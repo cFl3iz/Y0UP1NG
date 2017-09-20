@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>VIEW Entity of PersonManager Component</title>
+    <description>None</description>
+    <copyright>S</copyright>
+    <version>1</version>
+
+
+    <!--头像*新)-->
+    <view-entity entity-name="PartyContentAndDataResource" package-name="com.banfftech.personerp">
+        <member-entity entity-name="Content" entity-alias="Content" />
+        <member-entity entity-name="PartyContent" entity-alias="PartyContent" />
+        <member-entity entity-name="DataResource" entity-alias="DataResource" />
+
+        <alias entity-alias="DataResource" field="objectInfo" name="objectInfo"/>
+        <alias entity-alias="PartyContent" field="partyContentTypeId" name="partyContentTypeId"/>
+        <alias entity-alias="PartyContent" field="fromDate" name="fromDate"/>
+        <alias entity-alias="PartyContent" field="partyId" name="partyId"/>
+
+
+        <alias entity-alias="DataResource" field="dataResourceId" name="dataResourceId"/>
+
+        <alias entity-alias="Content" field="contentId" name="contentId"/>
+
+
+        <alias entity-alias="PartyContent" field="thruDate" name="thruDate"/>
+
+
+        <view-link entity-alias="Content" rel-entity-alias="PartyContent">
+            <key-map rel-field-name="contentId" field-name="contentId"/>
+        </view-link>
+
+        <view-link entity-alias="Content" rel-entity-alias="DataResource">
+            <key-map rel-field-name="dataResourceId" field-name="dataResourceId"/>
+        </view-link>
+
+
+
+    </view-entity>
+</entitymodel>

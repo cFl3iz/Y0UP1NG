@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <!-- Tarjeta Property-->
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.expirationTime" systemPropertyValue="1296000" description="tarjeta的有效时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.issuer" systemPropertyValue="pe" description="tarjeta的issuer"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.secret" systemPropertyValue="{{secret used for signing}}" description="tarjeta的secret"/>
+
+    <!-- SSMS Property -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="23691976" description="短信平台appkey"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.intervalTime" systemPropertyValue="20" description="第二次与第一次短信发送间隔时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.secret" systemPropertyValue="6d86dc0f2c5b3eb893142db3bbcaf2d2" description="短信平台secret"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="丕屹" description="短信平台配置签名"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsTemplateCode" systemPropertyValue="SMS_52105414" description="短信平台模版号"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.url" systemPropertyValue="http://gw.api.tbsandbox.com/router/rest" description="短信平台请求地址"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.validTime" systemPropertyValue="900" description="短信使用有效时间"/>
+
+
+    <!-- OSS Property -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.endpoint" systemPropertyValue="oss-cn-hangzhou.aliyuncs.com" description="endpoint为:OSS外网域名或OSS内网域名去掉您的Bucket.后"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.accessKeyId" systemPropertyValue="LTAIMIU42pe743cb" description="accessKeyId"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.accessKeySecret" systemPropertyValue="9G5xDQFq5YPfP6l1wyN2LiH9Nw6I3f" description="your accessKeySecret"/>
+
+</entity-engine-xml>

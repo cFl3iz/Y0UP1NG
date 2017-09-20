@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PersonManager Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+
+    <!-- User Create -->
+    <service name="createPeUser" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPeUser" auth="false">
+        <description>Create Simple PE User</description>
+        <attribute name="uuid" type="String" mode="IN"
+                   optional="false" />
+        <attribute name="tel" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="userLoginId" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- Create Person Store -->
+    <service name="createPersonStore" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonStore" auth="false">
+        <description>Create Person Store</description>
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="false" />
+        <attribute name="storeId" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- Query MyResource Order -->
+    <service name="queryMyResourceOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyResourceOrder" auth="false">
+        <description>Query MyResourceOrder</description>
+
+        <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- Query Dimension Resource -->
+    <service name="queryDimensionResource" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryDimensionResource" auth="false">
+        <description>queryDimensionResource</description>
+
+        <attribute name="dimensionResourceList" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <!-- Query My Resource -->
+    <service name="queryMyResource" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyResource" auth="false">
+        <description>Query My Resource</description>
+
+        <attribute name="myResourceList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="productCategoryId" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- query Resource Detail -->
+    <service name="queryResourceDetail" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryResourceDetail" auth="false">
+        <description>Query Resource Detail</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
+                   optional="true" />
+          <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- Query My RelationShip -->
+    <service name="queryMyRelationShip" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyRelationShip" auth="false">
+        <description>Query My RelationShip</description>
+
+        <attribute name="relationList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- Update Person Info -->
+    <service name="updatePersonInfo" engine="java" default-entity-name="Person"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo" auth="false">
+        <description>updatePersonInfo</description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- Place Resource Order -->
+    <service name="placeResourceOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="placeResourceOrder" auth="false">
+        <description>Place Resource Order</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="price" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="prodCatalogId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="productStoreId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true" />
+
+
+        <attribute name="orderId" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="partyIdFrom" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="relationEnum" type="String" mode="OUT"
+                   optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+    <!-- TODO 重构 -->
+    <service name="addPartyRelationShip" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addPartyRelationShip" auth="false">
+        <description>add Party RelationShip</description>
+
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="relationEnum" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+</services>

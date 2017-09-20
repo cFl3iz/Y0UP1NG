@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+
+    <!-- Every Request Do Check -->
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java"
+               path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+    </preprocessor>
+
+
+
+
+
+    <!-- AppLogin (Tel) -->
+    <request-map uri="userAppLogin">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="userAppLogin"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- Get Login/Regist Captcha -->
+    <request-map uri="getTelCaptcha">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getTelCaptcha"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+</site-conf>

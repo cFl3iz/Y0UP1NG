@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="PlatformManagerApplication">
+        <value xml:lang="en">PlatformManager Application</value>
+        <value xml:lang="zh">PlatformManager应用程序</value>
+        <value xml:lang="zh-TW">PlatformManager應用程式</value>
+    </property>
+    <property key="PlatformManagerCompanyName">
+        <value xml:lang="en">OFBiz: PlatformManager</value>
+        <value xml:lang="zh-TW">OFBiz: PlatformManager</value>
+    </property>
+    <property key="PlatformManagerCompanySubtitle">
+        <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
+        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
+        <value xml:lang="zh-TW">開源軟體OFBiz的組成部�?</value>
+    </property>
+    <property key="PlatformManagerViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">不允许你浏览这个页面�?</value>
+        <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
+    </property>
+
+    <property key="LoginSuccess">
+        <value xml:lang="en">LoginSuccess.</value>
+        <value xml:lang="zh">登录成功</value>
+        <value xml:lang="zh-TW">登录成功</value>
+    </property>
+
+</resource>

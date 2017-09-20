@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ PE - PlatForm Services ECA Services
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+
+
+    <!-- ############# About Biz ############# -->
+
+    <!-- Place Resource Order Do ECA -->
+    <eca service="placeResourceOrder" event="return">
+        <set field-name="partyIdFrom"  />
+        <set field-name="partyIdTo" />
+        <set field-name="relationEnum" />
+        <action service="addPartyRelationShip" mode="sync" ignore-error="false" ignore-failure="false" />
+    </eca>
+
+
+    <!-- ############# About Biz End ############# -->
+
+</service-eca>

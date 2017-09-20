@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+
+    <property key="CaptchaNotExistError">
+        <value xml:lang="en">captcha not exist</value>
+        <value xml:lang="zh">验证码不存在</value>
+    </property>
+
+    <property key="TelNotExistError">
+        <value xml:lang="en">Tel not exist</value>
+        <value xml:lang="zh">手机号不存在</value>
+    </property>
+
+    <property key="TelDisabledError">
+        <value xml:lang="en">Tel Is Disabled</value>
+        <value xml:lang="zh">该手机号无法使用</value>
+    </property>
+
+    <property key="InternalServiceError">
+        <value xml:lang="en">Internal service error, please contact the platform administrator</value>
+        <value xml:lang="zh">内部服务错误</value>
+    </property>
+
+    <property key="UserNotFoundError">
+        <value xml:lang="en">User Not Found Error</value>
+        <value xml:lang="zh">没有找到用户</value>
+    </property>
+
+    <property key="CaptchaCheckFailedError">
+        <value xml:lang="en">Captcha Check Failed Error</value>
+        <value xml:lang="zh">验证码错误</value>
+    </property>
+
+</resource>

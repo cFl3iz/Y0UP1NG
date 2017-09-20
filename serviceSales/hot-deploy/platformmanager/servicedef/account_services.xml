@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PlatformManager Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service>
+
+
+    <!-- App Login -->
+    <service name="userAppLogin" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="userAppLogin" auth="false">
+        <description>app Login</description>
+        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
+        <attribute name="uuid" type="String" mode="IN" optional="true"/>
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="newUser" type="String" mode="OUT" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- Get Tel Captcha -->
+    <service name="getTelCaptcha" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.SmsServices"
+             invoke="getTelCaptcha" auth="false">
+        <description>Get Captcha To Login Or Register</description>
+        <attribute name="teleNumber" type="String" mode="IN"
+                   optional="false" />
+        <attribute name="smsType" type="String" mode="IN" optional="true" />
+
+        <attribute name="captcha" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+    
+</services>

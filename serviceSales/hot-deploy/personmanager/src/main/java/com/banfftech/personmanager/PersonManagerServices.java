@@ -84,9 +84,6 @@ public class PersonManagerServices {
     }
 
 
-
-
-
     /**
      * release Resource
      *
@@ -235,6 +232,7 @@ public class PersonManagerServices {
 
     /**
      * Add Party RelationShip
+     *
      * @param dctx
      * @param context
      * @return
@@ -255,20 +253,14 @@ public class PersonManagerServices {
         String relationEnum = (String) context.get("relationEnum");
 
 
-
-        switch (relationType.getRelationType(relationEnum)){
+        switch (relationType.getRelationType(relationEnum)) {
             case C2CRSS:
-                Map<String,Object> serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                Map<String, Object> serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
                 if (ServiceUtil.isError(serviceResultMap)) {
                     return serviceResultMap;
                 }
 
         }
-
-
-
-
-
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -277,13 +269,14 @@ public class PersonManagerServices {
 
     /**
      * 建立C2C资源服务双方关系
+     *
      * @param delegator
      * @param dispatcher
      * @param admin
      * @param partyIdFrom
      * @param partyIdTo
      */
-    private static Map<String, Object> createRelationC2CRSS(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo , String  partyIdFrom)throws GenericServiceException {
+    private static Map<String, Object> createRelationC2CRSS(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
 
         String partyRelationshipTypeId = "";
         // Create Supplier Relation
@@ -296,7 +289,7 @@ public class PersonManagerServices {
         createPartyRelationshipInMap.put("userLogin", admin);
         createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
         createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId",partyRelationshipTypeId);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
         if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
@@ -304,21 +297,20 @@ public class PersonManagerServices {
         }
 
         partyRelationshipTypeId = PeConstant.CUSTOMER;
-         createPartyRelationshipInMap = new HashMap<String, Object>();
+        createPartyRelationshipInMap = new HashMap<String, Object>();
 
         createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdTo);
         createPartyRelationshipInMap.put("roleTypeIdTo", roleTypeIdFrom);
 
         createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom",partyIdFrom );
-        createPartyRelationshipInMap.put("partyIdTo",partyIdTo );
-        createPartyRelationshipInMap.put("partyRelationshipTypeId",partyRelationshipTypeId);
-         createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+        createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+        createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+        createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
         if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
             return createPartyRelationshipOutMap;
         }
-
 
 
         return ServiceUtil.returnSuccess();
@@ -366,9 +358,6 @@ public class PersonManagerServices {
 //    }
 
 
-
-
-
     /**
      * upload Head Portrait
      *
@@ -378,7 +367,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      */
     public static String updatePersonInfo(HttpServletRequest request, HttpServletResponse response)
-            throws GenericServiceException,GenericEntityException {
+            throws GenericServiceException, GenericEntityException {
 
         // Servlet Head
 
@@ -398,14 +387,14 @@ public class PersonManagerServices {
 
         String gender = (String) request.getParameter("gender");
 
-        if(!UtilValidate.isEmpty(gender)){
+        if (!UtilValidate.isEmpty(gender)) {
             gender = "M";
         }
 
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
-        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,
-                "partyId",partyId,"firstName",firstName,"lastName","NA","gender",gender));
+        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId, "firstName", firstName, "lastName", "NA", "gender", gender));
 
 
         try {
@@ -417,35 +406,36 @@ public class PersonManagerServices {
 
             int itemSize = 0;
 
-            if(null!=items){
+            if (null != items) {
                 itemSize = items.size();
             }
-
-            for (FileItem item : items) {
-
-
-                InputStream in = item.getInputStream();
-
-                String fileName = item.getName();
+            if (null != dfu && null != items) {
 
 
+                for (FileItem item : items) {
 
-                if (fileName != null && (!fileName.trim().equals(""))) {
+
+                    InputStream in = item.getInputStream();
+
+                    String fileName = item.getName();
 
 
-                    long tm = System.currentTimeMillis();
-                    String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                            "personerp", PeConstant.DEFAULT_HEAD_DISK, tm);
+                    if (fileName != null && (!fileName.trim().equals(""))) {
 
-                    if (pictureKey != null && !pictureKey.equals("")) {
 
-                       createContentAndDataResource(partyId,delegator,admin,dispatcher,pictureKey,"https://personerp.oss-cn-hangzhou.aliyuncs.com/"+PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")));
+                        long tm = System.currentTimeMillis();
+                        String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                "personerp", PeConstant.DEFAULT_HEAD_DISK, tm);
 
+                        if (pictureKey != null && !pictureKey.equals("")) {
+
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")));
+
+                        }
                     }
+
                 }
-
             }
-
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -457,11 +447,9 @@ public class PersonManagerServices {
     }
 
 
-
     /**
      * Create Content & DataResource &&  ASSOC Party
      *
-     * @author S.Y.L
      * @param delegator
      * @param userLogin
      * @param dispatcher
@@ -469,9 +457,10 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      * @throws GenericEntityException
+     * @author S.Y.L
      */
-    public static String createContentAndDataResource(String partyId,Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher,String pictureKey,String path)
-            throws GenericServiceException,GenericEntityException {
+    public static String createContentAndDataResource(String partyId, Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher, String pictureKey, String path)
+            throws GenericServiceException, GenericEntityException {
 
         // 1.CREATE DATA RESOURCE
         Map<String, Object> createDataResourceMap = UtilMisc.toMap("userLogin", userLogin, "partyId", "admin",
@@ -480,36 +469,24 @@ public class PersonManagerServices {
                 "objectInfo", path);
 
 
-
         Map<String, Object> serviceResultByDataResource = dispatcher.runSync("createDataResource",
                 createDataResourceMap);
         String dataResourceId = (String) serviceResultByDataResource.get("dataResourceId");
 
 
-
-
-        Map<String, Object> createContentMap = UtilMisc.toMap("userLogin", userLogin,"createdByUserLogin",userLogin.get("userLoginId"), "contentTypeId",
-                "DOCUMENT","statusId","CTNT_PUBLISHED", "mimeTypeId", "image/png", "dataResourceId", dataResourceId);
+        Map<String, Object> createContentMap = UtilMisc.toMap("userLogin", userLogin, "createdByUserLogin", userLogin.get("userLoginId"), "contentTypeId",
+                "DOCUMENT", "statusId", "CTNT_PUBLISHED", "mimeTypeId", "image/png", "dataResourceId", dataResourceId);
 
 
         Map<String, Object> serviceResultByCreateContentMap = dispatcher.runSync("createContent", createContentMap);
         String contentId = (String) serviceResultByCreateContentMap.get("contentId");
 
 
-        Map<String, Object> assocContentPartyMap = UtilMisc.toMap("userLogin", userLogin,"contentId",contentId,"partyId",partyId,"partyContentTypeId","LGOIMGURL");
-        dispatcher.runSync("createPartyContent",assocContentPartyMap);
+        Map<String, Object> assocContentPartyMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId, "partyId", partyId, "partyContentTypeId", "LGOIMGURL");
+        dispatcher.runSync("createPartyContent", assocContentPartyMap);
 
         return null;
     }
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -539,7 +516,7 @@ public class PersonManagerServices {
         String payToPartyId = (String) context.get("payToPartyId");
         String productId = (String) context.get("productId");
         String price = (String) context.get("price");
-        String prodCatalogId  = (String) context.get("prodCatalogId");
+        String prodCatalogId = (String) context.get("prodCatalogId");
 
         BigDecimal subTotal = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
@@ -567,7 +544,7 @@ public class PersonManagerServices {
             return createOrderHeaderOutMap;
         }
 
-        String orderId =(String) createOrderHeaderOutMap.get("orderId");
+        String orderId = (String) createOrderHeaderOutMap.get("orderId");
 
 
         // Add Product To Order Item
@@ -575,12 +552,12 @@ public class PersonManagerServices {
         Map<String, Object> appendOrderItemInMap = new HashMap<String, Object>();
 
         appendOrderItemInMap.put("userLogin", userLogin);
-        appendOrderItemInMap.put("orderId", orderId );
+        appendOrderItemInMap.put("orderId", orderId);
         appendOrderItemInMap.put("productId", productId);
         appendOrderItemInMap.put("quantity", BigDecimal.ONE);
-        appendOrderItemInMap.put("amount",price);
+        appendOrderItemInMap.put("amount", price);
         appendOrderItemInMap.put("shipGroupSeqId", "00001");
-        appendOrderItemInMap.put("prodCatalogId",prodCatalogId);
+        appendOrderItemInMap.put("prodCatalogId", prodCatalogId);
         appendOrderItemInMap.put("basePrice", price);
         appendOrderItemInMap.put("overridePrice", price);
 
@@ -592,25 +569,22 @@ public class PersonManagerServices {
         }
 
         // ADD ORDER ROLE
-        Map<String,Object> addOrderRoleInMap = new HashMap<String, Object>();
+        Map<String, Object> addOrderRoleInMap = new HashMap<String, Object>();
         addOrderRoleInMap.put("userLogin", userLogin);
         addOrderRoleInMap.put("orderId", orderId);
         addOrderRoleInMap.put("partyId", partyId);
         addOrderRoleInMap.put("roleTypeId", "BILL_TO_CUSTOMER");
-        Map<String,Object> addOrderRoleOutMap = dispatcher.runSync("addOrderRole",addOrderRoleInMap);
+        Map<String, Object> addOrderRoleOutMap = dispatcher.runSync("addOrderRole", addOrderRoleInMap);
 
         if (ServiceUtil.isError(addOrderRoleOutMap)) {
             return addOrderRoleOutMap;
         }
 
 
-
-
-
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        resultMap.put("partyIdFrom",partyId);
-        resultMap.put("partyIdTo",payToPartyId);
-        resultMap.put("relationEnum","C2CRSS");
+        resultMap.put("partyIdFrom", partyId);
+        resultMap.put("partyIdTo", payToPartyId);
+        resultMap.put("relationEnum", "C2CRSS");
         resultMap.put("orderId", orderId);
         return resultMap;
     }
@@ -730,8 +704,6 @@ public class PersonManagerServices {
                     "roleTypeId", "SHIP_FROM_VENDOR");
             dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
         }
-
-
 
 
         // 创建店铺

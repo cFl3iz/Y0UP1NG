@@ -715,7 +715,16 @@ public class PersonManagerServices {
         }
 
 
+
+
+
+        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        if(null!=teleContact) {
+            String contactNumber = (String) teleContact.get("contactNumber");
+            resultMap.put("contactTel", contactNumber);
+        }
+
         resultMap.put("partyIdFrom", partyId);
         resultMap.put("partyIdTo", payToPartyId);
         resultMap.put("relationEnum", "C2CRSS");

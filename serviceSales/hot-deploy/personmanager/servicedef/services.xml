@@ -168,4 +168,20 @@
 
 
 
+    <!-- 匹配手机联系人 -->
+    <service name="matchingContact" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="matchingContact" auth="false">
+        <description>Matching Contact</description>
+        <attribute name="contacts" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="count" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
 </services>

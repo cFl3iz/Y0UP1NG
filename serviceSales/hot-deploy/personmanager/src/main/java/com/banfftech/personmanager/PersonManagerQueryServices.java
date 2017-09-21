@@ -388,6 +388,7 @@ public class PersonManagerQueryServices {
         fieldSet.add("price");
         fieldSet.add("productCategoryId");
         fieldSet.add("payToPartyId");
+
         if (rodCatalogRole != null) {
             String prodCatalogId = (String) rodCatalogRole.get("prodCatalogId");
             //根据目录拿关联的分类Id
@@ -397,10 +398,6 @@ public class PersonManagerQueryServices {
             //findConditions
             EntityCondition findConditions = EntityCondition
                     .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
-//            EntityCondition findConditions2 = EntityCondition
-//                    .makeCondition(UtilMisc.toMap("productTypeId", "SERVICE"));
-//            EntityCondition findConditions3 = EntityCondition
-//                    .makeCondition("productName", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
 
 
             //Query My Resource

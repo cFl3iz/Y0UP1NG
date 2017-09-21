@@ -74,13 +74,98 @@ public class PersonManagerServices {
      */
     public enum relationType {
 
-        C2CRSS;
+        C2CRSS,CONTACT;
 
         public static relationType getRelationType(String relationType) {
 
             return valueOf(relationType.toUpperCase());
 
         }
+    }
+
+
+    /**
+     * Matching Contact
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> matchingContact(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        GenericValue userLogin = (GenericValue)  context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        String contacts = (String) context.get("contacts");
+
+        // Split
+        String[] contactsArray = contacts.split(",");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+       int count = 0;
+
+        if (!UtilValidate.isEmpty(contactsArray)) {
+            count = forSearchPeUsers(partyId,delegator,dispatcher,contactsArray,admin);
+        }
+
+
+
+
+
+
+
+
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        resultMap.put("count", count + "");
+        return resultMap;
+    }
+
+    /**
+     * Search User Is Exsits ?
+     * @param delegator
+     * @param dispatcher
+     * @param contactsArray
+     * @param admin
+     * @return
+     */
+    private static int forSearchPeUsers(String partyIdFrom,Delegator delegator, LocalDispatcher dispatcher, String[] contactsArray, GenericValue admin) throws GenericEntityException, GenericServiceException {
+
+      int count = 0;
+
+        for (int i = 0; i < contactsArray.length; i++) {
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+            String tel = contactsArray[i].substring(contactsArray[i].indexOf(":") + 1).replace("-","").replace("\"","");
+            String nickName = contactsArray[i].substring(1, contactsArray[i].indexOf(":"));
+            GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("contactNumber", tel).queryFirst();
+
+
+            if (null != teleContact) {
+                String partyId = (String) teleContact.get("partyId");
+                Map<String,Object>   addPartyRelationShipInMap = new HashMap<String, Object>();
+                addPartyRelationShipInMap.put("userLogin",admin);
+                addPartyRelationShipInMap.put("partyIdFrom",partyId);
+                addPartyRelationShipInMap.put("partyIdTo",partyIdFrom);
+                addPartyRelationShipInMap.put("relationEnum","CONTACT");
+                dispatcher.runSync("addPartyRelationShip",addPartyRelationShipInMap);
+                count ++;
+            }
+           // createActivityMembers(userLogin, workEffortId, nickName, tel, dispatcher, delegator, false, null, null, null, null, null);
+        }
+
+
+        return count;
     }
 
 
@@ -252,14 +337,18 @@ public class PersonManagerServices {
         String partyIdTo = (String) context.get("partyIdTo");
         String relationEnum = (String) context.get("relationEnum");
 
-
+        Map<String, Object> serviceResultMap = null;
         switch (relationType.getRelationType(relationEnum)) {
             case C2CRSS:
-                Map<String, Object> serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
                 if (ServiceUtil.isError(serviceResultMap)) {
                     return serviceResultMap;
                 }
-
+            case CONTACT:
+                 serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                if (ServiceUtil.isError(serviceResultMap)) {
+                    return serviceResultMap;
+                }
         }
 
 
@@ -316,6 +405,51 @@ public class PersonManagerServices {
         return ServiceUtil.returnSuccess();
     }
 
+
+    /**
+     * createRelationCONTACT
+     * @param delegator
+     * @param dispatcher
+     * @param admin
+     * @param partyIdTo
+     * @param partyIdFrom
+     * @return
+     * @throws GenericServiceException
+     */
+    private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
+
+        String partyRelationshipTypeId = "";
+        // Create Supplier Relation
+        partyRelationshipTypeId = PeConstant.CONTACT;
+
+        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
+        createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+            return createPartyRelationshipOutMap;
+        }
+
+        partyRelationshipTypeId = PeConstant.CONTACT;
+        createPartyRelationshipInMap = new HashMap<String, Object>();
+
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+        createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+        createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+            return createPartyRelationshipOutMap;
+        }
+
+
+        return ServiceUtil.returnSuccess();
+    }
 
     /**
      * Update PersonInfo

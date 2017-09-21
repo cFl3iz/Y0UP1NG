@@ -93,6 +93,17 @@
     </request-map>
 
 
+    <!-- Matching Contacts -->
+    <request-map uri="matchingContact">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="matchingContact"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
 
     <!-- Release Resource -->
     <request-map uri="releaseResource">

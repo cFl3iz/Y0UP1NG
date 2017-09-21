@@ -30,7 +30,10 @@
         <value xml:lang="en">SUPPLIER.</value>
         <value xml:lang="zh">卖家</value>
     </property>
-
+    <property key="CONTACT_REL">
+        <value xml:lang="en">CONTACT.</value>
+        <value xml:lang="zh">联系人</value>
+    </property>
     <property key="ORDER_CREATED">
         <value xml:lang="en">CREATED.</value>
         <value xml:lang="zh-CN">已创建</value>

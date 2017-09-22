@@ -149,7 +149,28 @@
                    optional="true" />
     </service>
 
+    <!-- Query Person Info -->
+    <service name="queryPersonInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryPersonInfo" auth="false">
+        <description>queryPersonInfo</description>
+        <attribute name="userInfo" type="java.util.Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
+
+    <!-- salesDiscontinuation -->
+    <service name="salesDiscontinuation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="salesDiscontinuation" auth="false">
+        <description>sales Discontinuation</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
 
     <!-- TODO 重构 -->

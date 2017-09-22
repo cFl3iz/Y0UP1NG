@@ -69,6 +69,7 @@ public class PersonManagerServices {
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
 
+
     /**
      * PartyRelationShipENUM
      */
@@ -82,6 +83,83 @@ public class PersonManagerServices {
 
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * salesDiscontinuation
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> salesDiscontinuation(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String productId = (String) context.get("productId");
+
+        Map<String, Object> updateProductInMap = new HashMap<String, Object>();
+        updateProductInMap.put("userLogin", admin);
+        updateProductInMap.put("productId", productId);
+        updateProductInMap.put("salesDiscontinuationDate", new Timestamp(new Date().getTime()));
+
+        Map<String, Object> updateProductOutMap = dispatcher.runSync("updateProduct", updateProductInMap);
+
+        if (ServiceUtil.isError(updateProductOutMap)) {
+            return updateProductOutMap;
+        }
+
+
+
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
 
 
     /**

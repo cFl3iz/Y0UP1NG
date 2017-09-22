@@ -5,6 +5,7 @@ import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
+import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
@@ -234,6 +235,7 @@ public class PersonManagerQueryServices {
         fieldSet.add("productStoreId");
         fieldSet.add("detailImageUrl");
         fieldSet.add("createdDate");
+        fieldSet.add("salesDiscontinuationDate");
         fieldSet.add("price");
         fieldSet.add("prodCatalogId");
         fieldSet.add("payToPartyId");
@@ -250,6 +252,41 @@ public class PersonManagerQueryServices {
         if(person!=null){
             resourceDetail.put("firstName",(String) person.get("firstName"));
         }
+
+
+
+
+
+        Set<String> orderFieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("productId");
+
+
+
+        EntityCondition findOrderConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("productId", productId));
+
+
+
+        //Query My Resource
+        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                findOrderConditions, orderFieldSet,
+                UtilMisc.toList("-orderDate"), null, false);
+
+        List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
+        if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
+            for(GenericValue order : queryMyResourceOrderList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String partyId = (String) order.get("partyId");
+                GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
+                if(person!=null){
+                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
+                }
+                partyOrderList.add(rowMap);
+            }
+        }
+        resourceDetail.put("partyBuyOrder",partyOrderList);
 
         resultMap.put("resourceDetail", resourceDetail);
 
@@ -313,6 +350,9 @@ public class PersonManagerQueryServices {
                     .makeCondition(UtilMisc.toMap("productTypeId", "SERVICE"));
             EntityCondition findConditions3 = EntityCondition
                     .makeCondition("productName", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD.toString());
+            EntityCondition findConditions4 = EntityCondition
+                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+
 
             EntityConditionList<EntityCondition> listConditions = EntityCondition
                     .makeCondition(findConditions, findConditions2, findConditions3);
@@ -347,6 +387,103 @@ public class PersonManagerQueryServices {
 
         return resultMap;
     }
+
+
+    /**
+     * queryPersonInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> queryPersonInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
+
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = UtilMisc.toMap();
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+
+        GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
+
+
+        GenericValue party = delegator.findOne("Party", UtilMisc.toMap("partyId", partyId), false);
+
+
+
+        inputMap.put("personName",(String) person.get("firstName"));
+        //获取性别
+        String gender = "";
+        if (UtilValidate.isNotEmpty(person.get("gender"))) {
+            // gender = "M".equals(person.get("gender")) ? "男" : "女";
+            inputMap.put("gender", person.get("gender"));
+        } else {
+            inputMap.put("gender", "NA");
+        }
+
+        //获取电话号码
+        GenericValue telecomNumber = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+        if (UtilValidate.isNotEmpty(telecomNumber)){
+            inputMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+        }
+        //获取email
+        GenericValue emailAddress = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("EmailAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS")).queryList());
+        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
+        //获取地址
+        GenericValue postalAddress = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+        if (UtilValidate.isNotEmpty(postalAddress))
+            inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address2") + " " + postalAddress.get("address1"));
+        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
+
+
+        List<GenericValue> contentsList =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+        GenericValue partyContent = null;
+        if(null != contentsList && contentsList.size()>0){
+            partyContent = contentsList.get(0);
+        }
+
+        if (UtilValidate.isNotEmpty(partyContent)) {
+
+            String contentId = partyContent.getString("contentId");
+            inputMap.put("headPortrait",
+                    partyContent.getString("objectInfo"));
+        } else {
+            inputMap.put("headPortrait",
+                    "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+        }
+
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyId, "partyIdentificationTypeId", "WX_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            inputMap.put("openId", partyIdentificationList.get(0).get("idValue"));
+        } else {
+            inputMap.put("openId", "NA");
+        }
+
+
+        resultMap.put("userInfo", inputMap);
+        return resultMap;
+    }
+
+
+
 
 
     /**
@@ -398,11 +535,17 @@ public class PersonManagerQueryServices {
             //findConditions
             EntityCondition findConditions = EntityCondition
                     .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
 
+
+
+            EntityConditionList<EntityCondition> listConditions = EntityCondition
+                    .makeCondition(findConditions, findConditions2);
 
             //Query My Resource
             myResourceList = delegator.findList("ProductAndCategoryMember",
-                    findConditions, fieldSet,
+                    listConditions, fieldSet,
                     UtilMisc.toList("-createdDate"), findOptions, false);
             //EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productCategoryId",productCategoryId).queryList();
         }

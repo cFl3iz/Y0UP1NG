@@ -933,6 +933,14 @@ public class PersonManagerServices {
 
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
 
+
+        // 关联店铺角色
+        Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,"productStoreId",productStoreId,"roleTypeId","ADMIN"));
+
+
+
+
         // CreateProd Catalog 创建目录
         Map<String, Object> createProdCatalogInMap = new HashMap<String, Object>();
         createProdCatalogInMap.put("userLogin", admin);

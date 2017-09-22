@@ -87,6 +87,8 @@ public class PersonManagerQueryServices {
 
 
                 if(!relationMap.containsKey(partyIdTo)){
+
+                    relationMap.put(partyIdTo,"");
                 GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdTo),false);
                 rowMap.put("firstName",(String) person.get("firstName"));
                  List<GenericValue> contentsList =
@@ -104,8 +106,6 @@ public class PersonManagerQueryServices {
                      rowMap.put("headPortrait",
                                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
                   }
-
-
 
                 rowMap.put("partyRelationshipTypeId",UtilProperties.getMessage("PersonManagerUiLabels.xml", partyRelationshipTypeId, locale));
                 relationList.add(rowMap);

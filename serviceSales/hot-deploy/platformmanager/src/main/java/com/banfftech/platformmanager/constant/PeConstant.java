@@ -80,6 +80,11 @@ public class PeConstant {
      */
     public static final String SUPPLIER = "SUPPLIER_REL";
 
+    /**
+     * 是一个联系
+     */
+    public static final String CONTACT = "CONTACT_REL";
+
 
     // Default OSS Head
     public static final String DEFAULT_HEAD_DISK = "datas/images/headPortrait/";

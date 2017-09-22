@@ -254,6 +254,8 @@ public class PlatformLoginWorker {
                     String newUserLoginId = (String) serviceResultMap.get("userLoginId");
                     userLogin   = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
                     result.put("newUser", "Y");
+                }else{
+                    result.put("newUser", "N");
                 }
 
                 String enabled = null;
@@ -302,7 +304,7 @@ public class PlatformLoginWorker {
 
                 result.put("tarjeta", token);
                 result.put("partyId", (String) userLogin.get("partyId"));
-                result.put("newUser", "N");
+
             } else {
 
                 Debug.logError("*CaptchaCheckFailedError:" + captcha,module);

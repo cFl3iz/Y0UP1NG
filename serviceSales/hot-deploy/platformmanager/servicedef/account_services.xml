@@ -43,5 +43,13 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
-    
+
+
+
+
+
+
+
+
+
 </services>

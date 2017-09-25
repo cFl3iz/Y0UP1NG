@@ -10,6 +10,16 @@
     </preprocessor>
 
 
+    <!-- Query Local Roster
+         # Relation Roster List
+         # Cache Match
+    -->
+    <request-map uri="queryLocalRoster">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryLocalRoster"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

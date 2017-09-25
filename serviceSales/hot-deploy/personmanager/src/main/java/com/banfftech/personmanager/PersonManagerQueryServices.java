@@ -21,16 +21,304 @@ import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import main.java.com.banfftech.platformmanager.util.GZIP;
+
+
 
 /**
  * Created by S on 2017/9/12.
  */
 public class PersonManagerQueryServices {
 
+
+
+
+
+
     public final static String module = PersonManagerQueryServices.class.getName();
 
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
+
+
+
+
+    /**
+     * Query LocalRoster
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryLocalRoster(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        StringBuffer rosterBuffer = new StringBuffer();
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+
+        // Default 2 Dimension
+        rosterBuffer = queryDimensionRelationShip(partyId, delegator);
+
+
+
+
+//        GZIP.compress()
+        try {
+            resultMap.put("roster", GZIP.compress(rosterBuffer.toString()));
+        }catch (Exception e){
+
+        }
+        return resultMap;
+    }
+
+    /**
+     * queryPartyRelationShip
+     * @param partyId
+     * @param delegator
+     * @return
+     */
+    private static StringBuffer queryDimensionRelationShip(String partyId, Delegator delegator ) throws GenericEntityException, GenericServiceException {
+
+        StringBuffer rosterBuffer = new StringBuffer();
+
+        Set<String> fieldSet = new HashSet<String>();
+
+        fieldSet.add("partyIdTo");
+
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyId));
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyRelationshipTypeId", PeConstant.CONTACT));
+
+        EntityConditionList<EntityCondition> listConditions = EntityCondition
+                .makeCondition(findConditions, findConditions2);
+
+        // 1D
+        List<GenericValue> myRelationListList = delegator.findList("PartyRelationship",
+                listConditions, fieldSet,
+                null, null, false);
+
+
+        Map<String,Object> dimensionMap = new HashMap<String, Object>();
+
+
+        for(GenericValue gv : myRelationListList){
+            rosterBuffer.append((String)gv.get("partyIdTo")+",");
+            dimensionMap.put(gv.get("partyIdTo")+"","");
+        }
+
+
+        rosterBuffer.append("。");
+        // 1D OVER
+
+        rosterBuffer.append(forQueryDimensionRelationShip(myRelationListList, delegator,dimensionMap,partyId));
+        // 2D 3D OVER
+
+
+
+
+        return rosterBuffer;
+    }
+
+    /**
+     *
+     * @param myRelationListList
+     * @param delegator
+     * @return
+     */
+    private static String  forQueryDimensionRelationShip(List<GenericValue> relationList, Delegator delegator,Map<String,Object> dimensionMap,String userPartyId) throws GenericEntityException, GenericServiceException {
+
+        StringBuffer sb = new StringBuffer();
+
+       for(GenericValue gv : relationList){
+           String partyIdTo = (String) gv.get("partyIdTo");
+
+
+
+           Set<String> fieldSet = new HashSet<String>();
+
+           fieldSet.add("partyIdTo");
+
+
+           EntityCondition findConditions = EntityCondition
+                   .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+
+
+           EntityCondition findConditions2 = EntityCondition
+                   .makeCondition(UtilMisc.toMap("partyRelationshipTypeId", PeConstant.CONTACT));
+
+           EntityConditionList<EntityCondition> listConditions = EntityCondition
+                   .makeCondition(findConditions, findConditions2);
+
+           // 1D
+           List<GenericValue> myRelationListList = delegator.findList("PartyRelationship",
+                   listConditions, fieldSet,
+                   null, null, false);
+
+
+
+           for(GenericValue gv2 : myRelationListList){
+               String partyIdToTo = (String)gv2.get("partyIdTo");
+               if(!dimensionMap.containsKey(partyIdToTo) && !userPartyId.equals(partyIdToTo)){
+                   sb.append(gv2.get("partyIdTo")+",");
+               }
+           }
+       }
+
+
+        return sb.toString();
+    }
+
+
+    /**
+     * Query More Resource
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMoreResource(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        String productId = (String) context.get("productId");
+        String productName = (String) context.get("productName");
+
+
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("productId");
+        fieldSet.add("productStoreId");
+        fieldSet.add("productName");
+        fieldSet.add("detailImageUrl");
+        fieldSet.add("createdDate");
+        fieldSet.add("price");
+        fieldSet.add("productCategoryId");
+        fieldSet.add("payToPartyId");
+
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("productName",EntityOperator.LIKE,productName);
+
+
+
+
+        if(UtilValidate.isNotEmpty(productId)){
+            findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("productId",productId));
+        }
+
+
+
+
+
+        //Query My Resource
+        List<GenericValue> queryResourceList = delegator.findList("ProductAndCategoryMember",
+                findConditions, fieldSet,
+                UtilMisc.toList("-createdDate"), null, false);
+
+
+
+
+
+        if(null != queryResourceList && queryResourceList.size()>0){
+            for(GenericValue gv : queryResourceList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                rowMap = gv.getAllFields();
+                String payToPartyId = (String)gv.get("payToPartyId");
+                GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", payToPartyId), false);
+                if(person!=null){
+                    rowMap.put("firstName",(String) person.get("firstName"));
+                }
+                returnList.add(rowMap);
+            }
+        }
+
+
+
+
+        resultMap.put("resourceList", returnList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+        /**
+         * Ajax Query Resource
+         * @param request
+         * @param response
+         * @return
+         * @throws GenericServiceException
+         * @throws GenericEntityException
+         */
+    public static String ajaxQueryResource(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        String productName = (String) request.getParameter("productName");
+
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("productId");
+        fieldSet.add("productName");
+
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("productName",EntityOperator.LIKE,"%"+productName+"%");
+
+
+        //Query My Resource
+        List<GenericValue> queryResourceList = delegator.findList("Product",
+                findConditions, fieldSet,
+                UtilMisc.toList("-createdStamp"), null, true);
+
+
+        request.setAttribute("queryResourceList",queryResourceList);
+
+        return "success";
+    }
+
+
 
 
     /**
@@ -263,10 +551,10 @@ public class PersonManagerQueryServices {
         fieldSet.add("productId");
         fieldSet.add("productName");
         fieldSet.add("productStoreId");
-        fieldSet.add("detailImageUrl");
         fieldSet.add("createdDate");
         fieldSet.add("salesDiscontinuationDate");
         fieldSet.add("price");
+        fieldSet.add("detailImageUrl");
         fieldSet.add("prodCatalogId");
         fieldSet.add("payToPartyId");
         //    Map<String,Object> productMap = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst().getAllFields();

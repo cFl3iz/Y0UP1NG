@@ -335,7 +335,7 @@ public class PersonManagerServices {
                         String fileName = item.getName();
 
 
-                        if (fileName != null && (!fileName.trim().equals(""))) {
+                        if (!UtilValidate.isEmpty(fileName)) {
 
 
                             long tm = System.currentTimeMillis();
@@ -632,7 +632,7 @@ public class PersonManagerServices {
                     String fileName = item.getName();
 
 
-                    if (fileName != null && (!fileName.trim().equals(""))) {
+                    if (!UtilValidate.isEmpty(fileName)) {
 
 
                         long tm = System.currentTimeMillis();

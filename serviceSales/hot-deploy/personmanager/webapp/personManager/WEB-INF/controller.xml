@@ -72,6 +72,24 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- AJAX QUERY AUTO COMPLETE -->
+    <request-map uri="ajaxQueryResource">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+               invoke="ajaxQueryResource"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- -->
+    <request-map uri="queryMoreResource">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMoreResource"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <!--&lt;!&ndash; update PersonInfo &ndash;&gt;-->
     <!--<request-map uri="updatePersonInfo">-->

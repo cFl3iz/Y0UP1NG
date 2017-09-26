@@ -9,6 +9,7 @@ import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
@@ -24,6 +25,7 @@ import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.geom.GeneralPath;
 import java.util.*;
 
 import main.java.com.banfftech.platformmanager.util.GZIP;
@@ -80,7 +82,7 @@ public class PersonManagerQueryServices {
 
 //        GZIP.compress()
         try {
-            resultMap.put("roster", GZIP.compress(rosterBuffer.toString()));
+            resultMap.put("roster",rosterBuffer.toString());
         }catch (Exception e){
 
         }
@@ -121,8 +123,14 @@ public class PersonManagerQueryServices {
         Map<String,Object> dimensionMap = new HashMap<String, Object>();
 
 
-        for(GenericValue gv : myRelationListList){
-            rosterBuffer.append((String)gv.get("partyIdTo")+",");
+        for(int i = 0 ; i  < myRelationListList.size();i++){
+            GenericValue gv = myRelationListList.get(i);
+            if(i+1==myRelationListList.size()){
+                rosterBuffer.append((String)gv.get("partyIdTo"));
+            }else{
+                rosterBuffer.append((String)gv.get("partyIdTo")+",");
+            }
+
             dimensionMap.put(gv.get("partyIdTo")+"","");
         }
 
@@ -147,9 +155,12 @@ public class PersonManagerQueryServices {
      */
     private static String  forQueryDimensionRelationShip(List<GenericValue> relationList, Delegator delegator,Map<String,Object> dimensionMap,String userPartyId) throws GenericEntityException, GenericServiceException {
 
+        Map<String,Object> twoDimensionMap = new HashMap<String, Object>();
+
         StringBuffer sb = new StringBuffer();
 
-       for(GenericValue gv : relationList){
+       for(int i =0; i < relationList.size();i++){
+           GenericValue gv = relationList.get(i);
            String partyIdTo = (String) gv.get("partyIdTo");
 
 
@@ -176,11 +187,28 @@ public class PersonManagerQueryServices {
 
 
 
-           for(GenericValue gv2 : myRelationListList){
+
+
+           for(int y = 0 ; y< myRelationListList.size();y++){
+               GenericValue gv2 = myRelationListList.get(y);
                String partyIdToTo = (String)gv2.get("partyIdTo");
-               if(!dimensionMap.containsKey(partyIdToTo) && !userPartyId.equals(partyIdToTo)){
-                   sb.append(gv2.get("partyIdTo")+",");
-               }
+
+                   if(i+1 == relationList.size() && y +1 == myRelationListList.size()){
+
+                     if(!dimensionMap.containsKey(partyIdToTo) && !userPartyId.equals(partyIdToTo) && !twoDimensionMap.containsKey(partyIdToTo)) {
+                         sb.append(partyIdToTo);
+                         twoDimensionMap.put(partyIdToTo,"");
+                      }
+
+
+                   }else{
+                       if(!dimensionMap.containsKey(partyIdToTo) && !userPartyId.equals(partyIdToTo)  && !twoDimensionMap.containsKey(partyIdToTo)) {
+                           sb.append(partyIdToTo + ",");
+                           twoDimensionMap.put(partyIdToTo,"");
+                       }
+                   }
+
+
            }
        }
 
@@ -209,9 +237,25 @@ public class PersonManagerQueryServices {
 
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String partyId = (String) userLogin.get("partyId");
-        String productId = (String) context.get("productId");
+        String partyId     = (String) userLogin.get("partyId");
+        String productId   = (String) context.get("productId");
         String productName = (String) context.get("productName");
+        String roster      = (String) context.get("roster");
+
+//        if(UtilValidate.isNotEmpty(roster)){
+//            try {
+//                roster = GZIP.unCompress(roster);
+//            }catch (Exception e) {
+//               //TODO Add Catch
+//            }
+//        }
+
+        System.out.println("roster = " + roster);
+
+        String [] rosterArray = roster.split("。");
+
+        List<String> rosters = doSplitRoster(rosterArray);
+
 
 
 
@@ -229,7 +273,11 @@ public class PersonManagerQueryServices {
         EntityCondition findConditions = EntityCondition
                 .makeCondition("productName",EntityOperator.LIKE,productName);
 
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition("payToPartyId",EntityOperator.IN,rosters);
 
+        EntityConditionList<EntityCondition> listConditions = EntityCondition
+                .makeCondition(findConditions, findConditions2);
 
 
         if(UtilValidate.isNotEmpty(productId)){
@@ -243,7 +291,7 @@ public class PersonManagerQueryServices {
 
         //Query My Resource
         List<GenericValue> queryResourceList = delegator.findList("ProductAndCategoryMember",
-                findConditions, fieldSet,
+                listConditions, fieldSet,
                 UtilMisc.toList("-createdDate"), null, false);
 
 
@@ -271,15 +319,35 @@ public class PersonManagerQueryServices {
         return resultMap;
     }
 
+    /**
+     * 循环分割名单
+     * @param rosterArray
+     * @return
+     */
+    private static List<String> doSplitRoster(String[] rosterArray) {
+        List<String> returnList = new ArrayList<String>();
+
+        String [] oneArray = rosterArray[0].split(",");
 
 
+        for(int i = 0 ; i < oneArray.length; i ++){
+                String partyId = oneArray[i];
+                returnList.add(partyId);
+        }
+        if(rosterArray.length > 1 && rosterArray[1].indexOf(",")>0){
+            String [] twoArray = rosterArray[1].split(",");
+            for(int i = 0 ; i < twoArray.length; i ++){
+                String partyId = twoArray[i];
+                returnList.add(partyId);
+            }
+        }
 
 
+        return returnList;
+    }
 
 
-
-
-        /**
+    /**
          * Ajax Query Resource
          * @param request
          * @param response
@@ -450,19 +518,25 @@ public class PersonManagerQueryServices {
         fieldSet.add("productId");
         fieldSet.add("quantity");
         fieldSet.add("unitPrice");
+        fieldSet.add("roleTypeId");
+
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
+        fieldSet.add("payToPartyId");
 
 
 
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
-        EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+//        EntityCondition findConditions2 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
-        EntityConditionList<EntityCondition> listConditions = EntityCondition
-                .makeCondition(findConditions, findConditions2);
+                EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
 
 //        EntityCondition findSalesConditions = EntityCondition
 //                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
@@ -495,6 +569,9 @@ public class PersonManagerQueryServices {
                 rowMap.put("payToPartyId",(String)productStore.get("payToPartyId"));
                 String statusId = (String) gv.get("statusId");
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+                rowMap.put("userPartyId",partyId);
+
                 myResourceOrderList.add(rowMap);
             }
         }

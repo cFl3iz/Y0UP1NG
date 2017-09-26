@@ -9,7 +9,19 @@
     <copyright></copyright>
     <version></version>
 
+    <entity entity-name="Roster" package-name="com.banfftech.personerp"
+            title="Roster">
 
+        <description>Roster</description>
+
+        <field name="partyId" type="id-ne"></field>
+
+        <field name="rosters" type="value"></field>
+
+
+        <prim-key field="partyId" />
+
+    </entity>
 
 
 

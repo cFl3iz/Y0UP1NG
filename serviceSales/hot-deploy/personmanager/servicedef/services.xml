@@ -40,6 +40,9 @@
              invoke="queryMyResourceOrder" auth="false">
         <description>Query MyResourceOrder</description>
 
+        <!--<attribute name="userPartyId" type="String" mode="OUT"-->
+                   <!--optional="false" />-->
+
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
                    optional="true" />
 
@@ -162,6 +165,7 @@
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryMoreResource" auth="false">
         <description>queryMoreResource</description>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="roster" type="String" mode="IN" optional="true"/>
         <attribute name="productName" type="String" mode="IN" optional="true"/>
         <attribute name="resourceList" type="List" mode="OUT"
                    optional="true" />

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.util.UtilTools;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -225,6 +226,8 @@ public class PersonManagerServices {
             Map<String,Object> rowMap = new HashMap<String, Object>();
 
             String tel = contactsArray[i].substring(contactsArray[i].indexOf(":") + 1).replace("-","").replace("\"","");
+            tel = tel.replaceAll("]", "");
+
             String nickName = contactsArray[i].substring(1, contactsArray[i].indexOf(":"));
             GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("contactNumber", tel).queryFirst();
 

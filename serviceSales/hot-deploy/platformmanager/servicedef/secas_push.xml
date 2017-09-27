@@ -16,7 +16,7 @@
         <set field-name="regId" env-name="regId"/>
         <set field-name="sendType" value="one"/>
         <set field-name="content" value="您的账号在其他地方登录,本地已下线!" />
-        <set field-name="message" value='{"type":"loginNotification","time":"${time}","deviceType":"${deviceType}"}' />
+        <set field-name="message" value='loginNotification' />
         <action service="pushNotifOrMessage"  mode="async"/>
     </eca>
     <!-- ############# About Biz End ############# -->

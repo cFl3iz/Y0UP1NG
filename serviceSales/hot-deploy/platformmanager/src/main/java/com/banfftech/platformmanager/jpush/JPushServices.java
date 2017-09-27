@@ -67,9 +67,9 @@ public class JPushServices {
 		String partyId = userLogin.getString("partyId");
 
 		String partyIdentificationTypeId = null;
-		if( "android".equalsIgnoreCase(deviceType)){
+		if(deviceType.toLowerCase().indexOf("android")>0){
 			partyIdentificationTypeId = "JPUSH_ANDROID";
-		}else if("ios".equalsIgnoreCase(deviceType)){
+		}else if(deviceType.toLowerCase().indexOf("os")>0){
 			partyIdentificationTypeId = "JPUSH_IOS";
 		}
 
@@ -79,7 +79,7 @@ public class JPushServices {
 		}
 
 		//原app regId
-		String oldRegId = "";
+		String oldRegId = null;
 		String time = "";
 		// 查询registrationID
 		EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyId);
@@ -130,7 +130,7 @@ public class JPushServices {
 
 
 		retMap.put("deviceType", deviceType);
-		retMap.put("regId", oldRegId);
+		retMap.put("regId", oldRegId==null?regId:oldRegId);
 		retMap.put("time", time);
 		return retMap;
 	}
@@ -203,7 +203,7 @@ public class JPushServices {
 
 		// 透传消息
 		String message = (String) context.get("message");
-		if(UtilValidate.isNotEmpty(message) && message.indexOf("${")>0){
+		if(UtilValidate.isNotEmpty(message)){
 			message = FlexibleStringExpander.expandString(message, context);
 		}
 

@@ -34,6 +34,21 @@
                    optional="true" />
     </service>
 
+
+
+    <!-- Affirm Order -->
+    <service name="affirmOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="affirmOrder" auth="false">
+        <description>Affirm Order</description>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
     <!-- Query MyResource Order -->
     <service name="queryMyResourceOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

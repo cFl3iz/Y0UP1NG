@@ -70,7 +70,10 @@ public class PeConstant {
      */
     public static final String ORDER_CREATED_STATUS_ID = "ORDER_CREATED";
 
-
+    /**
+     * 订单'批准'状态
+     */
+    public static final String ORDER_APPROVED_STATUS_ID = "ORDER_APPROVED";
     /**
      * 是一个客户关系
      */
@@ -88,4 +91,8 @@ public class PeConstant {
 
     // Default OSS Head
     public static final String DEFAULT_HEAD_DISK = "datas/images/headPortrait/";
+
+
+
+
 }

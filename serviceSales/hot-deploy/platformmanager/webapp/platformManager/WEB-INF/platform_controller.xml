@@ -10,6 +10,38 @@
     </preprocessor>
 
 
+
+
+
+    <!-- 退出登录删除regId -->
+    <request-map uri="removeJpushRegId">
+        <security https="false" auth="false" />
+        <event type="service" invoke="removeJpushRegId"  />
+        <response name="success" type="request" value="json" />
+        <response name="error" type="request" value="json" />
+    </request-map>
+
+    <!-- 注册极光ID -->
+    <request-map uri="regJpushRegId">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="regJpushRegId"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="pushNotifOrMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="pushNotifOrMessage"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+
+
+
+
+
     <!-- Query Local Roster
          # Relation Roster List
          # Cache Match

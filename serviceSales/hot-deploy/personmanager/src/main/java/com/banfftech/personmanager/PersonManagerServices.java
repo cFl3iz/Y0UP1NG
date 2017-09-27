@@ -86,18 +86,45 @@ public class PersonManagerServices {
     }
 
 
+    /**
+     * Affirm Order
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> affirmOrder(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String orderId = (String) context.get("orderId");
+
+        Map<String, Object> updateOrderStatusInMap = new HashMap<String, Object>();
+        updateOrderStatusInMap.put("userLogin", admin);
+        updateOrderStatusInMap.put("orderId", orderId);
+        updateOrderStatusInMap.put("statusId", PeConstant.ORDER_APPROVED_STATUS_ID);
+
+        Map<String, Object> updateOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", updateOrderStatusInMap);
+
+        if (ServiceUtil.isError(updateOrderStatusOutMap)) {
+            return updateOrderStatusOutMap;
+        }
 
 
 
 
-
-
-
-
-
-
-
-
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        return resultMap;
+    }
 
 
 

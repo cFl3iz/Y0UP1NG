@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ PE - PlatForm Services ECA Services
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+
+
+    <!-- ############# About Biz ############# -->
+
+    <!-- 更新设备ID后的消息通知 -->
+    <eca service="regJpushRegId" event="return">
+        <set field-name="appType" env-name="appType"/>
+        <set field-name="deviceType" env-name="deviceType"/>
+        <set field-name="regId" env-name="regId"/>
+        <set field-name="sendType" value="one"/>
+        <set field-name="content" value="您的账号在其他地方登录,本地已下线!" />
+        <set field-name="message" value='{"type":"loginNotification","time":"${time}","deviceType":"${deviceType}"}' />
+        <action service="pushNotifOrMessage"  mode="async"/>
+    </eca>
+    <!-- ############# About Biz End ############# -->
+
+</service-eca>

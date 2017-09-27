@@ -11,4 +11,34 @@
         </description>
     </service>
 
+
+    <!-- 极光推 -->
+    <service name="pushNotifOrMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">
+        <description>pushNotifOrMessage</description>
+        <attribute name="message" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="content" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="deviceType" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+
+        <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
+        <attribute name="sendType" type="String" mode="IN" optional="true"><description>安卓还是ios</description></attribute>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    <!-- 注册用户极光ID -->
+    <service name="regJpushRegId" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="regJpushRegId" auth="false">
+        <description>注册设备regId</description>
+
+        <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
+        <attribute name="deviceType" type="String" mode="INOUT" optional="true"><description>设备类型</description></attribute>
+        <!--<attribute name="appType" type="String" mode="INOUT" optional="true"><description>用户app类型</description></attribute>-->
+        <attribute name="time" type="String" mode="OUT" optional="true"><description>时间</description></attribute>
+    </service>
+    <!-- 退出 -->
+    <service name="removeJpushRegId" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="removeJpushRegId" auth="false">
+        <description>退出登录删除regId</description>
+        <attribute name="regId" type="String" mode="IN" optional="true"><description>设备Id</description></attribute>
+    </service>
+
 </services>

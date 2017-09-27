@@ -34,14 +34,14 @@ import java.util.*;
  */
 public class JPushServices {
 	public static final String module = JPushServices.class.getName();
-	public static final String resourceError = "cloudcardErrorUiLabels";
+//	public static final String resourceError = "cloudcardErrorUiLabels";
 
 	
 	//注册jPushClient
 	private static JPushClient getJPushClient(Delegator delegator,String appType) {
 		JPushClient jPushClient = null;
-		String appkey = "adcf1f42fca929dfd9d2fd2c";
-		String secret = "324a4f20fe9abf6ed2c80d6b";
+		String appkey = "cb43c0495515a6827a191fbf";
+		String secret = "565d6cf05270a7ba009bfff0";
 		jPushClient = new JPushClient(secret, appkey);
 		return jPushClient;
 	}

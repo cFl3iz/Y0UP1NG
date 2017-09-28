@@ -23,4 +23,16 @@
         <prim-key field="fromDate"/>
     </entity>
 
+    <!--Message-->
+    <entity entity-name="MessageLog" package-name="org.ofbiz.cloudLake.message" title="Message">
+        <description>Message</description>
+        <field name="messageId" type="id"></field>
+        <field name="partyIdFrom" type="value"></field>
+        <field name="partyIdTo" type="value"></field>
+        <field name="message" type="value"></field>
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="messageId"/>
+        <prim-key field="fromDate"/>
+    </entity>
+
 </entitymodel>

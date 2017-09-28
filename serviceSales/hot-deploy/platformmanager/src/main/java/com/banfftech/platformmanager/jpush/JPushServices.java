@@ -130,7 +130,7 @@ public class JPushServices {
 
 
 		retMap.put("deviceType", deviceType);
-		retMap.put("regId", oldRegId==null?regId:oldRegId);
+		retMap.put("regId", oldRegId);
 		retMap.put("time", time);
 		return retMap;
 	}

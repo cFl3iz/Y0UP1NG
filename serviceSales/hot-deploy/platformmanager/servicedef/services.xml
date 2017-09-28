@@ -41,4 +41,51 @@
         <attribute name="regId" type="String" mode="IN" optional="true"><description>设备Id</description></attribute>
     </service>
 
+    <service name="sendMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="sendMessage" auth="false">
+        <description>sendMessage</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="message" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="deviceType" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="regId" type="String" mode="OUT"
+                   optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+
+    <service name="loadMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="loadMessage" auth="false">
+        <description>loadMessage</description>
+
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="messages" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+
 </services>

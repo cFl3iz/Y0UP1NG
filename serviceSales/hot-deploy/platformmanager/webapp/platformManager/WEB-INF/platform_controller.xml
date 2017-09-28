@@ -10,6 +10,21 @@
     </preprocessor>
 
 
+    <!-- Send Message -->
+    <request-map uri="sendMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sendMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <!-- Load Message -->
+    <request-map uri="loadMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
 
 

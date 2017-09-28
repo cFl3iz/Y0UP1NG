@@ -526,11 +526,11 @@ public class PersonManagerQueryServices {
 
 
 
+//        EntityCondition findConditions2 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
-//        EntityCondition findConditions2 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
                 EntityCondition findConditions2 = EntityCondition
                 .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
@@ -671,8 +671,10 @@ public class PersonManagerQueryServices {
 
         List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
         if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
+            resourceDetail.put("orderId",queryMyResourceOrderList.get(0).get("orderId"));
             for(GenericValue order : queryMyResourceOrderList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
+
                 String partyId = (String) order.get("partyId");
                 GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
                 if(person!=null){
@@ -681,6 +683,7 @@ public class PersonManagerQueryServices {
                 partyOrderList.add(rowMap);
             }
         }
+
         resourceDetail.put("partyBuyOrder",partyOrderList);
 
         resultMap.put("resourceDetail", resourceDetail);

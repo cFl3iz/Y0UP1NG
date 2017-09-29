@@ -24,9 +24,10 @@
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
 
     <!-- Share Resource -->
-    <request-map uri="shareReSource"><security https="false" auth="false"/><response name="success" type="view" value="shareReSource"/></request-map>
-
+    <request-map uri="shareResource"><security https="false" auth="false"/><response name="success" type="view" value="shareResource"/></request-map>
+    <request-map uri="shareCategory"><security https="false" auth="false"/><response name="success" type="view" value="shareCategory"/></request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>
-    <view-map name="shareReSource" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareReSource"/>
+    <view-map name="shareResource" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareResource"/>
+    <view-map name="shareCategory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>
 </site-conf>

@@ -52,6 +52,27 @@
         </section>
     </screen>
 
+    <screen name="NullCommonDecorator">
+        <section>
+            <actions>
+
+            </actions>
+            <widgets>
+
+
+
+                <container style="container">
+
+                    <decorator-section-include name="body"/>
+
+                </container>
+
+
+
+
+            </widgets>
+        </section>
+    </screen>
 
 
     <screen name="WebManagerCommonDecorator">

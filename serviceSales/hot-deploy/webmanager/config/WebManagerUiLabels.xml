@@ -20,4 +20,23 @@
         <value xml:lang="zh">不允许你浏览这个页面�?</value>
         <value xml:lang="zh_CN">不允許您檢視這�?�頁�?.</value>
     </property>
+
+    <property key="DownApp">
+        <value xml:lang="en">Down App.</value>
+        <value xml:lang="zh">立即前往.</value>
+        <value xml:lang="zh_CN">立即前往.</value>
+    </property>
+
+    <property key="AppDesc">
+        <value xml:lang="en">Good App.</value>
+        <value xml:lang="zh">更专业的熟人资源交易平台.</value>
+        <value xml:lang="zh_CN">更专业的熟人资源交易平台.</value>
+    </property>
+
+
+    <property key="Talk">
+        <value xml:lang="en">Talk.</value>
+        <value xml:lang="zh">聊一聊.</value>
+        <value xml:lang="zh_CN">聊一聊.</value>
+    </property>
 </resource>

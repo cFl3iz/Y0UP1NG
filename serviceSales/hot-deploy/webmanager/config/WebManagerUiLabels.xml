@@ -39,4 +39,24 @@
         <value xml:lang="zh">聊一聊.</value>
         <value xml:lang="zh_CN">聊一聊.</value>
     </property>
+
+    <property key="clickOnSay">
+        <value xml:lang="en">click On.</value>
+        <value xml:lang="zh">按住 说话.</value>
+        <value xml:lang="zh_CN">按住 说话.</value>
+    </property>
+
+    <property key="send">
+        <value xml:lang="en">send.</value>
+        <value xml:lang="zh">发送.</value>
+        <value xml:lang="zh_CN">发送.</value>
+    </property>
+
+
+
+    <property key="About">
+        <value xml:lang="en">Hi.</value>
+        <value xml:lang="zh">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
+        <value xml:lang="zh_CN">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
+    </property>
 </resource>

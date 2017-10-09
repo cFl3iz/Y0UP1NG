@@ -16,12 +16,49 @@
         </section>
     </screen>
 
+
+
+
+
+
+
+
+    <screen name="miniChat">
+        <section>
+            <actions>
+
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/miniChat.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+
     <!-- Share Source -->
     <screen name="shareResource">
         <section>
             <actions>
                 <set field="productId" value="${parameters.productId}"/>
+                <set field="openId" value="${parameters.openId}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <service service-name="queryResourceDetail" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                </service>
+                <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
 
             </actions>
             <widgets>

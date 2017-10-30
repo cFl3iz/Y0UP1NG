@@ -12,7 +12,7 @@
     </service>
 
 
-    <!-- 极光推 -->
+    <!-- JPush -->
     <service name="pushNotifOrMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">
         <description>pushNotifOrMessage</description>
@@ -24,23 +24,24 @@
         <attribute name="sendType" type="String" mode="IN" optional="true"><description>安卓还是ios</description></attribute>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-    <!-- 注册用户极光ID -->
+    <!-- RegisterJpushID -->
     <service name="regJpushRegId" engine="java"
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="regJpushRegId" auth="false">
-        <description>注册设备regId</description>
+        <description>RegisterJpushID</description>
 
         <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
         <attribute name="deviceType" type="String" mode="INOUT" optional="true"><description>设备类型</description></attribute>
         <!--<attribute name="appType" type="String" mode="INOUT" optional="true"><description>用户app类型</description></attribute>-->
         <attribute name="time" type="String" mode="OUT" optional="true"><description>时间</description></attribute>
     </service>
-    <!-- 退出 -->
+    <!-- ExitJpush -->
     <service name="removeJpushRegId" engine="java"
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="removeJpushRegId" auth="false">
         <description>退出登录删除regId</description>
         <attribute name="regId" type="String" mode="IN" optional="true"><description>设备Id</description></attribute>
     </service>
 
+    <!-- DoSend -->
     <service name="sendMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
              invoke="sendMessage" auth="false">
@@ -69,7 +70,7 @@
 
 
 
-
+    <!-- Load Message -->
     <service name="loadMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
              invoke="loadMessage" auth="false">

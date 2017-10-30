@@ -92,7 +92,23 @@ public class PeConstant {
     // Default OSS Head
     public static final String DEFAULT_HEAD_DISK = "datas/images/headPortrait/";
 
+    /**
+     * 微信开放平台用户信息调用地址
+     */
+    public static final String WX_KAIFANG_PINGTAI = "https://api.weixin.qq.com/sns/userinfo";
 
+    /**
+     * 微信开放平台Ak调用地址
+     */
+    public static final String WX_KAIFANG_PINGTAI_ACCESS = "https://api.weixin.qq.com/sns/oauth2/access_token";
 
+    /**
+     * 开放平台AppId
+     */
+    public static final String WX_KAIFANG_PINGTAI_APP_ID = "wxb132477b29cc91ab";
 
+    /**
+     * 开放平台AppSc
+     */
+    public static final String WX_KAIFANG_PINGTAI_APP_SC = "4ea8a58cd61e54d94bdadb603c0dd5e3";
 }

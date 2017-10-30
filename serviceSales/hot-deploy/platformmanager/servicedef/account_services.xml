@@ -18,7 +18,27 @@
         <description>app Login</description>
         <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
         <attribute name="uuid" type="String" mode="IN" optional="true"/>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+
         <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="newUser" type="String" mode="OUT" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
+    <!-- App WeChat Login -->
+    <service name="weChatAppLogin" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatAppLogin" auth="false">
+        <description>weChat AppLogin</description>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <attribute name="uuid" type="String" mode="IN" optional="true"/>
+
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
         <attribute name="newUser" type="String" mode="OUT" optional="true"/>

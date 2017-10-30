@@ -26,4 +26,11 @@
     <PartyIdentificationType createdStamp="2017-05-11 15:22:41.0" createdTxStamp="2017-05-11 15:22:41.0" lastUpdatedStamp="2017-05-11 15:22:41.0" lastUpdatedTxStamp="2017-05-11 15:22:41.0" partyIdentificationTypeId="JPUSH_IOS"/>
     <PartyIdentificationType createdStamp="2017-05-11 15:22:41.0" createdTxStamp="2017-05-11 15:22:41.0" lastUpdatedStamp="2017-05-11 15:22:41.0" lastUpdatedTxStamp="2017-05-11 15:22:41.0" partyIdentificationTypeId="JPUSH_ANDROID"/>
 
+
+
+    <!-- 微信UnioID-->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_OPEN_ID"/>
+    <!-- 公众号OpenId -->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_GZ_OPEN_ID"/>
+
 </entity-engine-xml>

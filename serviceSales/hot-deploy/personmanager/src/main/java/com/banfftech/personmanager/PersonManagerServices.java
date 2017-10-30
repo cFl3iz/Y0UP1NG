@@ -841,6 +841,27 @@ public class PersonManagerServices {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Create User
      *
@@ -861,6 +882,7 @@ public class PersonManagerServices {
         String partyId, userLoginId = "";
         String uuid = (String) context.get("uuid");
         String tel = (String) context.get("tel");
+        String openId = (String) context.get("openId");
 
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
@@ -878,6 +900,12 @@ public class PersonManagerServices {
         Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
                 partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
         dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+
+        if(!UtilValidate.isEmpty(openId)){
+            Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", openId, "partyIdentificationTypeId", "WX_OPEN_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+        }
 
 
         // Create UserLogin Block

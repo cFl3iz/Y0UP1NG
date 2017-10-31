@@ -59,4 +59,20 @@
         <value xml:lang="zh">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
         <value xml:lang="zh_CN">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
     </property>
+
+
+
+    <property key="BuyNow">
+        <value xml:lang="en">Buy Now!.</value>
+        <value xml:lang="zh">立即购买 '${productName}'!</value>
+        <value xml:lang="zh_CN">立即购买 '${productName}'!</value>
+    </property>
+
+    <property key="noBuyHistory">
+        <value xml:lang="en">no Buy History.</value>
+        <value xml:lang="zh">这个产品还没有过交易记录!</value>
+        <value xml:lang="zh_CN">这个产品还没有过交易记录!</value>
+    </property>
+
+
 </resource>

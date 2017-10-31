@@ -28,7 +28,7 @@
             <actions>
 
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
-
+                <set field="productName" value="${parameters.productName}"/>
 
             </actions>
             <widgets>

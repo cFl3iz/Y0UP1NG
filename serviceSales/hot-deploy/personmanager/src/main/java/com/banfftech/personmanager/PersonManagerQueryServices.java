@@ -276,8 +276,11 @@ public class PersonManagerQueryServices {
         EntityCondition findConditions2 = EntityCondition
                 .makeCondition("payToPartyId",EntityOperator.IN,rosters);
 
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+
         EntityConditionList<EntityCondition> listConditions = EntityCondition
-                .makeCondition(findConditions, findConditions2);
+                .makeCondition(findConditions, findConditions2,findConditions3);
 
 
         if(UtilValidate.isNotEmpty(productId)){
@@ -753,7 +756,7 @@ public class PersonManagerQueryServices {
 
 
             EntityConditionList<EntityCondition> listConditions = EntityCondition
-                    .makeCondition(findConditions, findConditions2, findConditions3);
+                    .makeCondition(findConditions, findConditions2, findConditions3,findConditions4);
 
 
             //Query My Resource

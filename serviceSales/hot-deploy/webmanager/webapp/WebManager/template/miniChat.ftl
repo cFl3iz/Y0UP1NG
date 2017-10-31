@@ -1,4 +1,4 @@
-<html lang="zh-cn" >
+
 <head>
     <meta charset="utf-8" />
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
-    <title>jQuery仿手机微信聊天界面代码 - A5源码</title>
+    <title>PersonService</title>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
         body{background:url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yuyin_bg.png) no-repeat;background-size:100%;}
@@ -60,7 +60,7 @@
         <div class="answer">
             <div class="heard_img left"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>
             <div class="answer_text">
-                <p>${uiLabel.About}</p>
+                <p>${uiLabel.About}<br/><a href="#">${uiLabel.BuyNow}</a></p>
                 <i></i>
             </div>
         </div>
@@ -187,5 +187,3 @@
     autoWidth();
 </script>
 </body>
-</html>
-

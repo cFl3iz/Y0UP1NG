@@ -35,7 +35,8 @@
 
     <article class="m-list list-theme4">
          <strong>
-             ${(resourceDetail)!}
+             ${(resourceDetail.description?default('No About Description ..'))!}
+             <#--${(resourceDetail.partyBuyOrder)!}-->
          </strong>
     </article>
 
@@ -68,9 +69,15 @@
         });
     </script>
     <br/>
+    <#if resourceDetail.partyBuyOrder?has_content>
+    ${(resourceDetail.partyBuyOrder)!}
+    </#if>
+    <#if !resourceDetail.partyBuyOrder?has_content>
+    ${uiLabel.noBuyHistory}
+    </#if>
     <footer class="m-tabbar demo-small-pitch" style="background-color:#ff5647;bottom: 0;">
 
-        <a href="miniChat" class="tabbar-item">
+        <a href="miniChat?productName=${resourceDetail.productName}" class="tabbar-item">
                 <#--<span class="tabbar-icon">-->
                     <#--<i class="demo-icons-contact"></i>-->
                 <#--</span>-->

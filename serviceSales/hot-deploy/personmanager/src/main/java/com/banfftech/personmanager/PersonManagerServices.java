@@ -803,8 +803,13 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("basePrice", price);
         appendOrderItemInMap.put("overridePrice", price);
 
-        Map<String, Object> appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
-
+        //appendOrderItem
+        try {
+            Map<String, Object> appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
+        }catch (GenericServiceException e1) {
+        Debug.logError(e1.getMessage(), module);
+        return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));
+        }
 
         if (ServiceUtil.isError(appendOrderItemOutMap)) {
             return appendOrderItemOutMap;

@@ -31,4 +31,10 @@
         <value xml:lang="zh">验证码错误</value>
     </property>
 
+
+    <property key="ProductNoLongerForSale">
+        <value xml:lang="en">This product is no longer available for sale</value>
+        <value xml:lang="zh">抱歉,这个产品已经停售!</value>
+    </property>
+
 </resource>

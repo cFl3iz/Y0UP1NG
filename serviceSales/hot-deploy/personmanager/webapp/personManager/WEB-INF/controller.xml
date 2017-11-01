@@ -156,6 +156,9 @@
     </request-map>
 
 
+
+
+
     <!--  Create OrderHeader & OrderItem -->
     <request-map uri="placeResourceOrder">
         <security https="false" auth="false"/>
@@ -164,8 +167,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
-
+    <!-- add Product Content -->
+    <request-map uri="addProductContent">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="addProductContent"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personmanager/widget/PersonManagerScreens.xml#main"/>

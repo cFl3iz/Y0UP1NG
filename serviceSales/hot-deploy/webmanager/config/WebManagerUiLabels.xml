@@ -36,9 +36,22 @@
 
     <property key="Talk">
         <value xml:lang="en">Talk.</value>
-        <value xml:lang="zh">聊一聊.</value>
-        <value xml:lang="zh_CN">聊一聊.</value>
+        <value xml:lang="zh">聊一聊</value>
+        <value xml:lang="zh_CN">聊一聊</value>
     </property>
+
+    <property key="More">
+        <value xml:lang="en">More.</value>
+        <value xml:lang="zh">相关</value>
+        <value xml:lang="zh_CN">相关</value>
+    </property>
+
+    <property key="ShareFriend">
+        <value xml:lang="en">Share To Friend</value>
+        <value xml:lang="zh">分享给朋友</value>
+        <value xml:lang="zh_CN">分享给朋友</value>
+    </property>
+
 
     <property key="clickOnSay">
         <value xml:lang="en">click On.</value>
@@ -60,7 +73,43 @@
         <value xml:lang="zh_CN">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
     </property>
 
+    <property key="Mark">
+        <value xml:lang="en">MarkStar</value>
+        <value xml:lang="zh">收藏</value>
+        <value xml:lang="zh_CN">收藏</value>
+    </property>
 
+    <property key="ProductDetail">
+        <value xml:lang="en">Product Detail</value>
+        <value xml:lang="zh">商品详情</value>
+        <value xml:lang="zh_CN">商品详情</value>
+    </property>
+
+
+    <property key="Buy">
+        <value xml:lang="en">Buy</value>
+        <value xml:lang="zh">立即购买</value>
+        <value xml:lang="zh_CN">立即购买</value>
+    </property>
+
+    <property key="FriendSay">
+        <value xml:lang="en">Friend Buy</value>
+        <value xml:lang="zh">这些朋友买过</value>
+        <value xml:lang="zh_CN">这些朋友买过</value>
+    </property>
+
+
+    <property key="ProductSpecDetail">
+        <value xml:lang="en">ProductSpecDetail</value>
+        <value xml:lang="zh">图文介绍</value>
+        <value xml:lang="zh_CN">图文介绍</value>
+    </property>
+
+    <property key="Person">
+        <value xml:lang="en">Person</value>
+        <value xml:lang="zh">人</value>
+        <value xml:lang="zh_CN">人</value>
+    </property>
 
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>

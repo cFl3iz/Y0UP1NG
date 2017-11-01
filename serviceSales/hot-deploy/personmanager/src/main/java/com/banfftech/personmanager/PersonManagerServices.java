@@ -86,14 +86,15 @@ public class PersonManagerServices {
     }
 
 
-    /**
-     * Affirm Order
-     * @param dctx
-     * @param context
-     * @return
-     * @throws GenericEntityException
-     * @throws GenericServiceException
-     */
+
+        /**
+         * Affirm Order
+         * @param dctx
+         * @param context
+         * @return
+         * @throws GenericEntityException
+         * @throws GenericServiceException
+         */
     public static Map<String, Object> affirmOrder(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 
@@ -276,6 +277,139 @@ public class PersonManagerServices {
         return count;
     }
 
+    /**
+     * add Product Content
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String addProductContent(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+
+
+
+
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+        // productId
+        String productId = (String) request.getParameter("productId");
+
+        String descriptions = (String) request.getParameter("descriptions");
+
+
+
+
+            try {
+
+                ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+
+                List<FileItem> items = dfu.parseRequest(request);
+
+
+                int itemSize = 0;
+
+
+                // if(null!=items){
+                if (null != items) {
+                    itemSize = items.size();
+
+                    int count = 1;
+
+                    for (FileItem item : items) {
+
+
+                        InputStream in = item.getInputStream();
+
+                        String fileName = item.getName();
+
+
+                        if (!UtilValidate.isEmpty(fileName)) {
+
+
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
+
+                            if (pictureKey != null && !pictureKey.equals("") && count <=4) {
+                                //创建产品内容和数据资源附图
+                                createProductContentAndDataResource(delegator,dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")),count);
+                                count++;
+                            }
+                        }
+
+                    }
+                }
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
+
+        return "success";
+
+    }
+
+    /**
+     * 创建产品内容及数据资源
+     * @param dispatcher
+     * @param admin
+     * @param productId
+     * @param discription
+     * @param dataInfo
+     */
+    private static void createProductContentAndDataResource(Delegator delegator,LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo,int count)throws GenericServiceException {
+
+        // Create Content
+        String contentTypeId =  "ADDITIONAL_IMAGE_"+count;
+        String contentId     = delegator.getNextSeqId("Content");
+        dispatcher.runSync("createProductContent",UtilMisc.toMap("userLogin",admin,"productContentTypeId",contentTypeId,"productId",productId,"contentId",contentId));
+
+        // Create DataResource
+        Map<String, Object> dataResourceCtx = new HashMap<String, Object>();
+        dataResourceCtx.put("objectInfo", dataInfo);
+        dataResourceCtx.put("dataResourceName",  description);
+        dataResourceCtx.put("userLogin", admin);
+        dataResourceCtx.put("dataResourceTypeId", "SHORT_TEXT");
+        dataResourceCtx.put("mimeTypeId", "text/html");
+        Map<String, Object> dataResourceResult = new HashMap<String, Object>();
+        try {
+            dataResourceResult = dispatcher.runSync("createDataResource", dataResourceCtx);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+
+        }
+
+        // Update Content
+        Map<String, Object> contentCtx = new HashMap<String, Object>();
+        contentCtx.put("contentId", contentId);
+        contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+        contentCtx.put("userLogin", admin);
+        try {
+            dispatcher.runSync("updateContent", contentCtx);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+
+        }
+
+    }
+
 
     /**
      * release Resource
@@ -302,7 +436,7 @@ public class PersonManagerServices {
 
         String partyId = (String) userLogin.get("partyId");
 
-        String productName = (String) request.getParameter("productName");
+
 
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
@@ -312,6 +446,7 @@ public class PersonManagerServices {
         // 价格
         String productPrice = (String) request.getParameter("productPrice");
 
+        String productName = (String) request.getParameter("productName");
 
         String defaultImageUrl = (String) request.getParameter("defaultImageUrl");
 
@@ -417,6 +552,8 @@ public class PersonManagerServices {
         addProductToCategoryInMap.put("productId", productId);
         addProductToCategoryInMap.put("productCategoryId", productCategoryId);
         dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+
+        request.setAttribute("productId",productId);
 
         return "success";
 

@@ -105,10 +105,10 @@ public class PeConstant {
     /**
      * 开放平台AppId
      */
-    public static final String WX_KAIFANG_PINGTAI_APP_ID = "wxb132477b29cc91ab";
+    public static final String WX_KAIFANG_PINGTAI_APP_ID = "wx5843eeb488708c80";
 
     /**
      * 开放平台AppSc
      */
-    public static final String WX_KAIFANG_PINGTAI_APP_SC = "4ea8a58cd61e54d94bdadb603c0dd5e3";
+    public static final String WX_KAIFANG_PINGTAI_APP_SC = "d410e16ac6dd1346f509dda263f23253";
 }

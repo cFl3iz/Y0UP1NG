@@ -49,7 +49,7 @@
 
 
     <!-- Share Source -->
-    <screen name="shareResource">
+    <screen name="shareProduct">
         <section>
             <actions>
                 <set field="productId" value="${parameters.productId}"/>
@@ -63,11 +63,12 @@
             </actions>
             <widgets>
                 <!-- MobileYDUICommonDecorator -->
-                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                <decorator-screen name="MobileProductCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
                 <decorator-section name="body">
                     <platform-specific>
                         <html>
-                            <html-template location="component://webmanager/webapp/WebManager/template/shareResource.ftl"></html-template>
+                            <!--<html-template location="component://webmanager/webapp/WebManager/template/shareProduct.ftl"></html-template>-->
+                            <html-template location="component://webmanager/webapp/WebManager/template/shareProduct_v2.ftl"></html-template>
                         </html>
                     </platform-specific>
                 </decorator-section>

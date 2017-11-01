@@ -52,6 +52,35 @@
         </section>
     </screen>
 
+
+
+
+
+    <screen name="MobileProductCommonDecorator">
+        <section>
+            <actions>
+
+            </actions>
+            <widgets>
+
+                <platform-specific>
+                    <html><html-template location="component://webmanager/webapp/webmanager/include/MobileProductHead.ftl"/></html>
+                </platform-specific>
+
+                <container style="container">
+
+                    <decorator-section-include name="body"/>
+
+                </container>
+
+
+
+
+            </widgets>
+        </section>
+    </screen>
+
+
     <screen name="NullCommonDecorator">
         <section>
             <actions>

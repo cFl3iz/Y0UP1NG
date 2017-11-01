@@ -24,7 +24,7 @@
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
 
     <!-- Share Resource -->
-    <request-map uri="shareResource"><security https="false" auth="false"/><response name="success" type="view" value="shareResource"/></request-map>
+    <request-map uri="shareProduct"><security https="false" auth="false"/><response name="success" type="view" value="shareProduct"/></request-map>
     <request-map uri="shareCategory"><security https="false" auth="false"/><response name="success" type="view" value="shareCategory"/></request-map>
 
     <!-- Chat -->
@@ -33,6 +33,6 @@
     <!-- View Mappings -->
     <view-map name="miniChat" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#miniChat"/>
     <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>
-    <view-map name="shareResource" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareResource"/>
+    <view-map name="shareProduct" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareProduct"/>
     <view-map name="shareCategory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>
 </site-conf>

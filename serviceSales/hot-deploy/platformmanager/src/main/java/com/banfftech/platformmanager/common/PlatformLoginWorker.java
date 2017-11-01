@@ -223,6 +223,12 @@ public class PlatformLoginWorker {
 
             String wxNickName = (String) jsonMap2.get("nickname");
 
+//            try{
+//                wxNickName = new String(wxNickName.getBytes("ISO-8859-1"), "UTF-8");
+//                String stra = "";
+//            }catch (Exception e){
+//
+//            }
             if(EmojiFilter.containsEmoji(wxNickName)){
                 //包含emoji表情
                 wxNickName = EmojiHandler.encodeJava(wxNickName);
@@ -342,6 +348,7 @@ public class PlatformLoginWorker {
             String newUserLoginId = (String) serviceResultMap.get("userLoginId");
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
             result.put("newUser", "Y");
+            bindNoDataWeChat(accessToken, (String) userLogin.get("partyId"), admin, openId, delegator, dispatcher, locale, userLogin, kaiFangUserInfoPath);
 
         }else{
             result.put("newUser", "N");
@@ -358,7 +365,6 @@ public class PlatformLoginWorker {
 
 
 
-        bindNoDataWeChat(accessToken,(String) userLogin.get("partyId"),admin,openId,delegator,dispatcher,locale,userLogin,kaiFangUserInfoPath);
 
         //有效时间
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));

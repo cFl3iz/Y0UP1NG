@@ -1,4 +1,3 @@
-
 <head>
     <meta charset="utf-8" />
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
@@ -9,9 +8,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
     <title>PersonService</title>
-    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
-        body{background:url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yuyin_bg.png) no-repeat;background-size:100%;}
+        body{
+            background:url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/chatBG.jpeg) no-repeat;
+            background-size:100%;
+            background-attachment: fixed;
+        }
         @media all and (min-width: 640px) {
             body,html,.wenwen-footer,.speak_window{width:640px!important;margin:0 auto}
             .speak_window,.wenwen-footer{left:50%!important;margin-left:-320px}
@@ -40,7 +43,7 @@
         .question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
         .question_text{padding-right:20px;}
         .answer_text{padding-left:20px;}
-        .question_text p,.answer_text p{border-radius:10px;padding:.5rem;margin:0;font-size:14px;line-height:28px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:60px;word-wrap:break-word;}
+        .question_text p,.answer_text p{border-radius:10px;padding:.5rem;margin:0;font-size:16px;line-height:28px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:60px;word-wrap:break-word;}
         .answer_text p{background:#fff;}
         .question_text p{background:#42929d;color:#fff;text-align:left;}
         .question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
@@ -50,9 +53,15 @@
         audio{display:none;}
         .saying{position:fixed;bottom:30%;left:50%;width:120px;margin-left:-60px;display:none;}
         .saying img{width:100%;}
-        .write_list{position:absolute;left:0;width:100%;background:#fff;border-top:solid 1px #ddd;padding:5px;line-height:30px;}
+        .write_list{font-size:18px;position:absolute;left:0;width:100%;background:#fff;border-top:solid 1px #ddd;padding:5px;line-height:30px;}
     </style>
-
+<script>
+    $(
+            function(){
+                $("#wenwen_btn_left").click();
+            }
+    );
+</script>
 </head>
 <body>
 <div class="speak_window">
@@ -60,7 +69,9 @@
         <div class="answer">
             <div class="heard_img left"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>
             <div class="answer_text">
-                <p>${uiLabel.About}<br/><a href="#">${uiLabel.BuyNow}</a></p>
+                <p>${uiLabel.About}<br/>
+                    <#--<a href="#">${uiLabel.BuyNow}</a>-->
+                </p>
                 <i></i>
             </div>
         </div>
@@ -70,7 +81,9 @@
     <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saying.gif">
 </div>
 <div class="wenwen-footer">
-    <div class="wenwen_btn left" onClick="to_write()"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jp_btn.png"></div>
+    <div class="wenwen_btn left" id="wenwen_btn_left" onClick="to_write()">
+        <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jp_btn.png">
+    </div>
     <div class="wenwen_text left">
         <div class="write_box">
             <input type="text" class="left" onKeyUp="keyup()" placeholder="" />
@@ -80,15 +93,17 @@
         </div>
     </div>
     <div class="wenwen_help right">
-        <a href="http://banff-tech.com/">
+        <a href="javascript:window.history.back();">
             <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/help_btn.png">
         </a>
         <button onClick="up_say()" class="right">${uiLabel.send}</button>
     </div>
     <div style="opacity:0;" class="clear"></div>
 </div>
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
+
 <script type="text/javascript">
+
     function to_write(){
         $('.wenwen_btn img').attr('src','http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');
         $('.wenwen_btn').attr('onclick','to_say()');

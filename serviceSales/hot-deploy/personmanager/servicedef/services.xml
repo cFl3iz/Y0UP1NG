@@ -106,6 +106,7 @@
                    optional="true" />
         <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
                    optional="true" />
+
           <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
@@ -127,6 +128,8 @@
              location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo" auth="false">
         <description>updatePersonInfo</description>
         <auto-attributes include="pk" mode="IN" optional="true"/>
+        <attribute name="noteInfo" type="String" mode="IN"
+                   optional="true" />
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

@@ -55,14 +55,14 @@
 
     <property key="clickOnSay">
         <value xml:lang="en">click On.</value>
-        <value xml:lang="zh">按住 说话.</value>
-        <value xml:lang="zh_CN">按住 说话.</value>
+        <value xml:lang="zh">按住 说话</value>
+        <value xml:lang="zh_CN">按住 说话</value>
     </property>
 
     <property key="send">
         <value xml:lang="en">send.</value>
-        <value xml:lang="zh">发送.</value>
-        <value xml:lang="zh_CN">发送.</value>
+        <value xml:lang="zh">发送</value>
+        <value xml:lang="zh_CN">发送</value>
     </property>
 
 

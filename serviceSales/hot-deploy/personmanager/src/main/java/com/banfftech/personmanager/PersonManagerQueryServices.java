@@ -648,7 +648,37 @@ public class PersonManagerQueryServices {
         Map<String, Object> resourceDetail = product.getAllFields();
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
         if(person!=null){
+
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", resourceDetail.get("payToPartyId"), "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+            GenericValue partyContent = null;
+            if(null != contentsList && contentsList.size()>0){
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+
+                String contentId = partyContent.getString("contentId");
+                resourceDetail.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                resourceDetail.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
             resourceDetail.put("firstName",(String) person.get("firstName"));
+
+            //PartyNoteView
+            GenericValue partyNoteView = EntityQuery.use(delegator).from("PartyNoteView").where("targetPartyId", resourceDetail.get("payToPartyId")).queryFirst();
+            if(UtilValidate.isNotEmpty(partyNoteView)){
+                resourceDetail.put("partyNote",partyNoteView.get("noteInfo"));
+            }else{
+                resourceDetail.put("partyNote","这位卖家还未设置个人说明...");
+            }
+
         }
 
 
@@ -688,6 +718,12 @@ public class PersonManagerQueryServices {
         }
 
         resourceDetail.put("partyBuyOrder",partyOrderList);
+
+
+        // Query Product More Images & Text
+        List<Map<String,Object>> productMoreDetails = new ArrayList<Map<String, Object>>();
+        resourceDetail.put("productMoreDetails",productMoreDetails);
+
 
         resultMap.put("resourceDetail", resourceDetail);
 
@@ -914,8 +950,8 @@ public class PersonManagerQueryServices {
         GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
 
         EntityFindOptions findOptions = new EntityFindOptions();
-        findOptions.setFetchSize(0);
-        findOptions.setMaxRows(4);
+//        findOptions.setFetchSize(0);
+//        findOptions.setMaxRows(4);
         //Select Fields
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");

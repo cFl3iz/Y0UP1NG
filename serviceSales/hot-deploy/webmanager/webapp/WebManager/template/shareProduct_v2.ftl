@@ -3,7 +3,14 @@
         color:#000000;
     }
 </style>
-
+<script>
+    // 获取用户信息
+    function doWeChatAccess(){
+        var fromurl = "http://www.yo-pe.com/wechatBackInterface/oauth2_buy_product.php?productId="+"${(productId)!}&payToPartyId=${(resourceDetail.payToPartyId)!}";
+        var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
+        location.href = url;
+    }
+</script>
 <#if resourceDetail?has_content>
 <#--<header class="bar bar-nav">-->
     <#--&lt;#&ndash;<a class="icon icon-left-nav pull-left"></a> <a class="icon icon-more-vertical pull-right"></a>&ndash;&gt;-->
@@ -29,7 +36,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png" al
                         <div class="slogon"></div>
                     </div>
                 </section>
-                <section id="s-price"> <span class="mui-price big"> <i class="mui-price-rmb">&yen;</i> <span class="mui-price-integer">33.00 - 39.00</span> <span class="mui-price-decimal"></span> </span> </section>
+                <section id="s-price"> <span class="mui-price big"> <i class="mui-price-rmb">&yen;</i> <span class="mui-price-integer">${(resourceDetail.price?default('0'))!}</span> <span class="mui-price-decimal"></span> </span> </section>
                 <section id="s-adds"> </section>
                 <section id="s-hkDeliver"></section>
                 <section class="itemExtraInfo"> </section>
@@ -45,13 +52,18 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png" al
                 <#--</ul>-->
                 <ul class="table-view" style="margin-top: 10px;">
                     <li class="table-view-cell media"> <a class=""> <img class="media-object pull-left" src="http://placehold.it/42x42" />
-                        <div class="media-body"> My Mother
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+                        <div class="media-body"> ${(resourceDetail.firstName?default('StoreName'))!}
+                            <p>${(resourceDetail.partyNote?default('Description'))!}</p>
                         </div>
                     </a> </li>
                 </ul>
                 <ul class="table-view" style="margin-top:10px;">
-                    <li class="table-view-cell"> <a  style="font-size: 18px;font-style:bold;color:#666;"> <span class="badge">1485 ${uiLabel.Person}</span> ${uiLabel.FriendSay} </a></li>
+                    <li class="table-view-cell">
+                        <a  style="font-size: 18px;font-style:bold;color:#666;">
+        <#assign listSize = resourceDetail.partyBuyOrder?size/>
+                        <span class="badge">${(listSize?default(0))!} ${uiLabel.Person}</span> ${uiLabel.FriendSay}
+                        </a>
+                    </li>
                 </ul>
                 <div class="ipo">
                     <ul class="table-view">
@@ -143,17 +155,17 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                 <!-- 弹出 -->
                 <section id="s-actionBar-container">
                     <div id="s-actionbar" class="action-bar mui-flex align-center">
-                        <div class="web"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
+                        <div class="web" onclick="javascript:window.location.href='<@ofbizUrl>miniChat?productId=${productId}</@ofbizUrl>'"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
                             <p>${uiLabel.Talk}</p>
                         </div>
                         <div class="web"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>
-                        <div class="web"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
+                        <div class="web" onclick="javascript:alert('MARK');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell">${uiLabel.ShareFriend}</button>
-                        <button class="buy cell">${uiLabel.Buy}</button>
+                        <button class="buy cell" onclick="doWeChatAccess()">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
                 </section>
@@ -232,6 +244,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 </#if>
 <#if !resourceDetail?has_content>
 <script>
-    location.href = bank;
+    location.href = "www.baidu.com";
 </script>
 </#if>

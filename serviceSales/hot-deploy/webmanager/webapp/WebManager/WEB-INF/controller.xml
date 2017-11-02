@@ -22,16 +22,40 @@
 
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
-
     <!-- Share Resource -->
     <request-map uri="shareProduct"><security https="false" auth="false"/><response name="success" type="view" value="shareProduct"/></request-map>
+    <!-- Share Category -->
     <request-map uri="shareCategory"><security https="false" auth="false"/><response name="success" type="view" value="shareCategory"/></request-map>
-
-    <!-- Chat -->
+    <!-- Mini Chat -->
     <request-map uri="miniChat"><security https="false" auth="false"/><response name="success" type="view" value="miniChat"/></request-map>
+    <!-- ViewOrder -->
+    <request-map uri="viewWebOrderDetail"><security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/></request-map>
+
+    <!-- accessWeChatFromBuyProduct -->
+    <request-map uri="accessWeChatFromBuyProduct">
+        <security auth="false" https="false"/>
+        <event type="java" path="main.java.com.banfftech.webmanager.WebServices"
+               invoke="accessWeChatFromBuyProduct"/>
+        <response name="success" type="request-redirect" value="viewWebOrderDetail">
+            <redirect-parameter name="accessToken" from="accessToken"/>
+            <redirect-parameter name="openId" from="openId"/>
+            <redirect-parameter name="code" from="code"/>
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+        <response name="error" type="request-redirect" value="shareProduct"/>
+    </request-map>
+
+
+
+
+
+
+
+
 
     <!-- View Mappings -->
     <view-map name="miniChat" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#miniChat"/>
+    <view-map name="viewWebOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#viewWebOrderDetail"/>
     <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>
     <view-map name="shareProduct" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareProduct"/>
     <view-map name="shareCategory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>

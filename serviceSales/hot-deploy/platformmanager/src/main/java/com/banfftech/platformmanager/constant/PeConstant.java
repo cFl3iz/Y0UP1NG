@@ -111,4 +111,29 @@ public class PeConstant {
      * 开放平台AppSc
      */
     public static final String WX_KAIFANG_PINGTAI_APP_SC = "d410e16ac6dd1346f509dda263f23253";
+
+    /**
+     * 微信公众平台AppID
+     */
+    public static final String WECHAT_GZ_APP_ID = "wx8b1eb42f8cadbff1";
+
+    /**
+     * 微信公众平台Sc
+     */
+    public static final String ACCESS_KEY_SECRET = "f507073761431bdb0a15e85ebe33cffd";
+
+    /**
+     * We Chat Access Path
+     */
+    public static final String WX_ACCESS_PATH ="https://api.weixin.qq.com/sns/oauth2/access_token";
+
+    /**
+     * We Chat User Info Path
+     */
+    public static final String WX_USER_INFO_PATH ="https://api.weixin.qq.com/sns/userinfo";
+
+    /**
+     * We Chat User Info Path / CGI
+     */
+    public static final String WX_USER_INFO_CGI_BIN_PATH ="https://api.weixin.qq.com/cgi-bin/user/info";
 }

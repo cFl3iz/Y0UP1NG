@@ -764,13 +764,23 @@ public class PersonManagerServices {
 
         String firstName = (String) request.getParameter("firstName");
 
+        String noteInfo  = (String) request.getParameter("noteInfo");
+
         String gender = (String) request.getParameter("gender");
 
         if (!UtilValidate.isEmpty(gender)) {
             gender = "M";
         }
 
+
+
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+
+        if(!UtilValidate.isEmpty(noteInfo)){
+            dispatcher.runSync("createPartyNote", UtilMisc.toMap("userLogin", admin,
+                    "partyId", partyId,"note",noteInfo,"noteName","个人说明"));
+        }
 
         dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId, "firstName", firstName, "lastName", "NA", "gender", gender));

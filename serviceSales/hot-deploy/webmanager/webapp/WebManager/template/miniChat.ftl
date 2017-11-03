@@ -110,7 +110,7 @@
     </div>
     <div class="wenwen_text left">
         <div class="write_box">
-            <input type="text" class="left" onKeyUp="keyup()" placeholder="" />
+            <input type="hidden" class="left" onKeyUp="keyup()" placeholder=""  />
         </div>
         <div class="circle-button" id="wenwen">
         ${uiLabel.clickOnSay}
@@ -166,7 +166,7 @@
             autoWidth();
             for_bottom();
             setTimeout(function(){
-                var ans  = '<div class="answer"><div class="heard_img left"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>';
+                var ans  = '<div class="answer"><div class="heard_img left"><img src="'${(payToPartyHead)!}'"></div>';
                 ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
                 ans += '</div></div>';
                 $('.speak_box').append(ans);

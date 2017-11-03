@@ -110,7 +110,7 @@
     </div>
     <div class="wenwen_text left">
         <div class="write_box">
-            <input type="hidden" class="left" onKeyUp="keyup()" placeholder=""  />
+            <input type="text" class="left" onKeyUp="keyup()" placeholder=""  />
         </div>
         <div class="circle-button" id="wenwen">
         ${uiLabel.clickOnSay}
@@ -125,7 +125,7 @@
     <div style="opacity:0;" class="clear"></div>
 </div>
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
-<input id="payToPartyId" value="${(payToPartyId)!}"/>
+<input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <script type="text/javascript">
 
     function to_write(){

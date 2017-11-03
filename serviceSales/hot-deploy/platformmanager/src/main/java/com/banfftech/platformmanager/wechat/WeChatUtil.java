@@ -175,6 +175,7 @@ public class WeChatUtil {
         Map<String,String> weChatUserInfo = new HashMap<String, String>();
 
        StringBuffer requestParamSB = new StringBuffer();
+
         String contentAK=(String)context.get("accessToken");
 
 

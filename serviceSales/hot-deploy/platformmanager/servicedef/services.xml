@@ -95,6 +95,7 @@
              invoke="getWeChatUserInfo" auth="false">
         <description> Get We Chat User Info</description>
         <attribute name="code" type="String" mode="IN" optional="true" />
+        <attribute name="accessToken" type="String" mode="IN" optional="true" />
         <attribute name="openId" type="String" mode="IN" optional="true" />
         <attribute name="weChatUserInfo" type="java.util.Map" mode="OUT"
                    optional="true" />

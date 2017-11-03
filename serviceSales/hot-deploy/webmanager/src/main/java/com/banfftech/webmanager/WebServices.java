@@ -109,7 +109,8 @@ public class WebServices {
         Map<String,Object> accessMap =  wu.getWeChatAccess(code);
 
 
-        Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId")));
+
+        Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId"),"accessToken",accessMap.get("accessToken")));
 
         Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
         System.out.println("==================================================userInfoMap= " + userInfoMap);

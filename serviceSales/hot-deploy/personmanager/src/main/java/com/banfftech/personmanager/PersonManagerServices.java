@@ -110,11 +110,13 @@ public class PersonManagerServices {
 
         String partyIdTo = (String) context.get("partyIdTo");
 
+        System.out.println("========================================= partyIdTo = " +partyIdTo);
+
         GenericValue jpush = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "JPUSH_IOS").queryFirst();
 
         String jpushId = (String) jpush.get("idValue");
 
-        System.out.println("========================================= jpush id " + jpushId +" === partyId = " +partyIdTo);
+
 
         dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"deviceType","IOS","regId",jpushId,"sendType","JPUSH_ANDROID"));
 

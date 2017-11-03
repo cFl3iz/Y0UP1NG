@@ -112,7 +112,7 @@ public class WebServices {
         Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId")));
 
         Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
-
+        System.out.println("==================================================userInfoMap= " + userInfoMap);
         String unioId =  (String) userInfoMap.get("unionid");
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();

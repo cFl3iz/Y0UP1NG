@@ -193,6 +193,8 @@ public class WeChatUtil {
 
         String realAk   =(String) jsonMapAk.get("access_token");
 
+        System.out.println("==================================================realAk= " +realAk);
+        System.out.println("==================================================openId= " +context.get("openId"));
         if(context.get("openId")!=null){
             requestParamSB.append("access_token="+realAk);//AK
             requestParamSB.append("&openid="+(String)context.get("openId"));//AK
@@ -206,6 +208,7 @@ public class WeChatUtil {
         String responseStr = sendGet(PeConstant.WX_USER_INFO_CGI_BIN_PATH,requestParamSB.toString());
 
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
+        System.out.println("==================================================jsonMap= " + jsonMap);
         if(null != jsonMap.get("nickname")){
 //            weChatUserInfo.put("weChatId",(String) context.get("openId"));
 //            weChatUserInfo.put("nickname",(String) jsonMap.get("nickname"));
@@ -235,7 +238,8 @@ public class WeChatUtil {
         JSONObject jsonUserInfoMap = JSONObject.fromObject(jsonUserInfoMapStr);
 
         String wxNickName = (String) jsonUserInfoMap.get("nickname");
-
+        System.out.println("==================================================jsonUserInfoMap= " + jsonUserInfoMap);
+        System.out.println("==================================================wxNickName= " + wxNickName);
         if(EmojiFilter.containsEmoji(wxNickName)){
             //包含emoji表情
             wxNickName = EmojiHandler.encodeJava(wxNickName);

@@ -948,7 +948,7 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("shipGroupSeqId", "00001");
         appendOrderItemInMap.put("prodCatalogId", prodCatalogId);
         appendOrderItemInMap.put("basePrice", grandTotal);
-        appendOrderItemInMap.put("overridePrice", grandTotal);
+        appendOrderItemInMap.put("overridePrice", price);
 
         //appendOrderItem
         Map<String, Object> appendOrderItemOutMap = null;

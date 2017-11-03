@@ -7,7 +7,7 @@
     // 获取用户信息
     function doWeChatAccess(){
 
-        var fromurl = "http://120.27.222.80/wechatBackInterface/oauth2_buy_product.php?productId="+"${(productId)!}"+"&payToPartyId="+"${(resourceDetail.payToPartyId)!}"+"&prodCatalogId="+"${(resourceDetail.prodCatalogId)!}"+"&productStoreId="+"${(resourceDetail.productStoreId)!}";
+        var fromurl = "http://120.27.222.80/oauth2_buy_product.php?productId="+"${(productId)!}";
 
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         alert(url);

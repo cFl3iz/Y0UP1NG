@@ -23,7 +23,7 @@
                 <section id="s-showcase">
                     <div class="scroller">
                         <div class="itbox main"> <a class="item"> <img src="
-http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png" alt="" /> </a>
+${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}" alt="" /> </a>
                         </div>
                     </div>
                 </section>

@@ -29,6 +29,9 @@
 
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
                 <set field="productName" value="${parameters.productName}"/>
+                <set field="payToPartyId" value="${parameters.payToPartyId}"/>
+                <set field="payToPartyFirstName" value="${parameters.payToPartyFirstName}"/>
+                <set field="payToPartyHead" value="${parameters.payToPartyHead}"/>
 
             </actions>
             <widgets>

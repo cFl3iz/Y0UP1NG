@@ -7,7 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
-    <title>PersonService</title>
+    <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}</title>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
         body{
@@ -67,7 +67,9 @@
 <div class="speak_window">
     <div class="speak_box">
         <div class="answer">
-            <div class="heard_img left"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>
+            <div class="heard_img left">
+                <img src="${(payToPartyHead)!}">
+            </div>
             <div class="answer_text">
                 <p>${uiLabel.About}<br/>
                     <#--<a href="#">${uiLabel.BuyNow}</a>-->

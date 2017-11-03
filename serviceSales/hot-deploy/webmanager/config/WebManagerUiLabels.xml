@@ -65,7 +65,17 @@
         <value xml:lang="zh_CN">发送</value>
     </property>
 
+    <property key="to">
+        <value xml:lang="en">to </value>
+        <value xml:lang="zh">与 </value>
+        <value xml:lang="zh_CN">与 </value>
+    </property>
 
+    <property key="chat">
+        <value xml:lang="en">chat </value>
+        <value xml:lang="zh">的聊天 </value>
+        <value xml:lang="zh_CN">的聊天 </value>
+    </property>
 
     <property key="About">
         <value xml:lang="en">Hi.</value>

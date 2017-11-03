@@ -64,7 +64,7 @@
             <widgets>
 
                 <platform-specific>
-                    <html><html-template location="component://webmanager/webapp/webmanager/include/MobileProductHead.ftl"/></html>
+                    <html><html-template location="component://webmanager/webapp/Webmanager/include/MobileProductHead.ftl"/></html>
                 </platform-specific>
 
                 <container style="container">

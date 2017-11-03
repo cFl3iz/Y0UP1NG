@@ -1048,9 +1048,12 @@ public class PersonManagerServices {
 
 
         // Create PartyIdentification Block
-        Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
-        dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        if(!UtilValidate.isEmpty(uuid)){
+            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        }
+
 
         if(!UtilValidate.isEmpty(openId)){
             Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",

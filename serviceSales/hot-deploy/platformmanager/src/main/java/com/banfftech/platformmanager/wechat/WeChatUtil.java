@@ -174,11 +174,9 @@ public class WeChatUtil {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Map<String,String> weChatUserInfo = new HashMap<String, String>();
 
-
-        result.put("adminOpenId",context.get("adminOpenId"));
-//        System.out.println("============================================IN getWeChatUserInfo SERVICE , admin OpenId = "+result.get("adminOpenId"));
-        StringBuffer requestParamSB = new StringBuffer();
+       StringBuffer requestParamSB = new StringBuffer();
         String contentAK=(String)context.get("accessToken");
+
 
 
         //此处微信做了更改，一律从新获取ak
@@ -189,7 +187,7 @@ public class WeChatUtil {
         requestParamSBa.append("&grant_type=client_credential");
 
         // Do HTTP Get
-        String responseStrAk = sendPost("https://api.weixin.qq.com/cgi-bin/token", requestParamSBa.toString());
+        String responseStrAk = sendPost(PeConstant.WX_USER_INFO_CGI_BIN_TOKEN_PATH, requestParamSBa.toString());
 
         JSONObject jsonMapAk = JSONObject.fromObject(responseStrAk);
 
@@ -205,11 +203,9 @@ public class WeChatUtil {
 
 
         // Do HTTP Get
-        //String responseStr = sendGet(WX_USER_INFO_PATH,requestParamSB.toString());
         String responseStr = sendGet(PeConstant.WX_USER_INFO_CGI_BIN_PATH,requestParamSB.toString());
 
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
-        //    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++jsonMap="+jsonMap);
         if(null != jsonMap.get("nickname")){
 //            weChatUserInfo.put("weChatId",(String) context.get("openId"));
 //            weChatUserInfo.put("nickname",(String) jsonMap.get("nickname"));
@@ -223,7 +219,7 @@ public class WeChatUtil {
 //            weChatUserInfo.put("unionid",(String) jsonMap.get("unionid"));
             //关键字段:是否订阅,这将影响我们是否要他重复关注公众号
             weChatUserInfo.put("subscribe",jsonMap.get("subscribe")+"");
-            //    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>subscribe="+jsonMap.get("subscribe")+"");
+
         }
 
 
@@ -235,6 +231,7 @@ public class WeChatUtil {
 
 
         String jsonUserInfoMapStr = sendGet(PeConstant.WX_USER_INFO_PATH,requestParamUserInfoSB.toString());
+
         JSONObject jsonUserInfoMap = JSONObject.fromObject(jsonUserInfoMapStr);
 
         String wxNickName = (String) jsonUserInfoMap.get("nickname");
@@ -255,20 +252,27 @@ public class WeChatUtil {
             String uuid = (String) jsonUserInfoMap.get("unionid");
             weChatUserInfo.put("unionid",(String) jsonUserInfoMap.get("unionid"));
         }
-        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", (String) jsonUserInfoMap.get("unionid")).queryList();
-        String   partyId ="";
-        if(partyIdentificationList.size()>1){
-            partyId =  (String) partyIdentificationList.get(partyIdentificationList.size()-1).get("partyId");
-        }else{
-            if(null != partyIdentificationList && partyIdentificationList.size()>0 && partyIdentificationList.get(0) != null){
-                partyId =(String) partyIdentificationList.get(0).get("partyId");
-            }
-        }
+
+//        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", (String) jsonUserInfoMap.get("unionid")).queryList();
+//
+//        String   partyId ="";
+//
+//        if(partyIdentificationList.size()>1){
+//
+//            partyId =  (String) partyIdentificationList.get(partyIdentificationList.size()-1).get("partyId");
+//
+//        }else{
+//            if(null != partyIdentificationList && partyIdentificationList.size()>0 && partyIdentificationList.get(0) != null){
+//
+//                partyId =(String) partyIdentificationList.get(0).get("partyId");
+//
+//            }
+//        }
 
 
         // Service Foot
         result.put("weChatUserInfo",weChatUserInfo);
-        result.put("nowPartyId",partyId);
+       // result.put("nowPartyId",partyId);
         return result;
     }
 }

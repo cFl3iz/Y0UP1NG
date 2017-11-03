@@ -223,12 +223,6 @@ public class PlatformLoginWorker {
 
             String wxNickName = (String) jsonMap2.get("nickname");
 
-//            try{
-//                wxNickName = new String(wxNickName.getBytes("ISO-8859-1"), "UTF-8");
-//                String stra = "";
-//            }catch (Exception e){
-//
-//            }
             if(EmojiFilter.containsEmoji(wxNickName)){
                 //包含emoji表情
                 wxNickName = EmojiHandler.encodeJava(wxNickName);
@@ -241,34 +235,9 @@ public class PlatformLoginWorker {
             weChatUserInfo.put("city", (String) jsonMap2.get("city"));
             weChatUserInfo.put("province", (String) jsonMap2.get("province"));
             weChatUserInfo.put("country", (String) jsonMap2.get("country"));
-            String uuid = (String) jsonMap2.get("unionid");
-            //创建微信绑定数据
-            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                    partyId, "idValue", uuid, "partyIdentificationTypeId", "WX_OPEN_ID","enabled","Y");
-            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
-            //头像数据
-            main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"));
-            //将微信名称更新过来
-            GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
-            person.set("firstName", weChatUserInfo.get("nickname"));
-            //微信中的用户性别,如果真的什么都没默认男。
-            String gender = "M";
-            if(null != weChatUserInfo.get("sex") && (weChatUserInfo.get("sex").equals("2"))){
-                gender ="F";
-            }
-            person.set("gender", gender);
-            person.store();
-            String language = weChatUserInfo.get("language");
-            //配置用户本地语言环境
-            Debug.logInfo("PE-LOG====================userLoginId = " + userLogin.get("userLoginId"), module);
-            Debug.logInfo("PE-LOG====================language = " + language, module);
-            if (language != null) {
-                GenericValue userPreference = delegator.createOrStore(delegator.makeValue("UserPreference",
-                        UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "local", "userPrefValue", language
-                        )));
-            }
+            String unionid = (String) jsonMap2.get("unionid");
 
-
+            main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin, partyId, delegator, unionid, weChatUserInfo, userLogin, dispatcher);
 
             Debug.logInfo("PE-LOG====================USER_BIND_WECHAT_OVER", module);
 
@@ -276,7 +245,44 @@ public class PlatformLoginWorker {
         return true;
     }
 
-
+    /**
+     * createNewWeChatPerson
+     * @param admin
+     * @param partyId
+     * @param delegator
+     * @param uuid
+     * @param weChatUserInfo
+     * @param userLogin
+     * @param dispatcher
+     * @throws GenericServiceException
+     */
+    public static  void createNewWeChatPerson(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
+        //创建微信绑定数据
+        Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                partyId, "idValue", unioId, "partyIdentificationTypeId", "WX_OPEN_ID","enabled","Y");
+        dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        //头像数据
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"));
+        //将微信名称更新过来
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+        person.set("firstName", weChatUserInfo.get("nickname"));
+        //微信中的用户性别,如果真的什么都没默认男。
+        String gender = "M";
+        if(null != weChatUserInfo.get("sex") && (weChatUserInfo.get("sex").equals("2"))){
+            gender ="F";
+        }
+        person.set("gender", gender);
+        person.store();
+        String language = (String) weChatUserInfo.get("language");
+        //配置用户本地语言环境
+        Debug.logInfo("PE-LOG====================userLoginId = " + userLogin.get("userLoginId"), module);
+        Debug.logInfo("PE-LOG====================language = " + language, module);
+        if (language != null) {
+            GenericValue userPreference = delegator.createOrStore(delegator.makeValue("UserPreference",
+                    UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "local", "userPrefValue", language
+                    )));
+        }
+    }
 
 
 

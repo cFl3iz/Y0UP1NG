@@ -6,7 +6,7 @@
 <script>
     // 获取用户信息
     function doWeChatAccess(){
-        var fromurl = "http://www.yo-pe.com/wechatBackInterface/oauth2_buy_product.php?productId="+"${(productId)!}&payToPartyId=${(resourceDetail.payToPartyId)!}";
+        var fromurl = "http://www.yo-pe.com/wechatBackInterface/oauth2_buy_product.php?productId="+"${(productId)!}&payToPartyId=${(resourceDetail.payToPartyId)!}&prodCatalogId=${(resourceDetail.prodCatalogId)!}&productStoreId=${(resourceDetail.productStoreId)!}";
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         location.href = url;
     }

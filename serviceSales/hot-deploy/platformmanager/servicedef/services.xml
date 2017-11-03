@@ -89,4 +89,17 @@
 
 
 
+
+    <service name="getWeChatUserInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.wechat.WeChatUtil"
+             invoke="getWeChatUserInfo" auth="false">
+        <description> Get We Chat User Info</description>
+        <attribute name="code" type="String" mode="IN" optional="true" />
+        <attribute name="openId" type="String" mode="IN" optional="true" />
+        <attribute name="weChatUserInfo" type="java.util.Map" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
 </services>

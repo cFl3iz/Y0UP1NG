@@ -80,7 +80,7 @@ public class WebServices {
      * @throws GenericServiceException
      */
     public static String accessWeChatFromBuyProduct(HttpServletRequest request, HttpServletResponse response)
-            throws GenericServiceException {
+            throws GenericServiceException,GenericEntityException {
 
         // Servlet Head
 
@@ -94,20 +94,77 @@ public class WebServices {
 
         String code = (String) request.getParameter("code");
 
+        String prodCatalogId = (String) request.getParameter("prodCatalogId");
+
         String productId = (String) request.getParameter("productId");
 
+        String payToPartyId = (String) request.getParameter("payToPartyId");
+
+        String productStoreId = (String) request.getParameter("productStoreId");
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = null;
 
         Map<String,Object> accessMap =  wu.getWeChatAccess(code);
 
 
+        Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId")));
+
+        Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
+
+        String unioId =  (String) userInfoMap.get("unionid");
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
+
+        String   partyId ="";
+
+
+
+
+        if(partyIdentificationList.size()>1){
+
+            partyId =  (String) partyIdentificationList.get(partyIdentificationList.size()-1).get("partyId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+        }else{
+
+            if(null != partyIdentificationList && partyIdentificationList.size()>0 && partyIdentificationList.get(0) != null){
+
+                partyId =(String) partyIdentificationList.get(0).get("partyId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+            }else{
+
+                Debug.logInfo("*CREATE NEW USER", module);
+                //立即注册
+                Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+                createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
+                createPeUserMap.put("userLogin", admin);
+                createPeUserMap.put("uuid", null);
+                Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
+                String newUserLoginId = (String) serviceResultMap.get("userLoginId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+                partyId = (String)userLogin.get("partyId");
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin,partyId,delegator,unioId,userInfoMap,userLogin,dispatcher);
+            }
+        }
+
+        GenericValue priductPrice =  EntityQuery.use(delegator).from("ProductPrice").where("productId", productId, "productPriceTypeId",PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID,"productPricePurposeId",PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE,"currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID).queryFirst();
+
+        // placeResourceOrder
+        Map<String,Object> placeResourceOrderInMap = new HashMap<String, Object>();
+        placeResourceOrderInMap.put("userLogin",userLogin);
+        placeResourceOrderInMap.put("productId",productId);
+        placeResourceOrderInMap.put("prodCatalogId",prodCatalogId);
+        placeResourceOrderInMap.put("price",priductPrice.get("price")+"");
+        placeResourceOrderInMap.put("productStoreId",productStoreId);
+        placeResourceOrderInMap.put("payToPartyId",payToPartyId);
+
+
+        Map<String,Object> placeResourceOrderOutMap =  dispatcher.runSync("placeResourceOrder",placeResourceOrderInMap);
+
+
         request.setAttribute("productId",productId);
-        request.setAttribute("accessToken",accessMap.get("accessToken"));
-        request.setAttribute("openId",accessMap.get("openId"));
-        request.setAttribute("code",code);
-
-
-        //TODO  RunSync getWeChatUserInfo Service  To Get UnioId
-
+        request.setAttribute("orderId",placeResourceOrderOutMap.get("orderId"));
         return "success";
     }
 

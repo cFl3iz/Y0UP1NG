@@ -132,6 +132,12 @@ public class PeConstant {
      */
     public static final String WX_USER_INFO_PATH ="https://api.weixin.qq.com/sns/userinfo";
 
+
+    /**
+     * WX_USER_INFO_CGI_BIN_TOKEN_PATH
+     */
+    public static final String WX_USER_INFO_CGI_BIN_TOKEN_PATH  =  "https://api.weixin.qq.com/cgi-bin/token";
+
     /**
      * We Chat User Info Path / CGI
      */

@@ -86,6 +86,44 @@ public class PersonManagerServices {
     }
 
 
+    /**
+     * push Message
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> pushMessage(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String text = (String) context.get("text");
+
+        String partyIdTo = (String) context.get("partyIdTo");
+
+        GenericValue jpush = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "JPUSH_IOS").queryFirst();
+
+        String jpushId = (String) jpush.get("idValue");
+
+        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"deviceType","IOS","regId",jpushId,"sendType","JPUSH_ANDROID"));
+
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        return resultMap;
+    }
+
+
+
 
         /**
          * Affirm Order
@@ -276,6 +314,43 @@ public class PersonManagerServices {
 
         return count;
     }
+
+
+    /**
+     * Query Message
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String queryMessage(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+        // productId
+        String productId = (String) request.getParameter("productId");
+
+
+
+
+        return "success";
+    }
+
+
 
     /**
      * add Product Content

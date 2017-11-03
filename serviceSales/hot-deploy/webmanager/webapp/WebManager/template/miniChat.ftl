@@ -56,6 +56,28 @@
         .write_list{font-size:18px;position:absolute;left:0;width:100%;background:#fff;border-top:solid 1px #ddd;padding:5px;line-height:30px;}
     </style>
 <script>
+
+    function flushMessage() {
+        var url = "queryMessage";
+        var param = {
+            payToPartyId:${(payToPartyId)!}
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (data) {
+                alert("ERROR :" + data.status);
+            }
+        });
+    }
+
+
+
+
     $(
             function(){
                 $("#wenwen_btn_left").click();
@@ -123,6 +145,9 @@
         $('.circle-button,.wenwen_help a').show();
     }
 
+    /**
+     * 发送说的话
+     */
     function up_say(){
         $('.write_list').remove();
         var text = $('.write_box input').val(),
@@ -148,6 +173,24 @@
                 for_bottom();
             },1000);
         }
+
+
+        var url = "pushMessage";
+        var param = {
+            partyIdTo:${(payToPartyId)!},
+            text:text
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (data) {
+                alert("ERROR :" + data.status);
+            }
+        });
     }
 
     function keyup(){

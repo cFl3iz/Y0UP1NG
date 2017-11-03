@@ -30,6 +30,23 @@
     <request-map uri="miniChat"><security https="false" auth="false"/><response name="success" type="view" value="miniChat"/></request-map>
     <!-- ViewOrder -->
     <request-map uri="viewWebOrderDetail"><security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/></request-map>
+    <!-- QueryMessage -->
+    <request-map uri="queryMessage">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="queryMessage"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <!-- PushMessage -->
+    <request-map uri="pushMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="pushMessage"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <!-- accessWeChatFromBuyProduct -->
     <request-map uri="accessWeChatFromBuyProduct">

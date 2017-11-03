@@ -125,7 +125,7 @@
     <div style="opacity:0;" class="clear"></div>
 </div>
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
-
+<input id="payToPartyId" value="${(payToPartyId)!}"/>
 <script type="text/javascript">
 
     function to_write(){
@@ -174,10 +174,10 @@
             },1000);
         }
 
-
+        var payToPartyId = $("#payToPartyId").val();
         var url = "pushMessage";
         var param = {
-            partyIdTo:${(payToPartyId)!},
+            partyIdTo:payToPartyId,
             text:text
         };
         $.ajax({

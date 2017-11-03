@@ -114,6 +114,8 @@ public class PersonManagerServices {
 
         String jpushId = (String) jpush.get("idValue");
 
+        System.out.println("========================================= jpush id " + jpushId +" === partyId = " +partyIdTo);
+
         dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"deviceType","IOS","regId",jpushId,"sendType","JPUSH_ANDROID"));
 
 

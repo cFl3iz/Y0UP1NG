@@ -166,7 +166,7 @@
             autoWidth();
             for_bottom();
             setTimeout(function(){
-                var ans  = '<div class="answer"><div class="heard_img left"><img src="'${(payToPartyHead)!}'"></div>';
+                var ans  = '<div class="answer"><div class="heard_img left"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>';
                 ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
                 ans += '</div></div>';
                 $('.speak_box').append(ans);

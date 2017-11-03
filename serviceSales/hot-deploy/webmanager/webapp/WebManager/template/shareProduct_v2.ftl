@@ -57,7 +57,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <#--</ul>-->
                 <ul class="table-view" style="margin-top: 10px;">
                     <li class="table-view-cell media"> <a class="">
-                        <img class="media-object pull-left" src="${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}" />
+                        <img class="media-object pull-left" style="width: 50%;height:50%;" src="${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}" />
                         <div class="media-body"> ${(resourceDetail.firstName?default('StoreName'))!}
                             <p>${(resourceDetail.partyNote?default('Description'))!}</p>
                         </div>

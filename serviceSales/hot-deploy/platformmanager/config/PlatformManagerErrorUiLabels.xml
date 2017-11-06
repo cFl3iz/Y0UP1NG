@@ -21,6 +21,12 @@
         <value xml:lang="zh">内部服务错误</value>
     </property>
 
+    <property key="JPushError">
+        <value xml:lang="en">JPushError</value>
+        <value xml:lang="zh">极光推送失败</value>
+    </property>
+
+
     <property key="UserNotFoundError">
         <value xml:lang="en">User Not Found Error</value>
         <value xml:lang="zh">没有找到用户</value>

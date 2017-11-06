@@ -108,6 +108,8 @@ public class PersonManagerServices {
 
         String text = (String) context.get("text");
 
+        String objectId = (String) context.get("objectId");
+
         String partyIdTo = (String) context.get("partyIdTo");
 
         String partyIdFrom = (String) context.get("partyIdFrom");
@@ -132,8 +134,39 @@ public class PersonManagerServices {
         if(person!=null){
             text = person.get("firstName")+":"+text;
         }
-
+    try{
         dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+    } catch (GenericServiceException e1) {
+        Debug.logError(e1.getMessage(), module);
+        return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+    }
+
+
+
+
+        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+
+        if(!UtilValidate.isEmpty(partyIdFrom)) {
+            createMessageLogMap.put("partyIdFrom", partyIdFrom);
+        }
+
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+        createMessageLogMap.put("partyIdTo",partyIdTo);
+
+        createMessageLogMap.put("message",text);
+
+        if(!UtilValidate.isEmpty(objectId)){
+            createMessageLogMap.put("objectId",objectId);
+        }
+
+        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+        msg.create();
+
+
 
 
 

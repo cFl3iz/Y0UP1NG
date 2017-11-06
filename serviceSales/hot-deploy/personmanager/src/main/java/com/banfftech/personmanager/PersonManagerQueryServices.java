@@ -567,7 +567,7 @@ public class PersonManagerQueryServices {
 
                 //说明这笔订单我是卖家,查买家头像信息
                 if(payToPartyId.equals(partyId)){
-                    personInfoMap =  queryPersonBaseInfo(delegator,partyId);
+                    personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
                 }
                 //说明这笔单我是买家,查卖家头像信息
                 if(!payToPartyId.equals(partyId)){

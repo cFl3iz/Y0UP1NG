@@ -78,6 +78,10 @@
 
         <attribute name="partyIdFrom" type="String" mode="IN"
                    optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="objectId" type="String" mode="IN"
+                   optional="true" />
         <attribute name="messages" type="List" mode="OUT"
                    optional="true" />
 

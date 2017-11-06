@@ -40,14 +40,20 @@ public class PlatformManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyIdTo = (String) userLogin.get("partyId");
         String partyIdFrom = (String) context.get("partyIdFrom");
+        String objectId = (String) context.get("objectId");
+
         Set<String> fieldSet = new HashSet<String>();
 
         fieldSet.add("message");
         fieldSet.add("partyIdFrom");
         fieldSet.add("partyIdTo");
-
+        fieldSet.add("objectId");
         fieldSet.add("messageId");
         fieldSet.add("fromDate");
+
+//        if (UtilValidate.isNotEmpty(objectId)) {
+//
+//        }
 
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
@@ -68,6 +74,9 @@ public class PlatformManagerQueryServices {
 
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3,EntityOperator.OR,findConditions4);
+
+
+
 
         EntityConditionList<EntityCondition> listBigConditions = EntityCondition
                 .makeCondition(listConditions, listConditions2);
@@ -96,12 +105,12 @@ public class PlatformManagerQueryServices {
             } catch (Exception e) {
             }
 
-            rowMap.put("_id", messageId);
+            rowMap.put("messageId", messageId);
             rowMap.put("text", message);
-            rowMap.put("createdAt", tsStr);
+            rowMap.put("messageTime", tsStr);
             GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
 
-            userMap.put("_id",person.get("partyId"));
+            userMap.put("toPartyId",person.get("partyId"));
             userMap.put("name",person.get("firstName"));
             userMap.put("avatar","https://facebook.github.io/react/img/logo_og.png");
             rowMap.put("user", userMap);

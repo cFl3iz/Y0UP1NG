@@ -82,7 +82,7 @@ public class PlatformManagerQueryServices {
                 .makeCondition(listConditions, listConditions2);
 
 
-        List<GenericValue> queryMessageLogList = delegator.findList("MessageLog",
+        List<GenericValue> queryMessageLogList = delegator.findList("MessageLogView",
                 listBigConditions, fieldSet,
                 UtilMisc.toList("-fromDate"), null, false);
 

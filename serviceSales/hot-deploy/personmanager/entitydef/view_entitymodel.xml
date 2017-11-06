@@ -144,4 +144,19 @@
 
 
     </view-entity>
+
+
+
+
+    <!-- 查询 消息列表的视图 , 非常痛苦  -->
+    <view-entity entity-name="MessageLogView" package-name="com.banfftech.personerp">
+    <member-entity entity-name="MessageLog" entity-alias="ML" />
+        <alias-all entity-alias="ML"/>
+        <alias name="objectId" field="objectId" group-by="true" entity-alias="ML"/>
+    </view-entity>
+
+
+
+
+
 </entitymodel>

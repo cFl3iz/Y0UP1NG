@@ -36,7 +36,7 @@
             <widgets>
 
                 <platform-specific>
-                    <html><html-template location="component://webmanager/webapp/webmanager/include/UDUI.ftl"/></html>
+                    <html><html-template location="component://webmanager/webapp/WebManager/include/UDUI.ftl"/></html>
                 </platform-specific>
 
                 <container style="container">

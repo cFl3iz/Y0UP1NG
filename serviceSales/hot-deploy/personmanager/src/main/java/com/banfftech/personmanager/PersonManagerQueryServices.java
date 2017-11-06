@@ -522,7 +522,6 @@ public class PersonManagerQueryServices {
         fieldSet.add("quantity");
         fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
-
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
         fieldSet.add("payToPartyId");
@@ -541,22 +540,11 @@ public class PersonManagerQueryServices {
         EntityCondition listConditions = EntityCondition
                 .makeCondition(findConditions,EntityOperator.OR,findConditions2);
 
-//        EntityCondition findSalesConditions = EntityCondition
-//                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
-//
-//        EntityCondition findSalesConditions2 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId", "SHIP_FROM_VENDOR"));
-//
-//        EntityConditionList<EntityCondition> listSalesConditions = EntityCondition
-//                .makeCondition(findSalesConditions, findSalesConditions2);
 
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
-//        List<GenericValue> queryMySalesResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-//                listSalesConditions, fieldSet,
-//                UtilMisc.toList("-orderDate"), null, false);
 
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
 
@@ -579,24 +567,6 @@ public class PersonManagerQueryServices {
             }
         }
 
-
-//        if(null != queryMySalesResourceOrderList && queryMySalesResourceOrderList.size()>0){
-//
-//            for(GenericValue gv : queryMySalesResourceOrderList){
-//                Map<String,Object> rowMap = new HashMap<String, Object>();
-//                rowMap = gv.getAllFields();
-//                String productStoreId = (String) gv.get("productStoreId");
-//                String productId = (String) gv.get("productId");
-//                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
-//                GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
-//                rowMap.put("productName",""+product.get("productName"));
-//                rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
-//                rowMap.put("partyId",(String)gv.get("partyId"));
-//                String statusId = (String) gv.get("statusId");
-//                rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
-//                myResourceOrderList.add(rowMap);
-//            }
-//        }
 
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
 

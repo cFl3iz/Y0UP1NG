@@ -18,6 +18,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+
 
 /**
  * Created by Administrator on 2017/9/12.
@@ -108,11 +110,12 @@ public class PlatformManagerQueryServices {
             rowMap.put("messageId", messageId);
             rowMap.put("text", message);
             rowMap.put("messageTime", tsStr);
-            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
 
-            userMap.put("toPartyId",person.get("partyId"));
-            userMap.put("name",person.get("firstName"));
-            userMap.put("avatar","https://facebook.github.io/react/img/logo_og.png");
+//            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
+            Map<String,String> user =  queryPersonBaseInfo(delegator,toParty);
+            userMap.put("toPartyId",toParty);
+            userMap.put("name",user.get("firstName"));
+            userMap.put("avatar",user.get("headPortrait"));
             rowMap.put("user", userMap);
             returnList.add(rowMap);
         }

@@ -62,14 +62,16 @@ public class JPushServices {
 		Locale locale = (Locale) context.get("locale");
 		String regId = (String) context.get("regId");
 		String deviceType = (String) context.get("deviceType");
-
+		String sendType  = "";
 		GenericValue userLogin = (GenericValue) context.get("userLogin");
 		String partyId = userLogin.getString("partyId");
 
 		String partyIdentificationTypeId = null;
 		if(deviceType.toLowerCase().indexOf("android")>0){
+			sendType= "ANDROID";
 			partyIdentificationTypeId = "JPUSH_ANDROID";
 		}else if(deviceType.toLowerCase().indexOf("os")>0){
+			sendType= "IOS";
 			partyIdentificationTypeId = "JPUSH_IOS";
 		}
 

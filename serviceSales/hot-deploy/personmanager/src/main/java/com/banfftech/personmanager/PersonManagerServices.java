@@ -133,7 +133,7 @@ public class PersonManagerServices {
             text = person.get("firstName")+":"+text;
         }
 
-        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId));
+        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
 
 
 

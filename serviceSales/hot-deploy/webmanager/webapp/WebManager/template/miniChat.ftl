@@ -129,7 +129,7 @@
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <script type="text/javascript">
     var payToPartyHead = $("#payToPartyHead").val();
-    alert(payToPartyHead);
+
     function to_write(){
         $('.wenwen_btn img').attr('src','http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');
         $('.wenwen_btn').attr('onclick','to_say()');
@@ -168,7 +168,7 @@
             autoWidth();
             for_bottom();
             setTimeout(function(){
-                var ans  = '<div class="answer"><div class="heard_img left"><img src=""' + payToPartyHead + '></div>';
+                var ans  = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                 ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
                 ans += '</div></div>';
                 $('.speak_box').append(ans);

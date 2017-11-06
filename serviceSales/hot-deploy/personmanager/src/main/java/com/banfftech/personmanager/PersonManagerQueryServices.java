@@ -557,12 +557,24 @@ public class PersonManagerQueryServices {
                 GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
                 rowMap.put("productName",""+product.get("productName"));
                 rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
-                rowMap.put("payToPartyId",(String)productStore.get("payToPartyId"));
+                String payToPartyId = (String)productStore.get("payToPartyId");
+                rowMap.put("payToPartyId",payToPartyId);
                 String statusId = (String) gv.get("statusId");
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+                String payFromPartyId = (String) rowMap.get("partyId");
 
+                Map<String,String> personInfoMap = null;
+
+                //说明这笔订单我是卖家,查买家头像信息
+                if(payToPartyId.equals(partyId)){
+                    personInfoMap =  queryPersonBaseInfo(delegator,partyId);
+                }
+                //说明这笔单我是买家,查卖家头像信息
+                if(!payToPartyId.equals(partyId)){
+                    personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
+                }
                 rowMap.put("userPartyId",partyId);
-
+                rowMap.put("personInfoMap",personInfoMap);
                 myResourceOrderList.add(rowMap);
             }
         }
@@ -572,6 +584,47 @@ public class PersonManagerQueryServices {
 
         return resultMap;
     }
+
+
+    /**
+     * 查头像和名称
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String,String> queryPersonBaseInfo(Delegator delegator,String partyId)throws GenericEntityException, GenericServiceException {
+
+        Map<String, String> personInfo = new HashMap<String, String>();
+
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        if (person != null) {
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+            GenericValue partyContent = null;
+            if (null != contentsList && contentsList.size() > 0) {
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+                String contentId = partyContent.getString("contentId");
+                personInfo.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                personInfo.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
+            personInfo.put("firstName", (String) person.get("firstName"));
+
+
+        }
+        return personInfo;
+    }
+
 
 
     /**

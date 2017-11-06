@@ -128,7 +128,7 @@
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <script type="text/javascript">
-    var payToPartyHead = Document.getElementById("payToPartyHead").text();
+    var payToPartyHead = $("#payToPartyHead").val();
     alert(payToPartyHead);
     function to_write(){
         $('.wenwen_btn img').attr('src','http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');

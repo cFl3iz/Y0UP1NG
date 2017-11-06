@@ -115,15 +115,12 @@ public class PeConstant {
     /**
      * 微信公众平台AppID
      */
-    //public static final String WECHAT_GZ_APP_ID = "wx8b1eb42f8cadbff1";
-            //暂时使用不分梨的
-    public static final String WECHAT_GZ_APP_ID = "wx25118b98db9eb608";
+
+    public static final String WECHAT_GZ_APP_ID = "wx8b1eb42f8cadbff1";
     /**
      * 微信公众平台Sc
      */
-    //public static final String ACCESS_KEY_SECRET = "f507073761431bdb0a15e85ebe33cffd";
-    //暂时使用不分梨的
-    public static final String ACCESS_KEY_SECRET = "964d3ac62f03fa70ebf2ac20e84ab7f2";
+    public static final String ACCESS_KEY_SECRET = "f507073761431bdb0a15e85ebe33cffd";
     /**
      * We Chat Access Path
      */

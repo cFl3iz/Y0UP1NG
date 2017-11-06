@@ -12,7 +12,7 @@
              invoke="createPeUser" auth="false">
         <description>Create Simple PE User</description>
         <attribute name="uuid" type="String" mode="IN"
-                   optional="false" />
+                   optional="true" />
         <attribute name="tel" type="String" mode="IN"
                    optional="true" />
         <attribute name="userLoginId" type="String" mode="OUT"
@@ -143,6 +143,8 @@
         <attribute name="text" type="String" mode="IN"
                optional="true" />
         <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="IN"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

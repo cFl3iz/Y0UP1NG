@@ -110,15 +110,31 @@ public class PersonManagerServices {
 
         String partyIdTo = (String) context.get("partyIdTo");
 
+        String partyIdFrom = (String) context.get("partyIdFrom");
+
         System.out.println("========================================= partyIdTo = " +partyIdTo);
 
-        GenericValue jpush = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "JPUSH_IOS").queryFirst();
+        // 查询registrationID
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
+        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
-        String jpushId = (String) jpush.get("idValue");
+        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+        GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+        String jpushId = (String) partyIdentification.getString("idValue");
+        String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
 
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
+        if(person!=null){
+            text = person.get("firstName")+":"+text;
+        }
 
-        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"deviceType","IOS","regId",jpushId,"sendType","JPUSH_ANDROID"));
+        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId));
+
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();

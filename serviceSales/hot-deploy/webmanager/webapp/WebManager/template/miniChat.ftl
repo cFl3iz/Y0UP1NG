@@ -126,8 +126,10 @@
 </div>
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
+<input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <script type="text/javascript">
-
+    var payToPartyHead = Document.getElementById("payToPartyHead").text();
+    alert(payToPartyHead);
     function to_write(){
         $('.wenwen_btn img').attr('src','http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');
         $('.wenwen_btn').attr('onclick','to_say()');
@@ -178,6 +180,7 @@
         var url = "pushMessage";
         var param = {
             partyIdTo:payToPartyId,
+            partyIdFrom:"",
             text:text
         };
         $.ajax({

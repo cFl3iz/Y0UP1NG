@@ -113,8 +113,12 @@ public class WebServices {
         Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId"),"accessToken",accessMap.get("accessToken")));
 
         Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
+
         System.out.println("==================================================userInfoMap= " + userInfoMap);
+
         String unioId =  (String) userInfoMap.get("unionid");
+
+
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
 
@@ -140,7 +144,7 @@ public class WebServices {
                 Map<String, Object> createPeUserMap = new HashMap<String, Object>();
                 createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
                 createPeUserMap.put("userLogin", admin);
-                createPeUserMap.put("uuid", null);
+                createPeUserMap.put("uuid", "");
                 Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
                 String newUserLoginId = (String) serviceResultMap.get("userLoginId");
                 userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();

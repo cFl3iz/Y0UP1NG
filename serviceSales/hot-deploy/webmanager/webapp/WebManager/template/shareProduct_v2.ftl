@@ -237,6 +237,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
         var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';
         var payToPartyFirstName = '${resourceDetail.firstName}';
         var tarjeta = $("#tarjeta").val();
+        alert(tarjeta);
         location.href = "miniChat?productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&tarjeta="+tarjeta+"&payToPartyFirstName="+payToPartyFirstName;
 
     }

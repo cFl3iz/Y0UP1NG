@@ -220,7 +220,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell" onclick="javascript:alert('${uiLabel.DefaultAction}');">${uiLabel.MyOrder}</button>
-                        <button class="buy cell" onclick="buyProduct()">${uiLabel.Buy}</button>
+                        <button class="buy cell" onclick="buyProduct();this.disabled=true;">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
                 </section>
@@ -232,15 +232,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 <script type="text/javascript">
 
     function doMiniChat(){
-        <#--var productId = '${productId}';-->
-        <#--var payToPartyId = '${resourceDetail.payToPartyId}';-->
-        <#--var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';-->
-        <#--var payToPartyFirstName = '${resourceDetail.firstName}';-->
-//        var tarjeta = $("#tarjeta").val();
-//        alert(tarjeta);
-        <#--var url  = "miniChat?tarjeta="+tarjeta+"&productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&payToPartyFirstName="+payToPartyFirstName;-->
-        <#--alert(url);-->
-        <#--location.href = url;-->
 
         $("#miniChatForm").submit();
     }
@@ -256,11 +247,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
             $(".spec-menu").hide();
         })
 
-        /* $("#cool").focus(function(){
-             var oi = $('#cool').val();
-
-             $('.amount').html(oi)
-         });*/
 
         $('#cool').bind('input propertychange', function () {
             /* alert(this.value);*/

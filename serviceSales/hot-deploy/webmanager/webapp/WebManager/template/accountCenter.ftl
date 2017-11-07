@@ -24,13 +24,13 @@
     }
 
     function weChatOauthLogin(fromurl){
-//        alert("weChat Oauth Login");
+        alert("weChat Oauth Login");
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         location.href = url;
     }
 
     function validateTarjetaIsRight(tarjeta){
-//        alert("validate tarjeta 2");
+        alert("validate tarjeta 2");
         var url = "checkTarjeta";
         var param = {
             tarjeta:tarjeta
@@ -41,7 +41,7 @@
             data: param,
             success: function (data) {
                 var validate = data.validate;
-//                alert("validate result = " + validate);
+                alert("validate result = " + validate);
                 if(validate==="true"){
                     var newTarjeta = data.tarjeta;
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
@@ -69,7 +69,7 @@
 
             tarjeta = $("#tarjeta").val();
 
-//            alert("#tarjeta = " + tarjeta);
+            alert("#tarjeta = " + tarjeta);
 
             if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty
@@ -123,7 +123,7 @@
 //                alert("user account validate");
 
                 var tarjeta = getCookie("tarjeta");
-//                alert("in cookie tajeta = " + tarjeta);
+                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 if(!validateTarjeta(tarjeta)){

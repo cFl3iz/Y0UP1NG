@@ -313,11 +313,11 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <form id="miniChatForm" action="miniChat" method="get">
-    <input id="tarjeta" type="hidden" value="${(tarjeta)!}"/>
-    <input id="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>
-    <input id="payToPartyHead" type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
-    <input id="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
-    <input id="productId" type="hidden" value="${(productId)!}"/>
+    <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
+    <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="${resourceDetail.payToPartyId}"/>
+    <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
+    <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
+    <input id="productId" name="productId" type="hidden" value="${(productId)!}"/>
 </form>
 
 </#if>

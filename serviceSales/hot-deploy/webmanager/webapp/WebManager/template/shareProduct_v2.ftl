@@ -311,7 +311,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     })
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
-<form id="miniChatForm" action="miniChat" method="post">
+<form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta" type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>
     <input id="payToPartyHead" type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>

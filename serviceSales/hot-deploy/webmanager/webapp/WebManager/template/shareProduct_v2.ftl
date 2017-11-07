@@ -251,7 +251,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     })
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
-<input id="tarjeta" type="hidden" value="${(tarjeta)!}"/>
+<input id="tarjeta" type="hidden" value="${(tarjeta?default(''))!}"/>
 </#if>
 <#if !resourceDetail?has_content>
 <script>

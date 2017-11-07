@@ -31,7 +31,7 @@
 
     function validateTarjeta(tarjeta){
         //CookieTarjeta Empty
-
+        alert("validateTarjeta = " + tarjeta);
         if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
             tarjeta = $("#tarjeta").val();
             alert("#tarjeta = " + tarjeta);

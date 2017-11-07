@@ -58,6 +58,15 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+    <!-- Load Message -->
+    <request-map uri="loadMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- PushMessage -->
     <request-map uri="pushMessage">
         <security https="false" auth="false"/>

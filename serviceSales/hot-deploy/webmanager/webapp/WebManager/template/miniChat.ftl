@@ -172,13 +172,7 @@
             $('.write_box input').focus();
             autoWidth();
             for_bottom();
-            setTimeout(function(){
-                var ans  = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
-                ans += '</div></div>';
-                $('.speak_box').append(ans);
-                for_bottom();
-            },1000);
+
         }
 
         var payToPartyId = $("#payToPartyId").val();
@@ -203,6 +197,51 @@
             }
         });
     }
+
+
+
+
+
+
+    setTimeout(function(){
+//                var ans  = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+//                ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
+//                ans += '</div></div>';
+//                $('.speak_box').append(ans);
+//                for_bottom();
+
+        var payToPartyId = $("#payToPartyId").val();
+        var payFromPartyId = $("#payFromPartyId").val();
+        var tarjeta = $("#tarjeta").val();
+
+        var url = "loadMessage";
+        var param = {
+            partyIdTo:payToPartyId,
+            tarjeta:tarjeta,
+            partyIdFrom:payFromPartyId
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            success: function (data) {
+                alert(data.messages);
+            },
+            error: function (data) {
+                alert("ERROR :" + data.status);
+            }
+        });
+
+
+    },5000);
+
+
+
+
+
+
+
 
     function keyup(){
         var footer_height = $('.wenwen-footer').outerHeight(),

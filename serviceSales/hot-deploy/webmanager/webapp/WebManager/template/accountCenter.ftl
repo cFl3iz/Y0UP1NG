@@ -59,8 +59,6 @@
             }
         });
 
-
-        return false;
     }
 
     function validateTarjeta(tarjeta){
@@ -79,6 +77,7 @@
                     $("#tarjeta").val(getCookie("tarjeta"));
                     return true;
                 }else{
+                    alert("132");
                     weChatOauthLogin(fromurl);
                 }
             }
@@ -87,6 +86,7 @@
                 $("#tarjeta").val(getCookie("tarjeta"));
                 return true;
             }else{
+                alert("254");
                 weChatOauthLogin(fromurl);
             }
         }

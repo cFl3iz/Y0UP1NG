@@ -7,7 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
-    <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}</title>
+    <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}${userInfo}</title>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
         body{

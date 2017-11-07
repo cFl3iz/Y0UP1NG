@@ -35,12 +35,12 @@
         <security https="false" auth="false"/>
         <event type="service" invoke="queryPersonBaseInfoByChat"/>
         <response name="success" type="view" value="miniChat">
-            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="tarjeta" from="parameters.tarjeta"/>
             <redirect-parameter name="personInfo" from="personInfo"/>
-            <redirect-parameter name="productId" from="productId"/>
-            <redirect-parameter name="payToPartyId" from="payToPartyId"/>
-            <redirect-parameter name="payToPartyFirstName" from="payToPartyFirstName"/>
-            <redirect-parameter name="payToPartyHead" from="payToPartyHead"/>
+            <redirect-parameter name="productId" from="parameters.productId"/>
+            <redirect-parameter name="payToPartyId" from="parameters.payToPartyId"/>
+            <redirect-parameter name="payToPartyFirstName" from="parameters.payToPartyFirstName"/>
+            <redirect-parameter name="payToPartyHead" from="parameters.payToPartyHead"/>
         </response>
         <response name="error" type="view" value="shareProduct">
             <redirect-parameter name="tarjeta" from="tarjeta"/>

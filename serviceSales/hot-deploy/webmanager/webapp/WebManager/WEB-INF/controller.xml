@@ -68,7 +68,14 @@
 
 
 
+    <request-map uri="checkTarjeta">
+        <security auth="false" https="false"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
 
+    </request-map>
 
 
 

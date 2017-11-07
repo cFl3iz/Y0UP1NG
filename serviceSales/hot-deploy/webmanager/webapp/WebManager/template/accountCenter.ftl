@@ -29,6 +29,40 @@
         location.href = url;
     }
 
+    function validateTarjetaIsRight(tarjeta){
+        alert("validate tarjeta 2");
+        var url = "checkTarjeta";
+        var param = {
+            tarjeta:tarjeta
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            success: function (data) {
+                var validate = data.validate;
+                alert("validate result = " + validate);
+                if(validate==="true"){
+                    var newTarjeta = data.tarjeta;
+                    if(newTarjeta!=null && newTarjeta.trim()!=""){
+                        setCookie("tarjeta",newTarjeta);
+                        return true;
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
+
+            },
+            error: function (data) {
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
     function validateTarjeta(tarjeta){
         //CookieTarjeta Empty
         alert("validateTarjeta = " + tarjeta);
@@ -43,12 +77,16 @@
                 //PageContext Empty
                 return false;
             }else{
-                alert("set tarjeta ok !");
-                setCookie("tarjeta",tarjeta);
+                if(validateTarjetaIsRight(tarjeta)){
+                    $("#tarjeta").val(getCookie("tarjeta"));
+                    return true;
+                }
             }
         }else{
-            $("#tarjeta").val(tarjeta);
-            return true;
+            if(validateTarjetaIsRight(tarjeta)){
+                $("#tarjeta").val(getCookie("tarjeta"));
+                return true;
+            }
         }
         return true;
 //        else{

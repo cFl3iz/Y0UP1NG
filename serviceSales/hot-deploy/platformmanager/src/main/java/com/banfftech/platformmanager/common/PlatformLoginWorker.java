@@ -181,6 +181,7 @@ public class PlatformLoginWorker {
                 claims.put("iat", now);
                 request.setAttribute(TOKEN_KEY_ATTR, signer.sign(claims));
             }
+                request.setAttribute("validate","true");
         } else {
             Debug.logWarning("*Could not find userLogin for token: " + token, module);
             Debug.logWarning("*Claims User Is : " + claims.get("user"), module);

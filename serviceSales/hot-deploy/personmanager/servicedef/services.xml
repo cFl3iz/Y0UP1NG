@@ -151,9 +151,9 @@
     </service>
 
 
-
+    <!-- queryPersonBaseInfo -->
     <service name="queryPersonBaseInfo" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryPersonBaseInfo" auth="false">
         <description>queryPersonBaseInfo</description>
 

@@ -70,7 +70,7 @@
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
 
                 <!-- 微信授权登录后的回调地址 -->
-                <set field="fromurl" value="http://www.vivafoo.com/oauth2_buy_product.php?productId=${productId}"/>
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}"/>
 
             </actions>
             <widgets>

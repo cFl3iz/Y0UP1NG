@@ -210,7 +210,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                 <!-- 弹出 -->
                 <section id="s-actionBar-container">
                     <div id="s-actionbar" class="action-bar mui-flex align-center">
-                        <div class="web" onclick="javascript:window.location.href='<@ofbizUrl>miniChat?productId=${productId}&payToPartyId=${(resourceDetail.payToPartyId)!}&payToPartyHead=${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}&payToPartyFirstName=${(resourceDetail.firstName)!}</@ofbizUrl>'"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
+                        <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
                             <p>${uiLabel.Talk}</p>
                         </div>
                         <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
@@ -230,6 +230,17 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 </div>
 </body>
 <script type="text/javascript">
+
+    function doMiniChat(){
+        var productId = '${productId}';
+        var payToPartyId = '${resourceDetail.payToPartyId}';
+        var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';
+        var payToPartyFirstName = '${resourceDetail.firstName}';
+        var tarjeta = $("#tarjeta").val();
+        location.href = "miniChat?productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&tarjeta="+tarjeta+"&payToPartyFirstName="+payToPartyFirstName;
+
+    }
+
     $(function () {
         $(".clickwn").click(function () {
             $(".flick-menu-mask").show();

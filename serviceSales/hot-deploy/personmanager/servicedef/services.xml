@@ -152,12 +152,24 @@
 
 
     <!-- queryPersonBaseInfo -->
-    <service name="queryPersonBaseInfo" engine="java"
+    <service name="queryPersonBaseInfoByChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryPersonBaseInfo" auth="false">
         <description>queryPersonBaseInfo</description>
-        <attribute name="tarjeta" type="String" mode="IN"
+        <attribute name="tarjeta" type="String" mode="INOUT"
                    optional="true" />
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="payToPartyId" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="payToPartyFirstName" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="payToPartyHead" type="String" mode="INOUT"
+                   optional="true" />
+
+
+
+
 
         <attribute name="partyId" type="String" mode="OUT"
                    optional="true" />

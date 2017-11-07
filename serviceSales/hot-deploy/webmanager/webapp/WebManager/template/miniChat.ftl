@@ -215,6 +215,7 @@
         var tarjeta = $("#tarjeta").val();
 
         var url = "loadMessage";
+        
         var param = {
             partyIdTo:payToPartyId,
             tarjeta:tarjeta,

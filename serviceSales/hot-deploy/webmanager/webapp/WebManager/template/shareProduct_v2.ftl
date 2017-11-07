@@ -236,11 +236,12 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
         <#--var payToPartyId = '${resourceDetail.payToPartyId}';-->
         <#--var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';-->
         <#--var payToPartyFirstName = '${resourceDetail.firstName}';-->
-        <#--var tarjeta = $("#tarjeta").val();-->
-        <#--alert(url);-->
+        var tarjeta = $("#tarjeta").val();
+        alert(tarjeta);
         <#--var url  = "miniChat?tarjeta="+tarjeta+"&productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&payToPartyFirstName="+payToPartyFirstName;-->
         <#--alert(url);-->
         <#--location.href = url;-->
+
         $("#miniChatForm").submit();
     }
 

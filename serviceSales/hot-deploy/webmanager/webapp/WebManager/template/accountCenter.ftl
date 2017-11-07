@@ -46,15 +46,16 @@
                     var newTarjeta = data.tarjeta;
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
                         setCookie("tarjeta",newTarjeta);
-                        return true;
                     }
                     return true;
                 }else{
+                    alert(" validate result over return false");
                     return false;
                 }
 
             },
             error: function (data) {
+                alert("errror");
                 return false;
             }
         });

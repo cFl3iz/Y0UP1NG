@@ -126,6 +126,9 @@
 </div>
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
+<input type="hidden" id="payFromPartyId" value="${(personInfo.partyId)!}"/>
+
+
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
 
@@ -179,10 +182,11 @@
         }
 
         var payToPartyId = $("#payToPartyId").val();
+        var payFromPartyId = $("#payFromPartyId").val();
         var url = "pushMessage";
         var param = {
             partyIdTo:payToPartyId,
-            partyIdFrom:"",
+            partyIdFrom:payFromPartyId,
             text:text
         };
         $.ajax({

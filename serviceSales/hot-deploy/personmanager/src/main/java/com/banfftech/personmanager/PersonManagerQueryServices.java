@@ -608,7 +608,7 @@ public class PersonManagerQueryServices {
         resultMap.put("tarjeta", (String) context.get("tarjeta"));
         resultMap.put("productId",(String) context.get("productId"));
         resultMap.put("payToPartyId",(String) context.get("payToPartyId"));
-        resultMap.put("payToPartyFirstName","狗日的");
+        resultMap.put("payToPartyFirstName",(String) context.get("payToPartyFirstName"));
         resultMap.put("payToPartyHead",(String) context.get("payToPartyHead"));
 
 

@@ -232,16 +232,16 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 <script type="text/javascript">
 
     function doMiniChat(){
-        var productId = '${productId}';
-        var payToPartyId = '${resourceDetail.payToPartyId}';
-        var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';
-        var payToPartyFirstName = '${resourceDetail.firstName}';
-        var tarjeta = $("#tarjeta").val();
-        alert(url);
-        var url  = "miniChat?tarjeta="+tarjeta+"&productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&payToPartyFirstName="+payToPartyFirstName;
-        alert(url);
-        location.href = url;
-
+        <#--var productId = '${productId}';-->
+        <#--var payToPartyId = '${resourceDetail.payToPartyId}';-->
+        <#--var payToPartyHead = '${resourceDetail.headPortrait?default('http://placehold.it/42x42')}';-->
+        <#--var payToPartyFirstName = '${resourceDetail.firstName}';-->
+        <#--var tarjeta = $("#tarjeta").val();-->
+        <#--alert(url);-->
+        <#--var url  = "miniChat?tarjeta="+tarjeta+"&productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&payToPartyFirstName="+payToPartyFirstName;-->
+        <#--alert(url);-->
+        <#--location.href = url;-->
+        $("#miniChatForm").submit();
     }
 
     $(function () {
@@ -311,7 +311,14 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     })
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
-<input id="tarjeta" type="hidden" value="${(tarjeta)!}"/>
+<form id="miniChatForm" action="miniChat" method="post">
+    <input id="tarjeta" type="hidden" value="${(tarjeta)!}"/>
+    <input id="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>
+    <input id="payToPartyHead" type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
+    <input id="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
+    <input id="productId" type="hidden" value="${(productId)!}"/>
+</form>
+
 </#if>
 <#if !resourceDetail?has_content>
 <script>

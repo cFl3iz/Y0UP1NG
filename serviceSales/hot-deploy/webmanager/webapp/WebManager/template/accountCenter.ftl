@@ -39,6 +39,7 @@
             type: 'POST',
             url: url,
             data: param,
+            async:false,
             success: function (data) {
                 var validate = data.validate;
                 alert("validate result = " + validate);
@@ -53,6 +54,10 @@
                     return false;
                 }
 
+            },
+            error: function (data) {
+                alert("errror");
+                return false;
             }
         });
 

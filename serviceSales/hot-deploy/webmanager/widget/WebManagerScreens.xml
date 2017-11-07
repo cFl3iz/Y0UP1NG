@@ -61,7 +61,7 @@
 
                 <set field="productId" value="${parameters.productId}"/>
 
-                <set field="tarjeta" value="${parameters.tarjeta}" default-value="" />
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
 
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>

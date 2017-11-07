@@ -36,8 +36,14 @@
                  data: param,
                  async:false,
                  success: function (data) {
-                     var orderId = data.orderId;
-                     alert("buy success orderId = " + orderId);
+                     alert("code="+data.code);
+                     if(data.code === "200"){
+                         var orderId = data.orderId;
+                         location.href = "viewWebOrderDetail?orderId="+orderId;
+                     }
+                     if(data.code === "500"){
+                        alert("ERROR:500");
+                     }
 
                  },
                  error: function (data) {

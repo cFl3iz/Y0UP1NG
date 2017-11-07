@@ -43,7 +43,7 @@
             success: function (data) {
                 var validate = data.validate;
                 alert("validate result = " + validate);
-                if(validate == true || validate==="true"){
+                if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
                         setCookie("tarjeta",newTarjeta);
@@ -89,7 +89,8 @@
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
                 return true;
-            }else{
+            }
+            if(isRight == false){
                 alert("254");
                 weChatOauthLogin(fromurl);
             }

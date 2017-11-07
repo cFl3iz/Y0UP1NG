@@ -5,23 +5,48 @@
     }
 </style>
 <script>
-    // 获取用户信息
-    function doWeChatAccess(){
+    var confirmMessage = $("#confirmMessage").val();
 
-        var fromurl = "http://www.lyndonspace.com/oauth2_buy_product.php?productId="+"${(productId)!}"+"&payToPartyId="+"${(resourceDetail.payToPartyId)!}"+"&prodCatalogId="+"${(resourceDetail.prodCatalogId)!}"+"&productStoreId="+"${(resourceDetail.productStoreId)!}";
+     function buyProduct(){
+         var a=confirm(confirmMessage);
+         if(a == true)
+         {
+             var tarjeta = $("#tarjeta").val();
+             var url = "placeResourceOrder";
+             var param = {
+                 payToPartyId:${(resourceDetail.payToPartyId)!},
+                 productId:${resourceDetail.productId},
+                 prodCatalogId:${resourceDetail.prodCatalogId},
+                 productStoreId:${resourceDetail.productStoreId},
+                 tarjeta:tarjeta
+             };
+             $.ajax({
+                 type: 'POST',
+                 url: url,
+                 data: param,
+                 success: function (data) {
+                     var orderId = data.orderId;
+                     alert("buy success orderId = " + orderId);
 
-        //var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
+                 },
+                 error: function (data) {
+                     alert("ERROR :" + data.status);
+                 }
+             });
 
-        var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
-
-        location.href = url;
-    }
+         }
+         else
+         {
+             return false;
+         }
+     }
 </script>
 <#if resourceDetail?has_content>
 <#--<header class="bar bar-nav">-->
     <#--&lt;#&ndash;<a class="icon icon-left-nav pull-left"></a> <a class="icon icon-more-vertical pull-right"></a>&ndash;&gt;-->
     <#--<h1 class="title">${resourceDetail.productName}</h1>-->
 <#--</header>-->
+<input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>
 <div id="content">
     <div class="scroller">
         <div id="p-summary" class="page">
@@ -173,7 +198,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                         <div class="web" onclick="javascript:alert('MARK');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
                             <p>${uiLabel.Mark}</p>
                         </div>
-                        <button class="cart cell">${uiLabel.ShareFriend}</button>
+                        <button class="cart cell">${uiLabel.MyOrder}</button>
                         <button class="buy cell" onclick="doWeChatAccess()">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>

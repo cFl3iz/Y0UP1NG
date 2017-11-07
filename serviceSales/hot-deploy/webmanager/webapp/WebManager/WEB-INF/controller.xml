@@ -76,7 +76,13 @@
         <response name="error" type="request" value="json"/>
 
     </request-map>
-
+    <!-- Buy -->
+    <request-map uri="placeResourceOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placeResourceOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- View Mappings -->

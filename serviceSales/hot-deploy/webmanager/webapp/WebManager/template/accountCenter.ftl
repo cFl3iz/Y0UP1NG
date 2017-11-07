@@ -30,7 +30,7 @@
     }
 
     function validateTarjetaIsRight(tarjeta){
-        alert("validate tarjeta 2");
+        alert("validate tarjeta 2,tarjeta="+tarjeta);
         var url = "checkTarjeta";
         var param = {
             tarjeta:tarjeta
@@ -53,10 +53,6 @@
                     return false;
                 }
 
-            },
-            error: function (data) {
-                alert("errror");
-                return false;
             }
         });
 
@@ -74,7 +70,8 @@
                 //PageContext Empty
                 return false;
             }else{
-                if(validateTarjetaIsRight(tarjeta)){
+                var isRight =  validateTarjetaIsRight(tarjeta);
+                if(isRight){
                     $("#tarjeta").val(getCookie("tarjeta"));
                     return true;
                 }else{
@@ -83,7 +80,8 @@
                 }
             }
         }else{
-            if(validateTarjetaIsRight(tarjeta)){
+            var isRight =  validateTarjetaIsRight(tarjeta);
+            if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
                 return true;
             }else{

@@ -56,13 +56,21 @@
     <screen name="shareProduct">
         <section>
             <actions>
-                <set field="productId" value="${parameters.productId}"/>
-                <set field="openId" value="${parameters.openId}"/>
+
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+                <set field="productId" value="${parameters.productId}"/>
+
+                <set field="openId" value="${parameters.openId}"/>
+
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
                 </service>
+
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
+
+                <!-- 微信授权登录后的回调地址 -->
+                <set field="fromurl" value="http://www.vivafoo.com/oauth2_buy_product.php?productId=${productId}"/>
 
             </actions>
             <widgets>

@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.entity.util.EntityQuery;
@@ -67,6 +68,7 @@ public class PlatformLoginWorker {
 
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
+    public static WeChatUtil wu = new WeChatUtil();
 
     /**
      * 验证是否拥身份令牌
@@ -283,6 +285,99 @@ public class PlatformLoginWorker {
                     )));
         }
     }
+
+
+    /**
+     * weChat App 'Web' Login
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> weChatAppWebLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue userLogin = null;
+
+
+
+
+        String code = (String) context.get("code");
+
+        Map<String,Object> accessMap =  wu.getWeChatAccess(code);
+
+        Map<String,Object> resultMap = dispatcher.runSync("getWeChatUserInfo",UtilMisc.toMap("userLogin",admin,"code",code,"openId",accessMap.get("openId"),"accessToken",accessMap.get("accessToken")));
+
+        Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
+
+        System.out.println("*weChatAppWebLogin:" + userInfoMap);
+
+        String unioId =  (String) userInfoMap.get("unionid");
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
+
+        String   partyId,token ="";
+
+
+        if(partyIdentificationList.size()>1){
+
+            partyId =  (String) partyIdentificationList.get(partyIdentificationList.size()-1).get("partyId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+        }else{
+
+            if(null != partyIdentificationList && partyIdentificationList.size()>0 && partyIdentificationList.get(0) != null){
+
+                partyId =(String) partyIdentificationList.get(0).get("partyId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+            }else{
+
+                Debug.logInfo("*CREATE NEW USER", module);
+                //立即注册
+                Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+                createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
+                createPeUserMap.put("userLogin", admin);
+                createPeUserMap.put("uuid", "");
+                Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
+                String newUserLoginId = (String) serviceResultMap.get("userLoginId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+                partyId = (String)userLogin.get("partyId");
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin,partyId,delegator,unioId,userInfoMap,userLogin,dispatcher);
+            }
+        }
+
+
+
+
+        //有效时间
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", userLogin.get("userLoginId"));
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        token = signer.sign(claims);
+
+
+        result.put("tarjeta", token);
+        return result;
+    }
+
 
 
 

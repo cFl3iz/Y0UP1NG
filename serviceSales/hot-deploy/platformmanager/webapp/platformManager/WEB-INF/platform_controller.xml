@@ -78,13 +78,16 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-    <!-- weChatAppLogin -->
+    <!-- weChatAppLogin For App -->
     <request-map uri="weChatAppLogin">
         <security https="false" auth="false"/>
         <event type="service" invoke="weChatAppLogin"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
+
 
     <!-- Get Login/Regist Captcha -->
     <request-map uri="getTelCaptcha">

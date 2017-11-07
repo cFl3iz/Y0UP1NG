@@ -1,3 +1,4 @@
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 <style>
     .picture_text{
         color:#000000;
@@ -12,7 +13,7 @@
         //var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
 
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
-//        alert(url);
+
         location.href = url;
     }
 </script>
@@ -249,6 +250,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
     })
 </script>
+<input id="fromurl" value="${fromurl}"/>
 </#if>
 <#if !resourceDetail?has_content>
 <script>

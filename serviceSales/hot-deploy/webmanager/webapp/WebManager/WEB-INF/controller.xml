@@ -53,11 +53,14 @@
         <security auth="false" https="false"/>
         <event type="java" path="main.java.com.banfftech.webmanager.WebServices"
                invoke="accessWeChatFromBuyProduct"/>
-        <response name="success" type="request-redirect" value="viewWebOrderDetail">
-            <redirect-parameter name="orderId" from="orderId"/>
+        
+        <response name="success" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
             <redirect-parameter name="productId" from="productId"/>
         </response>
-        <response name="error" type="request-redirect" value="shareProduct"/>
+        <response name="error" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
     </request-map>
 
 

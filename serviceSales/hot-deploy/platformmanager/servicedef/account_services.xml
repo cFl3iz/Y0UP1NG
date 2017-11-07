@@ -31,7 +31,7 @@
 
 
 
-    <!-- App WeChat Login -->
+    <!-- App WeChat Login / 开放 -->
     <service name="weChatAppLogin" engine="java"
              location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatAppLogin" auth="false">
         <description>weChat AppLogin</description>
@@ -43,6 +43,16 @@
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
         <attribute name="newUser" type="String" mode="OUT" optional="true"/>
 
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- WebApp WeChat Login / 公众 -->
+    <service name="weChatAppWebLogin" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatAppWebLogin" auth="false">
+        <description>weChatAppWebLogin</description>
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

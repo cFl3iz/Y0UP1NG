@@ -67,12 +67,12 @@
                 //回调地址
                 var fromurl = $("#fromurl").val();
 
-                alert(fromurl);
+//                alert(fromurl);
 
                 alert("user account validate");
 
                 var tarjeta = getCookie("tarjeta");
-
+                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 if(!validateTarjeta(tarjeta)){

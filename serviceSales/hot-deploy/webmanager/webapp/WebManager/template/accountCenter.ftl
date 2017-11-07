@@ -42,7 +42,7 @@
             success: function (data) {
                 var validate = data.validate;
                 alert("validate result = " + validate);
-                if(validate==="true"){
+                if(validate == true || validate==="true"){
                     var newTarjeta = data.tarjeta;
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
                         setCookie("tarjeta",newTarjeta);

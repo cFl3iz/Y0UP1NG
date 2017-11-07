@@ -34,6 +34,7 @@
                  type: 'POST',
                  url: url,
                  data: param,
+                 async:false,
                  success: function (data) {
                      var orderId = data.orderId;
                      alert("buy success orderId = " + orderId);

@@ -250,7 +250,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
     })
 </script>
-<input id="fromurl" value="${fromurl}"/>
+<input id="fromurl" type="hidden" value="${fromurl}"/>
+<input id="tarjeta" type="hidden" value="${tarjeta}"/>
 </#if>
 <#if !resourceDetail?has_content>
 <script>

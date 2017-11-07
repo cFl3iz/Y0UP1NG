@@ -26,7 +26,7 @@
     function weChatOauthLogin(fromurl){
         alert("weChat Oauth Login");
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
-        //location.href = url;
+        location.href = url;
     }
 
     function validateTarjeta(tarjeta){
@@ -37,6 +37,7 @@
                 //PageContext Empty
                 return false;
             }else{
+                alert("set tarjeta ok !");
                 setCookie("tarjeta",tarjeta);
             }
         }

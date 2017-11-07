@@ -238,7 +238,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
         var payToPartyFirstName = '${resourceDetail.firstName}';
         var tarjeta = $("#tarjeta").val();
         alert(tarjeta);
-        location.href = "miniChat?productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&tarjeta="+tarjeta+"&payToPartyFirstName="+payToPartyFirstName;
+        var url  = "miniChat?tarjeta="+tarjeta+"&productId="+productId+"&payToPartyId="+payToPartyId+"&payToPartyHead="+payToPartyHead+"&payToPartyFirstName="+payToPartyFirstName;
+        location.href = url;
 
     }
 

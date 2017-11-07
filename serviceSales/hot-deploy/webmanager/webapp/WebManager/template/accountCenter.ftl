@@ -31,9 +31,10 @@
 
     function validateTarjeta(tarjeta){
         //CookieTarjeta Empty
+        alert("#tarjeta = " + $("#tarjeta").val());
         if(isEmpty(tarjeta)){
             tarjeta = $("#tarjeta").val();
-            alert("#tarjeta = " + $("#tarjeta").val());
+
             if(isEmpty(tarjeta)){
                 //PageContext Empty
                 return false;

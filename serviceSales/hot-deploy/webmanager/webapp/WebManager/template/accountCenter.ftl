@@ -32,9 +32,13 @@
     function validateTarjeta(tarjeta){
         //CookieTarjeta Empty
         alert("validateTarjeta = " + tarjeta);
+
         if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
+
             tarjeta = $("#tarjeta").val();
+
             alert("#tarjeta = " + tarjeta);
+
             if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty
                 return false;
@@ -69,7 +73,7 @@
 
     $(
             function(){
-                clearCookie("tarjeta");
+               // clearCookie("tarjeta");
 
                 //回调地址
                 var fromurl = $("#fromurl").val();
@@ -82,11 +86,11 @@
                 alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
-//                if(!validateTarjeta(tarjeta)){
-//
-//                    weChatOauthLogin(fromurl);
-//
-//                }
+                if(!validateTarjeta(tarjeta)){
+
+                    weChatOauthLogin(fromurl);
+
+                }
 
             }
 

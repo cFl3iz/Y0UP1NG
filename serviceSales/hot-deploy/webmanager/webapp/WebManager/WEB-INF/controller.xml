@@ -7,7 +7,11 @@
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
 
     <description>WebManager Component Site Configuration File</description>
-
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java"
+               path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+    </preprocessor>
     <!-- Events to run on every request before security (chains exempt) -->
     <!--
     <preprocessor>

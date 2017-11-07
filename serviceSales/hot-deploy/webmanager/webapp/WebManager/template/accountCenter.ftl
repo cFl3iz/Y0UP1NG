@@ -62,8 +62,15 @@
         return true;
     };
 
+    //清除cookie
+    function clearCookie(name) {
+        setCookie(name, "", -1);
+    }
+
     $(
             function(){
+                clearCookie("tarjeta");
+
                 //回调地址
                 var fromurl = $("#fromurl").val();
 
@@ -75,11 +82,11 @@
                 alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
-                if(!validateTarjeta(tarjeta)){
-
-                    weChatOauthLogin(fromurl);
-
-                }
+//                if(!validateTarjeta(tarjeta)){
+//
+//                    weChatOauthLogin(fromurl);
+//
+//                }
 
             }
 

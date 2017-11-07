@@ -44,7 +44,9 @@
             }
         }else{
             $("#tarjeta").val(tarjeta);
+            return true;
         }
+        return true;
 //        else{
 //            var tjt = "<input type='hidden' id='tarjeta' value='" + tarjeta +   "'/>";
 //            $("#fromurl").parent().append(tjt);

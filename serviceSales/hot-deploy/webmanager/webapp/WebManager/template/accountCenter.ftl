@@ -78,6 +78,7 @@
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
                     $("#tarjeta").val(getCookie("tarjeta"));
+                    alert("#tarjeta="+$("#tarjeta").val());
                     return true;
                 }else{
 //                    alert("132");
@@ -88,6 +89,7 @@
             var isRight =  validateTarjetaIsRight(tarjeta);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
+                alert("#tarjeta="+$("#tarjeta").val());
                 return true;
             }
             if(isRight == false){
@@ -132,9 +134,7 @@
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 if(!validateTarjeta(tarjeta)){
-
                     weChatOauthLogin(fromurl);
-
                 }
 
             }

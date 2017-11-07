@@ -199,7 +199,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell">${uiLabel.MyOrder}</button>
-                        <button class="buy cell" onclick="doWeChatAccess()">${uiLabel.Buy}</button>
+                        <button class="buy cell" onclick="buyProduct()">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
                 </section>

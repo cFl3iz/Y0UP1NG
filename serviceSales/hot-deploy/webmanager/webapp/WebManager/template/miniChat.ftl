@@ -7,7 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
-    <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}${personInfo}</title>
+    <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}</title>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
         body{
@@ -127,7 +127,7 @@
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <input type="hidden" id="payFromPartyId" value="${(personInfo.partyId)!}"/>
-
+<input type="hidden" id="tarjeta" value="${(tarjeta)!}"/>
 
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
@@ -183,9 +183,11 @@
 
         var payToPartyId = $("#payToPartyId").val();
         var payFromPartyId = $("#payFromPartyId").val();
+        var tarjeta = $("#tarjeta").val();
         var url = "pushMessage";
         var param = {
             partyIdTo:payToPartyId,
+            tarjeta:tarjeta,
             partyIdFrom:payFromPartyId,
             text:text
         };

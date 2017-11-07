@@ -213,13 +213,13 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                         <div class="web" onclick="javascript:window.location.href='<@ofbizUrl>miniChat?productId=${productId}&payToPartyId=${(resourceDetail.payToPartyId)!}&payToPartyHead=${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}&payToPartyFirstName=${(resourceDetail.firstName)!}</@ofbizUrl>'"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
                             <p>${uiLabel.Talk}</p>
                         </div>
-                        <div class="web"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
+                        <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>
-                        <div class="web" onclick="javascript:alert('MARK');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
+                        <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
                             <p>${uiLabel.Mark}</p>
                         </div>
-                        <button class="cart cell">${uiLabel.MyOrder}</button>
+                        <button class="cart cell" onclick="javascript:alert('${uiLabel.DefaultAction}');">${uiLabel.MyOrder}</button>
                         <button class="buy cell" onclick="buyProduct()">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>

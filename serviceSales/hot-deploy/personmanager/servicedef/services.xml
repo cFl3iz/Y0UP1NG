@@ -152,6 +152,22 @@
 
 
 
+    <service name="queryPersonBaseInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="queryPersonBaseInfo" auth="false">
+        <description>queryPersonBaseInfo</description>
+
+
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="personInfo" type="java.util.Map" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
     <!-- Place Resource Order -->
     <service name="placeResourceOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

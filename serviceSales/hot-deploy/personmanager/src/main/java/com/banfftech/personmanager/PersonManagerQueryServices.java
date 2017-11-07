@@ -587,6 +587,66 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * queryPersonBaseInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryPersonBaseInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+
+        resultMap.put("partyId",partyId);
+
+        Map<String, String> personInfo = new HashMap<String, String>();
+
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        if (person != null) {
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+            GenericValue partyContent = null;
+            if (null != contentsList && contentsList.size() > 0) {
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+                String contentId = partyContent.getString("contentId");
+                personInfo.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                personInfo.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
+            personInfo.put("firstName", (String) person.get("firstName"));
+
+
+        }
+
+        resultMap.put("personInfo",personInfo);
+
+        return resultMap;
+    }
+
+
+
+
+    /**
      * 查头像和名称
      * @return
      * @throws GenericEntityException

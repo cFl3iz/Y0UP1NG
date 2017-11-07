@@ -134,6 +134,12 @@
         <value xml:lang="zh_CN">的</value>
     </property>
 
+    <property key="DefaultAction">
+        <value xml:lang="en">DefaultAction</value>
+        <value xml:lang="zh">预留功能</value>
+        <value xml:lang="zh_CN">预留功能</value>
+    </property>
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

@@ -22,7 +22,7 @@
 
 
 
-
+    <!-- miniChat -->
     <screen name="miniChat">
         <section>
             <actions>
@@ -32,7 +32,11 @@
                 <set field="payToPartyId" value="${parameters.payToPartyId}"/>
                 <set field="payToPartyFirstName" value="${parameters.payToPartyFirstName}"/>
                 <set field="payToPartyHead" value="${parameters.payToPartyHead}"/>
-
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <service service-name="queryPersonBaseInfo" result-map="resultMap">
+                    <field-map field-name="tarjeta"/>
+                </service>
+                <set field="personInfo" value="${resultMap.personInfo}"/>
 
             </actions>
             <widgets>

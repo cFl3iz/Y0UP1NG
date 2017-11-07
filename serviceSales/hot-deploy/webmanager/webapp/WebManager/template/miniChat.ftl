@@ -127,9 +127,11 @@
 <#--<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>-->
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
+<input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
+
 <script type="text/javascript">
     var payToPartyHead = $("#payToPartyHead").val();
-
+    var payFromPartyHead = $("#payFromPartyHead").val();
     function to_write(){
         $('.wenwen_btn img').attr('src','http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');
         $('.wenwen_btn').attr('onclick','to_say()');
@@ -154,7 +156,7 @@
         $('.write_list').remove();
         var text = $('.write_box input').val(),
                 str  = '<div class="question">';
-        str += '<div class="heard_img right"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png"></div>';
+        str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
         str += '<div class="question_text clear"><p>'+text+'</p><i></i>';
         str += '</div></div>';
 

@@ -13,12 +13,21 @@
          if(a == true)
          {
              var tarjeta = $("#tarjeta").val();
+             var payToParty = ${(resourceDetail.payToPartyId)!};
+             var productId = ${(resourceDetail.productId)!};
+             var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
+             var productStoreId = ${(resourceDetail.productStoreId)!};
              var url = "placeResourceOrder";
+             alert("tarjeta="+tarjeta);
+             alert("payToParty="+payToParty);
+             alert("productId="+productId);
+             alert("prodCatalogId="+prodCatalogId);
+             alert("productStoreId="+productStoreId);
              var param = {
-                 payToPartyId:${(resourceDetail.payToPartyId)!},
-                 productId:${resourceDetail.productId},
-                 prodCatalogId:${resourceDetail.prodCatalogId},
-                 productStoreId:${resourceDetail.productStoreId},
+                 payToPartyId:payToParty,
+                 productId:productId,
+                 prodCatalogId:prodCatalogId,
+                 productStoreId:productStoreId,
                  tarjeta:tarjeta
              };
              $.ajax({
@@ -48,6 +57,10 @@
     <#--<h1 class="title">${resourceDetail.productName}</h1>-->
 <#--</header>-->
 <input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>
+<input type="hidden" id="productId" value="${(resourceDetail.productId)!}"/>
+<input type="hidden" id="prodCatalogId" value="${(resourceDetail.prodCatalogId)!}"/>
+<input type="hidden" id="productStoreId" value="${(resourceDetail.productStoreId)!}"/>
+
 <div id="content">
     <div class="scroller">
         <div id="p-summary" class="page">

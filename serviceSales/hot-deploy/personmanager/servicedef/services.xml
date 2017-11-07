@@ -156,7 +156,8 @@
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryPersonBaseInfo" auth="false">
         <description>queryPersonBaseInfo</description>
-
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true" />
 
         <attribute name="partyId" type="String" mode="OUT"
                    optional="true" />

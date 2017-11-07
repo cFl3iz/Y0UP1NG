@@ -5,9 +5,10 @@
     }
 </style>
 <script>
-    var confirmMessage = $("#confirmMessage").val();
+
 
      function buyProduct(){
+         var confirmMessage = $("#confirmMessage").val();
          var a=confirm(confirmMessage);
          if(a == true)
          {

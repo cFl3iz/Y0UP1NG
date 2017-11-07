@@ -24,13 +24,13 @@
     }
 
     function weChatOauthLogin(fromurl){
-       alert("weChat Oauth Login");
+     //  alert("weChat Oauth Login");
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         location.href = url;
     }
 
     function validateTarjetaIsRight(tarjeta){
-        alert("validate tarjeta 2,tarjeta="+tarjeta);
+ //       alert("validate tarjeta 2,tarjeta="+tarjeta);
         var url = "checkTarjeta";
         var param = {
             tarjeta:tarjeta
@@ -42,7 +42,7 @@
             async:false,
             success: function (data) {
                 var validate = data.validate;
-                alert("validate result = " + validate);
+          //      alert("validate result = " + validate);
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
@@ -53,13 +53,13 @@
 
                     return true;
                 }else{
-                   alert(" validate result over return false");
+             //      alert(" validate result over return false");
                     return false;
                 }
 
             },
             error: function (data) {
-                alert("errror");
+         //       alert("errror");
                 return false;
             }
         });
@@ -72,7 +72,7 @@
 
             tarjeta = $("#tarjeta").val();
 
-           alert("#tarjeta = " + tarjeta);
+      //     alert("#tarjeta = " + tarjeta);
 
             if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty
@@ -81,10 +81,10 @@
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
                     $("#tarjeta").val(getCookie("tarjeta"));
-                    alert("#tarjeta="+$("#tarjeta").val());
+            //        alert("#tarjeta="+$("#tarjeta").val());
                     return true;
                 }else{
-                    alert("132");
+                //    alert("132");
                     weChatOauthLogin(fromurl);
                 }
             }
@@ -92,11 +92,11 @@
             var isRight =  validateTarjetaIsRight(tarjeta);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
-                alert("#tarjeta="+$("#tarjeta").val());
+              //  alert("#tarjeta="+$("#tarjeta").val());
                 return true;
             }
             if(isRight == false){
-               alert("254");
+           //    alert("254");
                 weChatOauthLogin(fromurl);
             }
         }
@@ -130,10 +130,10 @@
 
 //                alert(fromurl);
 
-                alert("user account validate");
+         //       alert("user account validate");
 
                 var tarjeta = getCookie("tarjeta");
-                alert("in cookie tajeta = " + tarjeta);
+     //           alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 if(!validateTarjeta(tarjeta)){

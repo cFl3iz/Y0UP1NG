@@ -18,11 +18,11 @@
              var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
              var productStoreId = ${(resourceDetail.productStoreId)!};
              var url = "placeResourceOrder";
-             alert("tarjeta="+tarjeta);
-             alert("payToParty="+payToParty);
-             alert("productId="+productId);
-             alert("prodCatalogId="+prodCatalogId);
-             alert("productStoreId="+productStoreId);
+         //    alert("tarjeta="+tarjeta);
+          //   alert("payToParty="+payToParty);
+          //   alert("productId="+productId);
+          //   alert("prodCatalogId="+prodCatalogId);
+          //   alert("productStoreId="+productStoreId);
              var param = {
                  payToPartyId:payToParty,
                  productId:productId,
@@ -36,7 +36,7 @@
                  data: param,
                  async:false,
                  success: function (data) {
-                     alert("code="+data.code);
+                  //   alert("code="+data.code);
                      if(data.code === "200"){
                          var orderId = data.orderId;
                          location.href = "viewWebOrderDetail?orderId="+orderId;

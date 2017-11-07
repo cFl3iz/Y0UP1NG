@@ -45,9 +45,12 @@
                 alert("validate result = " + validate);
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
+                    $("#tarjeta").val(tarjeta);
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
                         setCookie("tarjeta",newTarjeta);
+                        $("#tarjeta").val(newTarjeta);
                     }
+
                     return true;
                 }else{
                    alert(" validate result over return false");

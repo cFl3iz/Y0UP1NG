@@ -128,6 +128,12 @@
         <value xml:lang="zh_CN">人</value>
     </property>
 
+    <property key="De">
+        <value xml:lang="en">-</value>
+        <value xml:lang="zh">的</value>
+        <value xml:lang="zh_CN">的</value>
+    </property>
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

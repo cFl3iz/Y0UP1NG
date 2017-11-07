@@ -220,7 +220,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell" onclick="javascript:alert('${uiLabel.DefaultAction}');">${uiLabel.MyOrder}</button>
-                        <button class="buy cell" onclick="buyProduct();this.disabled=true;">${uiLabel.Buy}</button>
+                        <button class="buy cell" onclick="buyProduct();">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
                 </section>

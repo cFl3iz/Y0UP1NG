@@ -87,6 +87,9 @@ public class PlatformLoginWorker {
         Debug.logInfo("token verify...", module);
 
         String token = request.getParameter("tarjeta");
+
+        System.out.println("*validate-tarjeta token = " + token);
+
         // 这种事件里面只能返回success, 后面的其它预处理事件会继续采用其它方式验证登录情况
         if (token == null) return "success";
 

@@ -31,17 +31,19 @@
 
     function validateTarjeta(tarjeta){
         //CookieTarjeta Empty
-        alert("#tarjeta = " + $("#tarjeta").val());
-        if(isEmpty(tarjeta)){
-            tarjeta = $("#tarjeta").val();
 
-            if(isEmpty(tarjeta)){
+        if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
+            tarjeta = $("#tarjeta").val();
+            alert("#tarjeta = " + tarjeta);
+            if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty
                 return false;
             }else{
                 alert("set tarjeta ok !");
                 setCookie("tarjeta",tarjeta);
             }
+        }else{
+            $("#tarjeta").val(tarjeta);
         }
 //        else{
 //            var tjt = "<input type='hidden' id='tarjeta' value='" + tarjeta +   "'/>";

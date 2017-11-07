@@ -34,14 +34,17 @@
     <request-map uri="miniChat">
         <security https="false" auth="false"/>
         <!--<event type="service" invoke="queryPersonBaseInfo"/>-->
-        <response name="success" type="view" value="miniChat">
-            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
-            <!--<redirect-parameter name="productId" from="productId"/>-->
-            <!--<redirect-parameter name="payToPartyId" from="payToPartyId"/>-->
-            <!--<redirect-parameter name="payToPartyFirstName" from="payToPartyFirstName"/>-->
-            <!--<redirect-parameter name="payToPartyHead" from="payToPartyHead"/>-->
-
-            <!--<redirect-parameter name="personInfo" from="personInfo"/>-->
+        <response name="success" type="request-redirect" value="miniChat">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="productId" from="productId"/>
+            <redirect-parameter name="payToPartyId" from="payToPartyId"/>
+            <redirect-parameter name="payToPartyFirstName" from="payToPartyFirstName"/>
+            <redirect-parameter name="payToPartyHead" from="payToPartyHead"/>
+            <redirect-parameter name="personInfo" from="personInfo"/>
+        </response>
+        <response name="error" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="productId" from="productId"/>
         </response>
     </request-map>
     <!-- ViewOrder -->

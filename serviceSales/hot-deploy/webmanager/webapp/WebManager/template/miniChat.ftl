@@ -203,7 +203,7 @@
 
 
 
-    setTimeout(function(){
+    setInterval(function(){
 //                var ans  = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
 //                ans += '<div class="answer_text"><p>You Say :'+text+'</p><i></i>';
 //                ans += '</div></div>';

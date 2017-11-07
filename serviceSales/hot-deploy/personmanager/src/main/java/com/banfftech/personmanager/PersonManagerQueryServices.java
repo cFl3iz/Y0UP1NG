@@ -603,6 +603,8 @@ public class PersonManagerQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
+        System.out.println(" payToPartyFirstName = "+(String) context.get("payToPartyFirstName"));
+        
         resultMap.put("tarjeta", (String) context.get("tarjeta"));
         resultMap.put("productId",(String) context.get("productId"));
         resultMap.put("payToPartyId",(String) context.get("payToPartyId"));

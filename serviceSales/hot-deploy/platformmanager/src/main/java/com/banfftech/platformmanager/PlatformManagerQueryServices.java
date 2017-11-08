@@ -30,9 +30,6 @@ public class PlatformManagerQueryServices {
     public final static String module = PlatformManagerQueryServices.class.getName();
 
 
-
-
-
     public static Map<String, Object> loadMaiJiaMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -66,14 +63,10 @@ public class PlatformManagerQueryServices {
 
 
         EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdFrom));
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
 
         EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
-
-
-
-
+                .makeCondition(findConditions, EntityOperator.OR, findConditions2);
 
 
         EntityConditionList<EntityCondition> listBigConditions = EntityCondition
@@ -81,17 +74,14 @@ public class PlatformManagerQueryServices {
 
         List<GenericValue> queryMessageLogList = null;
 
-            queryMessageLogList = delegator.findList("MessageLog",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
+        queryMessageLogList = delegator.findList("MessageLog",
+                listBigConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
 
 
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-
-
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-
-        for(GenericValue gv : queryMessageLogList) {
+        for (GenericValue gv : queryMessageLogList) {
             Map<String, Object> rowMap = new HashMap<String, Object>();
             Map<String, Object> userMap = new HashMap<String, Object>();
             String fromParty = (String) gv.get("partyIdFrom");
@@ -111,26 +101,24 @@ public class PlatformManagerQueryServices {
             rowMap.put("messageTime", tsStr);
 
 //            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
-            Map<String,String> user =  queryPersonBaseInfo(delegator,toParty);
-            userMap.put("toPartyId",toParty);
-            userMap.put("name",user.get("firstName"));
-            userMap.put("avatar",user.get("headPortrait"));
+            Map<String, String> user = queryPersonBaseInfo(delegator, toParty);
+            userMap.put("toPartyId", toParty);
+            userMap.put("name", user.get("firstName"));
+            userMap.put("avatar", user.get("headPortrait"));
             rowMap.put("user", userMap);
             returnList.add(rowMap);
         }
 
 
-
-
-        resultMap.put("messages",returnList);
+        resultMap.put("messages", returnList);
 
         return resultMap;
     }
 
 
-
     /**
      * Load Message Log
+     *
      * @param dctx
      * @param context
      * @return
@@ -165,20 +153,15 @@ public class PlatformManagerQueryServices {
         fieldSet.add("fromDate");
 
 
-
-
-
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
 
         EntityCondition findConditions4 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdTo));
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
 
         EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3,EntityOperator.OR,findConditions4);
-
-
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
 
         EntityConditionList<EntityCondition> listBigConditions = null;
@@ -189,35 +172,33 @@ public class PlatformManagerQueryServices {
 
 
             EntityCondition findConditions2 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdFrom));
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
 
             EntityCondition listConditions = EntityCondition
-                    .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
             listBigConditions = EntityCondition
                     .makeCondition(listConditions, listConditions2);
-        }else{
+        } else {
             listBigConditions = EntityCondition
-                    .makeCondition( listConditions2);
+                    .makeCondition(listConditions2);
         }
 
 
         List<GenericValue> queryMessageLogList = null;
-        if(UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")){
+        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("fromDate"), null, false);
-        }else{
+        } else {
             queryMessageLogList = delegator.findList("MessageLogView",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
         }
 
 
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-
-        for(GenericValue gv : queryMessageLogList) {
+        for (GenericValue gv : queryMessageLogList) {
             Map<String, Object> rowMap = new HashMap<String, Object>();
             Map<String, Object> userMap = new HashMap<String, Object>();
             String fromParty = (String) gv.get("partyIdFrom");
@@ -237,25 +218,22 @@ public class PlatformManagerQueryServices {
             rowMap.put("messageTime", tsStr);
 
 //            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
-            Map<String,String> user =  queryPersonBaseInfo(delegator,toParty);
-            userMap.put("toPartyId",toParty);
-            userMap.put("name",user.get("firstName"));
-            userMap.put("avatar",user.get("headPortrait"));
+            Map<String, String> user = queryPersonBaseInfo(delegator, toParty);
+            userMap.put("toPartyId", toParty);
+            userMap.put("name", user.get("firstName"));
+            userMap.put("avatar", user.get("headPortrait"));
             rowMap.put("user", userMap);
             returnList.add(rowMap);
         }
 
 
-
-
-        resultMap.put("messages",returnList);
+        resultMap.put("messages", returnList);
 
         return resultMap;
     }
 
 
     /**
-     *
      * @param dctx
      * @param context
      * @return
@@ -290,20 +268,15 @@ public class PlatformManagerQueryServices {
         fieldSet.add("fromDate");
 
 
-
-
-
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
 
         EntityCondition findConditions4 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdTo));
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
 
         EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3,EntityOperator.OR,findConditions4);
-
-
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
 
         EntityConditionList<EntityCondition> listBigConditions = null;
@@ -314,24 +287,24 @@ public class PlatformManagerQueryServices {
 
 
             EntityCondition findConditions2 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdFrom));
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
 
             EntityCondition listConditions = EntityCondition
-                    .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
             listBigConditions = EntityCondition
                     .makeCondition(listConditions, listConditions2);
-        }else{
+        } else {
             listBigConditions = EntityCondition
-                    .makeCondition( listConditions2);
+                    .makeCondition(listConditions2);
         }
 
 
         List<GenericValue> queryMessageLogList = null;
-        if(UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")){
+        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("fromDate"), null, false);
-        }else{
+        } else {
             queryMessageLogList = delegator.findList("MessageLogView",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
@@ -339,22 +312,41 @@ public class PlatformManagerQueryServices {
 
 
 
+        List<List<Map<String, Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
 
-        List<List<Map<String,Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
-        String beForeObjectId = "";
-        List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
-        for(int i =0;i<queryMessageLogList.size();i++) {
+
+
+        Map<String,String> beforeMap = new HashMap<String, String>();
+
+        beforeMap.put("objectId","");
+        beforeMap.put("from","");
+        beforeMap.put("to","");
+
+        List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
+
+
+        for (int i = 0; i < queryMessageLogList.size(); i++) {
+
             GenericValue gv = queryMessageLogList.get(i);
+
             Map<String, Object> rowMap = new HashMap<String, Object>();
+
             Map<String, Object> userMap = new HashMap<String, Object>();
-            String gvObjectId  = (String) gv.get("objectId");
+
+            String gvObjectId = (String) gv.get("objectId");
+
             String fromParty = (String) gv.get("partyIdFrom");
+
             String toParty = (String) gv.get("partyIdTo");
+
             String messageId = (String) gv.get("messageId");
 
             String message = (String) gv.get("message");
+
             String tsStr = "";
+
             DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
             try {
                 //方法一
                 tsStr = sdf.format(gv.get("fromDate"));
@@ -364,31 +356,56 @@ public class PlatformManagerQueryServices {
             rowMap.put("messageId", messageId);
             rowMap.put("text", message);
             rowMap.put("messageTime", tsStr);
-
-//            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
-            Map<String,String> user =  queryPersonBaseInfo(delegator,fromParty);
-            userMap.put("toPartyId",toParty);
-            userMap.put("name",user.get("firstName"));
-            userMap.put("avatar",user.get("headPortrait"));
-            rowMap.put("user", userMap);
-            if(gvObjectId.equals(beForeObjectId)){
-                rowList.add(rowMap);
+            Map<String, String> user = null;
+            if(partyIdTo.equals(fromParty)){
+                user = queryPersonBaseInfo(delegator, toParty);
             }else{
-                returnList.add(rowList);
-                rowList = new ArrayList<Map<String, Object>>();
-                rowList.add(rowMap);
+                user = queryPersonBaseInfo(delegator, fromParty);
             }
-            beForeObjectId = (String) gv.get("objectId");
-            if(i+1 == queryMessageLogList.size()){
+
+
+            userMap.put("toPartyId", toParty);
+
+            userMap.put("name", user.get("firstName"));
+
+            userMap.put("avatar", user.get("headPortrait"));
+
+            rowMap.put("user", userMap);
+
+
+            if (
+                    gvObjectId.equals(beforeMap.get("objectId"))
+                    &&  partyIdFrom.equals(beforeMap.get("from"))
+                    &&  partyIdTo.equals(beforeMap.get("to")) ||
+                            gvObjectId.equals(beforeMap.get("objectId"))
+                                    &&  partyIdFrom.equals(beforeMap.get("to"))
+                                    &&  partyIdTo.equals(beforeMap.get("from"))
+            ) {
+
+                rowList.add(rowMap);
+
+            } else {
+
                 returnList.add(rowList);
+
+                rowList = new ArrayList<Map<String, Object>>();
+
+                rowList.add(rowMap);
+
+            }
+            beforeMap.put("from",partyIdFrom);
+            beforeMap.put("to",partyIdTo);
+            beforeMap.put("objectId",(String) gv.get("objectId"));
+
+            if (i + 1 == queryMessageLogList.size()) {
+
+                returnList.add(rowList);
+
             }
         }
 
 
-
-
-
-        resultMap.put("messages",returnList);
+        resultMap.put("messages", returnList);
 
         return resultMap;
     }

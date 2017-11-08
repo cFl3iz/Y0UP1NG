@@ -212,6 +212,7 @@
 
         var payToPartyId = $("#payToPartyId").val();
         var payFromPartyId = $("#payFromPartyId").val();
+        alert("payFromPartyId="+payFromPartyId);
         var tarjeta = $("#tarjeta").val();
 
         var url = "loadMessage";

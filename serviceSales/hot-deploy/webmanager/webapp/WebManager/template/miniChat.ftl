@@ -57,6 +57,8 @@
     </style>
 <script>
 
+    var messagesArray = new Array();
+
     function flushMessage() {
         var url = "queryMessage";
         var param = {
@@ -80,6 +82,8 @@
 
     $(
             function(){
+
+
                 $("#wenwen_btn_left").click();
             }
     );
@@ -235,8 +239,11 @@
                 var messages = eval(data.messages);
                 for(var i=0; i<messages.length; i++)
                 {
-                    alert(messages[i].messageId+" ");
+//                    alert(messages[i].messageId+" ");
+                    messagesArray.push(messages[i].messageId);
+
                 }
+                alert(messagesArray);
             },
             error: function (data) {
                 alert("ERROR :" + data.status);

@@ -237,9 +237,9 @@
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
-                if (messagesArray.contains('foo')) {
-                    // do something special
-                }
+//                if (messagesArray.contains('foo')) {
+//                    // do something special
+//                }
                 for(var i=0; i<messages.length; i++)
                 {
 //                    alert(messages[i].messageId+" ");

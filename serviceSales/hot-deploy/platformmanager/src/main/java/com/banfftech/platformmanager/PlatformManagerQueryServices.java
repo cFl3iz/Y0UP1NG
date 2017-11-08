@@ -84,7 +84,7 @@ public class PlatformManagerQueryServices {
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
-         
+
 
 
 

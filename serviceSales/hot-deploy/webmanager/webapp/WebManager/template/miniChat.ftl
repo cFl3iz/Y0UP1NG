@@ -235,7 +235,7 @@
                 var messages = eval(data.messages);
                 for(var i=0; i<messages.length; i++)
                 {
-                    alert(messages[i].text+" " + messages[i].value)
+                    alert(messages[i].messageId+" ");
                 }
             },
             error: function (data) {

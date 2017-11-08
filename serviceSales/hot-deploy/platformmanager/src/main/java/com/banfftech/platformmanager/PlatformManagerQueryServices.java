@@ -164,19 +164,9 @@ public class PlatformManagerQueryServices {
         fieldSet.add("messageId");
         fieldSet.add("fromDate");
 
-//        if (UtilValidate.isNotEmpty(objectId)) {
-//
-//        }
-
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
 
 
-        EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdFrom));
 
-        EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
 
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
@@ -191,8 +181,25 @@ public class PlatformManagerQueryServices {
 
 
 
-        EntityConditionList<EntityCondition> listBigConditions = EntityCondition
-                .makeCondition(listConditions, listConditions2);
+        EntityConditionList<EntityCondition> listBigConditions = null;
+
+        if (UtilValidate.isNotEmpty(partyIdFrom)) {
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+
+
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdFrom",partyIdFrom));
+
+            EntityCondition listConditions = EntityCondition
+                    .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+            listBigConditions = EntityCondition
+                    .makeCondition(listConditions, listConditions2);
+        }else{
+            listBigConditions = EntityCondition
+                    .makeCondition( listConditions2);
+        }
+
 
         List<GenericValue> queryMessageLogList = null;
         if(UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")){

@@ -36,7 +36,7 @@
             tarjeta:tarjeta
         };
         var result = false;
-        alert("result  = " + result);
+//        alert("result  = " + result);
         $.ajax({
             type: 'POST',
             url: url,
@@ -45,7 +45,7 @@
             success: function (data) {
                 var validate = data.validate;
           //      alert("validate result = " + validate);
-                alert("validate="+validate);
+//                alert("validate="+validate);
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
@@ -56,7 +56,7 @@
                     result = true;
 
                 }else{
-                    alert("return false");
+//                    alert("return false");
                     clearCookie("tarjeta");
              //      alert(" validate result over return false");
 
@@ -69,7 +69,7 @@
             }
         });
 
-        alert("result  = " + result);
+//        alert("result  = " + result);
         return result;
     }
 
@@ -92,20 +92,20 @@
                     setCookie("tarjeta",$("#tarjeta").val());
                     return true;
                 }else{
-                   alert("132");
+//                   alert("132");
 
                     weChatOauthLogin(fromurl);
                 }
             }
         }else{
             var isRight =  validateTarjetaIsRight(tarjeta);
-            alert("isRight = " + isRight);
+//            alert("isRight = " + isRight);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
               //  alert("#tarjeta="+$("#tarjeta").val());
                 return true;
             }else{
-                alert("254");
+//                alert("254");
                 weChatOauthLogin(fromurl);
             }
         }

@@ -25,7 +25,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <request-map uri="loadAllMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadAllMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- 退出登录删除regId -->

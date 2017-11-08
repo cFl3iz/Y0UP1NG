@@ -446,6 +446,7 @@
         var tarjeta = $("#tarjeta").val();
         var productId = $("#productId").val();
         var url = "pushMessage";
+        alert("productId = " + productId);
         var param = {
             partyIdTo: payToPartyId,
             tarjeta: tarjeta,

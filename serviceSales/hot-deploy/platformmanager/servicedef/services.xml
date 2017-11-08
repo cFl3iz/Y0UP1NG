@@ -90,6 +90,27 @@
 
 
 
+    <service name="loadAllMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="loadAllMessage" auth="false">
+        <description>loadMessage</description>
+
+        <attribute name="bizType" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="objectId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="messages" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
     <!-- Load Message -->
     <service name="loadMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"

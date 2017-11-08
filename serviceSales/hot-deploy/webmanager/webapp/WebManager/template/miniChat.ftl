@@ -232,7 +232,11 @@
             url: url,
             data: param,
             success: function (data) {
-                alert(data.messages);
+                var messages = eval(data.messages);
+                for(var i=0; i<messages.length; i++)
+                {
+                    alert(messages[i].text+" " + messages[i].value)
+                }
             },
             error: function (data) {
                 alert("ERROR :" + data.status);
@@ -240,7 +244,7 @@
         });
 
 
-    },5000);
+    },8000);
 
 
 

@@ -220,9 +220,9 @@ public class PlatformManagerQueryServices {
 
             Map<String, String> user = null;
 
-            if(partyIdTo.equals(fromParty)){
+            if (partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
-            }else{
+            } else {
                 user = queryPersonBaseInfo(delegator, fromParty);
             }
 
@@ -261,6 +261,8 @@ public class PlatformManagerQueryServices {
         String partyIdTo = (String) userLogin.get("partyId");
         String partyIdFrom = (String) context.get("partyIdFrom");
         String objectId = (String) context.get("objectId");
+
+        String bizType = (String) context.get("bizType");
 
         Set<String> fieldSet = new HashSet<String>();
 
@@ -308,9 +310,9 @@ public class PlatformManagerQueryServices {
 
         List<GenericValue> queryMessageLogList = null;
 
-                    queryMessageLogList = delegator.findList("MessageLog",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
+        queryMessageLogList = delegator.findList("MessageLog",
+                listBigConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
 
 //        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
 //            queryMessageLogList = delegator.findList("MessageLog",
@@ -322,35 +324,17 @@ public class PlatformManagerQueryServices {
 //                    UtilMisc.toList("-fromDate"), null, false);
 
 
-
-
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
-
-
-
-
-
-
-
-
-
 
 
         //-----------------------------------------------------------------------------
 
 
+        Map<String, String> beforeMap = new HashMap<String, String>();
 
-
-
-
-
-
-        Map<String,String> beforeMap = new HashMap<String, String>();
-
-        beforeMap.put("objectId","");
-        beforeMap.put("from","");
-        beforeMap.put("to","");
-
+        beforeMap.put("objectId", "");
+        beforeMap.put("from", "");
+        beforeMap.put("to", "");
 
 
         for (int i = 0; i < queryMessageLogList.size(); i++) {
@@ -371,14 +355,14 @@ public class PlatformManagerQueryServices {
 
             Map<String, String> user = null;
 
-            if(partyIdTo.equals(fromParty)){
+            if (partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
-            }else{
+            } else {
                 user = queryPersonBaseInfo(delegator, fromParty);
             }
 
 
-            userMap.put("toPartyId", toParty);
+            userMap.put("_id", fromParty);
 
             userMap.put("name", user.get("firstName"));
 
@@ -401,27 +385,31 @@ public class PlatformManagerQueryServices {
             } catch (Exception e) {
             }
 
-            rowMap.put("messageId", messageId);
+            rowMap.put("_id", messageId);
             rowMap.put("text", message);
-            rowMap.put("messageTime", tsStr);
+            rowMap.put("createdAt", tsStr);
 
 
-
-
-            if (
-                    gvObjectId.equals(beforeMap.get("objectId"))
-                    &&  fromParty.equals(beforeMap.get("from"))
-                    &&  partyIdTo.equals(beforeMap.get("to")) ||
-                            gvObjectId.equals(beforeMap.get("objectId"))
-                                    &&  fromParty.equals(beforeMap.get("to"))
-                                    &&  partyIdTo.equals(beforeMap.get("from"))
-            ) {
-            }else{
+            if (bizType != null & bizType.equals("findOne")) {
                 returnList.add(rowMap);
+            } else {
+
+
+                if (
+                        gvObjectId.equals(beforeMap.get("objectId"))
+                                && fromParty.equals(beforeMap.get("from"))
+                                && partyIdTo.equals(beforeMap.get("to")) ||
+                                gvObjectId.equals(beforeMap.get("objectId"))
+                                        && fromParty.equals(beforeMap.get("to"))
+                                        && partyIdTo.equals(beforeMap.get("from"))
+                        ) {
+                } else {
+                    returnList.add(rowMap);
+                }
             }
-            beforeMap.put("from",fromParty);
-            beforeMap.put("to",partyIdTo);
-            beforeMap.put("objectId",(String) gv.get("objectId"));
+            beforeMap.put("from", fromParty);
+            beforeMap.put("to", partyIdTo);
+            beforeMap.put("objectId", (String) gv.get("objectId"));
 
         }
 

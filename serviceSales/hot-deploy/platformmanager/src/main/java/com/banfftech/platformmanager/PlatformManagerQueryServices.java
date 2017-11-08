@@ -80,15 +80,11 @@ public class PlatformManagerQueryServices {
                 .makeCondition(listConditions);
 
         List<GenericValue> queryMessageLogList = null;
-        if(UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")){
+
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
-        }else{
-            queryMessageLogList = delegator.findList("MessageLogView",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
-        }
+         
 
 
 

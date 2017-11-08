@@ -128,7 +128,7 @@
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <input type="hidden" id="payFromPartyId" value="${(personInfo.partyId)!}"/>
 <input type="hidden" id="tarjeta" value="${(tarjeta)!}"/>
-<input type="hidden" id="orderId" value="${(orderId)!}"/>
+<input type="hidden" id="productId" value="${(productId)!}"/>
 
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
@@ -179,19 +179,21 @@
         var payToPartyId = $("#payToPartyId").val();
         var payFromPartyId = $("#payFromPartyId").val();
         var tarjeta = $("#tarjeta").val();
+        var productId  =   $("#productId").val();
         var url = "pushMessage";
         var param = {
             partyIdTo:payToPartyId,
             tarjeta:tarjeta,
             partyIdFrom:payFromPartyId,
-            text:text
+            text:text,
+            objectId:productId
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
             success: function (data) {
-                alert(data);
+                alert(data.messages);
             },
             error: function (data) {
                 alert("ERROR :" + data.status);
@@ -213,7 +215,7 @@
 
         var payToPartyId = $("#payToPartyId").val();
         var payFromPartyId = $("#payFromPartyId").val();
-        var orderId  =   $("#orderId").val();
+
         var tarjeta = $("#tarjeta").val();
 
         var url = "loadMessage";
@@ -221,8 +223,7 @@
         var param = {
             partyIdTo:payToPartyId,
             tarjeta:tarjeta,
-            partyIdFrom:payFromPartyId,
-            objectId:orderId
+            partyIdFrom:payFromPartyId
         };
 
         $.ajax({

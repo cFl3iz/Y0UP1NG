@@ -76,6 +76,8 @@
              invoke="loadMessage" auth="false">
         <description>loadMessage</description>
 
+        <attribute name="bizType" type="String" mode="IN"
+                   optional="true" />
         <attribute name="partyIdFrom" type="String" mode="IN"
                    optional="true" />
         <attribute name="partyIdTo" type="String" mode="IN"

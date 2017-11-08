@@ -186,7 +186,8 @@
             tarjeta:tarjeta,
             partyIdFrom:payFromPartyId,
             text:text,
-            objectId:productId
+            objectId:productId,
+            bizType:"webChat"
         };
         $.ajax({
             type: 'POST',

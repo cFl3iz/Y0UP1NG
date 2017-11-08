@@ -46,6 +46,9 @@ public class PlatformManagerQueryServices {
 
         Set<String> fieldSet = new HashSet<String>();
 
+        // 区分作用域 WebChat 还是 App 查询列用途
+        String bizType = (String) context.get("bizType");
+
         fieldSet.add("message");
         fieldSet.add("partyIdFrom");
         fieldSet.add("partyIdTo");
@@ -83,10 +86,17 @@ public class PlatformManagerQueryServices {
         EntityConditionList<EntityCondition> listBigConditions = EntityCondition
                 .makeCondition(listConditions, listConditions2);
 
+        List<GenericValue> queryMessageLogList = null;
+        if(UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")){
+            queryMessageLogList = delegator.findList("MessageLog",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
+        }else{
+            queryMessageLogList = delegator.findList("MessageLogView",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
+        }
 
-        List<GenericValue> queryMessageLogList = delegator.findList("MessageLogView",
-                listBigConditions, fieldSet,
-                UtilMisc.toList("-fromDate"), null, false);
 
 
 

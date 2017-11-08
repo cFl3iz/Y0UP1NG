@@ -43,6 +43,7 @@
             success: function (data) {
                 var validate = data.validate;
           //      alert("validate result = " + validate);
+                alert("validate="+validate);
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
@@ -53,6 +54,7 @@
 
                     return true;
                 }else{
+                    alert("return false");
              //      alert(" validate result over return false");
                     return false;
                 }
@@ -84,7 +86,7 @@
             //        alert("#tarjeta="+$("#tarjeta").val());
                     return true;
                 }else{
-                //    alert("132");
+                   alert("132");
                     weChatOauthLogin(fromurl);
                 }
             }
@@ -96,7 +98,7 @@
                 return true;
             }
             if(isRight == false){
-           //    alert("254");
+                alert("254");
                 weChatOauthLogin(fromurl);
             }
         }

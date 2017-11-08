@@ -188,6 +188,7 @@ public class PlatformLoginWorker {
         } else {
             Debug.logWarning("*Could not find userLogin for token: " + token, module);
             Debug.logWarning("*Claims User Is : " + claims.get("user"), module);
+            request.setAttribute("validate","false");
         }
         return "success";
     }

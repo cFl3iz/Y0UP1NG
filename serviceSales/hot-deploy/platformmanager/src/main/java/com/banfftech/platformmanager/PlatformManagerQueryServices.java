@@ -343,7 +343,8 @@ public class PlatformManagerQueryServices {
         List<List<Map<String,Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
         String beForeObjectId = "";
         List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
-        for(GenericValue gv : queryMessageLogList) {
+        for(int i =0;i<queryMessageLogList.size();i++) {
+            GenericValue gv = queryMessageLogList.get(i);
             Map<String, Object> rowMap = new HashMap<String, Object>();
             Map<String, Object> userMap = new HashMap<String, Object>();
             String gvObjectId  = (String) gv.get("objectId");
@@ -370,7 +371,6 @@ public class PlatformManagerQueryServices {
             userMap.put("name",user.get("firstName"));
             userMap.put("avatar",user.get("headPortrait"));
             rowMap.put("user", userMap);
-//            returnList.add(rowMap);
             if(gvObjectId.equals(beForeObjectId)){
                 rowList.add(rowMap);
             }else{
@@ -379,6 +379,9 @@ public class PlatformManagerQueryServices {
                 rowList.add(rowMap);
             }
             beForeObjectId = (String) gv.get("objectId");
+            if(i+1 == queryMessageLogList.size()){
+                returnList.add(rowList);
+            }
         }
 
 

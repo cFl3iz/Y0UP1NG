@@ -217,8 +217,15 @@ public class PlatformManagerQueryServices {
             rowMap.put("text", message);
             rowMap.put("messageTime", tsStr);
 
-//            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",toParty),false);
-            Map<String, String> user = queryPersonBaseInfo(delegator, toParty);
+
+            Map<String, String> user = null;
+
+            if(partyIdTo.equals(fromParty)){
+                user = queryPersonBaseInfo(delegator, toParty);
+            }else{
+                user = queryPersonBaseInfo(delegator, fromParty);
+            }
+
             userMap.put("toPartyId", toParty);
             userMap.put("name", user.get("firstName"));
             userMap.put("avatar", user.get("headPortrait"));
@@ -316,6 +323,23 @@ public class PlatformManagerQueryServices {
 
 
 
+
+
+
+
+
+
+
+
+        //-----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
         Map<String,String> beforeMap = new HashMap<String, String>();
 
         beforeMap.put("objectId","");
@@ -333,11 +357,31 @@ public class PlatformManagerQueryServices {
 
             Map<String, Object> userMap = new HashMap<String, Object>();
 
+
             String gvObjectId = (String) gv.get("objectId");
 
             String fromParty = (String) gv.get("partyIdFrom");
 
             String toParty = (String) gv.get("partyIdTo");
+
+
+            Map<String, String> user = null;
+
+            if(partyIdTo.equals(fromParty)){
+                user = queryPersonBaseInfo(delegator, toParty);
+            }else{
+                user = queryPersonBaseInfo(delegator, fromParty);
+            }
+
+
+            userMap.put("toPartyId", toParty);
+
+            userMap.put("name", user.get("firstName"));
+
+            userMap.put("avatar", user.get("headPortrait"));
+
+            rowMap.put("user", userMap);
+
 
             String messageId = (String) gv.get("messageId");
 
@@ -356,21 +400,8 @@ public class PlatformManagerQueryServices {
             rowMap.put("messageId", messageId);
             rowMap.put("text", message);
             rowMap.put("messageTime", tsStr);
-            Map<String, String> user = null;
-            if(partyIdTo.equals(fromParty)){
-                user = queryPersonBaseInfo(delegator, toParty);
-            }else{
-                user = queryPersonBaseInfo(delegator, fromParty);
-            }
 
 
-            userMap.put("toPartyId", toParty);
-
-            userMap.put("name", user.get("firstName"));
-
-            userMap.put("avatar", user.get("headPortrait"));
-
-            rowMap.put("user", userMap);
 
 
             if (

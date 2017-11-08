@@ -385,8 +385,9 @@ public class PlatformManagerQueryServices {
                 rowList.add(rowMap);
 
             } else {
-
-                returnList.add(rowList);
+                if(rowList.size()>=1){
+                    returnList.add(rowList);
+                }
 
                 rowList = new ArrayList<Map<String, Object>>();
 

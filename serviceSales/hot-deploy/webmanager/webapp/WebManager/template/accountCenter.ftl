@@ -57,6 +57,7 @@
 
                 }else{
                     alert("return false");
+                    clearCookie("tarjeta");
              //      alert(" validate result over return false");
 
                 }
@@ -91,6 +92,7 @@
                     return true;
                 }else{
                    alert("132");
+
                     weChatOauthLogin(fromurl);
                 }
             }

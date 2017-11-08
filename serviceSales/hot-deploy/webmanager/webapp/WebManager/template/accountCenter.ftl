@@ -74,7 +74,9 @@
     }
 
     function validateTarjeta(tarjeta){
+
         var fromurl = $("#fromurl").val();
+
         if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
 
             tarjeta = $("#tarjeta").val();
@@ -87,8 +89,7 @@
             }else{
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
-                    $("#tarjeta").val(getCookie("tarjeta"));
-            //        alert("#tarjeta="+$("#tarjeta").val());
+                    setCookie("tarjeta",$("#tarjeta").val());
                     return true;
                 }else{
                    alert("132");

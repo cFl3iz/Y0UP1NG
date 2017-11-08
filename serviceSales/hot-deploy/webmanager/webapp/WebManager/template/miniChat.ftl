@@ -288,8 +288,8 @@
             <div class="heard_img left">
                 <img src="${(payToPartyHead)!}">
             </div>
-            <div class="answer_text">
-                <p id="firstAboutMessage" style="display:none;">${uiLabel.About}<br/>
+            <div class="answer_text" id="firstAboutMessage" style="display:none;">
+                <p >${uiLabel.About}<br/>
                 <#--<a href="#">${uiLabel.BuyNow}</a>-->
                 </p>
                 <i></i>

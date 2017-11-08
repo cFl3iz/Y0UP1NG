@@ -222,7 +222,7 @@
 
         var tarjeta = $("#tarjeta").val();
 
-        var url = "loadMessage";
+        var url = "loadMaiJiaMessage";
 
         var param = {
             partyIdTo:payToPartyId,
@@ -237,6 +237,9 @@
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
+                if (messagesArray.contains('foo')) {
+                    // do something special
+                }
                 for(var i=0; i<messages.length; i++)
                 {
 //                    alert(messages[i].messageId+" ");
@@ -259,17 +262,17 @@
 
 
 
-
+//输入文字的放大镜效果
     function keyup(){
-        var footer_height = $('.wenwen-footer').outerHeight(),
-                text = $('.write_box input').val(),
-                str = '<div class="write_list">'+text+'</div>';
-        if (text == '' || text == undefined){
-            $('.write_list').remove();
-        }else{
-            $('.wenwen-footer').append(str);
-            $('.write_list').css('bottom',footer_height);
-        }
+//        var footer_height = $('.wenwen-footer').outerHeight(),
+//                text = $('.write_box input').val(),
+//                str = '<div class="write_list">'+text+'</div>';
+//        if (text == '' || text == undefined){
+//            $('.write_list').remove();
+//        }else{
+//            $('.wenwen-footer').append(str);
+//            $('.write_list').css('bottom',footer_height);
+//        }
     }
 
     var wen  = document.getElementById('wenwen');

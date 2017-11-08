@@ -59,10 +59,10 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-    <!-- Load Message -->
-    <request-map uri="loadMessage">
+    <!-- Load payToPartySend Message -->
+    <request-map uri="loadMaiJiaMessage">
         <security https="false" auth="false"/>
-        <event type="service" invoke="loadMessage"  />
+        <event type="service" invoke="loadMaiJiaMessage"  />
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

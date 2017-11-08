@@ -92,12 +92,12 @@
             }
         }else{
             var isRight =  validateTarjetaIsRight(tarjeta);
+            alert("isRight = " + isRight);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
               //  alert("#tarjeta="+$("#tarjeta").val());
                 return true;
-            }
-            if(isRight == false){
+            }else{
                 alert("254");
                 weChatOauthLogin(fromurl);
             }

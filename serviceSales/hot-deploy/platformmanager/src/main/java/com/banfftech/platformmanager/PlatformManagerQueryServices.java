@@ -340,14 +340,17 @@ public class PlatformManagerQueryServices {
 
 
 
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-
+        List<List<Map<String,Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
+        String beForeObjectId = "";
+        List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
         for(GenericValue gv : queryMessageLogList) {
             Map<String, Object> rowMap = new HashMap<String, Object>();
             Map<String, Object> userMap = new HashMap<String, Object>();
+            String gvObjectId  = (String) gv.get("objectId");
             String fromParty = (String) gv.get("partyIdFrom");
             String toParty = (String) gv.get("partyIdTo");
             String messageId = (String) gv.get("messageId");
+
             String message = (String) gv.get("message");
             String tsStr = "";
             DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -367,7 +370,15 @@ public class PlatformManagerQueryServices {
             userMap.put("name",user.get("firstName"));
             userMap.put("avatar",user.get("headPortrait"));
             rowMap.put("user", userMap);
-            returnList.add(rowMap);
+//            returnList.add(rowMap);
+            if(gvObjectId.equals(beForeObjectId)){
+                rowList.add(rowMap);
+            }else{
+                returnList.add(rowList);
+                rowList = new ArrayList<Map<String, Object>>();
+                rowList.add(rowMap);
+            }
+            beForeObjectId = (String) gv.get("objectId");
         }
 
 

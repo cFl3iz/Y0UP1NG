@@ -101,7 +101,7 @@ public class PersonManagerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
-
+        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
@@ -131,6 +131,7 @@ public class PersonManagerServices {
 
 
         GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
+        createMessageLogMap.put("message",text);
         if(person!=null){
             text = person.get("firstName")+":"+text;
         }
@@ -144,7 +145,7 @@ public class PersonManagerServices {
 
 
 
-        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+
 
         if(!UtilValidate.isEmpty(partyIdFrom)) {
             createMessageLogMap.put("partyIdFrom", partyIdFrom);
@@ -154,7 +155,7 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("partyIdTo",partyIdTo);
 
-        createMessageLogMap.put("message",text);
+
 
         if(!UtilValidate.isEmpty(objectId)){
             createMessageLogMap.put("objectId",objectId);

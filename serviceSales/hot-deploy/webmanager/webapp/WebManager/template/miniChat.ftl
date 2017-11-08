@@ -128,6 +128,7 @@
 <input type="hidden" id="payToPartyId" value="${(payToPartyId)!}"/>
 <input type="hidden" id="payFromPartyId" value="${(personInfo.partyId)!}"/>
 <input type="hidden" id="tarjeta" value="${(tarjeta)!}"/>
+<input type="hidden" id="orderId" value="${(orderId)!}"/>
 
 <input type="hidden" id="payToPartyHead" value="${(payToPartyHead)!}"/>
 <input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
@@ -212,7 +213,7 @@
 
         var payToPartyId = $("#payToPartyId").val();
         var payFromPartyId = $("#payFromPartyId").val();
-//        alert("payFromPartyId="+payFromPartyId);
+        var orderId  =   $("#orderId").val();
         var tarjeta = $("#tarjeta").val();
 
         var url = "loadMessage";
@@ -220,7 +221,8 @@
         var param = {
             partyIdTo:payToPartyId,
             tarjeta:tarjeta,
-            partyIdFrom:payFromPartyId
+            partyIdFrom:payFromPartyId,
+            objectId:orderId
         };
 
         $.ajax({

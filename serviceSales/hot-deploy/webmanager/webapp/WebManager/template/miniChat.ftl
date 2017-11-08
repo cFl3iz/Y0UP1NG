@@ -289,7 +289,7 @@
                 <img src="${(payToPartyHead)!}">
             </div>
             <div class="answer_text">
-                <p id="firstAboutMessage"><br/>
+                <p id="firstAboutMessage" style="display:none;">${uiLabel.About}<br/>
                 <#--<a href="#">${uiLabel.BuyNow}</a>-->
                 </p>
                 <i></i>
@@ -413,7 +413,7 @@
         });
 
         if(messagesArray == null){
-            $("#firstAboutMessage").val($("about").val());
+            $("#firstAboutMessage").show();
         }
     }
 

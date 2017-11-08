@@ -307,19 +307,24 @@ public class PlatformManagerQueryServices {
 
 
         List<GenericValue> queryMessageLogList = null;
-        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
-            queryMessageLogList = delegator.findList("MessageLog",
+
+                    queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
-        } else {
-            queryMessageLogList = delegator.findList("MessageLogView",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
-        }
+
+//        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
+//            queryMessageLogList = delegator.findList("MessageLog",
+//                    listBigConditions, fieldSet,
+//                    UtilMisc.toList("-fromDate"), null, false);
+//        } else {}
+//            queryMessageLogList = delegator.findList("MessageLogView",
+//                    listBigConditions, fieldSet,
+//                    UtilMisc.toList("-fromDate"), null, false);
 
 
 
-        List<List<Map<String, Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
 
 
@@ -346,7 +351,6 @@ public class PlatformManagerQueryServices {
         beforeMap.put("from","");
         beforeMap.put("to","");
 
-        List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
 
 
         for (int i = 0; i < queryMessageLogList.size(); i++) {
@@ -412,28 +416,13 @@ public class PlatformManagerQueryServices {
                                     &&  fromParty.equals(beforeMap.get("to"))
                                     &&  partyIdTo.equals(beforeMap.get("from"))
             ) {
-
-                rowList.add(rowMap);
-
-            } else {
-                if(rowList.size()>=1){
-                    returnList.add(rowList);
-                }
-
-                rowList = new ArrayList<Map<String, Object>>();
-
-                rowList.add(rowMap);
-
+            }else{
+                returnList.add(rowMap);
             }
             beforeMap.put("from",fromParty);
             beforeMap.put("to",partyIdTo);
             beforeMap.put("objectId",(String) gv.get("objectId"));
 
-            if (i + 1 == queryMessageLogList.size()) {
-
-                returnList.add(rowList);
-
-            }
         }
 
 

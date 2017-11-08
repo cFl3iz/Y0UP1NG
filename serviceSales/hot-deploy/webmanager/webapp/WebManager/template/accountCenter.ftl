@@ -35,6 +35,8 @@
         var param = {
             tarjeta:tarjeta
         };
+        var result = false;
+        alert("result  = " + result);
         $.ajax({
             type: 'POST',
             url: url,
@@ -51,21 +53,23 @@
                         setCookie("tarjeta",newTarjeta);
                         $("#tarjeta").val(newTarjeta);
                     }
+                    result = true;
 
-                    return true;
                 }else{
                     alert("return false");
              //      alert(" validate result over return false");
-                    return false;
+
                 }
 
             },
             error: function (data) {
          //       alert("errror");
-                return false;
+
             }
         });
 
+        alert("result  = " + result);
+        return result;
     }
 
     function validateTarjeta(tarjeta){

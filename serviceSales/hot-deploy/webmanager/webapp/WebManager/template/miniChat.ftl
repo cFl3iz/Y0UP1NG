@@ -284,11 +284,11 @@
 <input type="hidden" value="${uiLabel.About}" id="about"/>
 <div class="speak_window">
     <div class="speak_box">
-        <div class="answer">
+        <div class="answer" id="firstAboutMessage" style="display:none;">
             <div class="heard_img left">
                 <img src="${(payToPartyHead)!}">
             </div>
-            <div class="answer_text" id="firstAboutMessage" style="display:none;">
+            <div class="answer_text" >
                 <p >${uiLabel.About}<br/>
                 <#--<a href="#">${uiLabel.BuyNow}</a>-->
                 </p>
@@ -458,7 +458,7 @@
             url: url,
             data: param,
             success: function (data) {
-                alert(data.messages);
+//                alert(data.messages);
             },
             error: function (data) {
                 alert("ERROR :" + data.status);

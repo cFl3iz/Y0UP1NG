@@ -186,8 +186,7 @@
             tarjeta:tarjeta,
             partyIdFrom:payFromPartyId,
             text:text,
-            objectId:productId,
-            bizType:"webChat"
+            objectId:productId
         };
         $.ajax({
             type: 'POST',
@@ -224,7 +223,8 @@
         var param = {
             partyIdTo:payToPartyId,
             tarjeta:tarjeta,
-            partyIdFrom:payFromPartyId
+            partyIdFrom:payFromPartyId,
+            bizType:"webChat"
         };
 
         $.ajax({

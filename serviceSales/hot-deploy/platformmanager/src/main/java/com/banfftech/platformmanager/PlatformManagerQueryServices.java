@@ -267,7 +267,6 @@ public class PlatformManagerQueryServices {
         Set<String> fieldSet = new HashSet<String>();
 
         // 区分作用域 WebChat 还是 App 查询列用途
-        String bizType = (String) context.get("bizType");
 
         fieldSet.add("message");
         fieldSet.add("partyIdFrom");

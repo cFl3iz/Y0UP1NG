@@ -375,10 +375,10 @@ public class PlatformManagerQueryServices {
 
             if (
                     gvObjectId.equals(beforeMap.get("objectId"))
-                    &&  partyIdFrom.equals(beforeMap.get("from"))
+                    &&  fromParty.equals(beforeMap.get("from"))
                     &&  partyIdTo.equals(beforeMap.get("to")) ||
                             gvObjectId.equals(beforeMap.get("objectId"))
-                                    &&  partyIdFrom.equals(beforeMap.get("to"))
+                                    &&  fromParty.equals(beforeMap.get("to"))
                                     &&  partyIdTo.equals(beforeMap.get("from"))
             ) {
 
@@ -393,7 +393,7 @@ public class PlatformManagerQueryServices {
                 rowList.add(rowMap);
 
             }
-            beforeMap.put("from",partyIdFrom);
+            beforeMap.put("from",fromParty);
             beforeMap.put("to",partyIdTo);
             beforeMap.put("objectId",(String) gv.get("objectId"));
 

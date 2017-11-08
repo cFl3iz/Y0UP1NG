@@ -621,6 +621,8 @@ public class PersonManagerQueryServices {
 
         Map<String, String> personInfo = new HashMap<String, String>();
 
+        personInfo.put("partyId",partyId);
+
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
 
         if (person != null) {

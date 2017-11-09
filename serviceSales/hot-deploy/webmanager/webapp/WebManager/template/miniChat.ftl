@@ -496,12 +496,12 @@
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
-                alert("messages.length = "+messages.length);
+            //    alert("messages.length = "+messages.length);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var messageId = messages[i].messageId;
-                    alert("now messageId = " + messageId);
-                    alert("messagesArray.length = " + messagesArray.length);
+                    //alert("now messageId = " + messageId);
+                  //  alert("messagesArray.length = " + messagesArray.length);
                     if ( 0 == messagesArray.length) {
                         messagesArray.push(messageId);
                         var text =  messages[i].text;
@@ -512,11 +512,11 @@
                         autoWidth();
                         for_bottom();
                     }else{
-                        alert(" messagesArray = " + messagesArray);
-                        if($.inArray(messageId, messagesArray)>0){
-                            alert(" messageId in messagesArray contains != " + messageId);
+                      //  alert(" messagesArray = " + messagesArray);
+                        if($.inArray(messageId, messagesArray)>=0){
+                           // alert(" messageId in messagesArray contains != " + messageId);
                         }else{
-                            alert(" else messagesArray no contains = " + messageId);
+                          //  alert(" else messagesArray no contains = " + messageId);
                             messagesArray.push(messageId);
                             var text =  messages[i].text;
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';

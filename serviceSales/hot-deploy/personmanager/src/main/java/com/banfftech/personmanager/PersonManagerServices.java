@@ -87,6 +87,55 @@ public class PersonManagerServices {
 
 
     /**
+     * markOrOutMarkProduct
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> markOrOutMarkProduct(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String productId = (String) context.get("productId");
+
+        String markIt    = (String) context.get("markIt");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        if(markIt.equals("true")){
+            dispatcher.runSync("addPartyToProduct",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"productId",productId,"roleTypeId","PLACING_CUSTOMER"));
+        }else{
+            GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+            dispatcher.runSync("removePartyFromProduct",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"productId",productId,"roleTypeId","PLACING_CUSTOMER","fromDate",partyMarkRole.get("fromDate")));
+        }
+
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+    /**
      * push Message
      * @param dctx
      * @param context
@@ -589,6 +638,16 @@ public class PersonManagerServices {
         // 不分梨用户
         if (null == productCategoryId) {
             productCategoryId = createPersonStoreAndCatalogAndCategory(admin, delegator, dispatcher, partyId);
+
+            // Create Party Role 授予当事人 意向客户 角色 用于mark product
+            GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+            if (null == partyMarkRole) {
+                Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                        "roleTypeId", "PLACING_CUSTOMER");
+                dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+            }
+
+
         }
 
 

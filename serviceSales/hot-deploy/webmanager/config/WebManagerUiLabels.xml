@@ -96,6 +96,20 @@
         <value xml:lang="zh_CN">收藏</value>
     </property>
 
+
+    <property key="confirmMarkMessage">
+        <value xml:lang="en">Are you a fickle person?</value>
+        <value xml:lang="zh">从'我的收藏'移除?</value>
+        <value xml:lang="zh_CN">从'我的收藏'移除?</value>
+    </property>
+
+    <property key="confirmMarkProductMessage">
+        <value xml:lang="en">Mark Product!</value>
+        <value xml:lang="zh">已添加到'公众号-我的收藏'。</value>
+        <value xml:lang="zh_CN">已添加到'公众号-我的收藏'。</value>
+    </property>
+
+
     <property key="ProductDetail">
         <value xml:lang="en">Product Detail</value>
         <value xml:lang="zh">商品详情</value>

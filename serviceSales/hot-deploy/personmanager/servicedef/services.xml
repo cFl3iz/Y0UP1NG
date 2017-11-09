@@ -153,6 +153,22 @@
     </service>
 
 
+    <!-- markOrOutMarkProduct -->
+    <service name="markOrOutMarkProduct" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="markOrOutMarkProduct" auth="false">
+        <description>markOrOutMarkProduct</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="markIt" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
     <!-- queryPersonBaseInfo -->
     <service name="queryPersonBaseInfoByChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

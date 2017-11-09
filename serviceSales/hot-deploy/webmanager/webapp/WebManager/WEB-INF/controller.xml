@@ -59,6 +59,16 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- markOrOutMarkProduct -->
+
+    <request-map uri="markOrOutMarkProduct">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="markOrOutMarkProduct"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- Load payToPartySend Message -->
     <request-map uri="loadMaiJiaMessage">
         <security https="false" auth="false"/>

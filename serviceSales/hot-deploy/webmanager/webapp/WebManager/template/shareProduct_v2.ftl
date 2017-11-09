@@ -18,11 +18,7 @@
              var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
              var productStoreId = ${(resourceDetail.productStoreId)!};
              var url = "placeResourceOrder";
-         //    alert("tarjeta="+tarjeta);
-          //   alert("payToParty="+payToParty);
-          //   alert("productId="+productId);
-          //   alert("prodCatalogId="+prodCatalogId);
-          //   alert("productStoreId="+productStoreId);
+
              var param = {
                  payToPartyId:payToParty,
                  productId:productId,
@@ -64,6 +60,8 @@
     <#--<h1 class="title">${resourceDetail.productName}</h1>-->
 <#--</header>-->
 <input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>
+<input type="hidden" id="confirmMarkMessage" value="${uiLabel.confirmMarkMessage}"/>
+<input type="hidden" id="confirmMarkProductMessage" value="${uiLabel.confirmMarkProductMessage}"/>
 <input type="hidden" id="productId" value="${(resourceDetail.productId)!}"/>
 <input type="hidden" id="prodCatalogId" value="${(resourceDetail.prodCatalogId)!}"/>
 <input type="hidden" id="productStoreId" value="${(resourceDetail.productStoreId)!}"/>
@@ -231,7 +229,45 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 </body>
 <script type="text/javascript">
 
+    //MarkProduct
+    function markOrOutMark(markBoolean){
 
+        var tarjeta = $("#tarjeta").val();
+
+        var productId = $("#tarjeta").val();
+
+
+
+        alert(markBoolean);
+
+        var url = "markOrOutMarkProduct";
+
+        var param = {
+            productId:productId,
+            tarjeta:tarjeta,
+            markIt:markBoolean
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+                if(data.code === "200"){
+
+                }
+                if(data.code === "500"){
+                    alert("ERROR:500");
+                }
+
+            },
+            error: function (data) {
+                alert("ERROR :" + data.status);
+            }
+        });
+
+
+    }
 
 
     function doMiniChat(){
@@ -243,11 +279,22 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
         $("#markProduct").click(
                 function(){
+
                     var src = $("#markProductImg").attr("src")+"";
+
+
                     if(src.indexOf("make") > 0){
-                        $("#markProductImg").attr("src","http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png");
-                    }else{
+                        var confirmMarkMessage = $("#confirmMarkMessage").val();
+                        var a=confirm(confirmMarkMessage);
+                        if(a == true) {
+                            markOrOutMark(false);
+                            $("#markProductImg").attr("src", "http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png");
+                        }
+                     }else{
+                        var confirmMarkProductMessage = $("#confirmMarkProductMessage").val();
+                        markOrOutMark(true);
                         $("#markProductImg").attr("src","http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite_make.png");
+                        alert(confirmMarkProductMessage);
                     }
                 }
         );

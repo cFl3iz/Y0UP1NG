@@ -394,7 +394,7 @@ public class PlatformManagerQueryServices {
             rowMap.put("_id", messageId);
             rowMap.put("text", message);
             rowMap.put("createdAt", tsStr);
-
+            rowMap.put("objectId",gvObjectId);
 
             if (bizType != null & bizType.equals("findOne")) {
                 returnList.add(rowMap);

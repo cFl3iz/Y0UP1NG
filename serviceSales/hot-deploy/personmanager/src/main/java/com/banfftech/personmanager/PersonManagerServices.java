@@ -194,7 +194,7 @@ public class PersonManagerServices {
 
 
             try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","message:"+partyIdFrom,"content",partyIdFrom,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","message:"+partyIdFrom,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
@@ -1213,7 +1213,7 @@ public class PersonManagerServices {
 
 
             try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","order","content",maiJiaName+"购买了您的产品!点我查看!","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","order:"+orderId,"content",maiJiaName+"购买了您的产品!点我查看!","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));

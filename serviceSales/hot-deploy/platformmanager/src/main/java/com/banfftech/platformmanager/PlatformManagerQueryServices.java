@@ -222,11 +222,13 @@ public class PlatformManagerQueryServices {
 
             if (partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
+                userMap.put("toPartyId", toParty);
             } else {
                 user = queryPersonBaseInfo(delegator, fromParty);
+                userMap.put("toPartyId", fromParty);
             }
 
-            userMap.put("toPartyId", toParty);
+
             userMap.put("name", user.get("firstName"));
             userMap.put("avatar", user.get("headPortrait"));
             rowMap.put("user", userMap);

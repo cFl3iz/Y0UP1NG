@@ -510,6 +510,7 @@
                         ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
                         ans += '</div></div>';
                         $('.speak_box').append(ans);
+                        autoWidth();
                         for_bottom();
                     }else{
                         alert("eles");

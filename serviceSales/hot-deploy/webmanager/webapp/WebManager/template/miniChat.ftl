@@ -496,14 +496,13 @@
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
-
                 alert("messages.length = "+messages.length);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var messageId = messages[i].messageId;
                     alert("now messageId = " + messageId);
                     alert("messagesArray.length = " + messagesArray.length);
-                    if ( 0 == messagesArray.length || !messagesArray.contains(messageId)) {
+                    if ( 0 == messagesArray.length) {
                         messagesArray.push(messageId);
                         var text =  messages[i].text;
                         var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
@@ -513,7 +512,19 @@
                         autoWidth();
                         for_bottom();
                     }else{
-                        alert("eles");
+                        alert("in else messagesArray = " + messagesArray);
+                        if(messagesArray.contains(messageId)){
+
+                        }else{
+                            messagesArray.push(messageId);
+                            var text =  messages[i].text;
+                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+                            ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
+                            ans += '</div></div>';
+                            $('.speak_box').append(ans);
+                            autoWidth();
+                            for_bottom();
+                        }
                     }
 //                    messagesArray.push(messages[i].messageId);
 

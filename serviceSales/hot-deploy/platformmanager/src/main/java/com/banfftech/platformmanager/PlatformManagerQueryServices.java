@@ -337,7 +337,7 @@ public class PlatformManagerQueryServices {
         }else{
             queryMessageLogList = delegator.findList("MessageLogView",
                     listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
+                    UtilMisc.toList("fromDate"), null, false);
         }
 
 

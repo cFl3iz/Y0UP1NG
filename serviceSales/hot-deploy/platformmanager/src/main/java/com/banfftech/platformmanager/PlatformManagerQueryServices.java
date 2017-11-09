@@ -63,14 +63,25 @@ public class PlatformManagerQueryServices {
 
 
         EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
 
         EntityCondition listConditions = EntityCondition
                 .makeCondition(findConditions, EntityOperator.OR, findConditions2);
 
 
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+
+
+        EntityCondition findConditions4 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+
+
         EntityConditionList<EntityCondition> listBigConditions = EntityCondition
-                .makeCondition(listConditions);
+                .makeCondition(listConditions,listConditions2);
 
         List<GenericValue> queryMessageLogList = null;
 
@@ -86,6 +97,9 @@ public class PlatformManagerQueryServices {
             Map<String, Object> userMap = new HashMap<String, Object>();
             String fromParty = (String) gv.get("partyIdFrom");
             String toParty = (String) gv.get("partyIdTo");
+            if(fromParty.equals(partyIdTo)){
+                continue;
+            }
             String messageId = (String) gv.get("messageId");
             String message = (String) gv.get("message");
             String tsStr = "";

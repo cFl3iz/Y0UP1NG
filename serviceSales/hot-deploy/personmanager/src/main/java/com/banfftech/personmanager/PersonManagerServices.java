@@ -174,22 +174,38 @@ public class PersonManagerServices {
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
         List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-        GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
-        String jpushId = (String) partyIdentification.getString("idValue");
-        String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-
 
         GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
         createMessageLogMap.put("message",text);
         if(person!=null){
             text = person.get("firstName")+":"+text;
         }
-    try{
-        dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
-    } catch (GenericServiceException e1) {
-        Debug.logError(e1.getMessage(), module);
-        return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
-    }
+
+        if(null != partyIdentifications && partyIdentifications.size()>0){
+
+
+            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            
+
+            try{
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+            }
+
+
+        }
+
+
+
+
+
+
+
+
 
 
 

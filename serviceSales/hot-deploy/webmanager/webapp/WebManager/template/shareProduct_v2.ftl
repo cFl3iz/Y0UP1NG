@@ -216,7 +216,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                         <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>
-                        <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
+                        <div class="web" id="markProduct"> <img id="markProductImg" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell" onclick="javascript:alert('${uiLabel.DefaultAction}');">${uiLabel.MyOrder}</button>
@@ -231,12 +231,28 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 </body>
 <script type="text/javascript">
 
+
+
+
     function doMiniChat(){
 
         $("#miniChatForm").submit();
     }
 
     $(function () {
+
+        $("#markProduct").click(
+                function(){
+                    var src = $("#markProductImg").attr("src")+"";
+                    if(src.indexOf("make") > 0){
+                        $("#markProductImg").attr("src","http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png");
+                    }else{
+                        $("#markProductImg").attr("src","http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite_make.png");
+                    }
+                }
+        );
+
+
         $(".clickwn").click(function () {
             $(".flick-menu-mask").show();
             $(".spec-menu").show();

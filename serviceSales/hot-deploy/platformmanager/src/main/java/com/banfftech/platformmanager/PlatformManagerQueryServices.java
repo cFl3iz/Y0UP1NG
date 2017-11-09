@@ -223,13 +223,14 @@ public class PlatformManagerQueryServices {
             if (!partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
 
-                userMap.put("toPartyId",toParty);
+
             } else {
 
                 user = queryPersonBaseInfo(delegator, fromParty);
-                userMap.put("toPartyId",  fromParty);
-            }
 
+            }
+            //此处拿的是from
+            userMap.put("toPartyId",  fromParty);
 
             userMap.put("name", user.get("firstName"));
             userMap.put("avatar", user.get("headPortrait"));

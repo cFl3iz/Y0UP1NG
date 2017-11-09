@@ -513,10 +513,10 @@
                         for_bottom();
                     }else{
                         alert(" messagesArray = " + messagesArray);
-                        if(messagesArray.contains(messageId)){
-                            alert(" messagesArray.contains = " + messagesArray);
+                        if($.inArray(messageId, messagesArray)>0){
+                            alert(" messageId in messagesArray contains != " + messageId);
                         }else{
-                            alert(" else messagesArray no contains = " + messagesArray);
+                            alert(" else messagesArray no contains = " + messageId);
                             messagesArray.push(messageId);
                             var text =  messages[i].text;
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';

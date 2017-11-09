@@ -402,11 +402,11 @@ public class PlatformManagerQueryServices {
 
 
                 if (
-
-                                  fromParty.equals(beforeMap.get("from"))
+                        gvObjectId.equals(beforeMap.get("objectId"))
+                                && fromParty.equals(beforeMap.get("from"))
                                 && partyIdTo.equals(beforeMap.get("to")) ||
-
-                                          fromParty.equals(beforeMap.get("to"))
+                                gvObjectId.equals(beforeMap.get("objectId"))
+                                        && fromParty.equals(beforeMap.get("to"))
                                         && partyIdTo.equals(beforeMap.get("from"))
                         ) {
                 } else {

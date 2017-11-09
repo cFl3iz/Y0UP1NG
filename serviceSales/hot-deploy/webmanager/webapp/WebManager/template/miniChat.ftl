@@ -502,8 +502,8 @@
 //                    alert(messages[i].messageId+" ");
                     var messageId = messages[i].messageId;
                     alert("now messageId = " + messageId);
-
-                    if (null == messagesArray || !messagesArray.contains(messageId)) {
+                    alert("messagesArray.length = " + messagesArray.length);
+                    if ( 0 == messagesArray.length || !messagesArray.contains(messageId)) {
                         messagesArray.push(messageId);
                         var text =  messages[i].text;
                         var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';

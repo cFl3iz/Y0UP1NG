@@ -194,7 +194,7 @@ public class PersonManagerServices {
 
 
             try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",partyIdFrom+":"+text,"content",partyIdFrom,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));

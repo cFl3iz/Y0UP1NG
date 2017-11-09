@@ -376,8 +376,13 @@
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var partyIdTo = messages[i].user.toPartyId;
-                    alert("toPartyId="+partyIdTo);
+
                     var text =  messages[i].text;
+                    alert("toPartyId="+partyIdTo);
+                    alert("text= "+ text);
+                    var bool = (payToPartyId === partyIdTo);
+                    alert("bool = " + bool+"");
+                    
                     var messageId = messages[i].messageId;
                     if (payToPartyId === partyIdTo) {
 

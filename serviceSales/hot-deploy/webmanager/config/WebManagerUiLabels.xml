@@ -167,4 +167,11 @@
     </property>
 
 
+
+    <property key="CreateOrderSuccess">
+        <value xml:lang="en">CreateOrderSuccess!.</value>
+        <value xml:lang="zh">订单创建成功!</value>
+        <value xml:lang="zh_CN">订单创建成功!</value>
+    </property>
+
 </resource>

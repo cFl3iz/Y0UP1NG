@@ -211,7 +211,8 @@ public class JPushServices {
 
 
 		
-		Map<String, String> extras = UtilGenerics.checkMap(context.get("extras"));
+		//Map<String, String> extras = UtilGenerics.checkMap(context.get("extras"));
+		Map<String, String> extras = new HashMap<String, String>();
 		extras.put("objectId",objectId);
 		if(null==extras){
 			extras =  new HashMap<String, String>();

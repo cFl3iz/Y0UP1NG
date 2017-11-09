@@ -497,11 +497,12 @@
             success: function (data) {
                 var messages = eval(data.messages);
                 alert("return messagess = " + messages);
+                alert("messages.length = "+messages.length);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var messageId = messages[i].messageId;
                     alert("now messageId = " + messageId);
-                    alert("!messagesArray.contains(messageId) = " + !messagesArray.contains(messageId));
+                    alert("!messagesArray.contains(messageId) = " + messagesArray.contains(messageId));
                     if (!messagesArray.contains(messageId)) {
                         messagesArray.push(messageId);
                         var text =  messages[i].text;

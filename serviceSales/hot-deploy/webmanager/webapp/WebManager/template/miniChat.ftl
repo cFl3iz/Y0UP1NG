@@ -446,7 +446,7 @@
         var tarjeta = $("#tarjeta").val();
         var productId = $("#productId").val();
         var url = "pushMessage";
-        alert("productId = " + productId);
+//        alert("productId = " + productId);
         var param = {
             partyIdTo: payToPartyId,
             tarjeta: tarjeta,
@@ -476,6 +476,7 @@
 //                for_bottom();
 
         var payToPartyId = $("#payToPartyId").val();
+
         var payFromPartyId = $("#payFromPartyId").val();
 
         var tarjeta = $("#tarjeta").val();
@@ -488,17 +489,19 @@
             partyIdFrom: payToPartyId,
             bizType: "webChat"
         };
-
+        alert("messagesArray="+messagesArray);
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
-
+                alert("return messagess = " + messages);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var messageId = messages[i].messageId;
+                    alert("now messageId = " + messageId);
+                    alert("!messagesArray.contains(messageId) = " + !messagesArray.contains(messageId));
                     if (!messagesArray.contains(messageId)) {
                         messagesArray.push(messageId);
                         var text =  messages[i].text;

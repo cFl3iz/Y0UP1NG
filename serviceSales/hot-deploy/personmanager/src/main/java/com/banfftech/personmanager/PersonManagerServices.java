@@ -659,15 +659,6 @@ public class PersonManagerServices {
         if (null == productCategoryId) {
             productCategoryId = createPersonStoreAndCatalogAndCategory(admin, delegator, dispatcher, partyId);
 
-            // Create Party Role 授予当事人 意向客户 角色 用于mark product
-            GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
-            if (null == partyMarkRole) {
-                Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
-                        "roleTypeId", "PLACING_CUSTOMER");
-                dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
-            }
-
-
         }
 
 
@@ -1301,6 +1292,18 @@ public class PersonManagerServices {
         }
 
         createPersonStoreAndCatalogAndCategory(admin, delegator, dispatcher, partyId);
+
+
+
+        // Create Party Role 授予当事人 意向客户 角色 用于mark product
+        GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "PLACING_CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+
+
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         resultMap.put("userLoginId", userLoginId);

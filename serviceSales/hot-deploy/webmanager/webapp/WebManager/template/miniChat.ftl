@@ -489,7 +489,7 @@
             partyIdFrom: payToPartyId,
             bizType: "webChat"
         };
-        alert("messagesArray="+messagesArray);
+        //alert("messagesArray="+messagesArray);
         $.ajax({
             type: 'POST',
             url: url,

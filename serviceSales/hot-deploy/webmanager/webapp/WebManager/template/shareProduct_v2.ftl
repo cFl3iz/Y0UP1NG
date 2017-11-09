@@ -369,7 +369,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     })
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
-<input id="mark" type="hidden" value="${mark}"/>
+<input id="mark" type="hidden" value="${(mark)!}"/>
 
 
 <form id="miniChatForm" action="miniChat" method="get">

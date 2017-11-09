@@ -362,7 +362,7 @@
         var param = {
             partyIdTo: payFromPartyId,
             tarjeta: tarjeta,
-//            partyIdFrom: payToPartyId,
+            partyIdFrom: payToPartyId,
             bizType: "webChat"
         };
 

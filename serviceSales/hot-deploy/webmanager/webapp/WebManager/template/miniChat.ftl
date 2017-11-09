@@ -380,11 +380,11 @@
                     var text =  messages[i].text;
                     alert("toPartyId="+partyIdTo);
                     alert("text= "+ text);
-                    var bool = (payToPartyId == partyIdTo);
+                    var bool = (payToPartyId === partyIdTo);
                     alert("bool = " + bool+"");
 
                     var messageId = messages[i].messageId;
-                    if (payToPartyId == partyIdTo) {
+                    if (bool) {
 
                         var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                         ans += '<div class="answer_text"><p>' + text + '</p><i></i>';

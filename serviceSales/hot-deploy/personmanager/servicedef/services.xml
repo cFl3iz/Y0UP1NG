@@ -169,6 +169,22 @@
 
 
 
+    <!-- queryProductRole-->
+    <service name="queryProductRole" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductRole" auth="false">
+        <description>queryProductRole</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="mark" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
     <!-- queryPersonBaseInfo -->
     <service name="queryPersonBaseInfoByChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

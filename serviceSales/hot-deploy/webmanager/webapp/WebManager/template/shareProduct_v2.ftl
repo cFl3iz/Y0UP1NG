@@ -275,7 +275,45 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
         $("#miniChatForm").submit();
     }
 
+    //Init
+    function initShareProductPage(){
+        var tarjeta = $("#tarjeta").val();
+        var productId = $("#productId").val();
+
+        var url = "queryProductRole";
+
+        var param = {
+
+            productId:productId,
+            tarjeta:tarjeta
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+                //   alert("code="+data.code);
+                if(data.code === "200"){
+                    var mark = data.mark;
+
+                    $("#mark").val(mark);
+                }
+                if(data.code === "500"){
+                    alert("ERROR:500");
+                }
+
+            },
+            error: function (data) {
+                alert("ERROR :" + data.status);
+            }
+        });
+
+    }
+
     $(function () {
+
+        initShareProductPage();
 
         var mark = $("#mark").val();
 

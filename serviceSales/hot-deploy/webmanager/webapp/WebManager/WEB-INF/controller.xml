@@ -67,6 +67,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <request-map uri="queryProductRole">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryProductRole"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- Load payToPartySend Message -->

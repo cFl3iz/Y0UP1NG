@@ -234,11 +234,11 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
         var tarjeta = $("#tarjeta").val();
 
-        var productId = $("#tarjeta").val();
+        var productId = $("#productId").val();
 
 
 
-        alert(markBoolean);
+//        alert(markBoolean);
 
         var url = "markOrOutMarkProduct";
 

@@ -375,7 +375,7 @@
                 var messages = eval(data.messages);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
-                    var partyIdTo = messages[i].toPartyId;
+                    var partyIdTo = messages[i].user.toPartyId;
                     alert("toPartyId="+partyIdTo);
                     var text =  messages[i].text;
                     var messageId = messages[i].messageId;

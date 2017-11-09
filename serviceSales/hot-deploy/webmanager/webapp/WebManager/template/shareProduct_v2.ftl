@@ -277,6 +277,14 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
     $(function () {
 
+        var mark = $("#mark").val();
+
+        //已经收藏了
+        if(mark != null && mark.trim() !="" && mark==="true"){
+            $("#markProductImg").attr("src","http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite_make.png");
+        }
+
+
         $("#markProduct").click(
                 function(){
 
@@ -361,6 +369,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     })
 </script>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
+<input id="mark" type="hidden" value="${mark}"/>
+
+
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="${resourceDetail.payToPartyId}"/>

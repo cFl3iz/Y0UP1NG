@@ -73,6 +73,9 @@
 
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
 
+                <set field="mark" value="${resourceDetail.mark}"/>
+
+
                 <!-- 微信授权登录后的回调地址 -->
                 <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}"/>
 

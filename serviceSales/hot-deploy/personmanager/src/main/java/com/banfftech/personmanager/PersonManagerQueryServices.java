@@ -720,6 +720,9 @@ public class PersonManagerQueryServices {
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
+        String partyId = (String) userLogin.get("partyId");
+
+
         String productId = (String) context.get("productId");
 
         Set<String> fieldSet = new HashSet<String>();
@@ -819,6 +822,14 @@ public class PersonManagerQueryServices {
         List<Map<String,Object>> productMoreDetails = new ArrayList<Map<String, Object>>();
         resourceDetail.put("productMoreDetails",productMoreDetails);
 
+
+        //是否是意向客户
+        GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+
+
+        if(null != partyMarkRole){
+            resourceDetail.put("mark","true");
+        }
 
         resultMap.put("resourceDetail", resourceDetail);
 

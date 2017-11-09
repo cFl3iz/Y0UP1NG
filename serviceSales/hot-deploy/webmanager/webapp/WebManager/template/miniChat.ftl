@@ -496,7 +496,7 @@
             data: param,
             success: function (data) {
                 var messages = eval(data.messages);
-                alert("return messagess = " + messages);
+
                 alert("messages.length = "+messages.length);
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
@@ -511,6 +511,8 @@
                         ans += '</div></div>';
                         $('.speak_box').append(ans);
                         for_bottom();
+                    }else{
+                        alert("eles");
                     }
 //                    messagesArray.push(messages[i].messageId);
 

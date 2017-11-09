@@ -76,7 +76,7 @@ public class PlatformManagerQueryServices {
 
         queryMessageLogList = delegator.findList("MessageLog",
                 listBigConditions, fieldSet,
-                UtilMisc.toList("-fromDate"), null, false);
+                UtilMisc.toList("fromDate"), null, false);
 
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();

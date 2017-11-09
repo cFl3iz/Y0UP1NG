@@ -1187,6 +1187,43 @@ public class PersonManagerServices {
         resultMap.put("partyIdTo", payToPartyId);
         resultMap.put("relationEnum", "C2CRSS");
         resultMap.put("orderId", orderId);
+
+
+        //推送先不用ECA
+        // 查询registrationID
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+
+        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+        String maiJiaName = (String) person.get("firstName");
+
+
+        if(null != partyIdentifications && partyIdentifications.size()>0){
+
+
+            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+
+
+            try{
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",maiJiaName+"购买了您的产品!点我查看!","content",orderId,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+            }
+
+
+        }
+
+
+
         return resultMap;
     }
 

@@ -222,10 +222,12 @@ public class PlatformManagerQueryServices {
 
             if (partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
-                userMap.put("toPartyId", toParty);
+                //这里拿的应该是from
+                userMap.put("toPartyId",fromParty);
             } else {
+                //这里拿的应该是from
                 user = queryPersonBaseInfo(delegator, fromParty);
-                userMap.put("toPartyId", fromParty);
+                userMap.put("toPartyId",  toParty);
             }
 
 

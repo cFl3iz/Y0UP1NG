@@ -163,6 +163,10 @@ public class PersonManagerServices {
 
         String partyIdFrom = (String) context.get("partyIdFrom");
 
+        if(UtilValidate.isEmpty(partyIdFrom)){
+            partyIdFrom = (String) userLogin.get("partyId");
+        }
+
         System.out.println("========================================= partyIdTo = " +partyIdTo);
 
         // 查询registrationID

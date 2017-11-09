@@ -512,10 +512,11 @@
                         autoWidth();
                         for_bottom();
                     }else{
-                        alert("in else messagesArray = " + messagesArray);
+                        alert(" messagesArray = " + messagesArray);
                         if(messagesArray.contains(messageId)){
-
+                            alert(" messagesArray.contains = " + messagesArray);
                         }else{
+                            alert(" else messagesArray no contains = " + messagesArray);
                             messagesArray.push(messageId);
                             var text =  messages[i].text;
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';

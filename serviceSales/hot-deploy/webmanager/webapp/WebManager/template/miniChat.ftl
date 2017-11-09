@@ -376,6 +376,7 @@
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var partyIdTo = messages[i].toPartyId;
+                    alert("toPartyId="+partyIdTo);
                     var text =  messages[i].text;
                     var messageId = messages[i].messageId;
                     if (payToPartyId === partyIdTo) {
@@ -384,8 +385,7 @@
                         ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
                         ans += '</div></div>';
                         $('.speak_box').append(ans);
-
-                            messagesArray.push(messageId);
+                        messagesArray.push(messageId);
 
                       //  for_bottom();
                     }else{

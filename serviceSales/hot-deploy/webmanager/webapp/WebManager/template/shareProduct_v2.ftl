@@ -279,6 +279,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
     function initShareProductPage(){
         var tarjeta = $("#tarjeta").val();
         var productId = $("#productId").val();
+        if(null != tarjeta && tarjeta.trim() != "" && tarjeta != "undefined"){
+
 
         var url = "queryProductRole";
 
@@ -308,6 +310,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                 alert("ERROR :" + data.status);
             }
         });
+        }
 
     }
 

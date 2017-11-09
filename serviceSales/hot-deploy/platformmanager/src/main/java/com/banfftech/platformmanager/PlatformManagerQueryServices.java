@@ -220,12 +220,12 @@ public class PlatformManagerQueryServices {
 
             Map<String, String> user = null;
 
-            if (partyIdTo.equals(fromParty)) {
+            if (!partyIdTo.equals(fromParty)) {
                 user = queryPersonBaseInfo(delegator, toParty);
 
                 userMap.put("toPartyId",toParty);
             } else {
-             
+
                 user = queryPersonBaseInfo(delegator, fromParty);
                 userMap.put("toPartyId",  fromParty);
             }

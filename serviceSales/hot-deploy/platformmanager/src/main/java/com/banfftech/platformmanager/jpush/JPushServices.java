@@ -194,7 +194,7 @@ public class JPushServices {
 		}
 
 		String regId = (String) context.get("regId");
-
+		String objectId = (String) context.get("objectId");
 		String title = "友评";
 
 		// 通知消息
@@ -212,6 +212,7 @@ public class JPushServices {
 
 		
 		Map<String, String> extras = UtilGenerics.checkMap(context.get("extras"));
+		extras.put("objectId",objectId);
 		if(null==extras){
 			extras =  new HashMap<String, String>();
 		}

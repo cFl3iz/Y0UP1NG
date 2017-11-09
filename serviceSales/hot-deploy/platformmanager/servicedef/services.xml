@@ -19,7 +19,7 @@
         <attribute name="message" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
         <attribute name="content" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
         <attribute name="deviceType" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
-
+        <attribute name="objectId" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
         <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
         <attribute name="sendType" type="String" mode="IN" optional="true"><description>安卓还是ios</description></attribute>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

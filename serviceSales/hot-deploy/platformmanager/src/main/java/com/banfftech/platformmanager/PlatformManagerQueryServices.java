@@ -278,6 +278,9 @@ public class PlatformManagerQueryServices {
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyIdTo = (String) userLogin.get("partyId");
+
+        resultMap.put("partyId",partyIdTo);
+
         String partyIdFrom = (String) context.get("partyIdFrom");
         String objectId = (String) context.get("objectId");
 

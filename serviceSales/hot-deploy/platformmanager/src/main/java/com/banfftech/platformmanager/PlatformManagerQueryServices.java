@@ -327,10 +327,16 @@ public class PlatformManagerQueryServices {
 
 
         List<GenericValue> queryMessageLogList = null;
+        if (bizType != null & bizType.equals("findOne")) {
+            queryMessageLogList = delegator.findList("MessageLog",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("fromDate"), null, false);
+        }else{
+            queryMessageLogList = delegator.findList("MessageLogView",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
+        }
 
-        queryMessageLogList = delegator.findList("MessageLog",
-                listBigConditions, fieldSet,
-                UtilMisc.toList("-fromDate"), null, false);
 
 //        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
 //            queryMessageLogList = delegator.findList("MessageLog",
@@ -367,6 +373,10 @@ public class PlatformManagerQueryServices {
             String gvObjectId = (String) gv.get("objectId");
 
             String fromParty = (String) gv.get("partyIdFrom");
+
+            if(partyIdTo.equals(fromParty)){
+                continue;
+            }
 
             String toParty = (String) gv.get("partyIdTo");
 
@@ -423,6 +433,7 @@ public class PlatformManagerQueryServices {
                                         && fromParty.equals(beforeMap.get("to"))
                                         && partyIdTo.equals(beforeMap.get("from"))
                         ) {
+
                 } else {
                     returnList.add(rowMap);
                 }

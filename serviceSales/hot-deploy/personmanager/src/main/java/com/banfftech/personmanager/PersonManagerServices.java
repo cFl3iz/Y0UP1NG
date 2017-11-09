@@ -187,7 +187,7 @@ public class PersonManagerServices {
             GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            
+
 
             try{
                 dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message",text,"content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));

@@ -720,7 +720,7 @@ public class PersonManagerQueryServices {
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        String partyId = (String) userLogin.get("partyId");
+        String userLoginPartyId = (String) userLogin.get("partyId");
 
 
         String productId = (String) context.get("productId");
@@ -824,7 +824,7 @@ public class PersonManagerQueryServices {
 
 
         //是否是意向客户
-        GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", userLoginPartyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
 
 
         if(null != partyMarkRole){

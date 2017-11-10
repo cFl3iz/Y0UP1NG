@@ -192,9 +192,14 @@ public class PersonManagerServices {
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
+            //查角标
+
+            long count = delegator.findCountByCondition("MessageLog", EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"), null, null);
+
+            String badege_str = count+"";
 
             try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","message","content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",partyIdFrom));
+                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"badge",badege_str,"message","message","content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",partyIdFrom));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
@@ -224,7 +229,7 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("partyIdTo",partyIdTo);
 
-
+        createMessageLogMap.put("badge","true");
 
         if(!UtilValidate.isEmpty(objectId)){
             createMessageLogMap.put("objectId",objectId);

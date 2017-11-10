@@ -33,6 +33,7 @@
         <field name="partyIdTo" type="value"></field>
         <field name="message" type="value"></field>
         <field name="fromDate" type="date-time"></field>
+        <field name="badge" type="value"></field>
         <prim-key field="messageId"/>
         <prim-key field="fromDate"/>
     </entity>

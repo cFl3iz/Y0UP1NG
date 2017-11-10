@@ -17,6 +17,7 @@
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">
         <description>pushNotifOrMessage</description>
         <attribute name="message" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="badge" type="String" mode="IN" optional="true"><description>badge</description></attribute>
         <attribute name="content" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
         <attribute name="deviceType" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
         <attribute name="objectId" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>

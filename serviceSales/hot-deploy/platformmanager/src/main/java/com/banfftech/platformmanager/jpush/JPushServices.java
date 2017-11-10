@@ -187,6 +187,10 @@ public class JPushServices {
 		// all 所有人
 		String sendType = (String) context.get("sendType");
 
+		String badge_str    = (String) context.get("badge");
+
+		int badge = Integer.parseInt(null == badge_str ?"1":badge_str);
+
 		String partyIdentificationTypeId = "JPUSH_IOS";
 
 		if(sendType!=null & sendType.equals("android")){
@@ -255,7 +259,7 @@ public class JPushServices {
 		if(UtilValidate.isNotEmpty(content)){
 			payloadBuilder.setNotification(
 					Notification.newBuilder().addPlatformNotification(
-							IosNotification.newBuilder().setAlert(content).setBadge(1).setSound("default").addExtras(extras).build())
+							IosNotification.newBuilder().setAlert(content).setBadge(badge).setSound("default").addExtras(extras).build())
 							.addPlatformNotification(
 									AndroidNotification.newBuilder().setAlert(content).setTitle(title).addExtras(extras).build())
 							.build());

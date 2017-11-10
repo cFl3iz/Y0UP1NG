@@ -503,27 +503,27 @@ public class PlatformManagerQueryServices {
 
 
         // 查询registrationID
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
-        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
-        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
-        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
-        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
-        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
-
-        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-
-
-
-        if(null != partyIdentifications && partyIdentifications.size()>0) {
-
-
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            System.out.println("===========================================" + "badge="+count+""+"|message="+"message"+"|content="+"badge"+"|regId="+jpushId+"|deviceType:"+partyIdentificationTypeId+"|sendType="+""+"objectId="+"");
-            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","badge","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",""));
-
-        }
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
+//        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+//        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+//        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+//
+//        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//
+//
+//        if(null != partyIdentifications && partyIdentifications.size()>0) {
+//
+//
+//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//            System.out.println("===========================================" + "badge="+count+""+"|message="+"message"+"|content="+"badge"+"|regId="+jpushId+"|deviceType:"+partyIdentificationTypeId+"|sendType="+""+"objectId="+"");
+//            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","badge","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",""));
+//
+//        }
 
 
 

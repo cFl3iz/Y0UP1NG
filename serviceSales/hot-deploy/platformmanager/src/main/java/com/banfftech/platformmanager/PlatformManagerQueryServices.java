@@ -520,7 +520,8 @@ public class PlatformManagerQueryServices {
             GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","badge","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+            System.out.println("===========================================" + "badge="+count+""+"|message="+"message"+"|content="+"badge"+"|regId="+jpushId+"|deviceType:"+partyIdentificationTypeId+"|sendType="+""+"objectId="+"");
+            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","badge","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",""));
 
         }
 

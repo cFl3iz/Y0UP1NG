@@ -484,6 +484,7 @@ public class PlatformManagerQueryServices {
                 for(GenericValue gv : queryMessageList){
                     gv.set("badge","false");
                     gv.store();
+                    System.out.println("==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN");
                 }
             }else{
                 count += queryMessageList.size();

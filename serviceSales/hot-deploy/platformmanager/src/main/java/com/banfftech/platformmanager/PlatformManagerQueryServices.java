@@ -458,21 +458,21 @@ public class PlatformManagerQueryServices {
             String to    =  (String)  mp.get("toParty");
             String from  =  (String)  mp.get("fromParty");
              findConditions3 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+                    .makeCondition(UtilMisc.toMap("partyIdTo", to));
 
 
              findConditions4 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", to));
 
              listConditions2 = EntityCondition
                     .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
             EntityCondition findConditions = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+                    .makeCondition(UtilMisc.toMap("partyIdTo", from));
 
 
             EntityCondition findConditions2 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", from));
 
             EntityCondition listConditions = EntityCondition
                     .makeCondition(findConditions, EntityOperator.OR, findConditions2);
@@ -485,7 +485,7 @@ public class PlatformManagerQueryServices {
 
             List<GenericValue> queryMessageList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
+                    null, null, false);
             mp.put("badge",queryMessageList.size());
         }
 

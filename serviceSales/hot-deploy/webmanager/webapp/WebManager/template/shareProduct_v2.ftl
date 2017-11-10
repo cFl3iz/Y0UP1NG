@@ -65,6 +65,8 @@
 <input type="hidden" id="productId" value="${(resourceDetail.productId)!}"/>
 <input type="hidden" id="prodCatalogId" value="${(resourceDetail.prodCatalogId)!}"/>
 <input type="hidden" id="productStoreId" value="${(resourceDetail.productStoreId)!}"/>
+<input id="fromurl" type="hidden" value="${fromurl}"/>
+<input id="mark" type="hidden" value="${(mark)!}"/>
 
 <div id="content">
     <div class="scroller">
@@ -211,7 +213,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                         <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
                             <p>${uiLabel.Talk}</p>
                         </div>
-                        <div class="web" onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
+                        <div class="web" id="moreAction"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>
                         <div class="web" id="markProduct"> <img id="markProductImg" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
@@ -348,8 +350,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
                 }
         );
 
-
-        $(".clickwn").click(function () {
+        //弹出层在这
+        $(".moreAction").click(function () {
             $(".flick-menu-mask").show();
             $(".spec-menu").show();
         })
@@ -409,8 +411,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
     })
 </script>
-<input id="fromurl" type="hidden" value="${fromurl}"/>
-<input id="mark" type="hidden" value="${(mark)!}"/>
+
 
 
 <form id="miniChatForm" action="miniChat" method="get">
@@ -423,7 +424,5 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
 
 </#if>
 <#if !resourceDetail?has_content>
-<script>
-    location.href = "www.baidu.com";
-</script>
+NOT FOUND:550
 </#if>

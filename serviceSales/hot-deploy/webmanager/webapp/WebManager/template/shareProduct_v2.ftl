@@ -55,10 +55,7 @@
      }
 </script>
 <#if resourceDetail?has_content>
-<#--<header class="bar bar-nav">-->
-    <#--<#--<a class="icon icon-left-nav pull-left"></a> <a class="icon icon-more-vertical pull-right"></a>-->-->
-    <#--<h1 class="title">${resourceDetail.productName}</h1>-->
-<#--</header>-->
+
 <input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>
 <input type="hidden" id="confirmMarkMessage" value="${uiLabel.confirmMarkMessage}"/>
 <input type="hidden" id="confirmMarkProductMessage" value="${uiLabel.confirmMarkProductMessage}"/>
@@ -97,11 +94,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                     <section id="s-action"> </section>
                 </div>
                 <section id="s-rate" data-spm=""> </section>
-                <#--<ul class="table-view">-->
-                    <#--<li class="table-view-cell" style="padding: 11px 6px 11px 15px;font-size: 18px;font-style:bold;color:#333;">Spec Option-->
-                        <#--<#--<span style="float: right;margin-right:10px;" class="icon icon icon-more clickwn"></span>&ndash;&gt;-->
-                    <#--</li>-->
-                <#--</ul>-->
+
                 <ul class="table-view" style="margin-top: 10px;">
                     <li class="table-view-cell media"> <a class="">
 
@@ -155,7 +148,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                         </div>
                        </div>
                 </div>
-                <!-- 弹出 -->
                 <section id="s-actionBar-container">
                     <div id="s-actionbar" class="action-bar mui-flex align-center">
                         <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />

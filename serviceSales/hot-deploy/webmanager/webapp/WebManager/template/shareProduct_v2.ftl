@@ -351,7 +351,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width=
         );
 
         //弹出层在这
-        $(".moreAction").click(function () {
+        $("#moreAction").click(function () {
             $(".flick-menu-mask").show();
             $(".spec-menu").show();
         })

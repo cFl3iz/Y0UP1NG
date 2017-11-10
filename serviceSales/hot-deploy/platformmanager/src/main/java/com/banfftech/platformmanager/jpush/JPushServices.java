@@ -255,10 +255,10 @@ public class JPushServices {
 		if(UtilValidate.isNotEmpty(content)){
 			payloadBuilder.setNotification(
 					Notification.newBuilder().addPlatformNotification(
-							IosNotification.newBuilder().setAlert(content).setBadge(1).addExtras(extras).build())
-					.addPlatformNotification(
-							AndroidNotification.newBuilder().setAlert(content).setTitle(title).addExtras(extras).build())
-					.build());
+							IosNotification.newBuilder().setAlert(content).setBadge(1).setSound("default").addExtras(extras).build())
+							.addPlatformNotification(
+									AndroidNotification.newBuilder().setAlert(content).setTitle(title).addExtras(extras).build())
+							.build());
 		}
 
 		// 发送消息

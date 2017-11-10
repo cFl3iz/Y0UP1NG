@@ -1,4 +1,4 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 <style>
     .picture_text{
         color:#000000;
@@ -56,7 +56,7 @@
 </script>
 <#if resourceDetail?has_content>
 <#--<header class="bar bar-nav">-->
-    <#--&lt;#&ndash;<a class="icon icon-left-nav pull-left"></a> <a class="icon icon-more-vertical pull-right"></a>&ndash;&gt;-->
+    <#--<#--<a class="icon icon-left-nav pull-left"></a> <a class="icon icon-more-vertical pull-right"></a>-->-->
     <#--<h1 class="title">${resourceDetail.productName}</h1>-->
 <#--</header>-->
 <input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>
@@ -99,7 +99,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <section id="s-rate" data-spm=""> </section>
                 <#--<ul class="table-view">-->
                     <#--<li class="table-view-cell" style="padding: 11px 6px 11px 15px;font-size: 18px;font-style:bold;color:#333;">Spec Option-->
-                        <#--&lt;#&ndash;<span style="float: right;margin-right:10px;" class="icon icon icon-more clickwn"></span>&ndash;&gt;-->
+                        <#--<#--<span style="float: right;margin-right:10px;" class="icon icon icon-more clickwn"></span>&ndash;&gt;-->
                     <#--</li>-->
                 <#--</ul>-->
                 <ul class="table-view" style="margin-top: 10px;">
@@ -164,50 +164,53 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/rmb.png" /> </span> <span id="spec_price"> 36.80 </span> </div>
                             <div id="specWeightDiv" class="spec-weight"> <span>重量:</span> <span id="spec_weight">3.26kg</span> </div>
                         </div>
-                        <div class="spec-menu-middle">
-                            <div class="prod-spec" id="prodSpecArea">
-                                <!-- 已选 -->
-                                <div class="prod-spec" id="prodSpecArea">
-                                    <!-- 已选 -->
-                                    <div class="spec-desc"> <span class="part-note-msg">已选</span>
-                                        <div id="specDetailInfo_spec" class="base-txt"> 白色 直袖款 &nbsp;&nbsp; <span class="amount">1</span>件 </div>
-                                    </div>
-                                    <div class="nature-container" id="natureCotainer">
-                                        <!--颜色 5.5版本之前的规格属性-->
-                                        <div class="pro-color"> <span class="part-note-msg"> Color </span>
-                                            <p id="color"> <a title="白色 直袖款" class="a-item selected J_ping"   report-eventparam="白色 直袖款" >白色 直袖款</a> <a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a> <a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a> <a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a> <a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a> <a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a> </p>
-                                        </div>
-                                        <!--尺寸-->
-                                        <!--容量-->
-                                        <!--数量-->
-                                    </div>
-                                    <!--尺寸-->
-                                    <!--容量-->
-                                    <!--数量-->
-                                    <div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">Count</span>
-                                        <div style="width: 100%;margin-left: 10px;" class="num">
-                                            <p class="jian" style="float: left;margin-top: 5px;"><img src="
-http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jian.png" width="16" height="16"></p>
-                                            <input id="cool" class="inputBorder"  value="1" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')" type="text" maxlength="5" placeholder="Count" style="font-size: 12px;width: 60px;height: 20px;float: left;padding: 0 5px;margin-top:3px;margin-left: 5px;" />
-                                            <p class="jia" style="float: left;margin-top: 5px;margin-left:4px;"><img src="
-http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width="16" height="16"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--延保start-->
-                            <div class="warranty-wrap bdr-t" style="display: none;">
-                                <div id="spec_yanbaoInfo" class="warranty-title"> Services: </div>
-                                <div id="spec_yanbaoItems"> </div>
-                            </div>
-                            <!--延保end-->
-                        </div>
+
+
+                        <!-- 弹出层中间 -->
+                        <#--<div class="spec-menu-middle">-->
+                            <#--<div class="prod-spec" id="prodSpecArea">-->
+                                <#--<!-- 已选 &ndash;&gt;-->
+                                <#--<div class="prod-spec" id="prodSpecArea">-->
+                                    <#--<!-- 已选 &ndash;&gt;-->
+                                    <#--<div class="spec-desc"> <span class="part-note-msg">已选</span>-->
+                                        <#--<div id="specDetailInfo_spec" class="base-txt"> 白色 直袖款 &nbsp;&nbsp; <span class="amount">1</span>件 </div>-->
+                                    <#--</div>-->
+                                    <#--<div class="nature-container" id="natureCotainer">-->
+                                        <#--<!--颜色 5.5版本之前的规格属性&ndash;&gt;-->
+                                        <#--<div class="pro-color"> <span class="part-note-msg"> Color </span>-->
+                                            <#--<p id="color"> <a title="白色 直袖款" class="a-item selected J_ping"   report-eventparam="白色 直袖款" >白色 直袖款</a> <a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a> <a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a> <a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a> <a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a> <a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a> </p>-->
+                                        <#--</div>-->
+                                        <#--<!--尺寸&ndash;&gt;-->
+                                        <#--<!--容量&ndash;&gt;-->
+                                        <#--<!--数量&ndash;&gt;-->
+                                    <#--</div>-->
+                                    <#--<!--尺寸&ndash;&gt;-->
+                                    <#--<!--容量&ndash;&gt;-->
+                                    <#--<!--数量&ndash;&gt;-->
+                                    <#--<div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">Count</span>-->
+                                        <#--<div style="width: 100%;margin-left: 10px;" class="num">-->
+                                            <#--<p class="jian" style="float: left;margin-top: 5px;"><img src="-->
+<#--http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jian.png" width="16" height="16"></p>-->
+                                            <#--<input id="cool" class="inputBorder"  value="1" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')" type="text" maxlength="5" placeholder="Count" style="font-size: 12px;width: 60px;height: 20px;float: left;padding: 0 5px;margin-top:3px;margin-left: 5px;" />-->
+                                            <#--<p class="jia" style="float: left;margin-top: 5px;margin-left:4px;"><img src="-->
+<#--http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width="16" height="16"></p>-->
+                                        <#--</div>-->
+                                    <#--</div>-->
+                                <#--</div>-->
+                            <#--</div>-->
+                            <#--<!--延保start&ndash;&gt;-->
+                            <#--<div class="warranty-wrap bdr-t" style="display: none;">-->
+                                <#--<div id="spec_yanbaoInfo" class="warranty-title"> Services: </div>-->
+                                <#--<div id="spec_yanbaoItems"> </div>-->
+                            <#--</div>-->
+                            <#--<!--延保end&ndash;&gt;-->
+                        <#--</div>-->
 
 
 
                         <!-- 弹出层底部----------------------------------------------------------- -->
                         <#--<div class="flick-menu-btn spec-menu-btn"> <a class="yellow-color add_cart" id="add_cart_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">加入购物车</a> <a class="red-color directorder" id="directorder_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">立即购买</a> <a class="yellow-color J_ping looksimilar looksimilara looksimilar_spec" id="looksimilar_speca" href=" " style="display: none;" report-eventid="MProductdetail_Similar" report-eventparam="W" report-eventlevel="5">查看相似</a>-->
-                            <#--<!--大家电-查看同款&ndash;&gt;-->
+                            <#--<!--大家电-查看同款-->-->
                             <#--<a class="yellow-color J_ping looksimilar looksimilarb looksimilar_spec" id="looksimilar_specb" href="" style="display: none;" report-eventid="MProductdetail_SameProduct" report-pageparam="" report-eventlevel="4">查看同款</a> <a class="red-color J_ping arrivalInform" id="arrivalInform_spec" style="display: none;" report-eventid="MProductdetail_ArrivalNotice" report-eventparam="2015246_W" report-eventlevel="5">到货通知</a> <a class="red-color disabled waitingForAppointments" style="display: none;" id="waitingForAppointments_spec">等待预约</a> <a class="red-color makeAppointments" style="display: none;" id="makeAppointments_spec">立即预约</a> <a class="red-color disabled waitingForBuying" style="display: none;" id="waitingForBuying_spec">等待抢购</a> <a class="red-color buyImmediately" style="display: none;" id="buyImmediately_spec">立即抢购</a> <a class="red-color disabled appointmentsEnd" style="display: none;" id="appointmentsEnd_spec">预约结束</a> <a class="red-color" style="display: none;" id="yushou_add_cart_spec">立即预定</a> </div>-->
                     </div>
                 </div>

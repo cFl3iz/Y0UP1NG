@@ -288,6 +288,10 @@ public class PlatformManagerQueryServices {
 
         Set<String> fieldSet = new HashSet<String>();
 
+        // App 内 用户点击阅读了消息列表
+        String click  = (String) context.get("click");
+
+
         // 区分作用域 WebChat 还是 App 查询列用途
 
         fieldSet.add("message");
@@ -480,11 +484,11 @@ public class PlatformManagerQueryServices {
             List<GenericValue> queryMessageList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     null, null, false);
-            if(bizType != null & bizType.equals("findOne")){
+            if(bizType != null & bizType.equals("findOne") && click !=null & click.equals("click")){
                 for(GenericValue gv : queryMessageList){
                     gv.set("badge","false");
                     gv.store();
-                    System.out.println("==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN==IN");
+
                 }
             }else{
                 count += queryMessageList.size();

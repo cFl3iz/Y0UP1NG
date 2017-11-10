@@ -400,6 +400,9 @@ public class PlatformManagerQueryServices {
             userMap.put("toParty", toParty);
             userMap.put("fromParty", fromParty);
 
+            rowMap.put("toParty", toParty);
+            rowMap.put("fromParty", fromParty);
+
 
             userMap.put("name", user.get("firstName"));
 
@@ -449,6 +452,41 @@ public class PlatformManagerQueryServices {
             beforeMap.put("to", partyIdTo);
             beforeMap.put("objectId", (String) gv.get("objectId"));
 
+        }
+
+        for(Map<String, Object> mp : returnList){
+            String to    =  (String)  mp.get("toParty");
+            String from  =  (String)  mp.get("fromParty");
+             findConditions3 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+
+
+             findConditions4 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+
+             listConditions2 = EntityCondition
+                    .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+
+
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+
+            EntityCondition listConditions = EntityCondition
+                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
+
+            EntityCondition findConditions5 = EntityCondition
+                    .makeCondition("badge", EntityOperator.EQUALS, "true");
+
+            listBigConditions = EntityCondition
+                    .makeCondition(listConditions, listConditions2,findConditions5);
+
+            List<GenericValue> queryMessageList = delegator.findList("MessageLog",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
+            mp.put("badge",queryMessageList.size());
         }
 
 

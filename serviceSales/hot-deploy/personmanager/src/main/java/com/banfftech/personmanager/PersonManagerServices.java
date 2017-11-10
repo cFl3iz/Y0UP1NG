@@ -193,8 +193,10 @@ public class PersonManagerServices {
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
             //查角标
-
-            long count = delegator.findCountByCondition("MessageLog", EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"), null, null);
+            EntityCondition findValCondition = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"),
+                    EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo));
+            long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
 
             String badege_str = count+"";
 

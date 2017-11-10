@@ -390,13 +390,6 @@ public class PlatformManagerQueryServices {
 
             userMap.put("_id", toParty);
 
-//            if (partyIdTo.equals(fromParty)) {
-//                user = queryPersonBaseInfo(delegator, toParty);
-//                userMap.put("_id", toParty);
-//            } else {
-//                user = queryPersonBaseInfo(delegator, fromParty);
-//                userMap.put("_id", fromParty);
-//            }
             userMap.put("toParty", toParty);
             userMap.put("fromParty", fromParty);
 
@@ -453,18 +446,19 @@ public class PlatformManagerQueryServices {
             beforeMap.put("objectId", (String) gv.get("objectId"));
 
         }
-
+        //badge
+        int count = 0;
         for(Map<String, Object> mp : returnList){
             String to    =  (String)  mp.get("toParty");
             String from  =  (String)  mp.get("fromParty");
-             findConditions3 = EntityCondition
+            findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));
 
 
-             findConditions4 = EntityCondition
+            findConditions4 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdFrom", to));
 
-             listConditions2 = EntityCondition
+            listConditions2 = EntityCondition
                     .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
             EntityCondition findConditions = EntityCondition
@@ -486,8 +480,50 @@ public class PlatformManagerQueryServices {
             List<GenericValue> queryMessageList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     null, null, false);
-            mp.put("badge",queryMessageList.size());
+            if(bizType != null & bizType.equals("findOne")){
+                for(GenericValue gv : queryMessageList){
+                    gv.set("badge","false");
+                    gv.store();
+                }
+            }else{
+                count += queryMessageList.size();
+                mp.put("badge",queryMessageList.size());
+            }
+
         }
+
+
+
+
+
+
+
+
+
+
+
+        // 查询registrationID
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
+        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+
+        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+
+
+        if(null != partyIdentifications && partyIdentifications.size()>0) {
+
+
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType",""));
+
+        }
+
 
 
         resultMap.put("messages", returnList);

@@ -194,9 +194,6 @@ public class WeChatUtil {
         JSONObject jsonMapAk = JSONObject.fromObject(responseStrAk);
 
         String realAk   =(String) jsonMapAk.get("access_token");
-        System.out.println("==================================================jsonMapAk= " +jsonMapAk);
-        System.out.println("==================================================realAk= " +realAk);
-        System.out.println("==================================================contentAK= " +contentAK);
 
 //        System.out.println("==================================================openId= " +context.get("openId"));
         if(context.get("openId")!=null){
@@ -214,19 +211,8 @@ public class WeChatUtil {
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
         System.out.println("==================================================jsonMap= " + jsonMap);
         if(null != jsonMap.get("nickname")){
-//            weChatUserInfo.put("weChatId",(String) context.get("openId"));
-//            weChatUserInfo.put("nickname",(String) jsonMap.get("nickname"));
-//            weChatUserInfo.put("headimgurl",(String) jsonMap.get("headimgurl"));
-//            weChatUserInfo.put("sex",jsonMap.get("sex")+"");
-//            weChatUserInfo.put("language",(String) jsonMap.get("language"));
-//            weChatUserInfo.put("city",(String) jsonMap.get("city"));
-//            weChatUserInfo.put("province",(String) jsonMap.get("province"));
-//            weChatUserInfo.put("country",(String) jsonMap.get("country"));
-//            String uuid = (String) jsonMap.get("unionid");
-//            weChatUserInfo.put("unionid",(String) jsonMap.get("unionid"));
             //关键字段:是否订阅,这将影响我们是否要他重复关注公众号
             weChatUserInfo.put("subscribe",jsonMap.get("subscribe")+"");
-
         }
 
 

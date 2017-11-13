@@ -117,7 +117,14 @@
     </request-map>
 
 
+    <!--<request-map uri="checkSubscribe">-->
+        <!--<security auth="false" https="false"/>-->
+        <!--<event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices"-->
+               <!--invoke="checkSubscribe"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
 
+    <!--</request-map>-->
 
 
     <request-map uri="checkTarjeta">

@@ -447,6 +447,38 @@ public class PersonManagerServices {
 
 
     /**
+     * checkSubscribe
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String checkSubscribe(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+        // productId
+        String productId = (String) request.getParameter("productId");
+
+
+
+        request.setAttribute("subscribe","");
+        return "success";
+    }
+
+
+
+
+    /**
      * Query Message
      * @param request
      * @param response

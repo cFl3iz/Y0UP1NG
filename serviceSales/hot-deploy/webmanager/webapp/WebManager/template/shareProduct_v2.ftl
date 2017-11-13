@@ -153,7 +153,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                         <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
                             <p>${uiLabel.Talk}</p>
                         </div>
-                        <div class="web" id="moreAction"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
+                        <div class="web"  onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>
                         <div class="web" id="markProduct"> <img id="markProductImg" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
@@ -213,14 +213,15 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     function checkSubscribe(){
 
-
-
         var subscribe = getCookie("subscribe");
-        alert("IN COOKIE subscribe = " + subscribe);
+//        alert("IN COOKIE subscribe = " + subscribe);
         $("#subscribe").val(subscribe);
 
         if(null != subscribe && subscribe === "1" ){
 
+        }else{
+            $(".flick-menu-mask").show();
+            $(".spec-menu").show();
         }
 
     }
@@ -230,7 +231,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
         //验证是否订阅
         checkSubscribe();
-
         $("#miniChatForm").submit();
     }
 
@@ -315,11 +315,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                 }
         );
 
-        //弹出层在这
-        $("#moreAction").click(function () {
-            $(".flick-menu-mask").show();
-            $(".spec-menu").show();
-        })
+
 
         $(".tclck").click(function () {
             $(".flick-menu-mask").hide();

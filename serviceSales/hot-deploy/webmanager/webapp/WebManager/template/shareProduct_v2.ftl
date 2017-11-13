@@ -136,7 +136,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <div class="spec-menu">
                     <div class="spec-menu-content spec-menu-show" style="display: block;">
                         <div class="spec-menu-top bdr-b">
-                            <p style="font-size:25px;">${uiLabel.YouHaoTiShi}</p>
+                            <p style="font-size:22px;">${uiLabel.YouHaoTiShi}</p>
                             <a class="rt-close-btn-wrap spec-menu-close">
                                 <p class="flick-menu-close tclck"> <img src="
 http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" width="24" height="24" /> </p>
@@ -144,7 +144,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                              </div>
 
                         <div class="spec-menu-middle">
-                            <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:85%;height:100%;" />
+                            <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:90%;height:100%;" />
                         </div>
                        </div>
                 </div>

@@ -296,6 +296,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         $("#markProduct").click(
                 function(){
 
+
+
+
                     var src = $("#markProductImg").attr("src")+"";
 
 

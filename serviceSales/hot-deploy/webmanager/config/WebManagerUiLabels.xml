@@ -105,8 +105,8 @@
 
     <property key="confirmMarkProductMessage">
         <value xml:lang="en">Mark Product!</value>
-        <value xml:lang="zh">已添加到'公众号-我的收藏'。</value>
-        <value xml:lang="zh_CN">已添加到'公众号-我的收藏'。</value>
+        <value xml:lang="zh">已添加到'我的收藏'。</value>
+        <value xml:lang="zh_CN">已添加到'我的收藏'。</value>
     </property>
 
 

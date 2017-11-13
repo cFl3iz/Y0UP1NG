@@ -151,9 +151,14 @@
     <!-- 查询 消息列表的视图 , 非常痛苦  -->
     <view-entity entity-name="MessageLogView" package-name="com.banfftech.personerp">
     <member-entity entity-name="MessageLog" entity-alias="ML" />
-        <alias-all entity-alias="ML"/>
-        <alias name="partyIdFrom" field="partyIdFrom" group-by="true" entity-alias="ML"/>
+        <!--<alias-all entity-alias="ML"/>-->
+        <alias name="fromDate" field="fromDate" entity-alias="ML"/>
         <alias name="partyIdTo" field="partyIdTo" group-by="true" entity-alias="ML"/>
+        <alias name="partyIdFrom" field="partyIdFrom" group-by="true" entity-alias="ML"/>
+        <alias name="badge" field="badge" entity-alias="ML"/>
+        <alias name="messageId" field="messageId" entity-alias="ML"/>
+        <alias name="message" field="message" entity-alias="ML"/>
+        <alias name="objectId" field="objectId" entity-alias="ML"/>
         <!--<entity-condition>-->
             <!--<order-by field-name="fromDate" />-->
         <!--</entity-condition>-->

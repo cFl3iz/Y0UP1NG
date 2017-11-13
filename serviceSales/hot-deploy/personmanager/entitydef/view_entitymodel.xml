@@ -158,7 +158,7 @@
         <alias name="badge" field="badge" entity-alias="ML"/>
         <alias name="messageId" field="messageId" entity-alias="ML"/>
         <alias name="message" field="message" entity-alias="ML"/>
-        <alias name="objectId" field="objectId" entity-alias="ML"/>
+        <alias name="objectId" field="objectId" entity-alias="ML" group-by="true"/>
         <!--<entity-condition>-->
             <!--<order-by field-name="fromDate" />-->
         <!--</entity-condition>-->

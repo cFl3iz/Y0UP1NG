@@ -16,7 +16,7 @@
 
     function setCookie(name,value)
     {
-        alert("IN SET COOKIE NAME = " + name +"|value="+value);
+//        alert("IN SET COOKIE NAME = " + name +"|value="+value);
         var Days = 30;
         var exp = new Date();
         exp.setTime(exp.getTime() + Days*24*60*60*1000);
@@ -31,13 +31,13 @@
     }
 
     function validateTarjetaIsRight(tarjeta){
-        alert("validate tarjeta 2,tarjeta="+tarjeta);
+//        alert("validate tarjeta 2,tarjeta="+tarjeta);
         var url = "checkTarjeta";
         var param = {
             tarjeta:tarjeta
         };
         var result = false;
-       alert("result  = " + result);
+//       alert("result  = " + result);
         $.ajax({
             type: 'POST',
             url: url,
@@ -45,23 +45,23 @@
             async:false,
             success: function (data) {
                 var validate = data.validate;
-               alert("validate result = " + validate);
-                alert("validate="+validate);
+//               alert("validate result = " + validate);
+//                alert("validate="+validate);
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
-                    setCookie("tarjeta",tarjeta);
+//                    setCookie("tarjeta",tarjeta);
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
-                        alert("setCookie = " + newTarjeta);
+//                        alert("setCookie = " + newTarjeta);
                         setCookie("tarjeta",newTarjeta);
                         $("#tarjeta").val(newTarjeta);
                     }
                     result = true;
 
                 }else{
-                   alert("return false");
+//                   alert("return false");
                     clearCookie("tarjeta");
-                   alert(" validate result over return false");
+//                   alert(" validate result over return false");
 
                 }
 
@@ -72,7 +72,7 @@
             }
         });
 
-        alert("result  = " + result);
+//        alert("result  = " + result);
         return result;
     }
 
@@ -84,7 +84,7 @@
 
             tarjeta = $("#tarjeta").val();
 
-           alert("#555tarjeta = " + tarjeta);
+//           alert("#555tarjeta = " + tarjeta);
 
             if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty
@@ -92,24 +92,24 @@
             }else{
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
-                    alert("setCookie = " + $("#tarjeta").val());
+//                    alert("setCookie = " + $("#tarjeta").val());
                     setCookie("tarjeta",$("#tarjeta").val());
                     return true;
                 }else{
-                   alert("132");
+//                   alert("132");
 
                     weChatOauthLogin(fromurl);
                 }
             }
         }else{
             var isRight =  validateTarjetaIsRight(tarjeta);
-            alert("isRight = " + isRight);
+//            alert("isRight = " + isRight);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
-                alert("#tarjeta="+$("#tarjeta").val());
+//                alert("#tarjeta="+$("#tarjeta").val());
                 return true;
             }else{
-               alert("254");
+//               alert("254");
                 weChatOauthLogin(fromurl);
             }
         }
@@ -143,10 +143,10 @@
 
 //                alert(fromurl);
 
-               alert("user account validate");
+//               alert("user account validate");
 
                 var tarjeta = getCookie("tarjeta");
-                alert("in cookie tajeta = " + tarjeta);
+//                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 if(!validateTarjeta(tarjeta)){

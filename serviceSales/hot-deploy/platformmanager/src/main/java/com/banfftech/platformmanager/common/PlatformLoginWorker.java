@@ -325,7 +325,12 @@ public class PlatformLoginWorker {
 
         Map<String,String> userInfoMap = (Map<String,String>) resultMap.get("weChatUserInfo");
 
+        if(null == userInfoMap){
+            return result;
+        }
+
         System.out.println("*weChatAppWebLogin:" + userInfoMap);
+
 
         String unioId =  (String) userInfoMap.get("unionid");
 

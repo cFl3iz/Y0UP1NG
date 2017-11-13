@@ -93,6 +93,7 @@
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
 //                    alert("setCookie = " + $("#tarjeta").val());
+                    setCookie("subscribe",$("#subscribe").val());
                     setCookie("tarjeta",$("#tarjeta").val());
                     return true;
                 }else{

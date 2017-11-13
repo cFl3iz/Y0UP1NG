@@ -219,6 +219,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     //Init
     function initShareProductPage(){
+        var subscribe = $("#subscribe").val();
+        alert("subscribe="+subscribe);
         var tarjeta = $("#tarjeta").val();
         var productId = $("#productId").val();
         if(null != tarjeta && tarjeta.trim() != "" && tarjeta != "undefined"){
@@ -353,7 +355,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 </script>
 
 
-
+<input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="${resourceDetail.payToPartyId}"/>

@@ -102,7 +102,7 @@ public class WebServices {
                 UtilMisc.toMap("userLogin",admin,"code",code));
 
         String tarjeta = (String) loginServiceResultMap.get("tarjeta");
-
+        String subscribe = (String) loginServiceResultMap.get("subscribe");
 
 //        GenericValue priductPrice =  EntityQuery.use(delegator).from("ProductPrice").where("productId", productId, "productPriceTypeId",PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID,"productPricePurposeId",PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE,"currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID).queryFirst();
 //
@@ -122,6 +122,7 @@ public class WebServices {
         request.setAttribute("productId",productId);
 
         request.setAttribute("tarjeta",tarjeta);
+        request.setAttribute("subscribe",subscribe);
 
         return "success";
     }

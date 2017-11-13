@@ -67,6 +67,8 @@
 
                 <set field="tarjeta" from-field="parameters.tarjeta" type="String" default-value=""/>
 
+                <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
+
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
                 </service>

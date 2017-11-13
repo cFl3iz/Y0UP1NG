@@ -107,6 +107,7 @@
 
         <response name="success" type="request-redirect" value="shareProduct">
             <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
             <redirect-parameter name="productId" from="productId"/>
         </response>
 

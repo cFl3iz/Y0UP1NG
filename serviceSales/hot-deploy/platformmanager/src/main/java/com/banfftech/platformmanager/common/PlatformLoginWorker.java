@@ -326,6 +326,11 @@ public class PlatformLoginWorker {
 
         String unioId =  (String) userInfoMap.get("unionid");
 
+        //是否订阅了公众号
+        String subscribe = (String) userInfoMap.get("subscribe");
+
+        result.put("subscribe",subscribe);
+
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
 
         String   partyId,token ="";

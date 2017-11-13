@@ -341,7 +341,7 @@ public class PlatformManagerQueryServices {
         }else{
             queryMessageLogList = delegator.findList("MessageLogView",
                     listBigConditions, fieldSet,
-                    UtilMisc.toList("fromDate"), null, false);
+                    UtilMisc.toList("-fromDate"), null, false);
         }
 
 
@@ -381,9 +381,9 @@ public class PlatformManagerQueryServices {
 
             String fromParty = (String) gv.get("partyIdFrom");
 
-            if(partyIdTo.equals(fromParty) && bizType.equals("webChat")){
-                continue;
-            }
+//            if(partyIdTo.equals(fromParty) && bizType.equals("webChat")){
+//                continue;
+//            }
 
             String toParty = (String) gv.get("partyIdTo");
 

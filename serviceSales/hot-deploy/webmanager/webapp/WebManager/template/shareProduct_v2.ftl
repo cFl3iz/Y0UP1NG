@@ -215,11 +215,12 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
         var subscribe = getCookie("subscribe");
         alert("IN COOKIE subscribe = " + subscribe);
-        $("#subscribe").val(subscribe);
+//        $("#subscribe").val(subscribe);
 
-        if(null != subscribe && subscribe === "1" ){
-
+        if(subscribe === "1" ){
+            alert("1");
         }else{
+            alert("0");
 //            $(".flick-menu-mask").show();
 //            $(".spec-menu").show();
             location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
@@ -233,7 +234,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         //验证是否订阅
         checkSubscribe();
 
-        $("#miniChatForm").submit();
+//        $("#miniChatForm").submit();
     }
 
     //Init

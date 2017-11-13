@@ -195,7 +195,9 @@ public class WeChatUtil {
         String realAk   =(String) jsonMapAk.get("access_token");
         System.out.println("==================================================jsonMapAk= " +jsonMapAk);
         System.out.println("==================================================realAk= " +realAk);
-        System.out.println("==================================================openId= " +context.get("openId"));
+        System.out.println("==================================================contentAK= " +contentAK);
+        
+//        System.out.println("==================================================openId= " +context.get("openId"));
         if(context.get("openId")!=null){
             requestParamSB.append("access_token="+realAk);//AK
             requestParamSB.append("&openid="+(String)context.get("openId"));//AK

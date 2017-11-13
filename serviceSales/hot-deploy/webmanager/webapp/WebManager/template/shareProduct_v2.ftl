@@ -211,16 +211,35 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     }
 
+    function checkSubscribe(){
+
+        var subscribe = $("#subscribe").val();
+
+        if(null != subscribe && subscribe === "1" ){
+
+        }
+
+    }
+
 
     function doMiniChat(){
+
+        //验证是否订阅
+        checkSubscribe();
 
         $("#miniChatForm").submit();
     }
 
     //Init
     function initShareProductPage(){
-        var subscribe = $("#subscribe").val();
-        alert("subscribe="+subscribe);
+
+
+
+
+//        alert("subscribe="+subscribe);
+
+
+
         var tarjeta = $("#tarjeta").val();
         var productId = $("#productId").val();
         if(null != tarjeta && tarjeta.trim() != "" && tarjeta != "undefined"){

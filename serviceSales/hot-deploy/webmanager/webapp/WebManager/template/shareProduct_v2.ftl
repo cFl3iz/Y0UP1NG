@@ -214,7 +214,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     function myOrder(){
         if(checkSubscribe()==true){
-            alert("true");
+            location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
         }
     }
 
@@ -233,7 +233,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
             $(".spec-menu").show();
             clearCookie("tarjeta");
             flag = false;
-       //     location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
+
         }
         return flag;
     }

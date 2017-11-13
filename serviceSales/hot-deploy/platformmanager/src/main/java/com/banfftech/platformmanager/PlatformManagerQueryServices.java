@@ -381,9 +381,9 @@ public class PlatformManagerQueryServices {
 
             String fromParty = (String) gv.get("partyIdFrom");
 
-//            if(partyIdTo.equals(fromParty) && bizType.equals("webChat")){
-//                continue;
-//            }
+            if(partyIdTo.equals(fromParty) && bizType.equals("webChat")){
+                continue;
+            }
 
             String toParty = (String) gv.get("partyIdTo");
 

@@ -159,7 +159,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                         <div class="web" id="markProduct"> <img id="markProductImg" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/favorite.png" width="20" height="20" />
                             <p>${uiLabel.Mark}</p>
                         </div>
-                        <button class="cart cell" onclick="javascript:alert('${uiLabel.DefaultAction}');">${uiLabel.MyOrder}</button>
+                        <button class="cart cell" onclick="myOrder();">${uiLabel.MyOrder}</button>
                         <button class="buy cell" onclick="buyProduct();">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
@@ -211,30 +211,39 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     }
 
-    function checkSubscribe(){
 
+    function myOrder(){
+        if(checkSubscribe()==true){
+            alert("true");
+        }
+    }
+
+
+    function checkSubscribe(){
+            var flag = false;
         var subscribe = getCookie("subscribe");
         alert("IN COOKIE subscribe = " + subscribe);
 //        $("#subscribe").val(subscribe);
 
         if(subscribe === "1" ){
-                alert("1");
+            flag =  true;
         }else{
             alert("2");
             $(".flick-menu-mask").show();
             $(".spec-menu").show();
             clearCookie("tarjeta");
+            flag = false;
        //     location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
         }
-
+        return flag;
     }
 
 
     function doMiniChat(){
 
         //验证是否订阅
-        var result = checkSubscribe();
-        if(result == true){
+
+        if(checkSubscribe() == true){
             $("#miniChatForm").submit();
         }
 

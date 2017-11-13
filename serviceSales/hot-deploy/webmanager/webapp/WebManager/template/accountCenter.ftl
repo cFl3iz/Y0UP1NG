@@ -50,6 +50,7 @@
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
+                        alert("setCookie = " + newTarjeta);
                         setCookie("tarjeta",newTarjeta);
                         $("#tarjeta").val(newTarjeta);
                     }
@@ -89,6 +90,7 @@
             }else{
                 var isRight =  validateTarjetaIsRight(tarjeta);
                 if(isRight){
+                    alert("setCookie = " + $("#tarjeta").val());
                     setCookie("tarjeta",$("#tarjeta").val());
                     return true;
                 }else{

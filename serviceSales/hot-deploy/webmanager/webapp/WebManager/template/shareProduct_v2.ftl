@@ -214,7 +214,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     function checkSubscribe(){
 
         var subscribe = getCookie("subscribe");
-//        alert("IN COOKIE subscribe = " + subscribe);
+        alert("IN COOKIE subscribe = " + subscribe);
         $("#subscribe").val(subscribe);
 
         if(null != subscribe && subscribe === "1" ){

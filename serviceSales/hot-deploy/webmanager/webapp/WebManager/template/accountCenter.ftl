@@ -49,6 +49,7 @@
                 if(validate === "true"){
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
+                    setCookie("tarjeta",tarjeta);
                     if(newTarjeta!=null && newTarjeta.trim()!=""){
                         alert("setCookie = " + newTarjeta);
                         setCookie("tarjeta",newTarjeta);
@@ -82,7 +83,7 @@
 
             tarjeta = $("#tarjeta").val();
 
-           alert("#tarjeta = " + tarjeta);
+           alert("#555tarjeta = " + tarjeta);
 
             if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
                 //PageContext Empty

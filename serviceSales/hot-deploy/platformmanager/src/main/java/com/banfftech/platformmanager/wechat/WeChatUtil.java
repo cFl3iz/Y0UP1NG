@@ -193,7 +193,7 @@ public class WeChatUtil {
         JSONObject jsonMapAk = JSONObject.fromObject(responseStrAk);
 
         String realAk   =(String) jsonMapAk.get("access_token");
-
+        System.out.println("==================================================jsonMapAk= " +jsonMapAk);
         System.out.println("==================================================realAk= " +realAk);
         System.out.println("==================================================openId= " +context.get("openId"));
         if(context.get("openId")!=null){

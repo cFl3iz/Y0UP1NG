@@ -222,13 +222,13 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     function checkSubscribe(){
             var flag = false;
         var subscribe = getCookie("subscribe");
-        alert("IN COOKIE subscribe = " + subscribe);
+//        alert("IN COOKIE subscribe = " + subscribe);
 //        $("#subscribe").val(subscribe);
 
         if(subscribe === "1" ){
             flag =  true;
         }else{
-            alert("2");
+//            alert("2");
             $(".flick-menu-mask").show();
             $(".spec-menu").show();
             clearCookie("tarjeta");

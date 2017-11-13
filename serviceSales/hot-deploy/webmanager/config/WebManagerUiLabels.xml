@@ -168,9 +168,9 @@
 
 
     <property key="YouHaoTiShi">
-        <value xml:lang="en">Please scan the 'qr code'。</value>
-        <value xml:lang="zh">请您先扫码关注,我们想更好地为您提供服务。</value>
-        <value xml:lang="zh_CN">请您先扫码关注,我们想更好地为您提供服务。</value>
+        <value xml:lang="en">Please Scan The'qr'code。</value>
+        <value xml:lang="zh">请扫码关注,为给您更好的提供服务。</value>
+        <value xml:lang="zh_CN">请扫码关注,为给您更好的提供服务。</value>
     </property>
 
 

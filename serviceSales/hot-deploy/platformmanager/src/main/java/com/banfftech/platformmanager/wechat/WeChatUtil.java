@@ -109,6 +109,7 @@ public class WeChatUtil {
         returnMap.put("openId", openId);
         returnMap.put("code", code);
 
+        System.out.println("*getWeChatAccess========================================================" + returnMap);
 
         return returnMap;
     }
@@ -196,7 +197,7 @@ public class WeChatUtil {
         System.out.println("==================================================jsonMapAk= " +jsonMapAk);
         System.out.println("==================================================realAk= " +realAk);
         System.out.println("==================================================contentAK= " +contentAK);
-        
+
 //        System.out.println("==================================================openId= " +context.get("openId"));
         if(context.get("openId")!=null){
             requestParamSB.append("access_token="+realAk);//AK

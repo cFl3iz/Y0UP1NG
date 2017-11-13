@@ -136,7 +136,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <div class="spec-menu">
                     <div class="spec-menu-content spec-menu-show" style="display: block;">
                         <div class="spec-menu-top bdr-b">
-                            <p style="font-size:21px;">${uiLabel.YouHaoTiShi}</p>
+                            <p style="font-size:21px;color: #83CCFC;">${uiLabel.YouHaoTiShi}</p>
                             <a class="rt-close-btn-wrap spec-menu-close">
                                 <p class="flick-menu-close tclck"> <img src="
 http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" width="24" height="24" /> </p>

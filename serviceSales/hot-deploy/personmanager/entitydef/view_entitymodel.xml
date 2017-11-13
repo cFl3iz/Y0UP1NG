@@ -154,7 +154,7 @@
         <alias-all entity-alias="ML"/>
         <alias name="partyIdFrom" field="partyIdFrom" group-by="true" entity-alias="ML"/>
         <alias name="partyIdTo" field="partyIdTo" group-by="true" entity-alias="ML"/>
-        <entity-condition filter-by-date="true" distinct="true">
+        <entity-condition>
             <order-by field-name="-fromDate" />
         </entity-condition>
     </view-entity>

@@ -16,6 +16,7 @@
 
     function setCookie(name,value)
     {
+        alert("IN SET COOKIE NAME = " + name +"|value="+value);
         var Days = 30;
         var exp = new Date();
         exp.setTime(exp.getTime() + Days*24*60*60*1000);

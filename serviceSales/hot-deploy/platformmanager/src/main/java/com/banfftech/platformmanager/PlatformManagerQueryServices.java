@@ -277,6 +277,7 @@ public class PlatformManagerQueryServices {
 
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
+
         String partyIdTo = (String) userLogin.get("partyId");
 
         resultMap.put("partyId", partyIdTo);
@@ -383,8 +384,10 @@ public class PlatformManagerQueryServices {
                 //绝对不拿自己的
                 if (fromParty.equals(partyIdTo)) {
                     user = queryPersonBaseInfo(delegator, toParty);
+                    userMap.put("realPartyId",toParty);
                 } else {
                     user = queryPersonBaseInfo(delegator, fromParty);
+                    userMap.put("realPartyId",fromParty);
                 }
 
                 if (directList.size() > 0 && directList.contains(fromParty + "|" + toParty) || directList.size() > 0 && directList.contains(toParty + "|" + fromParty)) {

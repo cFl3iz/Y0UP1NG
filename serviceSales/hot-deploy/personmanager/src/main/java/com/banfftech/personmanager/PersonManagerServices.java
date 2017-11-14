@@ -34,7 +34,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
-
+import org.apache.ofbiz.entity.util.EntityUtilProperties;
+import com.auth0.jwt.JWTExpiredException;
+import com.auth0.jwt.JWTSigner;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifyException;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.GenericEntity;
 
@@ -179,7 +183,31 @@ public class PersonManagerServices {
         pushWeChatMessageInfoMap.put("userLogin",userLogin);
 
         pushWeChatMessageInfoMap.put("message",text);
-        pushWeChatMessageInfoMap.put("tarjeta",tarjeta);
+
+
+        GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo,"enabled","Y").queryFirst();
+
+        String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+
+
+
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", toPartyUserLoginId);
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+
+        pushWeChatMessageInfoMap.put("tarjeta",signer.sign(claims));
 
 
         System.out.println("========================================= partyIdTo = " +partyIdTo);

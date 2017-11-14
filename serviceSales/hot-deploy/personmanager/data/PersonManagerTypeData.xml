@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
-
+    <PaymentMethodType createdStamp="2017-06-22 13:24:07.0" createdTxStamp="2017-06-22 13:24:07.0" description="媒介支付、第三方支付、跨平台支付类型" lastUpdatedStamp="2017-06-22 13:24:07.0" lastUpdatedTxStamp="2017-06-22 13:24:07.0" paymentMethodTypeId="MEDIATION_PAY"/>
 </entity-engine-xml>

@@ -117,6 +117,15 @@
     </property>
 
 
+
+    <property key="NoProductMoreDetail">
+        <value xml:lang="en">NoProductMoreDetail</value>
+        <value xml:lang="zh">没有更多的图文消息...</value>
+        <value xml:lang="zh_CN">没有更多的图文消息...</value>
+    </property>
+
+
+
     <property key="Buy">
         <value xml:lang="en">Buy</value>
         <value xml:lang="zh">我要一个</value>

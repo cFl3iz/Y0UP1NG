@@ -119,17 +119,27 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                             <div class="media-body"> ${uiLabel.ProductSpecDetail} </div>
                         </a> </li>
                     </ul>
-                    <p class="picture_text">It Very Good !
-                    </p>
-                    <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/paocai.png" alt="" /> </a>
-                    </div>
-                    <p class="picture_text">My Motehr Make !</p>
-                    <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/paocai.png" alt="" /> </a>
-                    </div>
-                    <p class="picture_text">Very Good</p>
-                    <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/paocai.png" alt="" /> </a>
-                    </div>
+                    <#if morePicture?has_content>
+                        <#list morePicture as list>
+                            <p class="picture_text">
+                            </p>
+                            <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="${(list.drObjectInfo)!}" alt="" /> </a>
+                            </div>
+                        </#list>
 
+                    <#--<p class="picture_text">My Motehr Make !</p>-->
+                    <#--<div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/paocai.png" alt="" /> </a>-->
+                    <#--</div>-->
+                    <#--<p class="picture_text">Very Good</p>-->
+                    <#--<div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/paocai.png" alt="" /> </a>-->
+                    <#--</div>-->
+                    </#if>
+    <#if !morePicture?has_content>
+        <p class="picture_text">
+            ${uiLabel.NoProductMoreDetail}
+        </p>
+
+    </#if>
                 </div>
 
                 <div class="flick-menu-mask" style=""></div>

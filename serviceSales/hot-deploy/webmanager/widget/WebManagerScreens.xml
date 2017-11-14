@@ -75,6 +75,9 @@
 
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
 
+                <set field="morePicture" value="${resourceDetail.morePicture}"/>
+
+
                 <set field="mark" value="${resourceDetail.mark}"/>
 
 

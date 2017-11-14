@@ -859,13 +859,18 @@ public class PersonManagerQueryServices {
         resourceDetail.put("productMoreDetails",productMoreDetails);
 
 
-        //是否是意向客户
-//        GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", userLoginPartyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
-//
-//
-//        if(null != partyMarkRole){
-//            resourceDetail.put("mark","true");
-//        }
+
+
+        fieldSet = new HashSet<String>();
+        fieldSet.add("drObjectInfo");
+        fieldSet.add("productId");
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition("productId", EntityOperator.EQUALS, productId);
+        List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                findConditions3, fieldSet,
+                null, null, false);
+        resourceDetail.put("morePicture",pictures);
+
 
         resultMap.put("resourceDetail", resourceDetail);
 
@@ -1056,6 +1061,13 @@ public class PersonManagerQueryServices {
             inputMap.put("openId", "NA");
         }
 
+        List<GenericValue> paymentMethodList = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "MEDIATION_PAY").queryList();
+
+        if(null != paymentMethodList && paymentMethodList.size()>0){
+            inputMap.put("paymentMethodList",paymentMethodList);
+        }else{
+            inputMap.put("paymentMethodList","NA");
+        }
 
         resultMap.put("userInfo", inputMap);
         return resultMap;
@@ -1087,6 +1099,7 @@ public class PersonManagerQueryServices {
         String productCategoryId = "NA";
         List<GenericValue> myResourceList = null;
 
+        List<Map<String,Object>> resourceMapList = new ArrayList<Map<String, Object>>();
 
         //查我的目录
         GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
@@ -1126,11 +1139,42 @@ public class PersonManagerQueryServices {
             myResourceList = delegator.findList("ProductAndCategoryMember",
                     listConditions, fieldSet,
                     UtilMisc.toList("-createdDate"), findOptions, false);
+
+            if(null != myResourceList && myResourceList.size()>0){
+                for(GenericValue gv :myResourceList){
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                    rowMap.put("productName",(String)gv.get("productName"));
+                    rowMap.put("productId",(String)gv.get("productId"));
+                    rowMap.put("productStoreId",(String)gv.get("productStoreId"));
+                    rowMap.put("detailImageUrl",(String)gv.get("detailImageUrl"));
+                    rowMap.put("createdDate",gv.get("createdDate"));
+                    rowMap.put("price",gv.get("price"));
+                    rowMap.put("productCategoryId",(String)gv.get("productCategoryId"));
+                    rowMap.put("payToPartyId",(String)gv.get("payToPartyId"));
+
+
+                    fieldSet = new HashSet<String>();
+                    fieldSet.add("drObjectInfo");
+                    fieldSet.add("productId");
+                    EntityCondition findConditions3 = EntityCondition
+                            .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
+                    List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                            findConditions3, fieldSet,
+                            null, null, false);
+                    rowMap.put("morePicture",pictures);
+
+                    resourceMapList.add(rowMap);
+                }
+            }
+
+
+          //  ProductContentAndInfo
             //EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productCategoryId",productCategoryId).queryList();
         }
 
 
-        resultMap.put("myResourceList", myResourceList);
+        resultMap.put("myResourceList", resourceMapList);
         resultMap.put("productCategoryId", productCategoryId);
 
         return resultMap;

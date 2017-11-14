@@ -630,7 +630,7 @@ public class PersonManagerServices {
 
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
-
+        String partyId = (String) userLogin.get("partyId");
 
 
 
@@ -639,8 +639,28 @@ public class PersonManagerServices {
         // productId
         String productId = (String) request.getParameter("productId");
 
-        String descriptions = (String) request.getParameter("descriptions");
+        String alipayaccount = (String) request.getParameter("alipayaccount");
 
+        String wechatpayaccount = (String) request.getParameter("wechatpayaccount");
+
+
+        if (!UtilValidate.isEmpty(alipayaccount)) {
+            // Create Default Pay Method To Party
+            GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
+            newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+            newPayMethod.set("partyId", partyId);
+            newPayMethod.set("paymentMethodTypeId", "MEDIATION_PAY");
+            newPayMethod.set("description", "支付宝账号:"+alipayaccount);
+            newPayMethod.create();
+        }
+        if (!UtilValidate.isEmpty(wechatpayaccount)) {
+            GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
+            newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+            newPayMethod2.set("partyId", partyId);
+            newPayMethod2.set("paymentMethodTypeId", "MEDIATION_PAY");
+            newPayMethod2.set("description", "微信账号:" + wechatpayaccount);
+            newPayMethod2.create();
+        }
 
 
 
@@ -677,7 +697,7 @@ public class PersonManagerServices {
 
                             if (pictureKey != null && !pictureKey.equals("") && count <=4) {
                                 //创建产品内容和数据资源附图
-                                createProductContentAndDataResource(delegator,dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")),count);
+                                createProductContentAndDataResource(delegator,dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")),count);
                                 count++;
                             }
                         }
@@ -708,7 +728,8 @@ public class PersonManagerServices {
 
         // Create Content
         String contentTypeId =  "ADDITIONAL_IMAGE_"+count;
-        String contentId     = delegator.getNextSeqId("Content");
+        Map<String,Object> resultMap1 = dispatcher.runSync("createContent",UtilMisc.toMap("userLogin",admin));
+        String contentId     = (String) resultMap1.get("contentId");
         dispatcher.runSync("createProductContent",UtilMisc.toMap("userLogin",admin,"productContentTypeId",contentTypeId,"productId",productId,"contentId",contentId));
 
         // Create DataResource

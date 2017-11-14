@@ -81,7 +81,7 @@ public class PlatformManagerQueryServices {
 
 
         EntityConditionList<EntityCondition> listBigConditions = EntityCondition
-                .makeCondition(listConditions,listConditions2);
+                .makeCondition(listConditions, listConditions2);
 
         List<GenericValue> queryMessageLogList = null;
 
@@ -97,7 +97,7 @@ public class PlatformManagerQueryServices {
             Map<String, Object> userMap = new HashMap<String, Object>();
             String fromParty = (String) gv.get("partyIdFrom");
             String toParty = (String) gv.get("partyIdTo");
-            if(fromParty.equals(partyIdTo)){
+            if (fromParty.equals(partyIdTo)) {
                 continue;
             }
             String messageId = (String) gv.get("messageId");
@@ -244,7 +244,7 @@ public class PlatformManagerQueryServices {
 
             }
             //此处拿的是from
-            userMap.put("toPartyId",  fromParty);
+            userMap.put("toPartyId", fromParty);
 
             userMap.put("name", user.get("firstName"));
             userMap.put("avatar", user.get("headPortrait"));
@@ -279,9 +279,10 @@ public class PlatformManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyIdTo = (String) userLogin.get("partyId");
 
-        resultMap.put("partyId",partyIdTo);
+        resultMap.put("partyId", partyIdTo);
 
         String partyIdFrom = (String) context.get("partyIdFrom");
+
         String objectId = (String) context.get("objectId");
 
         String bizType = (String) context.get("bizType");
@@ -289,7 +290,7 @@ public class PlatformManagerQueryServices {
         Set<String> fieldSet = new HashSet<String>();
 
         // App 内 用户点击阅读了消息列表
-        String click  = (String) context.get("click");
+        String click = (String) context.get("click");
 
 
         // 区分作用域 WebChat 还是 App 查询列用途
@@ -338,21 +339,13 @@ public class PlatformManagerQueryServices {
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
-        }else{
+        } else {
             queryMessageLogList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
         }
 
 
-//        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
-//            queryMessageLogList = delegator.findList("MessageLog",
-//                    listBigConditions, fieldSet,
-//                    UtilMisc.toList("-fromDate"), null, false);
-//        } else {}
-//            queryMessageLogList = delegator.findList("MessageLogView",
-//                    listBigConditions, fieldSet,
-//                    UtilMisc.toList("-fromDate"), null, false);
 
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
@@ -363,21 +356,6 @@ public class PlatformManagerQueryServices {
 
         List<String> directList = new ArrayList<String>();
 
-//        beforeMap.put("objectId", "");
-//        beforeMap.put("from", "");
-//        beforeMap.put("to", "");
-
-
-        //第一步,安装字典
-//        for (int i = 0; i < queryMessageLogList.size(); i++) {
-//            GenericValue gv = queryMessageLogList.get(i);
-//            String fromParty = (String) gv.get("partyIdFrom");
-//            String toParty = (String) gv.get("partyIdTo");
-//            Map<String, Object> rowMap = new HashMap<String, Object>();
-//            rowMap.put("fromParty",fromParty);
-//            rowMap.put("toParty",toParty);
-//
-//        }
 
 
         for (int i = 0; i < queryMessageLogList.size(); i++) {
@@ -398,27 +376,23 @@ public class PlatformManagerQueryServices {
             Map<String, String> user = null;
 
 
-
             String toParty = (String) gv.get("partyIdTo");
             if (bizType != null & bizType.equals("findOne")) {
                 user = queryPersonBaseInfo(delegator, fromParty);
-            }else{
+            } else {
                 //绝对不拿自己的
-                if(fromParty.equals(partyIdTo)){
+                if (fromParty.equals(partyIdTo)) {
                     user = queryPersonBaseInfo(delegator, toParty);
-                }else{
+                } else {
                     user = queryPersonBaseInfo(delegator, fromParty);
                 }
 
-            if(directList.size()>0 && directList.contains(fromParty+"|"+toParty) || directList.size()>0 && directList.contains(toParty+"|"+fromParty)){
-                continue;
-            }else{
-                directList.add(fromParty+"|"+toParty);
+                if (directList.size() > 0 && directList.contains(fromParty + "|" + toParty) || directList.size() > 0 && directList.contains(toParty + "|" + fromParty)) {
+                    continue;
+                } else {
+                    directList.add(fromParty + "|" + toParty);
+                }
             }
-            }
-
-
-
 
 
             userMap.put("_id", toParty);
@@ -454,38 +428,18 @@ public class PlatformManagerQueryServices {
             rowMap.put("_id", messageId);
             rowMap.put("text", message);
             rowMap.put("createdAt", tsStr);
-            rowMap.put("objectId",gvObjectId);
+            rowMap.put("objectId", gvObjectId);
 
-//            if (bizType != null & bizType.equals("findOne")) {
-//                returnList.add(rowMap);
-//            } else {
-//
-//
-//                if (
-//                        gvObjectId.equals(beforeMap.get("objectId"))
-//                                && fromParty.equals(beforeMap.get("from"))
-//                                && partyIdTo.equals(beforeMap.get("to")) ||
-//                                gvObjectId.equals(beforeMap.get("objectId"))
-//                                        && fromParty.equals(beforeMap.get("to"))
-//                                        && partyIdTo.equals(beforeMap.get("from"))
-//                        ) {
-//
-//                } else {
-//                    returnList.add(rowMap);
-//                }
-//            }
+
 
             returnList.add(rowMap);
-//            beforeMap.put("from", fromParty);
-//            beforeMap.put("to", partyIdTo);
-//            beforeMap.put("objectId", (String) gv.get("objectId"));
 
         }
         //badge
         int count = 0;
-        for(Map<String, Object> mp : returnList){
-            String to    =  (String)  mp.get("toParty");
-            String from  =  (String)  mp.get("fromParty");
+        for (Map<String, Object> mp : returnList) {
+            String to = (String) mp.get("toParty");
+            String from = (String) mp.get("fromParty");
             findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));
 
@@ -510,56 +464,24 @@ public class PlatformManagerQueryServices {
                     .makeCondition("badge", EntityOperator.EQUALS, "true");
 
             listBigConditions = EntityCondition
-                    .makeCondition(listConditions, listConditions2,findConditions5);
+                    .makeCondition(listConditions, listConditions2, findConditions5);
 
             List<GenericValue> queryMessageList = delegator.findList("MessageLog",
                     listBigConditions, fieldSet,
                     null, null, false);
-            if(bizType != null & bizType.equals("findOne") && click !=null & click.equals("click")){
-                for(GenericValue gv : queryMessageList){
-                    gv.set("badge","false");
+            if (bizType != null & bizType.equals("findOne") && click != null & click.equals("click")) {
+                for (GenericValue gv : queryMessageList) {
+                    gv.set("badge", "false");
                     gv.store();
 
                 }
-            }else{
+            } else {
                 count += queryMessageList.size();
-                mp.put("badge",queryMessageList.size());
+                mp.put("badge", queryMessageList.size());
             }
 
         }
 
-
-
-
-
-
-
-
-
-
-
-        // 查询registrationID
-//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
-//        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
-//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
-//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
-//        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
-//        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
-//
-//        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-//
-//
-//
-//        if(null != partyIdentifications && partyIdentifications.size()>0) {
-//
-//
-//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-//            String jpushId = (String) partyIdentification.getString("idValue");
-//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-//            System.out.println("===========================================" + "badge="+count+""+"|message="+"message"+"|content="+"badge"+"|regId="+jpushId+"|deviceType:"+partyIdentificationTypeId+"|sendType="+""+"objectId="+"");
-//            dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",userLogin,"badge",count+"","message","message","content","badge","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",""));
-//
-//        }
 
 
 

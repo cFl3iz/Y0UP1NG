@@ -142,6 +142,8 @@
     <description>Push Message</description>
         <attribute name="text" type="String" mode="IN"
                optional="true" />
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true" />
         <attribute name="objectId" type="String" mode="IN"
                    optional="true" />
         <attribute name="partyIdTo" type="String" mode="IN"

@@ -164,6 +164,8 @@ public class PersonManagerServices {
 
         String text = (String) context.get("text");
 
+        String tarjeta       = (String) context.get("tarjeta");
+
         String objectId = (String) context.get("objectId");
 
         String partyIdTo = (String) context.get("partyIdTo");
@@ -177,6 +179,8 @@ public class PersonManagerServices {
         pushWeChatMessageInfoMap.put("userLogin",userLogin);
 
         pushWeChatMessageInfoMap.put("message",text);
+        pushWeChatMessageInfoMap.put("tarjeta",tarjeta);
+
 
         System.out.println("========================================= partyIdTo = " +partyIdTo);
 
@@ -257,7 +261,13 @@ public class PersonManagerServices {
 
 
         if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+            GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+
+            String payToPartyId = (String) payToParty.get("payToPartyId");
+
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
             Date date = new Date();
 
             SimpleDateFormat formatter;
@@ -267,10 +277,18 @@ public class PersonManagerServices {
             String pushDate = ""+formatter.format(date);
 
             pushWeChatMessageInfoMap.put("date",pushDate);
+
             String openId = (String) partyIdentificationList.get(0).get("idValue");
+
             pushWeChatMessageInfoMap.put("openId",openId);
+
+            pushWeChatMessageInfoMap.put("productId",objectId);
+
+            pushWeChatMessageInfoMap.put("payToPartyId",payToPartyId);
+
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
+
         } else {
 
         }

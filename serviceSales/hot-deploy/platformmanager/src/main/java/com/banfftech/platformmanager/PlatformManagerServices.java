@@ -55,6 +55,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 
@@ -92,16 +93,20 @@ public class PlatformManagerServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
-        // 不需要 String openid = WeChatUtils.getOpenId("",APP_KEY,ACCESS_KEY_SECRET);
+
         String openId        = (String) context.get("openId");
-//        String workEffortName     = (String) context.get("workEffortName");
-//        String workEffortId     = (String) context.get("workEffortId");
-//        String position     = (String) context.get("position");
+        String productId     = (String) context.get("productId");
         String date     = (String) context.get("date");
         String message     = (String) context.get("message");
         String firstName     = (String) context.get("firstName");
+        String payToPartyId  = (String) context.get("payToPartyId");
+        String tarjeta       = (String) context.get("tarjeta");
 
         firstName = EmojiHandler.decodeJava(firstName);
+
+
+        Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+
 
         // 发送模版消息
         AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID,PeConstant.ACCESS_KEY_SECRET);
@@ -119,7 +124,9 @@ public class PlatformManagerServices {
 
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
-        jsobj1.put("url","www.yo-pe.com:3400/WebManager/control/shareProduct?productId="+"");
+        jsobj1.put("url","www.yo-pe.com:3400/WebManager/control/shareProduct?" +
+                "productId="+productId+"&payToPartyId=" +
+                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName"));
 
         jsobj3.put("value", firstName+"给您发了一条消息");
         jsobj3.put("color", "#173177");

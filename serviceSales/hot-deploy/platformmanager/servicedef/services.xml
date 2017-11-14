@@ -126,6 +126,10 @@
         <attribute name="openId" type="String" mode="IN" optional="true"/>
         <attribute name="firstName" type="String" mode="IN" optional="true"/>
         <attribute name="message" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+
         <attribute name="date" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

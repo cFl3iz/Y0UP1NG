@@ -119,6 +119,18 @@
     </service>
 
 
+    <!-- push WeChat MessageInfo -->
+    <service name="pushWeChatMessageInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushWeChatMessageInfo" auth="false">
+        <description>pushWeChatMessageInfo</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="true"/>
+        <attribute name="message" type="String" mode="IN" optional="true"/>
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
     <!-- Load Message -->
     <service name="loadMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"

@@ -2,10 +2,14 @@ package main.java.com.banfftech.personmanager;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.util.EmojiHandler;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
+import main.java.com.banfftech.platformmanager.wechat.AccessToken;
+import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -49,7 +53,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
-
+import net.sf.json.JSONObject;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -57,6 +61,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
+
+import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 /**
  * Created by S on 2017/9/12.
@@ -151,6 +157,7 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+        Map<String,Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
@@ -166,6 +173,10 @@ public class PersonManagerServices {
         if(UtilValidate.isEmpty(partyIdFrom)){
             partyIdFrom = (String) userLogin.get("partyId");
         }
+
+        pushWeChatMessageInfoMap.put("userLogin",userLogin);
+
+        pushWeChatMessageInfoMap.put("message",text);
 
         System.out.println("========================================= partyIdTo = " +partyIdTo);
 
@@ -184,6 +195,8 @@ public class PersonManagerServices {
         if(person!=null){
             text = person.get("firstName")+":"+text;
         }
+
+        pushWeChatMessageInfoMap.put("firstName",person.get("firstName"));
 
         if(null != partyIdentifications && partyIdentifications.size()>0){
 
@@ -213,16 +226,6 @@ public class PersonManagerServices {
 
 
 
-
-
-
-
-
-
-
-
-
-
         if(!UtilValidate.isEmpty(partyIdFrom)) {
             createMessageLogMap.put("partyIdFrom", partyIdFrom);
         }
@@ -242,6 +245,36 @@ public class PersonManagerServices {
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
 
         msg.create();
+
+
+
+
+
+
+
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = ""+formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date",pushDate);
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+            pushWeChatMessageInfoMap.put("openId",openId);
+            //推微信
+            dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
+        } else {
+
+        }
+
 
 
 
@@ -474,6 +507,96 @@ public class PersonManagerServices {
         request.setAttribute("subscribe","");
         return "success";
     }
+
+
+    /**
+     * Push WeChat MessageInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> pushWeChatMessageInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        // 不需要 String openid = WeChatUtils.getOpenId("",APP_KEY,ACCESS_KEY_SECRET);
+        String openId        = (String) context.get("openId");
+//        String workEffortName     = (String) context.get("workEffortName");
+//        String workEffortId     = (String) context.get("workEffortId");
+//        String position     = (String) context.get("position");
+        String date     = (String) context.get("date");
+        String message     = (String) context.get("message");
+        String firstName     = (String) context.get("firstName");
+
+        firstName = EmojiHandler.decodeJava(firstName);
+
+        // 发送模版消息
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID,PeConstant.ACCESS_KEY_SECRET);
+        String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+        String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
+
+        JSONObject jsobj1 = new JSONObject();
+        JSONObject jsobj2 = new JSONObject();
+        JSONObject jsobj3 = new JSONObject();
+        JSONObject jsobj4 = new JSONObject();
+        JSONObject jsobj5 = new JSONObject();
+        JSONObject jsobj6 = new JSONObject();
+        JSONObject jsobj7 = new JSONObject();
+        JSONObject jsobj8 = new JSONObject();
+
+        jsobj1.put("touser",openId);
+        jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
+        jsobj1.put("url","www.yo-pe.com:3400/WebManager/control/shareProduct?productId="+"");
+
+        jsobj3.put("value", firstName+"给您发了一条消息");
+        jsobj3.put("color", "#173177");
+        jsobj2.put("first", jsobj3);
+
+        jsobj4.put("value", "消息提醒");
+        jsobj4.put("color", "#173177");
+        jsobj2.put("keyword1", jsobj4);
+
+        jsobj5.put("value", message);
+        jsobj5.put("color", "#173177");
+        jsobj2.put("keyword2", jsobj5);
+
+//        jsobj6.put("value", date);
+//        jsobj6.put("color", "#173177");
+//        jsobj2.put("keyword3", jsobj6);
+//        jsobj7.put("value", position);
+//        jsobj7.put("color", "#173177");
+//        jsobj2.put("keyword4", jsobj7);
+
+//        jsobj8.put("value", "届时，我们期待您的参加！");
+//        jsobj8.put("color", "#173177");
+//        jsobj2.put("remark", jsobj8);
+
+        jsobj1.put("data", jsobj2);
+
+
+        WeChatUtil.PostSendMsg(jsobj1, url);
+
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1332,7 +1455,7 @@ public class PersonManagerServices {
 
         if(!UtilValidate.isEmpty(openId)){
             Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                    partyId, "idValue", openId, "partyIdentificationTypeId", "WX_OPEN_ID");
+                    partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
             dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
         }
 

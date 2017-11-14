@@ -1045,7 +1045,7 @@ public class PersonManagerQueryServices {
         }
 
 
-        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyId, "partyIdentificationTypeId", "WX_OPEN_ID").queryList();
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyId, "partyIdentificationTypeId", "WX_UNIO_ID").queryList();
 
 
         if (null != partyIdentificationList && partyIdentificationList.size() > 0) {

@@ -1,5 +1,8 @@
 package main.java.com.banfftech.platformmanager.wechat;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
+import net.sf.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,7 +74,27 @@ public class WeChatUtil {
 
 
 
-
+    public static AccessToken getAccessToken(String appid, String appsecret) {
+        AccessToken accessToken = null;
+        // 获取access_token的接口地址（GET） 限200（次/天）
+        String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+        String requestUrl = access_token_url.replace("APPID", appid).replace("APPSECRET", appsecret);
+        JSONObject jsonObject = JSONObject.fromObject(sendGet(requestUrl));
+        // 如果请求成功�
+        if (null != jsonObject) {
+            try {
+                accessToken = new AccessToken();
+                accessToken.setToken(jsonObject.getString("access_token"));
+                accessToken.setExpiresIn(jsonObject.getInt("expires_in"));
+            } catch (JSONException e) {
+                accessToken = null;
+                // 获取token失败
+                System.out.println("获取 token 失败errcode:" + jsonObject.getInt("errcode") + " errmsg:"
+                        + jsonObject.getString("errmsg"));
+            }
+        }
+        return accessToken;
+    }
 
 
     /**
@@ -154,6 +177,40 @@ public class WeChatUtil {
 
 
 
+    public static String PostSendMsg(JSONObject json, String url) {
+        HttpPost post = new HttpPost(url);
+        post.setHeader("Content-Type", "application/json");
+        post.addHeader("Authorization", "Basic YWRtaW46");
+        String result = "";
+        try {
+            StringEntity s = new StringEntity(json.toString(), "utf-8");
+            s.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(s);
+            // 发送请求����
+            HttpResponse httpResponse = HttpClients.createDefault().execute(post);
+            // 响应输出流���
+            InputStream inStream = httpResponse.getEntity().getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
+            StringBuilder strber = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null)
+                strber.append(line + "\n");
+            inStream.close();
+
+            result = strber.toString();
+            System.out.println(result);
+
+            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                System.out.println("请求服务成功 request success");
+            } else {
+                System.out.println("请求服务端失败 request error");
+            }
+        } catch (Exception e) {
+            System.out.println("请求异常 request Exception");
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
     /**
      * Get We Chat User Info

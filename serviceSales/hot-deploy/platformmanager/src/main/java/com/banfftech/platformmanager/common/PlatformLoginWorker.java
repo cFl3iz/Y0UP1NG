@@ -266,7 +266,7 @@ public class PlatformLoginWorker {
     public static  void createNewWeChatPerson(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
         //创建微信绑定数据
         Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                partyId, "idValue", unioId, "partyIdentificationTypeId", "WX_OPEN_ID","enabled","Y");
+                partyId, "idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID","enabled","Y");
         dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
         //头像数据
         main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"));
@@ -293,7 +293,7 @@ public class PlatformLoginWorker {
 
 
     /**
-     * weChat App 'Web' Login
+     * weChat App 'Web' Login /微信公众平台登录
      * @param dctx
      * @param context
      * @return
@@ -332,6 +332,8 @@ public class PlatformLoginWorker {
         System.out.println("*weChatAppWebLogin:" + userInfoMap);
 
 
+        String openId =  (String) userInfoMap.get("openId");
+
         String unioId =  (String) userInfoMap.get("unionid");
 
         //是否订阅了公众号
@@ -367,6 +369,13 @@ public class PlatformLoginWorker {
                 userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
                 partyId = (String)userLogin.get("partyId");
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin,partyId,delegator,unioId,userInfoMap,userLogin,dispatcher);
+
+                //增加公众平台OpenID绑定,定推特需
+                //创建微信绑定数据
+                Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                        partyId, "idValue", openId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID","enabled","Y");
+                dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+
             }
         }
 
@@ -451,7 +460,7 @@ public class PlatformLoginWorker {
         String openId = (String) jsonMap.get("unionid");
 
 
-        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_OPEN_ID").queryList();
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryList();
 
 
 

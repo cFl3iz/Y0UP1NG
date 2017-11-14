@@ -168,7 +168,7 @@ public class WeChatUtil {
         requestParamSB.append("&code="+code);//用户微信授权代码
         requestParamSB.append("&grant_type=authorization_code");//授予类型
 
-        String responseStr = main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet(PeConstant.WX_ACCESS_PATH,requestParamSB.toString());
+        String responseStr = main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet(PeConstant.WX_ACCESS_PATH, requestParamSB.toString());
 
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
 
@@ -316,7 +316,7 @@ public class WeChatUtil {
 
 
         // Do HTTP Get
-        String responseStr = sendGet(PeConstant.WX_USER_INFO_CGI_BIN_PATH,requestParamSB.toString());
+        String responseStr = main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet(PeConstant.WX_USER_INFO_CGI_BIN_PATH,requestParamSB.toString());
 
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
         System.out.println("==================================================jsonMap= " + jsonMap);
@@ -333,7 +333,7 @@ public class WeChatUtil {
         requestParamUserInfoSB.append("&openid="+context.get("openId"));//SC
 
 
-        String jsonUserInfoMapStr = sendGet(PeConstant.WX_USER_INFO_PATH,requestParamUserInfoSB.toString());
+        String jsonUserInfoMapStr = main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet(PeConstant.WX_USER_INFO_PATH,requestParamUserInfoSB.toString());
 
         JSONObject jsonUserInfoMap = JSONObject.fromObject(jsonUserInfoMapStr);
 

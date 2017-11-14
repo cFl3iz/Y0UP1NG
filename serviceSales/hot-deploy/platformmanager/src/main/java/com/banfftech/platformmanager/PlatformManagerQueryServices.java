@@ -395,11 +395,21 @@ public class PlatformManagerQueryServices {
 
             String fromParty = (String) gv.get("partyIdFrom");
 
+            Map<String, String> user = null;
+
+
 
             String toParty = (String) gv.get("partyIdTo");
             if (bizType != null & bizType.equals("findOne")) {
-
+                user = queryPersonBaseInfo(delegator, fromParty);
             }else{
+                //绝对不拿自己的
+                if(fromParty.equals(partyIdTo)){
+                    user = queryPersonBaseInfo(delegator, toParty);
+                }else{
+                    user = queryPersonBaseInfo(delegator, fromParty);
+                }
+
             if(directList.size()>0 && directList.contains(fromParty+"|"+toParty) || directList.size()>0 && directList.contains(toParty+"|"+fromParty)){
                 continue;
             }else{
@@ -409,9 +419,7 @@ public class PlatformManagerQueryServices {
 
 
 
-            Map<String, String> user = null;
 
-            user = queryPersonBaseInfo(delegator, fromParty);
 
             userMap.put("_id", toParty);
 

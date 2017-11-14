@@ -63,7 +63,6 @@ import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.service.ServiceAuthException;
 import org.apache.ofbiz.service.ServiceUtil;
 
-import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendPost;
 
 
@@ -169,7 +168,7 @@ public class WeChatUtil {
         requestParamSB.append("&code="+code);//用户微信授权代码
         requestParamSB.append("&grant_type=authorization_code");//授予类型
 
-        String responseStr = sendGet(PeConstant.WX_ACCESS_PATH,requestParamSB.toString());
+        String responseStr = main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet(PeConstant.WX_ACCESS_PATH,requestParamSB.toString());
 
         JSONObject jsonMap = JSONObject.fromObject(responseStr);
 

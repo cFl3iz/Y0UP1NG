@@ -121,7 +121,7 @@ public class PlatformManagerServices {
 
         String url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
                 "productId="+productId+"&payToPartyId=" +
-                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
+                ""+payToPartyId+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
         System.out.println("*============================================================URL = " + url2);
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");

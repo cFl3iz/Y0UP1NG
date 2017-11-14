@@ -332,7 +332,7 @@ public class PlatformLoginWorker {
         System.out.println("*weChatAppWebLogin:" + userInfoMap);
 
 
-        String openId =  (String) userInfoMap.get("openId");
+//        String openId =  (String) userInfoMap.get("openId");
 
         String unioId =  (String) userInfoMap.get("unionid");
 
@@ -373,7 +373,7 @@ public class PlatformLoginWorker {
                 //增加公众平台OpenID绑定,定推特需
                 //创建微信绑定数据
                 Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                        partyId, "idValue", openId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID","enabled","Y");
+                        partyId, "idValue", accessMap.get("openId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID","enabled","Y");
                 dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
 
             }

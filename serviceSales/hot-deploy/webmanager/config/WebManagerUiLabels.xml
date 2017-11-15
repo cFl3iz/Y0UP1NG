@@ -233,4 +233,23 @@
         <value xml:lang="zh_CN">您还未设置收货地址,补充便于发货。</value>
     </property>
 
+
+
+    <property key="NoFuckSetting">
+        <value xml:lang="en">NoFuckSetting</value>
+        <value xml:lang="zh">不要再试图得到我地址</value>
+        <value xml:lang="zh_CN">不要再试图得到我地址</value>
+    </property>
+
+    <property key="Setting">
+        <value xml:lang="en">Setting</value>
+        <value xml:lang="zh">完成</value>
+        <value xml:lang="zh_CN">完成</value>
+    </property>
+
+    <property key="SettingSuccess">
+        <value xml:lang="en">Setting Success</value>
+        <value xml:lang="zh">已为您保存设置</value>
+        <value xml:lang="zh_CN">已为您保存设置</value>
+    </property>
 </resource>

@@ -72,7 +72,7 @@
                 <section id="s-showcase">
                     <div class="scroller">
                         <div class="itbox main"> <a class="item"> <img src="
-${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}" alt="" /> </a>
+${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_500,h_500/quality,q_80" alt="" /> </a>
                         </div>
                     </div>
                 </section>
@@ -98,7 +98,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <ul class="table-view" style="margin-top: 10px;">
                     <li class="table-view-cell media"> <a class="">
 
-                        <img class="media-object pull-left" style="width: 15%;height:15%;" src="${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}" />
+                        <img class="media-object pull-left" style="width: 15%;height:15%;" src="${(resourceDetail.headPortrait?default('http://placehold.it/42x42'))!}?x-oss-process=image/resize,w_50,h_50/quality,q_80" />
 
                         <div class="media-body"> ${(resourceDetail.firstName?default('StoreName'))!}
                             <p>${(resourceDetail.partyNote?default('Description'))!}</p>
@@ -123,7 +123,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         <#list morePicture as list>
                             <p class="picture_text">
                             </p>
-                            <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="${(list.drObjectInfo)!}?x-oss-process=image/resize,w_450,h_450/quality,q_80" alt="" /> </a>
+                            <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="${(list.drObjectInfo)!}?x-oss-process=image/resize,w_500,h_500/quality,q_80" alt="" /> </a>
                             </div>
                         </#list>
 

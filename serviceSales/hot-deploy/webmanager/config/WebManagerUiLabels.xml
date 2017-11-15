@@ -183,11 +183,28 @@
     </property>
 
 
+    <property key="CheckAddress">
+        <value xml:lang="en">Check Address</value>
+        <value xml:lang="zh">是否要使用下列地址呢?</value>
+        <value xml:lang="zh_CN">是否要使用下列地址呢?</value>
+    </property>
+
+    <property key="AddressDetail">
+        <value xml:lang="en">AddressDetail</value>
+        <value xml:lang="zh">具体地址</value>
+        <value xml:lang="zh_CN">具体地址</value>
+    </property>
 
     <property key="CreateOrderSuccess">
         <value xml:lang="en">CreateOrderSuccess!.</value>
         <value xml:lang="zh">订单创建成功!</value>
         <value xml:lang="zh_CN">订单创建成功!</value>
+    </property>
+
+    <property key="SetAddress">
+        <value xml:lang="en">Set Address</value>
+        <value xml:lang="zh">未设置默认收货地址,如果您愿意,填写可方便卖家发货。</value>
+        <value xml:lang="zh_CN">未设置默认收货地址,如果您愿意,填写可方便卖家发货。</value>
     </property>
 
 </resource>

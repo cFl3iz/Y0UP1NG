@@ -119,6 +119,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="updatePersonPaymentQrCode">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="updatePersonPaymentQrCode"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <!-- Matching Contacts -->
     <request-map uri="matchingContact">

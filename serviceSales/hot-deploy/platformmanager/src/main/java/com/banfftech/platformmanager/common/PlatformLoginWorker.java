@@ -269,7 +269,7 @@ public class PlatformLoginWorker {
                 partyId, "idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID","enabled","Y");
         dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
         //头像数据
-        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"));
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"),null);
         //将微信名称更新过来
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
         person.set("firstName", weChatUserInfo.get("nickname"));

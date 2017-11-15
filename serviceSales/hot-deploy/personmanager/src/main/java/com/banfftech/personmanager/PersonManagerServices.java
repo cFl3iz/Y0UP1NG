@@ -1090,6 +1090,87 @@ public class PersonManagerServices {
 
 
     /**
+     * update Person PaymentQrCode
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String updatePersonPaymentQrCode(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        //QR CODE
+        String partyContentType =   (String) request.getParameter("partyContentType");
+
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+        try {
+
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+
+            List<FileItem> items = dfu.parseRequest(request);
+
+
+            int itemSize = 0;
+
+            if (null != items) {
+                itemSize = items.size();
+            }
+            if (null != dfu && null != items) {
+
+
+                for (FileItem item : items) {
+
+
+                    InputStream in = item.getInputStream();
+
+                    String fileName = item.getName();
+
+
+                    if (!UtilValidate.isEmpty(fileName)) {
+
+                        long tm = System.currentTimeMillis();
+
+                        String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                "personerp", PeConstant.DEFAULT_RR_CODE_DISK, tm);
+
+                        if (pictureKey != null && !pictureKey.equals("")) {
+
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_RR_CODE_DISK + tm + fileName.substring(fileName.indexOf(".")),partyContentType);
+
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return "success";
+
+    }
+
+
+
+    /**
      * upload Head Portrait
      *
      * @param request
@@ -1170,7 +1251,7 @@ public class PersonManagerServices {
 
                         if (pictureKey != null && !pictureKey.equals("")) {
 
-                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")));
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")),null);
 
                         }
                     }
@@ -1200,8 +1281,12 @@ public class PersonManagerServices {
      * @throws GenericEntityException
      * @author S.Y.L
      */
-    public static String createContentAndDataResource(String partyId, Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher, String pictureKey, String path)
+    public static String createContentAndDataResource(String partyId, Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher, String pictureKey, String path,String partyContentType)
             throws GenericServiceException, GenericEntityException {
+        //没有指定内容类型,默认是在传头像
+        if(partyContentType==null){
+            partyContentType="LGOIMGURL";
+        }
 
         // 1.CREATE DATA RESOURCE
         Map<String, Object> createDataResourceMap = UtilMisc.toMap("userLogin", userLogin, "partyId", "admin",
@@ -1223,7 +1308,7 @@ public class PersonManagerServices {
         String contentId = (String) serviceResultByCreateContentMap.get("contentId");
 
 
-        Map<String, Object> assocContentPartyMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId, "partyId", partyId, "partyContentTypeId", "LGOIMGURL");
+        Map<String, Object> assocContentPartyMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId, "partyId", partyId, "partyContentTypeId", partyContentType);
         dispatcher.runSync("createPartyContent", assocContentPartyMap);
 
         return null;

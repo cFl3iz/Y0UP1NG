@@ -92,6 +92,10 @@ public class PeConstant {
     // Default OSS Head
     public static final String DEFAULT_HEAD_DISK = "datas/images/headPortrait/";
 
+    // 二维码存放地址
+    public static final String DEFAULT_RR_CODE_DISK = "datas/images/qr_code/";
+
+
     /**
      * 微信开放平台用户信息调用地址
      */

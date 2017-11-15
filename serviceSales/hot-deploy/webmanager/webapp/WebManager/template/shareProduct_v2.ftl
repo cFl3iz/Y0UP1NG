@@ -123,7 +123,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         <#list morePicture as list>
                             <p class="picture_text">
                             </p>
-                            <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="${(list.drObjectInfo)!}" alt="" /> </a>
+                            <div class="itbox main"> <a class="item"> <img style="display: block;height: auto;max-width: 100%;" src="${(list.drObjectInfo)!}?x-oss-process=image/resize,w_450,h_450/quality,q_80" alt="" /> </a>
                             </div>
                         </#list>
 

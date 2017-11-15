@@ -393,8 +393,8 @@
                         ans += '</div></div>';
                         $('.speak_box').append(ans);
                         messagesArray.push(messageId);
-                        autoWidth();
-                        for_bottom();
+                       // autoWidth();
+                     //   for_bottom();
                       //  for_bottom();
                     }else{
                        var str = '<div class="question">';
@@ -403,8 +403,8 @@
                         str += '</div></div>';
                         $('.speak_box').append(str);
                         $('.write_box input').val('');
-                        autoWidth();
-                        for_bottom();
+
+
 //                        $('.write_box input').focus();
 
                     //    for_bottom();
@@ -412,7 +412,8 @@
 //                    messagesArray.push(messages[i].messageId);
 
                 }
-
+                autoWidth();
+                for_bottom();
 
 //                alert(messagesArray);
             },

@@ -1061,15 +1061,48 @@ public class PersonManagerQueryServices {
             inputMap.put("openId", "NA");
         }
 
-        List<GenericValue> paymentMethodList = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "MEDIATION_PAY").queryList();
+//        List<GenericValue> paymentMethodList = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "MEDIATION_PAY").queryList();
+//
+//        if(null != paymentMethodList && paymentMethodList.size()>0){
+//            inputMap.put("paymentMethodList",paymentMethodList);
+//        }else{
+//            inputMap.put("paymentMethodList","NA");
+//        }
 
-        if(null != paymentMethodList && paymentMethodList.size()>0){
-            inputMap.put("paymentMethodList",paymentMethodList);
-        }else{
-            inputMap.put("paymentMethodList","NA");
+
+        //Query Qr Code
+
+        List<GenericValue> aliPayQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "ALIQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+        GenericValue aliPayQrCode = null;
+
+        if(null != aliPayQrCodes && aliPayQrCodes.size()>0){
+            aliPayQrCode = aliPayQrCodes.get(0);
+            inputMap.put("aliPayQrCode",aliPayQrCode.getString("objectInfo"));
         }
 
+        List<GenericValue> weChatQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+        GenericValue weChatQrCode = null;
+
+        if(null != weChatQrCodes && weChatQrCodes.size()>0){
+            weChatQrCode = weChatQrCodes.get(0);
+            inputMap.put("aliPayQrCode",weChatQrCode.getString("objectInfo"));
+        }
+
+
+
+
         resultMap.put("userInfo", inputMap);
+
+
+
         return resultMap;
     }
 

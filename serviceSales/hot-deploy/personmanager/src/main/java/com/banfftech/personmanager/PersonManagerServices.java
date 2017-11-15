@@ -639,28 +639,28 @@ public class PersonManagerServices {
         // productId
         String productId = (String) request.getParameter("productId");
 
-        String alipayaccount = (String) request.getParameter("alipayaccount");
-
-        String wechatpayaccount = (String) request.getParameter("wechatpayaccount");
-
-
-        if (!UtilValidate.isEmpty(alipayaccount)) {
-            // Create Default Pay Method To Party
-            GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
-            newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
-            newPayMethod.set("partyId", partyId);
-            newPayMethod.set("paymentMethodTypeId", "MEDIATION_PAY");
-            newPayMethod.set("description", "支付宝账号:"+alipayaccount);
-            newPayMethod.create();
-        }
-        if (!UtilValidate.isEmpty(wechatpayaccount)) {
-            GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
-            newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
-            newPayMethod2.set("partyId", partyId);
-            newPayMethod2.set("paymentMethodTypeId", "MEDIATION_PAY");
-            newPayMethod2.set("description", "微信账号:" + wechatpayaccount);
-            newPayMethod2.create();
-        }
+//        String alipayaccount = (String) request.getParameter("alipayaccount");
+//
+//        String wechatpayaccount = (String) request.getParameter("wechatpayaccount");
+//
+//
+//        if (!UtilValidate.isEmpty(alipayaccount)) {
+//            // Create Default Pay Method To Party
+//            GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
+//            newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+//            newPayMethod.set("partyId", partyId);
+//            newPayMethod.set("paymentMethodTypeId", "MEDIATION_PAY");
+//            newPayMethod.set("description", "支付宝账号:"+alipayaccount);
+//            newPayMethod.create();
+//        }
+//        if (!UtilValidate.isEmpty(wechatpayaccount)) {
+//            GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
+//            newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+//            newPayMethod2.set("partyId", partyId);
+//            newPayMethod2.set("paymentMethodTypeId", "MEDIATION_PAY");
+//            newPayMethod2.set("description", "微信账号:" + wechatpayaccount);
+//            newPayMethod2.create();
+//        }
 
 
 

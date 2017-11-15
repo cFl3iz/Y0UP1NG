@@ -64,26 +64,41 @@
 </#if>
         <#if addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.CheckAddress}</div>
+
             <div class="m-cell">
-                <div class="cell-item">
-                    <div class="cell-left">${uiLabel.AddressScope}</div>
-                    <div class="cell-right cell-arrow">
-                        <input type="text" class="cell-input" readonly id="J_Address" placeholder="${uiLabel.SelectAddress}">
-                    </div>
-                </div>
-            </div>
-            <div class="m-celltitle">${uiLabel.SettingAbout}</div>
-            <div class="m-cell">
-                <label class="cell-item">
-                    <span class="cell-left">${uiLabel.SetDefaultAddress}</span>
-                    <label class="cell-right">
-                        <input type="checkbox" class="m-switch" checked/>
+                <#list addressInfo as list>
+                    <label class="cell-item">
+                        <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
+                        <label class="cell-right">
+                            <input type="radio" value="man" name="radio" checked/>
+                            <i class="cell-radio-icon"></i>
+                        </label>
                     </label>
-                </label>
+                </#list>
+
+
             </div>
 
+            <#--<div class="m-cell">-->
+                <#--<div class="cell-item">-->
+                    <#--<div class="cell-left">${uiLabel.AddressScope}</div>-->
+                    <#--<div class="cell-right cell-arrow">-->
+                        <#--<input type="text" class="cell-input" readonly id="J_Address" placeholder="${uiLabel.SelectAddress}">-->
+                    <#--</div>-->
+                <#--</div>-->
+            <#--</div>-->
+            <#--<div class="m-celltitle">${uiLabel.SettingAbout}</div>-->
+            <#--<div class="m-cell">-->
+                <#--<label class="cell-item">-->
+                    <#--<span class="cell-left">${uiLabel.SetDefaultAddress}</span>-->
+                    <#--<label class="cell-right">-->
+                        <#--<input type="checkbox" class="m-switch" checked/>-->
+                    <#--</label>-->
+                <#--</label>-->
+            <#--</div>-->
+
             <div class="m-button">
-                <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>
+                <input type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
             </div>
 
         </#if>

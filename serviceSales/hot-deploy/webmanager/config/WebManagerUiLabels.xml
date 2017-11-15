@@ -185,8 +185,8 @@
 
     <property key="CheckAddress">
         <value xml:lang="en">Check Address</value>
-        <value xml:lang="zh">是否要使用下列地址呢?</value>
-        <value xml:lang="zh_CN">是否要使用下列地址呢?</value>
+        <value xml:lang="zh">请确认您的收货地址</value>
+        <value xml:lang="zh_CN">请确认您的收货地址</value>
     </property>
 
     <property key="AddressDetail">
@@ -259,6 +259,12 @@
         <value xml:lang="en">Setting</value>
         <value xml:lang="zh">完成</value>
         <value xml:lang="zh_CN">完成</value>
+    </property>
+
+    <property key="Ok">
+        <value xml:lang="en">Ok</value>
+        <value xml:lang="zh">确定</value>
+        <value xml:lang="zh_CN">确定</value>
     </property>
 
     <property key="SettingSuccess">

@@ -48,7 +48,9 @@
         </response>
     </request-map>
     <!-- ViewOrder -->
-    <request-map uri="viewWebOrderDetail"><security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/></request-map>
+    <request-map uri="viewWebOrderDetail">
+        <security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/>
+    </request-map>
     <!-- QueryMessage -->
     <request-map uri="queryMessage">
         <security https="false" auth="false"/>

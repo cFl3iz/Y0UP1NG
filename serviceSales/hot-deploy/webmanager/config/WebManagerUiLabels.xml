@@ -209,14 +209,14 @@
 
     <property key="CreateOrderSuccess">
         <value xml:lang="en">CreateOrderSuccess!.</value>
-        <value xml:lang="zh">订单创建成功!</value>
-        <value xml:lang="zh_CN">订单创建成功!</value>
+        <value xml:lang="zh">订单已创建</value>
+        <value xml:lang="zh_CN">订单已创建</value>
     </property>
 
     <property key="SetAddress">
         <value xml:lang="en">Set Address</value>
-        <value xml:lang="zh">未设置默认收货地址,如果您愿意,填写可方便卖家发货。</value>
-        <value xml:lang="zh_CN">未设置默认收货地址,如果您愿意,填写可方便卖家发货。</value>
+        <value xml:lang="zh">您还未设置收货地址,补充便于发货。</value>
+        <value xml:lang="zh_CN">您还未设置收货地址,补充便于发货。</value>
     </property>
 
 </resource>

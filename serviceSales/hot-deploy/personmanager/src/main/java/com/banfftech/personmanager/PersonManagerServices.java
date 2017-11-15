@@ -145,7 +145,7 @@ public class PersonManagerServices {
 //        GenericValue partyGeoPoint = delegator.makeValue("PartyGeoPoint",
 //                UtilMisc.toMap("partyId", cloudCardStroreId, "geoPointId", geoPointId, "fromDate", UtilDateTime.nowTimestamp()));
 //        partyGeoPoint.create();
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId));
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
         String firstName = (String) person.get("firstName");
 
         // 收货地址

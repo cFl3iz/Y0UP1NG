@@ -332,6 +332,8 @@
 <script type="text/javascript">
     var payToPartyHead = $("#payToPartyHead").val();
     var payFromPartyHead = $("#payFromPartyHead").val();
+    payToPartyHead   = payToPartyHead   + "?x-oss-process=image/resize,w_50,h_50/quality,q_60";
+    payFromPartyHead = payFromPartyHead + "?x-oss-process=image/resize,w_50,h_50/quality,q_60";
     function to_write() {
         $('.wenwen_btn img').attr('src', 'http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/yy_btn.png');
         $('.wenwen_btn').attr('onclick', 'to_say()');
@@ -430,6 +432,7 @@
      */
     function up_say() {
         $('.write_list').remove();
+
         var text = $('.write_box input').val(),
                 str = '<div class="question">';
         str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';

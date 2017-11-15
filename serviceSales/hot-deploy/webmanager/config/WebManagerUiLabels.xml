@@ -195,6 +195,18 @@
         <value xml:lang="zh_CN">具体地址</value>
     </property>
 
+    <property key="AddressScope">
+        <value xml:lang="en">Scope</value>
+        <value xml:lang="zh">所在地区</value>
+        <value xml:lang="zh_CN">所在地区</value>
+    </property>
+
+    <property key="SelectAddress">
+        <value xml:lang="en">Select Address</value>
+        <value xml:lang="zh">请选择收货地址</value>
+        <value xml:lang="zh_CN">请选择收货地址</value>
+    </property>
+
     <property key="CreateOrderSuccess">
         <value xml:lang="en">CreateOrderSuccess!.</value>
         <value xml:lang="zh">订单创建成功!</value>

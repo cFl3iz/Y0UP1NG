@@ -1,4 +1,3 @@
-<section class="g-flexview">
 
     <section class="g-flexview">
 
@@ -16,9 +15,9 @@
             <div class="m-celltitle">${uiLabel.SetAddress}</div>
             <div class="m-cell">
                 <div class="cell-item">
-                    <div class="cell-left">所在地区：</div>
+                    <div class="cell-left">${uiLabel.AddressScope}</div>
                     <div class="cell-right cell-arrow">
-                        <input type="text" class="cell-input" readonly id="J_Address" placeholder="请选择收货地址">
+                        <input type="text" class="cell-input" readonly id="J_Address" placeholder="${uiLabel.SelectAddress}">
                     </div>
                 </div>
             </div>
@@ -35,9 +34,9 @@
             <div class="m-celltitle">${uiLabel.CheckAddress}</div>
             <div class="m-cell">
                 <div class="cell-item">
-                    <div class="cell-left">所在地区：</div>
+                    <div class="cell-left">${uiLabel.AddressScope}</div>
                     <div class="cell-right cell-arrow">
-                        <input type="text" class="cell-input" readonly id="J_Address" placeholder="请选择收货地址">
+                        <input type="text" class="cell-input" readonly id="J_Address" placeholder="${uiLabel.SelectAddress}">
                     </div>
                 </div>
             </div>
@@ -53,9 +52,6 @@
                 <#--</div>-->
             <#--</div>-->
 
-        </section>
-
-    </section>
     <#--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  <script src="../js/ydui.js"></script>-->
     <script src="http://static.ydcss.com/uploads/ydui/ydui.citys.js"></script>
 

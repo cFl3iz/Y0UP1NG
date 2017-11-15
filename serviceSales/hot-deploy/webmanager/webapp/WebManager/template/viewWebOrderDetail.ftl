@@ -9,7 +9,7 @@
         <section class="g-scrollview">
 
             <aside class="demo-tip">
-                <p>${uiLabel.CreateOrderSuccess}</p>
+                <p style="font-size:25px;">${uiLabel.CreateOrderSuccess}</p>
             </aside>
             <#if !addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.SetAddress}</div>

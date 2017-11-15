@@ -29,6 +29,16 @@
             </div>
         </div>
     </div>
+                <div class="m-celltitle">${uiLabel.SettingAbout}</div>
+                <div class="m-cell">
+                    <label class="cell-item">
+                        <span class="cell-left">${uiLabel.SetDefaultAddress}</span>
+                        <label class="cell-right">
+                            <input type="checkbox" class="m-switch-old" checked/>
+                            <span class="m-switch"></span>
+                        </label>
+                    </label>
+                </div>
 </#if>
         <#if addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.CheckAddress}</div>
@@ -39,6 +49,16 @@
                         <input type="text" class="cell-input" readonly id="J_Address" placeholder="${uiLabel.SelectAddress}">
                     </div>
                 </div>
+            </div>
+            <div class="m-celltitle">${uiLabel.SettingAbout}</div>
+            <div class="m-cell">
+                <label class="cell-item">
+                    <span class="cell-left">${uiLabel.SetDefaultAddress}</span>
+                    <label class="cell-right">
+                        <input type="checkbox" class="m-switch-old" checked/>
+                        <span class="m-switch"></span>
+                    </label>
+                </label>
             </div>
         </#if>
 

@@ -207,6 +207,20 @@
         <value xml:lang="zh_CN">请选择收货地址</value>
     </property>
 
+    <property key="SetDefaultAddress">
+        <value xml:lang="en">SetDefaultAddress</value>
+        <value xml:lang="zh">设为默认地址</value>
+        <value xml:lang="zh_CN">设为默认地址</value>
+    </property>
+
+    <property key="SettingAbout">
+        <value xml:lang="en">Setting About</value>
+        <value xml:lang="zh">偏好设置</value>
+        <value xml:lang="zh_CN">偏好设置</value>
+    </property>
+
+
+
     <property key="CreateOrderSuccess">
         <value xml:lang="en">CreateOrderSuccess!.</value>
         <value xml:lang="zh">订单已创建</value>

@@ -155,6 +155,26 @@
     </service>
 
 
+
+    <!-- createPartyPostalAddress -->
+    <service name="createPersonPartyPostalAddress" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonPartyPostalAddress" auth="false">
+        <description>createPersonPartyPostalAddress</description>
+
+        <attribute name="tarjeta" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="address1" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="address2" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
     <!-- markOrOutMarkProduct -->
     <service name="markOrOutMarkProduct" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

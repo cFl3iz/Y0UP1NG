@@ -97,6 +97,82 @@ public class PersonManagerServices {
 
 
     /**
+     * createPerson PartyPostalAddress
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createPersonPartyPostalAddress(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String address1 = (String) context.get("address1");
+
+        String address2 = (String) context.get("address2");
+
+        String tarjeta = (String) context.get("tarjeta");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        resultMap.put("tarjeta",tarjeta);
+
+
+        //Create GEO
+//        String geoDataSourceId = "GEOPT_";
+//        Map<String, Object> createGeoPointOutMap = dispatcher.runSync("createGeoPoint", UtilMisc.toMap("userLogin", userLogin, "latitude", latitude,
+//                "longitude", longitude, "information", address1, "dataSourceId", geoDataSourceId));
+//        if (!ServiceUtil.isSuccess(createGeoPointOutMap)) {
+//            return createGeoPointOutMap;
+//        }
+//
+//        String geoPointId = (String) createGeoPointOutMap.get("geoPointId");
+//        GenericValue partyGeoPoint = delegator.makeValue("PartyGeoPoint",
+//                UtilMisc.toMap("partyId", cloudCardStroreId, "geoPointId", geoPointId, "fromDate", UtilDateTime.nowTimestamp()));
+//        partyGeoPoint.create();
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId));
+        String firstName = (String) person.get("firstName");
+
+        // 收货地址
+        String contactMechPurposeTypeId = "GENERAL_LOCATION";
+        Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,  "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY,  "address1", address1, "address2", address2, "postalCode",PeConstant.DEFAULT_POST_CODE,
+                        "contactMechPurposeTypeId", contactMechPurposeTypeId));
+        if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+            return createPartyPostalAddressOutMap;
+        }
+
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * markOrOutMarkProduct
      * @param dctx
      * @param context

@@ -23,14 +23,20 @@
                     </div>
                 </div>
             </div>
+            <form id="createPersonPartyPostalAddressForm" action="createPersonPartyPostalAddress">
+                <input name="tarjeta" id="tarjeta" type="hidden"/>
+                <input name="address1" id="address1" type="hidden"/>
+
+
     <div class="m-celltitle">${uiLabel.AddressDetail}</div>
     <div class="m-cell">
         <div class="cell-item">
             <div class="cell-right">
-                <textarea class="cell-textarea" placeholder="${uiLabel.AddressDetailDemo}"></textarea>
+                <textarea name="address2" class="cell-textarea" placeholder="${uiLabel.AddressDetailDemo}"></textarea>
             </div>
         </div>
     </div>
+            </form>
         </div>
                 <div class="m-celltitle">${uiLabel.SettingAbout}</div>
                 <div class="m-cell" id="SetDefaultAddress">
@@ -51,6 +57,10 @@
                         </label>
                     </label>
                 </div>
+
+            <div class="m-button">
+                <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>
+            </div>
 </#if>
         <#if addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.CheckAddress}</div>
@@ -72,6 +82,9 @@
                 </label>
             </div>
 
+            <div class="m-button">
+                <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>
+            </div>
 
         </#if>
 
@@ -84,18 +97,7 @@
                     <#--</div>-->
                 <#--</div>-->
             <#--</div>-->
-            <div class="m-button">
 
-                <#--<input type="button" class="btn-block btn-primary" id="J_Confirm" value="Confirm"/>-->
-                <#--<input type="button" class="btn-block btn-primary" id="J_ConfirmCustom" value="Confirm->Custom"/>-->
-                <#--<input type="button" class="btn-block btn-hollow" id="J_Alert" value="Alert"/>-->
-                <#--<input type="button" class="btn-block btn-danger" id="J_ToastS" value="Toast->Success"/>-->
-                <#--<input type="button" class="btn-block btn-danger" id="J_ToastE" value="Toast->Error"/>-->
-                <#--<input type="button" class="btn-block btn-danger" id="J_ToastN" value="Toast->None"/>-->
-                <#--<input type="button" class="btn-block btn-hollow" id="J_Loading" value="Loading"/>-->
-                <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>
-
-            </div>
     <#--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  <script src="../js/ydui.js"></script>-->
     <script src="http://static.ydcss.com/uploads/ydui/ydui.citys.js"></script>
 
@@ -135,6 +137,8 @@
             });
 
             $target.on('done.ydui.cityselect', function (ret) {
+//                alert(ret.provance + ' ' + ret.city + ' ' + ret.area);
+                $("#address1").val(ret.provance + ' ' + ret.city + ' ' + ret.area);
                 $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
             });
         }();
@@ -169,7 +173,8 @@
                     // 顶部提示框
                     $('#J_Notify').on('click', function () {
                         dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
-                            console.log('我走咯！');
+                            console.log('do ajax');
+                            $("#createPersonPartyPostalAddressForm").submit();
                         });
                     });
                 }(window, jQuery);

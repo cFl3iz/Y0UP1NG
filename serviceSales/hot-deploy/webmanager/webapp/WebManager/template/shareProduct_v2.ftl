@@ -35,7 +35,7 @@
                   //   alert("code="+data.code);
                      if(data.code === "200"){
                          var orderId = data.orderId;
-                         location.href = "viewWebOrderDetail?orderId="+orderId;
+                         location.href = "viewWebOrderDetail?orderId="+orderId+"&tarjeta="+tarjeta;
                      }
                      if(data.code === "500"){
                         alert("ERROR:500");

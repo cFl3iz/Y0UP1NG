@@ -95,7 +95,10 @@ public class PeConstant {
     // 二维码存放地址
     public static final String DEFAULT_RR_CODE_DISK = "datas/images/qr_code/";
 
-
+    // Default GEO Country
+    public static final String DEFAULT_GEO_COUNTRY = "CHN";
+    public static final String DEFAULT_CITY_GEO_COUNTRY = "CN-88";
+    public static final String DEFAULT_POST_CODE = "200120";
     /**
      * 微信开放平台用户信息调用地址
      */

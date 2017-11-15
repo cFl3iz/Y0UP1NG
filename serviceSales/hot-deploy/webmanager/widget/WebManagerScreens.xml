@@ -130,6 +130,7 @@
             <actions>
                 <set field="orderId" value="${parameters.orderId}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <set field="addressInfo" value="${parameters.addressInfo}"/>
 
             </actions>
             <widgets>

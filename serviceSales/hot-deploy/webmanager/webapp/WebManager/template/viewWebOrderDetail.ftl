@@ -12,7 +12,7 @@
             <aside class="demo-tip">
                 <p>${uiLabel.CreateOrderSuccess}</p>
             </aside>
-<#if !resourceDetail?has_content>
+            <#if !addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.SetAddress}</div>
             <div class="m-cell">
                 <div class="cell-item">
@@ -31,7 +31,7 @@
         </div>
     </div>
 </#if>
-        <#if CheckAddress?has_content>
+        <#if addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.CheckAddress}</div>
             <div class="m-cell">
                 <div class="cell-item">
@@ -56,9 +56,9 @@
         </section>
 
     </section>
-    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <#--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  <script src="../js/ydui.js"></script>-->
     <script src="http://static.ydcss.com/uploads/ydui/ydui.citys.js"></script>
-    <script src="../js/ydui.js"></script>
+
     <script>
         /**
          * 默认调用

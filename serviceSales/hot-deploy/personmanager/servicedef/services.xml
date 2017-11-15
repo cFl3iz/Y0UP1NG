@@ -178,6 +178,8 @@
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryPostalAddress" auth="false">
         <description>queryPostalAddress</description>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true" />
         <attribute name="postalAddress" type="List" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -48,6 +48,64 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * queryPostalAddress
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryPostalAddress(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+//        Map<String, Object> partyPostalAddressMap = dispatcher.runSync("getPartyPostalAddress", UtilMisc.toMap("userLogin", userLogin, "partyId", partyId));
+//        if(UtilValidate.isNotEmpty(partyPostalAddressMap)){
+//            String contactMechId = (String) partyPostalAddressMap.get("contactMechId");
+//            GenericValue postalAddress = delegator.findOne("PostalAddress", UtilMisc.toMap("contactMechId", contactMechId),false);
+//            if(UtilValidate.isNotEmpty(postalAddress)){
+//                postalAddress.put("address1", storeAddress);
+//                postalAddress.store();
+//            }
+//        }
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("contactMechId");
+        fieldSet.add("partyId");
+        fieldSet.add("address1");
+        fieldSet.add("address2");
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+
+        //Query My Resource
+        List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
+                findConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
+
+        resultMap.put("postalAddress",queryAddressList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+    /**
      * queryProductRole
      * @param dctx
      * @param context

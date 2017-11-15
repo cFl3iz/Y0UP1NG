@@ -131,7 +131,10 @@
                 <set field="orderId" value="${parameters.orderId}"/>
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
-                <set field="addressInfo" value="${parameters.addressInfo}"/>
+                <service service-name="queryPostalAddress" result-map="resultMap">
+                <field-map field-name="tarjeta"/>
+                </service>
+                <set field="addressInfo" value="${resultMap.postalAddress}"/>
 
             </actions>
             <widgets>

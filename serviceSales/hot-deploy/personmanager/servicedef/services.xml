@@ -173,6 +173,17 @@
                    optional="true" />
     </service>
 
+    <!-- queryPostalAddress -->
+    <service name="queryPostalAddress" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryPostalAddress" auth="false">
+        <description>queryPostalAddress</description>
+        <attribute name="postalAddress" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
 
 
     <!-- markOrOutMarkProduct -->

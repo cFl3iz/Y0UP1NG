@@ -1093,7 +1093,7 @@ public class PersonManagerQueryServices {
 
         if(null != weChatQrCodes && weChatQrCodes.size()>0){
             weChatQrCode = weChatQrCodes.get(0);
-            inputMap.put("aliPayQrCode",weChatQrCode.getString("objectInfo"));
+            inputMap.put("weChatQrCode",weChatQrCode.getString("objectInfo"));
         }
 
 

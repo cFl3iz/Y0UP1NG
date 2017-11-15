@@ -9,7 +9,7 @@
         <section class="g-scrollview">
 
             <aside class="demo-tip">
-                <p style="font-size:25px;">${uiLabel.CreateOrderSuccess}</p>
+                <p style="font-size:25px;color:#4CD864;">${uiLabel.CreateOrderSuccess}</p>
             </aside>
             <#if !addressInfo?has_content>
             <div class="m-celltitle">${uiLabel.SetAddress}</div>
@@ -25,7 +25,7 @@
     <div class="m-cell">
         <div class="cell-item">
             <div class="cell-right">
-                <textarea class="cell-textarea" placeholder="例:上浦路69弄29号101-501 沈府棋牌"></textarea>
+                <textarea class="cell-textarea" placeholder="${uiLabel.AddressDetailDemo}"></textarea>
             </div>
         </div>
     </div>
@@ -106,23 +106,23 @@
         /**
          * 默认调用
          */
-//        !function () {
-//
-//
-//
-//            var $target = $('#J_Address');
-//
-//            $target.citySelect();
-//
-//            $target.on('click', function (event) {
-//                event.stopPropagation();
-//                $target.citySelect('open');
-//            });
-//
-//            $target.on('done.ydui.cityselect', function (ret) {
-//                $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
-//            });
-//        }();
+        !function () {
+
+
+
+            var $target = $('#J_Address');
+
+            $target.citySelect();
+
+            $target.on('click', function (event) {
+                event.stopPropagation();
+                $target.citySelect('open');
+            });
+
+            $target.on('done.ydui.cityselect', function (ret) {
+                $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+            });
+        }();
 //        /**
 //         * 设置默认值
 //         */

@@ -241,6 +241,14 @@
         <value xml:lang="zh_CN">不要再试图得到我地址</value>
     </property>
 
+
+    <property key="AddressDetailDemo">
+        <value xml:lang="en">Tips:Shanghai PuDong 15N-301</value>
+        <value xml:lang="zh">如:上浦路69弄29号101-501 沈府棋牌</value>
+        <value xml:lang="zh_CN">如:上浦路69弄29号101-501 沈府棋牌</value>
+    </property>
+
+
     <property key="Setting">
         <value xml:lang="en">Setting</value>
         <value xml:lang="zh">完成</value>

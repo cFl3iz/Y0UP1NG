@@ -24,7 +24,7 @@
                 </div>
             </div>
             <form id="createPersonPartyPostalAddressForm" action="createPersonPartyPostalAddress">
-                <input name="tarjeta" id="tarjeta" type="hidden"/>
+                <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
                 <input name="address1" id="address1" type="hidden"/>
 
 

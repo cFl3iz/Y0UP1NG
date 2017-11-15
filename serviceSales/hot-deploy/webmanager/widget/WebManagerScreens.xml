@@ -129,6 +129,7 @@
         <section>
             <actions>
                 <set field="orderId" value="${parameters.orderId}"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
                 <set field="addressInfo" value="${parameters.addressInfo}"/>
 

@@ -9,9 +9,11 @@
         <section class="g-scrollview">
 
             <aside class="demo-tip">
-                <p style="font-size:25px;color:#4CD864;">${uiLabel.CreateOrderSuccess}</p>
+                <p style="font-size:25px;">${uiLabel.CreateOrderSuccess}</p>
             </aside>
-            <#if !addressInfo?has_content>
+
+        <#if !addressInfo?has_content>
+        <div id="addressSettingBox">
             <div class="m-celltitle">${uiLabel.SetAddress}</div>
             <div class="m-cell">
                 <div class="cell-item">
@@ -29,8 +31,9 @@
             </div>
         </div>
     </div>
+        </div>
                 <div class="m-celltitle">${uiLabel.SettingAbout}</div>
-                <div class="m-cell">
+                <div class="m-cell" id="SetDefaultAddress">
                     <label class="cell-item">
                         <span class="cell-left">${uiLabel.SetDefaultAddress}</span>
                         <label class="cell-right">
@@ -43,7 +46,7 @@
                     <label class="cell-item">
                         <span class="cell-left">${uiLabel.NoFuckSetting}</span>
                         <label class="cell-right">
-                            <input type="checkbox" class="m-switch"/>
+                            <input type="checkbox" id="noSetting" class="m-switch"/>
 
                         </label>
                     </label>
@@ -98,9 +101,21 @@
 
     <script>
         $(
-                function(win, $){
+                function(){
 
+                    $("#noSetting").click(
+                            function(){
+                                var flag = this.checked;
+                                if(flag){
+                                    $("#addressSettingBox").hide();
+                                    $("#SetDefaultAddress").hide();
 
+                                }else{
+                                    $("#addressSettingBox").show();
+                                    $("#SetDefaultAddress").show();
+                                }
+                            }
+                    );
                 }
         );
         /**
@@ -153,7 +168,7 @@
 
                     // 顶部提示框
                     $('#J_Notify').on('click', function () {
-                        dialog.notify('${uiLabel.SettingSuccess}', 5000, function(){
+                        dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
                             console.log('我走咯！');
                         });
                     });

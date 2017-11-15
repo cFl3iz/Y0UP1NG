@@ -223,8 +223,8 @@
 
     <property key="CreateOrderSuccess">
         <value xml:lang="en">Create Order Success!.</value>
-        <value xml:lang="zh">已为您生成订单</value>
-        <value xml:lang="zh_CN">已为您生成订单</value>
+        <value xml:lang="zh">订单已创建</value>
+        <value xml:lang="zh_CN">订单已创建</value>
     </property>
 
     <property key="SetAddress">
@@ -257,7 +257,7 @@
 
     <property key="SettingSuccess">
         <value xml:lang="en">Setting Success</value>
-        <value xml:lang="zh">已为您保存设置</value>
-        <value xml:lang="zh_CN">已为您保存设置</value>
+        <value xml:lang="zh">保存成功</value>
+        <value xml:lang="zh_CN">保存成功</value>
     </property>
 </resource>

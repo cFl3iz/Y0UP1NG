@@ -23,7 +23,8 @@ under the License.
       <input type="hidden" name="orderId" value="${orderId!}" />
       <input type="hidden" name="contactMechPurposeTypeId" value="${contactMechPurpose.contactMechPurposeTypeId!}" />
       <input type="hidden" name="oldContactMechId" value="${contactMech.contactMechId!}" />
-      <select name="contactMechId">
+      ${contactMech.contactMechTypeId}
+        <select name="contactMechId">
         <#if contactMech.contactMechTypeId == "POSTAL_ADDRESS">
           <option value="${contactMechAddress.contactMechId}">${(contactMechAddress.address1)?default("")} - ${contactMechAddress.city?default("")}</option>
           <option value="${contactMechAddress.contactMechId}"></option>

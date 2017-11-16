@@ -341,7 +341,7 @@
     // 用经纬度设置地图中心点
     function theLocation(name,longitude,latitude){
         // 百度地图API功能
-        var map = new BMap.Map(name);
+        var map = new BMap.Map("allmap");
         map.centerAndZoom(new BMap.Point(116.331398,39.897445),11);
         map.enableScrollWheelZoom(true);
 
@@ -458,7 +458,7 @@
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<div class="answer_text"><div style="width:100px;height:80px;" id="' + latitude + '"></div><i></i>';
+                            ans += '<div class="answer_text"><div style="width:100px;height:80px;" id="' + "allmap" + '"></div><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
@@ -493,7 +493,7 @@
                             var longitude = messages[i].longitude;
                             var str = '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                            str += '<div class="question_text clear"><div style="width:100px;height:80px;" id="' + latitude + '"></div><i></i>';
+                            str += '<div class="question_text clear"><div style="width:100px;height:80px;" id="' + "allmap" + '"></div><i></i>';
                             str += '</div></div>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');

@@ -1516,8 +1516,17 @@ public class PersonManagerServices {
         }
 
 
+        //最关键的意向客户的角色
+        Map<String, Object> addPLACING_CUSTOMERInMap = new HashMap<String, Object>();
+        addPLACING_CUSTOMERInMap.put("userLogin", userLogin);
+        addPLACING_CUSTOMERInMap.put("orderId", orderId);
+        addPLACING_CUSTOMERInMap.put("partyId", partyId);
+        addPLACING_CUSTOMERInMap.put("roleTypeId", "PLACING_CUSTOMER");
+        Map<String, Object> addPLACING_CUSTOMEROutMap = dispatcher.runSync("addOrderRole", addPLACING_CUSTOMERInMap);
 
-
+        if (ServiceUtil.isError(addPLACING_CUSTOMEROutMap)) {
+            return addPLACING_CUSTOMEROutMap;
+        }
 
 
 

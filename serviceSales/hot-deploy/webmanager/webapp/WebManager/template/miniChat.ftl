@@ -9,7 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen"/>
     <title>${uiLabel.to}${(payToPartyFirstName)!}${uiLabel.chat}</title>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NYGTLd8V2Lz3cGsolRnZzXaHmuXW2XZ3"></script>
     <style type="text/css">
+        #allmap{height:80px;width:100px;}
+        #r-result{width:100%; font-size:14px;}
         body {
             background: url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/chatBG.jpeg) no-repeat;
             background-size: 100%;
@@ -330,6 +333,50 @@
 <input type="hidden" id="payFromPartyHead" value="${(personInfo.headPortrait)!}"/>
 
 <script type="text/javascript">
+
+
+
+
+
+    // 用经纬度设置地图中心点
+    function theLocation(name,longitude,latitude){
+        // 百度地图API功能
+        var map = new BMap.Map(name);
+        map.centerAndZoom(new BMap.Point(116.331398,39.897445),11);
+        map.enableScrollWheelZoom(true);
+
+        if(longitude != "" && latitude != ""){
+            map.clearOverlays();
+            var new_point = new BMap.Point(longitude,latitude);
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     var payToPartyHead = $("#payToPartyHead").val();
     var payFromPartyHead = $("#payFromPartyHead").val();
     payToPartyHead   = payToPartyHead   + "?x-oss-process=image/resize,w_50,h_50/quality,q_60";
@@ -398,14 +445,24 @@
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
-                        }else{
+                        }
+                        if(null != messageLogTypeId && messageLogTypeId === "TEXT"){
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                             ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
                         }
-
+                        if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
+                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+                            ans += '<div class="answer_text"><div id="' + text + '"></div><i></i>';
+                            ans += '</div></div>';
+                            $('.speak_box').append(ans);
+                            messagesArray.push(messageId);
+                            var latitude = messages[i].latitude;
+                            var longitude = messages[i].longitude;
+                                    theLocation(text,longitude,longitude);
+                        }
                        // autoWidth();
                      //   for_bottom();
                       //  for_bottom();
@@ -418,7 +475,8 @@
                             str += '</div></div>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
-                        }else{
+                        }
+                        if(null != messageLogTypeId && messageLogTypeId === "TEXT"){
                             var str = '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
                             str += '<div class="question_text clear"><p>' + text + '</p><i></i>';
@@ -426,7 +484,17 @@
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
                         }
-
+                        if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
+                            var str = '<div class="question">';
+                            str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
+                            str += '<div class="question_text clear"><div id="' + text + '"></div><i></i>';
+                            str += '</div></div>';
+                            $('.speak_box').append(str);
+                            $('.write_box input').val('');
+                            var latitude = messages[i].latitude;
+                            var longitude = messages[i].longitude;
+                            theLocation(text,longitude,longitude);
+                        }
 
 
 //                        $('.write_box input').focus();

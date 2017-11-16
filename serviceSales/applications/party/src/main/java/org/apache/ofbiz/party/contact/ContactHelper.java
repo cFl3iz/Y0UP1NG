@@ -19,6 +19,7 @@
 
 package org.apache.ofbiz.party.contact;
 
+import java.lang.System;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +52,7 @@ public class ContactHelper {
     }
 
     public static Collection<GenericValue> getContactMech(GenericValue party, String contactMechPurposeTypeId, String contactMechTypeId, boolean includeOld) {
+        System.out.println("=getContactMech======================================= party= " + party);
         if (party == null) return null;
         try {
             List<GenericValue> partyContactMechList;

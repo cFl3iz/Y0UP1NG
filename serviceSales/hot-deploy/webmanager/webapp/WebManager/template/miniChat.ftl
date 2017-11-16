@@ -394,7 +394,7 @@
                     if (bool) {
                         if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<div class="answer_text"><img style='' src=' + text + '></img><i></i>';
+                            ans += '<div class="answer_text"><img  src=' + text + '></img><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
@@ -414,7 +414,7 @@
                         if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
                             var str = '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                            str += '<div class="question_text clear"><img style='' src=' + text + '></img><i></i>';
+                            str += '<div class="question_text clear"><img  src=' + text + '></img><i></i>';
                             str += '</div></div>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');

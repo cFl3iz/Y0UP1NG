@@ -321,9 +321,11 @@ public class PersonManagerServices {
 
 
 
+        }else{
+            pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
         }
 
-        pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
+
 //        if(UtilValidate.isEmpty(partyIdFrom)){
 //            partyIdFrom = (String) userLogin.get("partyId");
 //        }

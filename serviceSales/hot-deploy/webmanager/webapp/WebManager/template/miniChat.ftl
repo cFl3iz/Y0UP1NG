@@ -375,6 +375,7 @@
             success: function (data) {
 
                 var messages = eval(data.messages);
+
                 for (var i = 0; i < messages.length; i++) {
 //                    alert(messages[i].messageId+" ");
                     var partyIdTo = messages[i].user.toPartyId;

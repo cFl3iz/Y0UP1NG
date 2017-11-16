@@ -136,23 +136,23 @@
 
 
     <!-- Push Message -->
-    <service name="pushMessage" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerServices"
-             invoke="pushMessage" auth="false">
-    <description>Push Message</description>
-        <attribute name="text" type="String" mode="IN"
-               optional="true" />
-        <attribute name="tarjeta" type="String" mode="IN"
-                   optional="true" />
-        <attribute name="objectId" type="String" mode="IN"
-                   optional="true" />
-        <attribute name="partyIdTo" type="String" mode="IN"
-                   optional="true" />
-        <attribute name="partyIdFrom" type="String" mode="IN"
-                   optional="true" />
-        <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
-    </service>
+    <!--<service name="pushMessage" engine="java"-->
+             <!--location="main.java.com.banfftech.personmanager.PersonManagerServices"-->
+             <!--invoke="pushMessage" auth="false">-->
+    <!--<description>Push Message</description>-->
+        <!--<attribute name="text" type="String" mode="IN"-->
+               <!--optional="true" />-->
+        <!--<attribute name="tarjeta" type="String" mode="IN"-->
+                   <!--optional="true" />-->
+        <!--<attribute name="objectId" type="String" mode="IN"-->
+                   <!--optional="true" />-->
+        <!--<attribute name="partyIdTo" type="String" mode="IN"-->
+                   <!--optional="true" />-->
+        <!--<attribute name="partyIdFrom" type="String" mode="IN"-->
+                   <!--optional="true" />-->
+        <!--<attribute name="resultMap" type="java.util.Map" mode="OUT"-->
+                   <!--optional="true" />-->
+    <!--</service>-->
 
 
 

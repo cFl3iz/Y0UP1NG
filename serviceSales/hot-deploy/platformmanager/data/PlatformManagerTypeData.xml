@@ -102,9 +102,9 @@
 
 
 
-    <MessageLogType MessageLogTypeId="TEXT" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="文字" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+    <MessageLogType messageLogTypeId="TEXT" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="文字" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
 
-    <MessageLogType MessageLogTypeId="IMAGE" createdStamp="2017-11-16 16:57:59.0" createdTxStamp="2017-11-16 16:57:59.0" description="图片" lastUpdatedStamp="2017-11-16 16:57:59.0" lastUpdatedTxStamp="2017-11-16 16:57:59.0"/>
+    <MessageLogType messageLogTypeId="IMAGE" createdStamp="2017-11-16 16:57:59.0" createdTxStamp="2017-11-16 16:57:59.0" description="图片" lastUpdatedStamp="2017-11-16 16:57:59.0" lastUpdatedTxStamp="2017-11-16 16:57:59.0"/>
 
-    <MessageLogType MessageLogTypeId="LOCATION" createdStamp="2017-11-16 16:58:16.0" createdTxStamp="2017-11-16 16:58:16.0" description="位置" lastUpdatedStamp="2017-11-16 16:58:16.0" lastUpdatedTxStamp="2017-11-16 16:58:16.0"/>
+    <MessageLogType messageLogTypeId="LOCATION" createdStamp="2017-11-16 16:58:16.0" createdTxStamp="2017-11-16 16:58:16.0" description="位置" lastUpdatedStamp="2017-11-16 16:58:16.0" lastUpdatedTxStamp="2017-11-16 16:58:16.0"/>
 </entity-engine-xml>

@@ -108,7 +108,10 @@
     <!-- PushMessage -->
     <request-map uri="pushMessage">
         <security https="false" auth="false"/>
-        <event type="service" invoke="pushMessage"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="pushMessage"></event>
+        <!--<event type="service" invoke="pushMessage"/>-->
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

@@ -33,6 +33,10 @@ public class PeConstant {
      * PRODUCT_OSS_PATH
      */
     public static final String PRODUCT_OSS_PATH = "datas/product_img/";
+
+
+    public static final String CHAT_IMAGE_OSS_PATH = "datas/chat_img/";
+
     /**
      * OSS_PATH
      */

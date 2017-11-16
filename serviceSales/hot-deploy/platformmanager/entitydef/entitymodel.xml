@@ -39,7 +39,7 @@
         <prim-key field="fromDate"/>
         <prim-key field="messageLogTypeId"/>
         <relation type="one" rel-entity-name="MessageLogType">
-            <key-map field-name="MessageLogTypeId"/>
+            <key-map field-name="messageLogTypeId"/>
         </relation>
     </entity>
 

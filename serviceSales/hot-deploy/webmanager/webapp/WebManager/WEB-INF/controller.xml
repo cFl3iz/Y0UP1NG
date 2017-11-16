@@ -67,7 +67,10 @@
     <request-map uri="createPersonPartyPostalAddress">
         <security https="false" auth="false"/>
         <event type="service" invoke="createPersonPartyPostalAddress"/>
-        <response name="success" type="request" value="result_json"/>
+        <response name="success" type="request-redirect" value="viewWebOrderDetail">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="orderId" from="orderId"/>
+        </response>
         <response name="error" type="request" value="result_json"/>
     </request-map>
 

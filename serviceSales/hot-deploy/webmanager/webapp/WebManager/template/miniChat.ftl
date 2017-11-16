@@ -463,8 +463,8 @@
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
 
-                            alert(latitude);alert(longitude);
-                                    theLocation(text,longitude,longitude);
+
+                                    theLocation(longitude,longitude,longitude);
                         }
                        // autoWidth();
                      //   for_bottom();
@@ -498,7 +498,7 @@
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
 
-                            theLocation(text,longitude,longitude);
+                            theLocation(longitude,longitude,longitude);
                         }
 
 

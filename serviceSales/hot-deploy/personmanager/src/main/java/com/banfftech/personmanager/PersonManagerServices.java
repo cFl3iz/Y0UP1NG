@@ -148,8 +148,9 @@ public class PersonManagerServices {
         GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
         String firstName = (String) person.get("firstName");
 
-        // 收货地址
-        String contactMechPurposeTypeId = "GENERAL_LOCATION";
+        // fa收货地址
+        String contactMechPurposeTypeId = "SHIPPING_LOCATION";
+//        String contactMechTypeId = "";
         Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                 UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,  "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY,  "address1", address1, "address2", address2, "postalCode",PeConstant.DEFAULT_POST_CODE,
                         "contactMechPurposeTypeId", contactMechPurposeTypeId));

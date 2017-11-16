@@ -456,12 +456,13 @@
                         }
                         if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<div class="answer_text"><div id="' + text + '"></div><i></i>';
+                            ans += '<div class="answer_text"><div style="width:100px;height:80px;" id="' + text + '"></div><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
+                            alert(latitude);alert(longitude);
                                     theLocation(text,longitude,longitude);
                         }
                        // autoWidth();
@@ -489,7 +490,7 @@
                         if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
                             var str = '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                            str += '<div class="question_text clear"><div id="' + text + '"></div><i></i>';
+                            str += '<div class="question_text clear"><div style="width:100px;height:80px;" id="' + text + '"></div><i></i>';
                             str += '</div></div>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');

@@ -4302,10 +4302,10 @@ under the License.
       <alias entity-alias="PSSM" name="shipmentMethodTypeId"/>
       <alias entity-alias="PSSM" name="partyId"/>
 
-        <alias name="carrierPartyId" field="partyId" entity-alias="PSSM"/>
+        <!--<alias name="carrierPartyId" field="partyId" entity-alias="PSSM"/>-->
 
       <alias entity-alias="PSSM" name="roleTypeId"/>
-      <!--<alias entity-alias="PSSM" name="companyPartyId"/>-->
+      <alias entity-alias="PSSM" name="companyPartyId"/>
       <alias entity-alias="PSSM" name="minSize"/>
       <alias entity-alias="PSSM" name="maxSize"/>
       <alias entity-alias="PSSM" name="minTotal"/>

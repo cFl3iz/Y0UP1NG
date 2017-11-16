@@ -219,6 +219,7 @@ public class PlatformManagerQueryServices {
             String toParty = (String) gv.get("partyIdTo");
             String messageId = (String) gv.get("messageId");
             String message = (String) gv.get("message");
+
             String tsStr = "";
             DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             try {
@@ -226,9 +227,13 @@ public class PlatformManagerQueryServices {
                 tsStr = sdf.format(gv.get("fromDate"));
             } catch (Exception e) {
             }
+            String messageLogTypeId = (String) gv.get("messageLogTypeId");
+            rowMap.put("messageLogTypeId", messageLogTypeId);
 
             rowMap.put("messageId", messageId);
             rowMap.put("text", message);
+
+
             rowMap.put("messageTime", tsStr);
 
 
@@ -418,7 +423,8 @@ public class PlatformManagerQueryServices {
             String messageId = (String) gv.get("messageId");
 
             String message = (String) gv.get("message");
-
+            String messageLogTypeId = (String) gv.get("messageLogTypeId");
+            rowMap.put("messageLogTypeId", messageLogTypeId);
             String tsStr = "";
 
             DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

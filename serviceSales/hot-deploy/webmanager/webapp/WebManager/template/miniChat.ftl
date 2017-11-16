@@ -464,7 +464,7 @@
                             messagesArray.push(messageId);
 
 
-                                    theLocation(longitude,longitude,longitude);
+                                    theLocation(longitude,longitude,latitude);
                         }
                        // autoWidth();
                      //   for_bottom();
@@ -498,7 +498,7 @@
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
 
-                            theLocation(longitude,longitude,longitude);
+                            theLocation(longitude,longitude,latitude);
                         }
 
 

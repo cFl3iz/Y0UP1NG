@@ -1489,10 +1489,10 @@ public class PersonManagerServices {
 
         //  发出账单的厂家 到 订单
         Map<String, Object> addBILL_FROM_VENDORInMap = new HashMap<String, Object>();
-        addOrderRoleInMap.put("userLogin", userLogin);
-        addOrderRoleInMap.put("orderId", orderId);
-        addOrderRoleInMap.put("partyId", payToPartyId);
-        addOrderRoleInMap.put("roleTypeId", "BILL_FROM_VENDOR");
+        addBILL_FROM_VENDORInMap.put("userLogin", userLogin);
+        addBILL_FROM_VENDORInMap.put("orderId", orderId);
+        addBILL_FROM_VENDORInMap.put("partyId", payToPartyId);
+        addBILL_FROM_VENDORInMap.put("roleTypeId", "BILL_FROM_VENDOR");
         Map<String, Object> addBILL_FROM_VENDOROutMap = dispatcher.runSync("addOrderRole", addBILL_FROM_VENDORInMap);
 
         if (ServiceUtil.isError(addBILL_FROM_VENDOROutMap)) {
@@ -1504,10 +1504,10 @@ public class PersonManagerServices {
 
         //  收货的客户 到 订单
         Map<String, Object> addSHIP_TO_CUSTOMERInMap = new HashMap<String, Object>();
-        addOrderRoleInMap.put("userLogin", userLogin);
-        addOrderRoleInMap.put("orderId", orderId);
-        addOrderRoleInMap.put("partyId", partyId);
-        addOrderRoleInMap.put("roleTypeId", "SHIP_TO_CUSTOMER");
+        addSHIP_TO_CUSTOMERInMap.put("userLogin", userLogin);
+        addSHIP_TO_CUSTOMERInMap.put("orderId", orderId);
+        addSHIP_TO_CUSTOMERInMap.put("partyId", partyId);
+        addSHIP_TO_CUSTOMERInMap.put("roleTypeId", "SHIP_TO_CUSTOMER");
         Map<String, Object> addSHIP_TO_CUSTOMEROutMap = dispatcher.runSync("addOrderRole", addSHIP_TO_CUSTOMERInMap);
 
         if (ServiceUtil.isError(addSHIP_TO_CUSTOMEROutMap)) {

@@ -16,14 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
+${orderHeader.statusId}
+${contactMech.contactMechTypeId}
 <#macro updateOrderContactMech orderHeader contactMechTypeId contactMechList contactMechPurposeTypeId contactMechAddress>
   <#if (!orderHeader.statusId.equals("ORDER_COMPLETED")) && !(orderHeader.statusId.equals("ORDER_REJECTED")) && !(orderHeader.statusId.equals("ORDER_CANCELLED"))>
     <form name="updateOrderContactMech" method="post" action="<@ofbizUrl>updateOrderContactMech</@ofbizUrl>">
       <input type="hidden" name="orderId" value="${orderId!}" />
       <input type="hidden" name="contactMechPurposeTypeId" value="${contactMechPurpose.contactMechPurposeTypeId!}" />
       <input type="hidden" name="oldContactMechId" value="${contactMech.contactMechId!}" />
-      ${contactMech.contactMechTypeId}
+
         <select name="contactMechId">
         <#if contactMech.contactMechTypeId == "POSTAL_ADDRESS">
           <option value="${contactMechAddress.contactMechId}">${(contactMechAddress.address1)?default("")} - ${contactMechAddress.city?default("")}</option>

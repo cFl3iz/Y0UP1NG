@@ -53,7 +53,7 @@ public class PlatformManagerQueryServices {
         fieldSet.add("objectId");
         fieldSet.add("messageId");
         fieldSet.add("fromDate");
-
+        fieldSet.add("messageLogTypeId");
 //        if (UtilValidate.isNotEmpty(objectId)) {
 //
 //        }
@@ -166,7 +166,7 @@ public class PlatformManagerQueryServices {
         fieldSet.add("messageId");
         fieldSet.add("fromDate");
 
-
+        fieldSet.add("messageLogTypeId");
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
@@ -303,6 +303,7 @@ public class PlatformManagerQueryServices {
         fieldSet.add("messageId");
         fieldSet.add("fromDate");
 
+        fieldSet.add("messageLogTypeId");
 
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));

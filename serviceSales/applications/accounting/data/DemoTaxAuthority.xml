@@ -72,7 +72,11 @@
     <!-- USA TaxAuthority defs -->
     <TaxAuthority taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" taxIdFormatPattern="\d{2}\-\d{7}|\d{3}\-\d{2}\-\d{4}" includeTaxInPrice="N"/>
     <TaxAuthorityGlAccount taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" organizationPartyId="Company" glAccountId="224100"/>
-    
+
+
+    <!--<TaxAuthority taxAuthGeoId="CHN" taxAuthPartyId="CHN_IRS" taxIdFormatPattern="\d{2}\-\d{7}|\d{3}\-\d{2}\-\d{4}" includeTaxInPrice="N"/>-->
+    <!--<TaxAuthorityGlAccount taxAuthGeoId="CHN" taxAuthPartyId="CHN_IRS" organizationPartyId="Company" glAccountId="224100"/>-->
+
     <TaxAuthority taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" includeTaxInPrice="N"/>
     <TaxAuthorityGlAccount taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" organizationPartyId="Company" glAccountId="224106"/>
     <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="CA" toTaxAuthPartyId="CA_BOE" taxAuthorityAssocTypeId="EXEMPT_INHER" fromDate="2001-05-13 00:00:00.001" thruDate=""/>

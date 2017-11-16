@@ -97,9 +97,9 @@
                 <#--</label>-->
             <#--</div>-->
 
-            <div class="m-button">
-                <input type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
-            </div>
+            <#--<div class="m-button">-->
+                <#--<input type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>-->
+            <#--</div>-->
 
         </#if>
 
@@ -189,6 +189,7 @@
                     $('#J_Notify').on('click', function () {
                         dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
                             console.log('do ajax');
+                            $("#J_Notify").attr({"disabled":"disabled"});
                             $("#createPersonPartyPostalAddressForm").submit();
                         });
                     });

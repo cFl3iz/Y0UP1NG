@@ -4169,6 +4169,7 @@ public class OrderServices {
 
         // calc the sales tax
         CheckOutHelper coh = new CheckOutHelper(dispatcher, delegator, cart);
+
         if (calcTax) {
             try {
                 coh.calcAndAddTax();

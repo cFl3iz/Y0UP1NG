@@ -27,7 +27,7 @@
     <entity entity-name="MessageLog" package-name="org.ofbiz.cloudLake.message" title="Message">
         <description>Message</description>
         <field name="messageId" type="id"></field>
-        <field name="MessageLogTypeId" type="id"></field>
+        <field name="messageLogTypeId" type="id"></field>
         <field name="partyIdFrom" type="value"></field>
         <!-- 谈吐围绕者,可能是订单，也可能是别的 -->
         <field name="objectId" type="value"></field>
@@ -37,6 +37,7 @@
         <field name="badge" type="value"></field>
         <prim-key field="messageId"/>
         <prim-key field="fromDate"/>
+        <prim-key field="messageLogTypeId"/>
         <relation type="one" rel-entity-name="MessageLogType">
             <key-map field-name="MessageLogTypeId"/>
         </relation>
@@ -45,9 +46,9 @@
 
     <entity entity-name="MessageLogType" package-name="org.ofbiz.cloudLake.message" title="MessageLogType">
         <description>MessageLogTypeId</description>
-        <field name="MessageLogTypeId" type="id"></field>
+        <field name="messageLogTypeId" type="id"></field>
         <field name="description" type="value"></field>
-        <prim-key field="MessageLogTypeId"/>
+        <prim-key field="messageLogTypeId"/>
     </entity>
 
 

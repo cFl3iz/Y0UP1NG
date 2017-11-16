@@ -97,9 +97,9 @@
                 <#--</label>-->
             <#--</div>-->
 
-            <#--<div class="m-button">-->
-                <#--<input type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>-->
-            <#--</div>-->
+            <div class="m-button">
+                <input onclick="history.back();" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
+            </div>
 
         </#if>
 

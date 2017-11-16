@@ -304,7 +304,7 @@ public class PersonManagerServices {
 
                             if (pictureKey != null && !pictureKey.equals("")) {
                                 text = PeConstant.OSS_PATH + PeConstant.CHAT_IMAGE_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
-                                pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap);
+                                pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
                             }
                         }
 
@@ -323,7 +323,7 @@ public class PersonManagerServices {
 
         }
 
-        pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap);
+        pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
 //        if(UtilValidate.isEmpty(partyIdFrom)){
 //            partyIdFrom = (String) userLogin.get("partyId");
 //        }
@@ -487,7 +487,7 @@ public class PersonManagerServices {
      */
     public static String  pushMsgBase(String objectId,String partyIdFrom,String partyIdTo,Delegator delegator,LocalDispatcher dispatcher,
                                       GenericValue userLogin,String text,
-                                      Map<String,Object> pushWeChatMessageInfoMap,GenericValue admin,Map<String,Object> createMessageLogMap)throws GenericEntityException, GenericServiceException{
+                                      Map<String,Object> pushWeChatMessageInfoMap,GenericValue admin,Map<String,Object> createMessageLogMap,String messageLogTypeId)throws GenericEntityException, GenericServiceException{
 
         if(UtilValidate.isEmpty(partyIdFrom)){
             partyIdFrom = (String) userLogin.get("partyId");
@@ -580,6 +580,9 @@ public class PersonManagerServices {
         createMessageLogMap.put("partyIdTo",partyIdTo);
 
         createMessageLogMap.put("badge","true");
+
+        createMessageLogMap.put("messageLogTypeId",messageLogTypeId);
+
 
         if(!UtilValidate.isEmpty(objectId)){
             createMessageLogMap.put("objectId",objectId);

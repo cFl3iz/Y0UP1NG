@@ -1433,7 +1433,7 @@ public class PersonManagerServices {
         Map<String, Object> createOrderHeaderInMap = new HashMap<String, Object>();
         createOrderHeaderInMap.put("userLogin", userLogin);
         createOrderHeaderInMap.put("productStoreId", productStoreId);
-        createOrderHeaderInMap.put("salesChannelEnumId", "UNKNWN_SALES_CHANNEL");
+        createOrderHeaderInMap.put("salesChannelEnumId", "POS_SALES_CHANNEL");
         createOrderHeaderInMap.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
         createOrderHeaderInMap.put("orderTypeId", PeConstant.SALES_ORDER);
         createOrderHeaderInMap.put("statusId", PeConstant.ORDER_CREATED_STATUS_ID);

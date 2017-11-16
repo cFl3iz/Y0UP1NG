@@ -417,7 +417,7 @@ if (orderHeader) {
 
         // list to find all the POSTAL_ADDRESS for the shipment party.
     orderParty = from("Party").where("partyId", partyId).queryOne()
-    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!partyId="+partyId);
+
     shippingContactMechList = ContactHelper.getContactMech(orderParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false)
     context.shippingContactMechList = shippingContactMechList
 

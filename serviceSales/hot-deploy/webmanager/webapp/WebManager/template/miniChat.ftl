@@ -387,23 +387,46 @@
                //     alert("bool = " + bool+"");
 
                     var messageId = messages[i].messageId;
-                    if (bool) {
 
-                        var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                        ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
-                        ans += '</div></div>';
-                        $('.speak_box').append(ans);
-                        messagesArray.push(messageId);
+                    var messageLogTypeId =   messages[i].messageLogTypeId;
+
+                    // True 等于 左边
+                    if (bool) {
+                        if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
+                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+                            ans += '<div class="answer_text"><img style='' src=' + text + '></img><i></i>';
+                            ans += '</div></div>';
+                            $('.speak_box').append(ans);
+                            messagesArray.push(messageId);
+                        }else{
+                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+                            ans += '<div class="answer_text"><p>' + text + '</p><i></i>';
+                            ans += '</div></div>';
+                            $('.speak_box').append(ans);
+                            messagesArray.push(messageId);
+                        }
+
                        // autoWidth();
                      //   for_bottom();
                       //  for_bottom();
                     }else{
-                       var str = '<div class="question">';
-                        str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                        str += '<div class="question_text clear"><p>' + text + '</p><i></i>';
-                        str += '</div></div>';
-                        $('.speak_box').append(str);
-                        $('.write_box input').val('');
+
+                        if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
+                            var str = '<div class="question">';
+                            str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
+                            str += '<div class="question_text clear"><img style='' src=' + text + '></img><i></i>';
+                            str += '</div></div>';
+                            $('.speak_box').append(str);
+                            $('.write_box input').val('');
+                        }else{
+                            var str = '<div class="question">';
+                            str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
+                            str += '<div class="question_text clear"><p>' + text + '</p><i></i>';
+                            str += '</div></div>';
+                            $('.speak_box').append(str);
+                            $('.write_box input').val('');
+                        }
+
 
 
 //                        $('.write_box input').focus();

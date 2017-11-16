@@ -71,6 +71,9 @@
 
     <GeoAssoc geoId="CHN" geoIdTo="EMS02" geoAssocTypeId="GROUP_MEMBER"/>
 
+
+    <!--310100-->
+
     <!--其它区也如此创建。之后，再将这九个区挂载至一个分区下。-->
     <Geo geoId="EMS_AREAS" geoTypeId="GROUP" geoName="EMS - Available Areas" geoCode="EMS_AREAS" abbreviation="EMS_AREAS"/>
     <GeoAssoc geoId="EMS01" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>

@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.order.order;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -6363,7 +6364,7 @@ public class OrderServices {
 
                 shippingMethods = ProductStoreWorker.getAvailableStoreShippingMethods(delegator, orh.getProductStoreId(),
                         shippingAddress, shippableItemSizes, shippableItemFeatures, shippableWeight, shippableTotal);
-
+                System.out.println("Order Before====================================== "+ shippingMethods);
                 boolean isShippingMethodAvailable = false;
                 // search shipping method for ship group is applicable to new address or not.
                 for (GenericValue shippingMethod : shippingMethods) {
@@ -6375,6 +6376,8 @@ public class OrderServices {
                     }
                 }
 
+                System.out.println("Order isShippingMethodAvailable====================================== "+ isShippingMethodAvailable);
+                System.out.println("Order After====================================== "+ shippingMethods);
                 // set first shipping method from list, if shipping method for ship group is not applicable to new ship address.
                 if(!isShippingMethodAvailable) {
                     shoppingCart.setShipmentMethodTypeId(groupIdx - 1, shippingMethods.get(0).getString("shipmentMethodTypeId"));

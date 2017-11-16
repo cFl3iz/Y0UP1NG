@@ -229,7 +229,7 @@ public class PlatformManagerQueryServices {
             }
             String messageLogTypeId = (String) gv.get("messageLogTypeId");
             rowMap.put("messageLogTypeId", messageLogTypeId);
-            if(messageLogTypeId.equals("LOCATION")){
+            if(messageLogTypeId.equals("LOCATION") && message!=null && !message.trim().equals("")){
                 rowMap.put("latitude", message.substring(message.indexOf("tude\":")+6,message.indexOf(",\"lo")));
                 rowMap.put("longitude", message.substring(message.indexOf("longitude\":") + 11, message.lastIndexOf("}")));
             }

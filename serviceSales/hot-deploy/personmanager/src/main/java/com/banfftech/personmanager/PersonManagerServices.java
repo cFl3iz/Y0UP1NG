@@ -303,9 +303,8 @@ public class PersonManagerServices {
                                     "personerp", PeConstant.CHAT_IMAGE_OSS_PATH, tm);
 
                             if (pictureKey != null && !pictureKey.equals("")) {
-
                                 text = PeConstant.OSS_PATH + PeConstant.CHAT_IMAGE_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
-
+                                pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap);
                             }
                         }
 
@@ -324,6 +323,171 @@ public class PersonManagerServices {
 
         }
 
+        pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap);
+//        if(UtilValidate.isEmpty(partyIdFrom)){
+//            partyIdFrom = (String) userLogin.get("partyId");
+//        }
+//
+//        pushWeChatMessageInfoMap.put("userLogin",userLogin);
+//
+//        pushWeChatMessageInfoMap.put("message",text);
+//
+//
+//        GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo,"enabled","Y").queryFirst();
+//
+//        String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+//
+//
+//
+//        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+//        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+//        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+//        //开始时间
+//        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+//        //到期时间
+//        final long exp = iat + expirationTime;
+//        //生成
+//        final JWTSigner signer = new JWTSigner(tokenSecret);
+//        final HashMap<String, Object> claims = new HashMap<String, Object>();
+//        claims.put("iss", iss);
+//        claims.put("user", toPartyUserLoginId);
+//        claims.put("delegatorName", delegator.getDelegatorName());
+//        claims.put("exp", exp);
+//        claims.put("iat", iat);
+//
+//        pushWeChatMessageInfoMap.put("tarjeta",signer.sign(claims));
+//
+//
+//        System.out.println("========================================= partyIdTo = " +partyIdTo);
+//
+//        // 查询registrationID
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
+//        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+//        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+//        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+//
+//        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
+//        createMessageLogMap.put("message",text);
+//        if(person!=null){
+//            text = person.get("firstName")+":"+text;
+//        }
+//
+//        pushWeChatMessageInfoMap.put("firstName",person.get("firstName"));
+//
+//        if(null != partyIdentifications && partyIdentifications.size()>0){
+//
+//
+//            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//
+//            //查角标
+//            EntityCondition findValCondition = EntityCondition.makeCondition(
+//                    EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"),
+//                    EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo));
+//            long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
+//
+//            String badege_str = count+"";
+//
+//            try{
+//                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"badge",badege_str,"message","message","content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",partyIdFrom));
+//            } catch (GenericServiceException e1) {
+//                Debug.logError(e1.getMessage(), module);
+//                return "error";
+//            }
+//
+//
+//        }
+//
+//
+//
+//
+//        if(!UtilValidate.isEmpty(partyIdFrom)) {
+//            createMessageLogMap.put("partyIdFrom", partyIdFrom);
+//        }
+//
+//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+//
+//        createMessageLogMap.put("partyIdTo",partyIdTo);
+//
+//        createMessageLogMap.put("badge","true");
+//
+//        if(!UtilValidate.isEmpty(objectId)){
+//            createMessageLogMap.put("objectId",objectId);
+//        }
+//
+//        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+//
+//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+//
+//        msg.create();
+//
+//
+//
+//
+//
+//
+//
+//
+//        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+//
+//
+//        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+//
+//            GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+//
+//            String payToPartyId = (String) payToParty.get("payToPartyId");
+//
+//            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+//
+//            Date date = new Date();
+//
+//            SimpleDateFormat formatter;
+//
+//            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//            String pushDate = ""+formatter.format(date);
+//
+//            pushWeChatMessageInfoMap.put("date",pushDate);
+//
+//            String openId = (String) partyIdentificationList.get(0).get("idValue");
+//
+//            pushWeChatMessageInfoMap.put("openId",openId);
+//
+//            pushWeChatMessageInfoMap.put("productId",objectId);
+//
+//            pushWeChatMessageInfoMap.put("payToPartyId",payToPartyId);
+//
+//            //推微信
+//            dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
+//
+//        }
+
+        return"success";
+    }
+
+
+    /**
+     * pushMsgBase
+     * @param objectId
+     * @param partyIdFrom
+     * @param partyIdTo
+     * @param delegator
+     * @param dispatcher
+     * @param userLogin
+     * @param text
+     * @param pushWeChatMessageInfoMap
+     * @param admin
+     * @param createMessageLogMap
+     * @return
+     */
+    public static String  pushMsgBase(String objectId,String partyIdFrom,String partyIdTo,Delegator delegator,LocalDispatcher dispatcher,
+                                      GenericValue userLogin,String text,
+                                      Map<String,Object> pushWeChatMessageInfoMap,GenericValue admin,Map<String,Object> createMessageLogMap)throws GenericEntityException, GenericServiceException{
 
         if(UtilValidate.isEmpty(partyIdFrom)){
             partyIdFrom = (String) userLogin.get("partyId");
@@ -430,10 +594,6 @@ public class PersonManagerServices {
 
 
 
-
-
-
-
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
 
 
@@ -466,12 +626,14 @@ public class PersonManagerServices {
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
 
-        } else {
-
         }
-
-        return"success";
+        return "success";
     }
+
+
+
+
+
 
     /**
      * push Message

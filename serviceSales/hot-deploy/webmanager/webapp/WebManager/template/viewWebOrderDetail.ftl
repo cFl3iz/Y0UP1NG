@@ -98,7 +98,7 @@
             <#--</div>-->
 
             <div class="m-button">
-                <input onclick="history.back();" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
+                <input onclick="history.back(-2);" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
             </div>
 
         </#if>

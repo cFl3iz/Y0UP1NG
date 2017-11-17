@@ -694,7 +694,7 @@ public class PersonManagerQueryServices {
      * @param payFromPartyId
      * @return
      */
-    private static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId) {
+    private static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId)throws GenericEntityException {
 
         Map<String, String> personMap = new HashMap<String, String>();
 

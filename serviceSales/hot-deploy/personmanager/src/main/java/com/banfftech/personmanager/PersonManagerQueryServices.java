@@ -661,17 +661,22 @@ public class PersonManagerQueryServices {
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String,String> personInfoMap = null;
+                Map<String,String> personAddressInfoMap = null;
 
                 //说明这笔订单我是卖家,查买家头像信息
                 if(payToPartyId.equals(partyId)){
                     personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,payFromPartyId);
                 }
                 //说明这笔单我是买家,查卖家头像信息
                 if(!payToPartyId.equals(partyId)){
                     personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
                 }
                 rowMap.put("userPartyId",partyId);
                 rowMap.put("personInfoMap",personInfoMap);
+                rowMap.put("personAddressInfoMap",personAddressInfoMap);
+
                 myResourceOrderList.add(rowMap);
             }
         }
@@ -680,6 +685,25 @@ public class PersonManagerQueryServices {
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
 
         return resultMap;
+    }
+
+
+    /**
+     * 查询卖家地址
+     * @param delegator
+     * @param payFromPartyId
+     * @return
+     */
+    private static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId) {
+
+        Map<String, String> personMap = new HashMap<String, String>();
+
+        GenericValue postalAddress = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+        if (UtilValidate.isNotEmpty(postalAddress))
+            personMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address1") + " " + postalAddress.get("address2"));
+
+        return personMap;
     }
 
 

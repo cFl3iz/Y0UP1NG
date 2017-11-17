@@ -622,22 +622,25 @@ public class PersonManagerQueryServices {
 
 
 
-//        EntityCondition findConditions2 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
         EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
 
 
                 EntityCondition findConditions2 = EntityCondition
                 .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
 
         EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.AND,findConditions2);
+                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
 
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
 
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                listConditions, fieldSet,
+                listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
 
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){

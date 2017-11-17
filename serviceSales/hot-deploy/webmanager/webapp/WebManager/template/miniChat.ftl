@@ -1049,8 +1049,11 @@
                     }
 
 
-
-
+                    alert(images);
+                    $('#gallery2').imagesGrid({
+                        images: images,
+                        align: true
+                    });
 
                 }
         );
@@ -1058,6 +1061,9 @@
 </head>
 <body>
 <input type="hidden" value="${uiLabel.About}" id="about"/>
+
+<div id="gallery2"></div>
+
 <div class="speak_window">
     <div class="speak_box">
         <div class="answer" id="firstAboutMessage" style="display:none;">

@@ -619,6 +619,7 @@
                 for (var i = 0; i < messages.length; i++) {
                     var messageLogTypeId =   messages[i].messageLogTypeId;
                     var messageId = messages[i].messageId;
+                    var text =  messages[i].text;
                     if ( 0 == messagesArray.length) {
 
                         if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){

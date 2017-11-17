@@ -459,9 +459,9 @@
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";
                             var baiduUrl = "http://api.map.baidu.com/marker?location="+longitude+","+ latitude +"&title="+tip+"&content="+tip+"&output=html";
-                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<a href="'+baiduUrl+'">'+ '<div class="answer_text"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';
-                            ans += '</div></a></div>';
+                            var ans =  '<a href="'+baiduUrl+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
+                            ans += '<div class="answer_text"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                            ans += '</div></div></a>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
 
@@ -495,10 +495,10 @@
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";
                             var baiduUrl = "http://api.map.baidu.com/marker?location="+longitude+","+ latitude +"&title="+tip+"&content="+tip+"&output=html";
-                            var str = '<div class="question">';
+                            var str =  '<a href="'+baiduUrl+'">'+ '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                            str += '<a href="'+baiduUrl+'">'+  '<div class="question_text clear"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';
-                            str += '</div></a></div>';
+                            str +=  '<div class="question_text clear"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                            str += '</div></div></a>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
 

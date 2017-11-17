@@ -699,7 +699,7 @@ public class PersonManagerQueryServices {
         Map<String, String> personMap = new HashMap<String, String>();
 
         GenericValue postalAddress = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+                EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId,"contactMechTypeId", "POSTAL_ADDRESS")).queryList());
         if (UtilValidate.isNotEmpty(postalAddress))
             personMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address1") + " " + postalAddress.get("address2"));
 

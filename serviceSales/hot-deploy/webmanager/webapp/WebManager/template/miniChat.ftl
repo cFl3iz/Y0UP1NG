@@ -443,7 +443,7 @@
 
 
                             var ans =  '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
+                            //text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
                             ans += '<div class="answer_text"><a href="javascript:alert(${uiLabel.DefaultAction});"><img style="width:200px;height:160px;no-repeat;"  src=' + text + '></img></a><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
@@ -478,7 +478,7 @@
                         if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
 
                             var str = '<div class="question">';
-                            text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
+                          //  text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
                             str += '<div class="question_text clear"><a href="javascript:alert(${uiLabel.DefaultAction});"><img style="width:200px;height:160px;no-repeat;"  src=' + text + '></img></a><i></i>';
                             str += '</div></div>';
@@ -626,7 +626,7 @@
 
 
                             var ans =  '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
+                       //     text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
                             ans += '<div class="answer_text"><img style="width:200px;height:160px;no-repeat;"  src=' + text + '></img><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
@@ -674,7 +674,7 @@
 
 
                                 var ans =  '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                                text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
+                              //  text = text + "?x-oss-process=image/resize,w_200,h_160/quality,q_100";
                                 ans += '<div class="answer_text"><img style="width:200px;height:160px;no-repeat;"  src=' + text + '></img><i></i>';
                                 ans += '</div></div>';
                                 $('.speak_box').append(ans);

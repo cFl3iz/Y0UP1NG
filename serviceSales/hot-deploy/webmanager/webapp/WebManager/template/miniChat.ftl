@@ -456,10 +456,11 @@
                     if (bool) {
                         if(null != messageLogTypeId && messageLogTypeId === "IMAGE"){
 
+
+                            var ans = '<a href="'+text+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                             text = text + "?x-oss-process=image/resize,w_100,h_80/quality,q_75";
-                            var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                             ans += '<div class="answer_text"><a href="#"><img style="width:100px;height:80px;no-repeat;"  src=' + text + '></img></a><i></i>';
-                            ans += '</div></div>';
+                            ans += '</div></div></a>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
 

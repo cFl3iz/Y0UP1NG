@@ -271,8 +271,8 @@
 
     <property key="ErrorLocation">
         <value xml:lang="en">ErrorLocation</value>
-        <value xml:lang="zh">该地址已过期,请看最新地址</value>
-        <value xml:lang="zh_CN">该地址已过期,请看最新地址</value>
+        <value xml:lang="zh">该位置已失效,请看最新位置</value>
+        <value xml:lang="zh_CN">该位置已失效,请看最新位置</value>
     </property>
 
 

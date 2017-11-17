@@ -458,7 +458,7 @@
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";
-                            var baiduUrl = "http://api.map.baidu.com/marker?location="+longitude+","+ latitude +"&title="+tip+"&content="+tip+"&output=html";
+                            var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                             var ans =  '<a href="'+baiduUrl+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                             ans += '<div class="answer_text"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';
                             ans += '</div></div></a>';
@@ -494,7 +494,7 @@
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";
-                            var baiduUrl = "http://api.map.baidu.com/marker?location="+longitude+","+ latitude +"&title="+tip+"&content="+tip+"&output=html";
+                            var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                             var str =  '<a href="'+baiduUrl+'">'+ '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
                             str +=  '<div class="question_text clear"><div style="width:150px;height:100px;" id="' + "allmap" + '"></div><i></i>';

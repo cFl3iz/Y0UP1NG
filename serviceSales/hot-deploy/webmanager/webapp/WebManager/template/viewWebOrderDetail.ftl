@@ -57,6 +57,16 @@
                         </label>
                     </label>
                 </div>
+            <div class="m-cell">
+                <label class="cell-item">
+                    <span class="cell-left">${uiLabel.CleanOne}</span>
+                    <label class="cell-right">
+                        <input type="checkbox"  class="m-switch"/>
+
+                    </label>
+                </label>
+            </div>
+
 
             <div class="m-button">
                 <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>

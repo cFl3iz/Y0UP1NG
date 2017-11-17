@@ -163,6 +163,13 @@
         <value xml:lang="zh_CN">预留功能</value>
     </property>
 
+    <property key="CleanOne">
+        <value xml:lang="en">CleanOne</value>
+        <value xml:lang="zh">该地址用完这单后自动清理不要保存</value>
+        <value xml:lang="zh_CN">该地址用完这单后自动清理不要保存</value>
+    </property>
+
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

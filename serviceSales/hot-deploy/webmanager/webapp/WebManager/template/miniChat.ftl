@@ -1049,11 +1049,7 @@
                     }
 
 
-                    alert(images);
-                    $('#gallery2').imagesGrid({
-                        images: images,
-                        align: true
-                    });
+
 
                 }
         );
@@ -1304,9 +1300,17 @@
             }
         });
 
-        if(messagesArray == null){
+        if(messagesArray.length == 0){
             $("#firstAboutMessage").show();
         }
+
+
+        alert(images);
+        $('#gallery2').imagesGrid({
+            images: images,
+            align: true
+        });
+
     }
 
 

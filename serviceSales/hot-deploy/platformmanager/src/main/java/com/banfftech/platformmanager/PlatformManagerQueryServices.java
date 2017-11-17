@@ -429,6 +429,10 @@ public class PlatformManagerQueryServices {
             String message = (String) gv.get("message");
             String messageLogTypeId = (String) gv.get("messageLogTypeId");
             rowMap.put("messageLogTypeId", messageLogTypeId);
+            if(UtilValidate.isNotEmpty(messageLogTypeId) && messageLogTypeId.equals("LOCATION") && message!=null && !message.trim().equals("")){
+                rowMap.put("latitude", message.substring(message.indexOf("tude\":")+6,message.indexOf(",\"lo")));
+                rowMap.put("longitude", message.substring(message.indexOf("longitude\":") + 11, message.lastIndexOf("}")));
+            }
             String tsStr = "";
 
             DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

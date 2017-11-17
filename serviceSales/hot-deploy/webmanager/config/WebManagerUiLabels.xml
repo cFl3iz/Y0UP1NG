@@ -199,8 +199,8 @@
 
     <property key="CheckAddress">
         <value xml:lang="en">Check Address</value>
-        <value xml:lang="zh">请确认您的收货地址</value>
-        <value xml:lang="zh_CN">请确认您的收货地址</value>
+        <value xml:lang="zh">这是您的收货地址</value>
+        <value xml:lang="zh_CN">这是您的收货地址</value>
     </property>
 
     <property key="AddressDetail">

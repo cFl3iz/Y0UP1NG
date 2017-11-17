@@ -624,15 +624,15 @@ public class PersonManagerQueryServices {
 
 //        EntityCondition findConditions2 = EntityCondition
 //                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyId));
 
 
                 EntityCondition findConditions2 = EntityCondition
                 .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
 
         EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+                .makeCondition(findConditions2);
 
 
 

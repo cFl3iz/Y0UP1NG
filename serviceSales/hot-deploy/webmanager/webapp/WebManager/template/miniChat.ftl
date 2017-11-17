@@ -1222,6 +1222,11 @@
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
+                            alert(images);
+                            $('#gallery2').imagesGrid({
+                                images: images,
+                                align: true
+                            });
                         }
                         if(null != messageLogTypeId && messageLogTypeId === "TEXT"){
                             var ans = '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';

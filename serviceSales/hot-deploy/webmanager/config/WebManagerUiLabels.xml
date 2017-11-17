@@ -170,6 +170,13 @@
     </property>
 
 
+    <property key="Over">
+        <value xml:lang="en">Over</value>
+        <value xml:lang="zh">卖家正在处理订单</value>
+        <value xml:lang="zh_CN">卖家正在处理订单</value>
+    </property>
+
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

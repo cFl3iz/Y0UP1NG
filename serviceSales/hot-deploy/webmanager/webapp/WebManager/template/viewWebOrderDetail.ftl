@@ -106,10 +106,10 @@
                     <#--</label>-->
                 <#--</label>-->
             <#--</div>-->
-
-            <div class="m-button">
-                <input onclick="window.close();" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>
-            </div>
+            ${uiLabel.Over}
+            <#--<div class="m-button">-->
+                <#--<input onclick="window.close();" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>-->
+            <#--</div>-->
 
         </#if>
 

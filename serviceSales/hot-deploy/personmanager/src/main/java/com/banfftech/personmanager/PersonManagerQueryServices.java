@@ -701,7 +701,7 @@ public class PersonManagerQueryServices {
         GenericValue postalAddress = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId,"contactMechTypeId", "POSTAL_ADDRESS")).queryList());
         if (UtilValidate.isNotEmpty(postalAddress))
-            personMap.put("contactAddress", postalAddress.get("city") + " " + postalAddress.get("address1") + " " + postalAddress.get("address2"));
+            personMap.put("contactAddress", "" + postalAddress.get("address1") + " " + postalAddress.get("address2"));
 
         return personMap;
     }

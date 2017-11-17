@@ -464,7 +464,7 @@
                             var tip = "${uiLabel.MyLocation}";
                             var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                             var ans =  '<a href="'+baiduUrl+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<div class="answer_text"><div style="width:180px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                            ans += '<div class="answer_text"><div style="width:250px;height:120px;" id="' + "allmap" + '"></div><i></i>';
                             ans += '</div></div></a>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
@@ -505,7 +505,7 @@
                             var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                             var str =  '<a href="'+baiduUrl+'">'+ '<div class="question">';
                             str += '<div class="heard_img right"><img src="' + payFromPartyHead + '"></div>';
-                            str +=  '<div class="question_text clear"><div style="width:180px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                            str +=  '<div class="question_text clear"><div style="width:250px;height:120px;" id="' + "allmap" + '"></div><i></i>';
                             str += '</div></div></a>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
@@ -647,7 +647,7 @@
                             var tip = "${uiLabel.MyLocation}";
                             var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                             var ans =  '<a href="'+baiduUrl+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                            ans += '<div class="answer_text"><div style="width:180px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                            ans += '<div class="answer_text"><div style="width:250px;height:120px;" id="' + "allmap" + '"></div><i></i>';
                             ans += '</div></div></a>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
@@ -695,7 +695,7 @@
                                 var tip = "${uiLabel.MyLocation}";
                                 var baiduUrl = "http://api.map.baidu.com/marker?location="+latitude+","+ longitude +"&title="+tip+"&content="+tip+"&output=html";
                                 var ans =  '<a href="'+baiduUrl+'">'+ '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
-                                ans += '<div class="answer_text"><div style="width:180px;height:100px;" id="' + "allmap" + '"></div><i></i>';
+                                ans += '<div class="answer_text"><div style="width:250px;height:120px;" id="' + "allmap" + '"></div><i></i>';
                                 ans += '</div></div></a>';
                                 $('.speak_box').append(ans);
                                 messagesArray.push(messageId);

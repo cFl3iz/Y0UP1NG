@@ -1,3 +1,5 @@
+<#include "component://webmanager/webapp/WebManager/template/imageBac.ftl" />
+
 <head>
     <meta charset="utf-8"/>
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
@@ -448,7 +450,7 @@
 
                             var ans =  '<div class="answer"><div class="heard_img left"><img src="' + payToPartyHead + '"></div>';
                             text = text + "?x-oss-process=image/resize,w_100,h_80/quality,q_75";
-                            ans += '<div class="answer_text"><a href=""><img style="width:100px;height:80px;no-repeat;"  src=' + text + '></img></a><i></i>';
+                            ans += '<div class="answer_text"><div id="gallery2"><img style="width:100px;height:80px;no-repeat;"  src=' + text + '></img></div><i></i>';
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);

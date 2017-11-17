@@ -1258,6 +1258,12 @@
                             str += '</div></div>';
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
+
+                            alert(images);
+                            $('#gallery2').imagesGrid({
+                                images: images,
+                                align: true
+                            });
                         }
                         if(null != messageLogTypeId && messageLogTypeId === "TEXT"){
                             var str = '<div class="question">';
@@ -1300,16 +1306,12 @@
             }
         });
 
-        if(messagesArray.length == 0){
+        if(messagesArray.length == null){
             $("#firstAboutMessage").show();
         }
 
 
-        alert(images);
-        $('#gallery2').imagesGrid({
-            images: images,
-            align: true
-        });
+
 
     }
 

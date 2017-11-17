@@ -472,6 +472,7 @@
                             messagesArray.push(messageId);
                         }
                         if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
+                            $("#allmap").replaceWith("<p>${uiLabel.ErrorLocation}</p>");
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";
@@ -511,6 +512,9 @@
                             $('.write_box input').val('');
                         }
                         if(null != messageLogTypeId && messageLogTypeId === "LOCATION"){
+
+                            $("#allmap").replaceWith("<p>${uiLabel.ErrorLocation}</p>");
+
                             var latitude = messages[i].latitude;
                             var longitude = messages[i].longitude;
                             var tip = "${uiLabel.MyLocation}";

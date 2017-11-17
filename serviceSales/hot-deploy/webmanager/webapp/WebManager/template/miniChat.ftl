@@ -519,7 +519,7 @@
     <script>
 
         (function($) {
-
+            alert("s");
             // Plugin
             $.fn.imagesGrid = function(options) {
 
@@ -1229,7 +1229,7 @@
                             ans += '</div></div>';
                             $('.speak_box').append(ans);
                             messagesArray.push(messageId);
-                            alert(images);
+//                            alert(images);
                             $('#gallery2').imagesGrid({
                                 images: images,
                                 align: true
@@ -1271,7 +1271,7 @@
                             $('.speak_box').append(str);
                             $('.write_box input').val('');
 
-                            alert(images);
+//                            alert(images);
                             $('#gallery2').imagesGrid({
                                 images: images,
                                 align: true

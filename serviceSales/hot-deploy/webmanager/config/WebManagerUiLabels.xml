@@ -261,6 +261,14 @@
         <value xml:lang="zh_CN">完成</value>
     </property>
 
+
+    <property key="MyLocation">
+        <value xml:lang="en">MyLocation</value>
+        <value xml:lang="zh">我的位置</value>
+        <value xml:lang="zh_CN">我的位置</value>
+    </property>
+
+
     <property key="Ok">
         <value xml:lang="en">Ok</value>
         <value xml:lang="zh">确定</value>

@@ -39,7 +39,7 @@
         <value xml:lang="zh-CN">订单已完成</value>
         <value xml:lang="zh-TW">订单已完成</value>
     </property>
-    <property key="OrderCreated">
+    <property key="ORDER_CREATED">
         <value xml:lang="ar">مخلق</value>
         <value xml:lang="de">Erstellt</value>
         <value xml:lang="en">Created</value>

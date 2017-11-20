@@ -125,7 +125,7 @@ public class PlatformManagerServices {
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
         jsobj1.put("url",url2);
 
-        jsobj3.put("value", "订单状态");
+        jsobj3.put("value", "订单状态更新啦!");
         jsobj3.put("color", "#173177");
         jsobj2.put("first", jsobj3);
 
@@ -141,7 +141,7 @@ public class PlatformManagerServices {
         jsobj6.put("color", "#173177");
         jsobj2.put("keyword3", jsobj6);
 
-        jsobj7.put("value", "状态变更时间:"+date);
+        jsobj7.put("value", date);
         jsobj7.put("color", "#173177");
         jsobj2.put("keyword4", jsobj7);
 

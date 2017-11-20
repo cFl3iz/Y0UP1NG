@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>WechatMiniProgram Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+    <!--queryOrderFromWeChatList-->
+    <service name="queryOrderListFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderListFromWeChat" auth="false">
+        <description>query Order FromWeChatList</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="orderList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+    
+</services>

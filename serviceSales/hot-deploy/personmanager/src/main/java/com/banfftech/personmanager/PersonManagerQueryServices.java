@@ -47,6 +47,10 @@ public class PersonManagerQueryServices {
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
 
+
+
+
+
     /**
      * queryPostalAddress
      * @param dctx
@@ -694,7 +698,7 @@ public class PersonManagerQueryServices {
      * @param payFromPartyId
      * @return
      */
-    private static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId)throws GenericEntityException {
+    public static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId)throws GenericEntityException {
 
         Map<String, String> personMap = new HashMap<String, String>();
 

@@ -123,7 +123,9 @@ public class PlatformManagerServices {
         System.out.println("*============================================================URL = " + url2);
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
-        jsobj1.put("url",url2);
+        jsobj1.put("url","");
+        jsobj1.put("miniprogram",UtilMisc.toMap("appid","wx119831dae45a3f3f","pagepath","pages/index/"));
+
 
         jsobj3.put("value", "订单状态更新啦!");
         jsobj3.put("color", "#173177");

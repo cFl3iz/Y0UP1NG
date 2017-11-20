@@ -224,7 +224,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     function myOrder(){
         if(checkSubscribe()==true){
-            location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
+            location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124&uin=&key=&devicetype=Windows+7&version=6205051a&lang=zh_CN&a8scene=7&winzoom=1';
         }
     }
 

@@ -134,6 +134,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- Push Order Status Message -->
+    <service name="pushOrderStatusInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushOrderStatusInfo" auth="false">
+        <description>pushOrderStatusInfo</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <!-- Load Message -->
     <service name="loadMessage" engine="java"

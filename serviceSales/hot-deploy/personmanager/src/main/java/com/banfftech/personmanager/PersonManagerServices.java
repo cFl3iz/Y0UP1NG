@@ -1995,9 +1995,45 @@ public class PersonManagerServices {
         }
 
 
+        //推送给微信用户
 
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+//            String payToPartyId = (String) payToParty.get("payToPartyId");
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("orderId", orderId);
+
+
+            //推微信订单状态
+            dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
+        }
         return resultMap;
     }
+
 
 
 

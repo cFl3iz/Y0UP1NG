@@ -66,14 +66,99 @@ public class PlatformManagerServices {
 
     public final static String module = PlatformManagerServices.class.getName();
 
+    public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
+
+    /**
+     * 订单状态变更推送
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> pushOrderStatusInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+
+        String openId        = (String) context.get("openId");
+        String orderId     = (String) context.get("orderId");
+        String date     = (String) context.get("date");
+
+        String payToPartyId  = (String) context.get("payToPartyId");
+        String tarjeta       = (String) context.get("tarjeta");
+
+
+        GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
+
+
+        Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+
+        String orderStatus =  UtilProperties.getMessage(resourceUiLabels,orderHeader.get("statusId")+"", locale);
+
+
+        // 发送模版消息
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID, PeConstant.ACCESS_KEY_SECRET);
+        String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+        String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
+
+        JSONObject jsobj1 = new JSONObject();
+        JSONObject jsobj2 = new JSONObject();
+        JSONObject jsobj3 = new JSONObject();
+        JSONObject jsobj4 = new JSONObject();
+        JSONObject jsobj5 = new JSONObject();
+        JSONObject jsobj6 = new JSONObject();
+        JSONObject jsobj7 = new JSONObject();
+        JSONObject jsobj8 = new JSONObject();
+
+
+        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
+                "orderId="+orderId+"&payToPartyId=" +
+                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
+        System.out.println("*============================================================URL = " + url2);
+        jsobj1.put("touser",openId);
+        jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
+        jsobj1.put("url",url2);
+
+        jsobj3.put("value", "订单状态");
+        jsobj3.put("color", "#173177");
+        jsobj2.put("first", jsobj3);
+
+        jsobj4.put("value", orderId);
+        jsobj4.put("color", "#173177");
+        jsobj2.put("keyword1", jsobj4);
+
+        jsobj5.put("value", orderStatus);
+        jsobj5.put("color", "#173177");
+        jsobj2.put("keyword2", jsobj5);
+
+        jsobj6.put("value", "卖家'"+personInfoMap.get("firstName")+"'正在处理您的订单");
+        jsobj6.put("color", "#173177");
+        jsobj2.put("keyword3", jsobj6);
+
+        jsobj7.put("value", "状态变更时间:"+date);
+        jsobj7.put("color", "#173177");
+        jsobj2.put("keyword4", jsobj7);
+
+        jsobj8.put("value", "友评平台竭诚为您服务^_^");
+        jsobj8.put("color", "#173177");
+        jsobj2.put("remark", jsobj8);
+
+        jsobj1.put("data", jsobj2);
 
 
 
 
 
+        WeChatUtil.PostSendMsg(jsobj1, url);
 
-
-
+        return result;
+    }
 
 
     /**

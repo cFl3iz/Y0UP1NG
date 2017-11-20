@@ -21,6 +21,62 @@
         <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
     </property>
 
+    <property key="OrderCompleted">
+        <value xml:lang="ar">الإكمال</value>
+        <value xml:lang="de">Abgeschlossen</value>
+        <value xml:lang="en">Completed</value>
+        <value xml:lang="es">Terminado</value>
+        <value xml:lang="fr">Terminée</value>
+        <value xml:lang="it">Completato</value>
+        <value xml:lang="ja">完了</value>
+        <value xml:lang="nl">Afgehandeld</value>
+        <value xml:lang="pt-BR">Concluído</value>
+        <value xml:lang="ro">Completat</value>
+        <value xml:lang="ru">Заполнен</value>
+        <value xml:lang="th">เสร็จสมบูรณ์</value>
+        <value xml:lang="vi">Đã hoàn thành</value>
+        <value xml:lang="zh">订单已完成</value>
+        <value xml:lang="zh-CN">订单已完成</value>
+        <value xml:lang="zh-TW">订单已完成</value>
+    </property>
+    <property key="OrderCreated">
+        <value xml:lang="ar">مخلق</value>
+        <value xml:lang="de">Erstellt</value>
+        <value xml:lang="en">Created</value>
+        <value xml:lang="es">Creado</value>
+        <value xml:lang="fr">Créée</value>
+        <value xml:lang="it">Creato</value>
+        <value xml:lang="ja">作成済</value>
+        <value xml:lang="nl">Aangemaakt op</value>
+        <value xml:lang="ro">Creat</value>
+        <value xml:lang="ru">Создано</value>
+        <value xml:lang="th">สร้าง</value>
+        <value xml:lang="vi">Đã tạo</value>
+        <value xml:lang="zh">订单已创建</value>
+        <value xml:lang="zh-TW">订单已新建</value>
+    </property>
+
+
+    <property key="OrderApproved">
+        <value xml:lang="ar">موافقة</value>
+        <value xml:lang="de">Genehmigt</value>
+        <value xml:lang="en">Approved</value>
+        <value xml:lang="es">Aprobada</value>
+        <value xml:lang="fr">Approuvée</value>
+        <value xml:lang="it">Approvato</value>
+        <value xml:lang="ja">承認</value>
+        <value xml:lang="nl">Goedgekeurd</value>
+        <value xml:lang="pt-BR">Aprovado</value>
+        <value xml:lang="ro">Aprobat</value>
+        <value xml:lang="ru">Утвержден</value>
+        <value xml:lang="th">ปรับปรุง</value>
+        <value xml:lang="vi">Đã phê duyệt</value>
+        <value xml:lang="zh">卖家已确认</value>
+        <value xml:lang="zh-CN">卖家已确认</value>
+        <value xml:lang="zh-TW">卖家已确认</value>
+    </property>
+
+
     <property key="LoginSuccess">
         <value xml:lang="en">LoginSuccess.</value>
         <value xml:lang="zh">登录成功</value>

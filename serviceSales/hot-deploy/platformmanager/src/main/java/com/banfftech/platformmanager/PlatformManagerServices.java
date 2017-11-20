@@ -125,7 +125,7 @@ public class PlatformManagerServices {
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
         jsobj1.put("url","");
         jsobjminipro.put("appid","wx119831dae45a3f3f");
-        jsobjminipro.put("pagepath","pages/index/");
+        jsobjminipro.put("pagepath","index?foo=bar");
         jsobj1.put("miniprogram",jsobjminipro);
 
 

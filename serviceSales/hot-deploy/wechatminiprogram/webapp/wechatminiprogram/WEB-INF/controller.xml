@@ -26,6 +26,19 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+    <request-map uri="jscode2session">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+               invoke="jscode2session"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
     

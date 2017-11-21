@@ -132,6 +132,27 @@ public class PeConstant {
      * 微信公众平台Sc
      */
     public static final String ACCESS_KEY_SECRET = "f507073761431bdb0a15e85ebe33cffd";
+
+    /**
+     * 微信小程序AppID
+     */
+    public static final String WECHAT_MINI_PROGRAM_APP_ID = "wx299644ef4c9afbde";
+
+
+
+
+    /**
+     * 微信小程序Secret
+     */
+    public static final String WECHAT_MINI_PROGRAM_APP_SECRET_ID = "7ba298224c1ae0f2f00301c8e5b312f7";
+
+
+    /**
+     * 微信小程序获取UnioId的地址
+     */
+    public static final String WECHAT_MINI_PROGRAM_SNS_PATH = "https://api.weixin.qq.com/sns/jscode2session";
+
+
     /**
      * We Chat Access Path
      */

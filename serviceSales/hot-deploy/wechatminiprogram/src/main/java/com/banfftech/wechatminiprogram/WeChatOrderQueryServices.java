@@ -60,7 +60,7 @@ public class WeChatOrderQueryServices {
         String openId = (String) context.get("openId");
 
 
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryFirst();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
         String partyId = "NA";
 

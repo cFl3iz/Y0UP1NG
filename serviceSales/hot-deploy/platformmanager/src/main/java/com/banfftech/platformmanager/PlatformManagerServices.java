@@ -117,16 +117,16 @@ public class PlatformManagerServices {
         JSONObject jsobj8 = new JSONObject();
         JSONObject jsobjminipro = new JSONObject();
 
-        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
-                "orderId="+orderId+"&payToPartyId=" +
-                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
-        System.out.println("*============================================================URL = " + url2);
+//        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
+//                "orderId="+orderId+"&payToPartyId=" +
+//                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
+//        System.out.println("*============================================================URL = " + url2);
         jsobj1.put("touser", openId);
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
         jsobj1.put("url","www.vivafoo.com");
-        jsobjminipro.put("appid","wx119831dae45a3f3f");
-        jsobjminipro.put("pagepath","pages/index/");
-        jsobj1.put("miniprogram",jsobjminipro);
+//        jsobjminipro.put("appid","wx119831dae45a3f3f");
+//        jsobjminipro.put("pagepath","pages/index/");
+//        jsobj1.put("miniprogram",jsobjminipro);
 
 
         jsobj3.put("value", "订单状态更新啦!");

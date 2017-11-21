@@ -59,6 +59,7 @@ public class WeChatOrderQueryServices {
 
         String openId = (String) context.get("openId");
 
+        System.out.println("*OPENID = " + openId);
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
@@ -67,7 +68,7 @@ public class WeChatOrderQueryServices {
         if(UtilValidate.isNotEmpty(partyIdentification) ){
             partyId = (String) partyIdentification.get("partyId");
         }
-
+        System.out.println("*partyId = "+partyId);
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
         fieldSet.add("partyId");
@@ -104,7 +105,7 @@ public class WeChatOrderQueryServices {
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
-
+        System.out.println("*queryMyResourceOrderList = "+queryMyResourceOrderList);
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
 
             for(GenericValue gv : queryMyResourceOrderList){

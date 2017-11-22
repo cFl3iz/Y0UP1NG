@@ -295,7 +295,9 @@
 
                     //初始化历史聊天记录
                     iniChatPage();
-
+                    $('body').on('touchmove touchstart', function (event) {
+                        event.preventDefault();
+                    });
 
                 }
         );

@@ -157,8 +157,8 @@
         }
 
         .heard_img {
-            height: 60px;
-            width: 60px;
+            height: 40px;
+            width: 40px;
             border-radius: 5px;
             overflow: hidden;
             background: #ddd;
@@ -188,7 +188,7 @@
             border-radius: 10px;
             padding: .5rem;
             margin: 0;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 28px;
             box-sizing: border-box;
             vertical-align: middle;

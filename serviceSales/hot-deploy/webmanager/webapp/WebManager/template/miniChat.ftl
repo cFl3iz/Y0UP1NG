@@ -63,11 +63,11 @@
         }
 
         .wenwen_btn img, .wenwen_help img {
-            height: 40px;
+            height: 36px;
         }
 
         .wenwen_text {
-            height: 40px;
+            height: 36px;
             border-radius: 5px;
             border: solid 1px #636162;
             box-sizing: border-box;

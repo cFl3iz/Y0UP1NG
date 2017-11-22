@@ -775,7 +775,7 @@
 
     function for_bottom() {
         var speak_height = $('.speak_box').height();
-        $('.speak_box,.speak_window').animate({scrollTop: speak_height}, 500);
+        $('.speak_box,.speak_window').animate({scrollTop: speak_height}, 100);
     }
 
     function autoWidth() {

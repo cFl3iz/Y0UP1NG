@@ -24,14 +24,12 @@
 
         #allmap{height:80px;width:100px;}
         #r-result{width:100%; font-size:14px;}
-        html{
-            position: fixed;
-        }
+
         body {
             background: url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/chatBG.jpeg) no-repeat;
             background-size: 100%;
             background-attachment: fixed;
-            position: fixed;
+
         }
 
         @media all and (min-width: 640px) {

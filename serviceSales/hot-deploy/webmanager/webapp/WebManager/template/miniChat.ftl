@@ -20,7 +20,7 @@
 
 
 
-
+        -webkit-overflow-scrolling:touch;
 
         #allmap{height:80px;width:100px;}
         #r-result{width:100%; font-size:14px;}

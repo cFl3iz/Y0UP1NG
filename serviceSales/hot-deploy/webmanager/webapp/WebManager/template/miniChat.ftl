@@ -28,6 +28,7 @@
             background: url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/chatBG.jpeg) no-repeat;
             background-size: 100%;
             background-attachment: fixed;
+            position: fixed;
         }
 
         @media all and (min-width: 640px) {
@@ -295,9 +296,9 @@
 
                     //初始化历史聊天记录
                     iniChatPage();
-                    $('body').on('touchmove touchstart', function (event) {
-                        event.preventDefault();
-                    });
+//                    $('body').on('touchmove touchstart', function (event) {
+//                        event.preventDefault();
+//                    });
 
                 }
         );

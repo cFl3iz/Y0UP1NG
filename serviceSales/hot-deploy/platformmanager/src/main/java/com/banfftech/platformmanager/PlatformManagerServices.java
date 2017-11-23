@@ -191,7 +191,7 @@ public class PlatformManagerServices {
         String payToPartyId  = (String) context.get("payToPartyId");
         String tarjeta       = (String) context.get("tarjeta");
 
-        firstName = EmojiHandler.decodeJava(firstName);
+//        firstName = EmojiHandler.decodeJava(firstName);
 
 
         Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);

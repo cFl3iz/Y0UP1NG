@@ -230,10 +230,10 @@ public class PlatformLoginWorker {
 
             String wxNickName = (String) jsonMap2.get("nickname");
 
-            if(EmojiFilter.containsEmoji(wxNickName)){
-                //包含emoji表情
-                wxNickName = EmojiHandler.encodeJava(wxNickName);
-            }
+//            if(EmojiFilter.containsEmoji(wxNickName)){
+//                //包含emoji表情
+//                wxNickName = EmojiHandler.encodeJava(wxNickName);
+//            }
 
             weChatUserInfo.put("nickname", wxNickName);
             weChatUserInfo.put("headimgurl", (String) jsonMap2.get("headimgurl"));

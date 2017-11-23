@@ -340,10 +340,10 @@ public class WeChatUtil {
         String wxNickName = (String) jsonUserInfoMap.get("nickname");
         System.out.println("==================================================jsonUserInfoMap= " + jsonUserInfoMap);
         System.out.println("==================================================wxNickName= " + wxNickName);
-        if(EmojiFilter.containsEmoji(wxNickName)){
-            //包含emoji表情
-            wxNickName = EmojiHandler.encodeJava(wxNickName);
-        }
+//        if(EmojiFilter.containsEmoji(wxNickName)){
+//            //包含emoji表情
+//            wxNickName = EmojiHandler.encodeJava(wxNickName);
+//        }
         if(null != jsonUserInfoMap.get("nickname")){
             weChatUserInfo.put("weChatId",(String) jsonUserInfoMap.get("openid"));
             weChatUserInfo.put("nickname",wxNickName);

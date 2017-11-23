@@ -43,7 +43,7 @@ under the License.
   <field-type-def type="indicator" sql-type="CHAR(1)" java-type="String"/>
   <field-type-def type="very-short" sql-type="VARCHAR(10)" java-type="String"/>
   <field-type-def type="short-varchar" sql-type="VARCHAR(60)" java-type="String"/>
-  <field-type-def type="long-varchar" sql-type="VARCHAR(191)" java-type="String"/>
+  <field-type-def type="long-varchar" sql-type="VARCHAR(250)" java-type="String"/>
   <field-type-def type="very-long" sql-type="LONGTEXT" java-type="String"/>
 
   <field-type-def type="comment" sql-type="VARCHAR(191)" java-type="String"/>

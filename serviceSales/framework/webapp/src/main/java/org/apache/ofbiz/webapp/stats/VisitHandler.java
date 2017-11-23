@@ -147,9 +147,9 @@ public class VisitHandler {
                             visit.set("fromDate", new Timestamp(session.getCreationTime()));
 
                             visit.set("initialLocale", initialLocale);
-                            if (initialRequest != null) visit.set("initialRequest", initialRequest.length() > 250 ? initialRequest.substring(0, 250) : initialRequest);
-                            if (initialReferrer != null) visit.set("initialReferrer", initialReferrer.length() > 250 ? initialReferrer.substring(0, 250) : initialReferrer);
-                            if (initialUserAgent != null) visit.set("initialUserAgent", initialUserAgent.length() > 250 ? initialUserAgent.substring(0, 250) : initialUserAgent);
+                            if (initialRequest != null) visit.set("initialRequest", initialRequest.length() > 191 ? initialRequest.substring(0, 190) : initialRequest);
+                            if (initialReferrer != null) visit.set("initialReferrer", initialReferrer.length() > 191 ? initialReferrer.substring(0, 190) : initialReferrer);
+                            if (initialUserAgent != null) visit.set("initialUserAgent", initialUserAgent.length() > 191 ? initialUserAgent.substring(0, 190) : initialUserAgent);
                             visit.set("webappName", webappName);
                             if (UtilProperties.propertyValueEquals("serverstats", "stats.proxy.enabled", "true")) {
                                 visit.set("clientIpAddress", session.getAttribute("_CLIENT_FORWARDED_FOR_"));

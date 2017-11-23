@@ -318,7 +318,7 @@ public class CommonServices {
             v.set("initialLocale", "en_US");
             v.set("initialRequest", "https://localhost:8443/webtools/control/main");
             v.set("initialReferrer", "https://localhost:8443/webtools/control/main");
-            v.set("initialUserAgent", "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/124 (KHTML, like Gecko) Safari/125.1");
+            v.set("initialUserAgent", "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us)");
             v.set("clientIpAddress", "127.0.0.1");
             v.set("clientHostName", "localhost");
             v.set("fromDate", UtilDateTime.nowTimestamp());

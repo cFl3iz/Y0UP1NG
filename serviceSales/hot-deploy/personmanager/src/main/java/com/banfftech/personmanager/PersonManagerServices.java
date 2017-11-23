@@ -1129,10 +1129,22 @@ public class PersonManagerServices {
 
 
 
+
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
         // productId
         String productId = (String) request.getParameter("productId");
+
+
+        String description = (String) request.getParameter("description");
+
+
+        GenericValue product = delegator.findOne(UtilMisc.toMap("productId",productId),false);
+
+
+        product.set("description",description);
+
+        product.store();
 
 //        String alipayaccount = (String) request.getParameter("alipayaccount");
 //

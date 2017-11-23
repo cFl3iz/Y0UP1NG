@@ -314,8 +314,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>
@@ -347,8 +347,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>
@@ -380,8 +380,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>

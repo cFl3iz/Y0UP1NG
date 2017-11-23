@@ -82,7 +82,9 @@
     <field-type name="derby" loader="fieldfile" location="fieldtypederby.xml"/>
     <field-type name="daffodil" loader="fieldfile" location="fieldtypedaffodil.xml"/>
     <field-type name="axion" loader="fieldfile" location="fieldtypeaxion.xml"/>
-    <field-type name="mysql" loader="fieldfile" location="fieldtypemysql.xml"/>
+
+    <field-type name="mysql" loader="fieldfile" location="fieldtypemysql_utf8mb4.xml"/>
+
     <field-type name="postgres" loader="fieldfile" location="fieldtypepostgres.xml"/>
     <field-type name="oracle" loader="fieldfile" location="fieldtypeoracle.xml"/>
     <field-type name="sapdb" loader="fieldfile" location="fieldtypesapdb.xml"/>
@@ -314,8 +316,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>
@@ -347,8 +349,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>
@@ -380,8 +382,8 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-                character-set="utf8"
-                collate="utf8_general_ci">
+                character-set="utf8mb4"
+                collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
         <read-data reader-name="seed-initial"/>

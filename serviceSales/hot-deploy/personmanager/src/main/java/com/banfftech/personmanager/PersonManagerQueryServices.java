@@ -656,6 +656,7 @@ public class PersonManagerQueryServices {
                 String productId = (String) gv.get("productId");
 
                 GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
                 rowMap.put("productName",""+product.get("productName"));
                 rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
                 String payToPartyId = (String)productStore.get("payToPartyId");

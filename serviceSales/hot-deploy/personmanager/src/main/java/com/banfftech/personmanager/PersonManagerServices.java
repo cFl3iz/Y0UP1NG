@@ -1139,8 +1139,8 @@ public class PersonManagerServices {
         String description = (String) request.getParameter("description");
 
 
-        GenericValue product = delegator.findOne(UtilMisc.toMap("productId",productId),false);
 
+        GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
 
         product.set("description",description);
 

@@ -654,7 +654,7 @@ public class PersonManagerQueryServices {
                 rowMap = gv.getAllFields();
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
-                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
                 GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
                 rowMap.put("productName",""+product.get("productName"));
                 rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
@@ -1232,6 +1232,7 @@ public class PersonManagerQueryServices {
         //Select Fields
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");
+        fieldSet.add("description");
         fieldSet.add("productStoreId");
         fieldSet.add("productName");
         fieldSet.add("detailImageUrl");
@@ -1274,6 +1275,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("price",gv.get("price"));
                     rowMap.put("productCategoryId",(String)gv.get("productCategoryId"));
                     rowMap.put("payToPartyId",(String)gv.get("payToPartyId"));
+                    rowMap.put("description",(String)gv.get("description"));
 
 
                     fieldSet = new HashSet<String>();

@@ -30,6 +30,7 @@
     <PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" />
 
     <!--  新增类型 -->
+    
     <ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>
     <ShipmentMethodType description="顺风" shipmentMethodTypeId="SHUNFENG"/>
     <ShipmentMethodType description="申通" shipmentMethodTypeId="SHENGTONG"/>

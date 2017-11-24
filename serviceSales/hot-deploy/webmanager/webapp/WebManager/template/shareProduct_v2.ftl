@@ -43,7 +43,7 @@
 
                  },
                  error: function (data) {
-                     alert("ERROR :" + data.status);
+                     alert("CODE-403:网络出现问题请刷新页面重试");
                  }
              });
 

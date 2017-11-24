@@ -198,6 +198,12 @@ public class JPushServices {
 		}
 
 		String regId = (String) context.get("regId");
+
+
+		if(!UtilValidate.isNotEmpty(regId)){
+			return ServiceUtil.returnSuccess();
+		}
+
 		String objectId = (String) context.get("objectId");
 		String title = "友评";
 

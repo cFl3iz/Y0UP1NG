@@ -88,7 +88,7 @@ public class PersonManagerQueryServices {
         fieldSet.add("contactMechId");
         fieldSet.add("partyId");
         fieldSet.add("address1");
-        fieldSet.add("address2");
+//        fieldSet.add("address2");
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
@@ -706,7 +706,7 @@ public class PersonManagerQueryServices {
         GenericValue postalAddress = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId,"contactMechTypeId", "POSTAL_ADDRESS")).queryList());
         if (UtilValidate.isNotEmpty(postalAddress))
-            personMap.put("contactAddress", "" + postalAddress.get("address1") + " " + postalAddress.get("address2"));
+            personMap.put("contactAddress", "" + postalAddress.get("address1"));
 
         return personMap;
     }
@@ -1116,7 +1116,7 @@ public class PersonManagerQueryServices {
         GenericValue postalAddress = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
         if (UtilValidate.isNotEmpty(postalAddress))
-            inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address2") + " " + postalAddress.get("address1"));
+            inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city")  + " " + postalAddress.get("address1"));
         if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
 
 

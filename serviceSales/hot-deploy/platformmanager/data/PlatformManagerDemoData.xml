@@ -38,7 +38,7 @@
     <ShipmentMethodType description="中通" shipmentMethodTypeId="ZHONGTONG"/>
 
     <!--新增一个货运方式-->
-    <CarrierShipmentMethod shipmentMethodTypeId="EMS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="SHUNFENG_EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
     <CarrierShipmentMethod shipmentMethodTypeId="SHENGTONG" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
     <CarrierShipmentMethod shipmentMethodTypeId="YUNDA" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
     <CarrierShipmentMethod shipmentMethodTypeId="YUANTONG" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>

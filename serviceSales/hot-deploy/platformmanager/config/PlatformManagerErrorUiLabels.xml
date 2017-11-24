@@ -6,6 +6,16 @@
         <value xml:lang="zh">验证码不存在</value>
     </property>
 
+    <property key="AccountingGiftCerticateNumberCannotStoreFulfillmentInfo">
+        <value xml:lang="de">Kann Ausführungsinformation nicht speichern:  ${errorString}</value>
+        <value xml:lang="en">Unable to store fulfillment info:  ${errorString}</value>
+        <value xml:lang="it">Non è possibile registrazione le informazioni di ricarica: ${errorString}</value>
+        <value xml:lang="ja">執行情報が格納できません: ${errorString}</value>
+        <value xml:lang="pt">Não é possível armazenar informações de cumprimento: ${errorString}</value>
+        <value xml:lang="zh">无法存储执行信息：${errorString}</value>
+        <value xml:lang="zh-TW">無法儲存責任履行履行資訊:${errorString}</value>
+    </property>
+
     <property key="TelNotExistError">
         <value xml:lang="en">Tel not exist</value>
         <value xml:lang="zh">手机号不存在</value>

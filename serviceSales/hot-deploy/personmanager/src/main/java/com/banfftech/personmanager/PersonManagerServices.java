@@ -1317,7 +1317,7 @@ public class PersonManagerServices {
 
         // 不分梨用户
         if (null == productCategoryId) {
-            productCategoryId = createPersonStoreAndCatalogAndCategory(admin, delegator, dispatcher, partyId);
+            productCategoryId = createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
         }
 
@@ -2148,7 +2148,7 @@ public class PersonManagerServices {
 
         }
 
-        createPersonStoreAndCatalogAndCategory(admin, delegator, dispatcher, partyId);
+        createPersonStoreAndCatalogAndCategory(locale,admin, delegator, dispatcher, partyId);
 
 
 
@@ -2179,7 +2179,7 @@ public class PersonManagerServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static String createPersonStoreAndCatalogAndCategory(GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
+    public static String createPersonStoreAndCatalogAndCategory(  Locale locale,GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
 
         // Create Party Role 授予当事人角色,如果没有
         GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
@@ -2251,12 +2251,17 @@ public class PersonManagerServices {
                 dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                 "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,
                         "shipmentMethodTypeId","EXPRESS","partyId","CHINAPOST","roleTypeId","CARRIER"));
-        //顺风
-        Map<String, Object> createProductStoreShipShunFenMethOutMap =
-                dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                        "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,
-                        "shipmentMethodTypeId","EXPRESS","partyId","SHUNFENG_EXPRESS","roleTypeId","CARRIER"));
 
+        try {
+            //顺风
+
+                    dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                            "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
+                            "shipmentMethodTypeId", "EXPRESS", "partyId", "SHUNFENG_EXPRESS", "roleTypeId", "CARRIER"));
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+
+        }
 
 
 

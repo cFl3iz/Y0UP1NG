@@ -3,47 +3,47 @@
 
     <!-- 一些快递Party -->
 
-    <Party partyId="SHUNFENG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="SHENTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="YUNDA_EXPRESS"    partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="YUANTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="EMS_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="ZTO_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="QuanFeng_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+    <!--<Party partyId="SHUNFENG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="SHENTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="YUNDA_EXPRESS"    partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="YUANTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="EMS_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="ZTO_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<Party partyId="QuanFeng_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />-->
 
 
-    <PartyGroup partyId="SHUNFENG_EXPRESS" groupName="顺丰速递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="SHENTONG_EXPRESS" groupName="申通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="YUNDA_EXPRESS"    groupName="韵达快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="YUANTONG_EXPRESS" groupName="圆通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="ZTO_EXPRESS"      groupName="中通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="QuanFeng_EXPRESS" groupName="全峰快递" />
+    <!--<PartyGroup partyId="SHUNFENG_EXPRESS" groupName="顺丰速递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<PartyGroup partyId="SHENTONG_EXPRESS" groupName="申通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<PartyGroup partyId="YUNDA_EXPRESS"    groupName="韵达快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<PartyGroup partyId="YUANTONG_EXPRESS" groupName="圆通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<PartyGroup partyId="ZTO_EXPRESS"      groupName="中通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>-->
+    <!--<PartyGroup partyId="QuanFeng_EXPRESS" groupName="全峰快递" />-->
 
 
-    <!--给快递加角色-->
-    <PartyRole partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>
-    <PartyRole partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="YUNDA_EXPRESS"    roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>
-    <PartyRole partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="EMS_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="ZTO_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" />
+    <!--&lt;!&ndash;给快递加角色&ndash;&gt;-->
+    <!--<PartyRole partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>-->
+    <!--<PartyRole partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>-->
+    <!--<PartyRole partyId="YUNDA_EXPRESS"    roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>-->
+    <!--<PartyRole partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>-->
+    <!--<PartyRole partyId="EMS_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>-->
+    <!--<PartyRole partyId="ZTO_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>-->
+    <!--<PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" />-->
 
-    <!--  新增类型 -->
-    <ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>
-    <ShipmentMethodType description="顺风" shipmentMethodTypeId="SHUNFENG"/>
-    <ShipmentMethodType description="申通" shipmentMethodTypeId="SHENGTONG"/>
-    <ShipmentMethodType description="韵达" shipmentMethodTypeId="YUNDA"/>
-    <ShipmentMethodType description="圆通" shipmentMethodTypeId="YUANTONG"/>
-    <ShipmentMethodType description="中通" shipmentMethodTypeId="ZHONGTONG"/>
+    <!--&lt;!&ndash;  新增类型 &ndash;&gt;-->
+    <!--<ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>-->
+    <!--<ShipmentMethodType description="顺风" shipmentMethodTypeId="SHUNFENG"/>-->
+    <!--<ShipmentMethodType description="申通" shipmentMethodTypeId="SHENGTONG"/>-->
+    <!--<ShipmentMethodType description="韵达" shipmentMethodTypeId="YUNDA"/>-->
+    <!--<ShipmentMethodType description="圆通" shipmentMethodTypeId="YUANTONG"/>-->
+    <!--<ShipmentMethodType description="中通" shipmentMethodTypeId="ZHONGTONG"/>-->
 
-    <!--新增一个货运方式-->
-    <CarrierShipmentMethod shipmentMethodTypeId="SHUNFENG_EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="SHENGTONG" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="YUNDA" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="YUANTONG" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EMS" partyId="EMS_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="ZHONGTONG" partyId="ZTO_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <!--&lt;!&ndash;新增一个货运方式&ndash;&gt;-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="SHUNFENG_EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="SHENGTONG" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="YUNDA" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="YUANTONG" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="EMS" partyId="EMS_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
+    <!--<CarrierShipmentMethod shipmentMethodTypeId="ZHONGTONG" partyId="ZTO_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
 
 
 

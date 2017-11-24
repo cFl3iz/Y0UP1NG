@@ -57,7 +57,7 @@
                         </label>
                     </label>
                 </div>
-            <div class="m-cell">
+            <div class="m-cell"  id="CleanOne">
                 <label class="cell-item">
                     <span class="cell-left">${uiLabel.CleanOne}</span>
                     <label class="cell-right">
@@ -136,10 +136,11 @@
                                 if(flag){
                                     $("#addressSettingBox").hide();
                                     $("#SetDefaultAddress").hide();
-
+                                    $("#CleanOne").hide();
                                 }else{
                                     $("#addressSettingBox").show();
                                     $("#SetDefaultAddress").show();
+                                    $("#CleanOne").show();
                                 }
                             }
                     );
@@ -198,7 +199,7 @@
                     // 顶部提示框
                     $('#J_Notify').on('click', function () {
                         dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
-                            console.log('do ajax');
+                            alert("1");
                             $("#J_Notify").attr({"disabled":"disabled"});
                             $("#createPersonPartyPostalAddressForm").submit();
                         });

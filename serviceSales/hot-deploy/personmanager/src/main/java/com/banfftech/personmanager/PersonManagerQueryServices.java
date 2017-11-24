@@ -1114,7 +1114,7 @@ public class PersonManagerQueryServices {
         if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
         //获取地址
         GenericValue postalAddress = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
         if (UtilValidate.isNotEmpty(postalAddress))
             inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address2") + " " + postalAddress.get("address1"));
         if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));

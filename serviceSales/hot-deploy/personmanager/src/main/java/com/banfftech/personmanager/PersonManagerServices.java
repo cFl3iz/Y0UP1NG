@@ -34,6 +34,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import com.auth0.jwt.JWTExpiredException;
 import com.auth0.jwt.JWTSigner;
@@ -57,6 +58,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.fileupload.FileItem;
@@ -80,13 +82,12 @@ public class PersonManagerServices {
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
 
-
     /**
      * PartyRelationShipENUM
      */
     public enum relationType {
 
-        C2CRSS,CONTACT;
+        C2CRSS, CONTACT;
 
         public static relationType getRelationType(String relationType) {
 
@@ -98,6 +99,7 @@ public class PersonManagerServices {
 
     /**
      * createPerson PartyPostalAddress
+     *
      * @param dctx
      * @param context
      * @return
@@ -130,7 +132,7 @@ public class PersonManagerServices {
 
         String partyId = (String) userLogin.get("partyId");
 
-        resultMap.put("tarjeta",tarjeta);
+        resultMap.put("tarjeta", tarjeta);
 
 
         //Create GEO
@@ -145,18 +147,33 @@ public class PersonManagerServices {
 //        GenericValue partyGeoPoint = delegator.makeValue("PartyGeoPoint",
 //                UtilMisc.toMap("partyId", cloudCardStroreId, "geoPointId", geoPointId, "fromDate", UtilDateTime.nowTimestamp()));
 //        partyGeoPoint.create();
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
         String firstName = (String) person.get("firstName");
 
-        // fa收货地址
-        String contactMechPurposeTypeId = "PRIMARY_LOCATION";
-//        String contactMechTypeId = "";
+        // 货运目的地址
+        String contactMechPurposeTypeId = "SHIPPING_LOCATION";
         Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,  "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY,  "address1", address1 +" "+ address2, "postalCode",PeConstant.DEFAULT_POST_CODE,
+                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
                         "contactMechPurposeTypeId", contactMechPurposeTypeId));
+        String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
         if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
             return createPartyPostalAddressOutMap;
         }
+
+        //寄送账单地址
+        dispatcher.runAsync("createPartyContactMechPurpose",
+                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+                        "contactMechPurposeTypeId", "BILLING_LOCATION"));
+
+        //通信地址
+        dispatcher.runAsync("createPartyContactMechPurpose",
+                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+                        "contactMechPurposeTypeId", "GENERAL_LOCATION"));
+
+        //首选地址
+        dispatcher.runAsync("createPartyContactMechPurpose",
+                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+                        "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
 
 
 
@@ -164,17 +181,9 @@ public class PersonManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
     /**
      * markOrOutMarkProduct
+     *
      * @param dctx
      * @param context
      * @return
@@ -201,17 +210,16 @@ public class PersonManagerServices {
 
         String productId = (String) context.get("productId");
 
-        String markIt    = (String) context.get("markIt");
+        String markIt = (String) context.get("markIt");
 
         String partyId = (String) userLogin.get("partyId");
 
-        if(markIt.equals("true")){
-            dispatcher.runSync("addPartyToProduct",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"productId",productId,"roleTypeId","PLACING_CUSTOMER"));
-        }else{
-            GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,"productId",productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
-            dispatcher.runSync("removePartyFromProduct",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"productId",productId,"roleTypeId","PLACING_CUSTOMER","fromDate",partyMarkRole.get("fromDate")));
+        if (markIt.equals("true")) {
+            dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
+        } else {
+            GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+            dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
         }
-
 
 
         return resultMap;
@@ -220,6 +228,7 @@ public class PersonManagerServices {
 
     /**
      * pushMessage
+     *
      * @param request
      * @param response
      * @return
@@ -240,9 +249,9 @@ public class PersonManagerServices {
         HttpSession session = request.getSession();
 
 
-        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
-        Map<String,Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
 
 
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
@@ -253,7 +262,7 @@ public class PersonManagerServices {
 
         String text = (String) request.getParameter("text");
 
-        String tarjeta       = (String) request.getParameter("tarjeta");
+        String tarjeta = (String) request.getParameter("tarjeta");
 
         String objectId = (String) request.getParameter("objectId");
 
@@ -264,12 +273,12 @@ public class PersonManagerServices {
         String messageLogTypeId = (String) request.getParameter("messageLogTypeId");
 
         //默认是文字类型
-        if(UtilValidate.isEmpty(messageLogTypeId)){
+        if (UtilValidate.isEmpty(messageLogTypeId)) {
             messageLogTypeId = "TEXT";
         }
 
 
-        if(!UtilValidate.isEmpty(messageLogTypeId) && messageLogTypeId.equals("IMAGE")){
+        if (!UtilValidate.isEmpty(messageLogTypeId) && messageLogTypeId.equals("IMAGE")) {
 
             try {
 
@@ -304,7 +313,7 @@ public class PersonManagerServices {
 
                             if (pictureKey != null && !pictureKey.equals("")) {
                                 text = PeConstant.OSS_PATH + PeConstant.CHAT_IMAGE_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
-                                pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
+                                pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
                             }
                         }
 
@@ -319,10 +328,8 @@ public class PersonManagerServices {
             }
 
 
-
-
-        }else{
-            pushMsgBase(objectId,partyIdFrom,partyIdTo,delegator,dispatcher,userLogin,text,pushWeChatMessageInfoMap,admin,createMessageLogMap,messageLogTypeId);
+        } else {
+            pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
         }
 
 
@@ -469,12 +476,13 @@ public class PersonManagerServices {
 //
 //        }
 
-        return"success";
+        return "success";
     }
 
 
     /**
      * pushMsgBase
+     *
      * @param objectId
      * @param partyIdFrom
      * @param partyIdTo
@@ -487,23 +495,22 @@ public class PersonManagerServices {
      * @param createMessageLogMap
      * @return
      */
-    public static String  pushMsgBase(String objectId,String partyIdFrom,String partyIdTo,Delegator delegator,LocalDispatcher dispatcher,
-                                      GenericValue userLogin,String text,
-                                      Map<String,Object> pushWeChatMessageInfoMap,GenericValue admin,Map<String,Object> createMessageLogMap,String messageLogTypeId)throws GenericEntityException, GenericServiceException{
+    public static String pushMsgBase(String objectId, String partyIdFrom, String partyIdTo, Delegator delegator, LocalDispatcher dispatcher,
+                                     GenericValue userLogin, String text,
+                                     Map<String, Object> pushWeChatMessageInfoMap, GenericValue admin, Map<String, Object> createMessageLogMap, String messageLogTypeId) throws GenericEntityException, GenericServiceException {
 
-        if(UtilValidate.isEmpty(partyIdFrom)){
+        if (UtilValidate.isEmpty(partyIdFrom)) {
             partyIdFrom = (String) userLogin.get("partyId");
         }
 
-        pushWeChatMessageInfoMap.put("userLogin",userLogin);
+        pushWeChatMessageInfoMap.put("userLogin", userLogin);
 
-        pushWeChatMessageInfoMap.put("message",text);
+        pushWeChatMessageInfoMap.put("message", text);
 
 
-        GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo,"enabled","Y").queryFirst();
+        GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo, "enabled", "Y").queryFirst();
 
         String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
-
 
 
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
@@ -522,10 +529,10 @@ public class PersonManagerServices {
         claims.put("exp", exp);
         claims.put("iat", iat);
 
-        pushWeChatMessageInfoMap.put("tarjeta",signer.sign(claims));
+        pushWeChatMessageInfoMap.put("tarjeta", signer.sign(claims));
 
 
-        System.out.println("========================================= partyIdTo = " +partyIdTo);
+        System.out.println("========================================= partyIdTo = " + partyIdTo);
 
         // 查询registrationID
         EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
@@ -535,20 +542,20 @@ public class PersonManagerServices {
         EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
-        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
-        createMessageLogMap.put("message",text);
-        if(person!=null){
-            text = person.get("firstName")+":"+text;
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyIdFrom), false);
+        createMessageLogMap.put("message", text);
+        if (person != null) {
+            text = person.get("firstName") + ":" + text;
         }
 
-        pushWeChatMessageInfoMap.put("firstName",person.get("firstName"));
+        pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
 
-        if(null != partyIdentifications && partyIdentifications.size()>0){
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
 
-            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
@@ -558,10 +565,10 @@ public class PersonManagerServices {
                     EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo));
             long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
 
-            String badege_str = count+"";
+            String badege_str = count + "";
 
-            try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"badge",badege_str,"message","message","content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",partyIdFrom));
+            try {
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return "error";
@@ -571,32 +578,28 @@ public class PersonManagerServices {
         }
 
 
-
-
-        if(!UtilValidate.isEmpty(partyIdFrom)) {
+        if (!UtilValidate.isEmpty(partyIdFrom)) {
             createMessageLogMap.put("partyIdFrom", partyIdFrom);
         }
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
-        createMessageLogMap.put("partyIdTo",partyIdTo);
+        createMessageLogMap.put("partyIdTo", partyIdTo);
 
-        createMessageLogMap.put("badge","true");
+        createMessageLogMap.put("badge", "true");
 
-        createMessageLogMap.put("messageLogTypeId",messageLogTypeId);
+        createMessageLogMap.put("messageLogTypeId", messageLogTypeId);
 
 
-        if(!UtilValidate.isEmpty(objectId)){
-            createMessageLogMap.put("objectId",objectId);
+        if (!UtilValidate.isEmpty(objectId)) {
+            createMessageLogMap.put("objectId", objectId);
         }
 
-        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
 
         msg.create();
-
-
 
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
@@ -616,28 +619,24 @@ public class PersonManagerServices {
 
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            String pushDate = ""+formatter.format(date);
+            String pushDate = "" + formatter.format(date);
 
-            pushWeChatMessageInfoMap.put("date",pushDate);
+            pushWeChatMessageInfoMap.put("date", pushDate);
 
             String openId = (String) partyIdentificationList.get(0).get("idValue");
 
-            pushWeChatMessageInfoMap.put("openId",openId);
+            pushWeChatMessageInfoMap.put("openId", openId);
 
-            pushWeChatMessageInfoMap.put("productId",objectId);
+            pushWeChatMessageInfoMap.put("productId", objectId);
 
-            pushWeChatMessageInfoMap.put("payToPartyId",payToPartyId);
+            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
 
             //推微信
-            dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
+            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
 
         }
         return "success";
     }
-
-
-
-
 
 
     /**
@@ -827,16 +826,15 @@ public class PersonManagerServices {
 //    }
 
 
-
-
-        /**
-         * Affirm Order
-         * @param dctx
-         * @param context
-         * @return
-         * @throws GenericEntityException
-         * @throws GenericServiceException
-         */
+    /**
+     * Affirm Order
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> affirmOrder(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 
@@ -863,29 +861,14 @@ public class PersonManagerServices {
         }
 
 
-
-
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         return resultMap;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * salesDiscontinuation
+     *
      * @param dctx
      * @param context
      * @return
@@ -918,23 +901,14 @@ public class PersonManagerServices {
         }
 
 
-
-
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         return resultMap;
     }
 
 
-
-
-
-
-
-
-
-
     /**
      * Matching Contact
+     *
      * @param dctx
      * @param context
      * @return
@@ -949,7 +923,7 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
-        GenericValue userLogin = (GenericValue)  context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = (String) userLogin.get("partyId");
 
@@ -961,18 +935,11 @@ public class PersonManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-       int count = 0;
+        int count = 0;
 
         if (!UtilValidate.isEmpty(contactsArray)) {
-            count = forSearchPeUsers(partyId,delegator,dispatcher,contactsArray,admin);
+            count = forSearchPeUsers(partyId, delegator, dispatcher, contactsArray, admin);
         }
-
-
-
-
-
-
-
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -982,20 +949,21 @@ public class PersonManagerServices {
 
     /**
      * Search User Is Exsits ?
+     *
      * @param delegator
      * @param dispatcher
      * @param contactsArray
      * @param admin
      * @return
      */
-    private static int forSearchPeUsers(String partyIdFrom,Delegator delegator, LocalDispatcher dispatcher, String[] contactsArray, GenericValue admin) throws GenericEntityException, GenericServiceException {
+    private static int forSearchPeUsers(String partyIdFrom, Delegator delegator, LocalDispatcher dispatcher, String[] contactsArray, GenericValue admin) throws GenericEntityException, GenericServiceException {
 
-      int count = 0;
+        int count = 0;
 
         for (int i = 0; i < contactsArray.length; i++) {
-            Map<String,Object> rowMap = new HashMap<String, Object>();
+            Map<String, Object> rowMap = new HashMap<String, Object>();
 
-            String tel = contactsArray[i].substring(contactsArray[i].indexOf(":") + 1).replace("-","").replace("\"","");
+            String tel = contactsArray[i].substring(contactsArray[i].indexOf(":") + 1).replace("-", "").replace("\"", "");
             tel = tel.replaceAll("]", "");
 
             String nickName = contactsArray[i].substring(1, contactsArray[i].indexOf(":"));
@@ -1004,15 +972,15 @@ public class PersonManagerServices {
 
             if (null != teleContact) {
                 String partyId = (String) teleContact.get("partyId");
-                Map<String,Object>   addPartyRelationShipInMap = new HashMap<String, Object>();
-                addPartyRelationShipInMap.put("userLogin",admin);
-                addPartyRelationShipInMap.put("partyIdFrom",partyId);
-                addPartyRelationShipInMap.put("partyIdTo",partyIdFrom);
-                addPartyRelationShipInMap.put("relationEnum","CONTACT");
-                dispatcher.runSync("addPartyRelationShip",addPartyRelationShipInMap);
-                count ++;
+                Map<String, Object> addPartyRelationShipInMap = new HashMap<String, Object>();
+                addPartyRelationShipInMap.put("userLogin", admin);
+                addPartyRelationShipInMap.put("partyIdFrom", partyId);
+                addPartyRelationShipInMap.put("partyIdTo", partyIdFrom);
+                addPartyRelationShipInMap.put("relationEnum", "CONTACT");
+                dispatcher.runSync("addPartyRelationShip", addPartyRelationShipInMap);
+                count++;
             }
-           // createActivityMembers(userLogin, workEffortId, nickName, tel, dispatcher, delegator, false, null, null, null, null, null);
+            // createActivityMembers(userLogin, workEffortId, nickName, tel, dispatcher, delegator, false, null, null, null, null, null);
         }
 
 
@@ -1022,6 +990,7 @@ public class PersonManagerServices {
 
     /**
      * checkSubscribe
+     *
      * @param request
      * @param response
      * @return
@@ -1044,30 +1013,14 @@ public class PersonManagerServices {
         String productId = (String) request.getParameter("productId");
 
 
-
-        request.setAttribute("subscribe","");
+        request.setAttribute("subscribe", "");
         return "success";
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Query Message
+     *
      * @param request
      * @param response
      * @return
@@ -1095,15 +1048,13 @@ public class PersonManagerServices {
         String productId = (String) request.getParameter("productId");
 
 
-
-
         return "success";
     }
 
 
-
     /**
      * add Product Content
+     *
      * @param request
      * @param response
      * @return
@@ -1128,8 +1079,6 @@ public class PersonManagerServices {
         String partyId = (String) userLogin.get("partyId");
 
 
-
-
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
         // productId
@@ -1139,10 +1088,9 @@ public class PersonManagerServices {
         String description = (String) request.getParameter("description");
 
 
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
 
-        GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
-
-        product.set("description",description);
+        product.set("description", description);
 
         product.store();
 
@@ -1170,54 +1118,53 @@ public class PersonManagerServices {
 //        }
 
 
+        try {
 
-            try {
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
 
-                ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
-
-                List<FileItem> items = dfu.parseRequest(request);
-
-
-                int itemSize = 0;
+            List<FileItem> items = dfu.parseRequest(request);
 
 
-                // if(null!=items){
-                if (null != items) {
-                    itemSize = items.size();
-
-                    int count = 1;
-
-                    for (FileItem item : items) {
+            int itemSize = 0;
 
 
-                        InputStream in = item.getInputStream();
+            // if(null!=items){
+            if (null != items) {
+                itemSize = items.size();
 
-                        String fileName = item.getName();
+                int count = 1;
+
+                for (FileItem item : items) {
 
 
-                        if (!UtilValidate.isEmpty(fileName)) {
+                    InputStream in = item.getInputStream();
+
+                    String fileName = item.getName();
 
 
-                            long tm = System.currentTimeMillis();
-                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                    "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
+                    if (!UtilValidate.isEmpty(fileName)) {
 
-                            if (pictureKey != null && !pictureKey.equals("") && count <=4) {
-                                //创建产品内容和数据资源附图
-                                createProductContentAndDataResource(delegator,dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")),count);
-                                count++;
-                            }
+
+                        long tm = System.currentTimeMillis();
+                        String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
+
+                        if (pictureKey != null && !pictureKey.equals("") && count <= 4) {
+                            //创建产品内容和数据资源附图
+                            createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), count);
+                            count++;
                         }
-
                     }
+
                 }
-
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
             }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
 
         return "success";
 
@@ -1225,24 +1172,25 @@ public class PersonManagerServices {
 
     /**
      * 创建产品内容及数据资源
+     *
      * @param dispatcher
      * @param admin
      * @param productId
      * @param discription
      * @param dataInfo
      */
-    private static void createProductContentAndDataResource(Delegator delegator,LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo,int count)throws GenericServiceException {
+    private static void createProductContentAndDataResource(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
 
         // Create Content
-        String contentTypeId =  "ADDITIONAL_IMAGE_"+count;
-        Map<String,Object> resultMap1 = dispatcher.runSync("createContent",UtilMisc.toMap("userLogin",admin));
-        String contentId     = (String) resultMap1.get("contentId");
-        dispatcher.runSync("createProductContent",UtilMisc.toMap("userLogin",admin,"productContentTypeId",contentTypeId,"productId",productId,"contentId",contentId));
+        String contentTypeId = "ADDITIONAL_IMAGE_" + count;
+        Map<String, Object> resultMap1 = dispatcher.runSync("createContent", UtilMisc.toMap("userLogin", admin));
+        String contentId = (String) resultMap1.get("contentId");
+        dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin", admin, "productContentTypeId", contentTypeId, "productId", productId, "contentId", contentId));
 
         // Create DataResource
         Map<String, Object> dataResourceCtx = new HashMap<String, Object>();
         dataResourceCtx.put("objectInfo", dataInfo);
-        dataResourceCtx.put("dataResourceName",  description);
+        dataResourceCtx.put("dataResourceName", description);
         dataResourceCtx.put("userLogin", admin);
         dataResourceCtx.put("dataResourceTypeId", "SHORT_TEXT");
         dataResourceCtx.put("mimeTypeId", "text/html");
@@ -1293,7 +1241,6 @@ public class PersonManagerServices {
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
         String partyId = (String) userLogin.get("partyId");
-
 
 
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
@@ -1412,7 +1359,7 @@ public class PersonManagerServices {
         addProductToCategoryInMap.put("productCategoryId", productCategoryId);
         dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
 
-        request.setAttribute("productId",productId);
+        request.setAttribute("productId", productId);
 
         return "success";
 
@@ -1449,7 +1396,7 @@ public class PersonManagerServices {
                     return serviceResultMap;
                 }
             case CONTACT:
-                 serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
                 if (ServiceUtil.isError(serviceResultMap)) {
                     return serviceResultMap;
                 }
@@ -1512,6 +1459,7 @@ public class PersonManagerServices {
 
     /**
      * createRelationCONTACT
+     *
      * @param delegator
      * @param dispatcher
      * @param admin
@@ -1598,6 +1546,7 @@ public class PersonManagerServices {
 
     /**
      * update Person PaymentQrCode
+     *
      * @param request
      * @param response
      * @return
@@ -1622,7 +1571,7 @@ public class PersonManagerServices {
         String partyId = (String) userLogin.get("partyId");
 
         //QR CODE
-        String partyContentType =   (String) request.getParameter("partyContentType");
+        String partyContentType = (String) request.getParameter("partyContentType");
 
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
@@ -1658,7 +1607,7 @@ public class PersonManagerServices {
 
                         if (pictureKey != null && !pictureKey.equals("")) {
 
-                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_RR_CODE_DISK + tm + fileName.substring(fileName.indexOf(".")),partyContentType);
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_RR_CODE_DISK + tm + fileName.substring(fileName.indexOf(".")), partyContentType);
 
                         }
                     }
@@ -1674,7 +1623,6 @@ public class PersonManagerServices {
         return "success";
 
     }
-
 
 
     /**
@@ -1704,7 +1652,7 @@ public class PersonManagerServices {
 
         String firstName = (String) request.getParameter("firstName");
 
-        String noteInfo  = (String) request.getParameter("noteInfo");
+        String noteInfo = (String) request.getParameter("noteInfo");
 
         String gender = (String) request.getParameter("gender");
 
@@ -1713,13 +1661,12 @@ public class PersonManagerServices {
         }
 
 
-
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
 
-        if(!UtilValidate.isEmpty(noteInfo)){
+        if (!UtilValidate.isEmpty(noteInfo)) {
             dispatcher.runSync("createPartyNote", UtilMisc.toMap("userLogin", admin,
-                    "partyId", partyId,"note",noteInfo,"noteName","个人说明"));
+                    "partyId", partyId, "note", noteInfo, "noteName", "个人说明"));
         }
 
         dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,
@@ -1758,7 +1705,7 @@ public class PersonManagerServices {
 
                         if (pictureKey != null && !pictureKey.equals("")) {
 
-                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")),null);
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_HEAD_DISK + tm + fileName.substring(fileName.indexOf(".")), null);
 
                         }
                     }
@@ -1788,11 +1735,11 @@ public class PersonManagerServices {
      * @throws GenericEntityException
      * @author S.Y.L
      */
-    public static String createContentAndDataResource(String partyId, Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher, String pictureKey, String path,String partyContentType)
+    public static String createContentAndDataResource(String partyId, Delegator delegator, GenericValue userLogin, LocalDispatcher dispatcher, String pictureKey, String path, String partyContentType)
             throws GenericServiceException, GenericEntityException {
         //没有指定内容类型,默认是在传头像
-        if(partyContentType==null){
-            partyContentType="LGOIMGURL";
+        if (partyContentType == null) {
+            partyContentType = "LGOIMGURL";
         }
 
         // 1.CREATE DATA RESOURCE
@@ -1897,12 +1844,11 @@ public class PersonManagerServices {
         //appendOrderItem
         Map<String, Object> appendOrderItemOutMap = null;
         try {
-         appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
-        }catch (GenericServiceException e1) {
-        Debug.logError(e1.getMessage(), module);
-        return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));
+            appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
+        } catch (GenericServiceException e1) {
+            Debug.logError(e1.getMessage(), module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));
         }
-
 
 
         //  接收账单的客户 到 订单
@@ -1931,8 +1877,6 @@ public class PersonManagerServices {
         }
 
 
-
-
         //  收货的客户 到 订单
         Map<String, Object> addSHIP_TO_CUSTOMERInMap = new HashMap<String, Object>();
         addSHIP_TO_CUSTOMERInMap.put("userLogin", userLogin);
@@ -1959,10 +1903,9 @@ public class PersonManagerServices {
         }
 
 
-
         GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        if(null!=teleContact) {
+        if (null != teleContact) {
             String contactNumber = (String) teleContact.get("contactNumber");
             resultMap.put("contactTel", contactNumber);
         }
@@ -1982,22 +1925,22 @@ public class PersonManagerServices {
         EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
-        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
         String maiJiaName = (String) person.get("firstName");
 
 
-        if(null != partyIdentifications && partyIdentifications.size()>0){
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
 
-            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
 
-            try{
-                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"message","order","content",maiJiaName+"购买了您的产品!点我查看!","regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",orderId));
+            try {
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", maiJiaName + "购买了您的产品!点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
@@ -2047,28 +1990,6 @@ public class PersonManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Create User
      *
@@ -2104,14 +2025,14 @@ public class PersonManagerServices {
 
 
         // Create PartyIdentification Block
-        if(!UtilValidate.isEmpty(uuid)){
+        if (!UtilValidate.isEmpty(uuid)) {
             Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
                     partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
             dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
         }
 
 
-        if(!UtilValidate.isEmpty(openId)){
+        if (!UtilValidate.isEmpty(openId)) {
             Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
                     partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
             dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
@@ -2148,8 +2069,7 @@ public class PersonManagerServices {
 
         }
 
-        createPersonStoreAndCatalogAndCategory(locale,admin, delegator, dispatcher, partyId);
-
+        createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
 
         // Create Party Role 授予当事人 意向客户 角色 用于mark product
@@ -2159,7 +2079,6 @@ public class PersonManagerServices {
                     "roleTypeId", "PLACING_CUSTOMER");
             dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
         }
-
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -2179,7 +2098,7 @@ public class PersonManagerServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static String createPersonStoreAndCatalogAndCategory(  Locale locale,GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
+    public static String createPersonStoreAndCatalogAndCategory(Locale locale, GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
 
         // Create Party Role 授予当事人角色,如果没有
         GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
@@ -2215,7 +2134,6 @@ public class PersonManagerServices {
         }
 
 
-
         // 发货厂家角色
         GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
         if (null == partyVendorRole) {
@@ -2242,30 +2160,26 @@ public class PersonManagerServices {
 
         // 关联店铺角色
         Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
-                "partyId", partyId,"productStoreId",productStoreId,"roleTypeId","ADMIN"));
+                "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", "ADMIN"));
 
 
         //店铺关联货运方法
         //EMS
         Map<String, Object> createProductStoreShipEmsMethOutMap =
                 dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,
-                        "shipmentMethodTypeId","EXPRESS","partyId","CHINAPOST","roleTypeId","CARRIER"));
+                        "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
+                        "shipmentMethodTypeId", "EXPRESS", "partyId", "CHINAPOST", "roleTypeId", "CARRIER"));
 
         try {
             //顺风
 
-                    dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                            "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
-                            "shipmentMethodTypeId", "EXPRESS", "partyId", "SHUNFENG_EXPRESS", "roleTypeId", "CARRIER"));
+            dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                    "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
+                    "shipmentMethodTypeId", "EXPRESS", "partyId", "SHUNFENG_EXPRESS", "roleTypeId", "CARRIER"));
         } catch (GenericServiceException e) {
             Debug.logError(e, module);
 
         }
-
-
-
-
 
 
         // CreateProd Catalog 创建目录

@@ -50,34 +50,34 @@
 
 
     <!--为中国邮政建立Party-->
-    <Party partyId="CHINAPOST" partyTypeId="PARTY_GROUP"/>
-    <PartyGroup partyId="CHINAPOST" groupName="China Post"/>
-    <PartyRole partyId="CHINAPOST" roleTypeId="CARRIER"/>
+    <!--<Party partyId="CHINAPOST" partyTypeId="PARTY_GROUP"/>-->
+    <!--<PartyGroup partyId="CHINAPOST" groupName="China Post"/>-->
+    <!--<PartyRole partyId="CHINAPOST" roleTypeId="CARRIER"/>-->
     <!--创建一种叫EMS的运输方式-->
-    <ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>
+    <!--<ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>-->
     <!--将EMS这种运输方式关联至CHINAPOST下-->
-    <CarrierShipmentMethod partyId="CHINAPOST" roleTypeId="CARRIER" shipmentMethodTypeId="EMS"/>
+    <!--<CarrierShipmentMethod partyId="CHINAPOST" roleTypeId="CARRIER" shipmentMethodTypeId="EMS"/>-->
 
     <!--有了EMS这种运输方式之后，就可以在店铺中将其加入了(只列出了主要字段)。-->
-    <ProductStoreShipmentMeth productStoreShipMethId="CP_EMS" productStoreId="9000" partyId="CHINAPOST" roleTypeId="CARRIER" shipmentMethodTypeId="EMS"/>
+    <!--<ProductStoreShipmentMeth productStoreShipMethId="CP_EMS" productStoreId="9000" partyId="CHINAPOST" roleTypeId="CARRIER" shipmentMethodTypeId="EMS"/>-->
 
 
-    <Geo geoId="EMS01" geoTypeId="GROUP" geoName="EMS area 1" geoCode="EMS01" abbreviation="EMS01"/>
-    <Geo geoId="EMS02" geoTypeId="GROUP" geoName="EMS area 2" geoCode="EMS02" abbreviation="EMS02"/>
+    <!--<Geo geoId="EMS01" geoTypeId="GROUP" geoName="EMS area 1" geoCode="EMS01" abbreviation="EMS01"/>-->
+    <!--<Geo geoId="EMS02" geoTypeId="GROUP" geoName="EMS area 2" geoCode="EMS02" abbreviation="EMS02"/>-->
 
-    <!--将香港和澳门挂载至这个分区下-->
-    <GeoAssoc geoId="HKG" geoIdTo="EMS01" geoAssocTypeId="GROUP_MEMBER"/>
-    <GeoAssoc geoId="MAC" geoIdTo="EMS01" geoAssocTypeId="GROUP_MEMBER"/>
+    <!--&lt;!&ndash;将香港和澳门挂载至这个分区下&ndash;&gt;-->
+    <!--<GeoAssoc geoId="HKG" geoIdTo="EMS01" geoAssocTypeId="GROUP_MEMBER"/>-->
+    <!--<GeoAssoc geoId="MAC" geoIdTo="EMS01" geoAssocTypeId="GROUP_MEMBER"/>-->
 
-    <GeoAssoc geoId="CHN" geoIdTo="EMS02" geoAssocTypeId="GROUP_MEMBER"/>
+    <!--<GeoAssoc geoId="CHN" geoIdTo="EMS02" geoAssocTypeId="GROUP_MEMBER"/>-->
 
 
     <!--310100-->
 
     <!--其它区也如此创建。之后，再将这九个区挂载至一个分区下。-->
-    <Geo geoId="EMS_AREAS" geoTypeId="GROUP" geoName="EMS - Available Areas" geoCode="EMS_AREAS" abbreviation="EMS_AREAS"/>
-    <GeoAssoc geoId="EMS01" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>
-    <GeoAssoc geoId="EMS02" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>
+    <!--<Geo geoId="EMS_AREAS" geoTypeId="GROUP" geoName="EMS - Available Areas" geoCode="EMS_AREAS" abbreviation="EMS_AREAS"/>-->
+    <!--<GeoAssoc geoId="EMS01" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
+    <!--<GeoAssoc geoId="EMS02" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
 
     <!--<GeoAssoc geoId="EMS03" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
     <!--<GeoAssoc geoId="EMS04" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
@@ -87,8 +87,8 @@
     <!--<GeoAssoc geoId="EMS08" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
     <!--<GeoAssoc geoId="EMS09" geoIdTo="EMS_AREAS" geoAssocTypeId="GROUP_MEMBER"/>-->
 
-    <ProductStoreShipmentMeth productStoreShipMethId="CP_EMS" productStoreId="9000" shipmentMethodTypeId="EMS" partyId="CHINAPOST" roleTypeId="CARRIER"
-                              includeGeoId="EMS_AREAS" />
+    <!--<ProductStoreShipmentMeth productStoreShipMethId="CP_EMS" productStoreId="9000" shipmentMethodTypeId="EMS" partyId="CHINAPOST" roleTypeId="CARRIER"-->
+                              <!--includeGeoId="EMS_AREAS" />-->
     <!--这个includeGeoId就指明了EMS只适用存在于"EMS_AREAS"这个GROUP内的国家。如果不在的话，网店上将不会出现EMS这种运输方式。-->
 
 

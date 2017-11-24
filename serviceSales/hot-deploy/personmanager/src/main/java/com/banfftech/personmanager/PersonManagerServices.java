@@ -2246,8 +2246,17 @@ public class PersonManagerServices {
 
 
         //店铺关联货运方法
-        Map<String, Object> createProductStoreShipMethOutMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,"shipmentMethodTypeId","EMS","partyId","CHINAPOST","roleTypeId","CARRIER"));
+        //EMS
+        Map<String, Object> createProductStoreShipEmsMethOutMap =
+                dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,
+                        "shipmentMethodTypeId","EXPRESS","partyId","CHINAPOST","roleTypeId","CARRIER"));
+        //顺风
+        Map<String, Object> createProductStoreShipShunFenMethOutMap =
+                dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                        "productStoreShipMethId", "CP_EMS","productStoreId",productStoreId,
+                        "shipmentMethodTypeId","EXPRESS","partyId","SHUNFENG_EXPRESS","roleTypeId","CARRIER"));
+
 
 
 

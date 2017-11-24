@@ -402,7 +402,10 @@ function getConfigDetails() {
                   <#assign imageUrl = "/images/defaultImage.jpg">
                 </#if>
                 <td align="center" valign="bottom">
-                  <a href="javascript:getList('FT${featureOrderFirst}','${indexer}',1);"><img src="<@ofbizContentUrl>${contentPathPrefix!}${imageUrl}</@ofbizContentUrl>" class='cssImgStandard' alt="" /></a>
+                  <a href="javascript:getList('FT${featureOrderFirst}','${indexer}',1);">
+                      <#--<img src="<@ofbizContentUrl>${contentPathPrefix!}${imageUrl}</@ofbizContentUrl>" class='cssImgStandard' alt="" />-->
+                      <img src="<@ofbizContentUrl>/images/defaultImage.jpg</@ofbizContentUrl>" class="cssImgStandard" />
+                  </a>
                   <br />
                   <a href="javascript:getList('FT${featureOrderFirst}','${indexer}',1);" class="buttontext">${key}</a>
                 </td>

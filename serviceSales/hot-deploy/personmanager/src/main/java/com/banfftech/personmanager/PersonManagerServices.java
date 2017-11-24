@@ -152,7 +152,7 @@ public class PersonManagerServices {
         String contactMechPurposeTypeId = "PRIMARY_LOCATION";
 //        String contactMechTypeId = "";
         Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,  "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY,  "address1", address1, "address2", address2, "postalCode",PeConstant.DEFAULT_POST_CODE,
+                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,  "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY,  "address1", address1 +" "+ address2, "postalCode",PeConstant.DEFAULT_POST_CODE,
                         "contactMechPurposeTypeId", contactMechPurposeTypeId));
         if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
             return createPartyPostalAddressOutMap;

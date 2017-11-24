@@ -199,7 +199,7 @@
                     // 顶部提示框
                     $('#J_Notify').on('click', function () {
                         dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
-                            alert("1");
+
                             $("#J_Notify").attr({"disabled":"disabled"});
                             $("#createPersonPartyPostalAddressForm").submit();
                         });

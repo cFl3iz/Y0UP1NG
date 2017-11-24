@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>${(resourceDetail.productName)!}${uiLabel.De}${(resourceDetail.productName)!}</title>
+    <title>${(resourceDetail.firstName)!}${uiLabel.De}${(resourceDetail.productName)!}</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />

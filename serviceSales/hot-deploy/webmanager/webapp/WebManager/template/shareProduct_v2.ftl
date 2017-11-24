@@ -120,6 +120,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         </a> </li>
                     </ul>
                     <#if morePicture?has_content>
+                        ${(resourceDetail.description)!}
                         <#list morePicture as list>
                             <p class="picture_text">
                             </p>

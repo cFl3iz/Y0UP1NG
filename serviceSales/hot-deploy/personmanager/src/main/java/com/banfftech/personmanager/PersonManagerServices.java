@@ -2134,6 +2134,15 @@ public class PersonManagerServices {
         }
 
 
+        GenericValue partyCUSTOMERRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();
+        if (null == partyCUSTOMERRole) {
+            Map<String, Object> createPartyCUSTOMERRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyCUSTOMERRoleMap);
+        }
+
+
+
         // 发货厂家角色
         GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
         if (null == partyVendorRole) {

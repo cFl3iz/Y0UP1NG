@@ -29,13 +29,21 @@
     <PartyRole partyId="ZTO_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
     <PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" />
 
+    <!--  新增类型 -->
+    <ShipmentMethodType description="EMS" shipmentMethodTypeId="EMS"/>
+    <ShipmentMethodType description="顺风" shipmentMethodTypeId="SHUNFENG"/>
+    <ShipmentMethodType description="申通" shipmentMethodTypeId="SHENGTONG"/>
+    <ShipmentMethodType description="韵达" shipmentMethodTypeId="YUNDA"/>
+    <ShipmentMethodType description="圆通" shipmentMethodTypeId="YUANTONG"/>
+    <ShipmentMethodType description="中通" shipmentMethodTypeId="ZHONGTONG"/>
+
     <!--新增一个货运方式-->
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="EMS_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="ZTO_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EMS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="SHENGTONG" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="YUNDA" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="YUANTONG" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EMS" partyId="EMS_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="ZHONGTONG" partyId="ZTO_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
 
 
 

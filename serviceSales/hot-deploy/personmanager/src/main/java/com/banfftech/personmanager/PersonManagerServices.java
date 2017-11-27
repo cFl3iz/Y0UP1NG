@@ -1839,7 +1839,7 @@ public class PersonManagerServices {
         }
 
         GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
-        String originFacilityId = facility.get("facilityId");
+        String originFacilityId = (String) facility.get("facilityId");
 
         // Do Create OrderHeader
         Map<String, Object> createOrderHeaderInMap = new HashMap<String, Object>();

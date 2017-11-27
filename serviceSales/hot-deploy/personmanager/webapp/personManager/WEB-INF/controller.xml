@@ -38,6 +38,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryExpressInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryExpressInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- Query Dimension Resource -->
     <request-map uri="queryDimensionResource">
         <security https="false" auth="false"/>

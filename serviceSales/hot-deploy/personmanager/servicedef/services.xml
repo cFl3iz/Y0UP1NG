@@ -21,6 +21,11 @@
                    optional="true" />
     </service>
 
+
+
+
+
+
     <!-- Create Person Store -->
     <service name="createPersonStore" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
@@ -189,6 +194,43 @@
     </service>
 
 
+
+    <!-- 查询快递信息 -->
+    <service name="queryExpressInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="queryExpressInfo" auth="false">
+        <description>queryExpressInfo</description>
+
+        <attribute name="code" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+    <!-- 更新货运信息 -->
+    <service name="updateShipGroupShipInfoForWeChat" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updateShipGroupShipInfoForWeChat" auth="false">
+        <description>updateShipGroupShipInfoForWeChat</description>
+
+        <attribute name="tarjeta" type="String" mode="INOUT"
+                   optional="true" />
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="contactMechId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="shipmentMethodId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
 
 

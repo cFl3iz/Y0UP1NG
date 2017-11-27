@@ -5,11 +5,14 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import main.java.com.banfftech.platformmanager.aliyun.util.HttpUtils;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.EmojiHandler;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -96,6 +99,117 @@ public class PersonManagerServices {
 
         }
     }
+
+
+    /**
+     * 查询快递信息
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryExpressInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String code = (String) context.get("code");
+
+        String host = "http://jisukdcx.market.alicloudapi.com";
+        String path = "/express/query";
+        String method = "GET";
+        String appcode = "8141fb4bfc2f44b1b21e7397de8c22ff";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("number", code);
+        querys.put("type", "auto");
+
+        try {
+            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+         //   System.out.println(response.toString());
+            //获取response的body
+            System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultMap;
+    }
+
+
+
+        /**
+         * updateShipGroupShipInfoForWeChat
+         * @param dctx
+         * @param context
+         * @return
+         * @throws GenericEntityException
+         * @throws GenericServiceException
+         */
+    public static Map<String, Object> updateShipGroupShipInfoForWeChat(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String contactMechId = (String) context.get("contactMechId");
+
+        String tarjeta = (String) context.get("tarjeta");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        String shipmentMethodId = (String) context.get("shipmentMethodId");
+
+        resultMap.put("tarjeta", tarjeta);
+
+        String orderId = (String) context.get("orderId");
+
+
+        Map<String, Object> updateShipGroupShipInfoOutMap =dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,
+                "contactMechId",contactMechId,"shipmentMethodId",shipmentMethodId,"shipGroupSeqId","00001"));
+
+        if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+            return updateShipGroupShipInfoOutMap;
+        }
+
+
+        return resultMap;
+    }
+
+
+
+
+
 
 
     /**

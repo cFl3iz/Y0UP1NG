@@ -47,6 +47,24 @@
             <redirect-parameter name="productId" from="productId"/>
         </response>
     </request-map>
+
+
+
+    <!--<request-map uri="updateShipGroupShipInfo">-->
+        <!--<security https="false" auth="false"/>-->
+        <!--<event type="service" invoke="updateShipGroupShipInfoForWeChat"/>-->
+        <!--<response name="success" type="view" value="viewWebOrderDetail">-->
+            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+            <!--<redirect-parameter name="productId" from="productId"/>-->
+        <!--</response>-->
+        <!--<response name="error" type="view" value="viewWebOrderDetail">-->
+            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+            <!--<redirect-parameter name="productId" from="productId"/>-->
+        <!--</response>-->
+    <!--</request-map>-->
+
+
+
     <!-- ViewOrder -->
     <request-map uri="viewWebOrderDetail">
         <security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/>

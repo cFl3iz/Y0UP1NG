@@ -1373,6 +1373,8 @@ public class PersonManagerServices {
        GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
         // 为产品创建库存量
 
+
+
         Map<String, Object> createInventoryItemOut = dispatcher.runSync("createInventoryItem",
                 UtilMisc.toMap("userLogin", userLogin,
                         "facilityId",(String)facility.get("facilityId") ,
@@ -1385,9 +1387,7 @@ public class PersonManagerServices {
                         "currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,
                         "unitCost","0"));
 
-        if (ServiceUtil.isError(createInventoryItemOut)) {
-            return "success";
-        }
+        System.out.println("********************************************createInventoryItemOut="+createInventoryItemOut);
 
         request.setAttribute("productId", productId);
 

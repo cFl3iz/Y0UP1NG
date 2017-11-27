@@ -1371,23 +1371,22 @@ public class PersonManagerServices {
 
 
        GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+
         // 为产品创建库存量
-
-
-
-        Map<String, Object> createInventoryItemOut = dispatcher.runSync("createInventoryItem",
+        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct",
                 UtilMisc.toMap("userLogin", userLogin,
                         "facilityId",(String)facility.get("facilityId") ,
                         "inventoryItemTypeId",PeConstant.DEFAULT_INV_ITEM,
                         "productId",productId,
-                        "quantityOnHandTotal",quantityTotal,
-                        "availableToPromiseTotal",quantityTotal,
-                        "accountingQuantityTotal",quantityTotal,
+                        "description ","卖家发布产品时的录入库存",
+                        "quantityAccepted",quantityTotal,
+                        "quantityRejected",BigDecimal.ZERO,
+                        "unitCost",price,
                         "ownerPartyId",partyId,
-                        "currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,
-                        "unitCost","0"));
+                        "partyId",partyId,
+                        "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID ));
 
-        System.out.println("********************************************createInventoryItemOut="+createInventoryItemOut);
+        System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 
         request.setAttribute("productId", productId);
 

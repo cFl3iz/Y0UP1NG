@@ -6400,7 +6400,7 @@ public class OrderServices {
         // save cart after updating shipping method and shipping address.
         Map<String, Object> changeMap = new HashMap<String, Object>();
         try {
-            saveUpdatedCartToOrder(dispatcher, delegator, shoppingCart, locale, userLogin, orderId, changeMap, true, false);
+            saveUpdatedCartToOrder(dispatcher, delegator, shoppingCart, locale, userLogin, orderId, changeMap, false, false);
         } catch(GeneralException e) {
             Debug.logError(e, module);
         }

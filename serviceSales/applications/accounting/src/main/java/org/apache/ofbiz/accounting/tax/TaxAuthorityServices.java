@@ -182,9 +182,6 @@ public class TaxAuthorityServices {
         }
         if (shippingAddress == null || (shippingAddress.get("countryGeoId") == null && shippingAddress.get("stateProvinceGeoId") == null && shippingAddress.get("postalCodeGeoId") == null)) {
 
-            System.out.println("--------------------------------------------------------------------------------------------");
-            System.out.println("shippingAddress == null = " + (shippingAddress == null) + "" +"| shippingAddress.get(\"countryGeoId\") == null = " + (shippingAddress.get("countryGeoId") == null)+"|"+"shippingAddress.get(\"stateProvinceGeoId\") == null = " + (shippingAddress.get("stateProvinceGeoId") == null)+"|  shippingAddress.get(\"postalCodeGeoId\") = "  + (  shippingAddress.get("postalCodeGeoId")) +"");
-            System.out.println("--------------------------------------------------------------------------------------------");
             String errMsg = UtilProperties.getMessage(resource, "AccountingTaxNoAddressSpecified", locale);
             if (shippingAddress != null) {
                 errMsg += UtilProperties.getMessage(resource, "AccountingTaxNoAddressSpecifiedDetails", UtilMisc.toMap("contactMechId", shippingAddress.getString("contactMechId"), "address1", shippingAddress.get("address1"), "postalCodeGeoId", shippingAddress.get("postalCodeGeoId"), "stateProvinceGeoId", shippingAddress.get("stateProvinceGeoId"), "countryGeoId", shippingAddress.get("countryGeoId")), locale);

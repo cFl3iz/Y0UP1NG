@@ -1373,18 +1373,20 @@ public class PersonManagerServices {
        GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
 
         // 为产品创建库存量
-        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct",
-                UtilMisc.toMap("userLogin", userLogin,
-                        "facilityId",(String)facility.get("facilityId") ,
-                        "inventoryItemTypeId",PeConstant.DEFAULT_INV_ITEM,
-                        "productId",productId,
-                        "description ","卖家发布产品时的录入库存",
-                        "quantityAccepted",quantityTotal,
-                        "quantityRejected",BigDecimal.ZERO,
-                        "unitCost",price,
-                        "ownerPartyId",partyId,
-                        "partyId",partyId,
-                        "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID ));
+        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                "facilityId",(String)facility.get("facilityId") ,
+                "inventoryItemTypeId",PeConstant.DEFAULT_INV_ITEM,
+                "productId",productId,
+                "description ","卖家发布产品时的录入库存",
+                "quantityAccepted",quantityTotal,
+                "quantityRejected",BigDecimal.ZERO,
+                "unitCost",price,
+                "ownerPartyId",partyId,
+                "partyId",partyId,
+                "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID );
+        System.out.println("********************************************receiveInventoryProductIn="+receiveInventoryProductIn);
+        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct",receiveInventoryProductIn
+                );
 
         System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 

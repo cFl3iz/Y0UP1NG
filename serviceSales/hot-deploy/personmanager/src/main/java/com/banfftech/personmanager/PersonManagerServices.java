@@ -2111,6 +2111,15 @@ public class PersonManagerServices {
         }
 
 
+
+        //创建当事人税务机关
+
+        Map<String, Object> createTaxAuthorityOutMap = dispatcher.runSync("createTaxAuthority",
+                UtilMisc.toMap("userLogin", admin,
+                "includeTaxInPrice", "N",
+                        "taxAuthGeoId","CHN",
+                        "taxAuthPartyId",partyId));
+
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         resultMap.put("userLoginId", userLoginId);
         return resultMap;

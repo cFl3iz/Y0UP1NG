@@ -1838,11 +1838,17 @@ public class PersonManagerServices {
             grandTotal = subTotal = new BigDecimal(price);
         }
 
+        GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        String originFacilityId = facility.get("facilityId");
 
         // Do Create OrderHeader
         Map<String, Object> createOrderHeaderInMap = new HashMap<String, Object>();
         createOrderHeaderInMap.put("userLogin", userLogin);
         createOrderHeaderInMap.put("productStoreId", productStoreId);
+
+        createOrderHeaderInMap.put("originFacilityId", originFacilityId);
+
+
         createOrderHeaderInMap.put("salesChannelEnumId", "WEB_SALES_CHANNEL");
         createOrderHeaderInMap.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
         createOrderHeaderInMap.put("orderTypeId", PeConstant.SALES_ORDER);
@@ -1872,6 +1878,7 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("prodCatalogId", prodCatalogId);
         appendOrderItemInMap.put("basePrice", grandTotal);
         appendOrderItemInMap.put("overridePrice", price);
+        appendOrderItemInMap.put("calcTax", new Boolean("false"));
 
         //appendOrderItem
         Map<String, Object> appendOrderItemOutMap = null;

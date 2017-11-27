@@ -1383,12 +1383,13 @@ public class PersonManagerServices {
                 "unitCost",price,
                 "ownerPartyId",partyId,
                 "partyId",partyId,
-                "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID );
-        System.out.println("********************************************receiveInventoryProductIn="+receiveInventoryProductIn);
+                "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                "currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID);
+        //System.out.println("********************************************receiveInventoryProductIn="+receiveInventoryProductIn);
         Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct",receiveInventoryProductIn
                 );
 
-        System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
+      //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 
         request.setAttribute("productId", productId);
 

@@ -28,7 +28,22 @@
         <description>Create Person Store</description>
         <attribute name="partyId" type="String" mode="IN"
                    optional="false" />
+        <attribute name="inventoryFacilityId" type="String" mode="IN"
+                   optional="false" />
+
         <attribute name="storeId" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <service name="createPersonFacility" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonFacility" auth="false">
+        <description>createPersonFacility</description>
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="false" />
+        <attribute name="facilityId" type="String" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

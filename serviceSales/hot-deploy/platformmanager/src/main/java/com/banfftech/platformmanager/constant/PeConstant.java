@@ -7,6 +7,9 @@ public class PeConstant {
      */
     public static final String DEFAULT_CURRENCY_UOM_ID = "CNY";
 
+
+    public static final String DEFAULT_INV_ITEM = "NON_SERIAL_INV_ITEM";
+
     /**
      * 错误信息文件 {@value}
      */

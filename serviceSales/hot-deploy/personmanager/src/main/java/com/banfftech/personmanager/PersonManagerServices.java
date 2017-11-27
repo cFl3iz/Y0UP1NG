@@ -67,6 +67,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
+import sun.net.www.content.text.Generic;
 
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -1255,6 +1256,10 @@ public class PersonManagerServices {
 
         String defaultImageUrl = (String) request.getParameter("defaultImageUrl");
 
+        String quantityTotal    = (String) request.getParameter("quantityTotal");
+
+
+
         // Default Price
         BigDecimal price = BigDecimal.ZERO;
 
@@ -1358,6 +1363,26 @@ public class PersonManagerServices {
         addProductToCategoryInMap.put("productId", productId);
         addProductToCategoryInMap.put("productCategoryId", productCategoryId);
         dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+
+
+       GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        // 为产品创建库存量
+
+        Map<String, Object> createInventoryItemOut = dispatcher.runSync("createInventoryItem",
+                UtilMisc.toMap("userLogin", userLogin,
+                        "facilityId",(String)facility.get("facilityId") ,
+                        "inventoryItemTypeId",PeConstant.DEFAULT_INV_ITEM,
+                        "productId",productId,
+                        "quantityOnHandTotal",quantityTotal,
+                        "availableToPromiseTotal",quantityTotal,
+                        "accountingQuantityTotal",quantityTotal,
+                        "ownerPartyId",partyId,
+                        "currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                        "unitCost","0"));
+
+        if (ServiceUtil.isError(createInventoryItemOut)) {
+            return createInventoryItemOut;
+        }
 
         request.setAttribute("productId", productId);
 
@@ -2160,11 +2185,23 @@ public class PersonManagerServices {
         }
 
 
-        // 创建店铺
-        Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createPersonStore", UtilMisc.toMap("userLogin", admin,
+
+        //创建仓库
+
+        Map<String, Object> createPersonFacilityOutMap = dispatcher.runSync("createPersonFacility", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId));
 
+        String facilityId = (String) createPersonFacilityOutMap.get("facilityId");
+
+
+
+        // 创建店铺
+        Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createPersonStore", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,"inventoryFacilityId",facilityId));
+
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
+
+
 
 
         // 关联店铺角色
@@ -2236,7 +2273,7 @@ public class PersonManagerServices {
 
 
     /**
-     * Create PE Person Store
+     * Create PE Person Store / Facility
      *
      * @param dctx
      * @param context
@@ -2253,6 +2290,8 @@ public class PersonManagerServices {
         // 当事人
         String partyId = (String) context.get("partyId");
 
+        String inventoryFacilityId = (String) context.get("inventoryFacilityId");
+
         // 商家名
         String storeName = partyId;
 
@@ -2262,7 +2301,7 @@ public class PersonManagerServices {
         try {
             // Create Product Store
             Map<String, Object> createProductStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
-                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "storeName", storeName, "payToPartyId", partyId));
+                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "storeName", storeName, "payToPartyId", partyId,"inventoryFacilityId",inventoryFacilityId));
             if (!ServiceUtil.isSuccess(createProductStoreOutMap)) {
                 return createProductStoreOutMap;
             }
@@ -2288,5 +2327,52 @@ public class PersonManagerServices {
         return result;
     }
 
+
+    /**
+     * createPersonFacility
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> createPersonFacility(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        // 当事人
+        String partyId = (String) context.get("partyId");
+
+        String facilityId = null;
+
+        GenericValue person =   delegator.findOne("Person", false, UtilMisc.toMap("partyId",partyId));
+
+        // 仓库名
+        String facilityName = (String) person.get("firstName");
+
+        try {
+            // Create Facility
+            Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
+                    "ownerPartyId", partyId,"facilityTypeId","WAREHOUSE","facilityName",facilityName,"defaultInventoryItemTypeId","NON_SERIAL_INV_ITEM"));
+            if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
+                return createFacilityOutMap;
+            }
+            facilityId = (String) createFacilityOutMap.get("facilityId");
+
+
+        } catch (GenericServiceException e1) {
+            Debug.logError(e1.getMessage(), module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+        }
+
+
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("facilityId", facilityId);
+        return result;
+    }
 
 }

@@ -1256,8 +1256,13 @@ public class PersonManagerServices {
 
         String defaultImageUrl = (String) request.getParameter("defaultImageUrl");
 
-        String quantityTotal    = (String) request.getParameter("quantityTotal");
+        String quantityTotalStr    = (String) request.getParameter("quantityTotal");
 
+        BigDecimal quantityTotal = new BigDecimal("99999999");
+
+        if (!UtilValidate.isEmpty(quantityTotalStr)) {
+            quantityTotal = new BigDecimal(quantityTotalStr);
+        }
 
 
         // Default Price
@@ -1381,7 +1386,7 @@ public class PersonManagerServices {
                         "unitCost","0"));
 
         if (ServiceUtil.isError(createInventoryItemOut)) {
-            return createInventoryItemOut;
+            return "success";
         }
 
         request.setAttribute("productId", productId);

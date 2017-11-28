@@ -77,7 +77,6 @@
         <member-entity entity-alias="CM" entity-name="ContactMech"/>
         <member-entity entity-alias="PA" entity-name="PostalAddress"/>
         <member-entity entity-alias="G" entity-name="Geo"/>
-        <alias entity-alias="PCMP" name="contactMechId" field="contactMechId"/>
         <alias entity-alias="PCM" name="partyId" field="partyId"/>
         <alias entity-alias="PCM" name="fromDate" field="fromDate"/>
         <alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>

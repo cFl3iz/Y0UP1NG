@@ -482,7 +482,7 @@ public class PersonManagerServices {
 
         String code = (String) context.get("code");
 
-        resultMap.put("code",code);
+        resultMap.put("expressCode",code);
 
         String host = PeConstant.ALI_EXPRESS_QUERY_API_HOST;
         String path = PeConstant.ALI_EXPRESS_QUERY_API_PATH;

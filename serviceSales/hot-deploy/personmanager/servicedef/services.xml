@@ -201,7 +201,10 @@
              invoke="queryExpressInfo" auth="false">
         <description>queryExpressInfo</description>
 
-        <attribute name="code" type="String" mode="INOUT"
+        <attribute name="code" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="expressCode" type="String" mode="OUT"
                    optional="true" />
 
         <attribute name="carrierCode" type="String" mode="OUT"

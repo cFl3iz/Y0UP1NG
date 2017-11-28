@@ -98,8 +98,8 @@ public class PlatformManagerServices {
 
 
         //Create Party
-        GenericValue party = delegator.makeValue("Party" , UtilMisc.toMap("partyId", carrierCode));
-        party.create();
+//        GenericValue party = delegator.makeValue("Party" , UtilMisc.toMap("partyId", carrierCode));
+//        party.create();
         //Create PartyGroup
         dispatcher.runSync("createPartyGroup",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"groupName",name ));
         //Create Role

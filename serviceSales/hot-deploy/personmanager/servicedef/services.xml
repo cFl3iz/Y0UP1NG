@@ -204,6 +204,12 @@
         <attribute name="code" type="String" mode="IN"
                    optional="true" />
 
+
+        <attribute name="name" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="expressInfos" type="List" mode="OUT"
+                   optional="true" />
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>

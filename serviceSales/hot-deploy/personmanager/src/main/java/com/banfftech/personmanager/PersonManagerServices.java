@@ -1,5 +1,6 @@
 package main.java.com.banfftech.personmanager;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -70,7 +71,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
+
+
+import net.sf.json.JSONArray;
 import sun.net.www.content.text.Generic;
+import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -102,7 +107,354 @@ public class PersonManagerServices {
 
 
     /**
+     *
+     */
+    public enum express {
+
+
+        AAEWEB, CAE,
+        ARAMEX,
+        ND56,
+        DHL,
+        PEISI,
+        DPEX,
+        EFSPOST,
+        DEXP,
+        CHINZ56,
+        EMS,
+        QCKD,
+        EWE,
+        QFKD,
+        FEDEX,
+        APEX,
+        FEDEXIN,
+        RFD,
+        PCA,
+        SFC,
+        TNT,
+        STO,
+        UPS,
+        SFWL,
+        ANJELEX,
+        SHENGHUI,
+        ANE,
+        SDEX,
+        ANEEX,
+        SFEXPRESS,
+        ANXINDA,
+        SUNING,
+        EES,
+        SURE,
+        HTKY,
+        HOAU,
+        BSKY,
+        TTKDEX,
+        FLYWAYEX,
+        VANGEN,
+        DTW, WANJIA, DEPPON, EWINSHINE, GCE, GZWENJIE, PHOENIXEXP, XBWL, FTD, XFEXPRESS, GSD, BROADASIA, GTO, YIEXPRESS, BLACKDOG, QEXPRESS, HENGLU, ETD, HYE, UC56, HQKY, CHINAPOST, JOUST, YFHEX, TMS, YTO, JIAJI, YADEX, JIAYI, YCGWL, KERRY, YFEXPRESS, HREX, YTEXPRESS, PEWKEE, YUNDA, JD, ZJS, KKE, ZMKMEX, JIUYESCM, COE, KYEXPRESS, CRE, FASTEXPRESS, ZTKY, BLUESKY, ZTO, LTS, LBEX, ZTO56, CNPL;
+
+        public static express getExpressName(String express) {
+            return valueOf(express.toUpperCase());
+        }
+    }
+
+
+    /**
+     * 返回快递中文名
+     *
+     * @param type
+     * @return
+     */
+    private static String getExpressNameFromType(String type) {
+
+
+        switch (express.getExpressName(type)) {
+
+            case AAEWEB:
+                return "AAE";
+
+            case CAE:
+                return "民航";
+
+            case ARAMEX:
+                return "Aramex";
+
+            case ND56:
+                return "能达";
+
+            case DHL:
+                return "DHL";
+
+            case PEISI:
+                return "配思航宇";
+
+            case DPEX:
+                return "DPEX";
+
+            case EFSPOST:
+                return "平安快递";
+
+            case DEXP:
+                return "D速";
+
+            case CHINZ56:
+                return "秦远物流";
+
+            case EMS:
+                return "EMS";
+
+            case QCKD:
+                return "全晨";
+
+            case EWE:
+                return "EWE";
+
+            case QFKD:
+                return "全峰";
+
+            case FEDEX:
+                return "联邦快递";
+
+            case APEX:
+                return "全一";
+
+            case FEDEXIN:
+                return "联邦快递-国际件";
+
+            case RFD:
+                return "如风达";
+
+            case PCA:
+                return "PCA";
+
+            case SFC:
+                return "三态";
+
+            case TNT:
+                return "TNT";
+
+            case STO:
+                return "申通";
+
+            case UPS:
+                return "UPS";
+
+            case SFWL:
+                return "盛丰";
+
+            case ANJELEX:
+                return "安捷";
+
+            case SHENGHUI:
+                return "盛辉";
+
+            case ANE:
+                return "安能";
+
+            case SDEX:
+                return "顺达快递";
+
+            case ANEEX:
+                return "安能快递";
+
+            case SFEXPRESS:
+                return "顺丰";
+
+            case ANXINDA:
+                return "安信达";
+
+            case SUNING:
+                return "苏宁";
+
+            case EES:
+                return "百福东方";
+
+            case SURE:
+                return "速尔";
+
+            case HTKY:
+                return "百世快递";
+
+            case HOAU:
+                return "天地华宇";
+
+            case BSKY:
+                return "百世快运";
+
+            case TTKDEX:
+                return "天天";
+
+            case FLYWAYEX:
+                return "程光";
+
+            case VANGEN:
+                return "万庚";
+
+            case DTW:
+                return "大田";
+
+            case WANJIA:
+                return "万家物流";
+
+            case DEPPON:
+                return "德邦";
+
+            case EWINSHINE:
+                return "万象";
+
+            case GCE:
+                return "飞洋";
+
+            case GZWENJIE:
+                return "文捷航空";
+
+            case PHOENIXEXP:
+                return "凤凰";
+
+            case XBWL:
+                return "新邦";
+
+            case FTD:
+                return "富腾达";
+
+            case XFEXPRESS:
+                return "信丰";
+
+            case GSD:
+                return "共速达";
+
+            case BROADASIA:
+                return "亚风";
+
+            case GTO:
+                return "国通";
+
+            case YIEXPRESS:
+                return "宜送";
+
+            case BLACKDOG:
+                return "黑狗";
+
+            case QEXPRESS:
+                return "易达通";
+
+            case HENGLU:
+                return "恒路";
+
+            case ETD:
+                return "易通达";
+
+            case HYE:
+                return "鸿远";
+
+            case UC56:
+                return "优速";
+
+            case HQKY:
+                return "华企";
+
+            case CHINAPOST:
+                return "邮政包裹";
+
+            case JOUST:
+                return "急先达";
+
+            case YFHEX:
+                return "原飞航";
+
+            case TMS:
+                return "加运美";
+
+            case YTO:
+                return "圆通";
+
+            case JIAJI:
+                return "佳吉";
+
+            case YADEX:
+                return "源安达";
+
+            case JIAYI:
+                return "佳怡";
+
+            case YCGWL:
+                return "远成";
+
+            case KERRY:
+                return "嘉里物流";
+
+            case YFEXPRESS:
+                return "越丰";
+
+            case HREX:
+                return "锦程快递";
+
+            case YTEXPRESS:
+                return "运通";
+
+            case PEWKEE:
+                return "晋越";
+
+            case YUNDA:
+                return "韵达";
+
+            case JD:
+                return "京东";
+
+            case ZJS:
+                return "宅急送";
+
+            case KKE:
+                return "京广";
+
+            case ZMKMEX:
+                return "芝麻开门";
+
+            case JIUYESCM:
+                return "九曳";
+
+            case COE:
+                return "中国东方";
+
+            case KYEXPRESS:
+                return "跨越";
+
+            case CRE:
+                return "中铁快运";
+
+            case FASTEXPRESS:
+                return "快捷";
+
+            case ZTKY:
+                return "中铁物流";
+
+            case BLUESKY:
+                return "蓝天";
+
+            case ZTO:
+                return "中通";
+
+            case LTS:
+                return "联昊通";
+            case LBEX:
+                return "龙邦";
+
+            case ZTO56:
+                return "中通快运";
+
+            case CNPL:
+                return "中邮";
+
+        }
+
+
+        return "未知";
+    }
+
+
+    /**
      * 查询快递信息
+     *
      * @param dctx
      * @param context
      * @return
@@ -110,7 +462,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      */
     public static Map<String, Object> queryExpressInfo(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException, GenericServiceException {
+            throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -130,39 +482,57 @@ public class PersonManagerServices {
 
         String code = (String) context.get("code");
 
-        String host = "http://jisukdcx.market.alicloudapi.com";
-        String path = "/express/query";
+        String host = PeConstant.ALI_EXPRESS_QUERY_API_HOST;
+        String path = PeConstant.ALI_EXPRESS_QUERY_API_PATH;
         String method = "GET";
-        String appcode = "8141fb4bfc2f44b1b21e7397de8c22ff";
+        String appcode = PeConstant.ALI_EXPRESS_QUERY_API_CODE;
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
         headers.put("Authorization", "APPCODE " + appcode);
         Map<String, String> querys = new HashMap<String, String>();
         querys.put("number", code);
+        //当Type为auto时,自动识别物流单位
         querys.put("type", "auto");
+        List<JSONObject> strlist = null;
+        String type = null;
+        JSONObject result = null;
+        String entityStr = null;
+
+        HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+        //   System.out.println(response.toString());
+        //获取response的body
 
         try {
-            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
-         //   System.out.println(response.toString());
-            //获取response的body
-            System.out.println(EntityUtils.toString(response.getEntity()));
-        } catch (Exception e) {
+            entityStr = EntityUtils.toString(response.getEntity());
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        JSONObject jsonMap2 = JSONObject.fromObject(entityStr);
+        Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
+        result = (JSONObject) jsonMap2.get("result");
+        type = (String) result.get("type");
+        JSONArray list = (JSONArray) result.get("list");
+
+        strlist = (List) JSONArray.toList(list,
+                JSONObject.class);
+
+
+        resultMap.put("expressInfos", strlist);
+        resultMap.put("name", getExpressNameFromType(type));
 
         return resultMap;
     }
 
 
-
-        /**
-         * updateShipGroupShipInfoForWeChat
-         * @param dctx
-         * @param context
-         * @return
-         * @throws GenericEntityException
-         * @throws GenericServiceException
-         */
+    /**
+     * updateShipGroupShipInfoForWeChat
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> updateShipGroupShipInfoForWeChat(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 
@@ -194,9 +564,9 @@ public class PersonManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-        Map<String, Object> updateShipGroupShipInfoOutMap =dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
-                "contactMechId",contactMechId,"shipmentMethodId",shipmentMethodId,"shipGroupSeqId","00001"));
+                "contactMechId", contactMechId, "shipmentMethodId", shipmentMethodId, "shipGroupSeqId", "00001"));
 
         if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
             return updateShipGroupShipInfoOutMap;
@@ -205,11 +575,6 @@ public class PersonManagerServices {
 
         return resultMap;
     }
-
-
-
-
-
 
 
     /**
@@ -289,7 +654,6 @@ public class PersonManagerServices {
         dispatcher.runAsync("createPartyContactMechPurpose",
                 UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
                         "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
-
 
 
         return resultMap;
@@ -1370,7 +1734,7 @@ public class PersonManagerServices {
 
         String defaultImageUrl = (String) request.getParameter("defaultImageUrl");
 
-        String quantityTotalStr    = (String) request.getParameter("quantityTotal");
+        String quantityTotalStr = (String) request.getParameter("quantityTotal");
 
         BigDecimal quantityTotal = new BigDecimal("99999999");
 
@@ -1484,26 +1848,26 @@ public class PersonManagerServices {
         dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
 
 
-       GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
 
         // 为产品创建库存量
         Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
-                "facilityId",(String)facility.get("facilityId") ,
-                "inventoryItemTypeId",PeConstant.DEFAULT_INV_ITEM,
-                "productId",productId,
-                "description ","卖家发布产品时的录入库存",
-                "quantityAccepted",quantityTotal,
-                "quantityRejected",BigDecimal.ZERO,
-                "unitCost",price,
-                "ownerPartyId",partyId,
-                "partyId",partyId,
-                "uomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,
-                "currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID);
+                "facilityId", (String) facility.get("facilityId"),
+                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                "productId", productId,
+                "description ", "卖家发布产品时的录入库存",
+                "quantityAccepted", quantityTotal,
+                "quantityRejected", BigDecimal.ZERO,
+                "unitCost", price,
+                "ownerPartyId", partyId,
+                "partyId", partyId,
+                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
         //System.out.println("********************************************receiveInventoryProductIn="+receiveInventoryProductIn);
-        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct",receiveInventoryProductIn
-                );
+        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+        );
 
-      //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
+        //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 
         request.setAttribute("productId", productId);
 
@@ -1952,7 +2316,7 @@ public class PersonManagerServices {
             grandTotal = subTotal = new BigDecimal(price);
         }
 
-        GenericValue facility =   EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
         String originFacilityId = (String) facility.get("facilityId");
 
         // Do Create OrderHeader
@@ -2234,14 +2598,13 @@ public class PersonManagerServices {
         }
 
 
-
         //创建当事人税务机关
 
         Map<String, Object> createTaxAuthorityOutMap = dispatcher.runSync("createTaxAuthority",
                 UtilMisc.toMap("userLogin", admin,
-                "includeTaxInPrice", "N",
-                        "taxAuthGeoId","CHN",
-                        "taxAuthPartyId",partyId));
+                        "includeTaxInPrice", "N",
+                        "taxAuthGeoId", "CHN",
+                        "taxAuthPartyId", partyId));
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         resultMap.put("userLoginId", userLoginId);
@@ -2304,7 +2667,6 @@ public class PersonManagerServices {
         }
 
 
-
         // 发货厂家角色
         GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
         if (null == partyVendorRole) {
@@ -2322,7 +2684,6 @@ public class PersonManagerServices {
         }
 
 
-
         //创建仓库
 
         Map<String, Object> createPersonFacilityOutMap = dispatcher.runSync("createPersonFacility", UtilMisc.toMap("userLogin", admin,
@@ -2331,14 +2692,11 @@ public class PersonManagerServices {
         String facilityId = (String) createPersonFacilityOutMap.get("facilityId");
 
 
-
         // 创建店铺
         Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createPersonStore", UtilMisc.toMap("userLogin", admin,
-                "partyId", partyId,"inventoryFacilityId",facilityId));
+                "partyId", partyId, "inventoryFacilityId", facilityId));
 
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
-
-
 
 
         // 关联店铺角色
@@ -2438,7 +2796,7 @@ public class PersonManagerServices {
         try {
             // Create Product Store
             Map<String, Object> createProductStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
-                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "storeName", storeName, "payToPartyId", partyId,"inventoryFacilityId",inventoryFacilityId));
+                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "storeName", storeName, "payToPartyId", partyId, "inventoryFacilityId", inventoryFacilityId));
             if (!ServiceUtil.isSuccess(createProductStoreOutMap)) {
                 return createProductStoreOutMap;
             }
@@ -2467,6 +2825,7 @@ public class PersonManagerServices {
 
     /**
      * createPersonFacility
+     *
      * @param dctx
      * @param context
      * @return
@@ -2485,7 +2844,7 @@ public class PersonManagerServices {
 
         String facilityId = null;
 
-        GenericValue person =   delegator.findOne("Person", false, UtilMisc.toMap("partyId",partyId));
+        GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
 
         // 仓库名
         String facilityName = (String) person.get("firstName");
@@ -2493,7 +2852,7 @@ public class PersonManagerServices {
         try {
             // Create Facility
             Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
-                    "ownerPartyId", partyId,"facilityTypeId","WAREHOUSE","facilityName",facilityName,"defaultInventoryItemTypeId","NON_SERIAL_INV_ITEM"));
+                    "ownerPartyId", partyId, "facilityTypeId", "WAREHOUSE", "facilityName", facilityName, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
             if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
                 return createFacilityOutMap;
             }
@@ -2504,7 +2863,6 @@ public class PersonManagerServices {
             Debug.logError(e1.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
         }
-
 
 
         Map<String, Object> result = ServiceUtil.returnSuccess();

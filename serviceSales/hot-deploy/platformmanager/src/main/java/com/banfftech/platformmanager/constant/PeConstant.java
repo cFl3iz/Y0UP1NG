@@ -104,7 +104,9 @@ public class PeConstant {
 
     // Default GEO Country
     public static final String DEFAULT_GEO_COUNTRY = "CHN";
+
     public static final String DEFAULT_CITY_GEO_COUNTRY = "CN-88";
+
     public static final String DEFAULT_POST_CODE = "200120";
     /**
      * 微信开放平台用户信息调用地址
@@ -176,4 +178,22 @@ public class PeConstant {
      * We Chat User Info Path / CGI
      */
     public static final String WX_USER_INFO_CGI_BIN_PATH ="https://api.weixin.qq.com/cgi-bin/user/info";
+
+
+    /**
+     * 阿里云快递查询Api Path
+     */
+    public static final String ALI_EXPRESS_QUERY_API_PATH = "/express/query";
+
+    /**
+     * 阿里云快递查询Api Host
+     */
+    public static final String ALI_EXPRESS_QUERY_API_HOST = "http://jisukdcx.market.alicloudapi.com";
+
+
+    /**
+     * 阿里云快递查询ApiCode
+     */
+    public static final String ALI_EXPRESS_QUERY_API_CODE =  "8141fb4bfc2f44b1b21e7397de8c22ff";
+
 }

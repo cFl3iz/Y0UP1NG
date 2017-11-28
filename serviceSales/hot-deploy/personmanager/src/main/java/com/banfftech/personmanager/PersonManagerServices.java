@@ -570,7 +570,7 @@ public class PersonManagerServices {
         String contactMechId = "";
 
         GenericValue postalAddress = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION")).queryList());
+                EntityQuery.use(delegator).from("PartyContactMechPurpose").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION")).queryList());
 
         if(null == postalAddress){
 

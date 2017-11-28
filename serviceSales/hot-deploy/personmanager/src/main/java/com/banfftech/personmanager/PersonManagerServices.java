@@ -482,6 +482,8 @@ public class PersonManagerServices {
 
         String code = (String) context.get("code");
 
+        resultMap.put("code",code);
+
         String host = PeConstant.ALI_EXPRESS_QUERY_API_HOST;
         String path = PeConstant.ALI_EXPRESS_QUERY_API_PATH;
         String method = "GET";
@@ -553,7 +555,6 @@ public class PersonManagerServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-
         String code = (String) context.get("code");
 
         String orderId = (String) context.get("orderId");
@@ -607,7 +608,7 @@ public class PersonManagerServices {
         }else{
             //查询系统中是否有此货运方法,如果没有新增。
 
-            GenericValue party = delegator.findOne("Party",UtilMisc.toMap("partyId",carrierCode));
+            GenericValue party = delegator.findOne("Party",UtilMisc.toMap("partyId",carrierCode),false);
 
             if(party==null){
                 dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode));

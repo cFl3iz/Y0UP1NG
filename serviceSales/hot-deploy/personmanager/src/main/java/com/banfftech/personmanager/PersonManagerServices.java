@@ -619,16 +619,18 @@ public class PersonManagerServices {
              dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                     "productStoreShipMethId", carrierCode, "productStoreId", productStoreId,
                     "shipmentMethodTypeId", "EXPRESS", "partyId",carrierCode, "roleTypeId", "CARRIER"));
-
+            shipmentMethodId = carrierCode;
         }
 
+        System.out.println("contactMechId = " + contactMechId);
 
 
+        System.out.println("shipmentMethod = " + shipmentMethodId);
 
         //将卖家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
-                "contactMechId", contactMechId, "shipmentMethod", carrierCode, "shipGroupSeqId", "00001"));
+                "contactMechId", contactMechId, "shipmentMethod", shipmentMethodId, "shipGroupSeqId", "00001"));
 
         if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
             return updateShipGroupShipInfoOutMap;

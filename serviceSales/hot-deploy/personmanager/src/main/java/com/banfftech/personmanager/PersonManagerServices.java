@@ -628,7 +628,7 @@ public class PersonManagerServices {
         //将卖家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
-                "contactMechId", contactMechId, "shipmentMethodId", carrierCode, "shipGroupSeqId", "00001"));
+                "contactMechId", contactMechId, "shipmentMethod", carrierCode, "shipGroupSeqId", "00001"));
 
         if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
             return updateShipGroupShipInfoOutMap;

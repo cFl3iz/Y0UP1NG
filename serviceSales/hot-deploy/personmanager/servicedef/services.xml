@@ -204,7 +204,8 @@
         <attribute name="code" type="String" mode="IN"
                    optional="true" />
 
-
+        <attribute name="carrierCode" type="String" mode="OUT"
+                   optional="true" />
         <attribute name="name" type="String" mode="OUT"
                    optional="true" />
         <attribute name="expressInfos" type="List" mode="OUT"
@@ -222,17 +223,22 @@
              invoke="updateShipGroupShipInfoForWeChat" auth="false">
         <description>updateShipGroupShipInfoForWeChat</description>
 
-        <attribute name="tarjeta" type="String" mode="INOUT"
-                   optional="true" />
 
         <attribute name="orderId" type="String" mode="IN"
                    optional="true" />
 
-        <attribute name="contactMechId" type="String" mode="IN"
+
+        <attribute name="carrierCode" type="String" mode="IN"
                    optional="true" />
 
-        <attribute name="shipmentMethodId" type="String" mode="IN"
+        <attribute name="name" type="String" mode="IN"
                    optional="true" />
+
+        <!--<attribute name="contactMechId" type="String" mode="IN"-->
+                   <!--optional="true" />-->
+
+        <!--<attribute name="shipmentMethodId" type="String" mode="IN"-->
+                   <!--optional="true" />-->
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

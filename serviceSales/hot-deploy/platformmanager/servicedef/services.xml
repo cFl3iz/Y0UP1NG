@@ -12,6 +12,11 @@
     </service>
 
 
+
+
+
+
+
     <!-- JPush -->
     <service name="pushNotifOrMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">
@@ -117,6 +122,19 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
+
+
+
+
+    <!-- create Simple Carrier Shipment Method -->
+    <service name="createSimpleCarrierShipmentMethod" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="createSimpleCarrierShipmentMethod" auth="false">
+        <description>createSimpleCarrierShipmentMethod</description>
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
 
 
     <!-- push WeChat MessageInfo -->

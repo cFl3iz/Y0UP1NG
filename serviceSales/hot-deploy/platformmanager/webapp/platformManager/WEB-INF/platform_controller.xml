@@ -17,6 +17,16 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!--updateShipGroupShipInfoForWeChat-->
+    <request-map uri="updateShipGroupShipInfoForWeChat">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryExpressInfo"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
 
     <!-- Send Message -->
     <request-map uri="sendMessage">

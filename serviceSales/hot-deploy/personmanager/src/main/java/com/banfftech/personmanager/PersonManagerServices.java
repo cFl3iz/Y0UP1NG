@@ -519,6 +519,7 @@ public class PersonManagerServices {
 
         resultMap.put("expressInfos", strlist);
         resultMap.put("name", getExpressNameFromType(type));
+        resultMap.put("carrierCode",type);
 
         return resultMap;
     }
@@ -551,22 +552,82 @@ public class PersonManagerServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        String contactMechId = (String) context.get("contactMechId");
 
-        String tarjeta = (String) context.get("tarjeta");
 
-        String partyId = (String) userLogin.get("partyId");
-
-        String shipmentMethodId = (String) context.get("shipmentMethodId");
-
-        resultMap.put("tarjeta", tarjeta);
+        String code = (String) context.get("code");
 
         String orderId = (String) context.get("orderId");
 
+        String partyId = (String) userLogin.get("partyId");
 
+        String carrierCode  = (String) context.get("carrierCode");
+
+        String name    = (String) context.get("name");
+
+        String shipmentMethodId = "";
+
+        String contactMechId = "";
+
+        GenericValue postalAddress = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+
+        if(null == postalAddress){
+
+        }else{
+
+            contactMechId =(String)  postalAddress.get("contactMechId");
+        }
+
+        GenericValue store  =  EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyId)).queryFirst();
+
+        String productStoreId = (String) store.get("productStoreId");
+
+        //查询店铺是否拥有该货运方式
+        //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("partyId",EntityOperator.LIKE,"%"+name+"%");
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("productStoreId",productStoreId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions,EntityOperator.AND,findConditions2);
+
+
+        //QueryStoreShipmentMethList
+        List<GenericValue> queryStoreShipmentMethList = delegator.findList("ProductStoreShipmentMeth",
+                listConditions, null,
+                UtilMisc.toList("-createdStamp"), null, true);
+
+        if(queryStoreShipmentMethList!=null && queryStoreShipmentMethList.size()>0){
+                GenericValue shimentMethod = (GenericValue) queryStoreShipmentMethList.get(0);
+                shipmentMethodId = (String) shimentMethod.get("partyId");
+        }else{
+            //查询系统中是否有此货运方法,如果没有新增。
+
+            GenericValue party = delegator.findOne("Party",UtilMisc.toMap("partyId",carrierCode));
+
+            if(party==null){
+                dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode));
+            }
+
+            //给卖家店铺增加此货运方法
+
+             dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                    "productStoreShipMethId", carrierCode, "productStoreId", productStoreId,
+                    "shipmentMethodTypeId", "EXPRESS", "partyId",carrierCode, "roleTypeId", "CARRIER"));
+
+        }
+
+
+
+
+        //将卖家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
-                "contactMechId", contactMechId, "shipmentMethodId", shipmentMethodId, "shipGroupSeqId", "00001"));
+                "contactMechId", contactMechId, "shipmentMethodId", carrierCode, "shipGroupSeqId", "00001"));
 
         if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
             return updateShipGroupShipInfoOutMap;
@@ -2706,21 +2767,15 @@ public class PersonManagerServices {
 
         //店铺关联货运方法
         //EMS
-        Map<String, Object> createProductStoreShipEmsMethOutMap =
-                dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                        "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
-                        "shipmentMethodTypeId", "EXPRESS", "partyId", "CHINAPOST", "roleTypeId", "CARRIER"));
-
-        try {
-            //顺风
-
-            dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                    "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
-                    "shipmentMethodTypeId", "EXPRESS", "partyId", "SHUNFENG_EXPRESS", "roleTypeId", "CARRIER"));
-        } catch (GenericServiceException e) {
-            Debug.logError(e, module);
-
-        }
+//        Map<String, Object> createProductStoreShipEmsMethOutMap =
+//                dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+//                        "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
+//                        "shipmentMethodTypeId", "EXPRESS", "partyId", "CHINAPOST", "roleTypeId", "CARRIER"));
+//
+//
+//            dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+//                    "productStoreShipMethId", "CP_EMS", "productStoreId", productStoreId,
+//                    "shipmentMethodTypeId", "EXPRESS", "partyId", "SHUNFENG_EXPRESS", "roleTypeId", "CARRIER"));
 
 
         // CreateProd Catalog 创建目录

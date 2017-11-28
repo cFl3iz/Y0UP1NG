@@ -68,6 +68,55 @@ public class PlatformManagerServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+
+    /**
+     * createSimpleCarrierShipmentMethod(单独创建系统货运方式)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createSimpleCarrierShipmentMethod(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String carrierCode = (String) context.get("carrierCode");
+
+        String name = (String) context.get("name");
+
+
+        //Create Party
+        GenericValue party = delegator.makeValue("Party" , UtilMisc.toMap("partyId", carrierCode));
+        party.create();
+        //Create PartyGroup
+        dispatcher.runSync("createPartyGroup",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"groupName",name ));
+        //Create Role
+        Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", carrierCode,
+                "roleTypeId", "CARRIER");
+
+        dispatcher.runSync("createPartyRole", createPartyRoleMap);
+
+        //Create CarrierShipmentMethod
+        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS"));
+
+        return result;
+    }
+
+
+
+
     /**
      * 订单状态变更推送
      * @param dctx

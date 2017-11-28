@@ -109,7 +109,7 @@ public class PlatformManagerServices {
         dispatcher.runSync("createPartyRole", createPartyRoleMap);
 
         //Create CarrierShipmentMethod
-        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS"));
+        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS","sequenceNumber","10"));
 
         return result;
     }

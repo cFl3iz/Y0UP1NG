@@ -616,7 +616,7 @@ public class PersonManagerServices {
 
             //给卖家店铺增加此货运方法
 
-             dispatcher.runAsync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+            dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                     "productStoreShipMethId", carrierCode, "productStoreId", productStoreId,
                     "shipmentMethodTypeId", "EXPRESS", "partyId",carrierCode, "roleTypeId", "CARRIER"));
             shipmentMethodId = carrierCode;

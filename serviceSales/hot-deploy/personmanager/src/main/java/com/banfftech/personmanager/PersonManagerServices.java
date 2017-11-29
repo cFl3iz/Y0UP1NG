@@ -1064,6 +1064,9 @@ public class PersonManagerServices {
 
         String objectId = (String) request.getParameter("objectId");
 
+        System.out.println("########################################################################### objectId = " + objectId);
+
+
         String partyIdTo = (String) request.getParameter("partyIdTo");
 
         String partyIdFrom = (String) request.getParameter("partyIdFrom");

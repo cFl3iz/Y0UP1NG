@@ -498,6 +498,26 @@ public class PersonManagerServices {
 
         String orderPaymentPreferenceId =  (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
 
+        GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId",orderId).queryFirst();
+
+        //找发票
+        GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId",orderId,"amount",orderHeader.get("grandTotal")).queryFirst();
+
+
+
+        //先将支付应用到发票
+
+        Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
+                "userLogin", userLogin, "paymentId",orderPaymentPrefAndPayment.get("paymentId"),"invoiceId",orderItemBillingAndInvoiceAndItem.get("invoiceId"),"amountApplied",orderHeader.get("grandTotal")));
+
+        if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
+            return createPaymentApplicationMap;
+        }
+
+
+
+
+
         //确认这笔支付的状态
 
         Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(

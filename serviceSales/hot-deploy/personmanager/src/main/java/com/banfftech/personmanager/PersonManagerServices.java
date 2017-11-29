@@ -512,7 +512,11 @@ public class PersonManagerServices {
         }
         JSONObject jsonMap2 = JSONObject.fromObject(entityStr);
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
+        try{
         result = (JSONObject) jsonMap2.get("result");
+        }catch(Exception e){
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));
+        }
         type = (String) result.get("type");
         JSONArray list = (JSONArray) result.get("list");
 

@@ -31,6 +31,11 @@
         <value xml:lang="zh">内部服务错误</value>
     </property>
 
+    <property key="ExpressInfoNotFound">
+        <value xml:lang="en">ExpressInfoNotFound</value>
+        <value xml:lang="zh">阿里云Api:没有找到这个物流信息</value>
+    </property>
+
     <property key="JPushError">
         <value xml:lang="en">JPushError</value>
         <value xml:lang="zh">极光推送失败</value>

@@ -660,6 +660,8 @@ public class PersonManagerQueryServices {
                     }else{
                         rowMap.put("orderPayStatus","未付款");
                     }
+                }else{
+                    rowMap.put("orderPayStatus","未付款");
                 }
 
 

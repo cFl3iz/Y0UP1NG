@@ -269,7 +269,7 @@
         var messagesArray = new Array();
 
         var images  = new Array();
-        
+
         function setPaymentStatus(){
             alert("setPaymentStatus");
         }

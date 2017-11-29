@@ -622,10 +622,6 @@ public class PersonManagerServices {
             shipmentMethodId = carrierCode;
         }
 
-        System.out.println("contactMechId = " + contactMechId);
-
-
-        System.out.println("shipmentMethod = " + shipmentMethodId);
 
         //将卖家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
@@ -637,6 +633,14 @@ public class PersonManagerServices {
         }
 
 
+        //更变订单状态
+
+        Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,"statusId","ORDER_APPROVED","newStatusId","ORDER_APPROVED","setItemStatus","Y"));
+
+        if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+            return changeOrderStatusOutMap;
+        }
         return resultMap;
     }
 

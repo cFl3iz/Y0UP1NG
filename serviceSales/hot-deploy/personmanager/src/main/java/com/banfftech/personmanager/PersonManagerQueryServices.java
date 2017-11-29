@@ -652,6 +652,20 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : queryMyResourceOrderList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+                if(null != orderPaymentPrefAndPayment){
+                    String statusId = orderPaymentPrefAndPayment.get("statusId");
+                    if(statusId.toLowerCase().equals("PMNT_RECEIVED")){
+                        rowMap.put("orderPayStatus","已付款");
+                    }else{
+                        rowMap.put("orderPayStatus","未付款");
+                    }
+                }
+
+
+
+
+
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
 

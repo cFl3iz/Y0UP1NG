@@ -956,7 +956,7 @@ public class PersonManagerServices {
             createMessageLogMap.put("message", "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!");
 
 
-            createMessageLogMap.put("partyIdFrom", partyIdFrom);
+            createMessageLogMap.put("partyIdFrom", ""+userLogin.get("partyId"));
 
 
             createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));

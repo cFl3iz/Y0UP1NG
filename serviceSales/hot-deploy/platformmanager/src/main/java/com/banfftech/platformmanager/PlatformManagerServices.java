@@ -96,10 +96,8 @@ public class PlatformManagerServices {
 
         String name = (String) context.get("name");
 
+        String code = (String) context.get("code");
 
-        //Create Party
-//        GenericValue party = delegator.makeValue("Party" , UtilMisc.toMap("partyId", carrierCode));
-//        party.create();
         //Create PartyGroup
         dispatcher.runSync("createPartyGroup",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"groupName",name ));
         //Create Role
@@ -109,7 +107,7 @@ public class PlatformManagerServices {
         dispatcher.runSync("createPartyRole", createPartyRoleMap);
 
         //Create CarrierShipmentMethod
-        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS","sequenceNumber",new Long("10")));
+        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"carrierServiceCode",code,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS","sequenceNumber",new Long("10")));
 
         return result;
     }

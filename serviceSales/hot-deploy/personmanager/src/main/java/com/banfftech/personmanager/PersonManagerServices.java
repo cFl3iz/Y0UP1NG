@@ -611,7 +611,7 @@ public class PersonManagerServices {
             GenericValue party = delegator.findOne("Party",UtilMisc.toMap("partyId",carrierCode),false);
 
             if(party==null){
-                dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode));
+                dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode,"code",code));
             }
 
             //给卖家店铺增加此货运方法
@@ -642,6 +642,11 @@ public class PersonManagerServices {
         if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
             return changeOrderStatusOutMap;
         }
+
+
+
+
+
         return resultMap;
     }
 

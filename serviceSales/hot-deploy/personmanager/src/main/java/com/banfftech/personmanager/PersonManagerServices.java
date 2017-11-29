@@ -942,8 +942,64 @@ public class PersonManagerServices {
 
         //pay_qr_code 推送的是收款码,需要再推一次包含注入内容的确认信息。
         if (!UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("y") || !UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("true")) {
+
+
             System.out.println("*IN pay_qr_code Biz,Now System Double Push!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!", pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
+
+
+
+            pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+            GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo, "enabled", "Y").queryFirst();
+
+            String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+
+
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", toPartyUserLoginId);
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+
+            pushWeChatMessageInfoMap.put("tarjeta", signer.sign(claims));
+
+
+            pushWeChatMessageInfoMap.put("userLogin", userLogin);
+
+            pushWeChatMessageInfoMap.put("message", "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!");
+
+            if (!UtilValidate.isEmpty(partyIdFrom)) {
+                createMessageLogMap.put("partyIdFrom", partyIdFrom);
+            }
+
+            createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+            createMessageLogMap.put("partyIdTo", partyIdTo);
+
+            createMessageLogMap.put("badge", "false");
+
+            createMessageLogMap.put("messageLogTypeId", messageLogTypeId);
+
+
+            if (!UtilValidate.isEmpty(objectId)) {
+                createMessageLogMap.put("objectId", objectId);
+            }
+
+            createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+            GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+            msg.create();
         }
 
 
@@ -1001,9 +1057,6 @@ public class PersonManagerServices {
         claims.put("iat", iat);
 
         pushWeChatMessageInfoMap.put("tarjeta", signer.sign(claims));
-
-
-        System.out.println("========================================= partyIdTo = " + partyIdTo);
 
         // 查询registrationID
         EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);

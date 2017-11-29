@@ -220,6 +220,38 @@
 
 
 
+
+
+
+    <!-- 卖家确认付款了 -->
+    <service name="setOrderPaymentStatus" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="setOrderPaymentStatus" auth="false">
+        <description>setOrderPaymentStatus</description>
+
+
+        <attribute name="paymentId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true" />
+
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+
+
+
+
     <!-- 更新货运信息 -->
     <service name="updateShipGroupShipInfoForWeChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

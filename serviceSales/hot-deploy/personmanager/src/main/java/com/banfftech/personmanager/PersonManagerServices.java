@@ -454,6 +454,85 @@ public class PersonManagerServices {
 
 
     /**
+     * setOrderPaymentStatus 买家确认已经付钱了
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> setOrderPaymentStatus(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String paymentId = (String) context.get("paymentId");
+
+        String payToPartyId = (String) context.get("payToPartyId");
+
+        String orderId = (String) context.get("orderId");
+
+        GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId",partyId,"paymentMethodTypeId","EXT_WXPAY").queryFirst();
+
+
+        //添加买家的支付方法到该笔支付
+        Map<String, Object> updatePaymentOutMap = dispatcher.runSync("updatePayment", UtilMisc.toMap(
+                "userLogin", userLogin, "paymentId",paymentId,"paymentMehotdId",paymentMethod.get("paymentMethodId")));
+
+        if (!ServiceUtil.isSuccess(updatePaymentOutMap)) {
+            return updatePaymentOutMap;
+        }
+
+        //确认这笔支付的状态
+
+        Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
+                "userLogin", userLogin, "paymentId",paymentId,"statusId","PMNT_RECEIVED"));
+
+        if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
+            return setPaymentStatusOutMap;
+        }
+
+        //推送告知卖家
+
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+
+
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+"+orderId+"的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+        }
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+    /**
      * 查询快递信息
      *
      * @param dctx
@@ -950,10 +1029,11 @@ public class PersonManagerServices {
 
             createMessageLogMap = new HashMap<String, Object>();
 
+            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",objectId).queryFirst();
 
 
 
-            createMessageLogMap.put("message", "如果你已经付好了,请点击 <button class='button' style='font-size:17px;' onclick='setPaymentStatus();'>这个按钮</button> 通知我查收!");
+            createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='setPaymentStatus("+ orderPaymentPrefAndPayment.get("paymentId") +","+objectId+");'>这个按钮</button> 通知我查收!");
 
 
             createMessageLogMap.put("partyIdFrom", ""+userLogin.get("partyId"));

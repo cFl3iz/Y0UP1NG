@@ -181,6 +181,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 确认我已经付款了,并且告诉卖家 -->
+    <request-map uri="setOrderPaymentStatus">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="setOrderPaymentStatus"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
     <!-- View Mappings myOrder-->
 

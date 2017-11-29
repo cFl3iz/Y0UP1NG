@@ -270,13 +270,39 @@
 
         var images  = new Array();
 
-        function setPaymentStatus(){
-            alert("setPaymentStatus");
+        /**
+         * 更改订单中的支付状态
+         */
+        function setPaymentStatus(paymentId,orderId){
+
+            var url = "setOrderPaymentStatus";
+            var tarjeta = $("#tarjeta").val();
+            var payToPartyId = $("#payToPartyId").val();
+            var param = {
+                tarjeta:tarjeta,
+                paymentId:paymentId,
+                payToPartyId:payToPartyId,
+                orderId:orderId
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (data) {
+                    alert("ERROR :" + data.status);
+                }
+            });
+
+
         }
 
 
         //刷新消息
         function flushMessage() {
+
             var url = "queryMessage";
             var param = {
                 payToPartyId:${(payToPartyId)!}

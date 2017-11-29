@@ -572,7 +572,7 @@ public class PersonManagerServices {
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId",orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
-        //请查买家谢谢
+
 
         GenericValue postalAddress = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("PartyContactMechPurpose").where(UtilMisc.toMap("partyId", orderCust.get("partyId"), "contactMechPurposeTypeId", "SHIPPING_LOCATION")).queryList());

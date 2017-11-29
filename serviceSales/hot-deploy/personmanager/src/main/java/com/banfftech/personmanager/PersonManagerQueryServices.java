@@ -672,13 +672,16 @@ public class PersonManagerQueryServices {
                 if(payToPartyId.equals(partyId)){
                     personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
                     personAddressInfoMap = queryPersonAddressInfo(delegator,payFromPartyId);
+                    rowMap.put("realPartyId",payFromPartyId);
                 }
                 //说明这笔单我是买家,查卖家头像信息
                 if(!payToPartyId.equals(partyId)){
                     personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
                     personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
+                    rowMap.put("realPartyId",payToPartyId);
                 }
                 rowMap.put("userPartyId",partyId);
+
                 rowMap.put("personInfoMap",personInfoMap);
                 rowMap.put("personAddressInfoMap",personAddressInfoMap);
 

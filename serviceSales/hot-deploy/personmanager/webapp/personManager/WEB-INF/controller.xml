@@ -172,7 +172,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <!-- 卖家确认收到货款 -->
+    <request-map uri="orderPaymentReceived">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="orderPaymentReceived"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

@@ -220,8 +220,18 @@
 
 
 
+    <!-- 买家确认收到了 -->
+    <service name="orderPaymentReceived" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderPaymentReceived" auth="false">
+        <description>orderPaymentReceived</description>
 
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
 
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
     <!-- 卖家确认付款了 -->
     <service name="setOrderPaymentStatus" engine="java"

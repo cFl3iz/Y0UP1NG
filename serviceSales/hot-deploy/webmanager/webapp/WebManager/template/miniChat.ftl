@@ -269,6 +269,11 @@
         var messagesArray = new Array();
 
         var images  = new Array();
+        
+        function setPaymentStatus(){
+            alert("setPaymentStatus");
+        }
+
 
         //刷新消息
         function flushMessage() {

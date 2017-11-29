@@ -953,7 +953,7 @@ public class PersonManagerServices {
 
 
 
-            createMessageLogMap.put("message", "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!");
+            createMessageLogMap.put("message", "如果你已经付好了,请点击 <button class='button' onclick='setPaymentStatus();' value='这个按钮'></button> 通知我查收!");
 
 
             createMessageLogMap.put("partyIdFrom", ""+userLogin.get("partyId"));

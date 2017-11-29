@@ -655,7 +655,7 @@ public class PersonManagerQueryServices {
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
                 if(null != orderPaymentPrefAndPayment){
                     String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
-                    if(statusId.toLowerCase().equals("PMNT_RECEIVED")){
+                    if(statusId.toUpperCase().indexOf("RECEIVED")>0){
                         rowMap.put("orderPayStatus","已付款");
                     }else{
                         rowMap.put("orderPayStatus","未付款");

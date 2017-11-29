@@ -493,7 +493,7 @@ public class PersonManagerServices {
 
         //添加买家的支付方法到该笔支付
         Map<String, Object> updatePaymentOutMap = dispatcher.runSync("updatePayment", UtilMisc.toMap(
-                "userLogin", userLogin, "paymentId",paymentId,"paymentMehotdId",paymentMethod.get("paymentMethodId")));
+                "userLogin", userLogin, "paymentId",paymentId,"paymentMethodId",paymentMethod.get("paymentMethodId")));
 
         if (!ServiceUtil.isSuccess(updatePaymentOutMap)) {
             return updatePaymentOutMap;

@@ -636,12 +636,15 @@ public class PersonManagerServices {
         //更变订单状态
 
         Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                "userLogin", userLogin, "orderId", orderId,"statusId","ORDER_SENT",
+                "userLogin", userLogin, "orderId", orderId,"statusId","ORDER_APPROVED",
                 "changeReason","卖家确认物流信息","setItemStatus","Y"));
 
         if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
             return changeOrderStatusOutMap;
         }
+        Map<String, Object> changeOrderStatusOutMap2 = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,"statusId","ORDER_APPROVED",
+                "changeReason","卖家确认物流信息","setItemStatus","Y"));
         return resultMap;
     }
 

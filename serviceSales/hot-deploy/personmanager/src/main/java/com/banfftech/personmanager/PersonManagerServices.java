@@ -874,10 +874,15 @@ public class PersonManagerServices {
 
         String messageLogTypeId = (String) request.getParameter("messageLogTypeId");
 
+        //发送的是收款码?
+        String pay_qr_code    = (String) request.getParameter("pay_qr_code");
+
         //默认是文字类型
         if (UtilValidate.isEmpty(messageLogTypeId)) {
             messageLogTypeId = "TEXT";
         }
+
+
 
 
         if (!UtilValidate.isEmpty(messageLogTypeId) && messageLogTypeId.equals("IMAGE")) {
@@ -931,152 +936,16 @@ public class PersonManagerServices {
 
 
         } else {
+            //推送的不是图片,只要普通推送
             pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
         }
 
+        //pay_qr_code 推送的是收款码,需要再推一次包含注入内容的确认信息。
+        if (!UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("y") || !UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("true")) {
+            System.out.println("*IN pay_qr_code Biz,Now System Double Push!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!", pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
+        }
 
-//        if(UtilValidate.isEmpty(partyIdFrom)){
-//            partyIdFrom = (String) userLogin.get("partyId");
-//        }
-//
-//        pushWeChatMessageInfoMap.put("userLogin",userLogin);
-//
-//        pushWeChatMessageInfoMap.put("message",text);
-//
-//
-//        GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo,"enabled","Y").queryFirst();
-//
-//        String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
-//
-//
-//
-//        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
-//        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
-//        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
-//        //开始时间
-//        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-//        //到期时间
-//        final long exp = iat + expirationTime;
-//        //生成
-//        final JWTSigner signer = new JWTSigner(tokenSecret);
-//        final HashMap<String, Object> claims = new HashMap<String, Object>();
-//        claims.put("iss", iss);
-//        claims.put("user", toPartyUserLoginId);
-//        claims.put("delegatorName", delegator.getDelegatorName());
-//        claims.put("exp", exp);
-//        claims.put("iat", iat);
-//
-//        pushWeChatMessageInfoMap.put("tarjeta",signer.sign(claims));
-//
-//
-//        System.out.println("========================================= partyIdTo = " +partyIdTo);
-//
-//        // 查询registrationID
-//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
-//        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
-//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
-//        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
-//        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
-//        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
-//
-//        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-//
-//        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
-//        createMessageLogMap.put("message",text);
-//        if(person!=null){
-//            text = person.get("firstName")+":"+text;
-//        }
-//
-//        pushWeChatMessageInfoMap.put("firstName",person.get("firstName"));
-//
-//        if(null != partyIdentifications && partyIdentifications.size()>0){
-//
-//
-//            GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
-//            String jpushId = (String) partyIdentification.getString("idValue");
-//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-//
-//            //查角标
-//            EntityCondition findValCondition = EntityCondition.makeCondition(
-//                    EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"),
-//                    EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo));
-//            long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
-//
-//            String badege_str = count+"";
-//
-//            try{
-//                dispatcher.runSync("pushNotifOrMessage",UtilMisc.toMap("userLogin",admin,"badge",badege_str,"message","message","content",text,"regId",jpushId,"deviceType",partyIdentificationTypeId,"sendType","","objectId",partyIdFrom));
-//            } catch (GenericServiceException e1) {
-//                Debug.logError(e1.getMessage(), module);
-//                return "error";
-//            }
-//
-//
-//        }
-//
-//
-//
-//
-//        if(!UtilValidate.isEmpty(partyIdFrom)) {
-//            createMessageLogMap.put("partyIdFrom", partyIdFrom);
-//        }
-//
-//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-//
-//        createMessageLogMap.put("partyIdTo",partyIdTo);
-//
-//        createMessageLogMap.put("badge","true");
-//
-//        if(!UtilValidate.isEmpty(objectId)){
-//            createMessageLogMap.put("objectId",objectId);
-//        }
-//
-//        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-//
-//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-//
-//        msg.create();
-//
-//
-//
-//
-//
-//
-//
-//
-//        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
-//
-//
-//        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
-//
-//            GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
-//
-//            String payToPartyId = (String) payToParty.get("payToPartyId");
-//
-//            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
-//
-//            Date date = new Date();
-//
-//            SimpleDateFormat formatter;
-//
-//            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//
-//            String pushDate = ""+formatter.format(date);
-//
-//            pushWeChatMessageInfoMap.put("date",pushDate);
-//
-//            String openId = (String) partyIdentificationList.get(0).get("idValue");
-//
-//            pushWeChatMessageInfoMap.put("openId",openId);
-//
-//            pushWeChatMessageInfoMap.put("productId",objectId);
-//
-//            pushWeChatMessageInfoMap.put("payToPartyId",payToPartyId);
-//
-//            //推微信
-//            dispatcher.runSync("pushWeChatMessageInfo",pushWeChatMessageInfoMap);
-//
-//        }
 
         return "success";
     }
@@ -2711,6 +2580,25 @@ public class PersonManagerServices {
         }
 
         createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+
+
+            //创建当事人支付方法
+
+            // Create Default Pay Method To Party
+            GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
+            newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+            newPayMethod.set("partyId", partyId);
+            newPayMethod.set("paymentMethodTypeId", "EXT_ALIPAY");
+            newPayMethod.set("description", "支付宝");
+            newPayMethod.create();
+
+
+            GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
+            newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+            newPayMethod2.set("partyId", partyId);
+            newPayMethod2.set("paymentMethodTypeId", "EXT_WXPAY");
+            newPayMethod2.set("description", "微信");
+            newPayMethod2.create();
 
 
         // Create Party Role 授予当事人 意向客户 角色 用于mark product

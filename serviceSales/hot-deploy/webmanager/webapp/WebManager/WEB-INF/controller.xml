@@ -25,6 +25,8 @@
     -->
 
     <!-- Request Mappings -->
+
+    <request-map uri="myOrder"><security https="true" auth="true"/><response name="success" type="view" value="myOrder"/></request-map>
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
     <!-- Share Resource -->
     <request-map uri="shareProduct"><security https="false" auth="false"/><response name="success" type="view" value="shareProduct"/></request-map>
@@ -180,7 +182,11 @@
     </request-map>
 
 
-    <!-- View Mappings -->
+    <!-- View Mappings myOrder-->
+
+
+    <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
+
     <view-map name="miniChat" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#miniChat"/>
     <view-map name="viewWebOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#viewWebOrderDetail"/>
     <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>

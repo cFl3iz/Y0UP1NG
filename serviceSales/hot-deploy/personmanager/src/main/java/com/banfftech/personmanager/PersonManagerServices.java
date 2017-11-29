@@ -1308,10 +1308,19 @@ public class PersonManagerServices {
 
 
         if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
-
+            //从产品找到卖家
             GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+            String payToPartyId = "";
+            if(null != payToParty ){
+                payToPartyId = (String) payToParty.get("payToPartyId");
+            }else{
+                //从订单找到卖家
+                GenericValue orderFrom = EntityQuery.use(delegator).from("OrderRole").where("orderId",objectId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
 
-            String payToPartyId = (String) payToParty.get("payToPartyId");
+                payToPartyId = (String) orderFrom.get("partyId");
+            }
+
+
 
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
 

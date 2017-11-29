@@ -139,12 +139,12 @@ public class PlatformManagerServices {
 
         String payToPartyId  = (String) context.get("payToPartyId");
         String tarjeta       = (String) context.get("tarjeta");
-
+        String messageInfo = (String) context.get("messageInfo");
 
         GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
 
 
-        Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+
 
         String orderStatus =  UtilProperties.getMessage(resourceUiLabels,orderHeader.get("statusId")+"", locale);
 
@@ -184,11 +184,23 @@ public class PlatformManagerServices {
         jsobj4.put("color", "#173177");
         jsobj2.put("keyword1", jsobj4);
 
+
+
+
+        if(orderStatus.toLowerCase().equals("created")){
+            orderStatus  = "订单已创建";
+           // messageInfo= personInfoMap.get("firstName")+"正在处理您的订单";
+        }else{
+            orderStatus  = "订单已发货";
+           // messageInfo= "物流公司:"+"物流单号:";
+        }
+
+
         jsobj5.put("value", orderStatus);
         jsobj5.put("color", "#173177");
         jsobj2.put("keyword2", jsobj5);
 
-        jsobj6.put("value", "卖家'"+personInfoMap.get("firstName")+"'正在处理您的订单");
+        jsobj6.put("value", messageInfo);
         jsobj6.put("color", "#173177");
         jsobj2.put("keyword3", jsobj6);
 

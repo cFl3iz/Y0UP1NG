@@ -77,6 +77,7 @@ import net.sf.json.JSONArray;
 import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 /**
@@ -528,7 +529,7 @@ public class PersonManagerServices {
 
 
     /**
-     * updateShipGroupShipInfoForWeChat
+     * updateShipGroupShipInfoForWeChat发货
      *
      * @param dctx
      * @param context
@@ -645,6 +646,46 @@ public class PersonManagerServices {
 
 
 
+
+
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId",orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+
+        //推送给微信用户
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            pushWeChatMessageInfoMap.put("payToPartyId", partyId);
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("orderId", orderId);
+
+            pushWeChatMessageInfoMap.put("messageInfo","物流公司:"+ name +"物流单号:" + code);
+
+            //推微信订单状态
+            dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
+        }
 
 
         return resultMap;
@@ -2550,7 +2591,6 @@ public class PersonManagerServices {
 
             Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
 
-//            String payToPartyId = (String) payToParty.get("payToPartyId");
 
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
 
@@ -2573,7 +2613,9 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("orderId", orderId);
 
+            Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
 
+            pushWeChatMessageInfoMap.put("messageInfo", personInfoMap.get("firstName")+"正在处理您的订单");
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }

@@ -37,14 +37,14 @@ under the License.
             <#if currentStatus.statusId == "ORDER_CREATED" || currentStatus.statusId == "ORDER_PROCESSING">
               <li><a href="javascript:document.OrderApproveOrder.submit()">${uiLabelMap.OrderApproveOrder}</a>
               <form name="OrderApproveOrder" method="post" action="<@ofbizUrl>changeOrderStatus/orderview</@ofbizUrl>">
-                <input type="hidden" name="statusId" value="ORDER_APPROVED"/>
-                <input type="hidden" name="newStatusId" value="ORDER_APPROVED"/>
-                <input type="hidden" name="setItemStatus" value="Y"/>
+                <input type="text" name="statusId" value="ORDER_APPROVED"/>
+                <input type="text" name="newStatusId" value="ORDER_APPROVED"/>
+                <input type="text" name="setItemStatus" value="Y"/>
                 <input type="hidden" name="workEffortId" value="${workEffortId!}"/>
-                <input type="hidden" name="orderId" value="${orderId!}"/>
-                <input type="hidden" name="partyId" value="${assignPartyId!}"/>
-                <input type="hidden" name="roleTypeId" value="${assignRoleTypeId!}"/>
-                <input type="hidden" name="fromDate" value="${fromDate!}"/>
+                <input type="text" name="orderId" value="${orderId!}"/>
+                <input type="text" name="partyId" value="${assignPartyId!}"/>
+                <input type="text" name="roleTypeId" value="${assignRoleTypeId!}"/>
+                <input type="text" name="fromDate" value="${fromDate!}"/>
               </form>
               </li>
             <#elseif currentStatus.statusId == "ORDER_APPROVED">

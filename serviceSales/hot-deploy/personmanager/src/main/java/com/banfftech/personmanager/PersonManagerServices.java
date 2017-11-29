@@ -948,7 +948,7 @@ public class PersonManagerServices {
 
 
 
-            pushWeChatMessageInfoMap = new HashMap<String, Object>();
+            createMessageLogMap = new HashMap<String, Object>();
 
             GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdTo, "enabled", "Y").queryFirst();
 
@@ -971,20 +971,21 @@ public class PersonManagerServices {
             claims.put("exp", exp);
             claims.put("iat", iat);
 
-            pushWeChatMessageInfoMap.put("tarjeta", signer.sign(claims));
+            createMessageLogMap.put("tarjeta", signer.sign(claims));
 
 
-            pushWeChatMessageInfoMap.put("userLogin", userLogin);
+            createMessageLogMap.put("userLogin", userLogin);
 
-            pushWeChatMessageInfoMap.put("message", "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!");
+            createMessageLogMap.put("message", "如果你已经付好了,请点击<a class='button' href=''>这个按钮</a> 通知我查收!");
 
-            if (!UtilValidate.isEmpty(partyIdFrom)) {
+           
                 createMessageLogMap.put("partyIdFrom", partyIdFrom);
-            }
+
 
             createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
             createMessageLogMap.put("partyIdTo", partyIdTo);
+
 
             createMessageLogMap.put("badge", "false");
 

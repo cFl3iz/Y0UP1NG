@@ -529,13 +529,15 @@ public class PersonManagerServices {
 
 
         //更新订单支付信息
-        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
-                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
-
-        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
-            return updateOrderPaymentPreferenceOutMap;
-        }
-
+//        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+//                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+//
+//        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+//            return updateOrderPaymentPreferenceOutMap;
+//        }
+        //暂时使用卑劣方式
+        orderPaymentPrefAndPayment.set("statusId","PMNT_RECEIVED");
+        orderPaymentPrefAndPayment.store();
 
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();

@@ -84,7 +84,7 @@
         }
 
         .wenwen_text .circle-button {
-            font-size: 15px;
+            font-size: 16px;
             color: #666;
             line-height: 38px;
         }

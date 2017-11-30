@@ -4,7 +4,7 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
     <meta content="telephone=no" name="format-detection"
     <meta charset="utf-8"/>
-    <title></title>
+    <title>OrderShipmentPage</title>
     <style>
         /**
  * Swiper 3.3.1

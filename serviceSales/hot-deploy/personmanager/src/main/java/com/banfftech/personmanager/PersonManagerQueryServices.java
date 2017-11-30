@@ -8,6 +8,7 @@ import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
+import net.sf.json.JSONObject;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.entity.GenericValue;
@@ -553,6 +554,112 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * Query MyOrders Detail
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyOrdersDetail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        String orderId = (String) context.get("orderId");
+
+        //Order BaseInfo
+        Map<String,Object> rowMap = new HashMap<String, Object>();
+        //Express Info
+        Map<String,Object> orderExpressInfo = new HashMap<String, Object>();
+
+        GenericValue  orderHeaderItemAndRoles  = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", orderId).queryFirst();
+
+        if(null != orderHeaderItemAndRoles){
+
+            rowMap = orderHeaderItemAndRoles.getAllFields();
+
+            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",orderId).queryFirst();
+
+            if(null != orderPaymentPrefAndPayment){
+
+                String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                if(statusId.toUpperCase().indexOf("RECEIVED")>0){
+
+                    rowMap.put("orderPayStatus","已付款");
+
+                }else{
+
+                    rowMap.put("orderPayStatus","未付款");
+
+                }
+            }else{
+
+                rowMap.put("orderPayStatus","未付款");
+
+            }
+
+            String productStoreId = (String) orderHeaderItemAndRoles.get("productStoreId");
+
+            String productId = (String) orderHeaderItemAndRoles.get("productId");
+
+            GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+
+            GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
+            rowMap.put("productName",""+product.get("productName"));
+
+            rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
+
+            String payToPartyId = (String)productStore.get("payToPartyId");
+
+            rowMap.put("payToPartyId",payToPartyId);
+
+
+            Map<String,String> personInfoMap = null;
+
+            Map<String,String> personAddressInfoMap = null;
+
+
+            personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+
+            personAddressInfoMap = queryPersonAddressInfo(delegator,partyId);
+
+            rowMap.put("personInfoMap",personInfoMap);
+
+            rowMap.put("personAddressInfoMap",personAddressInfoMap);
+
+        }
+
+        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
+
+        //TODO QUERY orderExpressInfo
+        Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",order.get("internalCode")));
+
+        List<JSONObject> expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+
+        resultMap.put("orderInfo",rowMap);
+        resultMap.put("orderExpressInfo",expressInfos);
+        resultMap.put("orderExpressName",queryExpressInfoMap.get("name"));
+
+
+        return resultMap;
+    }
+
+
+    /**
      * Query MyOrders
      * @param dctx
      * @param context
@@ -597,22 +704,13 @@ public class PersonManagerQueryServices {
         EntityCondition findConditions = EntityCondition
                 .makeCondition("partyId" ,EntityOperator.EQUALS,partyId);
 
-
-//        EntityCondition findConditions2 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
-//
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3,EntityOperator.AND,findConditions);
-
-//        EntityCondition listConditions = EntityCondition
-//                .makeCondition(findConditions);
 
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
-
-        System.out.println("===queryMyResourceOrderList = "+queryMyResourceOrderList+"=============================================================== PARTY ID = " + partyId);
 
 
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){

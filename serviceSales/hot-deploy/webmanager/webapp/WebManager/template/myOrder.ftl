@@ -8,7 +8,7 @@
 
             <#list orderList as list>
 
-                <a href="javascript:alert('订单明细不给你看的。');" class="list-item">
+                <a href="javascript:location.href = 'myOrderDetail?orderId=${list.orderId}&tarjeta=${tarjeta}'" class="list-item">
                     <div class="list-img">
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>
@@ -30,17 +30,16 @@
                             <div>
                                 <#assign payStat = "${list.orderPayStatus}" />
                                 ${payStat}
-                                <#if payStat == '已付款'>
-                                    <span class="list"><span style="color:#008000;font-size:19px;">
-                                        1${list.orderPayStatus}</span>
-                                    </span>
-                                </#if>
-                                <#if payStat ! == '已付款'>
-                                    <span class="list"><span style="color:indianred;font-size:19px;">
-                                        2${list.orderPayStatus}</span>
-                                    </span>
-                                </#if>
-
+                                <#--<#if payStat == '已付款'>-->
+                                    <#--<span class="list"><span style="color:#008000;font-size:19px;">-->
+                                        <#--1${list.orderPayStatus}</span>-->
+                                    <#--</span>-->
+                                <#--</#if>-->
+                                <#--<#if payStat ! == '已付款'>-->
+                                    <#--<span class="list"><span style="color:indianred;font-size:19px;">-->
+                                        <#--2${list.orderPayStatus}</span>-->
+                                    <#--</span>-->
+                                <#--</#if>-->
                             </div>
                         </div>
                     </div>

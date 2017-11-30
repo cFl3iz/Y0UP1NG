@@ -95,6 +95,27 @@
     </service>
 
 
+    <!--  query MyOrdersDetail -->
+    <service name="queryMyOrdersDetail" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyOrdersDetail" auth="false">
+        <description>Query MyOrders Detail</description>
+
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="orderInfo" type="Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="orderExpressInfo" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="orderExpressName" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <!-- Query Dimension Resource -->
     <service name="queryDimensionResource" engine="java"

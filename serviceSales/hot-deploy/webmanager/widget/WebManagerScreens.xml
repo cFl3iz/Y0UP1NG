@@ -124,6 +124,37 @@
     </screen>
 
 
+    <!-- myOrderDetail -->
+    <screen name="myOrderDetail">
+        <section>
+            <actions>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="orderId" value="${parameters.orderId}"/>
+                <service service-name="queryMyOrdersDetail" result-map="resultMap">
+                    <field-map field-name="tarjeta"/>
+                    <field-map field-name="orderId"/>
+                </service>
+                <set field="orderInfo" from-field="resultMap.orderInfo"/>
+                <set field="orderExpressInfo" from-field="resultMap.orderExpressInfo"/>
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/myOrderDetail.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
     <!-- Web页面查询我的订单 -->
     <screen name="myOrder">
         <section>

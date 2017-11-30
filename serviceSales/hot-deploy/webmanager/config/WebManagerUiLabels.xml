@@ -27,6 +27,36 @@
         <value xml:lang="zh_CN">立即前往.</value>
     </property>
 
+
+    <property key="DownReFlash">
+        <value xml:lang="en">DownReFlash</value>
+        <value xml:lang="zh">下拉刷新</value>
+        <value xml:lang="zh_CN">下拉刷新</value>
+    </property>
+
+    <property key="StopReFlash">
+        <value xml:lang="en">StopReFlash</value>
+        <value xml:lang="zh">释放刷新</value>
+        <value xml:lang="zh_CN">释放刷新</value>
+    </property>
+
+    <property key="NowReFlash">
+        <value xml:lang="en">NowReFlash</value>
+        <value xml:lang="zh">正在刷新</value>
+        <value xml:lang="zh_CN">正在刷新</value>
+    </property>
+    <property key="ReFlashSuccess">
+        <value xml:lang="en">ReFlashSuccess!</value>
+        <value xml:lang="zh">刷新成功!</value>
+        <value xml:lang="zh_CN">刷新成功!</value>
+    </property>
+    <property key="ExpressInfoNotFound">
+        <value xml:lang="en">Express Info NotFound</value>
+        <value xml:lang="zh">还没有物流信息</value>
+        <value xml:lang="zh_CN">还没有物流信息</value>
+    </property>
+
+
     <property key="orderTime">
         <value xml:lang="en">orderTime</value>
         <value xml:lang="zh">下单时间:</value>

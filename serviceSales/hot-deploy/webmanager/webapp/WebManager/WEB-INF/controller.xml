@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+           xmlns="http://ofbiz.apache.org/Site-Conf"
+           xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- The controller elements that are common to all OFBiz components
          can be found in the following xml file. A component can override the
          elements found in the common-controller.xml file. -->
@@ -28,12 +29,27 @@
 
     <request-map uri="myOrder">
         <security https="false" auth="false"/>
-        <response name="success" type="view" value="myOrder"/></request-map>
-    <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
+        <response name="success" type="view" value="myOrder"/>
+    </request-map>
+    <request-map uri="myOrderDetail">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myOrderDetail"/>
+    </request-map>
+
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
     <!-- Share Resource -->
-    <request-map uri="shareProduct"><security https="false" auth="false"/><response name="success" type="view" value="shareProduct"/></request-map>
+    <request-map uri="shareProduct">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="shareProduct"/>
+    </request-map>
     <!-- Share Category -->
-    <request-map uri="shareCategory"><security https="false" auth="false"/><response name="success" type="view" value="shareCategory"/></request-map>
+    <request-map uri="shareCategory">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="shareCategory"/>
+    </request-map>
     <!-- Mini Chat -->
     <request-map uri="miniChat">
         <security https="false" auth="false"/>
@@ -53,25 +69,24 @@
     </request-map>
 
 
-
     <!--<request-map uri="updateShipGroupShipInfo">-->
-        <!--<security https="false" auth="false"/>-->
-        <!--<event type="service" invoke="updateShipGroupShipInfoForWeChat"/>-->
-        <!--<response name="success" type="view" value="viewWebOrderDetail">-->
-            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
-            <!--<redirect-parameter name="productId" from="productId"/>-->
-        <!--</response>-->
-        <!--<response name="error" type="view" value="viewWebOrderDetail">-->
-            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
-            <!--<redirect-parameter name="productId" from="productId"/>-->
-        <!--</response>-->
+    <!--<security https="false" auth="false"/>-->
+    <!--<event type="service" invoke="updateShipGroupShipInfoForWeChat"/>-->
+    <!--<response name="success" type="view" value="viewWebOrderDetail">-->
+    <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+    <!--<redirect-parameter name="productId" from="productId"/>-->
+    <!--</response>-->
+    <!--<response name="error" type="view" value="viewWebOrderDetail">-->
+    <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+    <!--<redirect-parameter name="productId" from="productId"/>-->
+    <!--</response>-->
     <!--</request-map>-->
-
 
 
     <!-- ViewOrder -->
     <request-map uri="viewWebOrderDetail">
-        <security https="false" auth="false"/><response name="success" type="view" value="viewWebOrderDetail"/>
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewWebOrderDetail"/>
     </request-map>
     <!-- QueryMessage -->
     <request-map uri="queryMessage">
@@ -82,8 +97,6 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
-
-
 
 
     <request-map uri="createPersonPartyPostalAddress">
@@ -115,14 +128,14 @@
     <!-- Load payToPartySend Message -->
     <request-map uri="loadMaiJiaMessage">
         <security https="false" auth="false"/>
-        <event type="service" invoke="loadMaiJiaMessage"  />
+        <event type="service" invoke="loadMaiJiaMessage"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
     <request-map uri="loadMessage">
         <security https="false" auth="false"/>
-        <event type="service" invoke="loadMessage"  />
+        <event type="service" invoke="loadMessage"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
@@ -158,11 +171,11 @@
 
 
     <!--<request-map uri="checkSubscribe">-->
-        <!--<security auth="false" https="false"/>-->
-        <!--<event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices"-->
-               <!--invoke="checkSubscribe"/>-->
-        <!--<response name="success" type="request" value="json"/>-->
-        <!--<response name="error" type="request" value="json"/>-->
+    <!--<security auth="false" https="false"/>-->
+    <!--<event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices"-->
+    <!--invoke="checkSubscribe"/>-->
+    <!--<response name="success" type="request" value="json"/>-->
+    <!--<response name="error" type="request" value="json"/>-->
 
     <!--</request-map>-->
 
@@ -192,15 +205,18 @@
     </request-map>
 
 
-
     <!-- View Mappings myOrder-->
 
 
     <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
+    <view-map name="myOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrderDetail"/>
 
     <view-map name="miniChat" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#miniChat"/>
-    <view-map name="viewWebOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#viewWebOrderDetail"/>
+    <view-map name="viewWebOrderDetail" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#viewWebOrderDetail"/>
     <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>
-    <view-map name="shareProduct" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareProduct"/>
-    <view-map name="shareCategory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>
+    <view-map name="shareProduct" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#shareProduct"/>
+    <view-map name="shareCategory" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>
 </site-conf>

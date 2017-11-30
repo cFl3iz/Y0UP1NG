@@ -813,7 +813,7 @@ public class PersonManagerServices {
         }else{
             //查询系统中是否有此货运方法,如果没有新增。
 
-            GenericValue party = delegator.findOne("Party",UtilMisc.toMap("partyId",carrierCode),false);
+            GenericValue party = delegator.findOne("PartyGroup",UtilMisc.toMap("partyId",carrierCode),false);
 
             if(party==null){
                 dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode,"code",code));
@@ -828,7 +828,7 @@ public class PersonManagerServices {
         }
 
 
-        //将卖家信息更新到订单货运
+        //将买家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
                 "contactMechId", contactMechId, "shipmentMethod","EXPRESS@"+shipmentMethodId, "shipGroupSeqId", "00001"));
@@ -848,7 +848,9 @@ public class PersonManagerServices {
             return changeOrderStatusOutMap;
         }
 
-
+        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
+                order.set("internalCode",code);
+                order.store();
 
 
 

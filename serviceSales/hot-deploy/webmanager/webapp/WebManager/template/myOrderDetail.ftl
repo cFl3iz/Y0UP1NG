@@ -2068,7 +2068,7 @@
 <section class="g-scrollview">
 <article class="m-list list-theme4">
         <div class="list-img">
-            <img style="width:250px;height:250px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">
+            <img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">
         </div>
         <div class="list-mes">
 
@@ -2085,7 +2085,7 @@
                 <div>
                     <#assign payStat = "${orderInfo.orderPayStatus}" />
                                 ${payStat}<br/>
-                <a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>
+                <#--<a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>-->
                 </div>
             </div>
         </div>

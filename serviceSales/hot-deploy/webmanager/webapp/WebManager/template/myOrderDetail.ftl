@@ -2067,9 +2067,9 @@
 <#if orderInfo?has_content>
 <section class="g-scrollview">
 <article class="m-list list-theme4">
-        <#--<div class="list-img">-->
-            <#--<img src="${orderInfo.detailImageUrl}" data-url="${orderInfo.detailImageUrl}">-->
-        <#--</div>-->
+        <div class="list-img">
+            <img style="width:250px;height:250px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">
+        </div>
         <div class="list-mes">
 
             <h1 class="list-title">${orderInfo.productName}</h1>

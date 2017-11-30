@@ -70,6 +70,7 @@
 
         .wenwen_text {
             height: 36px;
+
             border-radius: 5px;
             border: solid 1px #636162;
             box-sizing: border-box;
@@ -100,6 +101,7 @@
         .write_box input {
             height: 40px;
             padding: 0 5px;
+            font-size:17px;
             line-height: 40px;
             width: 100%;
             box-sizing: border-box;

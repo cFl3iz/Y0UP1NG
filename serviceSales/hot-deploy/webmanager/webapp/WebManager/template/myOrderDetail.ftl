@@ -2069,6 +2069,8 @@
 <#--${orderInfo.productName}<br/>-->
 ${uiLabel.orderTime}${orderInfo.orderDate?string("yyyy-MM-dd")}<br/>
 ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
+    <br/>
+    <button style="font-size:16px;" onclick="alert('未完成该跳转');">联系卖家</button>
 </p>
 <#--<section class="g-scrollview">-->
 <#--<article class="m-list list-theme4">-->

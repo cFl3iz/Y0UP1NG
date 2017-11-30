@@ -50,6 +50,13 @@
         <value xml:lang="zh">刷新成功!</value>
         <value xml:lang="zh_CN">刷新成功!</value>
     </property>
+    <property key="shipmentAddress">
+        <value xml:lang="en">shipmentAddress!</value>
+        <value xml:lang="zh">收货地址:</value>
+        <value xml:lang="zh_CN">收货地址:</value>
+    </property>
+
+
     <property key="ExpressInfoNotFound">
         <value xml:lang="en">Express Info NotFound</value>
         <value xml:lang="zh">还没有物流信息</value>

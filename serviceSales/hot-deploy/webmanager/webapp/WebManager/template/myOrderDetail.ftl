@@ -2067,28 +2067,25 @@
 <#if orderInfo?has_content>
 <section class="g-scrollview">
 <article class="m-list list-theme4">
-        <div class="list-img">
-            <img src="${orderInfo.detailImageUrl}" data-url="${orderInfo.detailImageUrl}">
-        </div>
+        <#--<div class="list-img">-->
+            <#--<img src="${orderInfo.detailImageUrl}" data-url="${orderInfo.detailImageUrl}">-->
+        <#--</div>-->
         <div class="list-mes">
 
             <h1 class="list-title">${orderInfo.productName}</h1>
 
             <div class="list-mes-item">
                 <div>
-                                <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span
-                                        style="font-size:19px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>
-                                <span class="list" style="font-size:17px;">${uiLabel.orderPrice}&nbsp;¥<span
-                                        style="font-size:19px;">${orderInfo.grandTotal}</span></span>
+                                <span class="list" style="font-size:14px;">${uiLabel.orderTime}<span
+                                        style="font-size:14px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>
+                    <span class="list" style="font-size:14px;">${uiLabel.shipmentAddress}<span
+                            style="font-size:15px;">&nbsp;${(orderInfo.personAddressInfoMap.contactAddress)!}</span></span>
 
-                    <br/>
-                                <span class="list" style="font-size:17px;">${uiLabel.orderStatus}<span
-                                        style="font-size:19px;">${orderInfo.statusId}</span></span>
                 </div>
                 <div>
                     <#assign payStat = "${orderInfo.orderPayStatus}" />
-                                ${payStat}
-
+                                ${payStat}<br/>
+                <a href="#">${orderInfo.personInfoMap.headPortrait}</a>
                 </div>
             </div>
         </div>

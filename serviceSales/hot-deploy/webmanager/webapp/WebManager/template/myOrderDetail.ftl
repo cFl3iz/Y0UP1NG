@@ -589,7 +589,7 @@
             top: 50%;
             width: 11px;
             height: 11px;
-            background: url('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/order-icons.png') -21px -72px no-repeat;
+            background: url('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/order-icons.png?x-oss-process=image/resize,w_150,h_150/quality,q_75') -21px -72px no-repeat;
         }
 
         .track-list li.first .node-icon {

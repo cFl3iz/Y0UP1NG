@@ -23,7 +23,7 @@
 
                 <#assign orderStatusCode = "${list.orderStatusCode}" />
 
-                <a href="javascript:goMyOrderDetail('${list.orderId},${tarjeta},${orderStatusCode}');" class="list-item">
+                <a href="javascript:goMyOrderDetail('${list.orderId}','${tarjeta}','${orderStatusCode}');" class="list-item">
                     <div class="list-img">
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>

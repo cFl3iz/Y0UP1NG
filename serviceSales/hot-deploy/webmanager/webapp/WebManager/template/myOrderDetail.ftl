@@ -2062,6 +2062,7 @@
 </head>
 
 <body>
+<section class="g-flexview">
 <!-- Order Base Info -->
 <#if orderInfo?has_content>
 <section class="g-scrollview">
@@ -2098,7 +2099,7 @@
 
 
 <!-- 快递信息 -->
-<#if orderShipmentInfo?has_content>
+<#if orderExpressInfo?has_content>
 <div class="swiper-container">
 <#--下拉可以刷新-->
     <div class="refreshtip"></div>
@@ -2269,5 +2270,5 @@
 <#if !orderExpressInfo?has_content>
 ${uiLabel.ExpressInfoNotFound}
 </#if>
-
+</section>
 </body>

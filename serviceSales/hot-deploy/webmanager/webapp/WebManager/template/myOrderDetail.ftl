@@ -2064,8 +2064,9 @@
 <body>
 <!-- Order Base Info -->
 <#if orderInfo?has_content>
+<section class="g-scrollview">
 <article class="m-list list-theme4">
-        <div class="list-img" style="width:400px;height:400px;">
+        <div class="list-img">
             <img src="${orderInfo.detailImageUrl}" data-url="${orderInfo.detailImageUrl}">
         </div>
         <div class="list-mes">
@@ -2092,6 +2093,7 @@
         </div>
 
 </article>
+</section>
 </#if>
 
 

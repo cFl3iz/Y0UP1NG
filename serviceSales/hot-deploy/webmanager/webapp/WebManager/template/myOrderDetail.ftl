@@ -2067,10 +2067,10 @@
 <#if orderInfo?has_content>
 <section class="g-scrollview">
 <article class="m-list list-theme4">
-        <div class="list-img" style="width:80px;height:80px;float:left;">
+        <div class="list-img" style="width:14%;height:80px;float:left;">
             <img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">
         </div>
-        <div class="list-mes" style="float:right;">
+        <div class="list-mes" style="float:right;width:85%;">
 
             <h1 class="list-title">${orderInfo.productName}</h1>
 

@@ -159,8 +159,8 @@
         }
 
         .heard_img {
-            height: 40px;
-            width: 40px;
+            height: 45px;
+            width: 45px;
             border-radius: 5px;
             overflow: hidden;
             background: #ddd;

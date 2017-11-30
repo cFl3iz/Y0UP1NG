@@ -28,9 +28,9 @@
                             </div>
                             <div>
                                 <#if (list.orderPayStatus!"未付款") == "已付款">
-                                    <span class="list-price"><span style="color:#008000;">${list.orderPayStatus}</span></span>
+                                    <span class="list"><span style="color:#008000;font-size:19px;">${list.orderPayStatus}</span></span>
                                 <#else >
-                                    <span class="list-price">${list.orderPayStatus}</span>
+                                    <span class="list"><span style="color:indianred;font-size:19px;">${list.orderPayStatus}</span></span>
                                 </#if>
 
                             </div>

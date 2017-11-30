@@ -592,10 +592,10 @@ public class PersonManagerQueryServices {
         fieldSet.add("payToPartyId");
 
         EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+                .makeCondition("roleTypeId",EntityOperator.EQUALS,"BILL_TO_CUSTOMER");
 
         EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+                .makeCondition("partyId" ,EntityOperator.EQUALS,partyId);
 
 
 //        EntityCondition findConditions2 = EntityCondition
@@ -607,11 +607,13 @@ public class PersonManagerQueryServices {
 //        EntityCondition listConditions = EntityCondition
 //                .makeCondition(findConditions);
 
-        System.out.println("================================================================== PARTY ID = " + partyId);
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
+
+        System.out.println("===queryMyResourceOrderList = "+queryMyResourceOrderList+"=============================================================== PARTY ID = " + partyId);
+
 
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
 

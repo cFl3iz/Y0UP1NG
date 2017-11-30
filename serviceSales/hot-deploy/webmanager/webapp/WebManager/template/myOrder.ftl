@@ -28,7 +28,7 @@
                                         style="font-size:19px;">${list.statusId}</span></span>
                             </div>
                             <div>
-                                <#if (list.orderPayStatus!"未付款") == "已付款">
+                                <#if list.orderPayStatus == "已付款">
                                     <span class="list"><span
                                             style="color:#008000;font-size:19px;">1${list.orderPayStatus}</span></span>
                                 <#else>

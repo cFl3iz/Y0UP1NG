@@ -1,4 +1,15 @@
 <#if orderList?has_content>
+<script>
+    function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
+        alert(orderStatusCode);
+        if(orderStatusCode === "0"){
+            alert("是否提醒卖家发货?");
+        }
+        if(orderStatusCode === "1"){
+            location.href = 'myOrderDetail?orderId='+orderId+'&tarjeta='+tarjeta;
+        }
+    }
+</script>
 <section class="g-flexview">
 
 
@@ -56,14 +67,7 @@
     !function () {
         $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});
     }();
-    function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
-        if(orderStatusCode === "0"){
-            alert("是否提醒卖家发货?");
-        }
-        if(orderStatusCode === "1"){
-            location.href = 'myOrderDetail?orderId='+orderId+'&tarjeta='+tarjeta;
-        }
-    }
+
 </script>
 </#if>
 <#if !orderList?has_content>

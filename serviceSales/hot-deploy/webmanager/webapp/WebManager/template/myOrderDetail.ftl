@@ -2100,8 +2100,7 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 </#if>
 <br/>
 
-<h1 style="font-size:17px;color:cornflowerblue;">您的物流信息</h1>
-<hr/>
+<h1 style="font-size:17px;color:cornflowerblue;">您的物流信息</h1><br/>
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>

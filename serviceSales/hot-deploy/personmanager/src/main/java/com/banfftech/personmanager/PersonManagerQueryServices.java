@@ -730,14 +730,14 @@ public class PersonManagerQueryServices {
                     if(statusId.toUpperCase().indexOf("RECEIVED")>0){
 
                         rowMap.put("orderPayStatus","已付款");
-
+                        rowMap.put("payStatusCode","1");
                     }else{
-
+                        rowMap.put("payStatusCode","0");
                         rowMap.put("orderPayStatus","未付款");
 
                     }
                 }else{
-
+                    rowMap.put("payStatusCode","0");
                     rowMap.put("orderPayStatus","未付款");
 
                 }

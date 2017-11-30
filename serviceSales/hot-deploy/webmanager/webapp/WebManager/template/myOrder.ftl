@@ -28,18 +28,18 @@
                                         style="font-size:19px;">${list.statusId}</span></span>
                             </div>
                             <div>
-                                <#assign payStat = "${list.orderPayStatus}" />
-                                ${payStat}
-                                <#--<#if payStat == '已付款'>-->
-                                    <#--<span class="list"><span style="color:#008000;font-size:19px;">-->
-                                        <#--1${list.orderPayStatus}</span>-->
-                                    <#--</span>-->
-                                <#--</#if>-->
-                                <#--<#if payStat ! == '已付款'>-->
-                                    <#--<span class="list"><span style="color:indianred;font-size:19px;">-->
-                                        <#--2${list.orderPayStatus}</span>-->
-                                    <#--</span>-->
-                                <#--</#if>-->
+                                <#assign payStat = "${list.payStatusCode}" />
+                                <#--${payStat}-->
+                                <#if payStat == '1'>
+                                    <span class="list"><span style="color:#008000;font-size:19px;">
+                                        1${list.orderPayStatus}</span>
+                                    </span>
+                                </#if>
+                                <#if payStat == '0'>
+                                    <span class="list"><span style="color:indianred;font-size:19px;">
+                                        2${list.orderPayStatus}</span>
+                                    </span>
+                                </#if>
                             </div>
                         </div>
                     </div>

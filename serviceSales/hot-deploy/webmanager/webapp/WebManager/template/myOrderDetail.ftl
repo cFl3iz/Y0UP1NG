@@ -2085,7 +2085,7 @@
                 <div>
                     <#assign payStat = "${orderInfo.orderPayStatus}" />
                                 ${payStat}<br/>
-                <a href="#">${orderInfo.personInfoMap.headPortrait}</a>
+                <a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>
                 </div>
             </div>
         </div>

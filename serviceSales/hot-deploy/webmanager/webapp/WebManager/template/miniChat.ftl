@@ -23,7 +23,7 @@
         -webkit-overflow-scrolling:touch;
 
         #allmap{height:80px;width:100px;}
-        #r-result{width:100%; font-size:14px;}
+        #r-result{width:100%; font-size:15px;}
 
         body {
             background: url(http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/chatBG.jpeg) no-repeat;
@@ -84,7 +84,7 @@
         }
 
         .wenwen_text .circle-button {
-            font-size: 14px;
+            font-size: 15px;
             color: #666;
             line-height: 38px;
         }
@@ -190,7 +190,7 @@
             border-radius: 10px;
             padding: .5rem;
             margin: 0;
-            font-size: 14px;
+            font-size: 15px;
             line-height: 28px;
             box-sizing: border-box;
             vertical-align: middle;
@@ -594,7 +594,7 @@
         } else {
             $('.speak_box').append(str);
             $('.write_box input').val('');
-            $('.write_box input').focus();
+//            $('.write_box input').focus();
             autoWidth();
             for_bottom();
 

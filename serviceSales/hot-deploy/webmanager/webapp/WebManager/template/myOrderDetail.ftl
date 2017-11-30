@@ -589,7 +589,7 @@
             top: 50%;
             width: 11px;
             height: 11px;
-            background: url('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/order-icons.png?x-oss-process=image/resize,w_150,h_150/quality,q_75') -21px -72px no-repeat;
+            background: url('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/order-icons.png?x-oss-process=image/resize,w_250,h_250/quality,q_95') -21px -72px no-repeat;
         }
 
         .track-list li.first .node-icon {
@@ -2100,7 +2100,7 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 </#if>
 <br/>
 
-<h1>您的物流信息</h1>
+<h1 style="font-size:17px;color:cornflowerblue;">您的物流信息</h1><br/>
 <hr/>
 
 <!-- 快递信息 -->

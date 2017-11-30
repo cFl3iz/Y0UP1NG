@@ -23,13 +23,14 @@
                             <#--<#if list.orderPayStatus == '已付款'>-->
                                 <#--<span class="list-price" style="color:#008000;">${list.orderPayStatus}</span>-->
                             <#--</#if>-->
+                                <span class="list" style="font-size:20px;">${uiLabel.orderPrice}¥${list.grandTotal}</span>
                      <#if (list.orderPayStatus!"未付款") == "已付款">
                      <span class="list-price" ><span style="color:#008000;">${list.orderPayStatus}</span></span>
                      <#else >
                      <span class="list-price">${list.orderPayStatus}</span>
                       </#if>
-                            <span class="list">¥${list.grandTotal}</span>
-                            <span class="list">${uiLabel.orderStatus}${list.statusId}</span>
+                                <br/>
+                            <span class="list" style="font-size:20px;">${uiLabel.orderStatus}${list.statusId}</span>
                         </div>
                         <div>right</div>
                     </div>

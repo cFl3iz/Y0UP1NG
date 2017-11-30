@@ -29,10 +29,14 @@
 
     <property key="orderStatus">
         <value xml:lang="en">orderStatus</value>
-        <value xml:lang="zh">状态:</value>
-        <value xml:lang="zh_CN">状态:</value>
+        <value xml:lang="zh">订单状态:</value>
+        <value xml:lang="zh_CN">订单状态:</value>
     </property>
-
+    <property key="orderPrice">
+        <value xml:lang="en">orderPrice</value>
+        <value xml:lang="zh">订单金额:</value>
+        <value xml:lang="zh_CN">订单金额:</value>
+    </property>
 
 
     <property key="AppDesc">

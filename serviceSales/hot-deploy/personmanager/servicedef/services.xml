@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>PersonManager Services</description>
     <vendor></vendor>
     <version>1.0</version>
@@ -12,18 +12,14 @@
              invoke="createPeUser" auth="false">
         <description>Create Simple PE User</description>
         <attribute name="uuid" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="tel" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="userLoginId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
-
-
-
 
 
     <!-- Create Person Store -->
@@ -32,14 +28,14 @@
              invoke="createPersonStore" auth="false">
         <description>Create Person Store</description>
         <attribute name="partyId" type="String" mode="IN"
-                   optional="false" />
+                   optional="false"/>
         <attribute name="inventoryFacilityId" type="String" mode="IN"
-                   optional="false" />
+                   optional="false"/>
 
         <attribute name="storeId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <service name="createPersonFacility" engine="java"
@@ -47,13 +43,12 @@
              invoke="createPersonFacility" auth="false">
         <description>createPersonFacility</description>
         <attribute name="partyId" type="String" mode="IN"
-                   optional="false" />
+                   optional="false"/>
         <attribute name="facilityId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- create Pe Product -->
@@ -65,11 +60,10 @@
              invoke="affirmOrder" auth="false">
         <description>Affirm Order</description>
         <attribute name="orderId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- Query MyResource Order -->
@@ -78,15 +72,29 @@
              invoke="queryMyResourceOrder" auth="false">
         <description>Query MyResourceOrder</description>
 
-        <!--<attribute name="userPartyId" type="String" mode="OUT"-->
-                   <!--optional="false" />-->
-
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
+
+
+    <!-- WeChatPlatForm OrderList-->
+    <service name="queryMyOrders" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyOrders" auth="false">
+        <description>Query MyOrders</description>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
 
     <!-- Query Dimension Resource -->
     <service name="queryDimensionResource" engine="java"
@@ -95,10 +103,10 @@
         <description>queryDimensionResource</description>
 
         <attribute name="dimensionResourceList" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
 
@@ -109,12 +117,12 @@
         <description>Query My Resource</description>
 
         <attribute name="myResourceList" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="productCategoryId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- query Resource Detail -->
@@ -123,12 +131,12 @@
              invoke="queryResourceDetail" auth="false">
         <description>Query Resource Detail</description>
         <attribute name="productId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
-          <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
     </service>
 
     <!-- Query My RelationShip -->
@@ -138,41 +146,22 @@
         <description>Query My RelationShip</description>
 
         <attribute name="relationList" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- Update Person Info -->
     <service name="updatePersonInfo" engine="java" default-entity-name="Person"
-             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo" auth="false">
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo"
+             auth="false">
         <description>updatePersonInfo</description>
         <auto-attributes include="pk" mode="IN" optional="true"/>
         <attribute name="noteInfo" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-
-
-    <!-- Push Message -->
-    <!--<service name="pushMessage" engine="java"-->
-             <!--location="main.java.com.banfftech.personmanager.PersonManagerServices"-->
-             <!--invoke="pushMessage" auth="false">-->
-    <!--<description>Push Message</description>-->
-        <!--<attribute name="text" type="String" mode="IN"-->
-               <!--optional="true" />-->
-        <!--<attribute name="tarjeta" type="String" mode="IN"-->
-                   <!--optional="true" />-->
-        <!--<attribute name="objectId" type="String" mode="IN"-->
-                   <!--optional="true" />-->
-        <!--<attribute name="partyIdTo" type="String" mode="IN"-->
-                   <!--optional="true" />-->
-        <!--<attribute name="partyIdFrom" type="String" mode="IN"-->
-                   <!--optional="true" />-->
-        <!--<attribute name="resultMap" type="java.util.Map" mode="OUT"-->
-                   <!--optional="true" />-->
-    <!--</service>-->
 
 
 
@@ -183,16 +172,15 @@
         <description>createPersonPartyPostalAddress</description>
 
         <attribute name="tarjeta" type="String" mode="INOUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="address1" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="address2" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- 查询快递信息 -->
@@ -202,22 +190,21 @@
         <description>queryExpressInfo</description>
 
         <attribute name="code" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="expressCode" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="carrierCode" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="name" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="expressInfos" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- 买家确认收到了 -->
@@ -227,10 +214,10 @@
         <description>orderPaymentReceived</description>
 
         <attribute name="orderId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- 卖家确认付款了 -->
@@ -241,25 +228,18 @@
 
 
         <attribute name="paymentId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="payToPartyId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="orderId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="tarjeta" type="String" mode="IN"
-                   optional="true" />
-
+                   optional="true"/>
 
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
-
-
-
-
-
 
 
     <!-- 更新货运信息 -->
@@ -270,30 +250,27 @@
 
 
         <attribute name="orderId" type="String" mode="IN"
-                   optional="true" />
-
+                   optional="true"/>
 
 
         <attribute name="code" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="carrierCode" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="name" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="contactMechId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="shipmentMethodId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
-
 
 
     <!-- queryPostalAddress -->
@@ -302,13 +279,12 @@
              invoke="queryPostalAddress" auth="false">
         <description>queryPostalAddress</description>
         <attribute name="tarjeta" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="postalAddress" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- markOrOutMarkProduct -->
@@ -318,13 +294,12 @@
         <description>markOrOutMarkProduct</description>
 
         <attribute name="productId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="markIt" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- queryProductRole-->
@@ -334,13 +309,13 @@
         <description>queryProductRole</description>
 
         <attribute name="productId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="mark" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- queryPersonBaseInfo -->
@@ -349,28 +324,25 @@
              invoke="queryPersonBaseInfo" auth="false">
         <description>queryPersonBaseInfo</description>
         <attribute name="tarjeta" type="String" mode="INOUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="productId" type="String" mode="INOUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="payToPartyId" type="String" mode="INOUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="payToPartyFirstName" type="String" mode="INOUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="payToPartyHead" type="String" mode="INOUT"
-                   optional="true" />
-
-
-
+                   optional="true"/>
 
 
         <attribute name="partyId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="personInfo" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- Place Resource Order -->
@@ -379,40 +351,41 @@
              invoke="placeResourceOrder" auth="false">
         <description>Place Resource Order</description>
         <attribute name="productId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="price" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="prodCatalogId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="productStoreId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="payToPartyId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
 
         <attribute name="orderId" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="partyIdFrom" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="partyIdTo" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="relationEnum" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
 
         <attribute name="contactTel" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
     <!-- Query Person Info -->
     <service name="queryPersonInfo" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryPersonInfo" auth="false">
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryPersonInfo"
+             auth="false">
         <description>queryPersonInfo</description>
         <attribute name="userInfo" type="java.util.Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
@@ -420,24 +393,26 @@
 
     <!-- Query More Option Resource -->
     <service name="queryMoreResource" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryMoreResource" auth="false">
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryMoreResource"
+             auth="false">
         <description>queryMoreResource</description>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="roster" type="String" mode="IN" optional="true"/>
         <attribute name="productName" type="String" mode="IN" optional="true"/>
         <attribute name="resourceList" type="List" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
     <!-- Query Local Roster -->
     <service name="queryLocalRoster" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryLocalRoster" auth="false">
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryLocalRoster"
+             auth="false">
         <description>queryLocalRoster</description>
         <attribute name="partyId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="roster" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
@@ -449,11 +424,11 @@
         <description>sales Discontinuation</description>
 
         <attribute name="productId" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
 
 
@@ -464,16 +439,15 @@
         <description>add Party RelationShip</description>
 
         <attribute name="partyIdFrom" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="partyIdTo" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="relationEnum" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
     <!-- 匹配手机联系人 -->
@@ -482,14 +456,13 @@
              invoke="matchingContact" auth="false">
         <description>Matching Contact</description>
         <attribute name="contacts" type="String" mode="IN"
-                   optional="true" />
+                   optional="true"/>
 
         <attribute name="count" type="String" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true" />
+                   optional="true"/>
     </service>
-
 
 
 </services>

@@ -38,7 +38,7 @@
                          location.href = "viewWebOrderDetail?orderId="+orderId+"&tarjeta="+tarjeta;
                      }
                      if(data.code === "500"){
-                        alert("ERROR:500");
+                         alert("CODE-403:网络出现问题请刷新页面重试");
                      }
 
                  },
@@ -210,12 +210,12 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
                 }
                 if(data.code === "500"){
-                    alert("ERROR:500");
+                    alert("CODE:409 网络延迟,请刷新页面重试!");
                 }
 
             },
             error: function (data) {
-                alert("ERROR :" + data.status);
+                alert("CODE:409 网络延迟,请刷新页面重试!");
             }
         });
 
@@ -224,14 +224,16 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
 
     function myOrder(){
-        if(checkSubscribe()==true){
-            location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
-        }
+        var tarjeta = $("#tarjeta").val();
+        location.href = 'myOrder?tarjeta='+tarjeta;
+//        if(checkSubscribe()==true){
+//            location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NDkzMzYyNA==&scene=124#wechat_redirect';
+//        }
     }
 
 
     function checkSubscribe(){
-            var flag = false;
+        var flag = false;
         var subscribe = getCookie("subscribe");
 //        alert("IN COOKIE subscribe = " + subscribe);
 //        $("#subscribe").val(subscribe);
@@ -244,7 +246,6 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
             $(".spec-menu").show();
             clearCookie("tarjeta");
             flag = false;
-
         }
         return flag;
     }
@@ -280,7 +281,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var param = {
 
             productId:productId,
+
             tarjeta:tarjeta
+
         };
         $.ajax({
             type: 'POST',

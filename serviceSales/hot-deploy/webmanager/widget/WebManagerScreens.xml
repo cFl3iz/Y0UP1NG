@@ -124,13 +124,16 @@
     </screen>
 
 
-
+    <!-- Web页面查询我的订单 -->
     <screen name="myOrder">
         <section>
             <actions>
-                <set field="orderId" value="${parameters.orderId}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
-
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <service service-name="queryMyOrders" result-map="resultMap">
+                <field-map field-name="tarjeta"/>
+                </service>
+                <set field="tarjeta" from-field="resultMap.orderList"/>
             </actions>
             <widgets>
                 <!-- MobileYDUICommonDecorator -->

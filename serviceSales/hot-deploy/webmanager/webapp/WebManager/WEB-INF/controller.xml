@@ -26,7 +26,9 @@
 
     <!-- Request Mappings -->
 
-    <request-map uri="myOrder"><security https="true" auth="true"/><response name="success" type="view" value="myOrder"/></request-map>
+    <request-map uri="myOrder">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myOrder"/></request-map>
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
     <!-- Share Resource -->
     <request-map uri="shareProduct"><security https="false" auth="false"/><response name="success" type="view" value="shareProduct"/></request-map>

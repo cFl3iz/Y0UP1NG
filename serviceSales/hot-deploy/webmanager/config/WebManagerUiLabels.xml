@@ -27,6 +27,14 @@
         <value xml:lang="zh_CN">立即前往.</value>
     </property>
 
+    <property key="orderStatus">
+        <value xml:lang="en">orderStatus</value>
+        <value xml:lang="zh">状态:</value>
+        <value xml:lang="zh_CN">状态:</value>
+    </property>
+
+
+
     <property key="AppDesc">
         <value xml:lang="en">Good App.</value>
         <value xml:lang="zh">更专业的熟人资源交易平台.</value>

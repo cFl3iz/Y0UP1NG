@@ -37,22 +37,13 @@ import main.java.com.banfftech.platformmanager.util.GZIP;
  */
 public class PersonManagerQueryServices {
 
-
-
-
-
-
     public final static String module = PersonManagerQueryServices.class.getName();
 
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
 
-
-
-
-
     /**
-     * queryPostalAddress
+     * Query PostalAddress
      * @param dctx
      * @param context
      * @return
@@ -74,21 +65,11 @@ public class PersonManagerQueryServices {
 
         String partyId = (String) userLogin.get("partyId");
 
-//        Map<String, Object> partyPostalAddressMap = dispatcher.runSync("getPartyPostalAddress", UtilMisc.toMap("userLogin", userLogin, "partyId", partyId));
-//        if(UtilValidate.isNotEmpty(partyPostalAddressMap)){
-//            String contactMechId = (String) partyPostalAddressMap.get("contactMechId");
-//            GenericValue postalAddress = delegator.findOne("PostalAddress", UtilMisc.toMap("contactMechId", contactMechId),false);
-//            if(UtilValidate.isNotEmpty(postalAddress)){
-//                postalAddress.put("address1", storeAddress);
-//                postalAddress.store();
-//            }
-//        }
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("contactMechId");
         fieldSet.add("partyId");
         fieldSet.add("address1");
-//        fieldSet.add("address2");
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
@@ -110,7 +91,7 @@ public class PersonManagerQueryServices {
 
 
     /**
-     * queryProductRole
+     * Query ProductRole
      * @param dctx
      * @param context
      * @return
@@ -171,11 +152,8 @@ public class PersonManagerQueryServices {
         String partyId = (String) userLogin.get("partyId");
 
 
-
         // Default 2 Dimension
         rosterBuffer = queryDimensionRelationShip(partyId, delegator);
-
-
 
 
 //        GZIP.compress()
@@ -188,7 +166,7 @@ public class PersonManagerQueryServices {
     }
 
     /**
-     * queryPartyRelationShip
+     * Query PartyRelationShip
      * @param partyId
      * @param delegator
      * @return
@@ -239,14 +217,11 @@ public class PersonManagerQueryServices {
         rosterBuffer.append(forQueryDimensionRelationShip(myRelationListList, delegator,dimensionMap,partyId));
         // 2D 3D OVER
 
-
-
-
         return rosterBuffer;
     }
 
     /**
-     *
+     * ForEach Dimension
      * @param myRelationListList
      * @param delegator
      * @return
@@ -448,7 +423,7 @@ public class PersonManagerQueryServices {
     }
 
 
-    /**
+         /**
          * Ajax Query Resource
          * @param request
          * @param response
@@ -577,10 +552,156 @@ public class PersonManagerQueryServices {
     }
 
 
+    /**
+     * Query MyOrders
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyOrders(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        List<Map<String,Object>> orderList = new ArrayList<Map<String, Object>>();
 
 
 
 
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("statusId");
+        fieldSet.add("currencyUom");
+        fieldSet.add("grandTotal");
+        fieldSet.add("productId");
+        fieldSet.add("quantity");
+        fieldSet.add("unitPrice");
+        fieldSet.add("roleTypeId");
+        fieldSet.add("orderDate");
+        fieldSet.add("productStoreId");
+        fieldSet.add("payToPartyId");
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
+
+
+        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                listConditions2, fieldSet,
+                UtilMisc.toList("-orderDate"), null, false);
+
+        if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
+
+            for(GenericValue gv : queryMyResourceOrderList){
+
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                rowMap = gv.getAllFields();
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
+                if(null != orderPaymentPrefAndPayment){
+
+                    String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                    if(statusId.toUpperCase().indexOf("RECEIVED")>0){
+
+                        rowMap.put("orderPayStatus","已付款");
+
+                    }else{
+
+                        rowMap.put("orderPayStatus","未付款");
+
+                    }
+                }else{
+
+                    rowMap.put("orderPayStatus","未付款");
+
+                }
+
+                String productStoreId = (String) gv.get("productStoreId");
+
+                String productId = (String) gv.get("productId");
+
+                GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
+                rowMap.put("productName",""+product.get("productName"));
+
+                rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
+
+                String payToPartyId = (String)productStore.get("payToPartyId");
+
+                rowMap.put("payToPartyId",payToPartyId);
+
+                String statusId = (String) gv.get("statusId");
+
+                rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+                String payFromPartyId = (String) rowMap.get("partyId");
+
+                Map<String,String> personInfoMap = null;
+
+                Map<String,String> personAddressInfoMap = null;
+
+                //说明这笔订单我是卖家,查买家头像信息
+                if(payToPartyId.equals(partyId)){
+
+                    personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
+
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,payFromPartyId);
+
+                    rowMap.put("realPartyId",payFromPartyId);
+
+                }
+                //说明这笔单我是买家,查卖家头像信息
+                if(!payToPartyId.equals(partyId)){
+
+                    personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
+
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
+
+                    rowMap.put("realPartyId",payToPartyId);
+                }
+
+                rowMap.put("userPartyId",partyId);
+
+                rowMap.put("personInfoMap",personInfoMap);
+
+                rowMap.put("personAddressInfoMap",personAddressInfoMap);
+
+                orderList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("queryMyResourceOrderList", orderList);
+
+        return resultMap;
+    }
 
 
     /**

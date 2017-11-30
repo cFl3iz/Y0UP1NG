@@ -2065,35 +2065,40 @@
 <section class="g-flexview">
 <!-- Order Base Info -->
 <#if orderInfo?has_content>
-<section class="g-scrollview">
-<article class="m-list list-theme4">
-        <div class="list-img" style="width:14%;height:80px;float:left;">
-            <img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">
-        </div>
-        <div class="list-mes" style="float:right;width:85%;">
+${orderInfo.productName}<br/>
+${uiLabel.orderTime}${orderInfo.orderDate?string("yyyy-MM-dd")}<br/>
+${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 
-            <h1 class="list-title">${orderInfo.productName}</h1>
+<#--<section class="g-scrollview">-->
+<#--<article class="m-list list-theme4">-->
+        <#--<div class="list-img" style="width:14%;height:80px;float:left;">-->
+            <#--<img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">-->
+        <#--</div>-->
+        <#--<div class="list-mes" style="float:right;width:85%;">-->
 
-            <div class="list-mes-item">
-                <div>
-                                <span class="list" style="font-size:14px;">${uiLabel.orderTime}<span
-                                        style="font-size:14px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>
-                    <span class="list" style="font-size:14px;">${uiLabel.shipmentAddress}<span
-                            style="font-size:15px;">&nbsp;${(orderInfo.personAddressInfoMap.contactAddress)!}</span></span>
+            <#--<h1 class="list-title">${orderInfo.productName}</h1>-->
 
-                </div>
-                <div>
-                    <#assign payStat = "${orderInfo.orderPayStatus}" />
-                                ${payStat}<br/>
-                <#--<a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>-->
-                </div>
-            </div>
-        </div>
+            <#--<div class="list-mes-item">-->
+                <#--<div>-->
+                                <#--<span class="list" style="font-size:14px;">${uiLabel.orderTime}<span-->
+                                        <#--style="font-size:14px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>-->
+                    <#--<span class="list" style="font-size:14px;">${uiLabel.shipmentAddress}<span-->
+                            <#--style="font-size:15px;">&nbsp;${(orderInfo.personAddressInfoMap.contactAddress)!}</span></span>-->
 
-</article>
-</section>
+                <#--</div>-->
+                <#--<div>-->
+                    <#--<#assign payStat = "${orderInfo.orderPayStatus}" />-->
+                                <#--${payStat}<br/>-->
+                <#--&lt;#&ndash;<a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>&ndash;&gt;-->
+                <#--</div>-->
+            <#--</div>-->
+        <#--</div>-->
+
+<#--</article>-->
+<#--</section>-->
 </#if>
 
+    <hr/>
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>

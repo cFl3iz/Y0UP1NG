@@ -7,8 +7,9 @@
         <article class="m-list list-theme4">
 
             <#list orderList as list>
+                <#assign orderStatusCode = "${list.orderStatusCode}" />
 
-                <a href="javascript:location.href = 'myOrderDetail?orderId=${list.orderId}&tarjeta=${tarjeta}'" class="list-item">
+                <a href="javascript:goMyOrderDetail('${list.orderId},${tarjeta},${orderStatusCode}');" class="list-item">
                     <div class="list-img">
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>
@@ -32,12 +33,12 @@
                                 <#--${payStat}-->
                                 <#if payStat == '1'>
                                     <span class="list"><span style="color:#008000;font-size:19px;">
-                                        1${list.orderPayStatus}</span>
+                                        ${list.orderPayStatus}</span>
                                     </span>
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list"><span style="color:indianred;font-size:19px;">
-                                        2${list.orderPayStatus}</span>
+                                        ${list.orderPayStatus}</span>
                                     </span>
                                 </#if>
                             </div>
@@ -55,6 +56,14 @@
     !function () {
         $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});
     }();
+    function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
+        if(orderStatusCode === "0"){
+            alert("是否提醒卖家发货?");
+        }
+        if(orderStatusCode === "1"){
+            location.href = 'myOrderDetail?orderId='+orderId+'&tarjeta='+tarjeta;
+        }
+    }
 </script>
 </#if>
 <#if !orderList?has_content>

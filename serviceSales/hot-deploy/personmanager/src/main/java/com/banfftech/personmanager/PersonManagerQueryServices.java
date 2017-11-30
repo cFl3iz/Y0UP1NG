@@ -760,7 +760,16 @@ public class PersonManagerQueryServices {
 
                 String statusId = (String) gv.get("statusId");
 
+                //区分订单状态
+                if(statusId.toLowerCase().indexOf("COMPLETED")>0){
+                    rowMap.put("orderStatusCode","1");
+                }else{
+                    rowMap.put("orderStatusCode","0");
+                }
+
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+
 
                 String payFromPartyId = (String) rowMap.get("partyId");
 

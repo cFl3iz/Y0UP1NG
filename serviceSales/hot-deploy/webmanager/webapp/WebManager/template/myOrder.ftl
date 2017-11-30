@@ -18,6 +18,7 @@
         <article class="m-list list-theme4">
 
             <#list orderList as list>
+
                 <#assign orderStatusCode = "${list.orderStatusCode}" />
 
                 <a href="javascript:goMyOrderDetail('${list.orderId},${tarjeta},${orderStatusCode}');" class="list-item">

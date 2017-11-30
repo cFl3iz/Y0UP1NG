@@ -761,11 +761,12 @@ public class PersonManagerQueryServices {
                 String statusId = (String) gv.get("statusId");
 
                 //区分订单状态
-                if(statusId.toLowerCase().indexOf("COMPLETED")>0){
+                if(statusId.toLowerCase().indexOf("comp")>0){
                     rowMap.put("orderStatusCode","1");
                 }else{
                     rowMap.put("orderStatusCode","0");
                 }
+                System.out.println("orderStatusCode = " + rowMap.get("orderStatusCode"));
 
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
 

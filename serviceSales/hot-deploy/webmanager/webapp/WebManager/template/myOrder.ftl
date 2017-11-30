@@ -1,4 +1,4 @@
-<#if addressInfo?has_content>
+<#if orderList?has_content>
 <section class="g-flexview">
 
 
@@ -7,7 +7,7 @@
 
         <article class="m-list list-theme4">
 
-           <#list addressInfo as list>
+           <#list orderList as list>
 
             <a href="javascript:alert('订单明细不给你看的。');" class="list-item">
                 <div class="list-img">
@@ -43,7 +43,7 @@
     }();
 </script>
 </#if>
-<#if !addressInfo?has_content>
+<#if !orderList?has_content>
 <section class="g-flexview">
     <section class="g-scrollview">
         <h1>列表是空的!您还没有任何订单</h1>

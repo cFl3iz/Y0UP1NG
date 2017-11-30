@@ -137,7 +137,7 @@
                 </service>
                 <set field="orderInfo" from-field="resultMap.orderInfo"/>
                 <set field="orderExpressInfo" from-field="resultMap.orderExpressInfo"/>
-
+                <set field="orderExpressName" from-field="resultMap.orderExpressName"/>
             </actions>
             <widgets>
                 <!-- MobileYDUICommonDecorator -->

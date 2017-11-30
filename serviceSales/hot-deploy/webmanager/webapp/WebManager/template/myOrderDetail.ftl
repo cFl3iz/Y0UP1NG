@@ -2100,10 +2100,11 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 </#if>
 <br/>
 
-<h1 style="font-size:17px;color:cornflowerblue;">您的物流信息</h1><br/>
+
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>
+<h1 style="font-size:17px;color:cornflowerblue;">您的物流信息由 ${(orderExpressName)!} 提供</h1><br/>
 <div class="swiper-container">
 <#--下拉可以刷新-->
     <div class="refreshtip">${uiLabel.DownCanFlash}</div>

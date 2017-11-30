@@ -2098,8 +2098,9 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#--</article>-->
 <#--</section>-->
 </#if>
-
-    <br/>
+<br/>
+<h1>您的物流信息</h1>
+    <hr/>
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>
@@ -2126,8 +2127,8 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
     <#list orderExpressInfo as list>
         <li>
             <i class="node-icon"></i>
-            <span class="time">2016-03-10 18:07:15</span>
-            <span class="txt">${(list.text)!}</span>
+            <span class="time">${(list.time)!}</span>
+            <span class="txt">${(list.status)!}</span>
         </li>
         </#list>
                                 <#--<li class="first">-->

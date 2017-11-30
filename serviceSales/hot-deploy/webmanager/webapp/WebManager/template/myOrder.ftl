@@ -24,7 +24,7 @@
                                 <#--<span class="list-price" style="color:#008000;">${list.orderPayStatus}</span>-->
                             <#--</#if>-->
                      <#if (list.orderPayStatus!"未付款") == "已付款">
-                     <span class="list-price" style="color:#008000;">${list.orderPayStatus}</span>
+                     <span class="list-price" ><span style="color:#008000;">${list.orderPayStatus}</span></span>
                      <#else >
                      <span class="list-price">${list.orderPayStatus}</span>
                       </#if>

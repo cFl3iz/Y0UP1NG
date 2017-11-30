@@ -27,6 +27,12 @@
         <value xml:lang="zh_CN">立即前往.</value>
     </property>
 
+    <property key="orderTime">
+        <value xml:lang="en">orderTime</value>
+        <value xml:lang="zh">下单时间:</value>
+        <value xml:lang="zh_CN">下单时间:</value>
+    </property>
+
     <property key="orderStatus">
         <value xml:lang="en">orderStatus</value>
         <value xml:lang="zh">订单状态:</value>

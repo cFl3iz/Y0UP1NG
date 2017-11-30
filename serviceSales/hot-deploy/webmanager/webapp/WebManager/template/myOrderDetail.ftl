@@ -2062,13 +2062,14 @@
 </head>
 
 <body>
-<section class="g-flexview">
+
 <!-- Order Base Info -->
 <#if orderInfo?has_content>
+<p style="font-size:16px;">
 ${orderInfo.productName}<br/>
 ${uiLabel.orderTime}${orderInfo.orderDate?string("yyyy-MM-dd")}<br/>
 ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
-
+</p>
 <#--<section class="g-scrollview">-->
 <#--<article class="m-list list-theme4">-->
         <#--<div class="list-img" style="width:14%;height:80px;float:left;">-->
@@ -2272,5 +2273,4 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#if !orderExpressInfo?has_content>
 ${uiLabel.ExpressInfoNotFound}
 </#if>
-</section>
 </body>

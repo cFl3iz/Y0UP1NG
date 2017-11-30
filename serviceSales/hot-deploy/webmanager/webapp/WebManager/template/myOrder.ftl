@@ -1,6 +1,8 @@
 <#if orderList?has_content>
 <script>
     function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
+        alert(orderId);
+        alert(tarjeta);
         alert(orderStatusCode);
         if(orderStatusCode === "0"){
             alert("是否提醒卖家发货?");

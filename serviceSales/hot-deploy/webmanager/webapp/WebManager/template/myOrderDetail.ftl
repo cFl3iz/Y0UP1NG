@@ -2072,35 +2072,36 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 </p>
 <#--<section class="g-scrollview">-->
 <#--<article class="m-list list-theme4">-->
-        <#--<div class="list-img" style="width:14%;height:80px;float:left;">-->
-            <#--<img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">-->
-        <#--</div>-->
-        <#--<div class="list-mes" style="float:right;width:85%;">-->
+<#--<div class="list-img" style="width:14%;height:80px;float:left;">-->
+<#--<img style="width:80px;height:80px;" src="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60" data-url="${orderInfo.detailImageUrl}?x-oss-process=image/resize,w_250,h_250/quality,q_60">-->
+<#--</div>-->
+<#--<div class="list-mes" style="float:right;width:85%;">-->
 
-            <#--<h1 class="list-title">${orderInfo.productName}</h1>-->
+<#--<h1 class="list-title">${orderInfo.productName}</h1>-->
 
-            <#--<div class="list-mes-item">-->
-                <#--<div>-->
-                                <#--<span class="list" style="font-size:14px;">${uiLabel.orderTime}<span-->
-                                        <#--style="font-size:14px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>-->
-                    <#--<span class="list" style="font-size:14px;">${uiLabel.shipmentAddress}<span-->
-                            <#--style="font-size:15px;">&nbsp;${(orderInfo.personAddressInfoMap.contactAddress)!}</span></span>-->
+<#--<div class="list-mes-item">-->
+<#--<div>-->
+<#--<span class="list" style="font-size:14px;">${uiLabel.orderTime}<span-->
+<#--style="font-size:14px;">&nbsp;${orderInfo.orderDate?string("yyyy-MM-dd")}</span></span><br/>-->
+<#--<span class="list" style="font-size:14px;">${uiLabel.shipmentAddress}<span-->
+<#--style="font-size:15px;">&nbsp;${(orderInfo.personAddressInfoMap.contactAddress)!}</span></span>-->
 
-                <#--</div>-->
-                <#--<div>-->
-                    <#--<#assign payStat = "${orderInfo.orderPayStatus}" />-->
-                                <#--${payStat}<br/>-->
-                <#--&lt;#&ndash;<a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>&ndash;&gt;-->
-                <#--</div>-->
-            <#--</div>-->
-        <#--</div>-->
+<#--</div>-->
+<#--<div>-->
+<#--<#assign payStat = "${orderInfo.orderPayStatus}" />-->
+<#--${payStat}<br/>-->
+<#--&lt;#&ndash;<a href="#"><img src="${orderInfo.personInfoMap.headPortrait}" /></a>&ndash;&gt;-->
+<#--</div>-->
+<#--</div>-->
+<#--</div>-->
 
 <#--</article>-->
 <#--</section>-->
 </#if>
 <br/>
+
 <h1>您的物流信息</h1>
-    <hr/>
+<hr/>
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>
@@ -2110,7 +2111,8 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
     <div class="swiper-wrapper w">
         <div class="swiper-slide d">
         <#--下拉可以刷新-->
-            <div class="init-loading list-group-item text-center" style="display: none;background-color:#F5F5F5;border:1px solid #F5F5F5;">
+            <div class="init-loading list-group-item text-center"
+                 style="display: none;background-color:#F5F5F5;border:1px solid #F5F5F5;">
             </div>
             <div class="swiper-container2">
                 <div class="swiper-wrapper">
@@ -2124,24 +2126,24 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
                     <#--<div class="track-rcol">-->
                         <div class="track-list">
                             <ul>
-    <#list orderExpressInfo as list>
-        <#assign list_index="${list_index}"/>
-        <#if item_index==0>
-        <li class="first">
-        <i class="node-icon"></i>
-            <span class="time">${(list.time)!}</span>
-            <span class="txt">${(list.status)!}</span>
-        </li>
-        </#if>
-        <#if item_index>0>
-            <li>
-                <i class="node-icon"></i>
-                <span class="time">${(list.time)!}</span>
-                <span class="txt">${(list.status)!}</span>
-            </li>
-        </#if>
+                                <#list orderExpressInfo as list>
+                                    <#assign list_index="${list_index}"/>
+                                    <#if item_index==0>
+                                        <li class="first">
+                                            <i class="node-icon"></i>
+                                            <span class="time">${(list.time)!}</span>
+                                            <span class="txt">${(list.status)!}</span>
+                                        </li>
+                                    </#if>
+                                    <#if (item_index >0)>
+                                        <li>
+                                            <i class="node-icon"></i>
+                                            <span class="time">${(list.time)!}</span>
+                                            <span class="txt">${(list.status)!}</span>
+                                        </li>
+                                    </#if>
 
-        </#list>
+                                </#list>
 
                             </ul>
                         </div>
@@ -2156,19 +2158,19 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#--<div class="loadtip">上拉加载更多</div>-->
 <div class="swiper-scrollbar"></div>
 </div>
-<input id="DownReFlash" type="hidden" value="${uiLabel.DownReFlash}" />
+<input id="DownReFlash" type="hidden" value="${uiLabel.DownReFlash}"/>
 
-<input id="StopReFlash" type="hidden" value="${uiLabel.StopReFlash}" />
+<input id="StopReFlash" type="hidden" value="${uiLabel.StopReFlash}"/>
 
-<input id="NowReFlash" type="hidden" value="${uiLabel.NowReFlash}" />
+<input id="NowReFlash" type="hidden" value="${uiLabel.NowReFlash}"/>
 
-<input id="ReFlashSuccess" type="hidden" value="${uiLabel.ReFlashSuccess}" />
+<input id="ReFlashSuccess" type="hidden" value="${uiLabel.ReFlashSuccess}"/>
 
 <script type="text/javascript">
 
-    var DownReFlash = $("#DownReFlash").val()+"...";
-    var StopReFlash = $("#StopReFlash").val()+"...";
-    var NowReFlash = $("#NowReFlash").val()+"...";
+    var DownReFlash = $("#DownReFlash").val() + "...";
+    var StopReFlash = $("#StopReFlash").val() + "...";
+    var NowReFlash = $("#NowReFlash").val() + "...";
     var ReFlashSuccess = $("#ReFlashSuccess").val();
 
     var loadFlag = true;

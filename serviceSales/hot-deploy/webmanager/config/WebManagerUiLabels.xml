@@ -50,6 +50,13 @@
         <value xml:lang="zh">刷新成功!</value>
         <value xml:lang="zh_CN">刷新成功!</value>
     </property>
+
+    <property key="DownCanFlash">
+        <value xml:lang="en">ReFlash!</value>
+        <value xml:lang="zh">下拉可更新信息</value>
+        <value xml:lang="zh_CN">下拉可更新信息</value>
+    </property>
+
     <property key="shipmentAddress">
         <value xml:lang="en">shipmentAddress!</value>
         <value xml:lang="zh">收货地址:</value>

@@ -2106,7 +2106,7 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#if orderExpressInfo?has_content>
 <div class="swiper-container">
 <#--下拉可以刷新-->
-    <div class="refreshtip"></div>
+    <div class="refreshtip">${uiLabel.DownCanFlash}</div>
     <div class="swiper-wrapper w">
         <div class="swiper-slide d">
         <#--下拉可以刷新-->

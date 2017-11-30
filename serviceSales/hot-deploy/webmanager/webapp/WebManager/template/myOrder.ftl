@@ -13,7 +13,7 @@
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>
                     <div class="list-mes">
-                        <h3 class="list-title">${list.productName}</h3>
+                        <h2 class="list-title">${list.productName}</h2>
 
                         <div class="list-mes-item">
                             <div>
@@ -21,14 +21,15 @@
                                 <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span
                                         style="font-size:19px;">${list.orderDate}</span></span><br/>
                                 <span class="list" style="font-size:17px;">${uiLabel.orderPrice}¥<span
-                                        style="font-size:19px;">${list.grandTotal}</span></span&nbsp;&nbsp;&nbsp;&nbsp;
+                                        style="font-size:19px;">${list.grandTotal}</span></span>
                                 <#if (list.orderPayStatus!"未付款") == "已付款">
-                                    <span class="list-price"><span style="color:#008000;">${list.orderPayStatus}</span></span>
+                                    <span class="list-price"><span style="color:#008000;">&nbsp;&nbsp;&nbsp;&nbsp;${list.orderPayStatus}</span></span>
                                 <#else >
-                                    <span class="list-price">${list.orderPayStatus}</span>
+                                    <span class="list-price">&nbsp;&nbsp;&nbsp;&nbsp;${list.orderPayStatus}</span>
                                 </#if>
                                 <br/>
-                                <span class="list" style="font-size:20px;">${uiLabel.orderStatus}${list.statusId}</span>
+                                <span class="list" style="font-size:17px;">${uiLabel.orderStatus}<span
+                                        style="font-size:19px;">${list.statusId}</span></span>
                             </div>
                             <div>right</div>
                         </div>

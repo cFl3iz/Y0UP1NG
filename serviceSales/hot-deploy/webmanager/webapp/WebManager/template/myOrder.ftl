@@ -13,6 +13,7 @@
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>
                     <div class="list-mes">
+
                         <h1 class="list-title">${list.productName}</h1>
 
                         <div class="list-mes-item">
@@ -28,9 +29,11 @@
                             </div>
                             <div>
                                 <#if (list.orderPayStatus!"未付款") == "已付款">
-                                    <span class="list"><span style="color:#008000;font-size:19px;">${list.orderPayStatus}</span></span>
-                                <#else >
-                                    <span class="list"><span style="color:indianred;font-size:19px;">${list.orderPayStatus}</span></span>
+                                    <span class="list"><span
+                                            style="color:#008000;font-size:19px;">1${list.orderPayStatus}</span></span>
+                                <#else>
+                                    <span class="list"><span
+                                            style="color:indianred;font-size:19px;">2${list.orderPayStatus}</span></span>
                                 </#if>
 
                             </div>

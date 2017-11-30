@@ -30,12 +30,12 @@
                             <div>
                                 <#assign payStat = "${list.orderPayStatus}" />
                                 ${payStat}
-                                <#if payStat == "已付款">
+                                <#if payStat == '已付款'>
                                     <span class="list"><span style="color:#008000;font-size:19px;">
                                         1${list.orderPayStatus}</span>
                                     </span>
                                 </#if>
-                                <#if payStat ! == "已付款">
+                                <#if payStat ! == '已付款'>
                                     <span class="list"><span style="color:indianred;font-size:19px;">
                                         2${list.orderPayStatus}</span>
                                     </span>

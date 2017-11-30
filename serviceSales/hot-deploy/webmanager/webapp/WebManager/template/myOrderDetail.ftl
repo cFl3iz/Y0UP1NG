@@ -2128,14 +2128,14 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
                             <ul>
                                 <#list orderExpressInfo as list>
                                     <#assign list_index="${list_index}"/>
-                                    <#if item_index==0>
+                                    <#if list_index == 0 >
                                         <li class="first">
                                             <i class="node-icon"></i>
                                             <span class="time">${(list.time)!}</span>
                                             <span class="txt">${(list.status)!}</span>
                                         </li>
                                     </#if>
-                                    <#if (item_index >0)>
+                                    <#if (list_index >0)>
                                         <li>
                                             <i class="node-icon"></i>
                                             <span class="time">${(list.time)!}</span>

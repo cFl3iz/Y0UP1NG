@@ -2099,7 +2099,7 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#--</section>-->
 </#if>
 
-    <hr/>
+    <br/>
 
 <!-- 快递信息 -->
 <#if orderExpressInfo?has_content>
@@ -2123,36 +2123,43 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
                     <#--<div class="track-rcol">-->
                         <div class="track-list">
                             <ul>
-                                <li class="first">
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">感谢您在京东购物，欢迎您再次光临！</span>
-                                </li>
-                                <li>
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">【京东到家】京东配送员【申国龙】已出发，联系电话【18410106883，感谢您的耐心等待，参加评价还能赢取京豆呦】</span>
-                                </li>
-                                <li>
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">感谢您在京东购物，欢迎您再次光临！</span>
-                                </li>
-                                <li>
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">感谢您在京东购物，欢迎您再次光临！</span>
-                                </li>
-                                <li>
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">感谢您在京东购物，欢迎您再次光临！</span>
-                                </li>
-                                <li>
-                                    <i class="node-icon"></i>
-                                    <span class="time">2016-03-10 18:07:15</span>
-                                    <span class="txt">感谢您在京东购物，欢迎您再次光临！</span>
-                                </li>
+    <#list orderExpressInfo as list>
+        <li>
+            <i class="node-icon"></i>
+            <span class="time">2016-03-10 18:07:15</span>
+            <span class="txt">${(list.text)!}</span>
+        </li>
+        </#list>
+                                <#--<li class="first">-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">感谢您在京东购物，欢迎您再次光临！</span>-->
+                                <#--</li>-->
+                                <#--<li>-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">【京东到家】京东配送员【申国龙】已出发，联系电话【18410106883，感谢您的耐心等待，参加评价还能赢取京豆呦】</span>-->
+                                <#--</li>-->
+                                <#--<li>-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">感谢您在京东购物，欢迎您再次光临！</span>-->
+                                <#--</li>-->
+                                <#--<li>-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">感谢您在京东购物，欢迎您再次光临！</span>-->
+                                <#--</li>-->
+                                <#--<li>-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">感谢您在京东购物，欢迎您再次光临！</span>-->
+                                <#--</li>-->
+                                <#--<li>-->
+                                    <#--<i class="node-icon"></i>-->
+                                    <#--<span class="time">2016-03-10 18:07:15</span>-->
+                                    <#--<span class="txt">感谢您在京东购物，欢迎您再次光临！</span>-->
+                                <#--</li>-->
                             </ul>
                         </div>
                     </div>

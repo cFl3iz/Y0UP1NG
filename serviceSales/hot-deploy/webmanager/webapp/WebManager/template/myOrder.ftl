@@ -19,7 +19,7 @@
                             <div>
 
                                 <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span
-                                        style="font-size:19px;">${list.orderDate}</span></span><br/>
+                                        style="font-size:19px;">${list.orderDate?string("yyyy-MM-dd")}</span></span><br/>
                                 <span class="list" style="font-size:17px;">${uiLabel.orderPrice}¥<span
                                         style="font-size:19px;">${list.grandTotal}</span></span>
                                 <#if (list.orderPayStatus!"未付款") == "已付款">

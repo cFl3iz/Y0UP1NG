@@ -11,7 +11,7 @@
 
             <a href="javascript:alert('订单明细不给你看的。');" class="list-item">
                 <div class="list-img">
-                    <img src="http://static.ydcss.com/uploads/ydui/goods_default.jpg" data-url="http://img1.shikee.com/try/2016/06/19/09430120929215230041.jpg_180x180.jpg">
+                    <img src="${list.detailImageUrl}" data-url="http://img1.shikee.com/try/2016/06/19/09430120929215230041.jpg_180x180.jpg">
                 </div>
                 <div class="list-mes">
                     <h3 class="list-title">${list.productName}</h3>

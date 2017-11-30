@@ -133,7 +133,7 @@
                 <service service-name="queryMyOrders" result-map="resultMap">
                 <field-map field-name="tarjeta"/>
                 </service>
-                <set field="tarjeta" from-field="resultMap.orderList"/>
+                <set field="orderList" from-field="resultMap.orderList"/>
             </actions>
             <widgets>
                 <!-- MobileYDUICommonDecorator -->

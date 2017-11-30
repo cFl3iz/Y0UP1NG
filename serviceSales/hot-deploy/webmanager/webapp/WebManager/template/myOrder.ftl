@@ -1,11 +1,12 @@
 <#if orderList?has_content>
 <script>
     function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
-        alert(orderId);
-        alert(tarjeta);
-        alert(orderStatusCode);
+
         if(orderStatusCode === "0"){
-            alert("是否提醒卖家发货?");
+          var flag =  confirm("卖家还没发货,是否立即推送提醒?");
+           if(flag){
+               alert("已为您提醒卖家发货!");
+           }
         }
         if(orderStatusCode === "1"){
             location.href = 'myOrderDetail?orderId='+orderId+'&tarjeta='+tarjeta;

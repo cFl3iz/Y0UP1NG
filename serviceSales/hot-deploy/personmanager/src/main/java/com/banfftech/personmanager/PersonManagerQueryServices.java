@@ -698,7 +698,7 @@ public class PersonManagerQueryServices {
         }
 
 
-        resultMap.put("queryMyResourceOrderList", orderList);
+        resultMap.put("orderList", orderList);
 
         return resultMap;
     }

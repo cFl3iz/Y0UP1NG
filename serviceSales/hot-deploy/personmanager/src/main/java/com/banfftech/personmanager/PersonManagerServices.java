@@ -454,6 +454,50 @@ public class PersonManagerServices {
 
 
     /**
+     * Order Cancel
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> orderCancel(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+        String changeReason = context.get("changeReason") == null ?"default change":(String) context.get("changeReason");
+
+       Map<String,Object> changeOrderStatusMap =
+        dispatcher.runSync("changeOrderStatus", UtilMisc.toMap("userLogin",admin,"orderId", orderId, "statusId", "ORDER_CANCELLED", "changeReason",changeReason));
+        if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
+            return changeOrderStatusMap;
+        }
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Order Payment Received
      * @param dctx
      * @param context

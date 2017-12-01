@@ -85,8 +85,6 @@
                         </label>
                     </label>
                 </#list>
-
-
             </div>
 
             <#--<div class="m-cell">-->

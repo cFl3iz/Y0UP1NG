@@ -6,6 +6,23 @@
     <version>1.0</version>
 
 
+    <!-- orderCancel -->
+    <service name="orderCancel" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderCancel" auth="false">
+        <description>Order Cancel</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="false"/>
+        <attribute name="changeReason" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- User Create -->
     <service name="createPeUser" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

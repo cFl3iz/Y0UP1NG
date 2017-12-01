@@ -2379,6 +2379,7 @@ public class OrderServices {
         }
 
         // release the inital hold if we are cancelled or approved
+        // 如果订单被取消或者被批准,就必须释放掉
         if ("ORDER_CANCELLED".equals(statusId) || "ORDER_APPROVED".equals(statusId)) {
             OrderChangeHelper.releaseInitialOrderHold(ctx.getDispatcher(), orderId);
 

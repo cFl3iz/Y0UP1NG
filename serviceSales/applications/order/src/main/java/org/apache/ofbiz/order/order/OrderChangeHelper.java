@@ -108,6 +108,7 @@ public final class OrderChangeHelper {
         try {
             OrderChangeHelper.createReceivedPayments(dispatcher, userLogin, orderId);
             OrderChangeHelper.createOrderInvoice(dispatcher, userLogin, orderId);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!completeOrder");
             OrderChangeHelper.orderStatusChanges(dispatcher, userLogin, orderId, "ORDER_COMPLETED", "ITEM_APPROVED", "ITEM_COMPLETED", null);
         } catch (GenericEntityException e) {
             Debug.logError(e, module);

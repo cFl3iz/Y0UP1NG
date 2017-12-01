@@ -468,6 +468,10 @@ public class PersonManagerServices {
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
+        Delegator delegator = dispatcher.getDelegator();
+
+
+
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 

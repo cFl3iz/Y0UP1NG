@@ -3180,6 +3180,15 @@ public class PersonManagerServices {
             personStoreId = (String) createProductStoreOutMap.get("productStoreId");
 
 
+            //createProductStorePaymentSetting
+
+            //微信支付设置
+            Map<String, Object> createProductStorePaymentSettingOutMap = dispatcher.runSync("createProductStorePaymentSetting", UtilMisc.toMap("userLogin", admin,
+                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId","EXT_WXPAY", "paymentServiceTypeEnumId","PRDS_PAY_EXTERNAL"));
+            if (!ServiceUtil.isSuccess(createProductStorePaymentSettingOutMap)) {
+                return createProductStorePaymentSettingOutMap;
+            }
+
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));

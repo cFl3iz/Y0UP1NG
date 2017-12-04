@@ -625,7 +625,7 @@ public class PersonManagerServices {
 
             String paymentId = (String) payment.get("paymentId");
 
-            Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
+            Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin",userLogin,"paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
 
             if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
                 return setPaymentStatusMap;

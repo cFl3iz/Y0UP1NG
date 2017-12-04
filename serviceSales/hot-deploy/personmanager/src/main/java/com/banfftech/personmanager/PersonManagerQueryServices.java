@@ -792,6 +792,7 @@ public class PersonManagerQueryServices {
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",rowMap.get("orderId")).queryFirst();
+
                 if(null != orderPaymentPrefAndPayment){
 
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
@@ -899,17 +900,7 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : queryMyResourceOrderList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
-                if(null != orderPaymentPrefAndPayment){
-                    String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
-                    if(statusId.toUpperCase().indexOf("RECEIVED")>0){
-                        rowMap.put("orderPayStatus","已付款");
-                    }else{
-                        rowMap.put("orderPayStatus","未付款");
-                    }
-                }else{
-                    rowMap.put("orderPayStatus","未付款");
-                }
+
 
 
 
@@ -947,6 +938,38 @@ public class PersonManagerQueryServices {
 
                 rowMap.put("personInfoMap",personInfoMap);
                 rowMap.put("personAddressInfoMap",personAddressInfoMap);
+
+
+
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
+                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",gv.get("orderId")).queryFirst();
+
+                if(null != orderPaymentPrefAndPayment){
+
+                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                    if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
+
+                        rowMap.put("orderPayStatus","已付款");
+                        rowMap.put("payStatusCode","1");
+                    }else{
+                        rowMap.put("payStatusCode","0");
+                        rowMap.put("orderPayStatus","未付款");
+
+                    }
+                }else{
+                    if(null!=payment){
+                        rowMap.put("orderPayStatus","已付款");
+                        rowMap.put("payStatusCode","1");
+                    }else{
+                        rowMap.put("payStatusCode","0");
+                        rowMap.put("orderPayStatus","未付款");
+                    }
+
+
+                }
 
                 myResourceOrderList.add(rowMap);
             }

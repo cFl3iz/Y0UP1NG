@@ -267,7 +267,7 @@ public class PlatformManagerServices {
         JSONObject jsobj4 = new JSONObject();
         JSONObject jsobj5 = new JSONObject();
 
-        String url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
+        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
                 "productId="+productId+"&payToPartyId=" +
                 ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
         System.out.println("*============================================================URL = " + url2);

@@ -281,10 +281,10 @@
             var url = "createPaymentFromCust";
             var tarjeta = $("#tarjeta").val();
             var payToPartyId = $("#payToPartyId").val();
-            alert(payToPartyId);
+
             var param = {
                 tarjeta:tarjeta,
-                partyIdTo:payToPartyId,
+                payToPartyId:payToPartyId,
                 orderId:orderId
             };
             $.ajax({

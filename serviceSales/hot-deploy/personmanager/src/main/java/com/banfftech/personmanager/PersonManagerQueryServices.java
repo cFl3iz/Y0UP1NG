@@ -799,22 +799,30 @@ public class PersonManagerQueryServices {
 
                     if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
 
-                        rowMap.put("orderPayStatus","已付款");
+                        rowMap.put("orderPayStatus","已确认收款");
                         rowMap.put("payStatusCode","1");
                     }else{
                         rowMap.put("payStatusCode","0");
-                        rowMap.put("orderPayStatus","未付款");
-
+                        rowMap.put("orderPayStatus","买家已付款");
                     }
                 }else{
+                    rowMap.put("payStatusCode","0");
+                    rowMap.put("orderPayStatus","未付款");
                     if(null!=payment){
-                        rowMap.put("orderPayStatus","已付款");
-                        rowMap.put("payStatusCode","1");
+                        String paymentStatusId = (String) payment.get("statusId");
+                        if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
+                            rowMap.put("orderPayStatus","已确认收款");
+                            rowMap.put("payStatusCode","1");
+                        }
+                        if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
+                            rowMap.put("orderPayStatus","买家已付款");
+                            rowMap.put("payStatusCode","1");
+                        }
+
                     }else{
                         rowMap.put("payStatusCode","0");
                         rowMap.put("orderPayStatus","未付款");
                     }
-
 
                 }
 

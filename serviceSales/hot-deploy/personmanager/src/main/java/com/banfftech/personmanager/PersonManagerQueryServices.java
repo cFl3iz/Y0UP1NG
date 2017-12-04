@@ -647,8 +647,11 @@ public class PersonManagerQueryServices {
 
         //TODO QUERY orderExpressInfo
         Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",order.get("internalCode")));
+        List<JSONObject> expressInfos = null;
+        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+          expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+        }
 
-        List<JSONObject> expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
 
         resultMap.put("orderInfo",rowMap);
         resultMap.put("orderExpressInfo",expressInfos);

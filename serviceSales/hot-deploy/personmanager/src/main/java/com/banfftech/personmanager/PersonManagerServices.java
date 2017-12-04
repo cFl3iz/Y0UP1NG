@@ -756,21 +756,29 @@ public class PersonManagerServices {
         }
         JSONObject jsonMap2 = JSONObject.fromObject(entityStr);
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
+        JSONArray list =null;
         try{
         result = (JSONObject) jsonMap2.get("result");
+            type = (String) result.get("type");
+           list = (JSONArray) result.get("list");
         }catch(Exception e){
-            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));
+            Debug.logInfo("--" + UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale), module);
+            //return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));
         }
-        type = (String) result.get("type");
-        JSONArray list = (JSONArray) result.get("list");
 
-        strlist = (List) JSONArray.toList(list,
-                JSONObject.class);
+        if(list!=null){
+            strlist = (List) JSONArray.toList(list,
+                    JSONObject.class);
+            resultMap.put("expressInfos", strlist);
+            resultMap.put("name", getExpressNameFromType(type));
+            resultMap.put("carrierCode",type);
+        }else{
+            resultMap.put("name", "没有物流信息");
+        }
 
 
-        resultMap.put("expressInfos", strlist);
-        resultMap.put("name", getExpressNameFromType(type));
-        resultMap.put("carrierCode",type);
+
+
 
         return resultMap;
     }

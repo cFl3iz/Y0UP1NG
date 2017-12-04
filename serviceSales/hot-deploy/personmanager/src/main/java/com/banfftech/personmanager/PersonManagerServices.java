@@ -496,11 +496,24 @@ public class PersonManagerServices {
 
         Map<String, Object> serviceResultMap = dispatcher.runSync("createPayment", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "partyIdTo", payToPartyId, "amount", orderHeader.get("grandTotal"), "partyIdFrom", partyId, "paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "comments", orderId));
 
+        String paymentId = (String) serviceResultMap.get("paymentId");
+
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
 
             return serviceResultMap;
 
         }
+
+        //createOrderPaymentPreference
+        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "paymentId", paymentId, "maxAmount", orderHeader.get("grandTotal"), "orderId",orderId));
+
+        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceMap)) {
+
+            return createOrderPaymentPreferenceMap;
+
+        }
+
+
 
         EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
 

@@ -454,7 +454,73 @@ public class PersonManagerServices {
 
 
     /**
+     * create PaymentFromCust
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> createPaymentFromCust(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+        String payToPartyId = (String) context.get("payToPartyId");
+
+        GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+
+        GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "EXT_WXPAY").queryFirst();
+
+
+        Map<String, Object> serviceResultMap = dispatcher.runSync("createPayment", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "partyIdTo", payToPartyId, "amount", orderHeader.get("grandTotal"), "partyIdFrom", partyId, "paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "comments", orderId));
+
+        if (!ServiceUtil.isSuccess(serviceResultMap)) {
+
+            return serviceResultMap;
+
+        }
+
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+
+            String jpushId = (String) partyIdentification.getString("idValue");
+
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+        }
+
+
+        return resultMap;
+    }
+
+
+    /**
      * Order Cancel
+     *
      * @param dctx
      * @param context
      * @return
@@ -471,7 +537,6 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
 
 
-
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
@@ -479,10 +544,10 @@ public class PersonManagerServices {
 
         String orderId = (String) context.get("orderId");
 
-        String changeReason = context.get("changeReason") == null ?"default change":(String) context.get("changeReason");
+        String changeReason = context.get("changeReason") == null ? "default change" : (String) context.get("changeReason");
 
-       Map<String,Object> changeOrderStatusMap =
-        dispatcher.runSync("changeOrderStatus", UtilMisc.toMap("userLogin",admin,"orderId", orderId, "statusId", "ORDER_CANCELLED", "changeReason",changeReason));
+        Map<String, Object> changeOrderStatusMap =
+                dispatcher.runSync("changeOrderStatus", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "statusId", "ORDER_CANCELLED", "changeReason", changeReason));
         if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
             return changeOrderStatusMap;
         }
@@ -492,17 +557,9 @@ public class PersonManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
     /**
      * Order Payment Received
+     *
      * @param dctx
      * @param context
      * @return
@@ -533,60 +590,76 @@ public class PersonManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-
-
         //找到买家
-        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId",orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
         String payFromPartyId = (String) orderCust.get("partyId");
 
 
         //查找订单支付Id
-        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",orderId).queryFirst();
+        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
-        String orderPaymentPreferenceId =  (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
+        //这种情况下说明是先付钱,后发货的。
+        if (UtilValidate.isEmpty(orderPaymentPrefAndPayment)) {
 
-        GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId",orderId).queryFirst();
+            //所以卖家应找到客户的付款 并且将状态改为'已收到'
 
-        //找发票
-        GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId",orderId,"amount",orderHeader.get("grandTotal")).queryFirst();
+            GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
 
+            String paymentId = (String) payment.get("paymentId");
 
+            Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
 
-        //先将支付应用到发票
+            if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
+                return setPaymentStatusMap;
+            }
+            //推送提醒买家
 
-        Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
-                "userLogin", userLogin, "paymentId",orderPaymentPrefAndPayment.get("paymentId"),"invoiceId",orderItemBillingAndInvoiceAndItem.get("invoiceId"),"amountApplied",orderHeader.get("grandTotal")));
-
-        if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
-            return createPaymentApplicationMap;
-        }
-
-
+        } else {
 
 
+            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
 
-        //确认这笔支付的状态
+            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
-        Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
-                "userLogin", userLogin, "paymentId",orderPaymentPrefAndPayment.get("paymentId"),"statusId","PMNT_CONFIRMED"));
-
-        if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
-            return setPaymentStatusOutMap;
-        }
+            //找发票
+            GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
 
 
-        //更新订单支付信息
+            //先将支付应用到发票
+
+            Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
+                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
+
+            if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
+                return createPaymentApplicationMap;
+            }
+
+
+            //确认这笔支付的状态
+
+            Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
+                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
+
+            if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
+                return setPaymentStatusOutMap;
+            }
+
+
+            //更新订单支付信息
 //        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
 //                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
 //
 //        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
 //            return updateOrderPaymentPreferenceOutMap;
 //        }
-        //暂时使用卑劣方式
-        orderPaymentPrefAndPayment.set("statusId","PMNT_RECEIVED");
-        orderPaymentPrefAndPayment.store();
 
+            //暂时使用卑劣方式
+            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
+            orderPaymentPrefAndPayment.store();
+
+
+        }
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         //推送告知买家
@@ -596,30 +669,26 @@ public class PersonManagerServices {
         List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
 
-
-
         if (null != partyIdentifications && partyIdentifications.size() > 0) {
             GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+"+orderId+"的卖家已确认货款到账!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的卖家已确认货款到账!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
         }
 
 
         //推送微信
 
-        pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin,  "订单:+"+orderId+"的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+        pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId + "的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
 
 
         return resultMap;
     }
 
 
-
-
-
     /**
      * setOrderPaymentStatus 买家确认已经付钱了
+     *
      * @param dctx
      * @param context
      * @return
@@ -653,12 +722,12 @@ public class PersonManagerServices {
 
         String orderId = (String) context.get("orderId");
 
-        GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId",partyId,"paymentMethodTypeId","EXT_WXPAY").queryFirst();
+        GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "EXT_WXPAY").queryFirst();
 
 
         //添加买家的支付方法到该笔支付
         Map<String, Object> updatePaymentOutMap = dispatcher.runSync("updatePayment", UtilMisc.toMap(
-                "userLogin", userLogin, "paymentId",paymentId,"paymentMethodId",paymentMethod.get("paymentMethodId")));
+                "userLogin", userLogin, "paymentId", paymentId, "paymentMethodId", paymentMethod.get("paymentMethodId")));
 
         if (!ServiceUtil.isSuccess(updatePaymentOutMap)) {
             return updatePaymentOutMap;
@@ -667,7 +736,7 @@ public class PersonManagerServices {
         //确认这笔支付的状态
 
         Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
-                "userLogin", userLogin, "paymentId",paymentId,"statusId","PMNT_RECEIVED"));
+                "userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
 
         if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
             return setPaymentStatusOutMap;
@@ -680,21 +749,15 @@ public class PersonManagerServices {
         List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
 
-
         if (null != partyIdentifications && partyIdentifications.size() > 0) {
             GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+"+orderId+"的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
         }
 
         return resultMap;
     }
-
-
-
-
-
 
 
     /**
@@ -727,7 +790,7 @@ public class PersonManagerServices {
 
         String code = (String) context.get("code");
 
-        resultMap.put("expressCode",code);
+        resultMap.put("expressCode", code);
 
         String host = PeConstant.ALI_EXPRESS_QUERY_API_HOST;
         String path = PeConstant.ALI_EXPRESS_QUERY_API_PATH;
@@ -756,28 +819,25 @@ public class PersonManagerServices {
         }
         JSONObject jsonMap2 = JSONObject.fromObject(entityStr);
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
-        JSONArray list =null;
-        try{
-        result = (JSONObject) jsonMap2.get("result");
+        JSONArray list = null;
+        try {
+            result = (JSONObject) jsonMap2.get("result");
             type = (String) result.get("type");
-           list = (JSONArray) result.get("list");
-        }catch(Exception e){
+            list = (JSONArray) result.get("list");
+        } catch (Exception e) {
             Debug.logInfo("--" + UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale), module);
             //return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));
         }
 
-        if(list!=null){
+        if (list != null) {
             strlist = (List) JSONArray.toList(list,
                     JSONObject.class);
             resultMap.put("expressInfos", strlist);
             resultMap.put("name", getExpressNameFromType(type));
-            resultMap.put("carrierCode",type);
-        }else{
+            resultMap.put("carrierCode", type);
+        } else {
             resultMap.put("name", "没有物流信息");
         }
-
-
-
 
 
         return resultMap;
@@ -818,29 +878,28 @@ public class PersonManagerServices {
 
         String partyId = (String) userLogin.get("partyId");
 
-        String carrierCode  = (String) context.get("carrierCode");
+        String carrierCode = (String) context.get("carrierCode");
 
-        String name    = (String) context.get("name");
+        String name = (String) context.get("name");
 
         String shipmentMethodId = "";
 
         String contactMechId = "";
 
-        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId",orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
-
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
 
         GenericValue postalAddress = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("PartyContactMechPurpose").where(UtilMisc.toMap("partyId", orderCust.get("partyId"), "contactMechPurposeTypeId", "SHIPPING_LOCATION")).queryList());
 
-        if(null == postalAddress){
+        if (null == postalAddress) {
 
-        }else{
+        } else {
 
-            contactMechId =(String)  postalAddress.get("contactMechId");
+            contactMechId = (String) postalAddress.get("contactMechId");
         }
 
-        GenericValue store  =  EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyId)).queryFirst();
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyId)).queryFirst();
 
         String productStoreId = (String) store.get("productStoreId");
 
@@ -848,14 +907,14 @@ public class PersonManagerServices {
         //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
 
         EntityCondition findConditions = EntityCondition
-                .makeCondition("partyId",EntityOperator.LIKE,"%"+name+"%");
+                .makeCondition("partyId", EntityOperator.LIKE, "%" + name + "%");
 
 
         EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("productStoreId",productStoreId));
+                .makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 
         EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.AND,findConditions2);
+                .makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
 
         //QueryStoreShipmentMethList
@@ -863,16 +922,16 @@ public class PersonManagerServices {
                 listConditions, null,
                 UtilMisc.toList("-createdStamp"), null, true);
 
-        if(queryStoreShipmentMethList!=null && queryStoreShipmentMethList.size()>0){
-                GenericValue shimentMethod = (GenericValue) queryStoreShipmentMethList.get(0);
-                shipmentMethodId = (String) shimentMethod.get("partyId");
-        }else{
+        if (queryStoreShipmentMethList != null && queryStoreShipmentMethList.size() > 0) {
+            GenericValue shimentMethod = (GenericValue) queryStoreShipmentMethList.get(0);
+            shipmentMethodId = (String) shimentMethod.get("partyId");
+        } else {
             //查询系统中是否有此货运方法,如果没有新增。
 
-            GenericValue party = delegator.findOne("PartyGroup",UtilMisc.toMap("partyId",carrierCode),false);
+            GenericValue party = delegator.findOne("PartyGroup", UtilMisc.toMap("partyId", carrierCode), false);
 
-            if(party==null){
-                dispatcher.runSync("createSimpleCarrierShipmentMethod",UtilMisc.toMap("userLogin", admin,"name",name,"carrierCode",carrierCode,"code",code));
+            if (party == null) {
+                dispatcher.runSync("createSimpleCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "name", name, "carrierCode", carrierCode, "code", code));
             }
 
             //给卖家店铺增加此货运方法
@@ -887,7 +946,7 @@ public class PersonManagerServices {
         //将买家信息更新到订单货运
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
-                "contactMechId", contactMechId, "shipmentMethod","EXPRESS@"+shipmentMethodId, "shipGroupSeqId", "00001"));
+                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
 
         if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
             return updateShipGroupShipInfoOutMap;
@@ -897,19 +956,16 @@ public class PersonManagerServices {
         //更变订单状态
 
         Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                "userLogin", userLogin, "orderId", orderId,"statusId","ORDER_APPROVED",
-                "changeReason","卖家确认物流信息","setItemStatus","Y"));
+                "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
+                "changeReason", "卖家确认物流信息", "setItemStatus", "Y"));
 
         if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
             return changeOrderStatusOutMap;
         }
 
-        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
-                order.set("internalCode",code);
-                order.store();
-
-
-
+        GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+        order.set("internalCode", code);
+        order.store();
 
 
         //推送给微信用户
@@ -943,7 +999,7 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("orderId", orderId);
 
-            pushWeChatMessageInfoMap.put("messageInfo","物流公司:"+ name +"物流单号:" + code);
+            pushWeChatMessageInfoMap.put("messageInfo", "物流公司:" + name + "物流单号:" + code);
 
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
@@ -1132,14 +1188,12 @@ public class PersonManagerServices {
         String messageLogTypeId = (String) request.getParameter("messageLogTypeId");
 
         //发送的是收款码?
-        String pay_qr_code    = (String) request.getParameter("pay_qr_code");
+        String pay_qr_code = (String) request.getParameter("pay_qr_code");
 
         //默认是文字类型
         if (UtilValidate.isEmpty(messageLogTypeId)) {
             messageLogTypeId = "TEXT";
         }
-
-
 
 
         if (!UtilValidate.isEmpty(messageLogTypeId) && messageLogTypeId.equals("IMAGE")) {
@@ -1204,17 +1258,20 @@ public class PersonManagerServices {
             System.out.println("*IN pay_qr_code Biz,Now System Double Push!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 
-
             createMessageLogMap = new HashMap<String, Object>();
 
-            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",objectId).queryFirst();
+
+            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", objectId).queryFirst();
 
 
+            if (!UtilValidate.isEmpty(pay_qr_code)) {
+                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='setPaymentStatus(" + orderPaymentPrefAndPayment.get("paymentId") + "," + objectId + ");'>这个按钮</button> 通知我查收!");
+            } else {
+                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='createPayment(" + objectId + ");'> 这个按钮 </button> 通知我查收!");
+            }
 
-            createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='setPaymentStatus("+ orderPaymentPrefAndPayment.get("paymentId") +","+objectId+");'>这个按钮</button> 通知我查收!");
 
-
-            createMessageLogMap.put("partyIdFrom", ""+userLogin.get("partyId"));
+            createMessageLogMap.put("partyIdFrom", "" + userLogin.get("partyId"));
 
 
             createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
@@ -1369,15 +1426,14 @@ public class PersonManagerServices {
             //从产品找到卖家
             GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
             String payToPartyId = "";
-            if(null != payToParty ){
+            if (null != payToParty) {
                 payToPartyId = (String) payToParty.get("payToPartyId");
-            }else{
+            } else {
                 //从订单找到卖家
-                GenericValue orderFrom = EntityQuery.use(delegator).from("OrderRole").where("orderId",objectId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+                GenericValue orderFrom = EntityQuery.use(delegator).from("OrderRole").where("orderId", objectId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
 
                 payToPartyId = (String) orderFrom.get("partyId");
             }
-
 
 
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
@@ -2788,9 +2844,9 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("orderId", orderId);
 
-            Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+            Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 
-            pushWeChatMessageInfoMap.put("messageInfo", personInfoMap.get("firstName")+"正在处理您的订单");
+            pushWeChatMessageInfoMap.put("messageInfo", personInfoMap.get("firstName") + "正在处理您的订单");
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
@@ -2880,23 +2936,23 @@ public class PersonManagerServices {
         createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
 
-            //创建当事人支付方法
+        //创建当事人支付方法
 
-            // Create Default Pay Method To Party
-            GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
-            newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
-            newPayMethod.set("partyId", partyId);
-            newPayMethod.set("paymentMethodTypeId", "EXT_ALIPAY");
-            newPayMethod.set("description", "支付宝");
-            newPayMethod.create();
+        // Create Default Pay Method To Party
+        GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
+        newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+        newPayMethod.set("partyId", partyId);
+        newPayMethod.set("paymentMethodTypeId", "EXT_ALIPAY");
+        newPayMethod.set("description", "支付宝");
+        newPayMethod.create();
 
 
-            GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
-            newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
-            newPayMethod2.set("partyId", partyId);
-            newPayMethod2.set("paymentMethodTypeId", "EXT_WXPAY");
-            newPayMethod2.set("description", "微信");
-            newPayMethod2.create();
+        GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
+        newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+        newPayMethod2.set("partyId", partyId);
+        newPayMethod2.set("paymentMethodTypeId", "EXT_WXPAY");
+        newPayMethod2.set("description", "微信");
+        newPayMethod2.create();
 
 
         // Create Party Role 授予当事人 意向客户 角色 用于mark product

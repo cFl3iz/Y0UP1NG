@@ -272,6 +272,34 @@
 
         var images  = new Array();
 
+
+        /**
+         * 创建一笔 支付
+         *
+         * */
+        function createPayment(orderId){
+            var url = "createPaymentFromCust";
+            var tarjeta = $("#tarjeta").val();
+            var payToPartyId = $("#payToPartyId").val();
+            var param = {
+                tarjeta:tarjeta,
+                partyIdTo:payToPartyId,
+                orderId:orderId
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (data) {
+                    alert("ERROR :" + data.status);
+                }
+            });
+        }
+
+
         /**
          * 更改订单中的支付状态
          */

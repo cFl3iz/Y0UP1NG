@@ -23,6 +23,12 @@ public class PeConstant {
 
 
     /**
+     * 客户付款
+     */
+    public static final String CUSTOMER_PAYMENT = "CUSTOMER_PAYMENT";
+
+
+    /**
      * 表示是/否的 是 {@value}
      */
     public static final String IS_Y = "Y";

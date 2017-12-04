@@ -50,6 +50,15 @@
         <security https="false" auth="false"/>
         <response name="success" type="view" value="shareCategory"/>
     </request-map>
+    <!-- create Payment FromCust -->
+    <request-map uri="createPaymentFromCust">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPaymentFromCust"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- Mini Chat -->
     <request-map uri="miniChat">
         <security https="false" auth="false"/>

@@ -454,6 +454,101 @@ public class PersonManagerServices {
 
 
     /**
+     * Confirm Payment(新卖家确认)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> confirmPayment(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String productId = (String) context.get("productId");
+
+        String realPartyId = (String) context.get("realPartyId");
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", realPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            Map<String,Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+
+
+            GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+
+            if (person != null) {
+
+            }
+
+            pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
+            pushWeChatMessageInfoMap.put("message", "卖家"+ person.get("firstName")+"已经确认收到货款。");
+            pushWeChatMessageInfoMap.put("userLogin", admin);
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("productId", productId);
+
+            pushWeChatMessageInfoMap.put("payToPartyId", partyId);
+
+            //推微信
+            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+
+        }
+
+
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * create PaymentFromCust
      *
      * @param dctx

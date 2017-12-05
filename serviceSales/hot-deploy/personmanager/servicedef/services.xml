@@ -360,6 +360,21 @@
     </service>
 
 
+    <!-- confrim Payment -->
+    <service name="confirmPayment" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="confirmPayment" auth="false">
+        <description>confirmPayment</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="realPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- Query ConsumerInfo -->
     <service name="queryConsumerInfo" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

@@ -188,6 +188,15 @@
     </request-map>
 
 
+    <!-- 新 卖家已发货 -->
+    <request-map uri="confirmPayment">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="confirmPayment"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
 
     <!-- Release Resource -->

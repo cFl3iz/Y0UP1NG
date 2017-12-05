@@ -55,8 +55,11 @@ public class PersonManagerQueryServices {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
+
         Delegator delegator = dispatcher.getDelegator();
+
         Locale locale = (Locale) context.get("locale");
+
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
@@ -68,107 +71,89 @@ public class PersonManagerQueryServices {
 
         String realPartyId = (String) context.get("realPartyId");
 
+        String productCategoryId  = "";
 
+
+//        List<GenericValue> custProductRole = EntityQuery.use(delegator).from("ProductRole").where(UtilMisc.toMap("productId", productId,"contactMechTypeId", "POSTAL_ADDRESS")).queryList();
+
+
+        GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+
+        EntityFindOptions findOptions = new EntityFindOptions();
+//        findOptions.setFetchSize(0);
+//        findOptions.setMaxRows(4);
+
+        //Select Fields
         Set<String> fieldSet = new HashSet<String>();
-        fieldSet.add("orderId");
-        fieldSet.add("partyId");
-        fieldSet.add("statusId");
-        fieldSet.add("currencyUom");
-        fieldSet.add("grandTotal");
         fieldSet.add("productId");
-        fieldSet.add("quantity");
-        fieldSet.add("unitPrice");
-        fieldSet.add("roleTypeId");
-        fieldSet.add("orderDate");
+        fieldSet.add("description");
         fieldSet.add("productStoreId");
+        fieldSet.add("productName");
+        fieldSet.add("detailImageUrl");
+        fieldSet.add("createdDate");
+        fieldSet.add("price");
+        fieldSet.add("productCategoryId");
         fieldSet.add("payToPartyId");
 
+        if (rodCatalogRole != null) {
+
+            String prodCatalogId = (String) rodCatalogRole.get("prodCatalogId");
+            //根据目录拿关联的分类Id
+            GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId, "prodCatalogCategoryTypeId", "PCCT_PURCH_ALLW").queryFirst();
+            //得到分类Id
+            productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+            //findConditions
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
+//            EntityCondition findConditions2 = EntityCondition
+//                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+//
+//
+//            EntityConditionList<EntityCondition> listConditions = EntityCondition
+//                    .makeCondition(findConditions, findConditions2);
+
+            //Query My Resource
+            List<GenericValue> myResourceList = delegator.findList("ProductAndCategoryMember",
+                    findConditions, fieldSet,
+                    UtilMisc.toList("-createdDate"), findOptions, false);
+
+            if(null != myResourceList && myResourceList.size()>0){
+                for(GenericValue gv :myResourceList){
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                    String productId = (String)gv.get("productId");
+
+                    rowMap.put("productName",(String)gv.get("productName"));
+                    rowMap.put("productId",productId);
+                    rowMap.put("productStoreId",(String)gv.get("productStoreId"));
+                    rowMap.put("detailImageUrl",(String)gv.get("detailImageUrl"));
+                    rowMap.put("createdDate",gv.get("createdDate"));
+                    rowMap.put("price",gv.get("price"));
+                    rowMap.put("productCategoryId",(String)gv.get("productCategoryId"));
+                    rowMap.put("payToPartyId",(String)gv.get("payToPartyId"));
+                    rowMap.put("description",(String)gv.get("description"));
 
 
-        EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+                    fieldSet = new HashSet<String>();
+                    fieldSet.add("drObjectInfo");
+                    fieldSet.add("productId");
+                    EntityCondition findConditions3 = EntityCondition
+                            .makeCondition("productId", EntityOperator.EQUALS,productId );
 
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", realPartyId));
-
-
-        EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
-
-        EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
-
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
-
-
-        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                listConditions2, fieldSet,
-                UtilMisc.toList("-orderDate"), null, false);
-
-        if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
-
-            for(GenericValue gv : queryMyResourceOrderList){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
-                rowMap = gv.getAllFields();
-
-
-                String productStoreId = (String) gv.get("productStoreId");
-                String productId = (String) gv.get("productId");
-
-                GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
-                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
-                rowMap.put("productName",""+product.get("productName"));
-                rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
-                String payToPartyId = (String)productStore.get("payToPartyId");
-                rowMap.put("payToPartyId",payToPartyId);
-                String statusId = (String) gv.get("statusId");
-                rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
-                String payFromPartyId = (String) rowMap.get("partyId");
-
-
-
-
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
-
-                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",gv.get("orderId")).queryFirst();
-
-                if(null != orderPaymentPrefAndPayment){
-
-                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
-
-                    if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
-
-                        rowMap.put("orderPayStatus","已确认收款");
-                        rowMap.put("payStatusCode","1");
-                    }else{
-                        rowMap.put("payStatusCode","0");
-                        rowMap.put("orderPayStatus","买家已付款");
-                    }
-                }else{
-                    rowMap.put("payStatusCode","0");
-                    rowMap.put("orderPayStatus","未付款");
-                    if(null!=payment){
-                        String paymentStatusId = (String) payment.get("statusId");
-                        if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
-                            rowMap.put("orderPayStatus","已确认收款");
-                            rowMap.put("payStatusCode","1");
-                        }
-                        if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
-                            rowMap.put("orderPayStatus","买家已付款");
-                            rowMap.put("payStatusCode","1");
-                        }
-
-                    }else{
-                        rowMap.put("payStatusCode","0");
-                        rowMap.put("orderPayStatus","未付款");
+                    GenericValue  custProductRole = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"partyId",realPartyId).queryFirst();
+                    if(custProductRole!=null){
+                        rowMap.put("productPartyRole",custProductRole.get("roleTypeId"));
                     }
 
+                    returnList.add(rowMap);
                 }
-
-                returnList.add(rowMap);
             }
+
+
+            //  ProductContentAndInfo
+
         }
+
 
         resultMap.put("queryConsumerInfoList",returnList);
 

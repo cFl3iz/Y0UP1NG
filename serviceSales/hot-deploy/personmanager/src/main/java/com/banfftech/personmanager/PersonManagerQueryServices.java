@@ -208,7 +208,7 @@ public class PersonManagerQueryServices {
                 .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
 
         EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+                .makeCondition(findConditions,EntityOperator.AND,findConditions2);
 
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3,EntityOperator.AND,listConditions);

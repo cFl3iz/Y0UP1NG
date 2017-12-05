@@ -381,7 +381,7 @@
              invoke="queryConsumerInfo" auth="false">
         <description>queryConsumerInfo</description>
 
-        <attribute name="realPartyId" type="String" mode="IN"
+        <attribute name="realPartyId" type="String" mode="INOUT"
                    optional="true"/>
 
         <attribute name="queryConsumerInfoList" type="List" mode="OUT"

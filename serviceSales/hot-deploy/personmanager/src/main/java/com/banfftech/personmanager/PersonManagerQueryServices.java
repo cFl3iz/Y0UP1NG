@@ -72,6 +72,8 @@ public class PersonManagerQueryServices {
 
         String realPartyId = (String) context.get("realPartyId");
 
+        resultMap.put("realPartyId",realPartyId);
+
         String productCategoryId  = "";
 
 

@@ -360,6 +360,25 @@
     </service>
 
 
+    <!-- Query ConsumerInfo -->
+    <service name="queryConsumerInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryConsumerInfo" auth="false">
+        <description>queryConsumerInfo</description>
+
+        <attribute name="realPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="queryConsumerInfoList" type="List" mode="OUT"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
     <!-- queryProductRole-->
     <service name="queryProductRole" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

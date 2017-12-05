@@ -179,6 +179,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 查询消费者信息 -->
+    <request-map uri="queryConsumerInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryConsumerInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
 
     <!-- Release Resource -->

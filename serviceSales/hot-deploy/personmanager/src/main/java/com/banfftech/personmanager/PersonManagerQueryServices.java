@@ -44,6 +44,148 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * Query ConsumerInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryConsumerInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        String realPartyId = (String) context.get("realPartyId");
+
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("statusId");
+        fieldSet.add("currencyUom");
+        fieldSet.add("grandTotal");
+        fieldSet.add("productId");
+        fieldSet.add("quantity");
+        fieldSet.add("unitPrice");
+        fieldSet.add("roleTypeId");
+        fieldSet.add("orderDate");
+        fieldSet.add("productStoreId");
+        fieldSet.add("payToPartyId");
+
+
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", realPartyId));
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
+
+
+        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                listConditions2, fieldSet,
+                UtilMisc.toList("-orderDate"), null, false);
+
+        if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
+
+            for(GenericValue gv : queryMyResourceOrderList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                rowMap = gv.getAllFields();
+
+
+                String productStoreId = (String) gv.get("productStoreId");
+                String productId = (String) gv.get("productId");
+
+                GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+                rowMap.put("productName",""+product.get("productName"));
+                rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
+                String payToPartyId = (String)productStore.get("payToPartyId");
+                rowMap.put("payToPartyId",payToPartyId);
+                String statusId = (String) gv.get("statusId");
+                rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+                String payFromPartyId = (String) rowMap.get("partyId");
+
+
+
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
+                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",gv.get("orderId")).queryFirst();
+
+                if(null != orderPaymentPrefAndPayment){
+
+                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                    if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
+
+                        rowMap.put("orderPayStatus","已确认收款");
+                        rowMap.put("payStatusCode","1");
+                    }else{
+                        rowMap.put("payStatusCode","0");
+                        rowMap.put("orderPayStatus","买家已付款");
+                    }
+                }else{
+                    rowMap.put("payStatusCode","0");
+                    rowMap.put("orderPayStatus","未付款");
+                    if(null!=payment){
+                        String paymentStatusId = (String) payment.get("statusId");
+                        if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
+                            rowMap.put("orderPayStatus","已确认收款");
+                            rowMap.put("payStatusCode","1");
+                        }
+                        if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
+                            rowMap.put("orderPayStatus","买家已付款");
+                            rowMap.put("payStatusCode","1");
+                        }
+
+                    }else{
+                        rowMap.put("payStatusCode","0");
+                        rowMap.put("orderPayStatus","未付款");
+                    }
+
+                }
+
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("queryConsumerInfoList",returnList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Query PostalAddress
      * @param dctx
      * @param context

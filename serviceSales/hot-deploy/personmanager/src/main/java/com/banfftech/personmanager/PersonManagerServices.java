@@ -1269,48 +1269,48 @@ public class PersonManagerServices {
         }
 
         //pay_qr_code 推送的是收款码,需要再推一次包含注入内容的确认信息。
-        if (!UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("y") || !UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("true")) {
-
-
-            System.out.println("*IN pay_qr_code Biz,Now System Double Push!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-
-            createMessageLogMap = new HashMap<String, Object>();
-
-
-            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", objectId).queryFirst();
-
-
-            if (!UtilValidate.isEmpty(orderPaymentPrefAndPayment)) {
-                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='setPaymentStatus(" + orderPaymentPrefAndPayment.get("paymentId") + "," + objectId + ");'>这个按钮</button> 通知我查收!");
-            } else {
-                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='createPayment(" + objectId + ");'> 这个按钮 </button> 通知我查收!");
-            }
-
-
-            createMessageLogMap.put("partyIdFrom", "" + userLogin.get("partyId"));
-
-
-            createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-
-            createMessageLogMap.put("partyIdTo", partyIdTo);
-
-
-            createMessageLogMap.put("badge", "false");
-
-            createMessageLogMap.put("messageLogTypeId", "TEXT");
-
-
-            if (!UtilValidate.isEmpty(objectId)) {
-                createMessageLogMap.put("objectId", objectId);
-            }
-
-            createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-
-            GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-
-            msg.create();
-        }
+//        if (!UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("y") || !UtilValidate.isEmpty(pay_qr_code) && pay_qr_code.toLowerCase().equals("true")) {
+//
+//
+//            System.out.println("*IN pay_qr_code Biz,Now System Double Push!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//
+//
+//            createMessageLogMap = new HashMap<String, Object>();
+//
+//
+//            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", objectId).queryFirst();
+//
+//
+//            if (!UtilValidate.isEmpty(orderPaymentPrefAndPayment)) {
+//                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='setPaymentStatus(" + orderPaymentPrefAndPayment.get("paymentId") + "," + objectId + ");'>这个按钮</button> 通知我查收!");
+//            } else {
+//                createMessageLogMap.put("message", "如果你已经付好了,请点击 <button id='setPaymentStatusBtn' class='button' style='font-size:17px;' onclick='createPayment(" + objectId + ");'> 这个按钮 </button> 通知我查收!");
+//            }
+//
+//
+//            createMessageLogMap.put("partyIdFrom", "" + userLogin.get("partyId"));
+//
+//
+//            createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+//
+//            createMessageLogMap.put("partyIdTo", partyIdTo);
+//
+//
+//            createMessageLogMap.put("badge", "false");
+//
+//            createMessageLogMap.put("messageLogTypeId", "TEXT");
+//
+//
+//            if (!UtilValidate.isEmpty(objectId)) {
+//                createMessageLogMap.put("objectId", objectId);
+//            }
+//
+//            createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+//
+//            GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+//
+//            msg.create();
+//        }
 
 
         return "success";

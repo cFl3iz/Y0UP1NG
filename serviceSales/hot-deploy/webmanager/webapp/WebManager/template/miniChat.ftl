@@ -792,7 +792,9 @@
 
 
     //输入文字的放大镜效果
-//    function keyup() {
+    function keyup() {
+        autoWidth();
+        
 //        var footer_height = $('.wenwen-footer').outerHeight(),
 //                text = $('.write_box input').val(),
 //                str = '<div class="write_list">'+text+'</div>';
@@ -802,7 +804,7 @@
 //            $('.wenwen-footer').append(str);
 //            $('.write_list').css('bottom',footer_height);
 //        }
-//    }
+    }
 
     var wen = document.getElementById('wenwen');
     function _touch_start(event) {

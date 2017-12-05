@@ -503,7 +503,9 @@ public class PersonManagerServices {
             }
 
             pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
+
             pushWeChatMessageInfoMap.put("message", "卖家"+ person.get("firstName")+"已经确认收到货款。");
+
             pushWeChatMessageInfoMap.put("userLogin", admin);
 
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
@@ -527,9 +529,32 @@ public class PersonManagerServices {
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
 
+
         }
 
 
+        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+
+        createMessageLogMap.put("partyIdFrom", partyId);
+
+        createMessageLogMap.put("message", " 已收到您的货款! ");
+
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+        createMessageLogMap.put("partyIdTo", realPartyId);
+
+        createMessageLogMap.put("badge", "CHECK");
+
+        createMessageLogMap.put("messageLogTypeId", "TEXT");
+
+         createMessageLogMap.put("objectId", productId);
+
+
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+        msg.create();
 
 
         return resultMap;

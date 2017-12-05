@@ -151,7 +151,12 @@ public class PersonManagerQueryServices {
                     }
 
                     returnList.add(rowMap);
-
+                    GenericValue  isConfirm = EntityQuery.use(delegator).from("MessageLog").where("objectId",productId,"partyIdFrom",partyId,"partyIdTo",realPartyId,"badge", "CHECK","message", " 已收到您的货款! ").queryFirst();
+                    if(isConfirm!=null){
+                        rowMap.put("isConfirmPay","TRUE");
+                    }else{
+                        rowMap.put("isConfirmPay","FALSE");
+                    }
                 }
             }
 

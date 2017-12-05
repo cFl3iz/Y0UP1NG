@@ -307,8 +307,8 @@
         <description>updateShipGroupShipInfoForWeChat</description>
 
 
-        <!--<attribute name="orderId" type="String" mode="IN"-->
-                   <!--optional="true"/>-->
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
 
         <attribute name="code" type="String" mode="IN"
                    optional="true"/>

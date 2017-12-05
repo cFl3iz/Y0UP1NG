@@ -376,11 +376,11 @@
                    optional="true"/>
     </service>
 
-    <!-- queryPersonBaseInfo -->
+    <!-- Query Person BaseInfo WeChat -->
     <service name="queryPersonBaseInfoByChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
-             invoke="queryPersonBaseInfo" auth="false">
-        <description>queryPersonBaseInfo</description>
+             invoke="queryPersonBaseInfoByChat" auth="false">
+        <description>queryPersonBaseInfoByChat</description>
         <attribute name="tarjeta" type="String" mode="INOUT"
                    optional="true"/>
         <attribute name="productId" type="String" mode="INOUT"

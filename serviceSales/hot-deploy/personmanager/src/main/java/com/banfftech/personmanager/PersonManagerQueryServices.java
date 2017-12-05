@@ -1018,7 +1018,7 @@ public class PersonManagerQueryServices {
 
 
     /**
-     * queryPersonBaseInfo
+     * QueryPersonBaseInfo
      * @param dctx
      * @param context
      * @return
@@ -1087,6 +1087,99 @@ public class PersonManagerQueryServices {
     }
 
 
+    /**
+     * QueryPersonBaseInfo-WeChat
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryPersonBaseInfoByChat(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        resultMap.put("tarjeta", (String) context.get("tarjeta"));
+        resultMap.put("productId",(String) context.get("productId"));
+        resultMap.put("payToPartyId",(String) context.get("payToPartyId"));
+        resultMap.put("payToPartyFirstName",(String) context.get("payToPartyFirstName"));
+        resultMap.put("payToPartyHead",(String) context.get("payToPartyHead"));
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        resultMap.put("partyId",partyId);
+
+        Map<String, String> personInfo = new HashMap<String, String>();
+
+        personInfo.put("partyId",partyId);
+
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        if (person != null) {
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+            GenericValue partyContent = null;
+            if (null != contentsList && contentsList.size() > 0) {
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+                String contentId = partyContent.getString("contentId");
+                personInfo.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                personInfo.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
+            personInfo.put("firstName", (String) person.get("firstName"));
+
+
+        }
+
+        resultMap.put("personInfo",personInfo);
+
+        //自己就是卖家的情况下无需再增加角色关系
+        if(partyId.equals(context.get("payToPartyId")+"")){
+            return resultMap;
+        }
+
+        //是否已经是产品的意向客户
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId",partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        //如果还不是,就给一个意向客户到产品
+        if (!UtilValidate.isNotEmpty(productRole)) {
+            dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", "PLACING_CUSTOMER"));
+        }
+
+
+//已注释掉,将客户做成店铺客户的角色逻辑
+        //找店铺Id
+//        GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",context.get("payToPartyId") , "roleTypeId", "ADMIN").queryFirst();
+//        String productStoreId = (String) productStoreRole.get("productStoreId");
+//        GenericValue custStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"productStoreId",productStoreId).queryFirst();
+//        if (!UtilValidate.isNotEmpty(custStoreRole)) {
+//            //什么角色都没的时候,默认给一个潜在客户角色
+//            Map<String, Object> createProductStoreRoleOutMap =   dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", PeConstant.DEFAULT_PRODUCT_STORE_CUST_ROLE));
+//            if (!ServiceUtil.isSuccess(createProductStoreRoleOutMap)) {
+//                return createProductStoreRoleOutMap;
+//            }
+//        }
+
+        return resultMap;
+    }
 
 
     /**

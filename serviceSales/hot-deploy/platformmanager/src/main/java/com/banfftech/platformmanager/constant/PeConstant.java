@@ -28,6 +28,7 @@ public class PeConstant {
     public static final String CUSTOMER_PAYMENT = "CUSTOMER_PAYMENT";
 
 
+
     /**
      * 表示是/否的 是 {@value}
      */
@@ -56,6 +57,18 @@ public class PeConstant {
      */
     public static final String PRODUCT_TYPE_ID = "SERVICE";
 
+
+    /**
+     * 默认的客户角色 潜在客户
+     */
+    public static final String DEFAULT_PRODUCT_STORE_CUST_ROLE  = "PROSPECT";
+
+
+
+    /**
+     * 客户角色
+     */
+    public static final String  PRODUCT_STORE_CUST_ROLE  = "CLIENT";
 
     /**
      * 缺省价格

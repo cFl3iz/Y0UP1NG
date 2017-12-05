@@ -2867,6 +2867,32 @@ public class PersonManagerServices {
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
+
+
+        //买家就是卖家的情况直接返回
+        if(partyId.equals(payToPartyId)){
+            return resultMap;
+        }
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId",partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色
+        if (UtilValidate.isNotEmpty(productRole)) {
+            GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+            dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
+        }
+        //授予客户角色
+        dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE));
+
+        //已注释掉,将客户做成店铺客户的角色逻辑
+//        GenericValue custStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"productStoreId",productStoreId,"roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE).queryFirst();
+//        if (!UtilValidate.isNotEmpty(custStoreRole)) {
+//            //如果没有客户角色就创建一个客户角色
+//            Map<String, Object> createProductStoreRoleOutMap =   dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE));
+//            if (!ServiceUtil.isSuccess(createProductStoreRoleOutMap)) {
+//                return createProductStoreRoleOutMap;
+//            }
+//        }
+
+
         return resultMap;
     }
 

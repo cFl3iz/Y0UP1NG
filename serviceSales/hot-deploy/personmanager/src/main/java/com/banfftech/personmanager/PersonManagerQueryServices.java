@@ -42,6 +42,7 @@ public class PersonManagerQueryServices {
 
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
+    public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
     /**
      * Query ConsumerInfo
@@ -135,17 +136,22 @@ public class PersonManagerQueryServices {
 
 
                     fieldSet = new HashSet<String>();
+
                     fieldSet.add("drObjectInfo");
+
                     fieldSet.add("productId");
+
                     EntityCondition findConditions3 = EntityCondition
                             .makeCondition("productId", EntityOperator.EQUALS,productId );
 
                     GenericValue  custProductRole = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"partyId",realPartyId).queryFirst();
+                    String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
                     if(custProductRole!=null){
-                        rowMap.put("productPartyRole",custProductRole.get("roleTypeId"));
+                        rowMap.put("productPartyRole",custProductRoleStr);
                     }
 
                     returnList.add(rowMap);
+
                 }
             }
 

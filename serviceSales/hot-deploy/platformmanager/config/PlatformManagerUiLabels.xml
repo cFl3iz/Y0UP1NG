@@ -83,4 +83,17 @@
         <value xml:lang="zh-TW">登录成功</value>
     </property>
 
+
+    <property key="CUSTOMER">
+        <value xml:lang="en">CUSTOMER.</value>
+        <value xml:lang="zh">已购买</value>
+        <value xml:lang="zh-TW">已购买</value>
+    </property>
+
+    <property key="PLACING_CUSTOMER">
+        <value xml:lang="en">PLACING_CUSTOMER.</value>
+        <value xml:lang="zh">有意向</value>
+        <value xml:lang="zh-TW">有意向</value>
+    </property>
+
 </resource>

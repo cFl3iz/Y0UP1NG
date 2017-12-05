@@ -1154,6 +1154,10 @@ public class PersonManagerServices {
 
         dispatcher.runSync("setOrderPaymentStatus",UtilMisc.toMap("userLogin",userLogin,"paymentId",paymentId,"payToPartyId",partyId,"orderId",orderId));
 
+
+        //订单的支付状态需要已确认。
+
+
         return resultMap;
     }
 

@@ -201,7 +201,7 @@ public class PersonManagerQueryServices {
                 .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
         EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+                .makeCondition(UtilMisc.toMap("partyId", realPartyId));
 
 
         EntityCondition findConditions2 = EntityCondition
@@ -255,6 +255,7 @@ public class PersonManagerQueryServices {
                 }else{
                     rowMap.put("orderStatusCode","0");
                 }
+
                 System.out.println("orderStatusCode = " + rowMap.get("orderStatusCode"));
 
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));

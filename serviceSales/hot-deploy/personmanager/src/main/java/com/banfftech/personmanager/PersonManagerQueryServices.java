@@ -269,15 +269,15 @@ public class PersonManagerQueryServices {
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",rowMap.get("orderId")).queryFirst();
-
-                orderList.add(rowMap);
-
                 GenericValue  isConfirm = EntityQuery.use(delegator).from("MessageLog").where("objectId",productId,"partyIdFrom",partyId,"partyIdTo",payFromPartyId,"badge", "CHECK","message", " 已收到您的货款! ").queryFirst();
                 if(isConfirm!=null){
-                    orderList.put("isConfirmPay","TRUE");
+                    rowMap.put("isConfirmPay","TRUE");
                 }else{
-                    orderList.put("isConfirmPay","FALSE");
+                    rowMap.put("isConfirmPay","FALSE");
                 }
+                orderList.add(rowMap);
+
+
             }
         }
 

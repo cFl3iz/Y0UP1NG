@@ -794,7 +794,7 @@
     //输入文字的放大镜效果
     function keyup() {
         autoWidth();
-        
+        for_bottom();
 //        var footer_height = $('.wenwen-footer').outerHeight(),
 //                text = $('.write_box input').val(),
 //                str = '<div class="write_list">'+text+'</div>';

@@ -28,6 +28,7 @@
         <description>Message</description>
         <field name="messageId" type="id"></field>
         <field name="messageLogTypeId" type="id"></field>
+        <field name="objectTypeId" type="id"></field>
         <field name="partyIdFrom" type="value"></field>
         <!-- 谈吐围绕者,可能是订单，也可能是别的 -->
         <field name="objectId" type="value"></field>
@@ -35,6 +36,7 @@
         <field name="message" type="value"></field>
         <field name="fromDate" type="date-time"></field>
         <field name="badge" type="value"></field>
+        <prim-key field="objectTypeId"/>
         <prim-key field="messageId"/>
         <prim-key field="fromDate"/>
         <prim-key field="messageLogTypeId"/>

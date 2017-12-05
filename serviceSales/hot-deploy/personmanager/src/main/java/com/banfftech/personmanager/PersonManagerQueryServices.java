@@ -168,6 +168,116 @@ public class PersonManagerQueryServices {
         }
 
 
+
+
+
+
+
+
+
+
+
+
+        List<Map<String,Object>> orderList = new ArrayList<Map<String, Object>>();
+
+
+
+
+        Set<String> fieldOrderSet = new HashSet<String>();
+        fieldOrderSet.add("orderId");
+        fieldOrderSet.add("partyId");
+        fieldOrderSet.add("statusId");
+        fieldOrderSet.add("currencyUom");
+        fieldOrderSet.add("grandTotal");
+        fieldOrderSet.add("productId");
+        fieldOrderSet.add("quantity");
+        fieldOrderSet.add("unitPrice");
+        fieldOrderSet.add("roleTypeId");
+        fieldOrderSet.add("orderDate");
+        fieldOrderSet.add("productStoreId");
+        fieldOrderSet.add("payToPartyId");
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
+
+
+        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                listConditions2, fieldOrderSet,
+                UtilMisc.toList("-orderDate"), null, false);
+
+
+
+
+        if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
+
+            for(GenericValue gv : queryMyResourceOrderList){
+
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                rowMap = gv.getAllFields();
+
+
+
+                String productStoreId = (String) gv.get("productStoreId");
+
+                String productId = (String) gv.get("productId");
+
+                GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
+                rowMap.put("productName",""+product.get("productName"));
+
+                rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
+
+                String payToPartyId = (String)productStore.get("payToPartyId");
+
+                rowMap.put("payToPartyId",payToPartyId);
+
+                String statusId = (String) gv.get("statusId");
+
+                //区分订单状态
+                if(statusId.toLowerCase().indexOf("comp")>0){
+                    rowMap.put("orderStatusCode","1");
+                }else{
+                    rowMap.put("orderStatusCode","0");
+                }
+                System.out.println("orderStatusCode = " + rowMap.get("orderStatusCode"));
+
+                rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+
+
+                String payFromPartyId = (String) rowMap.get("partyId");
+
+
+
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
+                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",rowMap.get("orderId")).queryFirst();
+
+                orderList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("orderList", orderList);
+
+
         resultMap.put("queryConsumerInfoList",returnList);
 
         return resultMap;

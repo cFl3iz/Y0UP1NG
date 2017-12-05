@@ -881,17 +881,17 @@ public class PersonManagerServices {
 
         //推送告知卖家
 
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
-
-        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-
-
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-        }
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+//
+//        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//
+//        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+//        }
 
         return resultMap;
     }
@@ -1101,8 +1101,12 @@ public class PersonManagerServices {
         }
 
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+
         order.set("internalCode", code);
+
+
         order.store();
+
 
 
         //推送给微信用户
@@ -1142,6 +1146,13 @@ public class PersonManagerServices {
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
 
+
+        //TODO setOrderPaymentStatus
+        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+
+        String paymentId = (String) orderPaymentPrefAndPayment.get("paymentId");
+
+        dispatcher.runSync("setOrderPaymentStatus",UtilMisc.toMap("userLogin",userLogin,"paymentId",paymentId,"payToPartyId",partyId,"orderId",orderId));
 
         return resultMap;
     }

@@ -104,6 +104,10 @@ public class PeConstant {
      * 是一个客户关系
      */
     public static final String CUSTOMER = "CUSTOMER_REL";
+
+    //产品客户
+    public static final String PRODUCT_CUSTOMER = "CUSTOMER";
+
     /**
      * 是一个供应商
      */

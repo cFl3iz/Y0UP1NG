@@ -2880,7 +2880,7 @@ public class PersonManagerServices {
             dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
         }
         //授予客户角色
-        dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE));
+        dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
 
         //已注释掉,将客户做成店铺客户的角色逻辑
 //        GenericValue custStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"productStoreId",productStoreId,"roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE).queryFirst();

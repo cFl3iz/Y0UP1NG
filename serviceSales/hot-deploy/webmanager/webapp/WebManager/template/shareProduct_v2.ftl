@@ -34,7 +34,8 @@
                  productId:productId,
                  prodCatalogId:prodCatalogId,
                  productStoreId:productStoreId,
-                 tarjeta:tarjeta
+                 tarjeta:tarjeta,
+                 amount:amount
              };
              $.ajax({
                  type: 'POST',

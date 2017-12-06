@@ -8,6 +8,11 @@
 
 
      function buyProduct(){
+
+         $("#showboxmenu2").show();
+         $("#showboxmenuspec2").show();
+         return false;
+
          var confirmMessage = $("#confirmMessage").val();
          var a=confirm(confirmMessage);
          if(a == true)
@@ -143,8 +148,8 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
     </#if>
                 </div>
                 <!-- 弹出0 -->
-                <div class="flick-menu-mask" style=""></div>
-                <div class="spec-menu">
+                <div class="flick-menu-mask" id="showboxmenu2" style=""></div>
+                <div class="spec-menu" id="showboxmenuspec2">
                     <div class="spec-menu-content spec-menu-show" style="display: block;">
                         <div class="spec-menu-top bdr-b">
                             <div class="spec-first-pic"> <img id="spec_image" src="" /> </div>
@@ -160,7 +165,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                 </div>
                             </div>
                             <div class="spec-price" id="specJdPri" style="display: block"> <span class="yang-pic spec-yang-pic"> <img src="images/rmb.png" /> </span> <span id="spec_price"> 36.80 </span> </div>
-                            <div id="specWeightDiv" class="spec-weight"> <span>重量:</span> <span id="spec_weight">3.26kg</span> </div>
+                            <div id="specWeightDiv" class="spec-weight"> <span>${uiLabel.Weight}:</span> <span id="spec_weight">3.26kg</span> </div>
                         </div>
                         <div class="spec-menu-middle">
                             <div class="prod-spec" id="prodSpecArea">
@@ -168,12 +173,19 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                 <div class="prod-spec" id="prodSpecArea">
                                     <!-- 已选 -->
                                     <div class="spec-desc"> <span class="part-note-msg">已选</span>
-                                        <div id="specDetailInfo_spec" class="base-txt"> 白色 直袖款 &nbsp;&nbsp; <span class="amount">1</span>件 </div>
+                                        <div id="specDetailInfo_spec" class="base-txt"> 款式 默认款 &nbsp;&nbsp; <span class="amount" id="amount">1</span>件 </div>
                                     </div>
                                     <div class="nature-container" id="natureCotainer">
                                         <!--颜色 5.5版本之前的规格属性-->
-                                        <div class="pro-color"> <span class="part-note-msg"> 颜色 </span>
-                                            <p id="color"> <a title="白色 直袖款" class="a-item selected J_ping"   report-eventparam="白色 直袖款" >白色 直袖款</a> <a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a> <a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a> <a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a> <a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a> <a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a> </p>
+                                        <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
+                                            <p id="color">
+                                                <a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>
+                                                <#--<a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a>-->
+                                                <#--<a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a>-->
+                                                <#--<a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a>-->
+                                                <#--<a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a>-->
+                                                <#--<a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a>-->
+                                            </p>
                                         </div>
                                         <!--尺寸-->
                                         <!--容量-->
@@ -182,7 +194,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <!--尺寸-->
                                     <!--容量-->
                                     <!--数量-->
-                                    <div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">数量</span>
+                                    <div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">${uiLabel.Amount}</span>
                                         <div style="width: 100%;margin-left: 10px;" class="num">
                                             <p class="jian" style="float: left;margin-top: 5px;"><img src="images/jian.png" width="16" height="16"></p>
                                             <input id="cool" class="inputBorder"  value="1" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')" type="text" maxlength="5" placeholder="数量" style="font-size: 12px;width: 60px;height: 20px;float: left;padding: 0 5px;margin-top:3px;margin-left: 5px;" />

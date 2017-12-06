@@ -250,6 +250,17 @@
         <value xml:lang="zh_CN">聊聊</value>
     </property>
 
+    <property key="Amount">
+        <value xml:lang="en">amount</value>
+        <value xml:lang="zh">数量</value>
+        <value xml:lang="zh_CN">数量</value>
+    </property>
+    <property key="Weight">
+        <value xml:lang="en">weight</value>
+        <value xml:lang="zh">重量</value>
+        <value xml:lang="zh_CN">重量</value>
+    </property>
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

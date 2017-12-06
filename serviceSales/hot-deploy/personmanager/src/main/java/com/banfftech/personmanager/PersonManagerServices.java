@@ -486,9 +486,12 @@ public class PersonManagerServices {
         String roleTypeId = (String) context.get("realPartyId");
 
         String text = (String) context.get("text");
-
+        Debug.logInfo("*spreadProduct:" + productId+"|roleTypeId:"+roleTypeId+"|text:"+text, module);
 
         List<GenericValue> partyList = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", roleTypeId).queryList();
+
+        Debug.logInfo("*partyList:" + partyList, module);
+
 
         if (null != partyList && partyList.size() > 0) {
 
@@ -497,7 +500,7 @@ public class PersonManagerServices {
 
 
                 List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", spreadPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
-
+                Debug.logInfo("*partyIdentificationList:" + partyList, module);
 
                 if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
 

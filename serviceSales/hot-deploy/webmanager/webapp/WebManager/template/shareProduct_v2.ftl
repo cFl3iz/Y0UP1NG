@@ -11,10 +11,13 @@
 
          $("#showboxmenu2").show();
          $("#showboxmenuspec2").show();
-         return false;
+
+         var amount = $("#cool").val();
 
          var confirmMessage = $("#confirmMessage").val();
+
          var a=confirm(confirmMessage);
+
          if(a == true)
          {
              var tarjeta = $("#tarjeta").val();
@@ -158,7 +161,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                             </a>
                             <div id="specPlus" class="plus-price-wrap spec-plus-price-mtl" style="display: none">
                                 <div class="plus-price-row">
-                                    <div class="spec-jd-price"> <span class="plus-jd-price-title">京东价：</span> <span class="price-icon grey"></span> <span class="plus-jd-price-text" id="specJdPrice"> 36.80 </span> </div>
+                                    <div class="spec-jd-price"> <span class="plus-jd-price-title">京东价：</span> <span class="price-icon grey"></span> <span class="plus-jd-price-text" id="specJdPrice"> ￥ ${(resourceDetail.price?default('0'))!} </span> </div>
                                 </div>
                                 <div class="plus-price-row">
                                     <div class="spec-plus-price"> <span class="plus-member-price-title">会员价：</span> <span class="price-icon black"></span> <span class="plus-member-price-text" id="specPlusPrice"></span> <img class="plus-pri-icon" src="" /> </div>

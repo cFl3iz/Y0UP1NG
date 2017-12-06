@@ -2800,7 +2800,7 @@ public class PersonManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productStoreId = (String) context.get("productStoreId");
-        //   String number  = (String)  context.get("number");
+        String amount_str  = (String)  context.get("amount");
         String payToPartyId = (String) context.get("payToPartyId");
         String productId = (String) context.get("productId");
         String price = (String) context.get("price");
@@ -2808,6 +2808,12 @@ public class PersonManagerServices {
 
         BigDecimal subTotal = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
+
+        int amount = 1;
+
+        if (!UtilValidate.isEmpty(amount_str)) {
+            amount = Integer.parseInt(amount_str);
+        }
 
 
         if (!UtilValidate.isEmpty(price)) {
@@ -2857,9 +2863,12 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("calcTax", new Boolean("false"));
 
         //appendOrderItem
+
         Map<String, Object> appendOrderItemOutMap = null;
         try {
-            appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
+            for(int i = 0 ; i < amount;i++){
+                appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
+            }
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));

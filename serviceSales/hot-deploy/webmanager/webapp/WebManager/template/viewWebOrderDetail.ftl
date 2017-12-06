@@ -104,7 +104,9 @@
                     <#--</label>-->
                 <#--</label>-->
             <#--</div>-->
-            <span style="font-size:25px;color:darkgray;">${uiLabel.Over}</span>
+            <button onclick="javascript:location.href = 'myOrder?tarjeta=${tarjeta}'">${uiLabel.ViewMyOrder}</button>
+            <#--<span style="font-size:25px;color:darkgray;">${uiLabel.Over}</span>-->
+
             <#--<div class="m-button">-->
                 <#--<input onclick="window.close();" type="button" class="btn-block btn-primary" id="J_Notify_SelectAddress" value="${uiLabel.Ok}"/>-->
             <#--</div>-->

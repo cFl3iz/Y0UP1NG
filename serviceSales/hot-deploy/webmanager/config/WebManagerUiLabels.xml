@@ -239,6 +239,12 @@
     </property>
 
 
+    <property key="ViewMyOrder">
+        <value xml:lang="en">ViewMyOrder</value>
+        <value xml:lang="zh">查看订单</value>
+        <value xml:lang="zh_CN">查看订单</value>
+    </property>
+
     <property key="BuyNow">
         <value xml:lang="en">Buy Now!.</value>
         <value xml:lang="zh">立即购买 '${productName}'!</value>

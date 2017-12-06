@@ -2808,11 +2808,11 @@ public class PersonManagerServices {
 
         BigDecimal subTotal = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
+        BigDecimal amount = BigDecimal.ONE;
 
-        int amount = 1;
 
         if (!UtilValidate.isEmpty(amount_str)) {
-            amount = Integer.parseInt(amount_str);
+            amount = new BigDecimal(amount_str);
         }
 
 
@@ -2854,7 +2854,7 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("userLogin", userLogin);
         appendOrderItemInMap.put("orderId", orderId);
         appendOrderItemInMap.put("productId", productId);
-        appendOrderItemInMap.put("quantity", BigDecimal.ONE);
+        appendOrderItemInMap.put("quantity",amount);
         appendOrderItemInMap.put("amount", grandTotal);
         appendOrderItemInMap.put("shipGroupSeqId", "00001");
         appendOrderItemInMap.put("prodCatalogId", prodCatalogId);
@@ -2866,9 +2866,10 @@ public class PersonManagerServices {
 
         Map<String, Object> appendOrderItemOutMap = null;
         try {
-            for(int i = 0 ; i < amount;i++){
+//            for(int i = 0 ; i < amount;i++){ }
+            //TODO
                 appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
-            }
+
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));

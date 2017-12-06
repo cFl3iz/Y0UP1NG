@@ -5,12 +5,14 @@
     }
 </style>
 <script>
-
+     function buyProductModel(){
+         $("#showboxmenu2").show();
+         $("#showboxmenuspec2").show();
+     }
 
      function buyProduct(){
 
-         $("#showboxmenu2").show();
-         $("#showboxmenuspec2").show();
+
 
          var amount = $("#cool").val();
 
@@ -215,9 +217,16 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         </div>
                         <div class="flick-menu-btn spec-menu-btn">
                             <a class="yellow-color add_cart" onclick="javascript:$('#hidemenu').click();" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">取消</a>
-                            <a class="red-color directorder" id="directorder_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">立即购买</a> <a class="yellow-color J_ping looksimilar looksimilara looksimilar_spec" id="looksimilar_speca" href=" " style="display: none;" report-eventid="MProductdetail_Similar" report-eventparam="W" report-eventlevel="5">查看相似</a>
+                            <a class="red-color directorder" onclick="buyProduct();" id="directorder_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">立即购买</a>
+                            <a class="yellow-color J_ping looksimilar looksimilara looksimilar_spec" id="looksimilar_speca" href=" " style="display: none;" report-eventid="MProductdetail_Similar" report-eventparam="W" report-eventlevel="5">查看相似</a>
                             <!--大家电-查看同款-->
-                            <a class="yellow-color J_ping looksimilar looksimilarb looksimilar_spec" id="looksimilar_specb" href="" style="display: none;" report-eventid="MProductdetail_SameProduct" report-pageparam="" report-eventlevel="4">查看同款</a> <a class="red-color J_ping arrivalInform" id="arrivalInform_spec" style="display: none;" report-eventid="MProductdetail_ArrivalNotice" report-eventparam="2015246_W" report-eventlevel="5">到货通知</a> <a class="red-color disabled waitingForAppointments" style="display: none;" id="waitingForAppointments_spec">等待预约</a> <a class="red-color makeAppointments" style="display: none;" id="makeAppointments_spec">立即预约</a> <a class="red-color disabled waitingForBuying" style="display: none;" id="waitingForBuying_spec">等待抢购</a> <a class="red-color buyImmediately" style="display: none;" id="buyImmediately_spec">立即抢购</a> <a class="red-color disabled appointmentsEnd" style="display: none;" id="appointmentsEnd_spec">预约结束</a> <a class="red-color" style="display: none;" id="yushou_add_cart_spec">立即预定</a> </div>
+                            <a class="yellow-color J_ping looksimilar looksimilarb looksimilar_spec" id="looksimilar_specb" href="" style="display: none;" report-eventid="MProductdetail_SameProduct" report-pageparam="" report-eventlevel="4">查看同款</a>
+                            <a class="red-color J_ping arrivalInform" id="arrivalInform_spec" style="display: none;" report-eventid="MProductdetail_ArrivalNotice" report-eventparam="2015246_W" report-eventlevel="5">到货通知</a>
+                            <a class="red-color disabled waitingForAppointments" style="display: none;" id="waitingForAppointments_spec">等待预约</a>
+                            <a class="red-color makeAppointments" style="display: none;" id="makeAppointments_spec">立即预约</a> <a class="red-color disabled waitingForBuying" style="display: none;" id="waitingForBuying_spec">等待抢购</a>
+                            <a class="red-color buyImmediately" style="display: none;" id="buyImmediately_spec">立即抢购</a>
+                            <a class="red-color disabled appointmentsEnd" style="display: none;" id="appointmentsEnd_spec">预约结束</a>
+                            <a class="red-color" style="display: none;" id="yushou_add_cart_spec">立即预定</a> </div>
                     </div>
                 </div>
                 <!-- 弹出 0-->
@@ -257,7 +266,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell" onclick="myOrder();">${uiLabel.MyOrder}</button>
-                        <button class="buy cell" onclick="buyProduct();">${uiLabel.Buy}</button>
+                        <button class="buy cell" onclick="buyProductModel();">${uiLabel.Buy}</button>
                         <div class="activity-box cell"></div>
                     </div>
                 </section>

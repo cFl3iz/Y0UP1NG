@@ -104,7 +104,7 @@
                     <#--</label>-->
                 <#--</label>-->
             <#--</div>-->
-            <button onclick="javascript:location.href = 'myOrder?tarjeta=${tarjeta}'">${uiLabel.ViewMyOrder}</button>
+            <button class="button" onclick="javascript:location.href = 'myOrder?tarjeta=${tarjeta}'">${uiLabel.ViewMyOrder}</button>
             <#--<span style="font-size:25px;color:darkgray;">${uiLabel.Over}</span>-->
 
             <#--<div class="m-button">-->

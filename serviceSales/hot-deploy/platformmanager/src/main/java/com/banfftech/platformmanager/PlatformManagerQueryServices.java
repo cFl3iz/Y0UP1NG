@@ -324,20 +324,27 @@ public class PlatformManagerQueryServices {
 
         fieldSet.add("messageLogTypeId");
 
-        EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
-        EntityCondition findConditions5 = EntityCondition
+        EntityCondition objectIdCondition = EntityCondition
                 .makeCondition(UtilMisc.toMap("objectId", productId));
 
-        EntityCondition findConditions4 = EntityCondition
+        EntityCondition findConditionsPartyIdTo = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+
+
+        EntityCondition findConditionsPartyIdFrom = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(findConditionsPartyIdTo, EntityOperator.AND, objectIdCondition);
+
+        EntityCondition findConditions4 = EntityCondition
+                .makeCondition(findConditionsPartyIdFrom, EntityOperator.AND, objectIdCondition);
 
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
-        EntityCondition listConditions6 = EntityCondition
-                .makeCondition(listConditions2, EntityOperator.AND, findConditions5);
 
         EntityConditionList<EntityCondition> listBigConditions = null;
 
@@ -352,10 +359,10 @@ public class PlatformManagerQueryServices {
             EntityCondition listConditions = EntityCondition
                     .makeCondition(findConditions, EntityOperator.OR, findConditions2);
             listBigConditions = EntityCondition
-                    .makeCondition(listConditions, listConditions6);
+                    .makeCondition(listConditions, listConditions2);
         } else {
             listBigConditions = EntityCondition
-                    .makeCondition(listConditions6);
+                    .makeCondition(listConditions2);
         }
 
 

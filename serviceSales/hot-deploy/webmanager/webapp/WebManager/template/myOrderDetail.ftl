@@ -733,6 +733,29 @@
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
         }
+
+         .bac{
+             display: inline-block;
+             zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+             *display: inline;
+             vertical-align: baseline;
+             margin: 0 2px;
+             outline: none;
+             cursor: pointer;
+             text-align: center;
+             text-decoration: none;
+             font: 14px/100% Arial, Helvetica, sans-serif;
+             padding: .5em 2em .55em;
+             text-shadow: 0 1px 1px rgba(0,0,0,.3);
+             -webkit-border-radius: .5em;
+             -moz-border-radius: .5em;
+             border-radius: .5em;
+             -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+             -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+             box-shadow: 0 1px 2px rgba(0,0,0,.2);
+             float: right;
+         }
+
     </style>
     <script>
         /**
@@ -2070,7 +2093,7 @@
 ${uiLabel.orderTime}${orderInfo.orderDate?string("yyyy-MM-dd")}<br/>
 ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
     <br/>
-    <button class="button" style="font-size:16px;margin-left:200px;" onclick="alert('未完成该跳转');">联系卖家</button>
+    <button class="bac" style="font-size:16px;margin-left:200px;" onclick="alert('待完成跳转');">联系卖家</button>
 </p>
 <#--<section class="g-scrollview">-->
 <#--<article class="m-list list-theme4">-->

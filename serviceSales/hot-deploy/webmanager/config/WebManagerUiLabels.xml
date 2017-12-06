@@ -241,8 +241,13 @@
 
     <property key="ViewMyOrder">
         <value xml:lang="en">ViewMyOrder</value>
-        <value xml:lang="zh">查看订单</value>
-        <value xml:lang="zh_CN">查看订单</value>
+        <value xml:lang="zh">看看</value>
+        <value xml:lang="zh_CN">看看</value>
+    </property>
+    <property key="ViewMiniChat">
+        <value xml:lang="en">Chat</value>
+        <value xml:lang="zh">聊聊</value>
+        <value xml:lang="zh_CN">聊聊</value>
     </property>
 
     <property key="BuyNow">
@@ -311,8 +316,8 @@
 
     <property key="CreateOrderSuccess">
         <value xml:lang="en">Create Order Success!.</value>
-        <value xml:lang="zh">订单已创建</value>
-        <value xml:lang="zh_CN">订单已创建</value>
+        <value xml:lang="zh">已为您下单</value>
+        <value xml:lang="zh_CN">已为您下单</value>
     </property>
 
     <property key="SetAddress">

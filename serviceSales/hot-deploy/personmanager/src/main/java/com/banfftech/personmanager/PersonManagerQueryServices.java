@@ -1618,9 +1618,15 @@ public class PersonManagerQueryServices {
         List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
                 findConditions3, fieldSet,
                 null, null, false);
+
+
+        Long custCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId",PeConstant.PRODUCT_CUSTOMER).queryCount();
+        Long placingCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId","PLACING_CUSTOMER").queryCount();
+
+        resourceDetail.put("custCount",custCount);
+        resourceDetail.put("placingCount",placingCount);
+        
         resourceDetail.put("morePicture",pictures);
-
-
         resultMap.put("resourceDetail", resourceDetail);
 
         return resultMap;

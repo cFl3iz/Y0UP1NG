@@ -145,6 +145,7 @@
     <service name="pushWeChatMessageInfo" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushWeChatMessageInfo" auth="false">
         <description>pushWeChatMessageInfo</description>
+        <attribute name="url" type="String" mode="IN" optional="true"/>
         <attribute name="openId" type="String" mode="IN" optional="true"/>
         <attribute name="firstName" type="String" mode="IN" optional="true"/>
         <attribute name="message" type="String" mode="IN" optional="true"/>

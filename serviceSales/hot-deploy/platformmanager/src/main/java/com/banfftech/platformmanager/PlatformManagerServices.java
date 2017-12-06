@@ -249,6 +249,7 @@ public class PlatformManagerServices {
         String firstName     = (String) context.get("firstName");
         String payToPartyId  = (String) context.get("payToPartyId");
         String tarjeta       = (String) context.get("tarjeta");
+        String jumpUrl   = (String) context.get("url");
 
 //        firstName = EmojiHandler.decodeJava(firstName);
 
@@ -266,11 +267,17 @@ public class PlatformManagerServices {
         JSONObject jsobj3 = new JSONObject();
         JSONObject jsobj4 = new JSONObject();
         JSONObject jsobj5 = new JSONObject();
+        String url2 = "";
+        if(jumpUrl!=null && !jumpUrl.trim().equals("")){
+            url2 = jumpUrl;
+        }else{
+             url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
+                    "productId="+productId+"&payToPartyId=" +
+                    ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
+            System.out.println("*============================================================URL = " + url2);
+        }
 
-        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
-                "productId="+productId+"&payToPartyId=" +
-                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
-        System.out.println("*============================================================URL = " + url2);
+
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
         jsobj1.put("url",url2);

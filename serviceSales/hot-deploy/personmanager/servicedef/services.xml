@@ -437,6 +437,23 @@
                    optional="true"/>
     </service>
 
+
+    <!-- 推广产品 -->
+      <service name="spreadProduct" engine="java"
+                            location="main.java.com.banfftech.personmanager.PersonManagerServices"
+                            invoke="spreadProduct" auth="false">
+    <description>spreadProduct</description>
+    <attribute name="productId" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="text" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="roleTypeId" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="resultMap" type="java.util.Map" mode="OUT"
+               optional="true"/>
+</service>
+
+
     <!-- Place Resource Order -->
     <service name="placeResourceOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

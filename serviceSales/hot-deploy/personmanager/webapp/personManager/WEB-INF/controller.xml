@@ -196,6 +196,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 推广产品 -->
+    <request-map uri="spreadProduct">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="spreadProduct"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
 
 

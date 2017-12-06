@@ -1625,7 +1625,7 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("custCount",custCount);
         resourceDetail.put("placingCount",placingCount);
-        
+
         resourceDetail.put("morePicture",pictures);
         resultMap.put("resourceDetail", resourceDetail);
 

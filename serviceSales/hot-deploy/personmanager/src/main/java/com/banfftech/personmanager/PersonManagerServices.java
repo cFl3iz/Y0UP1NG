@@ -454,7 +454,98 @@ public class PersonManagerServices {
 
 
     /**
+     * spread Product 推广产品
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> spreadProduct(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String productId = (String) context.get("productId");
+
+        String roleTypeId = (String) context.get("realPartyId");
+
+        String text = (String) context.get("text");
+
+
+        List<GenericValue> partyList = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", roleTypeId).queryList();
+
+        if (null != partyList && partyList.size() > 0) {
+
+            for (GenericValue partyGv : partyList) {
+                String spreadPartyId = (String) partyGv.get("partyId");
+
+
+                List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", spreadPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+                if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+                    String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+                    Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+
+                    pushWeChatMessageInfoMap.put("message", text);
+
+                    pushWeChatMessageInfoMap.put("userLogin", admin);
+
+                    System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+                    Date date = new Date();
+
+                    SimpleDateFormat formatter;
+
+                    formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    String pushDate = "" + formatter.format(date);
+
+                    pushWeChatMessageInfoMap.put("date", pushDate);
+
+                    pushWeChatMessageInfoMap.put("openId", openId);
+
+                    pushWeChatMessageInfoMap.put("productId", productId);
+
+                    pushWeChatMessageInfoMap.put("payToPartyId", partyId);
+
+                    pushWeChatMessageInfoMap.put("url", "http://www.lyndonspace.com:3400/WebManager/control/shareProduct?productId="+productId);
+
+                    //推微信
+                    dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+
+
+                }
+            }
+        }
+
+
+        return resultMap;
+    }
+
+
+    /**
      * Confirm Payment(新卖家确认)
+     *
      * @param dctx
      * @param context
      * @return
@@ -491,8 +582,7 @@ public class PersonManagerServices {
 
             String openId = (String) partyIdentificationList.get(0).get("idValue");
 
-            Map<String,Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-
+            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
 
 
             GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
@@ -504,7 +594,7 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
 
-            pushWeChatMessageInfoMap.put("message", "卖家"+ person.get("firstName")+"已经确认收到货款。");
+            pushWeChatMessageInfoMap.put("message", "卖家" + person.get("firstName") + "已经确认收到货款。");
 
             pushWeChatMessageInfoMap.put("userLogin", admin);
 
@@ -533,7 +623,7 @@ public class PersonManagerServices {
         }
 
 
-        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
@@ -547,7 +637,7 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("messageLogTypeId", "TEXT");
 
-         createMessageLogMap.put("objectId", productId);
+        createMessageLogMap.put("objectId", productId);
 
 
         createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
@@ -559,18 +649,6 @@ public class PersonManagerServices {
 
         return resultMap;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -606,9 +684,6 @@ public class PersonManagerServices {
         String payToPartyId = (String) context.get("payToPartyId");
 
 
-
-
-
         GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
 
         GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "EXT_WXPAY").queryFirst();
@@ -625,14 +700,13 @@ public class PersonManagerServices {
         }
 
         //createOrderPaymentPreference
-        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId",orderId));
+        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId", orderId));
 
         if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceMap)) {
 
             return createOrderPaymentPreferenceMap;
 
         }
-
 
 
         EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
@@ -745,7 +819,7 @@ public class PersonManagerServices {
 
             String paymentId = (String) payment.get("paymentId");
 
-            Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin",userLogin,"paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
+            Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
 
             if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
                 return setPaymentStatusMap;
@@ -1108,7 +1182,6 @@ public class PersonManagerServices {
         order.store();
 
 
-
         //推送给微信用户
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
@@ -1152,7 +1225,7 @@ public class PersonManagerServices {
 
         String paymentId = (String) orderPaymentPrefAndPayment.get("paymentId");
 
-        dispatcher.runSync("setOrderPaymentStatus",UtilMisc.toMap("userLogin",userLogin,"paymentId",paymentId,"payToPartyId",partyId,"orderId",orderId));
+        dispatcher.runSync("setOrderPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "payToPartyId", partyId, "orderId", orderId));
 
 
         //订单的支付状态需要已确认。
@@ -2800,7 +2873,7 @@ public class PersonManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productStoreId = (String) context.get("productStoreId");
-        String amount_str  = (String)  context.get("amount");
+        String amount_str = (String) context.get("amount");
         String payToPartyId = (String) context.get("payToPartyId");
         String productId = (String) context.get("productId");
         String price = (String) context.get("price");
@@ -2854,7 +2927,7 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("userLogin", userLogin);
         appendOrderItemInMap.put("orderId", orderId);
         appendOrderItemInMap.put("productId", productId);
-        appendOrderItemInMap.put("quantity",amount);
+        appendOrderItemInMap.put("quantity", amount);
         appendOrderItemInMap.put("amount", grandTotal);
         appendOrderItemInMap.put("shipGroupSeqId", "00001");
         appendOrderItemInMap.put("prodCatalogId", prodCatalogId);
@@ -2868,7 +2941,7 @@ public class PersonManagerServices {
         try {
 //            for(int i = 0 ; i < amount;i++){ }
             //TODO
-                appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
+            appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
 
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
@@ -3015,10 +3088,10 @@ public class PersonManagerServices {
 
 
         //买家就是卖家的情况直接返回
-        if(partyId.equals(payToPartyId)){
+        if (partyId.equals(payToPartyId)) {
             return resultMap;
         }
-        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId",partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
         //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色
         if (UtilValidate.isNotEmpty(productRole)) {
             GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
@@ -3355,7 +3428,7 @@ public class PersonManagerServices {
 
             //微信支付设置
             Map<String, Object> createProductStorePaymentSettingOutMap = dispatcher.runSync("createProductStorePaymentSetting", UtilMisc.toMap("userLogin", admin,
-                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId","EXT_WXPAY", "paymentServiceTypeEnumId","PRDS_PAY_AUTH"));
+                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId", "EXT_WXPAY", "paymentServiceTypeEnumId", "PRDS_PAY_AUTH"));
             if (!ServiceUtil.isSuccess(createProductStorePaymentSettingOutMap)) {
                 return createProductStorePaymentSettingOutMap;
             }

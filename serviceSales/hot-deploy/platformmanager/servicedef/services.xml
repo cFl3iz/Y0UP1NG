@@ -109,6 +109,8 @@
                    optional="true" />
         <attribute name="objectId" type="String" mode="IN"
                    optional="true" />
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
         <attribute name="click" type="String" mode="IN"
                    optional="true" />
 

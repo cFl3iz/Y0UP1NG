@@ -303,6 +303,8 @@ public class PlatformManagerQueryServices {
 
         String objectId = (String) context.get("objectId");
 
+        String productId = (String) context.get("productId");
+
         String bizType = (String) context.get("bizType");
 
         Set<String> fieldSet = new HashSet<String>();
@@ -325,6 +327,8 @@ public class PlatformManagerQueryServices {
         EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
+        EntityCondition findConditions5 = EntityCondition
+                .makeCondition(UtilMisc.toMap("objectId", productId));
 
         EntityCondition findConditions4 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
@@ -332,6 +336,8 @@ public class PlatformManagerQueryServices {
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 
+        EntityCondition listConditions6 = EntityCondition
+                .makeCondition(listConditions2, EntityOperator.AND, findConditions5);
 
         EntityConditionList<EntityCondition> listBigConditions = null;
 
@@ -346,10 +352,10 @@ public class PlatformManagerQueryServices {
             EntityCondition listConditions = EntityCondition
                     .makeCondition(findConditions, EntityOperator.OR, findConditions2);
             listBigConditions = EntityCondition
-                    .makeCondition(listConditions, listConditions2);
+                    .makeCondition(listConditions, listConditions6);
         } else {
             listBigConditions = EntityCondition
-                    .makeCondition(listConditions2);
+                    .makeCondition(listConditions6);
         }
 
 

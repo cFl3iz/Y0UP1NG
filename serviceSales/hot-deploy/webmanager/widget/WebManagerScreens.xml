@@ -30,6 +30,7 @@
                 <set field="payToPartyHead" value="${parameters.payToPartyHead}"/>
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <set field="personInfo" value="${parameters.personInfo}"/>
+
                 <!--<service service-name="queryPersonBaseInfo" result-map="resultMap">-->
                     <!--<field-map field-name="tarjeta"/>-->
                 <!--</service>-->

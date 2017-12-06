@@ -695,7 +695,7 @@ public class PersonManagerServices {
 
 
     /**
-     * Order Payment Received
+     * Order Payment Received (已弃用)
      *
      * @param dctx
      * @param context

@@ -142,9 +142,77 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
 
     </#if>
                 </div>
-
+                <!-- 弹出0 -->
                 <div class="flick-menu-mask" style=""></div>
                 <div class="spec-menu">
+                    <div class="spec-menu-content spec-menu-show" style="display: block;">
+                        <div class="spec-menu-top bdr-b">
+                            <div class="spec-first-pic"> <img id="spec_image" src="" /> </div>
+                            <a class="rt-close-btn-wrap spec-menu-close">
+                                <p class="flick-menu-close tclck"> <img src="images/close.png" width="24" height="24" /> </p>
+                            </a>
+                            <div id="specPlus" class="plus-price-wrap spec-plus-price-mtl" style="display: none">
+                                <div class="plus-price-row">
+                                    <div class="spec-jd-price"> <span class="plus-jd-price-title">京东价：</span> <span class="price-icon grey"></span> <span class="plus-jd-price-text" id="specJdPrice"> 36.80 </span> </div>
+                                </div>
+                                <div class="plus-price-row">
+                                    <div class="spec-plus-price"> <span class="plus-member-price-title">会员价：</span> <span class="price-icon black"></span> <span class="plus-member-price-text" id="specPlusPrice"></span> <img class="plus-pri-icon" src="" /> </div>
+                                </div>
+                            </div>
+                            <div class="spec-price" id="specJdPri" style="display: block"> <span class="yang-pic spec-yang-pic"> <img src="images/rmb.png" /> </span> <span id="spec_price"> 36.80 </span> </div>
+                            <div id="specWeightDiv" class="spec-weight"> <span>重量:</span> <span id="spec_weight">3.26kg</span> </div>
+                        </div>
+                        <div class="spec-menu-middle">
+                            <div class="prod-spec" id="prodSpecArea">
+                                <!-- 已选 -->
+                                <div class="prod-spec" id="prodSpecArea">
+                                    <!-- 已选 -->
+                                    <div class="spec-desc"> <span class="part-note-msg">已选</span>
+                                        <div id="specDetailInfo_spec" class="base-txt"> 白色 直袖款 &nbsp;&nbsp; <span class="amount">1</span>件 </div>
+                                    </div>
+                                    <div class="nature-container" id="natureCotainer">
+                                        <!--颜色 5.5版本之前的规格属性-->
+                                        <div class="pro-color"> <span class="part-note-msg"> 颜色 </span>
+                                            <p id="color"> <a title="白色 直袖款" class="a-item selected J_ping"   report-eventparam="白色 直袖款" >白色 直袖款</a> <a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a> <a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a> <a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a> <a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a> <a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a> </p>
+                                        </div>
+                                        <!--尺寸-->
+                                        <!--容量-->
+                                        <!--数量-->
+                                    </div>
+                                    <!--尺寸-->
+                                    <!--容量-->
+                                    <!--数量-->
+                                    <div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">数量</span>
+                                        <div style="width: 100%;margin-left: 10px;" class="num">
+                                            <p class="jian" style="float: left;margin-top: 5px;"><img src="images/jian.png" width="16" height="16"></p>
+                                            <input id="cool" class="inputBorder"  value="1" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')" type="text" maxlength="5" placeholder="数量" style="font-size: 12px;width: 60px;height: 20px;float: left;padding: 0 5px;margin-top:3px;margin-left: 5px;" />
+                                            <p class="jia" style="float: left;margin-top: 5px;margin-left:4px;"><img src="images/jia.png" width="16" height="16"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--延保start-->
+                            <div class="warranty-wrap bdr-t" style="display: none;">
+                                <div id="spec_yanbaoInfo" class="warranty-title"> 保障服务 </div>
+                                <div id="spec_yanbaoItems"> </div>
+                            </div>
+                            <!--延保end-->
+                        </div>
+                        <div class="flick-menu-btn spec-menu-btn"> <a class="yellow-color add_cart" id="add_cart_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">加入购物车</a> <a class="red-color directorder" id="directorder_spec" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">立即购买</a> <a class="yellow-color J_ping looksimilar looksimilara looksimilar_spec" id="looksimilar_speca" href=" " style="display: none;" report-eventid="MProductdetail_Similar" report-eventparam="W" report-eventlevel="5">查看相似</a>
+                            <!--大家电-查看同款-->
+                            <a class="yellow-color J_ping looksimilar looksimilarb looksimilar_spec" id="looksimilar_specb" href="" style="display: none;" report-eventid="MProductdetail_SameProduct" report-pageparam="" report-eventlevel="4">查看同款</a> <a class="red-color J_ping arrivalInform" id="arrivalInform_spec" style="display: none;" report-eventid="MProductdetail_ArrivalNotice" report-eventparam="2015246_W" report-eventlevel="5">到货通知</a> <a class="red-color disabled waitingForAppointments" style="display: none;" id="waitingForAppointments_spec">等待预约</a> <a class="red-color makeAppointments" style="display: none;" id="makeAppointments_spec">立即预约</a> <a class="red-color disabled waitingForBuying" style="display: none;" id="waitingForBuying_spec">等待抢购</a> <a class="red-color buyImmediately" style="display: none;" id="buyImmediately_spec">立即抢购</a> <a class="red-color disabled appointmentsEnd" style="display: none;" id="appointmentsEnd_spec">预约结束</a> <a class="red-color" style="display: none;" id="yushou_add_cart_spec">立即预定</a> </div>
+                    </div>
+                </div>
+                <!-- 弹出 0-->
+
+
+
+
+
+
+                <!-- 弹出层1 -->
+                <div class="flick-menu-mask" id="showboxmenu1" style=""></div>
+                <div class="spec-menu" id="showboxmenuspec1">
                     <div class="spec-menu-content spec-menu-show" style="display: block;">
                         <div class="spec-menu-top bdr-b">
                             <p style="font-size:19px;color: #83CCFC;">${uiLabel.YouHaoTiShi}</p>
@@ -159,6 +227,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                         </div>
                        </div>
                 </div>
+                <!-- 弹出层1 结束-->
                 <section id="s-actionBar-container">
                     <div id="s-actionbar" class="action-bar mui-flex align-center">
                         <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
@@ -242,8 +311,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
             flag =  true;
         }else{
 //            alert("2");
-            $(".flick-menu-mask").show();
-            $(".spec-menu").show();
+            $("#showboxmenu1").show();
+            $("#showboxmenuspec1").show();
             clearCookie("tarjeta");
             flag = false;
         }
@@ -350,8 +419,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
 
         $(".tclck").click(function () {
-            $(".flick-menu-mask").hide();
-            $(".spec-menu").hide();
+            $("#showboxmenu1").hide();
+            $("#showboxmenuspec1").hide();
         })
 
 

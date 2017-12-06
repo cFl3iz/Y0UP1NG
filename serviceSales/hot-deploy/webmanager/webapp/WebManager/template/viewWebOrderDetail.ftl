@@ -99,6 +99,9 @@
 
             <div class="m-cell">
                 <#list addressInfo as list>
+                    <#if list_index ==0 >
+
+
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
@@ -106,6 +109,7 @@
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
+                    </#if>
                 </#list>
             </div>
 

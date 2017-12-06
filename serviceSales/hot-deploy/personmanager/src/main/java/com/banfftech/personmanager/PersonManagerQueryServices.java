@@ -147,7 +147,9 @@ public class PersonManagerQueryServices {
                             .makeCondition("productId", EntityOperator.EQUALS,productId );
 
                     GenericValue  custProductRole = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"partyId",realPartyId).queryFirst();
+
                     String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
+
                     if(custProductRole!=null){
                         rowMap.put("productPartyRole",custProductRoleStr);
                     }
@@ -1416,7 +1418,7 @@ public class PersonManagerQueryServices {
         }
 
         //是否已经是产品的意向客户
-        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId",partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("productId",context.get("productId"),"partyId",partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
         //如果还不是,就给一个意向客户到产品
         if (!UtilValidate.isNotEmpty(productRole)) {
             dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", "PLACING_CUSTOMER"));

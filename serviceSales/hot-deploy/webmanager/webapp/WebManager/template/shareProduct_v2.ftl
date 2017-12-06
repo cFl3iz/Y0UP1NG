@@ -154,7 +154,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         <div class="spec-menu-top bdr-b">
                             <div class="spec-first-pic"> <img id="spec_image" src="" /> </div>
                             <a class="rt-close-btn-wrap spec-menu-close">
-                                <p class="flick-menu-close tclck"> <img src="images/close.png" width="24" height="24" /> </p>
+                                <p class="flick-menu-close tclck"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" width="24" height="24" /> </p>
                             </a>
                             <div id="specPlus" class="plus-price-wrap spec-plus-price-mtl" style="display: none">
                                 <div class="plus-price-row">
@@ -164,7 +164,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <div class="spec-plus-price"> <span class="plus-member-price-title">会员价：</span> <span class="price-icon black"></span> <span class="plus-member-price-text" id="specPlusPrice"></span> <img class="plus-pri-icon" src="" /> </div>
                                 </div>
                             </div>
-                            <div class="spec-price" id="specJdPri" style="display: block"> <span class="yang-pic spec-yang-pic"> <img src="images/rmb.png" /> </span> <span id="spec_price"> 36.80 </span> </div>
+                            <div class="spec-price" id="specJdPri" style="display: block"> <span class="yang-pic spec-yang-pic"></span> <span id="spec_price"> 36.80 </span> </div>
                             <div id="specWeightDiv" class="spec-weight"> <span>${uiLabel.Weight}:</span> <span id="spec_weight">3.26kg</span> </div>
                         </div>
                         <div class="spec-menu-middle">
@@ -196,9 +196,9 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <!--数量-->
                                     <div id="addCartNum" class="pro-count"> <span class="part-note-msg" style="margin-right: 10px;">${uiLabel.Amount}</span>
                                         <div style="width: 100%;margin-left: 10px;" class="num">
-                                            <p class="jian" style="float: left;margin-top: 5px;"><img src="images/jian.png" width="16" height="16"></p>
+                                            <p class="jian" style="float: left;margin-top: 5px;"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jian.png" width="16" height="16"></p>
                                             <input id="cool" class="inputBorder"  value="1" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')" type="text" maxlength="5" placeholder="数量" style="font-size: 12px;width: 60px;height: 20px;float: left;padding: 0 5px;margin-top:3px;margin-left: 5px;" />
-                                            <p class="jia" style="float: left;margin-top: 5px;margin-left:4px;"><img src="images/jia.png" width="16" height="16"></p>
+                                            <p class="jia" style="float: left;margin-top: 5px;margin-left:4px;"><img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/jia.png" width="16" height="16"></p>
                                         </div>
                                     </div>
                                 </div>

@@ -483,7 +483,7 @@ public class PersonManagerServices {
 
         String productId = (String) context.get("productId");
 
-        String roleTypeId = (String) context.get("realPartyId");
+        String roleTypeId = (String) context.get("roleTypeId");
 
         String text = (String) context.get("text");
 

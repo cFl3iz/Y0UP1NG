@@ -336,12 +336,25 @@ public class PlatformManagerQueryServices {
                 .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
 
 
-        EntityCondition findConditions3 = EntityCondition
+        EntityCondition findConditions3 = null;
+        EntityCondition findConditions4 = null;
+        if(UtilValidate.isNotEmpty(productId)){
+
+
+          findConditions3 = EntityCondition
                 .makeCondition(findConditionsPartyIdTo, EntityOperator.AND, objectIdCondition);
 
-        EntityCondition findConditions4 = EntityCondition
+          findConditions4 = EntityCondition
                 .makeCondition(findConditionsPartyIdFrom, EntityOperator.AND, objectIdCondition);
+        }else{
 
+             findConditions3 = EntityCondition
+                    .makeCondition(findConditionsPartyIdTo);
+
+              findConditions4 = EntityCondition
+                    .makeCondition(findConditionsPartyIdFrom);
+
+        }
         EntityCondition listConditions2 = EntityCondition
                 .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
 

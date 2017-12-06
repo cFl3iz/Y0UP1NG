@@ -152,7 +152,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                 <div class="spec-menu" id="showboxmenuspec2">
                     <div class="spec-menu-content spec-menu-show" style="display: block;">
                         <div class="spec-menu-top bdr-b">
-                            <div class="spec-first-pic"> <img id="spec_image" src="" /> </div>
+                            <div class="spec-first-pic"> <img id="spec_image" src="${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_500,h_500/quality,q_80" /> </div>
                             <a class="rt-close-btn-wrap spec-menu-close">
                                 <p class="flick-menu-close tclck"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" width="24" height="24" /> </p>
                             </a>

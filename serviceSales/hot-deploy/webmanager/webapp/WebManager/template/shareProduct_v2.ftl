@@ -433,6 +433,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         $(".tclck").click(function () {
             $("#showboxmenu1").hide();
             $("#showboxmenuspec1").hide();
+            $("#showboxmenu2").hide();
+            $("#showboxmenuspec2").hide();
         })
 
 

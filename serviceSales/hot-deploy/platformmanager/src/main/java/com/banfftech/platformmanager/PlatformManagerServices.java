@@ -141,6 +141,8 @@ public class PlatformManagerServices {
         String tarjeta       = (String) context.get("tarjeta");
         String messageInfo = (String) context.get("messageInfo");
 
+        String jumpUrl       = (String) context.get("jumpUrl");
+
         GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
 
 
@@ -170,7 +172,7 @@ public class PlatformManagerServices {
 //        System.out.println("*============================================================URL = " + url2);
         jsobj1.put("touser", openId);
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
-        jsobj1.put("url","www.vivafoo.com");
+        jsobj1.put("url",jumpUrl);
 //        jsobjminipro.put("appid","wx119831dae45a3f3f");
 //        jsobjminipro.put("pagepath","pages/index/");
 //        jsobj1.put("miniprogram",jsobjminipro);

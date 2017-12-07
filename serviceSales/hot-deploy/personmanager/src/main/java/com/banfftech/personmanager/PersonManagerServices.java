@@ -1220,6 +1220,37 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("messageInfo", "物流公司:" + name + "物流单号:" + code);
 
+
+            GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", orderCust.get("partyId"), "enabled", "Y").queryFirst();
+
+            String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+
+
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", toPartyUserLoginId);
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+
+
+
+
+
+
+
+
+
+            pushWeChatMessageInfoMap.put("jumpUrl","http://www.lyndonspace.com:3400/WebManager/control/myOrderDetail?orderId="+orderId+"&tarjeta="+signer.sign(claims));
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
@@ -3083,6 +3114,34 @@ public class PersonManagerServices {
             pushWeChatMessageInfoMap.put("openId", openId);
 
             pushWeChatMessageInfoMap.put("orderId", orderId);
+
+
+
+            String toPartyUserLoginId = (String) userLogin.get("userLoginId");
+
+
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", toPartyUserLoginId);
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+
+
+
+
+
+
+            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.lyndonspace.com:3400/WebManager/control/myOrder?tarjeta"+ signer.sign(claims));
 
             Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 

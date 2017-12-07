@@ -294,6 +294,8 @@ public class PersonManagerQueryServices {
                  String relation = (String) gv.get("partyRelationshipTypeId");
                  relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
             }
+        }else{
+            relationStr = "还没有更进一步的关系";
         }
 
         resultMap.put("orderList", orderList);

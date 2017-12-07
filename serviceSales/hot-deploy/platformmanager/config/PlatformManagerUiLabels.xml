@@ -96,4 +96,20 @@
         <value xml:lang="zh-TW">有意向</value>
     </property>
 
+
+    <property key="CUSTOMER_REL">
+        <value xml:lang="en">CUSTOMER_REL.</value>
+        <value xml:lang="zh">客户</value>
+        <value xml:lang="zh-TW">客户</value>
+    </property>
+
+
+    <property key="CONTACT_REL">
+        <value xml:lang="en">CONTACT_REL.</value>
+        <value xml:lang="zh">联系人</value>
+        <value xml:lang="zh-TW">联系人</value>
+    </property>
+
+
+
 </resource>

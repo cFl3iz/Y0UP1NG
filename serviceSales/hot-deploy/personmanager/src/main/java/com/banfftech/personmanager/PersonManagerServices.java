@@ -487,14 +487,13 @@ public class PersonManagerServices {
 
         String text = (String) context.get("text");
 
-        System.out.println("*spreadProduct:" + productId+"|roleTypeId:"+roleTypeId+"|text:"+text);
 
 
 
         List<GenericValue> partyList = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", roleTypeId).queryList();
 
 
-        System.out.println("*partyList:" +partyList);
+
 
         if (null != partyList && partyList.size() > 0) {
 

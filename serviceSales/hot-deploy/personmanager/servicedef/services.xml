@@ -387,7 +387,8 @@
                    optional="true"/>
         <attribute name="orderList" type="List" mode="OUT"
                    optional="true"/>
-
+        <attribute name="partyRelation" type="String" mode="OUT"
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

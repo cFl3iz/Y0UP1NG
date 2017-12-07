@@ -284,10 +284,20 @@ public class PersonManagerQueryServices {
             }
         }
 
+        String relationStr = "";
+
+        List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",partyId,"partyIdFrom",realPartyId).queryList();
+
+        if(partyRelationship!=null && partyRelationship.size()>0){
+            for(int index = 0 ; index < partyRelationship.size(); index++ ){
+                 GenericValue gv = partyRelationship.get(index);
+                 String relation = (String) gv.get("partyRelationshipTypeId");
+                 relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
+            }
+        }
 
         resultMap.put("orderList", orderList);
-
-
+        resultMap.put("partyRelation",relationStr);
         resultMap.put("queryConsumerInfoList",returnList);
 
         return resultMap;

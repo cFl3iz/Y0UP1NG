@@ -90,6 +90,7 @@ public class HttpUtil {
         headers = initialBasicHeader(HttpMethod.GET, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
         HttpClient httpClient = wrapClient(host);
+
         httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, getTimeout(connectTimeout));
 
         HttpGet get = new HttpGet(initUrl(host, path, querys));

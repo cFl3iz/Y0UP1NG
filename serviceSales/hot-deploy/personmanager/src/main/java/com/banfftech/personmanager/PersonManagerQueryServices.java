@@ -147,10 +147,8 @@ public class PersonManagerQueryServices {
                             .makeCondition("productId", EntityOperator.EQUALS,productId );
 
                     GenericValue  custProductRole = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"partyId",realPartyId).queryFirst();
-
-                    String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
-
                     if(custProductRole!=null){
+                    String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
                         rowMap.put("productPartyRole",custProductRoleStr);
                     }
 

@@ -59,6 +59,9 @@ public class WeChatMiniProgramServices {
 
         String code = (String) request.getParameter("code");
 
+
+
+
         String responseStr2 = sendGet(PeConstant.WECHAT_MINI_PROGRAM_SNS_PATH,
                 "appid=" + PeConstant.WECHAT_MINI_PROGRAM_APP_ID +
                         "&secret=" + PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID +

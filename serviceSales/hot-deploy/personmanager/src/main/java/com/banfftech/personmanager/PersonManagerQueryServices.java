@@ -286,7 +286,7 @@ public class PersonManagerQueryServices {
 
         String relationStr = "";
 
-        List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",partyId,"partyIdFrom",realPartyId).queryList();
+        List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",realPartyId,"partyIdFrom",partyId).queryList();
 
         if(partyRelationship!=null && partyRelationship.size()>0){
             for(int index = 0 ; index < partyRelationship.size(); index++ ){

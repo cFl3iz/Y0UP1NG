@@ -362,7 +362,12 @@
 //                    $('body').on('touchmove touchstart', function (event) {
 //                        event.preventDefault();
 //                    });
-
+                    $("#wenwen_text").click(
+                            function(){
+                                autoWidth;
+                                for_bottom();
+                            }
+                    );
                 }
         );
     </script>
@@ -397,7 +402,7 @@
     </div>
     <div class="wenwen_text left">
         <div class="write_box">
-            <input type="text" class="left" onKeyUp="keyup()" placeholder=""/>
+            <input type="text" id="wenwen_text" class="left" onKeyUp="keyup()" placeholder=""/>
         </div>
         <div class="circle-button" id="wenwen">
         ${uiLabel.clickOnSay}

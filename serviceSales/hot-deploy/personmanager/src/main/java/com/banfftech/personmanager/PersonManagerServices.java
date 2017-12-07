@@ -3141,7 +3141,7 @@ public class PersonManagerServices {
 
 
 
-            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.lyndonspace.com:3400/WebManager/control/myOrder?tarjeta"+ signer.sign(claims));
+            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.lyndonspace.com:3400/WebManager/control/myOrder?tarjeta="+ signer.sign(claims));
 
             Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 

@@ -68,6 +68,8 @@ public class WeChatMiniProgramServices {
 
         String unionid = (String) jsonMap2.get("unionid");
 
+        System.out.println("*MiniProgramm-jscode2session jsonMap2 = " + jsonMap2);
+        System.out.println("*unionid = " + unionid);
         request.setAttribute("unionid",unionid);
 
         return "success";

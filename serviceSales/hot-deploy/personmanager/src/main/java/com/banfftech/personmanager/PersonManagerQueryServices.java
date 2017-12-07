@@ -148,17 +148,18 @@ public class PersonManagerQueryServices {
 
                     GenericValue  custProductRole = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"partyId",realPartyId).queryFirst();
                     if(custProductRole!=null){
-                    String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
+                        String custProductRoleStr =  UtilProperties.getMessage(resourceUiLabels,custProductRole.get("roleTypeId") +"", locale);
                         rowMap.put("productPartyRole",custProductRoleStr);
+                        returnList.add(rowMap);
+                        GenericValue  isConfirm = EntityQuery.use(delegator).from("MessageLog").where("objectId",productId,"partyIdFrom",partyId,"partyIdTo",realPartyId,"badge", "CHECK","message", " 已收到您的货款! ").queryFirst();
+                        if(isConfirm!=null){
+                            rowMap.put("isConfirmPay","TRUE");
+                        }else{
+                            rowMap.put("isConfirmPay","FALSE");
+                        }
                     }
 
-                    returnList.add(rowMap);
-                    GenericValue  isConfirm = EntityQuery.use(delegator).from("MessageLog").where("objectId",productId,"partyIdFrom",partyId,"partyIdTo",realPartyId,"badge", "CHECK","message", " 已收到您的货款! ").queryFirst();
-                    if(isConfirm!=null){
-                        rowMap.put("isConfirmPay","TRUE");
-                    }else{
-                        rowMap.put("isConfirmPay","FALSE");
-                    }
+
                 }
             }
 
@@ -293,7 +294,7 @@ public class PersonManagerQueryServices {
                  relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
             }
         }else{
-            relationStr = "还没有更进一步的关系";
+            relationStr = "潜在客户";
         }
 
         resultMap.put("orderList", orderList);

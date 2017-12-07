@@ -189,6 +189,8 @@ public class JPushServices {
 
 		String badge_str    = (String) context.get("badge");
 
+		String productId    =   (String) context.get("productId");
+
 		int badge = Integer.parseInt(null == badge_str ?"1":badge_str);
 
 		String partyIdentificationTypeId = "JPUSH_IOS";
@@ -224,6 +226,11 @@ public class JPushServices {
 		//Map<String, String> extras = UtilGenerics.checkMap(context.get("extras"));
 		Map<String, String> extras = new HashMap<String, String>();
 		extras.put("objectId",objectId);
+		if(null != productId){
+			extras.put("productId",objectId);
+		}
+
+
 		if(null==extras){
 			extras =  new HashMap<String, String>();
 		}

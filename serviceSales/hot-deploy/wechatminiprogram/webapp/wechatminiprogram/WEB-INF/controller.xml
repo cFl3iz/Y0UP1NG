@@ -19,8 +19,9 @@
         <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
     </postprocessor>
     -->
+    <!-- 等域名解除封印,就换https -->
     <request-map uri="queryOrderListFromWeChat">
-        <security https="true" auth="false"/>
+        <security https="false" auth="false"/>
         <event type="service" invoke="queryOrderListFromWeChat"  />
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
@@ -29,7 +30,7 @@
 
 
     <request-map uri="jscode2session">
-        <security https="true" auth="false"/>
+        <security https="false" auth="false"/>
         <event type="java"
                path="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
                invoke="jscode2session"></event>

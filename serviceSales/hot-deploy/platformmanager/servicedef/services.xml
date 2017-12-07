@@ -165,7 +165,7 @@
         <attribute name="orderId" type="String" mode="IN" optional="true"/>
         <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="messageInfo" type="String" mode="IN" optional="true"/>
-
+        <attribute name="jumpUrl" type="String" mode="IN" optional="true"/>
 
         <attribute name="date" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

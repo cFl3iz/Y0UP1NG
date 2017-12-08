@@ -24,7 +24,7 @@
          {
              var tarjeta = $("#tarjeta").val();
              var payToParty = ${(resourceDetail.payToPartyId)!};
-             var productId = ${(resourceDetail.productId)!};
+             var productId = ${(productId)!};
              var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
              var productStoreId = ${(resourceDetail.productStoreId)!};
              var url = "placeResourceOrder";

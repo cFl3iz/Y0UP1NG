@@ -118,14 +118,15 @@
         </button>
         </div>
 
-        <form id="miniChatForm" action="miniChat" method="get">
-            <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
-            <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="10000"/>
-            <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
-            <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="longxi"/>
-            <input id="productId" name="productId" type="hidden" value="10000"/>
-        </form>
+
 
     </section>
 
 </section>
+<form id="miniChatForm" action="miniChat" method="get">
+    <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
+    <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="10000"/>
+    <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="http://placehold.it/42x42"/>
+    <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="longxi"/>
+    <input id="productId" name="productId" type="hidden" value="10000"/>
+</form>

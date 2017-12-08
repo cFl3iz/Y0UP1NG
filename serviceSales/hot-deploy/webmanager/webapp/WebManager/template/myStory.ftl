@@ -126,7 +126,7 @@
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="10000"/>
-    <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="http://placehold.it/42x42"/>
+    <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143900.jpg"/>
     <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="longxi"/>
     <input id="productId" name="productId" type="hidden" value="10000"/>
 </form>

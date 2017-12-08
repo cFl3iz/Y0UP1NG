@@ -3157,7 +3157,8 @@ public class PersonManagerServices {
         }
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
         //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色
-        if (UtilValidate.isNotEmpty(productRole)) {
+        if (productRole !=null && productRole.get("partyId")!=null) {
+            System.out.println("productRole="+productRole);
             GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
             dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
         }

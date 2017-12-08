@@ -385,4 +385,55 @@
         <value xml:lang="zh">保存成功</value>
         <value xml:lang="zh_CN">保存成功</value>
     </property>
+
+    <property key="TitleFont">
+        <value xml:lang="en">TitleFont</value>
+        <value xml:lang="zh">儿子与他的滑板车</value>
+        <value xml:lang="zh_CN">儿子与他的滑板车</value>
+    </property>
+
+
+    <property key="BodyFont">
+        <value xml:lang="en">BodyFont</value>
+        <value xml:lang="zh">帅克trikke儿童三轮滑板车使用全球三点曲面联动系统技术研发，不同于蛙式滑板车对孩子骨骼发育有损害，帅克儿童滑板车不需要腿部蛙式分合动作前进，依靠的是身体左右摇摆，重心改变获取动力，是一种全身运动，同时，良好的人车互动，也让孩子从中获得乐趣，从此喜爱上运动</value>
+        <value xml:lang="zh_CN">帅克trikke儿童三轮滑板车使用全球三点曲面联动系统技术研发，不同于蛙式滑板车对孩子骨骼发育有损害，帅克儿童滑板车不需要腿部蛙式分合动作前进，依靠的是身体左右摇摆，重心改变获取动力，是一种全身运动，同时，良好的人车互动，也让孩子从中获得乐趣，从此喜爱上运动</value>
+    </property>
+
+    <property key="Author">
+        <value xml:lang="en">Author</value>
+        <value xml:lang="zh">作者:金龙熙</value>
+        <value xml:lang="zh_CN">作者:金龙熙</value>
+    </property>
+
+    <property key="Content">
+        <value xml:lang="en">Content</value>
+        <value xml:lang="zh">儿子两岁生日的那一天，孩子妈给他买了一辆黑色的帅客牌滑板车作为礼物送，开始他不敢上，在妈妈的帮助下，壮着胆子双手扶住车把，试着把右脚踩到车板上，并用力地将左脚在地面上一蹬。但没想到，啪地一声他连人带车一起摔到了地上，我害怕极了，怕他摔到哪里，但没想到，他立马站了起来，扶起车子继续滑了起来。后来又摔了几跤，不过在绕喷泉周围骑了几圈以后，慢慢地可以很流畅的滑行了！</value>
+        <value xml:lang="zh_CN">儿子两岁生日的那一天，孩子妈给他买了一辆黑色的帅客牌滑板车作为礼物送，开始他不敢上，在妈妈的帮助下，壮着胆子双手扶住车把，试着把右脚踩到车板上，并用力地将左脚在地面上一蹬。但没想到，啪地一声他连人带车一起摔到了地上，我害怕极了，怕他摔到哪里，但没想到，他立马站了起来，扶起车子继续滑了起来。后来又摔了几跤，不过在绕喷泉周围骑了几圈以后，慢慢地可以很流畅的滑行了！</value>
+    </property>
+
+
+
+
+    <property key="Msg">
+        <value xml:lang="en">Msg</value>
+        <value xml:lang="zh">这辆车是漂洋过海从韩国运来的,国内没有销售,想要的联系我,让孩子奶奶回国时带给你!</value>
+        <value xml:lang="zh_CN">这辆车是漂洋过海从韩国运来的,国内没有销售,想要的联系我,让孩子奶奶回国时带给你!</value>
+    </property>
+
+
+    <property key="ContactMe">
+        <value xml:lang="en">ContactMe</value>
+        <value xml:lang="zh">联系我</value>
+        <value xml:lang="zh_CN">联系我</value>
+    </property>
+
+
+
+
+
+
+
+
+
+
 </resource>

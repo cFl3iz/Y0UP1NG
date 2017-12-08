@@ -352,6 +352,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         //验证是否订阅
 
         if(checkSubscribe() == true){
+
+
             $("#miniChatForm").submit();
         }
 

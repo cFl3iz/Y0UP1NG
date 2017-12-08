@@ -124,6 +124,31 @@
         </section>
     </screen>
 
+    <!-- myStory -->
+    <screen name="myStory">
+        <section>
+            <actions>
+                <!--<set field="productId" value="${parameters.productId}"/>-->
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <!-- 微信授权登录后的回调地址 -->
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=10000"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/myStory.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
 
     <!-- myOrderDetail -->
     <screen name="myOrderDetail">

@@ -31,6 +31,12 @@
         <security https="false" auth="false"/>
         <response name="success" type="view" value="myOrder"/>
     </request-map>
+
+    <request-map uri="myStory">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myStory"/>
+    </request-map>
+
     <request-map uri="myOrderDetail">
         <security https="false" auth="false"/>
         <response name="success" type="view" value="myOrderDetail"/>
@@ -179,6 +185,24 @@
     </request-map>
 
 
+
+    <request-map uri="accessWeChatFromBuyStory">
+        <security auth="false" https="false"/>
+        <event type="java" path="main.java.com.banfftech.webmanager.WebServices"
+               invoke="accessWeChatFromBuyStory"/>
+
+        <response name="success" type="request-redirect" value="myStory">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <!--<redirect-parameter name="subscribe" from="subscribe"/>-->
+            <!--<redirect-parameter name="productId" from="productId"/>-->
+        </response>
+
+        <response name="error" type="request-redirect" value="myStory">
+            <!--<redirect-parameter name="productId" from="productId"/>-->
+        </response>
+    </request-map>
+
+
     <!--<request-map uri="checkSubscribe">-->
     <!--<security auth="false" https="false"/>-->
     <!--<event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices"-->
@@ -217,6 +241,7 @@
     <!-- View Mappings myOrder-->
 
 
+    <view-map name="myStory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myStory"/>
     <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
     <view-map name="myOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrderDetail"/>
 

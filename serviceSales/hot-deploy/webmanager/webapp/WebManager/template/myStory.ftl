@@ -113,12 +113,18 @@
                 <strong  style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
             </span>
         </p>
-        <button type="button" onclick="location.href = 'miniChat?productId=10000&tarjeta=${tarjeta}&payToPartyFirstName=longxi&payToPartyHead=http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLbXh3vd3I57rnNWlwyhXk6TtWa7rP90lQbTP4zu4iaiboGq21996ftQLWY1zYxp1R49U5NZqnZ36Ww/0&payToPartyId=10000" class="btn-block btn-primary">
+        <button type="button" onclick="$('#miniChatForm').submit();" class="btn-block btn-primary">
             ${uiLabel.ContactMe}
         </button>
         </div>
 
-
+        <form id="miniChatForm" action="miniChat" method="get">
+            <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
+            <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="10000"/>
+            <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
+            <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="longxi"/>
+            <input id="productId" name="productId" type="hidden" value="10000"/>
+        </form>
 
     </section>
 

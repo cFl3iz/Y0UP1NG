@@ -68,7 +68,7 @@
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
-                    <a href="http://www.baidu.com">
+                    <a href="javascript:alert('儿子不卖')">
                         <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143854.jpg">
                     </a>
                 </div>
@@ -85,7 +85,7 @@
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
-                    <a href="http://www.baidu.com">
+                    <a href="javascript:alert('儿子不卖')">
                         <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143900.jpg">
                     </a>
                 </div>

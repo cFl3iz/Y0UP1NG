@@ -3155,7 +3155,7 @@ public class PersonManagerServices {
         if (partyId.equals(payToPartyId)) {
             return resultMap;
         }
-        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER","productId", productId).queryFirst();
         //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色
         if (productRole !=null && productRole.get("partyId")!=null) {
             System.out.println("productRole="+productRole);

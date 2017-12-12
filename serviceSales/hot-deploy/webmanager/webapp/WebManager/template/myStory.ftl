@@ -129,5 +129,5 @@
     <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="10000"/>
     <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/chat_img/1512722103158.png"/>
     <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="longxi"/>
-    <input id="productId" name="productId" type="hidden" value="10000"/>
+    <input id="productId" name="productId" type="hidden" value="${productId}"/>
 </form>

@@ -2345,6 +2345,9 @@ public class PersonManagerServices {
 
         BigDecimal quantityTotal = new BigDecimal("99999999");
 
+
+        String description   = (String) request.getParameter("description");
+
         if (!UtilValidate.isEmpty(quantityTotalStr)) {
             quantityTotal = new BigDecimal(quantityTotalStr);
         }
@@ -2371,7 +2374,9 @@ public class PersonManagerServices {
         createProductInMap.put("internalName", partyId + "_" + ctm);
         createProductInMap.put("productName", productName);
         createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
+        createProductInMap.put("description",description );
 
+        String productId = "";
 
         if (!UtilValidate.isEmpty(defaultImageUrl)) {
             createProductInMap.put("smallImageUrl", defaultImageUrl);
@@ -2386,7 +2391,7 @@ public class PersonManagerServices {
 
 
                 int itemSize = 0;
-
+                int index = 0;
 
                 // if(null!=items){
                 if (null != items) {
@@ -2401,7 +2406,7 @@ public class PersonManagerServices {
                         String fileName = item.getName();
 
 
-                        if (!UtilValidate.isEmpty(fileName)) {
+                        if (!UtilValidate.isEmpty(fileName) && index ==0) {
 
 
                             long tm = System.currentTimeMillis();
@@ -2413,9 +2418,26 @@ public class PersonManagerServices {
 
                                 createProductInMap.put("smallImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
                                 createProductInMap.put("detailImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                // Create Product
+                                Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+                                productId = (String) createProductOutMap.get("productId");
                             }
                         }
+                        if (!UtilValidate.isEmpty(fileName) && index > 0) {
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
 
+                            if (pictureKey != null && !pictureKey.equals("")) {
+
+
+                                    //创建产品内容和数据资源附图
+                                    createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+
+
+                            }
+                        }
+                        index++;
                     }
                 }
 
@@ -2430,9 +2452,7 @@ public class PersonManagerServices {
         }
 
 
-        // Create Product
-        Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
-        String productId = (String) createProductOutMap.get("productId");
+
 
 
         // Create Product Price

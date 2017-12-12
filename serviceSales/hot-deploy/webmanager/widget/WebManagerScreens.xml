@@ -133,6 +133,16 @@
                 <!-- 微信授权登录后的回调地址 -->
                 <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=10000"/>
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
+
+                <set field="productId" value="${parameters.productId}"/>
+
+                <service service-name="queryResourceDetail" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                </service>
+                <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
+
+                <set field="morePicture" value="${resourceDetail.morePicture}"/>
+
             </actions>
             <widgets>
                 <!-- MobileYDUICommonDecorator -->

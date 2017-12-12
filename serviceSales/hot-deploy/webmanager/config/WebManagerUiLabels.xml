@@ -416,8 +416,8 @@
 
     <property key="Msg">
         <value xml:lang="en">Msg</value>
-        <value xml:lang="zh">这辆车是漂洋过海从韩国运来的,国内没有销售,想要的联系我,让孩子奶奶回国时带给你!</value>
-        <value xml:lang="zh_CN">这辆车是漂洋过海从韩国运来的,国内没有销售,想要的联系我,让孩子奶奶回国时带给你!</value>
+        <value xml:lang="zh">为了更方便快捷的了解我的产品,请点击联系我!</value>
+        <value xml:lang="zh_CN">为了更方便快捷的了解我的产品,请点击联系我!</value>
     </property>
 
 

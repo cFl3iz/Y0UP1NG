@@ -27,7 +27,7 @@
             <div class="slider-wrapper">
                 <div class="slider-item">
                     <img style="height:425px;"
-                         src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143848.jpg">
+                         src="${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_500,h_500/quality,q_95">
 
                 </div>
 
@@ -38,14 +38,14 @@
         Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; font-size: medium; white-space:
         normal;"><br></p>
         <strong><span style="font-size: 24px; font-family: PingFangSC-Light, sans-serif;">
-        ${uiLabel.TitleFont}
+        ${(resourceDetail.productName?default('ProductName'))!}
         </span></strong>
 
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: " Helvetica Neue",
         Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; font-size: medium; white-space:
         normal;"><br></p>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
-            <span style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">${uiLabel.Author}</span>
+            <span style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">作者:${(resourceDetail.firstName?default('StoreName'))!}</span>
         </p>
         <hr/>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
@@ -57,19 +57,20 @@
     <#--Boy</strong> Item: Is Fashion Modern - Very Good</span></p>-->
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
             <span style="font-family: PingFangSC-Light, sans-serif;">
-            ${uiLabel.Content}
+            ${(resourceDetail.description)!}
             </span>
         </p>
 
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
 
+<#list morePicture as list>
 
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
                     <a href="javascript:alert('儿子不卖')">
-                        <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143854.jpg">
+                        <img src="${(list.drObjectInfo)!}?x-oss-process=image/resize,w_500,h_500/quality,q_95">
                     </a>
                 </div>
 
@@ -77,22 +78,22 @@
             <div class="slider-pagination"></div>
         </div>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
-            <br></p>
+        <br></p>
+
+</#list>
 
 
+        <#--<div class="m-slider">-->
+            <#--<div class="slider-wrapper">-->
+                <#--<div class="slider-item">-->
+                    <#--<a href="javascript:alert('儿子不卖')">-->
+                        <#--<img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143900.jpg">-->
+                    <#--</a>-->
+                <#--</div>-->
 
-
-        <div class="m-slider">
-            <div class="slider-wrapper">
-                <div class="slider-item">
-                    <a href="javascript:alert('儿子不卖')">
-                        <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143900.jpg">
-                    </a>
-                </div>
-
-            </div>
-            <div class="slider-pagination"></div>
-        </div>
+            <#--</div>-->
+            <#--<div class="slider-pagination"></div>-->
+        <#--</div>-->
 
 
 
@@ -113,7 +114,7 @@
                 <strong  style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
             </span>
         </p>
-        <button type="button" onclick="$('#miniChatForm').submit();" class="btn-block btn-primary">
+        <button type="button" onclick="$('#miniChatForm').submit();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
         </button>
         </div>

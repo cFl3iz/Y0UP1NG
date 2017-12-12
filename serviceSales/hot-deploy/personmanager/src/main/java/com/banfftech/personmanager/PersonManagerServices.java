@@ -2348,6 +2348,8 @@ public class PersonManagerServices {
 
         String description   = (String) request.getParameter("description");
 
+        System.out.println("*description = " + description);
+
         if (!UtilValidate.isEmpty(quantityTotalStr)) {
             quantityTotal = new BigDecimal(quantityTotalStr);
         }

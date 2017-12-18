@@ -80,7 +80,8 @@
 
 <script>
     function contactMe (){
-        var subscribe = $("#subscribe").val();
+       var flag = checkSubscribe();
+        alert("flag="+flag);
     }
 </script>
 

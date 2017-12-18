@@ -6,6 +6,24 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <script>
+
+    function checkSubscribe(){
+        var flag = false;
+        var subscribe = getCookie("subscribe");
+        alert("IN COOKIE subscribe = " + subscribe);
+        if(subscribe === "1" ){
+            flag =  true;
+        }else{
+            //alert("2");
+            $("#showboxmenu1").show();
+            $("#showboxmenuspec1").show();
+            clearCookie("tarjeta");
+            flag = false;
+        }
+        return flag;
+    }
+
+
     function getCookie(name) {
         var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
         if (arr = document.cookie.match(reg))

@@ -31,9 +31,10 @@
     .white_content {
         display: none;
         position: absolute;
-        top: 25%;
-        left: 10%;
-        width: 80%;
+        top: 35%;
+        /*bottom:0;*/
+        left: 7%;
+        width: 85%;
         height: 80%;
         border: 16px solid lightblue;
         background-color: white;
@@ -43,8 +44,8 @@
     .white_content_small {
         display: none;
         position: absolute;
-        /*top: 20%;*/
-        bottom:0;
+        top: 20%;
+
         left: 30%;
         width: 40%;
         height: 50%;
@@ -182,3 +183,5 @@
     <img id="showboxmenu1" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:100%;height:100%;" />
 </div>
 
+
+<input id="Button1" type="button" value="点击弹出层" onclick="ShowDiv('MyDiv','fade')" />

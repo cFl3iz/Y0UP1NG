@@ -1,4 +1,4 @@
-<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
+<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
 <style>
     hr {
         display: block;
@@ -31,10 +31,10 @@
     .white_content {
         display: none;
         position: absolute;
-        top: 35%;
+        top: 40%;
         /*bottom:0;*/
-        left: 7%;
-        width: 85%;
+        left: 10%;
+        width: 80%;
         height: 80%;
         border: 16px solid lightblue;
         background-color: white;

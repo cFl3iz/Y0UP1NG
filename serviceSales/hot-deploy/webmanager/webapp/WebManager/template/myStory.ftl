@@ -36,7 +36,7 @@
         left: 10%;
         width: 80%;
         height: 80%;
-        border: 16px solid lightblue;
+        border: 1px solid lightblue;
         background-color: white;
         z-index:1002;
         overflow: auto;
@@ -176,10 +176,10 @@
 <div id="fade" class="black_overlay">
 </div>
 <div id="MyDiv" class="white_content">
-    <div style="text-align: right; cursor: default; height: 40px;">
-        <span style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
+    <div style="text-align: right; cursor: default; height:17px;">
+        <span style="font-size: 11px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
     </div>
-    <span style="font-size:17px;font-family:PingFang;">${(uiLabel.YouHaoTiShi)!}</span>
+    <span style="font-size:12px;font-family:PingFang;">${(uiLabel.YouHaoTiShi)!}</span>
     <img id="showboxmenu1" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:100%;height:100%;" />
 </div>
 

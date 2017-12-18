@@ -43,7 +43,8 @@
     .white_content_small {
         display: none;
         position: absolute;
-        top: 20%;
+        /*top: 20%;*/
+        bottom:0;
         left: 30%;
         width: 40%;
         height: 50%;

@@ -82,6 +82,11 @@
     function contactMe (){
        var flag = checkSubscribe();
         alert("flag="+flag);
+        if(flag == true){
+            $("#miniChatForm").submit();
+        }else{
+            $("#showboxmenu1").show();
+        }
     }
 </script>
 
@@ -94,3 +99,4 @@
     <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
     <input id="productId" name="productId" type="hidden" value="${productId}"/>
 </form>
+<img style="display: none;" id="showboxmenu1" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:95%;height:100%;" />

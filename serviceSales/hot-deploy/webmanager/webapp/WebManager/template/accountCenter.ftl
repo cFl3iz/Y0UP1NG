@@ -14,9 +14,8 @@
         if(subscribe === "1" ){
             flag =  true;
         }else{
-            //alert("2");
-            $("#showboxmenu1").show();
-            $("#showboxmenuspec1").show();
+//           $("#showboxmenu1").show();
+            //清Cookie中的登录数据,以便用户再次访问时刷新是否订阅。
             clearCookie("tarjeta");
             flag = false;
         }

@@ -10,7 +10,7 @@
     function checkSubscribe(){
         var flag = false;
         var subscribe = getCookie("subscribe");
-        alert("IN COOKIE subscribe = " + subscribe);
+//        alert("IN COOKIE subscribe = " + subscribe);
         if(subscribe === "1" ){
             flag =  true;
         }else{

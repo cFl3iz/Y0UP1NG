@@ -1,4 +1,4 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 <style>
     hr {
         display: block;
@@ -30,9 +30,9 @@
     }
     .white_content {
         display: none;
-        position: absolute;
-        top: 40%;
-        /*bottom:0;*/
+        position:fixed;
+        /*top: 40%;*/
+        bottom:0;
         left: 10%;
         width: 80%;
         height: 80%;
@@ -184,4 +184,4 @@
 </div>
 
 
-<input id="Button1" type="button" value="点击弹出层" onclick="ShowDiv('MyDiv','fade')" />
+<#--<input id="Button1" type="button" value="点击弹出层" onclick="ShowDiv('MyDiv','fade')" />-->

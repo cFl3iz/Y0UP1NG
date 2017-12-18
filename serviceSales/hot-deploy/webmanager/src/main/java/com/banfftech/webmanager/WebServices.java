@@ -109,11 +109,11 @@ public class WebServices {
 
 
 
-//        request.setAttribute("productId",productId);
+        request.setAttribute("productId",productId);
 
         request.setAttribute("tarjeta",tarjeta);
 
-//        request.setAttribute("subscribe",subscribe);
+        request.setAttribute("subscribe",subscribe);
 
         return "success";
     }

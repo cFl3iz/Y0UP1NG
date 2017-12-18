@@ -11,26 +11,13 @@
     }
 </style>
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-
-<#--<header class="m-navbar">-->
-<#--<a href="../index.html" class="navbar-item"><i class="back-ico"></i></a>-->
-<#--<div class="navbar-center"><span class="navbar-title">Slider</span></div>-->
-<#--</header>-->
-
     <section class="g-scrollview">
-
-    <#--<aside class="demo-tip">-->
-    <#--<p>HAHA</p>-->
-    <#--</aside>-->
-
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
                     <img style="height:425px;"
                          src="${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_500,h_500/quality,q_95">
-
                 </div>
-
             </div>
             <div class="slider-pagination"></div>
         </div>
@@ -50,22 +37,15 @@
         <hr/>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
-
         <!-- Some Font -->
-    <#--<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">-->
-    <#--<span style="font-family: PingFangSC-Light, sans-serif;"><strong style="margin: 0px; padding: 0px;">Small-->
-    <#--Boy</strong> Item: Is Fashion Modern - Very Good</span></p>-->
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
             <span style="font-family: PingFangSC-Light, sans-serif;">
             ${(resourceDetail.description)!}
             </span>
         </p>
-
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
-
 <#list morePicture as list>
-
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
@@ -79,33 +59,10 @@
         </div>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
         <br></p>
-
 </#list>
-
-
-        <#--<div class="m-slider">-->
-            <#--<div class="slider-wrapper">-->
-                <#--<div class="slider-item">-->
-                    <#--<a href="javascript:alert('儿子不卖')">-->
-                        <#--<img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/TIM%E5%9B%BE%E7%89%8720171208143900.jpg">-->
-                    <#--</a>-->
-                <#--</div>-->
-
-            <#--</div>-->
-            <#--<div class="slider-pagination"></div>-->
-        <#--</div>-->
-
-
-
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
-
-
-
-
-
         <div style="border:1px solid #8C8C8C;padding:10px;">
-
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; max-width: 100%; min-height: 1em; text-align: justify; line-height: 1.75em; box-sizing: border-box !important; word-wrap: break-word !important;">
             <span style="margin: 0px; padding: 0px; font-size: 16px; font-family: PingFangSC-Light, sans-serif;"><em
                     style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><strong
@@ -114,16 +71,21 @@
                 <strong  style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
             </span>
         </p>
-        <button type="button" onclick="$('#miniChatForm').submit();" class="btn-block btn-warning">
+        <button type="button" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
         </button>
         </div>
-
-
-
     </section>
-
 </section>
+
+<script>
+    function contactMe (){
+        var subscribe = $("#subscribe").val();
+    }
+</script>
+
+<input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
+
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="${resourceDetail.payToPartyId}"/>

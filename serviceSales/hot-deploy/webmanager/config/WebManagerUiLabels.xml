@@ -276,10 +276,16 @@
 
     <property key="YouHaoTiShi">
         <value xml:lang="en">Please Scan The'qr'code。</value>
-        <value xml:lang="zh">请扫码关注,为给您更好的提供服务。</value>
-        <value xml:lang="zh_CN">请扫码关注,为给您更好的提供服务。</value>
+        <value xml:lang="zh">为给您提供后续服务,请先关注。</value>
+        <value xml:lang="zh_CN">为给您提供后续服务,请先关注。</value>
     </property>
 
+
+    <property key="CLOSE">
+        <value xml:lang="en">CLOSE。</value>
+        <value xml:lang="zh">关闭</value>
+        <value xml:lang="zh_CN">关闭</value>
+    </property>
 
     <property key="CheckAddress">
         <value xml:lang="en">Check Address</value>

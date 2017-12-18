@@ -9,7 +9,69 @@
         border-style: inset;
         border-width: 1px;
     }
+
+    .overhide {
+        overflow: hidden;
+    }
+
+
+    .black_overlay{
+        display: none;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index:1001;
+        -moz-opacity: 0.8;
+        opacity:.80;
+        filter: alpha(opacity=80);
+    }
+    .white_content {
+        display: none;
+        position: absolute;
+        top: 25%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
+        border: 16px solid lightblue;
+        background-color: white;
+        z-index:1002;
+        overflow: auto;
+    }
+    .white_content_small {
+        display: none;
+        position: absolute;
+        top: 20%;
+        left: 30%;
+        width: 40%;
+        height: 50%;
+        border: 16px solid lightblue;
+        background-color: white;
+        z-index:1002;
+        overflow: auto;
+    }
 </style>
+<script>
+    //弹出隐藏层
+    function ShowDiv(show_div,bg_div){
+        document.getElementById(show_div).style.display='block';
+        document.getElementById(bg_div).style.display='block' ;
+        var bgdiv = document.getElementById(bg_div);
+        bgdiv.style.width = document.body.scrollWidth;
+        // bgdiv.style.height = $(document).height();
+        $("#"+bg_div).height($(document).height());
+    };
+    //关闭弹出层
+    function CloseDiv(show_div,bg_div)
+    {
+        document.getElementById(show_div).style.display='none';
+        document.getElementById(bg_div).style.display='none';
+    };
+</script>
+
+
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <section class="g-scrollview">
         <div class="m-slider">
@@ -43,9 +105,10 @@
             ${(resourceDetail.description)!}
             </span>
         </p>
+
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
-<#list morePicture as list>
+    <#list morePicture as list>
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
@@ -58,45 +121,63 @@
             <div class="slider-pagination"></div>
         </div>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
-        <br></p>
-</#list>
+            <br></p>
+    </#list>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
+
         <div style="border:1px solid #8C8C8C;padding:10px;">
-        <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; max-width: 100%; min-height: 1em; text-align: justify; line-height: 1.75em; box-sizing: border-box !important; word-wrap: break-word !important;">
+            <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; max-width: 100%; min-height: 1em; text-align: justify; line-height: 1.75em; box-sizing: border-box !important; word-wrap: break-word !important;">
             <span style="margin: 0px; padding: 0px; font-size: 16px; font-family: PingFangSC-Light, sans-serif;"><em
                     style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><strong
                     style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
                     style="font-size: 16px; font-family: PingFangSC-Light, sans-serif; margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"> ${uiLabel.Msg}</span></strong></em>
-                <strong  style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
+                <strong style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
             </span>
-        </p>
-        <button type="button" onclick="contactMe();" class="btn-block btn-warning">
+            </p>
+            <button type="button" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
-        </button>
+            </button>
         </div>
     </section>
 </section>
 
+
 <script>
-    function contactMe (){
-       var flag = checkSubscribe();
-        alert("flag="+flag);
-        if(flag == true){
+
+
+    function contactMe() {
+        var flag = checkSubscribe();
+        alert("flag=" + flag);
+        if (flag == true) {
             $("#miniChatForm").submit();
-        }else{
-            $("#showboxmenu1").show();
+        } else {
+            ShowDiv('MyDiv','fade');
         }
+
     }
 </script>
 
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 
 <form id="miniChatForm" action="miniChat" method="get">
-    <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>
-    <input id="payToPartyId"  name="payToPartyId"  type="hidden" value="${resourceDetail.payToPartyId}"/>
-    <input id="payToPartyHead" name="payToPartyHead"  type="hidden" value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
-    <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
+    <input id="tarjeta" name="tarjeta" type="hidden" value="${(tarjeta)!}"/>
+    <input id="payToPartyId" name="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>
+    <input id="payToPartyHead" name="payToPartyHead" type="hidden"
+           value="${resourceDetail.headPortrait?default('http://placehold.it/42x42')}"/>
+    <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${(resourceDetail.firstName)!}"/>
     <input id="productId" name="productId" type="hidden" value="${productId}"/>
 </form>
-<img style="display: none;" id="showboxmenu1" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:95%;height:100%;" />
+
+
+<!--弹出层时背景层DIV-->
+<div id="fade" class="black_overlay">
+</div>
+<div id="MyDiv" class="white_content">
+    <div style="text-align: right; cursor: default; height: 40px;">
+        <span style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
+    </div>
+    <span style="font-size:17px;font-family:PingFang;">${(uiLabel.YouHaoTiShi)!}</span>
+    <img id="showboxmenu1" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/saomaguanzhu.jpg" style="background-repeat:no-repeat; width:100%;height:100%;" />
+</div>
+

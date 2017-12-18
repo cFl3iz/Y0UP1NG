@@ -361,19 +361,19 @@
 
 <script>
 
-    function doWxLogic(workEffortId) {
-
-        var openid = $("#openid").val();
-        var unionid = $("#unionid").val();
-        alert(openid);
-        if(null == openid || openid == ''){
-            var fromurl = "http://www.vivafoo.com/oauth2.php";
-            var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
-            location.href = url;
-        }
-
-
-    }
+//    function doWxLogic(workEffortId) {
+//
+//        var openid = $("#openid").val();
+//        var unionid = $("#unionid").val();
+//        alert(openid);
+//        if(null == openid || openid == ''){
+//            var fromurl = "http://www.vivafoo.com/oauth2.php";
+//            var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25118b98db9eb608&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
+//            location.href = url;
+//        }
+//
+//
+//    }
 
 </script>
 

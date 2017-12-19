@@ -41,6 +41,11 @@
     </request-map>
 
 
+
+
+
+
+
     <!-- query My OrdersDetail -->
     <request-map uri="queryMyOrdersDetail">
         <security https="false" auth="false"/>

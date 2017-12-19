@@ -16,5 +16,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
-    
+
+    <!-- query My Collect Product 我收藏 我关注的产品 -->
+    <service name="queryMyCollectProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyCollectProduct" auth="false">
+        <description>queryMyCollectProduct</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="collectList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
 </services>

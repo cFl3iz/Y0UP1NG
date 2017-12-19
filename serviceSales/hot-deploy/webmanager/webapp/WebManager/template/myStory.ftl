@@ -172,7 +172,7 @@
 </form>
 
 
-<!--弹出层时背景层DIV-->
+<!-- 弹出层时背景层 DIV -->
 <div id="fade" class="black_overlay">
 </div>
 <div id="MyDiv" class="white_content">

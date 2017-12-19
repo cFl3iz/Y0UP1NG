@@ -37,6 +37,52 @@ public class WeChatOrderQueryServices {
 
     public final static String module = WeChatOrderQueryServices.class.getName();
 
+
+    /**
+     * query MyCollect Product
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyCollectProduct(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+
+
+        String openId = (String) context.get("openId");
+
+        System.out.println("*OPENID = " + openId);
+
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+
+        String partyId = "NA";
+
+        if(UtilValidate.isNotEmpty(partyIdentification) ){
+            partyId = (String) partyIdentification.get("partyId");
+        }
+        System.out.println("*partyId = "+partyId);
+
+        List<GenericValue> partyMarkRoleList = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,"roleTypeId", "PLACING_CUSTOMER").queryList();
+
+        resultMap.put("collectList",partyMarkRoleList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
     /**
      * query Order FromWeChat
      * @param dctx

@@ -82,7 +82,7 @@ public class WeChatOrderQueryServices {
                 Map<String,Object> rowMap =  new HashMap<String, Object>();
 
                 GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
-
+                rowMap.put("partyId",partyId);
                 rowMap.put("productId",productId);
                 rowMap.put("internalName",product.get("internalName"));
                 rowMap.put("productName",product.get("productName"));

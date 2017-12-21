@@ -1531,7 +1531,6 @@ public class PersonManagerQueryServices {
         fieldSet.add("prodCatalogId");
         fieldSet.add("payToPartyId");
         fieldSet.add("description");
-        //    Map<String,Object> productMap = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst().getAllFields();
 
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("productId", productId));

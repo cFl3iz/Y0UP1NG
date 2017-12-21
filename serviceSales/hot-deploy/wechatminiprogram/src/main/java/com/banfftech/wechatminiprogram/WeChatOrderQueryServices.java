@@ -82,10 +82,56 @@ public class WeChatOrderQueryServices {
                 Map<String,Object> rowMap =  new HashMap<String, Object>();
 
                 GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
+
+                Set<String> fieldSet = new HashSet<String>();
+                fieldSet.add("productId");
+                fieldSet.add("payToPartyId");
+
+                EntityCondition findConditions = EntityCondition
+                        .makeCondition(UtilMisc.toMap("productId", productId));
+
+                GenericValue productDesc = delegator.findList("ProductAndCategoryMember",
+                        findConditions, fieldSet,
+                        null, null, false).get(0);
+                GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", productDesc.get("payToPartyId")), false);
+
+
+
+                List<GenericValue> contentsList =
+                        EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                                where("partyId", productDesc.get("payToPartyId"), "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+                GenericValue partyContent = null;
+                if(null != contentsList && contentsList.size()>0){
+                    partyContent = contentsList.get(0);
+                }
+
+                if (UtilValidate.isNotEmpty(partyContent)) {
+
+                    rowMap.put("headPortrait",
+                            partyContent.getString("objectInfo"));
+                } else {
+                    rowMap.put("headPortrait",
+                            "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+                }
+
+
+
+
+                rowMap.put("payToPartyId",productDesc.get("payToPartyId"));
+
+                rowMap.put("payToPartyName",person.get("firstName"));
+
                 rowMap.put("partyId",partyId);
+
                 rowMap.put("productId",productId);
+
                 rowMap.put("internalName",product.get("internalName"));
+
                 rowMap.put("productName",product.get("productName"));
+
                 rowMap.put("detailImageUrl",product.get("detailImageUrl"));
 
                 GenericValue productPrice =EntityQuery.use(delegator).from("ProductPrice").where("productId",productId).queryFirst();

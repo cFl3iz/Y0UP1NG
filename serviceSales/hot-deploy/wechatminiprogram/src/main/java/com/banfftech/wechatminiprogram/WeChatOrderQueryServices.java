@@ -37,6 +37,54 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
+
+
+
+
+
+    public static Map<String, Object> queryMyPostalAddress(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String openId = (String) context.get("openId");
+
+        System.out.println("*OPENID = " + openId);
+
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+        System.out.println("*partyId = " + partyId);
+
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("contactMechId");
+        fieldSet.add("partyId");
+        fieldSet.add("address1");
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+
+        //Query My Resource
+        List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
+                findConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
+
+        resultMap.put("postalAddress",queryAddressList);
+
+        return resultMap;
+    }
+
+
+
+
     /**
      * query MyCollect Product
      *

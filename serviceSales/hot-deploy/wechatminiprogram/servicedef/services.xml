@@ -30,4 +30,21 @@
                    optional="true" />
     </service>
 
+
+
+
+    <!-- queryPostalAddress -->
+    <service name="queryMyPostalAddress" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyPostalAddress" auth="false">
+        <description>queryMyPostalAddress</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="postalAddress" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
 </services>

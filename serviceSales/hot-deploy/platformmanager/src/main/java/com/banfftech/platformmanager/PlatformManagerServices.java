@@ -362,7 +362,7 @@ public class PlatformManagerServices {
         createMessageLogMap.put("partyIdTo",partyIdTo);
         createMessageLogMap.put("message",message);
         createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-
+        createMessageLogMap.put("messageLogTypeId", "TEXT");
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
         msg.create();
 

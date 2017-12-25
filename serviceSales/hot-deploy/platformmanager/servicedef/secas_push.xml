@@ -30,15 +30,15 @@
         <set field-name="message" env-name="message" />
         <action service="pushNotifOrMessage"  mode="async"/>
     </eca>
-    <eca service="sendAppAndWeChatMessage" event="return">
-        <set field-name="appType" env-name="appType"/>
-        <set field-name="deviceType" env-name="deviceType"/>
-        <set field-name="regId" env-name="regId"/>
-        <set field-name="sendType" value="one"/>
-        <set field-name="content" env-name="partyIdFrom" />
-        <set field-name="message" env-name="message" />
-        <action service="pushNotifOrMessage"  mode="async"/>
-    </eca>
+    <!--<eca service="sendAppAndWeChatMessage" event="return">-->
+        <!--<set field-name="appType" env-name="appType"/>-->
+        <!--<set field-name="deviceType" env-name="deviceType"/>-->
+        <!--<set field-name="regId" env-name="regId"/>-->
+        <!--<set field-name="sendType" value="one"/>-->
+        <!--<set field-name="content" env-name="partyIdFrom" />-->
+        <!--<set field-name="message" env-name="message" />-->
+        <!--<action service="pushNotifOrMessage"  mode="async"/>-->
+    <!--</eca>-->
 
     <!-- ############# About Biz End ############# -->
 

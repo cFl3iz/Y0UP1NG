@@ -527,6 +527,26 @@ public class PlatformManagerServices {
 
         }
 
+
+
+        // 不用Ecs 推送App
+        Map<String, Object> pushNotifOrMessageInfoMap = new HashMap<String, Object>();
+        pushNotifOrMessageInfoMap.put("message",message);
+        pushNotifOrMessageInfoMap.put("productId","10000");
+        pushNotifOrMessageInfoMap.put("content","");
+        pushNotifOrMessageInfoMap.put("deviceType",partyIdentificationTypeId);
+        pushNotifOrMessageInfoMap.put("objectId","10000");
+        pushNotifOrMessageInfoMap.put("regId",regId);
+//        pushNotifOrMessageInfoMap.put("sendType",sendType);
+
+
+        GenericValue userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId",partyIdFrom,"enabled","Y").queryFirst();
+
+        pushNotifOrMessageInfoMap.put("userLogin",userLogin);
+
+        dispatcher.runSync("pushNotifOrMessage",pushNotifOrMessageInfoMap);
+
+
         return result;
     }
 

@@ -151,12 +151,14 @@
 
     function contactMe() {
         var flag = checkSubscribe();
-        alert("flag=" + flag);
+//        alert("flag=" + flag);
         if (flag == true) {
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
-            location.href = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
+            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
+            alert(jumpurl);
+//            location.href = jumpurl
 
         } else {
             ShowDiv('MyDiv','fade');

@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.util.HttpHelper;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
@@ -514,9 +515,42 @@ public class PlatformLoginWorker {
 
 
         result.put("tarjeta", token);
-        result.put("partyId", (String) userLogin.get("partyId"));
+        String partyId =  (String) userLogin.get("partyId");
+        result.put("partyId",partyId);
 
 
+
+
+
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+
+        //去SpringBootMongoDB注册IM用户
+
+        List<GenericValue> contentsList =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+        GenericValue partyContent = null;
+        String avatar = "";
+        if (null != contentsList && contentsList.size() > 0) {
+            partyContent = contentsList.get(0);
+        }
+
+        if (UtilValidate.isNotEmpty(partyContent)) {
+
+            avatar = partyContent.getString("objectInfo");
+        } else {
+            avatar = "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png";
+
+        }
+
+        String registerUrl = "https://www.yo-pe.com/api/common/register";
+
+        String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatar);
+
+        System.out.println("*RegisterMongoDB-ImUser");
+        System.out.println("*response = " + response);
         return result;
     }
 

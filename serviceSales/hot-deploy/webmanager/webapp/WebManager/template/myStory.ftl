@@ -1,4 +1,5 @@
 <#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
+
 <style>
     hr {
         display: block;
@@ -184,4 +185,3 @@
 </div>
 
 
-<#--<input id="Button1" type="button" value="点击弹出层" onclick="ShowDiv('MyDiv','fade')" />-->

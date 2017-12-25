@@ -153,12 +153,12 @@
         var flag = checkSubscribe();
 //        alert("flag=" + flag);
         if (flag == true) {
-//            $("#miniChatForm").submit();
+            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
-            alert(jumpurl);
-            location.href = jumpurl;
+
+//            location.href = jumpurl;
 
         } else {
             ShowDiv('MyDiv','fade');

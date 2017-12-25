@@ -35,6 +35,16 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
+    <request-map uri="sendAppAndWeChatMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sendAppAndWeChatMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- Load Message -->
     <request-map uri="loadMessage">
         <security https="false" auth="false"/>

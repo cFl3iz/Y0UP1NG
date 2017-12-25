@@ -3,6 +3,7 @@ package main.java.com.banfftech.platformmanager;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import net.sf.json.JSONObject;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
@@ -377,6 +378,9 @@ public class PlatformManagerServices {
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
         List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+
+
         GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
         String regId = (String) partyIdentification.getString("idValue");
         String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
@@ -392,6 +396,137 @@ public class PlatformManagerServices {
         return result;
     }
 
+
+
+
+
+
+
+
+
+
+
+    /**
+     * sendAppAnd WeChatMessage
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> sendAppAndWeChatMessage(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        String partyIdFrom = (String) context.get("partyId");
+        String partyIdTo = (String) context.get("partyIdTo");
+        String message = (String) context.get("message");
+        String orderId = (String) context.get("orderId");
+
+
+
+
+
+        if(partyIdFrom.equals(partyIdTo)){
+//            //TODO IF EQUALS , PARTY ID TO  = CUSTOMER
+//            GenericValue orderMap = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId",orderId).queryFirst();
+//            partyIdTo = (String) orderMap.get("partyId");
+            return result;
+        }
+
+
+        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+
+        createMessageLogMap.put("partyIdFrom",partyIdFrom);
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+        createMessageLogMap.put("partyIdTo",partyIdTo);
+        createMessageLogMap.put("message",message);
+        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+        msg.create();
+
+
+
+
+        // 查询registrationID
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", partyIdTo);
+        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+
+        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+
+
+        GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+        String regId = (String) partyIdentification.getString("idValue");
+        String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+
+        result.put("regId", regId);
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
+        result.put("partyIdFrom",person.get("firstName") + ":"+message);
+        result.put("partyIdTo",partyIdFrom);
+        result.put("deviceType",partyIdentificationTypeId);
+
+        result.put("message","message:" + partyIdTo + ":" + partyIdFrom+":"+orderId+"");
+
+
+
+
+
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+
+            pushWeChatMessageInfoMap.put("message", message);
+
+            pushWeChatMessageInfoMap.put("userLogin", admin);
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("productId", "");
+
+            pushWeChatMessageInfoMap.put("payToPartyId", partyIdTo);
+
+            pushWeChatMessageInfoMap.put("url", "");
+
+            //推微信
+            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+
+        }
+
+        return result;
+    }
 
 
 

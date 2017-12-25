@@ -170,6 +170,10 @@
         <description>Query Resource Detail</description>
         <attribute name="productId" type="String" mode="IN"
                    optional="true"/>
+
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+
         <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
                    optional="true"/>
 

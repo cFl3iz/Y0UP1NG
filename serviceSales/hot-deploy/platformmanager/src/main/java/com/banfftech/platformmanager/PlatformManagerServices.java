@@ -537,7 +537,7 @@ public class PlatformManagerServices {
         pushNotifOrMessageInfoMap.put("deviceType",partyIdentificationTypeId);
         pushNotifOrMessageInfoMap.put("objectId","10000");
         pushNotifOrMessageInfoMap.put("regId",regId);
-//        pushNotifOrMessageInfoMap.put("sendType",sendType);
+         pushNotifOrMessageInfoMap.put("sendType","one");
 
 
         GenericValue userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId",partyIdFrom,"enabled","Y").queryFirst();

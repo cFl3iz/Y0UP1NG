@@ -402,6 +402,39 @@ public class PlatformLoginWorker {
         token = signer.sign(claims);
 
 
+
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+
+        //去SpringBootMongoDB注册IM用户
+
+        List<GenericValue> contentsList =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+        GenericValue partyContent = null;
+        String avatar = "";
+        if (null != contentsList && contentsList.size() > 0) {
+            partyContent = contentsList.get(0);
+        }
+
+        if (UtilValidate.isNotEmpty(partyContent)) {
+
+            avatar = partyContent.getString("objectInfo");
+        } else {
+            avatar = "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png";
+
+        }
+
+        String registerUrl = "https://www.yo-pe.com/api/common/register";
+
+        String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatar);
+
+        System.out.println("*RegisterMongoDB-ImUser");
+
+        System.out.println("*response = " + response);
+
+ 
         result.put("tarjeta", token);
         return result;
     }
@@ -550,7 +583,9 @@ public class PlatformLoginWorker {
         String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatar);
 
         System.out.println("*RegisterMongoDB-ImUser");
+
         System.out.println("*response = " + response);
+
         return result;
     }
 

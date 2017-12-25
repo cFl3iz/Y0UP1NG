@@ -1641,7 +1641,7 @@ public class PersonManagerQueryServices {
         resultMap.put("resourceDetail", resourceDetail);
 
 
-        resultMap.put("partyId", (String) userLogin.get("partyId"));
+//        resultMap.put("partyId", (String) userLogin.get("partyId"));
         return resultMap;
     }
 

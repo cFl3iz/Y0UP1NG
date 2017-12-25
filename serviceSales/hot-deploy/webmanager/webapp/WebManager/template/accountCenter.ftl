@@ -112,6 +112,7 @@
 //                    alert("setCookie = " + $("#tarjeta").val());
                     setCookie("subscribe",$("#subscribe").val());
                     setCookie("tarjeta",$("#tarjeta").val());
+                    setCookie("partyId",$("#partyId").val());
                     return true;
                 }else{
 //                   alert("132");
@@ -124,6 +125,10 @@
 //            alert("isRight = " + isRight);
             if(isRight){
                 $("#tarjeta").val(getCookie("tarjeta"));
+                var partyId = getCookie("partyId");
+
+                $("#partyId").val(partyId);
+
 //                alert("#tarjeta="+$("#tarjeta").val());
                 return true;
             }else{
@@ -164,6 +169,7 @@
 //               alert("user account validate");
 
                 var tarjeta = getCookie("tarjeta");
+
 //                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 

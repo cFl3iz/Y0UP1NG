@@ -115,7 +115,7 @@
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
-                    <a href="javascript:alert('儿子不卖')">
+                    <a href="javascript:alert('为您服务')">
                         <img src="${(list.drObjectInfo)!}?x-oss-process=image/resize,w_500,h_500/quality,q_95">
                     </a>
                 </div>

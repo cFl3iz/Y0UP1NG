@@ -4,7 +4,7 @@
 
 
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" />
+<#--<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" />-->
 <script>
 
     function checkSubscribe(){

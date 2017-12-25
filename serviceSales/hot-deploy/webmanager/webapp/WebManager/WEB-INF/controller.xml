@@ -195,10 +195,11 @@
             <redirect-parameter name="tarjeta" from="tarjeta"/>
             <redirect-parameter name="subscribe" from="subscribe"/>
             <redirect-parameter name="partyId" from="partyId"/>
+            <redirect-parameter name="productId" from="productId"/>
         </response>
 
         <response name="error" type="request-redirect" value="myStory">
-            <!--<redirect-parameter name="productId" from="productId"/>-->
+            <redirect-parameter name="productId" from="productId"/>
         </response>
     </request-map>
 

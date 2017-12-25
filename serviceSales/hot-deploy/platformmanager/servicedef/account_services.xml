@@ -53,6 +53,9 @@
         <description>weChatAppWebLogin</description>
         <attribute name="code" type="String" mode="IN" optional="true"/>
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+
         <attribute name="subscribe" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

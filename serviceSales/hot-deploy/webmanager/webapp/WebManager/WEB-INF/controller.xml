@@ -193,8 +193,8 @@
 
         <response name="success" type="request-redirect" value="myStory">
             <redirect-parameter name="tarjeta" from="tarjeta"/>
-            <!--<redirect-parameter name="subscribe" from="subscribe"/>-->
-            <!--<redirect-parameter name="productId" from="productId"/>-->
+            <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="partyId" from="partyId"/>
         </response>
 
         <response name="error" type="request-redirect" value="myStory">

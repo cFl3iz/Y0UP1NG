@@ -153,7 +153,11 @@
         var flag = checkSubscribe();
         alert("flag=" + flag);
         if (flag == true) {
-            $("#miniChatForm").submit();
+//            $("#miniChatForm").submit();
+            var payToPartyId = $("#payToPartyId").val();
+            var partyId      = $("#partyId").val();
+            location.href = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
+
         } else {
             ShowDiv('MyDiv','fade');
         }
@@ -163,6 +167,8 @@
 
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 
+<input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="hidden"/>
+<input id="partyId" name="partyId" value="${(partyId)!}" type="hidden"/>
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta" name="tarjeta" type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId" name="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>

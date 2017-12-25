@@ -107,9 +107,11 @@ public class WebServices {
 
         String subscribe = (String) loginServiceResultMap.get("subscribe");
 
-
+        String partyId   = (String) loginServiceResultMap.get("partyId");
 
         request.setAttribute("productId",productId);
+
+        request.setAttribute("partyId",partyId);
 
         request.setAttribute("tarjeta",tarjeta);
 

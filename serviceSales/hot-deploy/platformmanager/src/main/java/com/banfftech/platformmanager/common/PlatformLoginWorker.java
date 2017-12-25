@@ -434,7 +434,7 @@ public class PlatformLoginWorker {
 
         System.out.println("*response = " + response);
 
- 
+        result.put("partyId", partyId);
         result.put("tarjeta", token);
         return result;
     }

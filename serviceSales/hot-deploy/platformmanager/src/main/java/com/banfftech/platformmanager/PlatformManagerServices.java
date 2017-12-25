@@ -423,7 +423,7 @@ public class PlatformManagerServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
-        String partyIdFrom = (String) context.get("partyId");
+        String partyIdFrom = (String) context.get("partyIdFrom");
         String partyIdTo = (String) context.get("partyIdTo");
         String message = (String) context.get("message");
         String orderId = (String) context.get("orderId");

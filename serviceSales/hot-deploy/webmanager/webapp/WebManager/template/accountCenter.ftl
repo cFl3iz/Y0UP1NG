@@ -98,6 +98,8 @@
 
         var fromurl = $("#fromurl").val();
 
+
+
         if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
 
             tarjeta = $("#tarjeta").val();
@@ -165,7 +167,7 @@
                 //回调地址
                 var fromurl = $("#fromurl").val();
 
-//                alert(fromurl);
+                alert("onload from url = "+ fromurl);
 
 //               alert("user account validate");
 

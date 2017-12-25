@@ -168,7 +168,7 @@
 </script>
 
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
-
+<input id="fromurl" type="hidden" value="${fromurl}"/>
 <input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="hidden"/>
 <input id="partyId" name="partyId" value="${(partyId)!}" type="hidden"/>
 <form id="miniChatForm" action="miniChat" method="get">

@@ -177,6 +177,9 @@
         <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
                    optional="true"/>
 
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

@@ -1640,6 +1640,8 @@ public class PersonManagerQueryServices {
         resourceDetail.put("morePicture",pictures);
         resultMap.put("resourceDetail", resourceDetail);
 
+
+        resultMap.put("partyId", (String) userLogin.get("partyId"));
         return resultMap;
     }
 

@@ -1515,11 +1515,9 @@ public class PersonManagerQueryServices {
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-//        String userLoginPartyId = (String) userLogin.get("partyId");
-        if(null != userLogin){
-        System.out.println("*queryResourceDetail user login = " + userLogin);
-        }
+
         String productId = (String) context.get("productId");
+        resultMap.put("productId",productId);
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");

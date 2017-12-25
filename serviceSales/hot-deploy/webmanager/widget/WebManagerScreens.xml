@@ -141,10 +141,8 @@
 
                 <set field="partyId" value="${parameters.partyId}"/>
 
-
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
-                    <field-map field-name="tarjeta"/>
                 </service>
 
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>

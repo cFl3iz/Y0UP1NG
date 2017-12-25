@@ -157,8 +157,8 @@
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
-//            alert(jumpurl);
-//            location.href = jumpurl
+            alert(jumpurl);
+            location.href = jumpurl;
 
         } else {
             ShowDiv('MyDiv','fade');

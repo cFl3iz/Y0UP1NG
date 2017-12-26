@@ -1558,15 +1558,19 @@ public class PersonManagerServices {
 
 
         // 推微信
-
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
 
-
+        System.out.println("*partyIdentificationList:" +partyIdentificationList);
         if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
-            //从产品找到卖家
-            GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            pushWeChatMessageInfoMap = new HashMap<String, Object>();
 
 
+            pushWeChatMessageInfoMap.put("message", text);
+
+            pushWeChatMessageInfoMap.put("userLogin", admin);
 
             System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
 
@@ -1579,14 +1583,14 @@ public class PersonManagerServices {
             String pushDate = "" + formatter.format(date);
 
             pushWeChatMessageInfoMap.put("date", pushDate);
-            pushWeChatMessageInfoMap.put("message", text);
-            String openId = (String) partyIdentificationList.get(0).get("idValue");
 
             pushWeChatMessageInfoMap.put("openId", openId);
 
-            pushWeChatMessageInfoMap.put("productId", objectId);
+            pushWeChatMessageInfoMap.put("productId", "");
 
             pushWeChatMessageInfoMap.put("payToPartyId", partyIdTo);
+
+            pushWeChatMessageInfoMap.put("url", "http://www.lyndonspace.com:3400/WebManager/control/shareProduct?productId=" + productId);
 
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);

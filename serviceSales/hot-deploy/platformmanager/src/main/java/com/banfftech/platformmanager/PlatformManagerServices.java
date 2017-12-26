@@ -243,7 +243,7 @@ public class PlatformManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> result = ServiceUtil.returnSuccess();
-
+        System.out.println("*pushWeChatMessageInfo============================================================");
 
         String openId        = (String) context.get("openId");
         String productId     = (String) context.get("productId");

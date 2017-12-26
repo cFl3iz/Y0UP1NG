@@ -1557,6 +1557,40 @@ public class PersonManagerServices {
 //        }
 
 
+        // 推微信
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+            //从产品找到卖家
+            GenericValue payToParty = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+
+
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+            pushWeChatMessageInfoMap.put("message", text);
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("productId", objectId);
+
+            pushWeChatMessageInfoMap.put("payToPartyId", partyIdTo);
+
+            //推微信
+            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+        }
         return "success";
     }
 

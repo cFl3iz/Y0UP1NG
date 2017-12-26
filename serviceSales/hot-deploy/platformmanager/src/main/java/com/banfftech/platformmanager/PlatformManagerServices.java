@@ -287,7 +287,7 @@ public class PlatformManagerServices {
 
         JSONObject jsobjminipro = new JSONObject();
         jsobjminipro.put("appid","wx299644ef4c9afbde");
-        jsobjminipro.put("pagepath","pages/index/");
+        jsobjminipro.put("pagepath","pages/home/");
         jsobj1.put("miniprogram",jsobjminipro);
 
 

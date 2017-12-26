@@ -1590,7 +1590,7 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("payToPartyId", partyIdTo);
 
-            pushWeChatMessageInfoMap.put("url", "http://www.lyndonspace.com:3400/WebManager/control/shareProduct?productId=" + productId);
+            pushWeChatMessageInfoMap.put("url", "");
 
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);

@@ -148,6 +148,45 @@
 
 <script>
 
+    function markOrOutMark(markBoolean){
+
+        var tarjeta = $("#tarjeta").val();
+
+        var productId = $("#productId").val();
+
+
+
+//        alert(markBoolean);
+
+        var url = "markOrOutMarkProduct";
+
+        var param = {
+            productId:productId,
+            tarjeta:tarjeta,
+            markIt:markBoolean
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+                if(data.code === "200"){
+
+                }
+                if(data.code === "500"){
+                    alert("CODE:409 网络延迟,请刷新页面重试!");
+                }
+
+            },
+            error: function (data) {
+                alert("CODE:409 网络延迟,请刷新页面重试!");
+            }
+        });
+
+
+    }
+
 
     function contactMe() {
         var flag = checkSubscribe();
@@ -159,7 +198,16 @@
             var productId      = $("#productId").val();
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 
-             location.href = jumpurl;
+
+
+            var mark = $("#mark").val();
+            if(mark != null && mark.trim() !="" && mark==="true"){
+
+            }else{
+                markOrOutMark(true);
+            }
+
+            location.href = jumpurl;
 
         } else {
             ShowDiv('MyDiv','fade');
@@ -167,7 +215,7 @@
 
     }
 </script>
-
+<input id="mark" type="hidden" value="${(mark)!}"/>
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="hidden"/>

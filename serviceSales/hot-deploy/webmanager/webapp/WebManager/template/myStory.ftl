@@ -156,7 +156,8 @@
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
-            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId;
+            var productId      = $("#productId").val();
+            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 
              location.href = jumpurl;
 

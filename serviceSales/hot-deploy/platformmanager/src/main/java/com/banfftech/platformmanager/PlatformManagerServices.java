@@ -244,7 +244,7 @@ public class PlatformManagerServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> result = ServiceUtil.returnSuccess();
         System.out.println("*pushWeChatMessageInfo============================================================");
-
+        String partyIdFrom   = (String) context.get("partyIdFrom");
         String openId        = (String) context.get("openId");
         String productId     = (String) context.get("productId");
         String date     = (String) context.get("date");
@@ -283,7 +283,7 @@ public class PlatformManagerServices {
 
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
-//        jsobj1.put("url",url2);
+        jsobj1.put("url","https://www.yo-pe.com/pejump/"+partyIdFrom+"/"+partyIdFrom+"111"+"/"+payToPartyId+"/"+productId);
 
         JSONObject jsobjminipro = new JSONObject();
         jsobjminipro.put("appid","wx299644ef4c9afbde");

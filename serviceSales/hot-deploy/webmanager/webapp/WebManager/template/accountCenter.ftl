@@ -228,20 +228,20 @@
 //                        }
 //                    });
 
-
+                    var imgUrl = "${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_200,h_200/quality,q_70";
                     wx.onMenuShareAppMessage({
                         title: 'test', // 分享标题
                         desc: 'test', // 分享描述
                         link: 'www.baidu.com', // 分享链接
-                        imgUrl: '', // 分享图标
-                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        imgUrl:imgUrl, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
-                            alert("我们知道你给了谁");
+                            alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
 // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
-                            alert("万万没想到,你居然取消了分享!");
+                            alert("万万没想到,你居然取消了分享! 是不好意思了吗??");
 // 用户取消分享后执行的回调函数
                         }
                     });

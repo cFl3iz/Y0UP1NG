@@ -4,7 +4,11 @@
 
 
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<#--<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" />-->
+
+<!-- TODO FIX ME -->
+
+<#--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" />-->
+
 <script>
 
     function checkSubscribe(){
@@ -185,33 +189,35 @@
 
 
                 var link = location.href;
+                alert("link="+link);
                 // do wx js
-//                $.ajax({
-//                    url:"",//后台给你提供的接口
-//                    type:"GET",
-//                    data:{"url":link},
-//                    async:true,
-//                    dataType:"json",
-//                    success:function (data){
-//                        wx.config({
-//                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
-//                            appId: data.configMap.appId, // 必填，公众号的唯一标识
-//                            timestamp: data.configMap.timestamp, // 必填，生成签名的时间戳
-//                            nonceStr: data.configMap.nonceStr, // 必填，生成签名的随机串
-//                            signature: data.configMap.signature,// 必填，签名，见附录1
-//                            jsApiList: [
-//                                "onMenuShareTimeline",
-//                                "onMenuShareAppMessage"
-//                            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-//                        });
-//                        wx.error(function (res) {
-//                            alert(res);
-//                        });
-//                    },
-//                    error:function (error){
-//                        alert(error)
-//                    }
-//                });
+                $.ajax({
+                    url:"https://www.yo-pe.com/api/common/"+link+"/wxJsRegister",//后台给你提供的接口
+                    type:"GET",
+                    data:{},
+                    async:true,
+                    dataType:"json",
+                    success:function (data){
+                        alert("register success");
+                        wx.config({
+                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
+                            appId: data.appId, // 必填，公众号的唯一标识
+                            timestamp: data.timestamp, // 必填，生成签名的时间戳
+                            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                            signature: data.signature,// 必填，签名，见附录1
+                            jsApiList: [
+                                "onMenuShareTimeline",
+                                "onMenuShareAppMessage"
+                            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        });
+                        wx.error(function (res) {
+                            alert(res);
+                        });
+                    },
+                    error:function (error){
+                        alert(error)
+                    }
+                });
 
 
 

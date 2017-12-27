@@ -192,11 +192,9 @@
                 alert("onload="+link);
                 // do wx js
                 $.ajax({
-                    url:"https://www.yo-pe.com/api/common/"+"http://www.lyndonspace.com"+"/wxJsRegister",//后台给你提供的接口
+                    url:"http://www.yo-pe.com/api/common/"+"http://www.lyndonspace.com"+"/wxJsRegister",//后台给你提供的接口
                     type:"GET",
-                    data:{},
-                    async:true,
-                    dataType:"json",
+                    async:false,
                     success:function (data){
                         alert("register success");
                         wx.config({

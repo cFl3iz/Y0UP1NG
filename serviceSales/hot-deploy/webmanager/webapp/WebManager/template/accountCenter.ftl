@@ -192,6 +192,8 @@
                     url: url,
                     async: false,
                     data:ajaxData,
+                    dataType : "json",
+                    timeout : 50000, //超时时间：50秒
                     success: function (data) {
                         alert(data);
                         alert("register success");

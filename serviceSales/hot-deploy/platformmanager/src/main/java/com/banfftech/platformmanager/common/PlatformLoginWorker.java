@@ -186,6 +186,8 @@ public class PlatformLoginWorker {
                 request.setAttribute(TOKEN_KEY_ATTR, signer.sign(claims));
             }
                 request.setAttribute("validate","true");
+            //增加PartyId的返回
+                request.setAttribute("partyId",userLogin.get("partyId"));
         } else {
             Debug.logWarning("*Could not find userLogin for token: " + token, module);
             Debug.logWarning("*Claims User Is : " + claims.get("user"), module);

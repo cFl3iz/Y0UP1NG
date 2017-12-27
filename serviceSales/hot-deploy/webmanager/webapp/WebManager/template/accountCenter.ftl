@@ -63,11 +63,16 @@
             async: false,
             success: function (data) {
                 var validate = data.validate;
+                var partyId  = data.partyId;
 //               alert("validate result = " + validate);
 //                alert("validate="+validate);
                 if (validate === "true") {
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
+                    //将当前用户的partyId放到页面
+                    alert("partyId="+partyId);
+                    $("#partyId").val(partyId);
+
 //                    setCookie("tarjeta",tarjeta);
                     if (newTarjeta != null && newTarjeta.trim() != "") {
 //                        alert("setCookie = " + newTarjeta);
@@ -227,11 +232,14 @@
 //                            alert(JSON.stringify(res));
 //                        }
 //                    });
-                    alert("SPM=${(spm)!}");
+                    var partyId = $("#partyId").val();
+
+                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
+
                     wx.onMenuShareAppMessage({
                         title: '${(resourceDetail.productName?default('ProductName'))!}', // 分享标题
                         desc: '这是我的秘密...', // 分享描述
-                        link: 'https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},${(partyId)!}/${(payToPartyId)!}', // 分享链接
+                        link: linkUrl, // 分享链接
                         imgUrl:"${(resourceDetail.detailImageUrl)!}", // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空

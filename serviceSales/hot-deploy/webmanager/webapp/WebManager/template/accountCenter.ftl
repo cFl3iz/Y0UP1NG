@@ -165,13 +165,8 @@
                 //回调地址
                 var fromurl = $("#fromurl").val();
 
-//                alert("onload from url = "+ fromurl);
-
-//               alert("user account validate");
-
                 var tarjeta = getCookie("tarjeta");
 
-//                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 var link = location.href;
@@ -190,7 +185,7 @@
                     timeout: 50000, //超时时间：50秒
                     success: function (data) {
 //                        alert(JSON.stringify(data));
-                        alert("register success");
+//                        alert("register success");
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
                             appId: data.data.appId, // 必填，公众号的唯一标识
@@ -213,7 +208,7 @@
 
                 wx.ready(function () {
 
-                    alert("非常不容易,wx.ready认证成功了");
+//                    alert("非常不容易,wx.ready认证成功了");
 
                     //验证Tarjeta
 

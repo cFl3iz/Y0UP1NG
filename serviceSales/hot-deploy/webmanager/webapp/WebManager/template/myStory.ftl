@@ -76,7 +76,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    spm = ${(spm)!}
+    参与分享接龙的人:${(spm)!}
     <section class="g-scrollview">
         <div class="m-slider">
             <div class="slider-wrapper">

@@ -233,7 +233,7 @@
                     wx.onMenuShareAppMessage({
                         title: '${(resourceDetail.productName?default('ProductName'))!}', // 分享标题
                         desc: '这是我的秘密...', // 分享描述
-                        link: 'https://www.yo-pe.com/login', // 分享链接
+                        link: 'https://www.yo-pe.com/productjump/${(productId)!}/10000,10001/${(payToPartyId)!}', // 分享链接
                         imgUrl:"${(resourceDetail.detailImageUrl)!}", // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空

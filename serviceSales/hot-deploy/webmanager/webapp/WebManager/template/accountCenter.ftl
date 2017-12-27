@@ -229,9 +229,9 @@
 
                 //验证登录
 
-                if(!validateTarjeta(tarjeta)){
-                    weChatOauthLogin(fromurl);
-                }
+//                if(!validateTarjeta(tarjeta)){
+//                    weChatOauthLogin(fromurl);
+//                }
 
             }
 

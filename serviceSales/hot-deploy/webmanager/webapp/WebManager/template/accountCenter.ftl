@@ -189,10 +189,10 @@
 
 
                 var link = location.href;
-                alert("link="+link);
+                alert("onload="+link);
                 // do wx js
                 $.ajax({
-                    url:"https://www.yo-pe.com/api/common/"+link+"/wxJsRegister",//后台给你提供的接口
+                    url:"https://www.yo-pe.com/api/common/"+"http://www.lyndonspace.com"+"/wxJsRegister",//后台给你提供的接口
                     type:"GET",
                     data:{},
                     async:true,

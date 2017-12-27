@@ -232,7 +232,7 @@
                     wx.onMenuShareAppMessage({
                         title: 'test', // 分享标题
                         desc: 'test', // 分享描述
-                        link: 'www.baidu.com', // 分享链接
+                        link: 'https://www.yo-pe.com', // 分享链接
                         imgUrl:imgUrl, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空

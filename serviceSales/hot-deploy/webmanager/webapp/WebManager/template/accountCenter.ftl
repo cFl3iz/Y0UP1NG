@@ -222,10 +222,15 @@
 //                    }
 
                     wx.checkJsApi({
-                        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline']
-                        success: function(res) {
-                            alert("检测结果"+JSON.stringify(res));
-                        }});
+                        jsApiList: [
+                            'getLocation',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage'
+                        ],
+                        success: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
 
 
                     wx.onMenuShareAppMessage({

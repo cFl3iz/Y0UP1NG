@@ -146,6 +146,8 @@
 
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
+                    <field-map field-name="tarjeta"/>
+
                 </service>
 
                 <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>

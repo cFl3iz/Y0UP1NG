@@ -175,9 +175,9 @@
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 var link = location.href;
-                alert("onload=" + link);
+
                 var url = 'https://www.yo-pe.com/api/common/wxJsRegister';
-                alert("url =" + url);
+
                 var ajaxData = {
                     link: link
                 };
@@ -212,8 +212,14 @@
 
 
                 wx.ready(function () {
-                    alert("非常不容易,认证成功了");
 
+                    alert("非常不容易,wx.ready认证成功了");
+
+                    //验证登录
+
+                    if (!validateTarjeta(tarjeta)) {
+                        weChatOauthLogin(fromurl);
+                    }
 
                     wx.onMenuShareAppMessage({
                         title: 'test', // 分享标题
@@ -240,11 +246,7 @@
                 });
 
 
-                //验证登录
 
-                if (!validateTarjeta(tarjeta)) {
-                    weChatOauthLogin(fromurl);
-                }
 
             }
     );

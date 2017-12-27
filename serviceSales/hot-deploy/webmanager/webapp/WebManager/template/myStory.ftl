@@ -76,8 +76,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    partyId=${(queryResourceDetailpartyId)!}
-    tarjeta=${(tarjeta)!}
+    spm = ${(spm)!}
     <section class="g-scrollview">
         <div class="m-slider">
             <div class="slider-wrapper">

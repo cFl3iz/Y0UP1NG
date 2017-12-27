@@ -70,7 +70,7 @@
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
                     //将当前用户的partyId放到页面
-                    alert("partyId="+partyId);
+//                    alert("partyId="+partyId);
                     $("#partyId").val(partyId);
 
 //                    setCookie("tarjeta",tarjeta);

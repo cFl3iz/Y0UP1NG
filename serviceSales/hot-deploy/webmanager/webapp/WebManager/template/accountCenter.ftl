@@ -182,12 +182,15 @@
 
                 var link = location.href;
                 alert("onload="+link);
-                var url = 'http://www.yo-pe.com/api/common/'+link+'/wxJsRegister';
+                var url = 'http://www.yo-pe.com/api/common/wxJsRegister';
                 alert("url =" + url);
+                var ajaxData = {
+                    link:link
+                };
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: url,
-                    data: "",
+                    data:ajaxData,
                     success: function (data) {
                         alert(data);
                         alert("register success");

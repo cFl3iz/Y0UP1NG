@@ -233,7 +233,7 @@
 <!-- 弹出层时背景层 DIV -->
 <div id="fade" class="black_overlay">
 </div>
-<div id="MyDiv" class="white_content">
+<div id="MyDiv" style="display:none;" class="white_content">
     <div style="text-align: right; cursor: default; height:17px;">
         <span style="font-size: 11px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
     </div>

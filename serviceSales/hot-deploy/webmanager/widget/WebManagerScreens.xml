@@ -136,10 +136,13 @@
                 <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
                 <set field="productId" value="${parameters.productId}"/>
 
+                <set field="spm" value="${parameters.spm}"/>
 
                 <set field="payToPartyId" value="${parameters.payToPartyId}"/>
 
                 <set field="partyId" value="${parameters.partyId}"/>
+
+                <set field="spm" value="${spm},${partyId}"/>
 
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>

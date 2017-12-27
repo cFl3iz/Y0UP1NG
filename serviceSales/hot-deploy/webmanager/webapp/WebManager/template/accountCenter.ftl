@@ -187,7 +187,7 @@
 //                        alert(JSON.stringify(data));
 //                        alert("register success");
                         wx.config({
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
+                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
                             appId: data.data.appId, // 必填，公众号的唯一标识
                             timestamp: data.data.timestamp, // 必填，生成签名的时间戳
                             nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
@@ -237,9 +237,11 @@
                         type: 'link', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
+                            alert("我们知道你给了谁");
 // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
+                            alert("万万没想到,你居然取消了分享!");
 // 用户取消分享后执行的回调函数
                         }
                     });

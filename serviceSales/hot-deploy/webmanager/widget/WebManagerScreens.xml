@@ -148,6 +148,8 @@
                     <field-map field-name="productId"/>
                 </service>
 
+                <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>
+
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
 
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>

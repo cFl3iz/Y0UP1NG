@@ -229,6 +229,7 @@
 //                    });
 
                     var imgUrl = "${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/banner3.png'))!}?x-oss-process=image/resize,w_200,h_200/quality,q_70";
+                    alert(imgUrl);
                     wx.onMenuShareAppMessage({
                         title: 'test', // 分享标题
                         desc: 'test', // 分享描述

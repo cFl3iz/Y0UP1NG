@@ -207,9 +207,11 @@
 //                            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 //                        });
                     },
-                    error: function (data) {
-                        alert("ERROR :" + data.status);
-                    }
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status);
+                        alert(XMLHttpRequest.readyState);
+                        alert(textStatus);
+                   }
                 });
 
 

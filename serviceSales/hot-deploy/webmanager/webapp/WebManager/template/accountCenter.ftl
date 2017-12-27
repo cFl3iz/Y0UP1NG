@@ -180,9 +180,6 @@
 //                alert("in cookie tajeta = " + tarjeta);
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
-                if(!validateTarjeta(tarjeta)){
-                    weChatOauthLogin(fromurl);
-                }
 
 
 
@@ -218,7 +215,11 @@
                 });
 
 
-
+                //验证登录
+                alert("验证登录");
+                if(!validateTarjeta(tarjeta)){
+                    weChatOauthLogin(fromurl);
+                }
 
             }
 

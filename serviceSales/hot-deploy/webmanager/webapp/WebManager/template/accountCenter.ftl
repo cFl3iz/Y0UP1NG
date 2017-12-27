@@ -182,11 +182,11 @@
 
                 var link = location.href;
                 alert("onload="+link);
-                var url = "www.yo-pe.com/api/common/"+link+"/wxJsRegister";
+                var url = '<@ofbizUrl fullPath="true">http://www.yo-pe.com/api/common/'+link+'/wxJsRegister</@ofbizUrl>';
                 alert("url =" + url);
                 $.ajax({
                     type: 'GET',
-                    url:url ,
+                    url: url,
                     data: "",
                     success: function (data) {
                         alert(data);

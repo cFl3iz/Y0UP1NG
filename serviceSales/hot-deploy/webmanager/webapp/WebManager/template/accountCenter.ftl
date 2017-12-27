@@ -189,7 +189,7 @@
                     dataType: "json",
                     timeout: 50000, //超时时间：50秒
                     success: function (data) {
-                        alert(JSON.stringify(data));
+//                        alert(JSON.stringify(data));
                         alert("register success");
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
@@ -215,11 +215,20 @@
 
                     alert("非常不容易,wx.ready认证成功了");
 
-                    //验证登录
+                    //验证Tarjeta
 
-                    if (!validateTarjeta(tarjeta)) {
-                        weChatOauthLogin(fromurl);
-                    }
+//                    if (!validateTarjeta(tarjeta)) {
+//                        weChatOauthLogin(fromurl);
+//                    }
+
+                    wx.checkJsApi({
+                        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'] // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function(res) {
+// 以键值对的形式返回，可用的api值true，不可用为false
+// 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                            alert("检测结果"+JSON.stringify(res));
+                        });
+
 
                     wx.onMenuShareAppMessage({
                         title: 'test', // 分享标题

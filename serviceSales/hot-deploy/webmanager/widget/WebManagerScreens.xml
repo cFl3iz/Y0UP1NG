@@ -142,7 +142,7 @@
 
                 <set field="partyId" value="${parameters.partyId}"/>
 
-                <set field="spm" value="${spm},${partyId}"/>
+
 
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
@@ -153,6 +153,7 @@
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
                 <set field="mark" value="${resourceDetail.mark}"/>
+
 
             </actions>
             <widgets>

@@ -1,23 +1,20 @@
 <!-- 此后所有验证授权因用Tarjeta保存 -->
 
 
-
-
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <!-- TODO FIX ME -->
 
 
-
 <script>
 
-    function checkSubscribe(){
+    function checkSubscribe() {
         var flag = false;
         var subscribe = getCookie("subscribe");
 //        alert("IN COOKIE subscribe = " + subscribe);
-        if(subscribe === "1" ){
-            flag =  true;
-        }else{
+        if (subscribe === "1") {
+            flag = true;
+        } else {
 //           $("#showboxmenu1").show();
             //清Cookie中的登录数据,以便用户再次访问时刷新是否订阅。
             clearCookie("tarjeta");
@@ -35,28 +32,27 @@
             return null;
     }
 
-    function setCookie(name,value)
-    {
+    function setCookie(name, value) {
 //        alert("IN SET COOKIE NAME = " + name +"|value="+value);
         var Days = 30;
         var exp = new Date();
-        exp.setTime(exp.getTime() + Days*24*60*60*1000);
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 
-        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
     }
 
-    function weChatOauthLogin(fromurl){
-     //  alert("weChat Oauth Login");
+    function weChatOauthLogin(fromurl) {
+        //  alert("weChat Oauth Login");
 //        alert("fromurl =" + fromurl);
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         location.href = url;
     }
 
-    function validateTarjetaIsRight(tarjeta){
+    function validateTarjetaIsRight(tarjeta) {
 //        alert("validate tarjeta 2,tarjeta="+tarjeta);
         var url = "checkTarjeta";
         var param = {
-            tarjeta:tarjeta
+            tarjeta: tarjeta
         };
         var result = false;
 //       alert("result  = " + result);
@@ -64,23 +60,23 @@
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
                 var validate = data.validate;
 //               alert("validate result = " + validate);
 //                alert("validate="+validate);
-                if(validate === "true"){
+                if (validate === "true") {
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
 //                    setCookie("tarjeta",tarjeta);
-                    if(newTarjeta!=null && newTarjeta.trim()!=""){
+                    if (newTarjeta != null && newTarjeta.trim() != "") {
 //                        alert("setCookie = " + newTarjeta);
-                        setCookie("tarjeta",newTarjeta);
+                        setCookie("tarjeta", newTarjeta);
                         $("#tarjeta").val(newTarjeta);
                     }
                     result = true;
 
-                }else{
+                } else {
 //                   alert("return false");
                     clearCookie("tarjeta");
 //                   alert(" validate result over return false");
@@ -98,39 +94,38 @@
         return result;
     }
 
-    function validateTarjeta(tarjeta){
+    function validateTarjeta(tarjeta) {
 
         var fromurl = $("#fromurl").val();
 
 
-
-        if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
+        if (tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined") {
 
             tarjeta = $("#tarjeta").val();
 
 //           alert("#555tarjeta = " + tarjeta);
 
-            if(tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined" ){
+            if (tarjeta == null || tarjeta.trim() == "" || tarjeta == "undefined") {
                 //PageContext Empty
                 return false;
-            }else{
-                var isRight =  validateTarjetaIsRight(tarjeta);
-                if(isRight){
+            } else {
+                var isRight = validateTarjetaIsRight(tarjeta);
+                if (isRight) {
 //                    alert("setCookie = " + $("#tarjeta").val());
-                    setCookie("subscribe",$("#subscribe").val());
-                    setCookie("tarjeta",$("#tarjeta").val());
-                    setCookie("partyId",$("#partyId").val());
+                    setCookie("subscribe", $("#subscribe").val());
+                    setCookie("tarjeta", $("#tarjeta").val());
+                    setCookie("partyId", $("#partyId").val());
                     return true;
-                }else{
+                } else {
 //                   alert("132");
 
                     weChatOauthLogin(fromurl);
                 }
             }
-        }else{
-            var isRight =  validateTarjetaIsRight(tarjeta);
+        } else {
+            var isRight = validateTarjetaIsRight(tarjeta);
 //            alert("isRight = " + isRight);
-            if(isRight){
+            if (isRight) {
                 $("#tarjeta").val(getCookie("tarjeta"));
                 var partyId = getCookie("partyId");
 
@@ -138,7 +133,7 @@
 
 //                alert("#tarjeta="+$("#tarjeta").val());
                 return true;
-            }else{
+            } else {
 //               alert("254");
                 weChatOauthLogin(fromurl);
             }
@@ -150,14 +145,13 @@
 //        }
     }
 
-    function isEmpty(obj)
-    {
-        for (var name in obj)
-        {
+    function isEmpty(obj) {
+        for (var name in obj) {
             return false;
         }
         return true;
-    };
+    }
+    ;
 
     //清除cookie
     function clearCookie(name) {
@@ -165,8 +159,8 @@
     }
 
     $(
-            function(){
-               // clearCookie("tarjeta");
+            function () {
+                // clearCookie("tarjeta");
 
                 //回调地址
                 var fromurl = $("#fromurl").val();
@@ -181,19 +175,19 @@
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 var link = location.href;
-                alert("onload="+link);
+                alert("onload=" + link);
                 var url = 'https://www.yo-pe.com/api/common/wxJsRegister';
                 alert("url =" + url);
                 var ajaxData = {
-                    link:link
+                    link: link
                 };
                 $.ajax({
                     type: 'POST',
                     url: url,
                     async: false,
-                    data:ajaxData,
-                    dataType : "json",
-                    timeout : 50000, //超时时间：50秒
+                    data: ajaxData,
+                    dataType: "json",
+                    timeout: 50000, //超时时间：50秒
                     success: function (data) {
                         alert(JSON.stringify(data));
                         alert("register success");
@@ -213,37 +207,47 @@
                         alert(XMLHttpRequest.status);
                         alert(XMLHttpRequest.readyState);
                         alert(textStatus);
-                   }
+                    }
                 });
 
 
+                wx.ready(function () {
+                    alert("非常不容易,认证成功了");
 
-                // do wx js
-//                $.ajax({
-//                    url:"http://www.yo-pe.com/api/common/"+"http://www.lyndonspace.com"+"/wxJsRegister",//后台给你提供的接口
-//                    type:"GET",
-//                    async:false,
-//                    success:function (data){
-//
-//                        wx.error(function (res) {
-//                            alert(res);
-//                        });
-//                    },
-//                    error:function (error){
-//                        alert(error)
-//                    }
-//                });
+
+                    wx.onMenuShareAppMessage({
+                        title: 'test', // 分享标题
+                        desc: 'test', // 分享描述
+                        link: 'www.baidu.com', // 分享链接
+                        imgUrl: '', // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+// 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+// 用户取消分享后执行的回调函数
+                        }
+                    });
+
+
+                    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                });
+
+                wx.error(function (res) {
+// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                    alert("认证失败=" + res);
+                });
 
 
                 //验证登录
 
-//                if(!validateTarjeta(tarjeta)){
-//                    weChatOauthLogin(fromurl);
-//                }
+                if (!validateTarjeta(tarjeta)) {
+                    weChatOauthLogin(fromurl);
+                }
 
             }
-
     );
 </script>
 
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" />
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>

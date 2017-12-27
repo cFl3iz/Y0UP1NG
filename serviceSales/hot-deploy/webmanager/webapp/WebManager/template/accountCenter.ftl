@@ -227,7 +227,7 @@
 //                            alert(JSON.stringify(res));
 //                        }
 //                    });
-                    alert("SPM="+spm);
+                    alert("SPM=${(spm)!}");
                     wx.onMenuShareAppMessage({
                         title: '${(resourceDetail.productName?default('ProductName'))!}', // 分享标题
                         desc: '这是我的秘密...', // 分享描述

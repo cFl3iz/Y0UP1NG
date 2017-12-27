@@ -182,7 +182,7 @@
 
                 var link = location.href;
                 alert("onload="+link);
-                var url = 'http://www.yo-pe.com/api/common/wxJsRegister';
+                var url = 'https://www.yo-pe.com/api/common/wxJsRegister';
                 alert("url =" + url);
                 var ajaxData = {
                     link:link
@@ -190,6 +190,7 @@
                 $.ajax({
                     type: 'POST',
                     url: url,
+                    async: false,
                     data:ajaxData,
                     success: function (data) {
                         alert(data);

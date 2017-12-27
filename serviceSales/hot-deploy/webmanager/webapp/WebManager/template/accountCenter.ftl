@@ -182,7 +182,7 @@
 
                 var link = location.href;
                 alert("onload="+link);
-                var url = "<@ofbizUrl fullPath=true>http://www.yo-pe.com/api/common/"+link+"/wxJsRegister</@ofbizUrl>";
+                var url = "<@ofbizUrl fullPath='true' secure='false'>http://www.yo-pe.com/api/common/"+link+"/wxJsRegister</@ofbizUrl>";
                 alert("url =" + url);
                 $.ajax({
                     type: 'GET',
@@ -228,7 +228,7 @@
 
 
                 //验证登录
-                alert("验证登录");
+
                 if(!validateTarjeta(tarjeta)){
                     weChatOauthLogin(fromurl);
                 }

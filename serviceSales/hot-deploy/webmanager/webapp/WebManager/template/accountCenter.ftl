@@ -195,7 +195,7 @@
                     dataType : "json",
                     timeout : 50000, //超时时间：50秒
                     success: function (data) {
-                        alert(data);
+                        alert(JSON.stringify(data));
                         alert("register success");
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来

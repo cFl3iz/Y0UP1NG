@@ -192,6 +192,7 @@
     function contactMe() {
         var flag = checkSubscribe();
 //        alert("flag=" + flag);
+        alert(flag);
         if (flag == true) {
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();

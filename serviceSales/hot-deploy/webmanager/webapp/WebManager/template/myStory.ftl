@@ -213,7 +213,15 @@
             location.href = jumpurl;
 
         } else {
-            ShowDiv('MyDiv','fade');
+//            ShowDiv('MyDiv','fade');
+            alert("in false");
+            $("#MyDiv").show();
+            document.getElementById(show_div).style.display='block';
+            document.getElementById(bg_div).style.display='block' ;
+            var bgdiv = document.getElementById(bg_div);
+            bgdiv.style.width = document.body.scrollWidth;
+            // bgdiv.style.height = $(document).height();
+            $("#"+bg_div).height($(document).height());
         }
 
     }

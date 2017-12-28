@@ -1,4 +1,4 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 
 <style>
     hr {
@@ -213,15 +213,7 @@
             location.href = jumpurl;
 
         } else {
-//            ShowDiv('MyDiv','fade');
-            alert("in false");
-            $("#MyDiv").show();
-            document.getElementById(show_div).style.display='block';
-            document.getElementById(bg_div).style.display='block' ;
-            var bgdiv = document.getElementById(bg_div);
-            bgdiv.style.width = document.body.scrollWidth;
-            // bgdiv.style.height = $(document).height();
-            $("#"+bg_div).height($(document).height());
+            ShowDiv('MyDiv','fade');
         }
 
     }
@@ -244,7 +236,7 @@
 <!-- 弹出层时背景层 DIV -->
 <div id="fade" class="black_overlay">
 </div>
-<div id="MyDiv" style="display:none;" class="white_content">
+<div id="MyDiv"  class="white_content">
     <div style="text-align: right; cursor: default; height:17px;">
         <span style="font-size: 11px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
     </div>

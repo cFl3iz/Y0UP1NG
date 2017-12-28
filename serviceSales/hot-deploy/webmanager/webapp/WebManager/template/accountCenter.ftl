@@ -231,9 +231,9 @@
 
                     //验证Tarjeta
 
-//                    if (!validateTarjeta(tarjeta)) {
-//                        weChatOauthLogin(fromurl);
-//                    }
+                    if (!validateTarjeta(tarjeta)) {
+                        weChatOauthLogin(fromurl);
+                    }
 
                     //验证是否可用
 //                    wx.checkJsApi({

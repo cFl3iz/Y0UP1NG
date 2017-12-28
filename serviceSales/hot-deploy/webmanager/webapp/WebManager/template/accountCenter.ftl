@@ -186,6 +186,15 @@
 
                 var tarjeta = getCookie("tarjeta");
 
+
+                //验证Tarjeta
+
+                if (!validateTarjeta(tarjeta)) {
+                    weChatOauthLogin(fromurl);
+                }
+
+
+
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
 
                 var link = location.href;
@@ -229,11 +238,7 @@
 
 //                    alert("非常不容易,wx.ready认证成功了");
 
-                    //验证Tarjeta
 
-                    if (!validateTarjeta(tarjeta)) {
-                        weChatOauthLogin(fromurl);
-                    }
 
                     //验证是否可用
 //                    wx.checkJsApi({

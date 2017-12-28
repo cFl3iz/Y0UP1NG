@@ -37,8 +37,123 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
+    /**
+     * Query My Product
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyProduct(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String openId = (String) context.get("openId");
+
+        System.out.println("*OPENID = " + openId);
+
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+        System.out.println("*partyId = " + partyId);
+
+        String productCategoryId = "NA";
+
+        List<GenericValue> myResourceList = null;
+
+        List<Map<String,Object>> resourceMapList = new ArrayList<Map<String, Object>>();
+
+        //查我的目录
+        GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+
+        EntityFindOptions findOptions = new EntityFindOptions();
+//        findOptions.setFetchSize(0);
+//        findOptions.setMaxRows(4);
+        //Select Fields
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("productId");
+        fieldSet.add("description");
+        fieldSet.add("productStoreId");
+        fieldSet.add("productName");
+        fieldSet.add("detailImageUrl");
+        fieldSet.add("createdDate");
+        fieldSet.add("price");
+        fieldSet.add("productCategoryId");
+        fieldSet.add("payToPartyId");
+
+        if (rodCatalogRole != null) {
+            String prodCatalogId = (String) rodCatalogRole.get("prodCatalogId");
+            //根据目录拿关联的分类Id
+            GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId, "prodCatalogCategoryTypeId", "PCCT_PURCH_ALLW").queryFirst();
+            //得到分类Id
+            productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+            //findConditions
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
 
 
+
+            EntityConditionList<EntityCondition> listConditions = EntityCondition
+                    .makeCondition(findConditions, findConditions2);
+
+            //Query My Resource
+            myResourceList = delegator.findList("ProductAndCategoryMember",
+                    listConditions, fieldSet,
+                    UtilMisc.toList("-createdDate"), findOptions, false);
+
+            if(null != myResourceList && myResourceList.size()>0){
+                for(GenericValue gv :myResourceList){
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                    rowMap.put("productName",(String)gv.get("productName"));
+                    rowMap.put("productId",(String)gv.get("productId"));
+                    rowMap.put("productStoreId",(String)gv.get("productStoreId"));
+                    rowMap.put("detailImageUrl",(String)gv.get("detailImageUrl"));
+                    rowMap.put("createdDate",gv.get("createdDate"));
+                    rowMap.put("price",gv.get("price"));
+                    rowMap.put("productCategoryId",(String)gv.get("productCategoryId"));
+                    rowMap.put("payToPartyId",(String)gv.get("payToPartyId"));
+                    rowMap.put("description",(String)gv.get("description"));
+
+
+                    fieldSet = new HashSet<String>();
+                    fieldSet.add("drObjectInfo");
+                    fieldSet.add("productId");
+                    EntityCondition findConditions3 = EntityCondition
+                            .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
+                    List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                            findConditions3, fieldSet,
+                            null, null, false);
+                    rowMap.put("morePicture",pictures);
+
+                    resourceMapList.add(rowMap);
+                }
+            }
+
+
+            //  ProductContentAndInfo
+            //EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productCategoryId",productCategoryId).queryList();
+        }
+
+
+        resultMap.put("productList", resourceMapList);
+//        resultMap.put("productCategoryId", productCategoryId);
+
+
+        return resultMap;
+    }
 
 
 

@@ -59,6 +59,7 @@
 <script>
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
+        $("#MyDiv").show();
         document.getElementById(show_div).style.display='block';
         document.getElementById(bg_div).style.display='block' ;
         var bgdiv = document.getElementById(bg_div);
@@ -192,7 +193,7 @@
     function contactMe() {
         var flag = checkSubscribe();
 //        alert("flag=" + flag);
-        alert(flag);
+        alert("是否订阅==" + flag);
         if (flag == true) {
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();

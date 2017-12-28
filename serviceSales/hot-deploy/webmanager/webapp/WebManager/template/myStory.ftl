@@ -1,5 +1,5 @@
 <#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
-<head>
+
 <style>
     hr {
         display: block;
@@ -17,30 +17,10 @@
 
 
     .black_overlay{
-        display: none;
-        position: absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        z-index:1001;
-        -moz-opacity: 0.8;
-        opacity:.80;
-        filter: alpha(opacity=80);
+
     }
     .white_content {
-        display: none;
-        position:fixed;
-        /*top: 40%;*/
-        bottom:0;
-        left: 10%;
-        width: 80%;
-        height: 80%;
-        border: 1px solid lightblue;
-        background-color: white;
-        z-index:1002;
-        overflow: auto;
+
     }
     .white_content_small {
         display: none;
@@ -56,7 +36,7 @@
         overflow: auto;
     }
 </style>
-</head>
+
 <script>
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
@@ -234,9 +214,9 @@
 
 
 <!-- 弹出层时背景层 DIV -->
-<div id="fade" class="black_overlay">
+<div id="fade" class="display: none;position: absolute;top: 0%;left: 0%;width: 100%;height: 100%;background-color: black;z-index:1001;-moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);">
 </div>
-<div id="MyDiv"  class="white_content">
+<div id="MyDiv"  class="display: none;position:fixed;bottom:0;left: 10%;width: 80%;height: 80%;border: 1px solid lightblue;background-color: white;z-index:1002;overflow: auto;">
     <div style="text-align: right; cursor: default; height:17px;">
         <span style="font-size: 11px;" onclick="CloseDiv('MyDiv','fade')">${(uiLabel.CLOSE)!}</span>
     </div>

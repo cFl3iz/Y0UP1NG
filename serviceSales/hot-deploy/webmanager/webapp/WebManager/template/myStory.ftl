@@ -1,5 +1,5 @@
 <#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
-
+<head>
 <style>
     hr {
         display: block;
@@ -56,10 +56,10 @@
         overflow: auto;
     }
 </style>
+</head>
 <script>
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
-        $("#MyDiv").show();
         document.getElementById(show_div).style.display='block';
         document.getElementById(bg_div).style.display='block' ;
         var bgdiv = document.getElementById(bg_div);

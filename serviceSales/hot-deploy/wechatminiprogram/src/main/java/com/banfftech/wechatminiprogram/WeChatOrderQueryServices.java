@@ -54,17 +54,17 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        String openId = (String) context.get("openId");
+        String partyId = (String) context.get("partyId");
 
-        System.out.println("*OPENID = " + openId);
-
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
-
-        String partyId = "NA";
-
-        if (UtilValidate.isNotEmpty(partyIdentification)) {
-            partyId = (String) partyIdentification.get("partyId");
-        }
+//        System.out.println("*OPENID = " + openId);
+//
+//        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+//
+//        String partyId = "NA";
+//
+//        if (UtilValidate.isNotEmpty(partyIdentification)) {
+//            partyId = (String) partyIdentification.get("partyId");
+//        }
         System.out.println("*partyId = " + partyId);
 
         String productCategoryId = "NA";

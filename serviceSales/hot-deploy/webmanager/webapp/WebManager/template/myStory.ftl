@@ -57,7 +57,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    参与分享接龙的人:${(spm)!}
+    shares:${(spm)!}
     <section class="g-scrollview">
         <div class="m-slider">
             <div class="slider-wrapper">
@@ -179,7 +179,8 @@
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
-            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
+            var spm            = $("#spm").val();
+            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
 
 
 
@@ -198,6 +199,9 @@
 
     }
 </script>
+
+<input id="spm" type="hidden" value="${(spm)!}" />
+
 <input id="mark" type="hidden" value="${(mark)!}"/>
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 <input id="fromurl" type="hidden" value="${fromurl}"/>

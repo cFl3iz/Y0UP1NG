@@ -6,7 +6,7 @@
 </style>
 <script>
      function buyProductModel(){
-         alert("s");
+//         alert("s");
          $("#showboxmenu2").show();
          $("#showboxmenuspec2").show();
      }
@@ -515,6 +515,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 </script>
 
 
+<input id="spm" name="spm" value="${(spm)!}" type="hidden"/>
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta"  name="tarjeta"  type="hidden" value="${(tarjeta)!}"/>

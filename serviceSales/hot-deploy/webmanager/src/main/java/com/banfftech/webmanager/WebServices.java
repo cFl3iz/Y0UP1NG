@@ -145,6 +145,8 @@ public class WebServices {
 
         String productId = (String) request.getParameter("productId");
 
+        String spm      = (String) request.getParameter("spm");
+
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         Map<String,Object> loginServiceResultMap = dispatcher.runSync("weChatAppWebLogin",
@@ -171,7 +173,23 @@ public class WebServices {
         request.setAttribute("productId",productId);
 
         request.setAttribute("tarjeta",tarjeta);
+
         request.setAttribute("subscribe",subscribe);
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPM = " +spm +" spmlength =" + spm.length());
+
+        if(null != spm && spm.length()>=5){
+            String sharePartyId  = spm.substring(1,5);
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sharePartyId = " +sharePartyId);
+            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",sharePartyId),false);
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> firstName = " +person.get("firstName"));
+            request.setAttribute("spm",person.get("firstName"));
+        }else{
+            request.setAttribute("spm",spm);
+        }
+
+
+
 
         return "success";
     }

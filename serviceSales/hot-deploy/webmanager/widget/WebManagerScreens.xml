@@ -131,12 +131,14 @@
                 <set field="productId" value="${parameters.productId}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
                 <!-- 微信授权登录后的回调地址 -->
-                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}"/>
+
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
                 <set field="productId" value="${parameters.productId}"/>
 
                 <set field="spm" value="${parameters.spm}"/>
+
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${(spm)!}"/>
 
                 <set field="payToPartyId" value="${parameters.payToPartyId}"/>
 

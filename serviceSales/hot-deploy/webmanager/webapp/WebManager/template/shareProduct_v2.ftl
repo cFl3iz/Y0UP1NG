@@ -6,6 +6,7 @@
 </style>
 <script>
      function buyProductModel(){
+         alert("s");
          $("#showboxmenu2").show();
          $("#showboxmenuspec2").show();
      }

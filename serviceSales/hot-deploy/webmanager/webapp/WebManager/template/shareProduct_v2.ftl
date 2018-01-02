@@ -4,7 +4,68 @@
         color:#000000;
     }
 </style>
+<script>
+     function buyProductModel(){
+         alert("s");
+         $("#showboxmenu2").show();
+         $("#showboxmenuspec2").show();
+     }
 
+     function buyProduct(){
+
+
+
+         var amount = $("#cool").val();
+
+         var confirmMessage = $("#confirmMessage").val();
+
+         var a=confirm(confirmMessage);
+
+         if(a == true)
+         {
+             var tarjeta = $("#tarjeta").val();
+             var payToParty = ${(resourceDetail.payToPartyId)!};
+             var productId = ${(productId)!};
+             var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
+             var productStoreId = ${(resourceDetail.productStoreId)!};
+             var url = "placeResourceOrder";
+
+             var param = {
+                 payToPartyId:payToParty,
+                 productId:productId,
+                 prodCatalogId:prodCatalogId,
+                 productStoreId:productStoreId,
+                 tarjeta:tarjeta,
+                 amount:amount
+             };
+             $.ajax({
+                 type: 'POST',
+                 url: url,
+                 data: param,
+                 async:false,
+                 success: function (data) {
+                  //   alert("code="+data.code);
+                     if(data.code === "200"){
+                         var orderId = data.orderId;
+                         location.href = "viewWebOrderDetail?orderId="+orderId+"&tarjeta="+tarjeta;
+                     }
+                     if(data.code === "500"){
+                         alert("CODE-403:网络出现问题请刷新页面重试");
+                     }
+
+                 },
+                 error: function (data) {
+                     alert("CODE-403:网络出现问题请刷新页面重试");
+                 }
+             });
+
+         }
+         else
+         {
+             return false;
+         }
+     }
+</script>
 <#if resourceDetail?has_content>
 
 <input type="hidden" id="confirmMessage" value="${uiLabel.confirmMessage}"/>

@@ -178,18 +178,18 @@ public class WebServices {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPM = " +spm +" spmlength =" + spm.length());
 
-        if(null != spm && spm.length()>=5){
-            String sharePartyId  = spm.substring(1,5);
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sharePartyId = " +sharePartyId);
-            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",sharePartyId),false);
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> firstName = " +person.get("firstName"));
-            request.setAttribute("spm",person.get("firstName"));
-        }else{
-            request.setAttribute("spm",spm);
-        }
+//        if(null != spm && spm.length()>=5){
+//            String sharePartyId  = spm.substring(1,5);
+//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sharePartyId = " +sharePartyId);
+//            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",sharePartyId),false);
+//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> firstName = " +person.get("firstName"));
+//            request.setAttribute("spm",person.get("firstName"));
+//        }else{
+//            request.setAttribute("spm",spm);
+//        }
 
 
-
+        request.setAttribute("spm",spm);
 
         return "success";
     }

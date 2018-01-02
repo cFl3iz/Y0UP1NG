@@ -1444,6 +1444,9 @@ public class PersonManagerServices {
 
         String partyIdTo = (String) request.getParameter("partyIdTo");
 
+
+        System.out.println("########################################################################### partyIdTo = " + partyIdTo);
+
         String partyIdFrom = (String) request.getParameter("partyIdFrom");
 
         String messageLogTypeId = (String) request.getParameter("messageLogTypeId");

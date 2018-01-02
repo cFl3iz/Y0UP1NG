@@ -173,7 +173,7 @@
     function contactMe() {
         var flag = checkSubscribe();
 //        alert("flag=" + flag);
-        alert("是否订阅==" + flag);
+//        alert("是否订阅==" + flag);
         if (flag == true) {
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();

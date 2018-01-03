@@ -38,6 +38,58 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * 查询绝对想要的资源列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryDesiredResources(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String partyId = "admin";
+
+        String resourceName = (String) context.get("resourceName");
+
+        //查询朋友列表
+
+
+        List<GenericValue> myFriendList = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo", partyId,"partyRelationshipTypeId","FRIEND").queryList();
+
+
+        for(GenericValue gv : myFriendList){
+
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+            String friendPartyId = (String) gv.get("partyIdFrom");
+
+            GenericValue shopingList = EntityQuery.use(delegator).from("ShoppingList").where("partyId",friendPartyId,"listName",resourceName).queryFirst();
+
+            if(null != shopingList){
+                rowMap.put("desc",shopingList.get("description"));
+                rowMap.put("time",shopingList.get("createdStamp"));
+                returnList.add(rowMap);
+            }
+
+        }
+
+
+        resultMap.put("resourcesList",returnList);
+
+        return  resultMap;
+    }
+
+
+
+    /**
      * Query My Product
      * @param dctx
      * @param context
@@ -74,7 +126,7 @@ public class WeChatOrderQueryServices {
         List<Map<String,Object>> resourceMapList = new ArrayList<Map<String, Object>>();
 
         //查我的目录
-        GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+        GenericValue rodCatalogRole =  EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
 
         EntityFindOptions findOptions = new EntityFindOptions();
 //        findOptions.setFetchSize(0);

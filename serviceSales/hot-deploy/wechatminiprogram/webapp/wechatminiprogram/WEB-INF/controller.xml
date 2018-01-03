@@ -27,6 +27,32 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+
+
+   <!--创建朋友列表-->
+    <request-map uri="autoCreateFriendRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="autoCreateFriendRelation"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- 查询绝对要的列表 -->
+    <request-map uri="queryDesiredResources">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryDesiredResources"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
+
     <!-- 我收藏的产品 -->
     <request-map uri="queryMyCollectProduct">
         <security https="false" auth="false"/>
@@ -34,6 +60,8 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
 
     <request-map uri="queryMyPostalAddress">
         <security https="false" auth="false"/>

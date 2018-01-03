@@ -61,7 +61,35 @@
     </service>
 
 
+    <!-- 查询绝对正确的资源 -->
+    <service name="queryDesiredResources" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryDesiredResources" auth="false">
+        <description>queryDesiredResources</description>
+        <attribute name="resourceName" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resourcesList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
+    <!-- 组建一些人与我的好友关系 -->
+    <service name="autoCreateFriendRelation" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="autoCreateFriendRelation" auth="false">
+        <description>autoCreateFriendRelation</description>
+        <attribute name="friends" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resourcesName" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resourcesName" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 </services>

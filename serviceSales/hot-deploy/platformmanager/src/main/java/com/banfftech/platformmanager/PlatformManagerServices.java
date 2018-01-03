@@ -254,7 +254,7 @@ public class PlatformManagerServices {
         String tarjeta       = (String) context.get("tarjeta");
         String jumpUrl   = (String) context.get("url");
 
-//        firstName = EmojiHandler.decodeJava(firstName);
+
 
 
         Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);

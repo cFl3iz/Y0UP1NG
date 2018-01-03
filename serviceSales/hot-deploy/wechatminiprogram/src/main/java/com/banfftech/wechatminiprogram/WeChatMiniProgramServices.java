@@ -51,29 +51,17 @@ public class WeChatMiniProgramServices {
             case 1:
                 return "有你想要";
             case 2:
-                return "有你想要";
+                return "是专家!,关于这方面";
             case 3:
-                return "是专家!,关于这方面";
+                return "的朋友沈寅麟关注过";
             case 4:
-                return "是专家!,关于这方面";
+                return "的朋友王玉亮购买过";
             case 5:
-                return "的朋友关注过";
+                return "的朋友冯浩分享过";
             case 6:
-                return "的朋友点赞过";
+                return "的同学李玉峰在提供";
             case 7:
-                return "的朋友曾经解决过";
-            case 8:
-                return "的朋友的朋友购买过";
-            case 9:
-                return "的朋友分享过";
-            case 10:
-                return "的朋友曾为此烦恼";
-            case 11:
-                return "的朋友提起过";
-            case 12:
-                return "的同学在提供";
-            case 13:
-                return "的邻居提供";
+                return "的邻居董梦洁提供";
 
 
         }
@@ -228,7 +216,7 @@ public class WeChatMiniProgramServices {
                 dispatcher.runSync("createPartyRelationship",createPartyRelationMap);
                 }
 
-                int max=13;
+                int max=7;
                 int min=1;
 
                 Random random = new Random();
@@ -242,7 +230,7 @@ public class WeChatMiniProgramServices {
                 Map<String,Object> createShoppingListMap  = new HashMap<String, Object>();
                 createShoppingListMap.put("userLogin",admin);
                 createShoppingListMap.put("listName",resourcesName);
-                createShoppingListMap.put("description",nextUserName+ getRandomActionName(randomNumber) +"的" +"'" + resourcesName +"'");
+                createShoppingListMap.put("description",nextUserName+ getRandomActionName(randomNumber));
                 createShoppingListMap.put("shoppingListTypeId","SLT_FREQ_PURCHASES");
                 createShoppingListMap.put("isPublic","Y");
                 createShoppingListMap.put("partyId",nextPartyId);

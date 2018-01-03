@@ -47,21 +47,21 @@ public class WeChatMiniProgramServices {
 
         switch(number){
             default:
-                return "也搜索过相同";
+                return "也搜索过相同 'aaaaa'";
             case 1:
-                return "有你想要";
+                return "有你想要'sadsad'";
             case 2:
-                return "是专家!,关于这方面";
+                return "是专家!,关于这方面 'asdsadsad'";
             case 3:
-                return "的朋友沈寅麟关注过";
+                return "的朋友沈寅麟关注过 'sadsad'";
             case 4:
-                return "的朋友王玉亮购买过";
+                return "的朋友王玉亮购买过 'ABAB'";
             case 5:
-                return "的朋友冯浩分享过";
+                return "的朋友冯浩分享过 'AAAC'";
             case 6:
-                return "的同学李玉峰在提供";
+                return "的同学李玉峰在提供 'BBB'";
             case 7:
-                return "的邻居董梦洁提供";
+                return "的邻居董梦洁提供 'AAA'";
 
 
         }

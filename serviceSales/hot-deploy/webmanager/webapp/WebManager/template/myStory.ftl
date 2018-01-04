@@ -182,8 +182,8 @@
             var spm            = $("#spm").val();
             alert("jump productId="+productId);
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
-
-
+            alert("jump productId="+jumpurl);
+            return false;
 
             var mark = $("#mark").val();
             if(mark != null && mark.trim() !="" && mark==="true"){

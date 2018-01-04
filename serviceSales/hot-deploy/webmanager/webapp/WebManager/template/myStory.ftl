@@ -182,9 +182,7 @@
             var spm            = $("#spm").val();
 
             if(payToPartyId == null || payToPartyId ===""){
-
-                location.reload();
-                contactMe();
+              alert("wxJs授权认证失败,请刷新页面。");
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 //            alert("jump productId="+jumpurl);

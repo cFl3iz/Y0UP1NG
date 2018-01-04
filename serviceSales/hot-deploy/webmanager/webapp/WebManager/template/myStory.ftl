@@ -180,10 +180,15 @@
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
             var spm            = $("#spm").val();
-            alert("jump productId="+productId);
+
+            if(payToPartyId == null || payToPartyId ===""){
+                alert("网络延时,请再点一次!");
+                location.reload();
+            }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
-            alert("jump productId="+jumpurl);
-            return false;
+//            alert("jump productId="+jumpurl);
+//            alert("jump productId="+productId);
+//            return false;
 
             var mark = $("#mark").val();
             if(mark != null && mark.trim() !="" && mark==="true"){

@@ -123,7 +123,7 @@
             <button type="button" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
-            <button type="button" onclick="location.href='shareProduct?productId=${productId}';" class="btn-block btn-warning">
+            <button type="button" onclick="location.href='shareProduct?productId=${productId}';" class="btn-block btn-primary">
             ${uiLabel.GoToPay}
             </button>
         </div>

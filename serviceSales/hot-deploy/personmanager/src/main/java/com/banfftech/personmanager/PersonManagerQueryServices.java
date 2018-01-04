@@ -77,7 +77,7 @@ public class PersonManagerQueryServices {
         System.out.println("IN QUERY PARAM = objectId = " + objectId);
         System.out.println("IN QUERY PARAM = partyIdTo = " + partyIdTo);
         System.out.println("IN QUERY PARAM = partyIdFrom = " + partyIdFrom);
-        
+
         Set<String> fieldSet = new HashSet<String>();
 
         // 区分作用域 WebChat 还是 App 查询列用途
@@ -162,7 +162,7 @@ public class PersonManagerQueryServices {
 
             String messageLogTypeId = (String) gv.get("messageLogTypeId");
 
-            rowMap.put("messageLogTypeId", messageLogTypeId);
+//            rowMap.put("messageLogTypeId", messageLogTypeId);
 
 //            if(UtilValidate.isNotEmpty(messageLogTypeId) && messageLogTypeId.equals("LOCATION") && message!=null && !message.trim().equals("")){
 //                rowMap.put("latitude", message.substring(message.indexOf("tude\":")+6,message.indexOf(",\"lo")));
@@ -188,9 +188,7 @@ public class PersonManagerQueryServices {
 
             //此处拿的是from
 
-            userMap.put("toPartyId", fromParty);
 
-            userMap.put("name", user.get("firstName"));
 
             rowMap.put("avatar", user.get("headPortrait"));
 
@@ -201,7 +199,7 @@ public class PersonManagerQueryServices {
                 rowMap.put("me", false);
             }
 
-            rowMap.put("username", userMap.get("firstName"));
+            rowMap.put("username",user.get("firstName"));
 
             returnList.add(rowMap);
 

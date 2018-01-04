@@ -73,6 +73,11 @@ public class PersonManagerQueryServices {
         String partyIdFrom = (String) request.getParameter("partyIdFrom");
 
 
+
+        System.out.println("IN QUERY PARAM = objectId = " + objectId);
+        System.out.println("IN QUERY PARAM = partyIdTo = " + partyIdTo);
+        System.out.println("IN QUERY PARAM = partyIdFrom = " + partyIdFrom);
+        
         Set<String> fieldSet = new HashSet<String>();
 
         // 区分作用域 WebChat 还是 App 查询列用途

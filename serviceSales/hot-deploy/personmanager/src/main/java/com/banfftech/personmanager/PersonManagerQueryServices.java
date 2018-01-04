@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import main.java.com.banfftech.platformmanager.util.GZIP;
@@ -43,6 +45,174 @@ public class PersonManagerQueryServices {
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
+
+
+    /**
+     * 查询聊天记录
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String loadChatMessage(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+
+        // Admin Do Run Service
+
+
+        String objectId = (String) request.getParameter("objectId");
+
+        String partyIdTo = (String) request.getParameter("partyIdTo");
+
+        String partyIdFrom = (String) request.getParameter("partyIdFrom");
+
+
+        Set<String> fieldSet = new HashSet<String>();
+
+        // 区分作用域 WebChat 还是 App 查询列用途
+        String bizType = "webChat";
+
+        fieldSet.add("message");
+        fieldSet.add("partyIdFrom");
+        fieldSet.add("partyIdTo");
+        fieldSet.add("objectId");
+        fieldSet.add("messageId");
+        fieldSet.add("fromDate");
+        fieldSet.add("messageLogTypeId");
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+
+
+        EntityCondition findConditions4 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+
+
+        EntityConditionList<EntityCondition> listBigConditions = null;
+
+        if (UtilValidate.isNotEmpty(partyIdFrom)) {
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+
+
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+
+            EntityCondition listConditions = EntityCondition
+                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
+            listBigConditions = EntityCondition
+                    .makeCondition(listConditions, listConditions2);
+        } else {
+            listBigConditions = EntityCondition
+                    .makeCondition(listConditions2);
+        }
+
+
+        List<GenericValue> queryMessageLogList = null;
+
+        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
+            queryMessageLogList = delegator.findList("MessageLog",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("fromDate"), null, false);
+        } else {
+            queryMessageLogList = delegator.findList("MessageLogView",
+                    listBigConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
+        }
+
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        for (GenericValue gv : queryMessageLogList) {
+
+            Map<String, Object> rowMap = new HashMap<String, Object>();
+
+            Map<String, Object> userMap = new HashMap<String, Object>();
+
+            String fromParty = (String) gv.get("partyIdFrom");
+            String toParty = (String) gv.get("partyIdTo");
+            String message = (String) gv.get("message");
+
+            String tsStr = "";
+
+            DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+            try {
+                //方法一
+
+                tsStr = sdf.format(gv.get("fromDate"));
+
+            } catch (Exception e) {
+
+            }
+
+            String messageLogTypeId = (String) gv.get("messageLogTypeId");
+
+            rowMap.put("messageLogTypeId", messageLogTypeId);
+
+//            if(UtilValidate.isNotEmpty(messageLogTypeId) && messageLogTypeId.equals("LOCATION") && message!=null && !message.trim().equals("")){
+//                rowMap.put("latitude", message.substring(message.indexOf("tude\":")+6,message.indexOf(",\"lo")));
+//                rowMap.put("longitude", message.substring(message.indexOf("longitude\":") + 11, message.lastIndexOf("}")));
+//            }
+
+//            rowMap.put("messageId", messageId);
+
+            rowMap.put("content", message);
+
+
+            rowMap.put("time", tsStr);
+
+
+            Map<String, String> user = null;
+
+            if (!partyIdTo.equals(fromParty)) {
+                user = queryPersonBaseInfo(delegator, toParty);
+
+            } else {
+                user = queryPersonBaseInfo(delegator, fromParty);
+            }
+
+            //此处拿的是from
+
+            userMap.put("toPartyId", fromParty);
+
+            userMap.put("name", user.get("firstName"));
+
+            rowMap.put("avatar", user.get("headPortrait"));
+
+            // it me
+            if(partyIdFrom.equals(fromParty)){
+                rowMap.put("me", true);
+            }else{
+                rowMap.put("me", false);
+            }
+
+            rowMap.put("username", userMap.get("firstName"));
+
+            returnList.add(rowMap);
+
+        }
+
+        request.setAttribute("messages", returnList);
+
+        return "success";
+    }
+
+
+
+
+
+
+
 
     /**
      * Query ConsumerInfo

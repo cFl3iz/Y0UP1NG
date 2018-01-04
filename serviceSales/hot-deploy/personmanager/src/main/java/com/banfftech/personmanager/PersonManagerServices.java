@@ -1718,7 +1718,7 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("productId", objectId);
 
-            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
+            pushWeChatMessageInfoMap.put("payToPartyId", partyIdTo);
 
             //推微信
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);

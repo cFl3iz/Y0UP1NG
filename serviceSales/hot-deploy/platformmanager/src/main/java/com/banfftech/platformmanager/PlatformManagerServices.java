@@ -290,6 +290,8 @@ public class PlatformManagerServices {
         jsobjminipro.put("pagepath","pages/chatView/chatView?username="+partyIdFrom+"&password="+partyIdFrom+"111&payToPartyId="+payToPartyId+"&productId="+productId);
         jsobj1.put("miniprogram",jsobjminipro);
 
+        System.out.println("pages/chatView/chatView?username="+partyIdFrom+"&password="+partyIdFrom+"111&payToPartyId="+payToPartyId+"&productId="+productId);
+
 
         jsobj3.put("value", firstName+"给您发了一条消息");
         jsobj3.put("color", "#173177");

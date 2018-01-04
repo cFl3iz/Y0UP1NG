@@ -182,8 +182,9 @@
             var spm            = $("#spm").val();
 
             if(payToPartyId == null || payToPartyId ===""){
-                alert("网络延时,请再点一次!");
+
                 location.reload();
+                contactMe();
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 //            alert("jump productId="+jumpurl);

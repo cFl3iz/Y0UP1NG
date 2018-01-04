@@ -183,6 +183,7 @@
         <attribute name="message" type="String" mode="IN" optional="true"/>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
         <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
 
         <attribute name="date" type="String" mode="IN" optional="true"/>

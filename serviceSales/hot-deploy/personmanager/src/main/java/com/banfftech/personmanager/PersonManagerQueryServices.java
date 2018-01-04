@@ -179,13 +179,13 @@ public class PersonManagerQueryServices {
 
             Map<String, String> user = null;
 
-            if (!partyIdTo.equals(fromParty)) {
-                user = queryPersonBaseInfo(delegator, toParty);
-
-            } else {
-                user = queryPersonBaseInfo(delegator, fromParty);
-            }
-
+//            if (!partyIdTo.equals(fromParty)) {
+//                user = queryPersonBaseInfo(delegator, toParty);
+//
+//            } else {
+//                user = queryPersonBaseInfo(delegator, fromParty);
+//            }
+            user = queryPersonBaseInfo(delegator, fromParty);
             //此处拿的是from
 
 

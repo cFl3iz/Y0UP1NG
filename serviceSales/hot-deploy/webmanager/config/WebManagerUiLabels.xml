@@ -422,8 +422,8 @@
 
     <property key="Msg">
         <value xml:lang="en">Msg</value>
-        <value xml:lang="zh">为了更方便快捷的了解我的产品,请点击联系我!</value>
-        <value xml:lang="zh_CN">为了更方便快捷的了解我的产品,请点击联系我!</value>
+        <value xml:lang="zh">如果你对产品有什么疑问或要求,请直接联系我哦!</value>
+        <value xml:lang="zh_CN">如果你对产品有什么疑问或要求,请直接联系我哦!</value>
     </property>
 
 

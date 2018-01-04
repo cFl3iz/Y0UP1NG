@@ -123,6 +123,9 @@
             <button type="button" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
+            <button type="button" onclick="location.href('shareProduct?productId=${productId}')" class="btn-block btn-warning">
+            ${uiLabel.GoToPay}
+            </button>
         </div>
     </section>
 </section>
@@ -182,7 +185,7 @@
             var spm            = $("#spm").val();
 
             if(payToPartyId == null || payToPartyId ===""){
-              alert("Code:409 - >超时的授权认证,请关闭当前页面再次打开即可正常使用。");
+              alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
                 return false;
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;

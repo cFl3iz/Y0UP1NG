@@ -436,7 +436,11 @@
 
 
 
-
+    <property key="GoToPay">
+        <value xml:lang="en">GoToPay</value>
+        <value xml:lang="zh">去下单</value>
+        <value xml:lang="zh_CN">去下单</value>
+    </property>
 
 
 

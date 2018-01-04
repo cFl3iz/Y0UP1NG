@@ -175,8 +175,6 @@
 
     function contactMe() {
         var flag = checkSubscribe();
-//        alert("flag=" + flag);
-//        alert("是否订阅==" + flag);
         if (flag == true) {
 //            $("#miniChatForm").submit();
             var payToPartyId = $("#payToPartyId").val();
@@ -194,6 +192,7 @@
 //            return false;
 
             var mark = $("#mark").val();
+
             if(mark != null && mark.trim() !="" && mark==="true"){
 
             }else{

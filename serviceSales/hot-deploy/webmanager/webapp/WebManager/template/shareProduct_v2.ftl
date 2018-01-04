@@ -187,11 +187,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                         <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
                                             <p id="color">
                                                 <a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>
-                                                <#--<a title="蓝色 直袖款" class="a-item J_ping"   report-eventparam="蓝色 直袖款" >蓝色 直袖款</a>-->
-                                                <#--<a title="黑色 直袖款" class="a-item J_ping"   report-eventparam="黑色 直袖款" >黑色 直袖款</a>-->
-                                                <#--<a title="灰色 直袖款" class="a-item J_ping"   report-eventparam="灰色 直袖款" >灰色 直袖款</a>-->
-                                                <#--<a title="粉色 直袖款" class="a-item J_ping"   report-eventparam="粉色 直袖款" >粉色 直袖款</a>-->
-                                                <#--<a title="紫色 直袖款" class="a-item J_ping"   report-eventparam="紫色 直袖款" >紫色 直袖款</a>-->
+
                                             </p>
                                         </div>
                                         <!--尺寸-->
@@ -213,7 +209,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                             <!--延保start-->
                             <div class="warranty-wrap bdr-t" style="display: block;">
                                 <div id="spec_yanbaoInfo" class="warranty-title"> 保障服务 </div>
-                                <div id="spec_yanbaoItems">卖家承诺是好东西包退货</div>
+                                <div id="spec_yanbaoItems">卖家承诺如果是好东西包退货</div>
                             </div>
                             <!--延保end-->
                         </div>
@@ -349,13 +345,35 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
     function doMiniChat(){
 
-        //验证是否订阅
+        //验证是否订阅,
 
         if(checkSubscribe() == true){
+        //    $("#miniChatForm").submit(); 之前的 WebMiniChat 逻辑
+            var payToPartyId = $("#payToPartyId").val();
+            var partyId      = $("#partyId").val();
+            var productId      = $("#productId").val();
+            var spm            = $("#spm").val();
 
+            if(payToPartyId == null || payToPartyId ===""){
+                alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
+                return false;
+            }
+            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
+            alert("jumpurl = " + jumpurl);
+            var mark = $("#mark").val();
 
-            $("#miniChatForm").submit();
+            if(mark != null && mark.trim() !="" && mark==="true"){
+
+            }else{
+                markOrOutMark(true);
+            }
+
+            location.href = jumpurl;
         }
+
+
+
+
 
     }
 

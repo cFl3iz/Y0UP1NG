@@ -1582,7 +1582,7 @@ public class PersonManagerServices {
     public static String pushMsgBase(String objectId, String partyIdFrom, String partyIdTo, Delegator delegator, LocalDispatcher dispatcher,
                                      GenericValue userLogin, String text,
                                      Map<String, Object> pushWeChatMessageInfoMap, GenericValue admin, Map<String, Object> createMessageLogMap, String messageLogTypeId) throws GenericEntityException, GenericServiceException {
-
+        pushWeChatMessageInfoMap.put("partyIdFrom",partyIdFrom);
         if (UtilValidate.isEmpty(partyIdFrom)) {
             partyIdFrom = (String) userLogin.get("partyId");
         }

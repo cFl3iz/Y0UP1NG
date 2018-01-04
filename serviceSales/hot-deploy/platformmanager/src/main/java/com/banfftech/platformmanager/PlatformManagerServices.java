@@ -287,10 +287,10 @@ public class PlatformManagerServices {
 
         JSONObject jsobjminipro = new JSONObject();
         jsobjminipro.put("appid","wx299644ef4c9afbde");
-        jsobjminipro.put("pagepath","pages/chatView/chatView?username="+partyIdFrom+"&password="+partyIdFrom+"111&payToPartyId="+payToPartyId+"&productId="+productId);
+        jsobjminipro.put("pagepath","pages/chatView/chatView?username="+payToPartyId+"&password="+payToPartyId+"111&payToPartyId="+partyIdFrom+"&productId="+productId);
         jsobj1.put("miniprogram",jsobjminipro);
 
-        System.out.println("pages/chatView/chatView?username="+partyIdFrom+"&password="+partyIdFrom+"111&payToPartyId="+payToPartyId+"&productId="+productId);
+        System.out.println("pages/chatView/chatView?username="+payToPartyId+"&password="+payToPartyId+"111&payToPartyId="+partyIdFrom+"&productId="+productId);
 
 
         jsobj3.put("value", firstName+"给您发了一条消息");

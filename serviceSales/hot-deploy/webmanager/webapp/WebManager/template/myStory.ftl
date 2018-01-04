@@ -180,6 +180,7 @@
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
             var spm            = $("#spm").val();
+            alert("jump productId="+productId);
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 
 

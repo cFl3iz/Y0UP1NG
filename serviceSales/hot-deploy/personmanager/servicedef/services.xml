@@ -89,6 +89,9 @@
              invoke="queryMyResourceOrder" auth="false">
         <description>Query MyResourceOrder</description>
 
+        <attribute name="area" type="String" mode="IN"
+                   optional="true"/>
+
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
                    optional="true"/>
 

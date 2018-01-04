@@ -1308,7 +1308,8 @@ public class PersonManagerQueryServices {
         List<Map<String,Object>> myResourceOrderList = new ArrayList<Map<String, Object>>();
 
 
-
+        //是否是从App端的查询
+        String area = (String) context.get("area");
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
@@ -1358,6 +1359,7 @@ public class PersonManagerQueryServices {
 
 
 
+
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
 
@@ -1366,6 +1368,10 @@ public class PersonManagerQueryServices {
                 rowMap.put("productName",""+product.get("productName"));
                 rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
                 String payToPartyId = (String)productStore.get("payToPartyId");
+                if(null != area && area.equals("app") && !payToPartyId.equals(partyId)){
+                  continue;
+                }
+
                 rowMap.put("payToPartyId",payToPartyId);
                 String statusId = (String) gv.get("statusId");
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));

@@ -182,7 +182,8 @@
             var spm            = $("#spm").val();
 
             if(payToPartyId == null || payToPartyId ===""){
-              alert("wxJs授权认证失败,请刷新页面。");
+              alert("Code:409 - >超时的授权认证,请关闭当前页面再次打开即可正常使用。");
+                return false;
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
 //            alert("jump productId="+jumpurl);

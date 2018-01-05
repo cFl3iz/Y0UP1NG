@@ -104,7 +104,6 @@ public class PlatformManagerServices {
 
         String   text = (String) context.get("text");
 
-        System.out.println("########################################################################### text = " + text + "| is utf8 = " + isUTF8(text));
 
         String tarjeta = (String) context.get("tarjeta");
 
@@ -112,15 +111,13 @@ public class PlatformManagerServices {
 
         String partyIdTo = (String) context.get("partyIdTo");
 
-        System.out.println("########################################################################### partyIdTo = " + partyIdTo);
-
         String partyIdFrom = (String) context.get("partyIdFrom");
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
             //推送的不是图片,只要普通推送
-        PersonManagerServices.pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
+        PersonManagerServices.pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, "TEXT");
 
 
         return result;

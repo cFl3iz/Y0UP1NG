@@ -3212,6 +3212,31 @@ public class PersonManagerServices {
 //            }
 //        }
 
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("contactMechId");
+        fieldSet.add("partyId");
+        fieldSet.add("address1");
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+
+        //Query My Resource
+        List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
+                findConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
+
+        String address1 =null;
+        if(queryAddressList!=null & queryAddressList.size()>0){
+            GenericValue address = queryAddressList.get(0);
+            address1 = address.get("address1");
+        }
+        if(address1==null){
+            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址!","objectId",productId));
+        }else{
+            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,您的收货地址是("+address1+"),是否确认?","objectId",productId));
+        }
+
+
+
 
         return resultMap;
     }

@@ -8,6 +8,7 @@ import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
@@ -29,6 +30,7 @@ public class PlatformManagerQueryServices {
 
     public final static String module = PlatformManagerQueryServices.class.getName();
 
+    public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
     public static Map<String, Object> loadMaiJiaMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
@@ -492,6 +494,7 @@ public class PlatformManagerQueryServices {
         for (Map<String, Object> mp : returnList) {
             String to = (String) mp.get("toParty");
             String from = (String) mp.get("fromParty");
+            String realPartyId = (String) mp.get("realPartyId");
             findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));
 
@@ -532,6 +535,24 @@ public class PlatformManagerQueryServices {
                 mp.put("badge", queryMessageList.size());
             }
 
+
+
+
+
+            String relationStr = "";
+            //查客户关系
+            List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId).queryList();
+
+            if(partyRelationship!=null && partyRelationship.size()>0){
+                for(int index = 0 ; index < partyRelationship.size(); index++ ){
+                    GenericValue gv = partyRelationship.get(index);
+                    String relation = (String) gv.get("partyRelationshipTypeId");
+                    relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
+                }
+            }else{
+                relationStr = "潜在客户";
+            }
+            mp.put("custRelation",relationStr);
         }
 
 

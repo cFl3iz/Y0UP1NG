@@ -1400,6 +1400,15 @@ public class PersonManagerServices {
     }
 
 
+    public static boolean isUTF8(String key) {
+        try {
+            key.getBytes("utf-8");
+            return true;
+        } catch (UnsupportedEncodingException e) {
+            return false;
+        }
+    }
+
     /**
      * pushMessage
      *
@@ -1435,13 +1444,14 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String   text = (String) request.getParameter("text");
-        
+
+        System.out.println("########################################################################### text = " + text + "| is utf8 = " + isUTF8(text));
 
         String tarjeta = (String) request.getParameter("tarjeta");
 
         String objectId = (String) request.getParameter("objectId");
 
-        System.out.println("########################################################################### objectId = " + objectId);
+       // System.out.println("########################################################################### objectId = " + objectId);
 
 
         String partyIdTo = (String) request.getParameter("partyIdTo");

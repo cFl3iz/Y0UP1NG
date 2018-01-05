@@ -2,6 +2,7 @@ package main.java.com.banfftech.personmanager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1433,7 +1434,12 @@ public class PersonManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String text = (String) request.getParameter("text");
+        String text = null;
+        try {
+            text = new String(request.getParameter("text").getBytes("iso-8859-1"), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         String tarjeta = (String) request.getParameter("tarjeta");
 

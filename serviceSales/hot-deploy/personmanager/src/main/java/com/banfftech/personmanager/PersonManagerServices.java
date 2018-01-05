@@ -3227,7 +3227,7 @@ public class PersonManagerServices {
         String address1 =null;
         if(queryAddressList!=null & queryAddressList.size()>0){
             GenericValue address = queryAddressList.get(0);
-            address1 = address.get("address1");
+            address1 = (String) address.get("address1");
         }
         if(address1==null){
             dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址!","objectId",productId));

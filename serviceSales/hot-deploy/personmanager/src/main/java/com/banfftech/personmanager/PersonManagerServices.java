@@ -1434,12 +1434,8 @@ public class PersonManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String text = null;
-        try {
-            text = new String(request.getParameter("text").getBytes("iso-8859-1"), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String   text = (String) request.getParameter("text");
+        
 
         String tarjeta = (String) request.getParameter("tarjeta");
 

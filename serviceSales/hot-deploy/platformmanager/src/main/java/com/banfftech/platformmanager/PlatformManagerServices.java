@@ -5,12 +5,18 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import main.java.com.banfftech.personmanager.PersonManagerServices;
+import main.java.com.banfftech.platformmanager.oss.OSSUnit;
 import net.sf.json.JSONObject;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.EmojiHandler;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -69,6 +75,63 @@ public class PlatformManagerServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+
+    /**
+     * 推送 服务类型
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> pushMessage(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String   text = (String) request.getParameter("text");
+
+        System.out.println("########################################################################### text = " + text + "| is utf8 = " + isUTF8(text));
+
+        String tarjeta = (String) request.getParameter("tarjeta");
+
+        String objectId = (String) request.getParameter("objectId");
+
+        String partyIdTo = (String) request.getParameter("partyIdTo");
+
+
+        System.out.println("########################################################################### partyIdTo = " + partyIdTo);
+
+        String partyIdFrom = (String) request.getParameter("partyIdFrom");
+
+        String messageLogTypeId = (String) request.getParameter("messageLogTypeId");
+
+        //发送的是收款码?
+        String pay_qr_code = (String) request.getParameter("pay_qr_code");
+
+
+        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+
+            //推送的不是图片,只要普通推送
+        PersonManagerServices.pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, messageLogTypeId);
+
+
+        return result;
+    }
 
     /**
      * createSimpleCarrierShipmentMethod(单独创建系统货运方式)

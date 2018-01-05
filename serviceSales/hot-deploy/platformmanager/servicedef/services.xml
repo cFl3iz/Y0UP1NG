@@ -205,6 +205,20 @@
     </service>
 
 
+    <service name="pushMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushMessage" auth="false">
+        <description>pushMessage</description>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true"/>
+        <attribute name="objectId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
     <!-- Load Message -->
     <service name="loadMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"

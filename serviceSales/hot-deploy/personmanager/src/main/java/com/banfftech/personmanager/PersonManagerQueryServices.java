@@ -64,12 +64,12 @@ public class PersonManagerQueryServices {
 
         String productId = (String) request.getParameter("productId");
 
-        String partyId  =  (String) request.getParameter("partyId");
+        String nowPartyId  =  (String) request.getParameter("partyId");
 
 
 
 
-        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", nowPartyId)).queryFirst();
 
         //有效时间
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));

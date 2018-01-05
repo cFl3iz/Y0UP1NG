@@ -150,9 +150,9 @@ public class PersonManagerQueryServices {
 
                 String partyId = (String) order.get("partyId");
                 GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
-                if(person!=null){
-                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
-                }
+//                if(person!=null){
+//                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
+//                }
                 partyOrderList.add(rowMap);
             }
         }

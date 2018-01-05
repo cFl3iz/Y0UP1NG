@@ -173,11 +173,18 @@ public class PlatformManagerServices {
 //                "orderId="+orderId+"&payToPartyId=" +
 //                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
 //        System.out.println("*============================================================URL = " + url2);
+
+
+
+
         jsobj1.put("touser", openId);
         jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
         jsobj1.put("url",jumpUrl);
 
 
+        jsobjminipro.put("appid","wx299644ef4c9afbde");
+        jsobjminipro.put("pagepath","pages/order/order");
+        jsobj1.put("miniprogram",jsobjminipro);
 
         jsobj3.put("value", "订单状态更新啦!");
         jsobj3.put("color", "#173177");

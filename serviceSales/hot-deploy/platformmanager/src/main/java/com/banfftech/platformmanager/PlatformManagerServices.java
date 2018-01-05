@@ -96,32 +96,25 @@ public class PlatformManagerServices {
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
-        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
 
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String   text = (String) request.getParameter("text");
+        String   text = (String) context.get("text");
 
         System.out.println("########################################################################### text = " + text + "| is utf8 = " + isUTF8(text));
 
-        String tarjeta = (String) request.getParameter("tarjeta");
+        String tarjeta = (String) context.get("tarjeta");
 
-        String objectId = (String) request.getParameter("objectId");
+        String objectId = (String) context.get("objectId");
 
-        String partyIdTo = (String) request.getParameter("partyIdTo");
-
+        String partyIdTo = (String) context.get("partyIdTo");
 
         System.out.println("########################################################################### partyIdTo = " + partyIdTo);
 
-        String partyIdFrom = (String) request.getParameter("partyIdFrom");
-
-        String messageLogTypeId = (String) request.getParameter("messageLogTypeId");
-
-        //发送的是收款码?
-        String pay_qr_code = (String) request.getParameter("pay_qr_code");
-
+        String partyIdFrom = (String) context.get("partyIdFrom");
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();

@@ -9,6 +9,7 @@ import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.base.util.UtilProperties;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;

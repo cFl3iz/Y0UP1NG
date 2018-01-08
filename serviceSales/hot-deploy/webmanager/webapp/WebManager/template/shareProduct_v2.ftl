@@ -254,9 +254,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                 <!-- 弹出层1 结束-->
                 <section id="s-actionBar-container">
                     <div id="s-actionbar" class="action-bar mui-flex align-center">
-                        <div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />
-                            <p>${uiLabel.Talk}</p>
-                        </div>
+                        <#--<div class="web" onclick="doMiniChat();"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/atm.png" width="20" height="20" />-->
+                            <#--<p>${uiLabel.Talk}</p>-->
+                        <#--</div>-->
                         <div class="web"  onclick="javascript:alert('${uiLabel.DefaultAction}');"> <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/trade-assurance.png" width="20" height="20" />
                             <p>${uiLabel.More}</p>
                         </div>

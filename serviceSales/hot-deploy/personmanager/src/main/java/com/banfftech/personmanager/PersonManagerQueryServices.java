@@ -276,6 +276,7 @@ public class PersonManagerQueryServices {
         // 区分作用域 WebChat 还是 App 查询列用途
         String bizType = "webChat";
 
+        fieldSet.add("messageId");
         fieldSet.add("message");
         fieldSet.add("partyIdFrom");
         fieldSet.add("partyIdTo");
@@ -361,8 +362,8 @@ public class PersonManagerQueryServices {
 //                rowMap.put("latitude", message.substring(message.indexOf("tude\":")+6,message.indexOf(",\"lo")));
 //                rowMap.put("longitude", message.substring(message.indexOf("longitude\":") + 11, message.lastIndexOf("}")));
 //            }
-
-//            rowMap.put("messageId", messageId);
+            String messageId = (String) gv.get("messageId");
+           rowMap.put("messageId", messageId);
 
             rowMap.put("content", message);
 

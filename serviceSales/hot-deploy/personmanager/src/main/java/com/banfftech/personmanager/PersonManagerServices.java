@@ -3232,7 +3232,7 @@ public class PersonManagerServices {
         if(address1==null){
             dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址(若已更新收货地址,勿理会本条提示*_*)!","objectId",productId));
         }else{
-            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,您的收货地址是("+address1+"),是否确认?","objectId",productId));
+            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","^_^你好,我已收到您下的订单,您的收货地址是("+address1+"),是否<a href='#'>确认</a>?","objectId",productId));
         }
 
 

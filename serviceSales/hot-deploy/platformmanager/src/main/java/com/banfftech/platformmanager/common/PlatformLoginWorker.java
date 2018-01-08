@@ -359,6 +359,15 @@ public class PlatformLoginWorker {
 
                 partyId =(String) partyIdentificationList.get(0).get("partyId");
                 userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+                //老用户登录的情况下也要考虑是否没有公众号OpenId.(卖家不推送问题Fix)
+                GenericValue gongZhongPartyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID","enabled","Y").queryFirst();
+                if(gongZhongPartyIdentification == null){
+                    //增加公众平台OpenID绑定,定推特需
+                    //创建微信绑定数据
+                    Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                            partyId, "idValue", accessMap.get("openId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID","enabled","Y");
+                    dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+                }
             }else{
 
                 Debug.logInfo("*CREATE NEW USER", module);

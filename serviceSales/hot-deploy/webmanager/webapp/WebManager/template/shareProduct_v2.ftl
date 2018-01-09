@@ -353,12 +353,15 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
             var spm            = $("#spm").val();
-
-            if(payToPartyId == null || payToPartyId ===""){
-                alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
-                return false;
-            }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
+            if(payToPartyId == null || payToPartyId ===""){
+//                alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
+                var returnPayToPartyId = $("#returnPayToPartyId").val();
+                alert("returnPayToPartyId="+returnPayToPartyId);
+
+                jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+returnPayToPartyId+"/"+productId;
+            }
+
             alert("jumpurl = " + jumpurl);
             var mark = $("#mark").val();
 
@@ -542,6 +545,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
     <input id="productId" name="productId" type="hidden" value="${(productId)!}"/>
 </form>
+<input id="returnPayToPartyId" value="${(returnPayToPartyId)!}" />
 
 </#if>
 <#if !resourceDetail?has_content>

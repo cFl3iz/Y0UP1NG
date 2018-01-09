@@ -76,11 +76,16 @@
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
 
+                <set field="returnPayToPartyId" value="${parameters.returnPayToPartyId}" />
+
+
                 <set field="mark" value="${resourceDetail.mark}"/>
+
+                <set field="returnPayToPartyId" value="${returnPayToPartyId}" />
 
 
                 <!-- 微信授权登录后的回调地址 -->
-                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}"/>
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}&amp;payToPartyId=${payToPartyId}"/>
 
             </actions>
             <widgets>

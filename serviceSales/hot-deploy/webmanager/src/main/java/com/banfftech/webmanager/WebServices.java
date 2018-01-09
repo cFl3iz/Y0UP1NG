@@ -145,6 +145,10 @@ public class WebServices {
 
         String productId = (String) request.getParameter("productId");
 
+        String payToPartyId = (String) request.getParameter("payToPartyId");
+
+        request.setAttribute("returnPayToPartyId",payToPartyId);
+
         String spm      = (String) request.getParameter("spm");
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));

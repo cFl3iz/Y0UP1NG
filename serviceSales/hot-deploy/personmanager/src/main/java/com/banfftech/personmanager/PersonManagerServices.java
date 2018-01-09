@@ -3120,7 +3120,8 @@ public class PersonManagerServices {
         addPLACING_CUSTOMERInMap.put("userLogin", userLogin);
         addPLACING_CUSTOMERInMap.put("orderId", orderId);
         addPLACING_CUSTOMERInMap.put("partyId", partyId);
-        addPLACING_CUSTOMERInMap.put("roleTypeId", "PLACING_CUSTOMER");
+       addPLACING_CUSTOMERInMap.put("roleTypeId", "PLACING_CUSTOMER");
+
         Map<String, Object> addPLACING_CUSTOMEROutMap = dispatcher.runSync("addOrderRole", addPLACING_CUSTOMERInMap);
 
         if (ServiceUtil.isError(addPLACING_CUSTOMEROutMap)) {
@@ -3289,6 +3290,9 @@ public class PersonManagerServices {
             dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","您的订单收货地址:"+address1+",无误请点击→","objectId",productId));
         }
 
+
+
+        createRelationC2CRSS(delegator,dispatcher,admin,payToPartyId,partyId);
 
 
 

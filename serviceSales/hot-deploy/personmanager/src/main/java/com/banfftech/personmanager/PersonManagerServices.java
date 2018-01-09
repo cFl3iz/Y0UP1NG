@@ -846,6 +846,48 @@ public class PersonManagerServices {
             }
             //推送提醒买家
 
+
+             orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
+
+            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
+
+            //找发票
+            GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
+
+
+            //先将支付应用到发票
+
+            Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
+                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
+
+            if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
+                return createPaymentApplicationMap;
+            }
+
+
+            //确认这笔支付的状态
+
+            Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
+                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
+
+            if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
+                return setPaymentStatusOutMap;
+            }
+
+
+            //更新订单支付信息
+//        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+//                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+//
+//        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+//            return updateOrderPaymentPreferenceOutMap;
+//        }
+
+            //暂时使用卑劣方式
+            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
+            orderPaymentPrefAndPayment.store();
+
         } else {
 
 

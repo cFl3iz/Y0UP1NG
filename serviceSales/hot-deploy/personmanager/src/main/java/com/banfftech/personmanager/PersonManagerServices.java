@@ -831,7 +831,7 @@ public class PersonManagerServices {
 
                 GenericValue payFromUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",payFromPartyId).queryFirst();
                 //卖家确定自己已经收到钱了
-               Map<String,Object> createPaymentResult   = dispatcher.runSync("createPaymentFromCust", UtilMisc.toMap("userLogin", payFromUserLogin,"partyIdTo",partyId ,"orderId",orderId));
+               Map<String,Object> createPaymentResult   = dispatcher.runSync("createPaymentFromCust", UtilMisc.toMap("userLogin", payFromUserLogin,"payToPartyId",partyId ,"orderId",orderId));
                 paymentId = (String) createPaymentResult.get("paymentId");
             }else{
                 paymentId = (String) payment.get("paymentId");

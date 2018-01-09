@@ -716,21 +716,21 @@ public class PersonManagerServices {
 
         }
 
-
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
-
-        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-
-            String jpushId = (String) partyIdentification.getString("idValue");
-
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-        }
+        //卖家不推了
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+//
+//        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+//
+//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+//
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//
+//            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+//        }
 
 
         return resultMap;
@@ -2126,8 +2126,9 @@ public class PersonManagerServices {
         // productId
         String messageId = (String) request.getParameter("messageId");
 
-
-        
+        GenericValue messageLog =  EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("contactNumber", tel).queryFirst();
+        messageLog.set("message"," "+ messageLog.get("message")+"");
+        messageLog.store();
         return "success";
     }
 

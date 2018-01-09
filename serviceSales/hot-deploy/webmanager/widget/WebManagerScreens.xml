@@ -81,11 +81,11 @@
 
                 <set field="mark" value="${resourceDetail.mark}"/>
 
-                <set field="returnPayToPartyId" value="${returnPayToPartyId}" />
+                <set field="payToPartyId" value="${returnPayToPartyId}" />
 
 
                 <!-- 微信授权登录后的回调地址 -->
-                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}&amp;payToPartyId=${payToPartyId}"/>
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_product.php?productId=${productId}&amp;payToPartyId=${resourceDetail.payToPartyId}"/>
 
             </actions>
             <widgets>

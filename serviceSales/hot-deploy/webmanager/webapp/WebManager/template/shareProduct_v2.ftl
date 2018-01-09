@@ -264,10 +264,10 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                             <p>${uiLabel.Mark}</p>
                         </div>
                         <button class="cart cell" onclick="myOrder();">${uiLabel.MyOrder}</button>
-    <#if !salesDiscontinuationDate?has_content>
+    <#if !resourceDetail.salesDiscontinuationDate?has_content>
                         <button class="buy cell" onclick="buyProductModel();">${uiLabel.Buy}</button>
         </#if>
-    <#if salesDiscontinuationDate?has_content>
+    <#if resourceDetail.salesDiscontinuationDate?has_content>
         <button class="buy cell" disabled >${uiLabel.DisProduct}</button>
     </#if>
 

@@ -2125,8 +2125,8 @@ public class PersonManagerServices {
         HttpSession session = request.getSession();
         // productId
         String messageId = (String) request.getParameter("messageId");
-
-        GenericValue messageLog =  EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("contactNumber", tel).queryFirst();
+        System.out.println("*messageId="+messageId);
+        GenericValue messageLog =  EntityQuery.use(delegator).from("MessageLog").where("messageId", messageId).queryFirst();
         messageLog.set("message"," "+ messageLog.get("message")+"");
         messageLog.store();
         return "success";

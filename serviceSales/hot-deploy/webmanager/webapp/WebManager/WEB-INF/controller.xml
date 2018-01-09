@@ -187,8 +187,16 @@
     </request-map>
 
 
+    <!-- checkAddress -->
+    <request-map uri="checkAddress">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="checkAddress"></event>
 
-
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- accessWeChatFromBuyProduct -->

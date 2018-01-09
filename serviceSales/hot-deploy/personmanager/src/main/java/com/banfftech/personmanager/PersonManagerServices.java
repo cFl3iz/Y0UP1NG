@@ -699,6 +699,8 @@ public class PersonManagerServices {
 
         String paymentId = (String) serviceResultMap.get("paymentId");
 
+        resultMap.put("paymentId",paymentId);
+
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
 
             return serviceResultMap;
@@ -823,7 +825,19 @@ public class PersonManagerServices {
 
             GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
 
-            String paymentId = (String) payment.get("paymentId");
+            String paymentId = "";
+
+            if(null == payment){
+
+                GenericValue payFromUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",payFromPartyId).queryFirst();
+                //卖家确定自己已经收到钱了
+               Map<String,Object> createPaymentResult   = dispatcher.runSync("createPaymentFromCust", UtilMisc.toMap("userLogin", payFromUserLogin, "orderId",orderId));
+                paymentId = (String) createPaymentResult.get("paymentId");
+            }else{
+                paymentId = (String) payment.get("paymentId");
+            }
+
+
 
             Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
 
@@ -2087,6 +2101,37 @@ public class PersonManagerServices {
 
         return count;
     }
+
+
+    /**
+     * checkAddress
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String checkAddress(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+        // productId
+        String messageId = (String) request.getParameter("messageId");
+
+
+        
+        return "success";
+    }
+
+
 
 
     /**

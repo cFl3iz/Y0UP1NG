@@ -3292,7 +3292,19 @@ public class PersonManagerServices {
 
 
 
-        createRelationC2CRSS(delegator,dispatcher,admin,payToPartyId,partyId);
+        //确认客户关系
+        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+
+
+        createPartyRelationshipInMap.put("roleTypeIdTo", "SHIP_FROM_VENDOR");
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("partyIdFrom", partyId);
+        createPartyRelationshipInMap.put("partyIdTo", payToPartyId);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.PRODUCT_CUSTOMER);
+
+        dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
 
 
 

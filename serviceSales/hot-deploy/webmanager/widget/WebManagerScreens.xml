@@ -145,7 +145,7 @@
 
                 <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${(spm)!}"/>
 
-                <set field="payToPartyId" value="${parameters.payToPartyId}"/>
+
 
                 <set field="partyId" value="${parameters.partyId}"/>
 
@@ -164,6 +164,7 @@
 
                 <set field="mark" value="${resourceDetail.mark}"/>
 
+                <set field="payToPartyId" value="${resourceDetail.payToPartyId}"/>
 
             </actions>
             <widgets>

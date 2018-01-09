@@ -253,7 +253,7 @@
 //                    });
                     var partyId = $("#partyId").val();
 
-                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
+                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!}"+ partyId +"/${(returnPayToPartyId)!}";
 
                     wx.onMenuShareAppMessage({
                         title: '${(resourceDetail.productName?default('ProductName'))!}', // 分享标题

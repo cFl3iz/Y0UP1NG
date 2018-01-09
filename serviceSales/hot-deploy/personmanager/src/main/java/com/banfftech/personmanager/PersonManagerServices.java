@@ -699,6 +699,8 @@ public class PersonManagerServices {
 
         String paymentId = (String) serviceResultMap.get("paymentId");
 
+        System.out.println("*create payment over | paymentid = " + paymentId);
+
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
 
             return serviceResultMap;
@@ -730,7 +732,7 @@ public class PersonManagerServices {
       //      dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
         }
 
-
+        resultMap.put("paymentId",paymentId);
         return resultMap;
     }
 

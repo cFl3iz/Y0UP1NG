@@ -1280,11 +1280,11 @@ public class PersonManagerServices {
 
 
         //TODO setOrderPaymentStatus
-        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
-
-        String paymentId = (String) orderPaymentPrefAndPayment.get("paymentId");
-
-        dispatcher.runSync("setOrderPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "payToPartyId", partyId, "orderId", orderId));
+//        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+//
+//        String paymentId = (String) orderPaymentPrefAndPayment.get("paymentId");
+//
+//        dispatcher.runSync("setOrderPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "payToPartyId", partyId, "orderId", orderId));
 
 
         //订单的支付状态需要已确认。

@@ -123,9 +123,16 @@
             <button type="button" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
+            <#if !salesDiscontinuationDate?has_content>
             <button type="button" onclick="location.href='shareProduct?productId=${productId}';" class="btn-block btn-primary">
             ${uiLabel.GoToPay}
             </button>
+            </#if>
+            <#if salesDiscontinuationDate?has_content>
+            <button type="button" class="btn-block btn-disabled">
+            ${uiLabel.DisProduct}
+            </button>
+        </#if>
         </div>
     </section>
 </section>

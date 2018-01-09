@@ -427,6 +427,14 @@
     </property>
 
 
+
+    <property key="DisProduct">
+        <value xml:lang="en">Product Disable</value>
+        <value xml:lang="zh">商品已下架</value>
+        <value xml:lang="zh_CN">商品已下架</value>
+    </property>
+
+
     <property key="ContactMe">
         <value xml:lang="en">ContactMe</value>
         <value xml:lang="zh">联系我</value>

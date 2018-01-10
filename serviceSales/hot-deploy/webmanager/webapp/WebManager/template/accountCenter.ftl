@@ -268,8 +268,8 @@
                     var partyId = $("#partyId").val();
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
-                    var title = UnicodeToUtf8("${(resourceDetail.productName)!}");
-                    var imgUrl = UnicodeToUtf8("${(resourceDetail.detailImageUrl)!}");
+                    var title = "${(resourceDetail.productName)!}";
+                    var imgUrl = "${(resourceDetail.detailImageUrl)!}";
                     alert(title);
                     alert(imgUrl);
                     wx.onMenuShareAppMessage({

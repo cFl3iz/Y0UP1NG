@@ -189,8 +189,8 @@ public class PlatformLoginWorker {
             //增加PartyId的返回
                 request.setAttribute("partyId",userLogin.get("partyId"));
             //增加人的名称返回
-            GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",userLogin.get("partyId")),false);
-            request.setAttribute("nowPersonName",person.get("firstName"));
+            GenericValue nowPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", userLogin.get("partyId")), false);
+            request.setAttribute("nowPersonName",nowPerson.get("firstName"));
         } else {
             Debug.logWarning("*Could not find userLogin for token: " + token, module);
             Debug.logWarning("*Claims User Is : " + claims.get("user"), module);

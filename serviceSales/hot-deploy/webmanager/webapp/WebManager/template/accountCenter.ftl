@@ -232,9 +232,9 @@
                         alert(textStatus);
                     }
                 });
-                window.addEventListener("click", function(e){
-                    alert(e.target.tagName);
-                });
+//                window.addEventListener("click", function(e){
+//                    alert(e.target.tagName);
+//                });
 
 
                 wx.ready(function () {

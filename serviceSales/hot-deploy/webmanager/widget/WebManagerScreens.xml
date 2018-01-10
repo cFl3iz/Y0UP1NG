@@ -75,6 +75,8 @@
 
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
+                <set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>
+
 
                 <set field="returnPayToPartyId" value="${parameters.returnPayToPartyId}" />
 

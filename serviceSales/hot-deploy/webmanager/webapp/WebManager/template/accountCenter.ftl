@@ -2,8 +2,8 @@
 
 
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<link href="http://cdn.staticfile.org/emoji/0.2.2/emoji.css" rel="stylesheet" type="text/css" />
-<script src="http://cdn.staticfile.org/emoji/0.2.2/emoji.js"></script>
+<#--<link href="http://cdn.staticfile.org/emoji/0.2.2/emoji.css" rel="stylesheet" type="text/css" />-->
+<#--<script src="http://cdn.staticfile.org/emoji/0.2.2/emoji.js"></script>-->
 <!-- TODO FIX ME -->
 
 
@@ -182,10 +182,10 @@
             function () {
 
                 //fix emoji
-                var $emojitext = $("#author");
-                alert($emojitext);
-                var emojitexthtml = $emojitext.html().trim().replace(/\n/g, '<br/>');
-                $emojitext.html(jEmoji.unifiedToHTML(emojitexthtml));
+//                var $emojitext = $("#author");
+//                alert($emojitext);
+//                var emojitexthtml = $emojitext.html().trim().replace(/\n/g, '<br/>');
+//                $emojitext.html(jEmoji.unifiedToHTML(emojitexthtml));
 
 
                 // clearCookie("tarjeta");
@@ -272,9 +272,11 @@
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
 
+                    var nowPersonName = $("#nowPersonName").val();
+                    nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题
-                        desc: '这是我的秘密...', // 分享描述
+                        desc: nowPersonName, // 分享描述
                         link: linkUrl, // 分享链接
                         imgUrl:imgUrl, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link

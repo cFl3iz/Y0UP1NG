@@ -216,6 +216,7 @@
 </script>
 
 <input id="spm" type="hidden" value="${(spm)!}" />
+<input id="nowPersonName" type="hidden" value="${(nowPersonName)!}" />
 
 <input id="productName" type="hidden" value="${(resourceDetail.productName)!}" />
 <input id="imgUrl" type="hidden" value="${(resourceDetail.detailImageUrl)!}" />

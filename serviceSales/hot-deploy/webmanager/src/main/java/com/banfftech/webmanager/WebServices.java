@@ -158,7 +158,7 @@ public class WebServices {
 
         String tarjeta = (String) loginServiceResultMap.get("tarjeta");
         String subscribe = (String) loginServiceResultMap.get("subscribe");
-
+        String nowPersonName = (String) loginServiceResultMap.get("nowPersonName");
 //        GenericValue priductPrice =  EntityQuery.use(delegator).from("ProductPrice").where("productId", productId, "productPriceTypeId",PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID,"productPricePurposeId",PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE,"currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID).queryFirst();
 //
 //        // placeResourceOrder
@@ -179,6 +179,7 @@ public class WebServices {
         request.setAttribute("tarjeta",tarjeta);
 
         request.setAttribute("subscribe",subscribe);
+        request.setAttribute("nowPersonName",nowPersonName);
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPM = " +spm +" spmlength =" + spm.length());
 

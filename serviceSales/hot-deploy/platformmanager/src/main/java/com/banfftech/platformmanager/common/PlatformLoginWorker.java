@@ -333,7 +333,7 @@ public class PlatformLoginWorker {
         }
 
         System.out.println("*weChatAppWebLogin:" + userInfoMap);
-
+        result.put("nowPersonName",userInfoMap.get("nickname"));
 
 //        String openId =  (String) userInfoMap.get("openId");
 

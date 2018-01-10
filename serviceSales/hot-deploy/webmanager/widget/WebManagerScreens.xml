@@ -148,7 +148,7 @@
 
                 <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${(spm)!}"/>
 
-
+                 <set field="nowPersonName" value="${parameters.nowPersonName}"/>
 
                 <set field="partyId" value="${parameters.partyId}"/>
 
@@ -163,12 +163,15 @@
                 <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>
 
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
-                <set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>
+
+                <!--<set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>-->
+
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
                 <set field="mark" value="${resourceDetail.mark}"/>
 
                 <set field="payToPartyId" value="${resourceDetail.payToPartyId}"/>
+
 
             </actions>
             <widgets>

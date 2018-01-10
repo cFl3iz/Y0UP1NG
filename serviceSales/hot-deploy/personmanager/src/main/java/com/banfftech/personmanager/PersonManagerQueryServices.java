@@ -2377,6 +2377,18 @@ public class PersonManagerQueryServices {
                 for(GenericValue gv :myResourceList){
                     Map<String,Object> rowMap = new HashMap<String, Object>();
 
+
+                    Long custCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", PeConstant.PRODUCT_CUSTOMER,"productId", (String)gv.get("productId")).queryCount();
+                    Long placingCustCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER","productId", (String)gv.get("productId")).queryCount();
+                    Long visitorCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "VISITOR","productId", (String)gv.get("productId")).queryCount();
+                    Long partnerCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PARTNER","productId", (String)gv.get("productId")).queryCount();
+
+                    // 客户、 潜在客户、 访问者 、 合作伙伴(转发者)
+                    rowMap.put("custCount",custCount);
+                    rowMap.put("placingCustCount",placingCustCount);
+                    rowMap.put("visitorCount",visitorCount);
+                    rowMap.put("partnerCount",partnerCount);
+
                     rowMap.put("productName",(String)gv.get("productName"));
                     rowMap.put("productId",(String)gv.get("productId"));
                     rowMap.put("productStoreId",(String)gv.get("productStoreId"));

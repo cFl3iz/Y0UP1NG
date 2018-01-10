@@ -455,6 +455,42 @@ public class PersonManagerServices {
 
 
     /**
+     * addProductRole
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> addProductRole(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        String partyId = (String) context.get("partyId");
+        Stirng roleTypeId = (String) context.get("roleTypeId");
+        Stirng productId = (String) context.get("productId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        if(productId==null){
+            return resultMap;
+        }
+        // 客户对于产品的角色
+
+        GenericValue productRoleCust =  EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", roleTypeId,"productId", productId).queryFirst();
+        if(null == productRoleCust){
+            dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", roleTypeId));
+        }
+
+        return resultMap;
+    }
+
+
+
+    /**
      * spread Product 推广产品
      *
      * @param dctx
@@ -3131,6 +3167,9 @@ public class PersonManagerServices {
 
 
         //最关键的意向客户的角色
+        GenericValue placRole =  EntityQuery.use(delegator).from("ProductRole").where("partyId",partyId,"roleTypeId", "PLACING_CUSTOMER","productId", productId).queryFirst();
+        if(null == placRole){
+
         Map<String, Object> addPLACING_CUSTOMERInMap = new HashMap<String, Object>();
         addPLACING_CUSTOMERInMap.put("userLogin", userLogin);
         addPLACING_CUSTOMERInMap.put("orderId", orderId);
@@ -3143,6 +3182,8 @@ public class PersonManagerServices {
             return addPLACING_CUSTOMEROutMap;
         }
 
+
+        }
 
         GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -3253,7 +3294,10 @@ public class PersonManagerServices {
             dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
         }
         //授予客户角色
-        dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
+        GenericValue productRoleCust =  EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", PeConstant.PRODUCT_CUSTOMER,"productId", productId).queryFirst();
+        if(null == productRoleCust){
+            dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
+        }
 
         //已注释掉,将客户做成店铺客户的角色逻辑
 //        GenericValue custStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"productStoreId",productStoreId,"roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE).queryFirst();
@@ -3432,6 +3476,25 @@ public class PersonManagerServices {
                     "roleTypeId", "PLACING_CUSTOMER");
             dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
         }
+
+
+
+        // Create Party Role 授予当事人 访问者 角色 用于mark product
+         partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "VISITOR").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "VISITOR");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+        // Create Party Role 授予当事人 合作伙伴 角色 用于mark product
+        partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PARTNER").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "PARTNER");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+
+
 
 
         //创建当事人税务机关

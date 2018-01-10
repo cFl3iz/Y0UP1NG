@@ -160,6 +160,13 @@
                     <field-map field-name="partyId"/>
                 </service>
 
+                <service service-name="addProductRole" result-map="addProductRoleMap">
+                    <field-map field-name="partyId"/>
+                    <field-map field-name="productId"/>
+                    <field-map field-name="roleTypeId" value="VISITOR"/>
+                </service>
+
+
                 <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>
 
                 <set field="resourceDetail" value="${resultMap.resourceDetail}"/>

@@ -64,13 +64,13 @@
     }
 
     function validateTarjetaIsRight(tarjeta) {
-//        alert("validate tarjeta 2,tarjeta="+tarjeta);
+
         var url = "checkTarjeta";
         var param = {
             tarjeta: tarjeta
         };
         var result = false;
-//       alert("result  = " + result);
+
         $.ajax({
             type: 'POST',
             url: url,
@@ -80,16 +80,11 @@
                 var validate = data.validate;
                 var partyId  = data.partyId;
                 var nowPersonName  = data.nowPersonName;
-//               alert("validate result = " + validate);
-//                alert("validate="+validate);
                 if (validate === "true") {
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
-                    //将当前用户的partyId放到页面
-//                    alert("partyId="+partyId);
                     $("#partyId").val(partyId);
                     $("#nowPersonName").val(nowPersonName);
-//                    setCookie("tarjeta",tarjeta);
                     if (newTarjeta != null && newTarjeta.trim() != "") {
 //                        alert("setCookie = " + newTarjeta);
                         setCookie("tarjeta", newTarjeta);
@@ -98,9 +93,7 @@
                     result = true;
 
                 } else {
-//                   alert("return false");
                     clearCookie("tarjeta");
-//                   alert(" validate result over return false");
 
                 }
 
@@ -269,7 +262,7 @@
 
 
                     var partyId = $("#partyId").val();
-
+                    var productId = $("#productId").val();
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
@@ -285,7 +278,8 @@
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
-                            alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
+                            //alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
+                            doAddProductRole(partyId,productId);
 // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
@@ -319,6 +313,31 @@
         $("#showboxmenu2").show();
         $("#showboxmenuspec2").show();
     }
+
+
+    function doAddProductRole(partyId,productId){
+        var url = "addProductRole";
+        
+        var param = {
+            partyId:partyId,
+            productId:productId,
+            roleTypeId:"PARTNER"
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+
+            },
+            error: function (data) {
+                alert("CODE-403:网络出现问题请刷新页面重试");
+            }
+        });
+
+    }
+
 
     function buyProduct(){
 

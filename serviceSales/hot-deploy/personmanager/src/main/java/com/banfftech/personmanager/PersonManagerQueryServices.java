@@ -1888,9 +1888,12 @@ public class PersonManagerQueryServices {
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
+        String nowPartyId = (String) context.get("partyId");
+        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",nowPartyId),false);
 
-        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",(String)userLogin.get("partyId")),false);
-        resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
+        if(null != nowPerson){
+            resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
+        }
 
         String productId = (String) context.get("productId");
         resultMap.put("productId",productId);

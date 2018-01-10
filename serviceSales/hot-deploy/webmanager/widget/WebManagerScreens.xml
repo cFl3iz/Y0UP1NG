@@ -56,6 +56,7 @@
 
     <!-- Share Source -->
     <screen name="shareProduct">
+        <!-- 老商品购买页面 -->
         <section>
             <actions>
 
@@ -75,7 +76,7 @@
 
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
-                <set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>
+                <!--<set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>-->
 
 
                 <set field="returnPayToPartyId" value="${parameters.returnPayToPartyId}" />
@@ -156,6 +157,7 @@
                 <service service-name="queryResourceDetail" result-map="resultMap">
                     <field-map field-name="productId"/>
                     <field-map field-name="tarjeta"/>
+                    <field-map field-name="partyId"/>
                 </service>
 
                 <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>

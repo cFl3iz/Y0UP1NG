@@ -251,11 +251,19 @@
 //                            alert(JSON.stringify(res));
 //                        }
 //                    });
+
+                    var decodeHtmlEntity = function(str) {
+                        return str.replace(/&#(\d+);/g, function(match, dec) {
+                            return String.fromCharCode(dec);
+                        });
+                    };
+
+
                     var partyId = $("#partyId").val();
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
-                    var title = "${(resourceDetail.productName)!}";
-                    var imgUrl = "${(resourceDetail.detailImageUrl)!}";
+                    var title = decodeHtmlEntity("${(resourceDetail.productName)!}");
+                    var imgUrl = decodeHtmlEntity("${(resourceDetail.detailImageUrl)!}");
                     alert(title);
                     alert(imgUrl);
                     wx.onMenuShareAppMessage({

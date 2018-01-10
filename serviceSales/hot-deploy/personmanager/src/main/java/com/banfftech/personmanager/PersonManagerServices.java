@@ -1279,15 +1279,30 @@ public class PersonManagerServices {
         }
 
 
-        //TODO setOrderPaymentStatus
-//        GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
-//
-//        String paymentId = (String) orderPaymentPrefAndPayment.get("paymentId");
-//
-//        dispatcher.runSync("setOrderPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "payToPartyId", partyId, "orderId", orderId));
+        GenericValue orderItem  =  EntityQuery.use(delegator).from("OrderItem").where("orderId",orderId).queryFirst();
+
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+
+        createMessageLogMap.put("partyIdFrom", partyId);
+
+        createMessageLogMap.put("message", "喂我告诉你,我已经发货了"+",物流公司是" + name + "!物流单号:" + code);
+
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+        createMessageLogMap.put("partyIdTo", orderCust.get("partyId"));
+
+        createMessageLogMap.put("badge", "CHECK");
+
+        createMessageLogMap.put("messageLogTypeId", "TEXT");
+
+        createMessageLogMap.put("objectId", orderItem.get("productId"));
 
 
-        //订单的支付状态需要已确认。
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+        msg.create();
 
 
         return resultMap;

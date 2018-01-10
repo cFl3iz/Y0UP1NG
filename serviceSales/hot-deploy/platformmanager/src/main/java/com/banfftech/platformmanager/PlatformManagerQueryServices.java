@@ -423,7 +423,7 @@ public class PlatformManagerQueryServices {
 
             Map<String, String> user = null;
 
-
+            String realToId = "";
             String toParty = (String) gv.get("partyIdTo");
             if (bizType != null & bizType.equals("findOne")) {
                 user = queryPersonBaseInfo(delegator, fromParty);
@@ -431,9 +431,11 @@ public class PlatformManagerQueryServices {
                 //绝对不拿自己的
                 if (fromParty.equals(partyIdTo)) {
                     user = queryPersonBaseInfo(delegator, toParty);
+                    realToId=toParty;
                     userMap.put("realPartyId",toParty);
                 } else {
                     user = queryPersonBaseInfo(delegator, fromParty);
+                    realToId=fromParty;
                     userMap.put("realPartyId",fromParty);
                 }
 
@@ -459,7 +461,7 @@ public class PlatformManagerQueryServices {
             userMap.put("avatar", user.get("headPortrait"));
 
             rowMap.put("user", userMap);
-
+            rowMap.put("realToId", realToId);
 
             String messageId = (String) gv.get("messageId");
 
@@ -495,7 +497,7 @@ public class PlatformManagerQueryServices {
         for (Map<String, Object> mp : returnList) {
             String to = (String) mp.get("toParty");
             String from = (String) mp.get("fromParty");
-            String realPartyId = (String) mp.get("realPartyId");
+            String realPartyId = (String) mp.get("realToId");
             findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));
 

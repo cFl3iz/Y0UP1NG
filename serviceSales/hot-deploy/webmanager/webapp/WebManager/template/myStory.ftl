@@ -79,7 +79,7 @@
         Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; font-size: medium; white-space:
         normal;"><br></p>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
-            <span style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">作者:${(resourceDetail.firstName?default('StoreName'))!}</span>
+            <span id="author" style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">作者:${(resourceDetail.firstName?default('StoreName'))!}</span>
         </p>
         <hr/>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">

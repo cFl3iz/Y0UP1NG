@@ -2,7 +2,8 @@
 
 
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-
+<link href="http://cdn.staticfile.org/emoji/0.2.2/emoji.css" rel="stylesheet" type="text/css" />
+<script src="http://cdn.staticfile.org/emoji/0.2.2/emoji.js"></script>
 <!-- TODO FIX ME -->
 
 
@@ -179,6 +180,13 @@
 
     $(
             function () {
+
+                //fix emoji
+                var $text = $('#author');
+                var html = $text.html().trim().replace(/\n/g, '<br/>');
+                $text.html(jEmoji.unifiedToHTML(html));
+
+
                 // clearCookie("tarjeta");
 
                 //回调地址

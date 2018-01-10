@@ -317,7 +317,7 @@
 
     function doAddProductRole(partyId,productId){
         var url = "addProductRole";
-        
+
         var param = {
             partyId:partyId,
             productId:productId,

@@ -468,12 +468,13 @@ public class PersonManagerServices {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         Delegator delegator = dispatcher.getDelegator();
 
         String partyId = (String) context.get("partyId");
-        Stirng roleTypeId = (String) context.get("roleTypeId");
-        Stirng productId = (String) context.get("productId");
+        String roleTypeId = (String) context.get("roleTypeId");
+        String productId = (String) context.get("productId");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         if(productId==null){
             return resultMap;

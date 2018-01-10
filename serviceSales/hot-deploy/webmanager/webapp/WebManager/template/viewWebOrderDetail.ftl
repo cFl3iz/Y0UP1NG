@@ -70,24 +70,24 @@
                         </label>
                     </label>
                 </div>
-                <div class="m-cell">
-                    <label class="cell-item">
-                        <span class="cell-left">${uiLabel.NoFuckSetting}</span>
-                        <label class="cell-right">
-                            <input type="checkbox" id="noSetting" class="m-switch"/>
+                <#--<div class="m-cell">-->
+                    <#--<label class="cell-item">-->
+                        <#--<span class="cell-left">${uiLabel.NoFuckSetting}</span>-->
+                        <#--<label class="cell-right">-->
+                            <#--<input type="checkbox" id="noSetting" class="m-switch"/>-->
 
-                        </label>
-                    </label>
-                </div>
-            <div class="m-cell"  id="CleanOne">
-                <label class="cell-item">
-                    <span class="cell-left">${uiLabel.CleanOne}</span>
-                    <label class="cell-right">
-                        <input type="checkbox"  class="m-switch"/>
+                        <#--</label>-->
+                    <#--</label>-->
+                <#--</div>-->
+            <#--<div class="m-cell"  id="CleanOne">-->
+                <#--<label class="cell-item">-->
+                    <#--<span class="cell-left">${uiLabel.CleanOne}</span>-->
+                    <#--<label class="cell-right">-->
+                        <#--<input type="checkbox"  class="m-switch"/>-->
 
-                    </label>
-                </label>
-            </div>
+                    <#--</label>-->
+                <#--</label>-->
+            <#--</div>-->
 
 
             <div class="m-button">

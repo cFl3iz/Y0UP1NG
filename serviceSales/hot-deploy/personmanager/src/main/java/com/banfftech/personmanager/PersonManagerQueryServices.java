@@ -1543,7 +1543,8 @@ public class PersonManagerQueryServices {
                     .makeCondition(roleTypeCustomer2,EntityOperator.AND,orderStatusCondition);
 
 
-        }else{
+        }
+        if(null != orderStatus && orderStatus.equals("ALL")){
             roleTypeCustomer = EntityCondition
                     .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
@@ -2388,6 +2389,10 @@ public class PersonManagerQueryServices {
           //  ProductContentAndInfo
             //EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productCategoryId",productCategoryId).queryList();
         }
+
+
+
+
 
 
         resultMap.put("myResourceList", resourceMapList);

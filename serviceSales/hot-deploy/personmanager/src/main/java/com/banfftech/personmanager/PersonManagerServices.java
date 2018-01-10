@@ -476,7 +476,7 @@ public class PersonManagerServices {
         String roleTypeId = (String) context.get("roleTypeId");
         String productId = (String) context.get("productId");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        if(productId==null){
+        if(productId==null || partyId ==null){
             return resultMap;
         }
         // 客户对于产品的角色

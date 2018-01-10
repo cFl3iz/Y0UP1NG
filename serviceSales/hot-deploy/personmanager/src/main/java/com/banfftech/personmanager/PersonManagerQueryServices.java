@@ -1620,7 +1620,7 @@ public class PersonManagerQueryServices {
                             rowMap.put("payStatusCode","1");
                         }
                         if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
-                            rowMap.put("orderPayStatus","买家已付款");
+                            rowMap.put("orderPayStatus","未付款");
                             rowMap.put("payStatusCode","1");
                         }
 

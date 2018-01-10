@@ -357,4 +357,4 @@
     }
 </script>
 
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" charset="gb2312"/>

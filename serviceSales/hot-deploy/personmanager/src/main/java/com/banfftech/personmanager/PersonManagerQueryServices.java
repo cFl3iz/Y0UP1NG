@@ -1527,7 +1527,7 @@ public class PersonManagerQueryServices {
 
 
 
-        EntityCondition roleTypeCustomer = null;
+        EntityCondition roleTypeCustomer = EntityCondition.makeCondition(UtilMisc.toMap("",""));
 
         //只查询发货完的订单
 

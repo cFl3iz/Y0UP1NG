@@ -182,9 +182,10 @@
             function () {
 
                 //fix emoji
-                var $text = $('#author');
-                var html = $text.html().trim().replace(/\n/g, '<br/>');
-                $text.html(jEmoji.unifiedToHTML(html));
+                var $emojitext = $("#author");
+                alert($emojitext);
+                var emojitexthtml = $emojitext.html().trim().replace(/\n/g, '<br/>');
+                $emojitext.html(jEmoji.unifiedToHTML(emojitexthtml));
 
 
                 // clearCookie("tarjeta");

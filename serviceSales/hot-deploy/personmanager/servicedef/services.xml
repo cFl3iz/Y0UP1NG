@@ -92,6 +92,9 @@
         <attribute name="area" type="String" mode="IN"
                    optional="true"/>
 
+        <attribute name="orderStatus" type="String" mode="IN"
+                   optional="true"/>
+
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
                    optional="true"/>
 

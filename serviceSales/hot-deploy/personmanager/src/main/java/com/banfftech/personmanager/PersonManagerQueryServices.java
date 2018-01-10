@@ -1505,6 +1505,12 @@ public class PersonManagerQueryServices {
         //是否是从App端的查询
         String area = (String) context.get("area");
 
+
+
+        String orderStatus  = (String) context.get("orderStatus");
+
+
+
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
         fieldSet.add("partyId");
@@ -1521,38 +1527,65 @@ public class PersonManagerQueryServices {
 
 
 
-        EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+        EntityCondition roleTypeCustomer = null;
 
-        EntityCondition findConditions = EntityCondition
+        //只查询发货完的订单
+
+        if(null != orderStatus && orderStatus.equals("SHIPMENT")){
+
+            EntityCondition orderStatusCondition = EntityCondition
+                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+
+            EntityCondition roleTypeCustomer2 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+
+            roleTypeCustomer = EntityCondition
+                    .makeCondition(roleTypeCustomer2,EntityOperator.AND,orderStatusCondition);
+
+
+        }else{
+            roleTypeCustomer = EntityCondition
+                    .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
+        }
+
+
+
+        EntityCondition partyIdCondition = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
-
-                EntityCondition findConditions2 = EntityCondition
+                EntityCondition payToPartyIdCondition = EntityCondition
                 .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
 
-        EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions,EntityOperator.OR,findConditions2);
+        EntityCondition guestAndPayToPartyConditionList = EntityCondition
+                .makeCondition(partyIdCondition,EntityOperator.OR,payToPartyIdCondition);
 
         EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3,EntityOperator.AND,listConditions);
+                .makeCondition(roleTypeCustomer,EntityOperator.AND,guestAndPayToPartyConditionList);
 
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
 
+
+
+
+
         if(null != queryMyResourceOrderList && queryMyResourceOrderList.size()>0){
 
             for(GenericValue gv : queryMyResourceOrderList){
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
+                if(null != orderStatus && orderStatus.equals("PAYMENT")){
+                    if(null == orderPaymentPrefAndPayment){
+                        continue;
+                    }
+                }
+
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
-
-
-
-
-
-
 
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
@@ -1594,7 +1627,7 @@ public class PersonManagerQueryServices {
 
 
 
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
+
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",gv.get("orderId")).queryFirst();
 

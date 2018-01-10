@@ -270,8 +270,7 @@
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
-                    alert(title);
-                    alert(imgUrl);
+
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题
                         desc: '这是我的秘密...', // 分享描述

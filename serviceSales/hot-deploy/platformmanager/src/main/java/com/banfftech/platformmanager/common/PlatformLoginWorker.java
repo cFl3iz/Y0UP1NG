@@ -334,7 +334,7 @@ public class PlatformLoginWorker {
 
         System.out.println("*weChatAppWebLogin:" + userInfoMap);
         result.put("nowPersonName",userInfoMap.get("nickname"));
-
+        System.out.println(">>>>>>*weChatAppWebLogin - nowPersonName =:" + userInfoMap.get("nickname"));
 //        String openId =  (String) userInfoMap.get("openId");
 
         String unioId =  (String) userInfoMap.get("unionid");

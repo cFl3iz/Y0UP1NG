@@ -1527,7 +1527,8 @@ public class PersonManagerQueryServices {
 
 
 
-        EntityCondition roleTypeCustomer = EntityCondition.makeCondition(UtilMisc.toMap("",""));
+        EntityCondition roleTypeCustomer  = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
         //只查询发货完的订单
 
@@ -1544,12 +1545,11 @@ public class PersonManagerQueryServices {
 
 
         }
+
         if(null != orderStatus && orderStatus.equals("ALL")){
-            roleTypeCustomer = EntityCondition
-                    .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
 
         }
-
 
 
         EntityCondition partyIdCondition = EntityCondition

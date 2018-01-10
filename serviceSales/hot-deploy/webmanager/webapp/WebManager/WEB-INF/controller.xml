@@ -211,7 +211,7 @@
             <redirect-parameter name="returnPayToPartyId" from="returnPayToPartyId"/>
             <redirect-parameter name="subscribe" from="subscribe"/>
             <redirect-parameter name="productId" from="productId"/>
-            <redirect-parameter name="nowPersonName" from="nowPersonName"/>
+            <redirect-parameter name="nowPersonName" value="${nowPersonName}"/>
         </response>
 
         <response name="error" type="request-redirect" value="shareProduct">

@@ -216,7 +216,7 @@
 </script>
 
 <input id="spm" type="hidden" value="${(spm)!}" />
-<input id="nowPersonName" type="hidden" value="${(nowPersonName)!}" />
+
 
 <input id="productName" type="hidden" value="${(resourceDetail.productName)!}" />
 <input id="imgUrl" type="hidden" value="${(resourceDetail.detailImageUrl)!}" />
@@ -226,6 +226,7 @@
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="hidden"/>
 <input id="partyId" name="partyId" value="${(partyId)!}" type="hidden"/>
+<input id="nowPersonName" name="partyId"  type="hidden" value="${(nowPersonName)!}" />
 <form id="miniChatForm" action="miniChat" method="get">
     <input id="tarjeta" name="tarjeta" type="hidden" value="${(tarjeta)!}"/>
     <input id="payToPartyId" name="payToPartyId" type="hidden" value="${resourceDetail.payToPartyId}"/>

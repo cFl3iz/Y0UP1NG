@@ -79,6 +79,7 @@
             success: function (data) {
                 var validate = data.validate;
                 var partyId  = data.partyId;
+                var nowPersonName  = data.nowPersonName;
 //               alert("validate result = " + validate);
 //                alert("validate="+validate);
                 if (validate === "true") {
@@ -87,7 +88,7 @@
                     //将当前用户的partyId放到页面
 //                    alert("partyId="+partyId);
                     $("#partyId").val(partyId);
-
+                    $("#nowPersonName").val(nowPersonName);
 //                    setCookie("tarjeta",tarjeta);
                     if (newTarjeta != null && newTarjeta.trim() != "") {
 //                        alert("setCookie = " + newTarjeta);

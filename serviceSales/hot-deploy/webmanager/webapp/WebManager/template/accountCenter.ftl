@@ -274,6 +274,7 @@
                     var imgUrl = $("#imgUrl").val();
 
                     var nowPersonName = getCookie("nowPersonName");
+                    alert("nowPersonName=")+nowPersonName;
                     nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题

@@ -3301,7 +3301,7 @@ public class PersonManagerServices {
         createPartyRelationshipInMap.put("userLogin", admin);
         createPartyRelationshipInMap.put("partyIdFrom", partyId);
         createPartyRelationshipInMap.put("partyIdTo", payToPartyId);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.PRODUCT_CUSTOMER);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
 
         dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 

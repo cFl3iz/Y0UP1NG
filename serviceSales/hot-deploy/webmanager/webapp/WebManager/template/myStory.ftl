@@ -217,6 +217,9 @@
 
 <input id="spm" type="hidden" value="${(spm)!}" />
 
+<input id="productName" type="hidden" value="${(resourceDetail.productName)!}" />
+<input id="imgUrl" type="hidden" value="${(resourceDetail.detailImageUrl)!}" />
+
 <input id="mark" type="hidden" value="${(mark)!}"/>
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
 <input id="fromurl" type="hidden" value="${fromurl}"/>

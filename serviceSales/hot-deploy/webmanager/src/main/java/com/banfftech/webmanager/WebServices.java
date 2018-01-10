@@ -181,6 +181,7 @@ public class WebServices {
         request.setAttribute("subscribe",subscribe);
         request.setAttribute("nowPersonName",nowPersonName);
 
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> nowPersonName = " +nowPersonName);
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPM = " +spm +" spmlength =" + spm.length());
 
 //        if(null != spm && spm.length()>=5){

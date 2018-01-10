@@ -135,6 +135,7 @@
                     setCookie("subscribe", $("#subscribe").val());
                     setCookie("tarjeta", $("#tarjeta").val());
                     setCookie("partyId", $("#partyId").val());
+                    setCookie("nowPersonName", $("#nowPersonName").val());
                     return true;
                 } else {
 //                   alert("132");
@@ -272,7 +273,7 @@
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
 
-                    var nowPersonName = $("#nowPersonName").val();
+                    var nowPersonName = getCookie("nowPersonName");
                     nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题

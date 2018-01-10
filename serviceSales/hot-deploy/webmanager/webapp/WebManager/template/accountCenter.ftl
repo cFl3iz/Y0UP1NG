@@ -232,6 +232,9 @@
                         alert(textStatus);
                     }
                 });
+                window.addEventListener("click", function(e){
+                    alert(e.target.tagName);
+                });
 
 
                 wx.ready(function () {
@@ -252,17 +255,6 @@
 //                        }
 //                    });
 
-                    function UnicodeToUtf8(unicode) {
-                        var uchar;
-                        var utf8str = "";
-                        var i;
-
-                        for(i=0; i<unicode.length;i+=2){
-                            uchar = (unicode[i]<<8) | unicode[i+1];               //UNICODE为2字节编码，一次读入2个字节
-                            utf8str = utf8str  + String.fromCharCode(uchar);    //使用String.fromCharCode强制转换
-                        }
-                        return utf8str;
-                    }
 
 
                     var partyId = $("#partyId").val();

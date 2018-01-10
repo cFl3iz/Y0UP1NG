@@ -1669,6 +1669,7 @@ public class PersonManagerQueryServices {
             }
         }
 
+        resultMap.put("orderStatus",orderStatus);
 
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
 

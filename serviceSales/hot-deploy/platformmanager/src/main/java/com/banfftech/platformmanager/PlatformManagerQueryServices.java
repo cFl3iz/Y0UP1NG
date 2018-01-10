@@ -541,18 +541,25 @@ public class PlatformManagerQueryServices {
 
 
             String relationStr = "";
+            System.out.println("===========================================================================>");
+            System.out.println("PartyIdTo="+userLogin.get("partyId"));
+            System.out.println("PartyIdFrom="+realPartyId);
+
             //查客户关系
             List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId).queryList();
-
+            System.out.println("partyRelationship="+partyRelationship.size());
             if(partyRelationship!=null && partyRelationship.size()>0){
                 for(int index = 0 ; index < partyRelationship.size(); index++ ){
                     GenericValue gv = partyRelationship.get(index);
                     String relation = (String) gv.get("partyRelationshipTypeId");
+                    System.out.println("relation="+relation);
                     relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
+                    System.out.println("relationStr="+relationStr);
                 }
             }else{
                 relationStr = "潜在客户";
             }
+            System.out.println("<===========================================================================");
             mp.put("custRelation",relationStr);
         }
 

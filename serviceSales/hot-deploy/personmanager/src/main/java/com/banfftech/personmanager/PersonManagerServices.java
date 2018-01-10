@@ -3293,17 +3293,17 @@ public class PersonManagerServices {
 
 
         //确认客户关系
-        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-
-
-        createPartyRelationshipInMap.put("roleTypeIdTo", "SHIP_FROM_VENDOR");
-        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", partyId);
-        createPartyRelationshipInMap.put("partyIdTo", payToPartyId);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
-
-        dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+//
+//
+//        createPartyRelationshipInMap.put("roleTypeIdTo", "SHIP_FROM_VENDOR");
+//        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
+//        createPartyRelationshipInMap.put("userLogin", admin);
+//        createPartyRelationshipInMap.put("partyIdFrom", partyId);
+//        createPartyRelationshipInMap.put("partyIdTo", payToPartyId);
+//        createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
+//
+//        dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
 
 

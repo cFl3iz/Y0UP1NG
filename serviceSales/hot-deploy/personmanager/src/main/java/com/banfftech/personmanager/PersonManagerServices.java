@@ -3172,23 +3172,6 @@ public class PersonManagerServices {
         String maiJiaName = (String) person.get("firstName");
 
 
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-
-
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-
-
-            try {
-                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId",productId,"message", "order", "content", maiJiaName + "购买了您的产品!点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-            } catch (GenericServiceException e1) {
-                Debug.logError(e1.getMessage(), module);
-                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
-            }
-
-
-        }
 
 
         //推送给微信用户
@@ -3322,7 +3305,21 @@ public class PersonManagerServices {
 
 
 
+        //推卖家
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+
+            try {
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId",productId,"message", "order", "content", maiJiaName + "购买了您的产品!点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+            }
+
+        }
         return resultMap;
     }
 

@@ -252,18 +252,24 @@
 //                        }
 //                    });
 
-                    var decodeHtmlEntity = function(str) {
-                        return str.replace(/&#(\d+);/g, function(match, dec) {
-                            return String.fromCharCode(dec);
-                        });
-                    };
+                    function UnicodeToUtf8(unicode) {
+                        var uchar;
+                        var utf8str = "";
+                        var i;
+
+                        for(i=0; i<unicode.length;i+=2){
+                            uchar = (unicode[i]<<8) | unicode[i+1];               //UNICODE为2字节编码，一次读入2个字节
+                            utf8str = utf8str  + String.fromCharCode(uchar);    //使用String.fromCharCode强制转换
+                        }
+                        return utf8str;
+                    }
 
 
                     var partyId = $("#partyId").val();
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
-                    var title = decodeHtmlEntity("${(resourceDetail.productName)!}");
-                    var imgUrl = decodeHtmlEntity("${(resourceDetail.detailImageUrl)!}");
+                    var title = UnicodeToUtf8("${(resourceDetail.productName)!}");
+                    var imgUrl = UnicodeToUtf8("${(resourceDetail.detailImageUrl)!}");
                     alert(title);
                     alert(imgUrl);
                     wx.onMenuShareAppMessage({

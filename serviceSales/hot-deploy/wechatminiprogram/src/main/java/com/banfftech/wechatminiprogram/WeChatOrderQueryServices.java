@@ -454,18 +454,18 @@ public class WeChatOrderQueryServices {
         GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
 
         //TODO QUERY orderExpressInfo
-        if(null != order && null != order.get("internalCode")){
-
-
-        Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",admin,"code",order.get("internalCode")));
-        List<JSONObject> expressInfos = null;
-        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
-            expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
-        }
-
-        rowMap.put("orderExpressInfo",expressInfos);
-        rowMap.put("orderExpressName",queryExpressInfoMap.get("name"));
-        }
+//        if(null != order && null != order.get("internalCode")){
+//
+//
+//        Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",admin,"code",order.get("internalCode")));
+//        List<JSONObject> expressInfos = null;
+//        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+//            expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+//        }
+//
+//        rowMap.put("orderExpressInfo",expressInfos);
+//        rowMap.put("orderExpressName",queryExpressInfoMap.get("name"));
+//        }
         resultMap.put("orderDetail",rowMap);
 
 

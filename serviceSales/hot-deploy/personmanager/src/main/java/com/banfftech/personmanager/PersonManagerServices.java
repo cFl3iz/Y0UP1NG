@@ -885,7 +885,7 @@ public class PersonManagerServices {
 
             //所以卖家应找到客户的付款 并且将状态改为'已收到'
 
-           // GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
+            GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
 
             String paymentId = (String) createPaymentResult.get("paymentId");
 
@@ -916,7 +916,7 @@ public class PersonManagerServices {
             //先将支付应用到发票
 
             Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
-                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
+                    "userLogin", userLogin, "paymentId", payment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
 
             if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
                 return createPaymentApplicationMap;
@@ -926,7 +926,7 @@ public class PersonManagerServices {
             //确认这笔支付的状态
 
             Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
-                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
+                    "userLogin", userLogin, "paymentId", payment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
 
             if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
                 return setPaymentStatusOutMap;

@@ -1529,47 +1529,79 @@ public class PersonManagerQueryServices {
 
 
 
-        EntityCondition roleTypeCustomer  = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+//        EntityCondition roleTypeCustomer  = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+//
+//        //只查询发货完的订单
+//
+//        if(null != orderStatus && orderStatus.equals("SHIPMENT")){
+//
+//            EntityCondition orderStatusCondition = EntityCondition
+//                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+//
+//            EntityCondition roleTypeCustomer2 = EntityCondition
+//                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+//
+//            roleTypeCustomer = EntityCondition
+//                    .makeCondition(roleTypeCustomer2,EntityOperator.AND,orderStatusCondition);
+//
+//
+//        }
+//
+//        if(null != orderStatus && orderStatus.equals("ALL")){
+//
+//
+//        }
+//
+//
+//        EntityCondition partyIdCondition = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyId));
+//
+//                EntityCondition payToPartyIdCondition = EntityCondition
+//                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+//
+//        EntityCondition guestAndPayToPartyConditionList = EntityCondition
+//                .makeCondition(partyIdCondition,EntityOperator.OR,payToPartyIdCondition);
+//
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(roleTypeCustomer,EntityOperator.AND,guestAndPayToPartyConditionList);
 
-        //只查询发货完的订单
+
+
+        EntityCondition roleTypeCondition  = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+
+        EntityCondition payToPartyIdCondition = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(roleTypeCondition,EntityOperator.AND,payToPartyIdCondition);
+
+
+
+
+
+        List<GenericValue> queryMyResourceOrderList = null;
 
         if(null != orderStatus && orderStatus.equals("SHIPMENT")){
 
-            EntityCondition orderStatusCondition = EntityCondition
-                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
 
-            EntityCondition roleTypeCustomer2 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+            EntityCondition listConditions3 = EntityCondition
+                    .makeCondition(listConditions2,EntityOperator.AND,orderStatusCondition);
 
-            roleTypeCustomer = EntityCondition
-                    .makeCondition(roleTypeCustomer2,EntityOperator.AND,orderStatusCondition);
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions3, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
 
+        }else{
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions2, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
 
         }
 
-        if(null != orderStatus && orderStatus.equals("ALL")){
-
-
-        }
-
-
-        EntityCondition partyIdCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
-
-                EntityCondition payToPartyIdCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
-
-        EntityCondition guestAndPayToPartyConditionList = EntityCondition
-                .makeCondition(partyIdCondition,EntityOperator.OR,payToPartyIdCondition);
-
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(roleTypeCustomer,EntityOperator.AND,guestAndPayToPartyConditionList);
-
-
-        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                listConditions2, fieldSet,
-                UtilMisc.toList("-orderDate"), null, false);
 
 
 

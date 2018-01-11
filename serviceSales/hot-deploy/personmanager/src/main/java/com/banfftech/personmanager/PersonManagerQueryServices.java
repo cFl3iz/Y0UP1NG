@@ -1657,8 +1657,8 @@ public class PersonManagerQueryServices {
              //   if(payToPartyId.equals(partyId)){   }
                 GenericValue  custOrderInfo  = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", rowMap.get("orderId"),"roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
 
-                    personInfoMap =  queryPersonBaseInfo(delegator,custOrderInfo.get("partyId"));
-                    personAddressInfoMap = queryPersonAddressInfo(delegator,custOrderInfo.get("partyId"));
+                    personInfoMap =  queryPersonBaseInfo(delegator,(String)custOrderInfo.get("partyId"));
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,(String)custOrderInfo.get("partyId"));
                     rowMap.put("realPartyId",custOrderInfo.get("partyId"));
 
                 //说明这笔单我是买家,查卖家头像信息

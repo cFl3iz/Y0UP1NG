@@ -878,14 +878,14 @@ public class PersonManagerServices {
 
 
         //查找订单支付Id
-       GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+       // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
         //这种情况下说明是先付钱,后发货的。
 
 
             //所以卖家应找到客户的付款 并且将状态改为'已收到'
 
-            GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
+           // GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
 
             String paymentId = (String) createPaymentResult.get("paymentId");
 
@@ -901,48 +901,47 @@ public class PersonManagerServices {
 //        } else {
 //
 //
-        if(null!=orderPaymentPrefAndPayment) {
-            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
-            //暂时使用卑劣方式
-            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
-            orderPaymentPrefAndPayment.store();
-        }
-            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
-
-            //找发票
-            GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
-
-
-            //先将支付应用到发票
-
-            Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
-                    "userLogin", userLogin, "paymentId", payment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
-
-            if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
-                return createPaymentApplicationMap;
-            }
-
-
-            //确认这笔支付的状态
-
-            Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
-                    "userLogin", userLogin, "paymentId", payment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
-
-            if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
-                return setPaymentStatusOutMap;
-            }
-
-
-            //更新订单支付信息
-//        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
-//                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+//            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
 //
-//        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
-//            return updateOrderPaymentPreferenceOutMap;
-//        }
-
-
-
+//            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
+//
+//            //找发票
+//            GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
+//
+//
+//            //先将支付应用到发票
+//
+//            Map<String, Object> createPaymentApplicationMap = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap(
+//                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "invoiceId", orderItemBillingAndInvoiceAndItem.get("invoiceId"), "amountApplied", orderHeader.get("grandTotal")));
+//
+//            if (!ServiceUtil.isSuccess(createPaymentApplicationMap)) {
+//                return createPaymentApplicationMap;
+//            }
+//
+//
+//            //确认这笔支付的状态
+//
+//            Map<String, Object> setPaymentStatusOutMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap(
+//                    "userLogin", userLogin, "paymentId", orderPaymentPrefAndPayment.get("paymentId"), "statusId", "PMNT_CONFIRMED"));
+//
+//            if (!ServiceUtil.isSuccess(setPaymentStatusOutMap)) {
+//                return setPaymentStatusOutMap;
+//            }
+//
+//
+//            //更新订单支付信息
+////        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+////                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+////
+////        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+////            return updateOrderPaymentPreferenceOutMap;
+////        }
+//
+//            //暂时使用卑劣方式
+//            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
+//            orderPaymentPrefAndPayment.store();
+//
+//
 //        }
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();

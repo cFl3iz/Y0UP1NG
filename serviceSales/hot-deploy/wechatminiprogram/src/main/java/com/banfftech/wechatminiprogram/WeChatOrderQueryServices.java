@@ -410,23 +410,31 @@ public class WeChatOrderQueryServices {
         fieldSet.add("payToPartyId");
 
 
-        EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+//        EntityCondition findConditions3 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+//
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyId));
+//
+//
+//        EntityCondition findConditions2 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
+//
+//        EntityCondition listConditions = EntityCondition
+//                .makeCondition(findConditions, EntityOperator.OR, findConditions2);
+//
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(findConditions3, EntityOperator.AND, listConditions);
 
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+        EntityCondition roleTypeCondition  = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
 
+        EntityCondition payToPartyIdCondition = EntityCondition
+                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
 
-        EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
-
-        EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions, EntityOperator.OR, findConditions2);
 
         EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3, EntityOperator.AND, listConditions);
-
-
+                .makeCondition(roleTypeCondition,EntityOperator.AND,payToPartyIdCondition);
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,
                 UtilMisc.toList("-orderDate"), null, false);

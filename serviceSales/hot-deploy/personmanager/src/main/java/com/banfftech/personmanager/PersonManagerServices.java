@@ -482,6 +482,13 @@ public class PersonManagerServices {
         // 客户对于产品的角色
 
         GenericValue productRoleCust =  EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", roleTypeId,"productId", productId).queryFirst();
+
+        System.out.println("*ProductRole Compoment ------------------->");
+        System.out.println("*ProductRole =" + roleTypeId);
+        System.out.println("*ProductId =" + productId);
+        System.out.println("*PartyId =" + partyId);
+        System.out.println("*HisRole ? =" + (productRoleCust == null));
+        System.out.println("*ProductRole Compoment <-------------------");
         if(null == productRoleCust){
             dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", roleTypeId));
         }

@@ -120,11 +120,11 @@
                 <strong style="margin: 0px; padding: 0px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
             </span>
             </p>
-            <button type="button" onclick="contactMe();" class="btn-block btn-warning">
+            <button type="button" id="contactBtn" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
             <#if !resourceDetail.salesDiscontinuationDate?has_content>
-            <button type="button" onclick="location.href='shareProduct?productId=${productId}';" class="btn-block btn-primary">
+            <button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">
             ${uiLabel.GoToPay}
             </button>
             </#if>
@@ -179,6 +179,16 @@
 
     }
 
+    function gotoBuyProduct(productId){
+        var payToPartyId = $("#payToPartyId").val();
+        var partyId      = $("#partyId").val();
+        if(payToPartyId === partyId){
+            alert("您的身份就是卖家。请勿刷单，否则平台将封杀您的账户。");
+            $("#contactBtn").css("disabled","disabled");
+            return false;
+        }
+        location.href='shareProduct?productId='+productId;
+    }
 
     function contactMe() {
         var flag = checkSubscribe();
@@ -188,6 +198,13 @@
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
             var spm            = $("#spm").val();
+
+
+            if(payToPartyId === partyId){
+                alert("您的身份就是卖家。请勿刷单，否则平台将封杀您的账户。");
+                $("#contactBtn").css("disabled","disabled");
+                return false;
+            }
 
             if(payToPartyId == null || payToPartyId ===""){
               alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");

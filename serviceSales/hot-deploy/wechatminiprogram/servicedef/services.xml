@@ -4,6 +4,20 @@
     <description>WechatMiniProgram Services</description>
     <vendor></vendor>
     <version>1.0</version>
+
+
+    <service name="queryOrderDetailFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderDetailFromWeChat" auth="false">
+        <description>queryOrderDetailFromWeChat</description>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="orderDetail" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
     <!--queryOrderFromWeChatList-->
     <service name="queryOrderListFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"

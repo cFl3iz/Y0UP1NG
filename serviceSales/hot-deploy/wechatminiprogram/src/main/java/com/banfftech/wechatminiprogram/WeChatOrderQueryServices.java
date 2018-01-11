@@ -1,5 +1,5 @@
 package main.java.com.banfftech.wechatminiprogram;
-
+import net.sf.json.JSONObject;
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import org.apache.ofbiz.entity.GenericEntity;
@@ -359,6 +359,108 @@ public class WeChatOrderQueryServices {
         }
 
         resultMap.put("collectList", returnList);
+
+        return resultMap;
+    }
+
+
+    /**
+     * queryOrderDetailFromWeChat
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryOrderDetailFromWeChat(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String orderId = (String) context.get("orderId");
+
+        //Order BaseInfo
+        Map<String,Object> rowMap = new HashMap<String, Object>();
+        //Express Info
+        Map<String,Object> orderExpressInfo = new HashMap<String, Object>();
+
+        GenericValue  orderHeaderItemAndRoles  = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", orderId,"roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
+
+        if(null != orderHeaderItemAndRoles){
+
+            rowMap = orderHeaderItemAndRoles.getAllFields();
+
+            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",orderId).queryFirst();
+
+            if(null != orderPaymentPrefAndPayment){
+
+                String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                if(statusId.toUpperCase().indexOf("RECEIVED")>0){
+
+                    rowMap.put("orderPayStatus","已付款");
+
+                }else{
+
+                    rowMap.put("orderPayStatus","未付款");
+
+                }
+            }else{
+
+                rowMap.put("orderPayStatus","未付款");
+
+            }
+
+            String productStoreId = (String) orderHeaderItemAndRoles.get("productStoreId");
+
+            String productId = (String) orderHeaderItemAndRoles.get("productId");
+
+            GenericValue productStore = delegator.findOne("ProductStore",UtilMisc.toMap("productStoreId",productStoreId),false);
+
+            GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
+
+            rowMap.put("productName",""+product.get("productName"));
+
+            rowMap.put("detailImageUrl",(String)product.get("detailImageUrl"));
+
+            String payToPartyId = (String)productStore.get("payToPartyId");
+
+            rowMap.put("payToPartyId",payToPartyId);
+
+
+            Map<String,String> personInfoMap = null;
+
+            Map<String,String> personAddressInfoMap = null;
+
+
+            personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+
+            personAddressInfoMap = queryPersonAddressInfo(delegator,rowMap.get("partyId"));
+
+            rowMap.put("personInfoMap",personInfoMap);
+
+            rowMap.put("personAddressInfoMap",personAddressInfoMap);
+
+        }
+
+        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
+
+        //TODO QUERY orderExpressInfo
+        Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",admin,"code",order.get("internalCode")));
+        List<JSONObject> expressInfos = null;
+        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+            expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+        }
+
+        rowMap.put("orderExpressInfo",expressInfos);
+        rowMap.put("orderExpressName",queryExpressInfoMap.get("name"));
+        resultMap.put("orderDetail",rowMap);
+
 
         return resultMap;
     }

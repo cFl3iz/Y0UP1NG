@@ -901,8 +901,12 @@ public class PersonManagerServices {
 //        } else {
 //
 //
+        if(null!=orderPaymentPrefAndPayment) {
             String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
-
+            //暂时使用卑劣方式
+            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
+            orderPaymentPrefAndPayment.store();
+        }
             GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
             //找发票
@@ -937,9 +941,6 @@ public class PersonManagerServices {
 //            return updateOrderPaymentPreferenceOutMap;
 //        }
 
-            //暂时使用卑劣方式
-            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
-            orderPaymentPrefAndPayment.store();
 
 
 //        }

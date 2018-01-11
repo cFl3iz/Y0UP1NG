@@ -28,6 +28,9 @@ import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
 import java.util.*;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonAddressInfo;
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+
 /**
  * Created by S on 2017/11/20.
  */
@@ -440,7 +443,7 @@ public class WeChatOrderQueryServices {
 
             personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
 
-            personAddressInfoMap = queryPersonAddressInfo(delegator,rowMap.get("partyId"));
+            personAddressInfoMap = queryPersonAddressInfo(delegator,(String) rowMap.get("partyId"));
 
             rowMap.put("personInfoMap",personInfoMap);
 
@@ -566,13 +569,13 @@ public class WeChatOrderQueryServices {
 
                 //说明这笔订单我是卖家,查买家头像信息
                 if (payToPartyId.equals(partyId)) {
-                    personInfoMap = PersonManagerQueryServices.queryPersonBaseInfo(delegator, payFromPartyId);
-                    personAddressInfoMap = PersonManagerQueryServices.queryPersonAddressInfo(delegator, payFromPartyId);
+                    personInfoMap = queryPersonBaseInfo(delegator, payFromPartyId);
+                    personAddressInfoMap = queryPersonAddressInfo(delegator, payFromPartyId);
                 }
                 //说明这笔单我是买家,查卖家头像信息
                 if (!payToPartyId.equals(partyId)) {
-                    personInfoMap = PersonManagerQueryServices.queryPersonBaseInfo(delegator, payToPartyId);
-                    personAddressInfoMap = PersonManagerQueryServices.queryPersonAddressInfo(delegator, payToPartyId);
+                    personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
+                    personAddressInfoMap = queryPersonAddressInfo(delegator, payToPartyId);
                 }
                 rowMap.put("userPartyId", partyId);
                 rowMap.put("personInfoMap", personInfoMap);

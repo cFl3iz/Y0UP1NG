@@ -1655,9 +1655,11 @@ public class PersonManagerQueryServices {
 
                 //说明这笔订单我是卖家,查买家头像信息
              //   if(payToPartyId.equals(partyId)){   }
-                    personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
-                    personAddressInfoMap = queryPersonAddressInfo(delegator,payFromPartyId);
-                    rowMap.put("realPartyId",payFromPartyId);
+                GenericValue  custOrderInfo  = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", rowMap.get("orderId"),"roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
+
+                    personInfoMap =  queryPersonBaseInfo(delegator,custOrderInfo.get("partyId"));
+                    personAddressInfoMap = queryPersonAddressInfo(delegator,custOrderInfo.get("partyId"));
+                    rowMap.put("realPartyId",custOrderInfo.get("partyId"));
 
                 //说明这笔单我是买家,查卖家头像信息
 //                if(!payToPartyId.equals(partyId)){

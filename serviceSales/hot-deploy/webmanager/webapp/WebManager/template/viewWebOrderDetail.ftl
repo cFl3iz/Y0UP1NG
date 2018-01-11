@@ -54,7 +54,7 @@
     <div class="m-cell">
         <div class="cell-item">
             <div class="cell-right">
-                <textarea name="address2" class="cell-textarea" placeholder="${uiLabel.AddressDetailDemo}"></textarea>
+                <textarea name="address2" id="address2" class="cell-textarea" placeholder="${uiLabel.AddressDetailDemo}"></textarea>
             </div>
         </div>
     </div>
@@ -224,11 +224,25 @@
 
                     // 顶部提示框
                     $('#J_Notify').on('click', function () {
-                        dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
 
+                        var address1 = $("#address1").val();
+                        var address2 = $("#address2").val();
+                        var flag  = true;
+                        if(address1 == null || address1 === ""){
+                            flag = false;
+                        }
+                        if(address2 == null || address2 === ""){
+                            flag = false;
+                        }
+
+                        if(flag){
+                        dialog.notify('${uiLabel.SettingSuccess}', 2000, function(){
                             $("#J_Notify").attr({"disabled":"disabled"});
                             $("#createPersonPartyPostalAddressForm").submit();
                         });
+                        }else{
+                            alert("请填写完整收货地址...");
+                        }
                     });
                 }(window, jQuery);
             </script>

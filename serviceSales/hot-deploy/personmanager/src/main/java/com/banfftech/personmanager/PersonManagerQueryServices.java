@@ -1608,14 +1608,14 @@ public class PersonManagerQueryServices {
 
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
                 //有物流信息
-                if(statusId.equals("ORDER_COMPLETED")){
-                    Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",rowMap.get("internalCode")));
-                    List<JSONObject> expressInfos = null;
-                    if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
-                        expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
-                        rowMap.put("expressInfos",expressInfos);
-                    }
-                }
+//                if(statusId.equals("ORDER_COMPLETED")){
+//                    Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",rowMap.get("internalCode")));
+//                    List<JSONObject> expressInfos = null;
+//                    if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+//                        expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+//                        rowMap.put("expressInfos",expressInfos);
+//                    }
+//                }
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String,String> personInfoMap = null;

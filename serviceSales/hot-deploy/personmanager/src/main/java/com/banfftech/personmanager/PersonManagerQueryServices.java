@@ -1654,17 +1654,17 @@ public class PersonManagerQueryServices {
                 Map<String,String> personAddressInfoMap = null;
 
                 //说明这笔订单我是卖家,查买家头像信息
-                if(payToPartyId.equals(partyId)){
+             //   if(payToPartyId.equals(partyId)){   }
                     personInfoMap =  queryPersonBaseInfo(delegator,payFromPartyId);
                     personAddressInfoMap = queryPersonAddressInfo(delegator,payFromPartyId);
                     rowMap.put("realPartyId",payFromPartyId);
-                }
+
                 //说明这笔单我是买家,查卖家头像信息
-                if(!payToPartyId.equals(partyId)){
-                    personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
-                    personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
-                    rowMap.put("realPartyId",payToPartyId);
-                }
+//                if(!payToPartyId.equals(partyId)){
+//                    personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
+//                    personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
+//                    rowMap.put("realPartyId",payToPartyId);
+//                }
                 rowMap.put("userPartyId",partyId);
 
                 rowMap.put("personInfoMap",personInfoMap);

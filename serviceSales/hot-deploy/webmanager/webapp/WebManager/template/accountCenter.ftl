@@ -263,6 +263,8 @@
 
                     var partyId = $("#partyId").val();
                     var productId = $("#productId").val();
+                    //记录访客
+                    doAddProductRole(partyId,productId,"VISITOR");
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
@@ -279,7 +281,7 @@
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
                             //alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
-                            doAddProductRole(partyId,productId);
+                            doAddProductRole(partyId,productId,"PARTNER");
 // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
@@ -315,13 +317,13 @@
     }
 
 
-    function doAddProductRole(partyId,productId){
+    function doAddProductRole(partyId,productId,roleTypeId){
         var url = "addProductRole";
 
         var param = {
             partyId:partyId,
             productId:productId,
-            roleTypeId:"PARTNER"
+            roleTypeId:roleTypeId
         };
         $.ajax({
             type: 'POST',

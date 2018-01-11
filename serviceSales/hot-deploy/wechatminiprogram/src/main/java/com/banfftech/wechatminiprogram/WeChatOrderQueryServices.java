@@ -426,11 +426,13 @@ public class WeChatOrderQueryServices {
 //        EntityCondition listConditions2 = EntityCondition
 //                .makeCondition(findConditions3, EntityOperator.AND, listConditions);
 
+        //只查我的采购订单
+
         EntityCondition roleTypeCondition  = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
         EntityCondition payToPartyIdCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
+                .makeCondition(UtilMisc.toMap("partyId",partyId));
 
 
         EntityCondition listConditions2 = EntityCondition

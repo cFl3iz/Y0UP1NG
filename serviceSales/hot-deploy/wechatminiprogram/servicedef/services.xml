@@ -12,7 +12,7 @@
         <description>queryOrderDetailFromWeChat</description>
         <attribute name="orderId" type="String" mode="IN"
                    optional="true" />
-        <attribute name="orderDetail" type="List" mode="OUT"
+        <attribute name="orderDetail" type="java.util.Map" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

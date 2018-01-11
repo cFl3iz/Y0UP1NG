@@ -35,7 +35,7 @@
         <value xml:lang="zh">联系人</value>
     </property>
     <property key="ORDER_CREATED">
-        <value xml:lang="en">CREATED.</value>
+        <value xml:lang="en">已创建</value>
         <value xml:lang="zh-CN">已创建</value>
     </property>
 
@@ -45,7 +45,7 @@
     <!--</property>-->
 
     <property key="ORDER_COMPLETED">
-        <value xml:lang="en">OVER.</value>
+        <value xml:lang="en">已发货</value>
         <value xml:lang="zh-CN">已发货</value>
     </property>
 

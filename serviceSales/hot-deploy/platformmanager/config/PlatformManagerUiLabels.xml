@@ -98,20 +98,20 @@
 
 
     <property key="CUSTOMER_REL">
-        <value xml:lang="en">CUSTOMER_REL.</value>
+        <value xml:lang="en">客户</value>
         <value xml:lang="zh">客户</value>
         <value xml:lang="zh-TW">客户</value>
     </property>
 
 
     <property key="CONTACT_REL">
-        <value xml:lang="en">CONTACT_REL.</value>
+        <value xml:lang="en">联系人</value>
         <value xml:lang="zh">联系人</value>
         <value xml:lang="zh-TW">联系人</value>
     </property>
 
     <property key="SUPPLIER_REL">
-        <value xml:lang="en">SUPPLIER_REL.</value>
+        <value xml:lang="en">供货商</value>
         <value xml:lang="zh">供货商</value>
         <value xml:lang="zh-TW">供货商</value>
     </property>

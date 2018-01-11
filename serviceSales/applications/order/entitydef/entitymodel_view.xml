@@ -497,6 +497,8 @@ under the License.
       <member-entity entity-alias="OI" entity-name="OrderItem"/>
       <member-entity entity-alias="PS" entity-name="ProductStore"/>
       <alias entity-alias="OH" name="orderName"/>
+      <alias entity-alias="OH" name="internalCode"/>
+
       <alias entity-alias="OH" name="orderId"/>
       <alias entity-alias="OT" name="partyId"/>
       <alias entity-alias="OT" name="roleTypeId"/>

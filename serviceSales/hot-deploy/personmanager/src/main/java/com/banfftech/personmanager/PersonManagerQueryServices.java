@@ -1520,6 +1520,8 @@ public class PersonManagerQueryServices {
         fieldSet.add("productId");
         fieldSet.add("quantity");
         fieldSet.add("unitPrice");
+        fieldSet.add("internalCode");
+
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
@@ -1600,7 +1602,20 @@ public class PersonManagerQueryServices {
 
                 rowMap.put("payToPartyId",payToPartyId);
                 String statusId = (String) gv.get("statusId");
+
+
+
+
                 rowMap.put("statusId",UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+                //有物流信息
+                if(statusId.equals("ORDER_COMPLETED")){
+                    Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",rowMap.get("internalCode")));
+                    List<JSONObject> expressInfos = null;
+                    if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+                        expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+                        rowMap.put("expressInfos",expressInfos);
+                    }
+                }
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String,String> personInfoMap = null;

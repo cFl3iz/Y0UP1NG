@@ -761,20 +761,20 @@ public class PersonManagerServices {
         }
 
 
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
-
-        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-
-            String jpushId = (String) partyIdentification.getString("idValue");
-
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-
-      //      dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-        }
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+//
+//        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+//
+//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+//
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//
+//           dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的买家已完成微信支付,请查收确认!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+//        }
 
         resultMap.put("paymentId",paymentId);
         return resultMap;
@@ -897,7 +897,7 @@ public class PersonManagerServices {
 //            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 //
 //            //找发票
-//            GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
+ //           GenericValue orderItemBillingAndInvoiceAndItem = EntityQuery.use(delegator).from("OrderItemBillingAndInvoiceAndItem").where("orderId", orderId, "amount", orderHeader.get("grandTotal")).queryFirst();
 //
 //
 //            //先将支付应用到发票

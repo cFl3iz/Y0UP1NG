@@ -1683,6 +1683,10 @@ public class PersonManagerQueryServices {
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo",payToPartyId,"partyIdFrom",payFromPartyId,"comments",gv.get("orderId")).queryFirst();
 
+                System.out.println("=============================================================");
+                System.out.println("orderPaymentPrefAndPayme=" + orderPaymentPrefAndPayment);
+                System.out.println("payment=" + payment);
+                System.out.println("=============================================================");
 
 
                 if(null != orderPaymentPrefAndPayment){
@@ -1692,10 +1696,13 @@ public class PersonManagerQueryServices {
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
                     if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
+                        if(null != orderStatus && orderStatus.equals("PAYMENT")){
+                            System.out.println("已确认收款");
 
-                        rowMap.put("orderPayStatus","已确认收款");
+                            rowMap.put("orderPayStatus","已确认收款");
                         rowMap.put("payStatusCode","1");
                         myResourceOrderList.add(rowMap);
+                        }
                     }else{
 
                         rowMap.put("payStatusCode","0");
@@ -1703,14 +1710,17 @@ public class PersonManagerQueryServices {
                     }
                 }else{
 
-                    rowMap.put("payStatusCode","0");
-                    rowMap.put("orderPayStatus","未付款");
+//                    rowMap.put("payStatusCode","0");
+//                    rowMap.put("orderPayStatus","未付款");
                     if(null!=payment){
                         String paymentStatusId = (String) payment.get("statusId");
                         if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
+                            if(null != orderStatus && orderStatus.equals("PAYMENT")){
                             rowMap.put("orderPayStatus","已确认收款");
+                                System.out.println("已确认收款 payment pay");
                             rowMap.put("payStatusCode","1");
                             myResourceOrderList.add(rowMap);
+                            }
                         }
                         if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
 

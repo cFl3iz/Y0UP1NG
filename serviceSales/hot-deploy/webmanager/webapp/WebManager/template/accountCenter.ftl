@@ -267,7 +267,7 @@
                     var spm = $("#spm").val();
                     doAddProductRole(partyId,productId,"VISITOR");
                     if(spm != null && spm != ""){
-                        alert(spm);
+//                        alert(spm);
                         doAddPartyRelation(partyId,spm);
                     }
 

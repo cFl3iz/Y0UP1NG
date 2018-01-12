@@ -2620,9 +2620,11 @@ public class PersonManagerServices {
                 "partyId", partyId,
                 "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
                 "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
-        //System.out.println("********************************************receiveInventoryProductIn="+receiveInventoryProductIn);
+
         Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
         );
+
+        dispatcher.runSync("createProductAttribute",UtilMisc.toMap("productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
 
         //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 
@@ -3078,6 +3080,21 @@ public class PersonManagerServices {
         if (!UtilValidate.isEmpty(price)) {
             grandTotal = subTotal = new BigDecimal(price);
         }
+
+        GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", productId).queryFirst();
+
+        String qantStr = (String)productAttrQu.get("attrValue");
+
+        int qant = Integer.parseInt(qantStr);
+
+        if(qant <= 0){
+            return ServiceUtil.returnSuccess();
+        }else{
+            qant = qant - 1;
+            productAttrQu.set("attrValue",qant+"");
+        }
+
+
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
         String originFacilityId = (String) facility.get("facilityId");

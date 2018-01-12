@@ -752,7 +752,7 @@ public class PersonManagerServices {
         }
 
         //createOrderPaymentPreference
-        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("statusId","PMNT_RECEIVED","createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId", orderId));
+        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("createOrderPaymentPreference", UtilMisc.toMap("statusId","PMNT_RECEIVED","paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId", orderId));
 
         if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceMap)) {
 

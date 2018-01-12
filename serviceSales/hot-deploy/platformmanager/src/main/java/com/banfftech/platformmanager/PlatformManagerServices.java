@@ -105,7 +105,7 @@ public class PlatformManagerServices {
 
         String partyIdTo = (String) context.get("partyIdTo");
 
-        findConditions3 = EntityCondition
+        EntityCondition findConditions3 = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
 
 

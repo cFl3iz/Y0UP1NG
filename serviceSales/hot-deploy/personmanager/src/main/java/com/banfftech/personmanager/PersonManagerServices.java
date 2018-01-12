@@ -2624,7 +2624,7 @@ public class PersonManagerServices {
         Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
         );
 
-        dispatcher.runSync("createProductAttribute",UtilMisc.toMap("productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
+        dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
 
         //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
 

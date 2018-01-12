@@ -486,7 +486,13 @@ public class PersonManagerServices {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>doAddPartyRelation>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         String temp     = spm.substring(1);
-        String partyIdTo = temp.substring(0,temp.indexOf(","));
+        String partyIdTo = "";
+        if(temp.indexOf(",")>0){
+             partyIdTo = temp.substring(0,temp.indexOf(","));
+        }else{
+            partyIdTo = temp.substring(0);
+        }
+
         String partyIdFrom = partyId;
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdTo="+partyIdTo);
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdFrom="+partyIdFrom);

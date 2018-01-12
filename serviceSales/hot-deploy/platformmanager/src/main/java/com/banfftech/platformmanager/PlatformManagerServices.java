@@ -77,6 +77,86 @@ public class PlatformManagerServices {
 
 
     /**
+     * cleanSessionMessage
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> cleanSessionMessage(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        // Admin Do Run Service
+
+
+        String partyIdTo = (String) context.get("partyIdTo");
+
+        findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+
+
+        EntityCondition findConditions4 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdTo", partyId));
+
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyIdFrom", partyId));
+
+        EntityCondition listConditions = EntityCondition
+                .makeCondition(findConditions, EntityOperator.OR, findConditions2);
+
+        EntityCondition findConditions5 = EntityCondition
+                .makeCondition("badge", EntityOperator.EQUALS, "true");
+
+        EntityCondition listBigConditions = EntityCondition
+                .makeCondition(listConditions, listConditions2, findConditions5);
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("message");
+        fieldSet.add("partyIdFrom");
+        fieldSet.add("partyIdTo");
+        fieldSet.add("objectId");
+        fieldSet.add("messageId");
+        fieldSet.add("fromDate");
+
+        fieldSet.add("messageLogTypeId");
+        List<GenericValue> queryMessageList = delegator.findList("MessageLog",
+                listBigConditions, fieldSet,
+                null, null, false);
+
+            for (GenericValue gv : queryMessageList) {
+                gv.set("badge", "false");
+                gv.store();
+
+            }
+
+
+        return result;
+    }
+
+
+
+
+    /**
      * 推送 服务类型
      * @param dctx
      * @param context

@@ -127,6 +127,18 @@
     </service>
 
 
+    <service name="cleanSessionMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="cleanSessionMessage" auth="false">
+        <description>cleanSessionMessage</description>
+
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
 
     <service name="loadAllMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"

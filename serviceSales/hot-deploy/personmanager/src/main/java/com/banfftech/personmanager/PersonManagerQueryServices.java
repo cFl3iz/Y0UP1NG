@@ -1698,12 +1698,13 @@ public class PersonManagerQueryServices {
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
                     if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
-                        if(null != orderStatus && orderStatus.equals("PAYMENT") ||  orderStatus.equals("ALL")){
+
                             System.out.println("已确认收款");
 
                             rowMap.put("orderPayStatus","已确认收款");
-                        rowMap.put("payStatusCode","1");
-                        myResourceOrderList.add(rowMap);
+                           rowMap.put("payStatusCode","1");
+                        if(null != orderStatus && orderStatus.equals("PAYMENT")){
+                           myResourceOrderList.add(rowMap);
                         }
                     }else{
 
@@ -1717,10 +1718,11 @@ public class PersonManagerQueryServices {
                     if(null!=payment){
                         String paymentStatusId = (String) payment.get("statusId");
                         if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
-                            if(null != orderStatus && orderStatus.equals("PAYMENT") ||  orderStatus.equals("ALL")){
+
                             rowMap.put("orderPayStatus","已确认收款");
-                                System.out.println("已确认收款 payment pay");
+
                             rowMap.put("payStatusCode","1");
+                            if(null != orderStatus && orderStatus.equals("PAYMENT") ){
                             myResourceOrderList.add(rowMap);
                             }
                         }

@@ -110,10 +110,11 @@
         <value xml:lang="zh-TW">联系人</value>
     </property>
 
+    <!-- 供货商 -->
     <property key="SUPPLIER_REL">
-        <value xml:lang="en">供货商</value>
-        <value xml:lang="zh">供货商</value>
-        <value xml:lang="zh-TW">供货商</value>
+        <value xml:lang="en"></value>
+        <value xml:lang="zh"></value>
+        <value xml:lang="zh-TW"></value>
     </property>
 
 

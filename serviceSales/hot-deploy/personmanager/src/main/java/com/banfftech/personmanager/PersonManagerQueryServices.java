@@ -1676,7 +1676,9 @@ public class PersonManagerQueryServices {
 
 
 
-
+                System.out.println("orderId="+gv.get("orderId"));
+                System.out.println("payToPartyId="+payToPartyId);
+                System.out.println("payFromPartyId="+payFromPartyId);
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",gv.get("orderId")).queryFirst();
 

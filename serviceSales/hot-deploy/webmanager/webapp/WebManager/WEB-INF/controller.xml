@@ -272,6 +272,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="doAddPartyRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="doAddPartyRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- 确认我已经付款了,并且告诉卖家 -->

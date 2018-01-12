@@ -455,6 +455,48 @@ public class PersonManagerServices {
 
 
     /**
+     * doAddPartyRelation
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> doAddPartyRelation(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+
+        Delegator delegator = dispatcher.getDelegator();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String partyId = (String) context.get("partyId");
+
+        String spm = (String) context.get("spm");
+
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        if(spm==null || partyId ==null){
+            return resultMap;
+        }
+
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>doAddPartyRelation>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        String temp     = spm.substring(1);
+        String partyIdTo = temp.substring(0,temp.indexOf(","));
+        String partyIdFrom = partyId;
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdTo="+partyIdTo);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdFrom="+partyIdFrom);
+        PersonManagerServices.createRelationCONTACT(delegator,dispatcher,admin,partyIdTo,partyIdFrom);
+
+        return resultMap;
+    }
+
+
+    /**
      * addProductRole
      * @param dctx
      * @param context

@@ -82,6 +82,25 @@
                    optional="true"/>
     </service>
 
+
+
+    <service name="doAddPartyRelation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="doAddPartyRelation" auth="false">
+        <description>doAddPartyRelation</description>
+
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="spm" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
     <service name="addProductRole" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="addProductRole" auth="false">

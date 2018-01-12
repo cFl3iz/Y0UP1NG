@@ -264,7 +264,13 @@
                     var partyId = $("#partyId").val();
                     var productId = $("#productId").val();
                     //记录访客
+                    var spm = $("#spm").val();
                     doAddProductRole(partyId,productId,"VISITOR");
+                    if(spm != null && spm != ""){
+                        alert(spm);
+                        doAddPartyRelation(partyId,spm);
+                    }
+
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
@@ -316,6 +322,28 @@
         $("#showboxmenuspec2").show();
     }
 
+
+    function doAddPartyRelation(partyId,spm){
+        var url = "doAddPartyRelation";
+
+        var param = {
+            partyId:partyId,
+            spm:spm
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+
+            },
+            error: function (data) {
+                alert("CODE-403:网络出现问题请刷新页面重试");
+            }
+        });
+
+    }
 
     function doAddProductRole(partyId,productId,roleTypeId){
         var url = "addProductRole";

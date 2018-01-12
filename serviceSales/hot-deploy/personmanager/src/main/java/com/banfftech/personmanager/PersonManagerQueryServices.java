@@ -2452,7 +2452,6 @@ public class PersonManagerQueryServices {
                     rowMap.put("visitorCount",visitorCount);
                     rowMap.put("partnerCount",partnerCount);
 
-
                     GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", (String)gv.get("productId")).queryFirst();
 
                     rowMap.put("kuCun",(String)productAttrQu.get("attrValue"));

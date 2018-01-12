@@ -739,7 +739,7 @@ public class PersonManagerServices {
         GenericValue paymentMethod = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId, "paymentMethodTypeId", "EXT_WXPAY").queryFirst();
 
 
-        Map<String, Object> serviceResultMap = dispatcher.runSync("createPayment", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "partyIdTo", payToPartyId, "amount", orderHeader.get("grandTotal"), "partyIdFrom", partyId, "paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "comments", orderId));
+        Map<String, Object> serviceResultMap = dispatcher.runSync("createPayment", UtilMisc.toMap("statusId","PMNT_RECEIVED","paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "partyIdTo", payToPartyId, "amount", orderHeader.get("grandTotal"), "partyIdFrom", partyId, "paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "comments", orderId));
 
         String paymentId = (String) serviceResultMap.get("paymentId");
 
@@ -752,7 +752,7 @@ public class PersonManagerServices {
         }
 
         //createOrderPaymentPreference
-        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId", orderId));
+        Map<String, Object> createOrderPaymentPreferenceMap = dispatcher.runSync("statusId","PMNT_RECEIVED","createOrderPaymentPreference", UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "userLogin", admin, "maxAmount", orderHeader.get("grandTotal"), "orderId", orderId));
 
         if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceMap)) {
 
@@ -864,21 +864,8 @@ public class PersonManagerServices {
          Map<String,Object> createPaymentResult =  dispatcher.runSync("createPaymentFromCust",UtilMisc.toMap("userLogin",payFromUserLogin,"payToPartyId",partyId,"orderId",orderId));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         //查找订单支付Id
-       // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+          // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
         //这种情况下说明是先付钱,后发货的。
 
@@ -896,6 +883,10 @@ public class PersonManagerServices {
             if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
                 return setPaymentStatusMap;
             }
+
+
+
+
             //推送提醒买家
 
 //        } else {

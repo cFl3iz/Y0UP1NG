@@ -112,9 +112,9 @@
 
     <!-- 供货商 -->
     <property key="SUPPLIER_REL">
-        <value xml:lang="en"></value>
-        <value xml:lang="zh"></value>
-        <value xml:lang="zh-TW"></value>
+        <value xml:lang="en"> </value>
+        <value xml:lang="zh"> </value>
+        <value xml:lang="zh-TW"> </value>
     </property>
 
 

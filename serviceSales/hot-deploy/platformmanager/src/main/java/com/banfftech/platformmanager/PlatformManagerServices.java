@@ -423,7 +423,8 @@ public class PlatformManagerServices {
 
         jsobj1.put("touser",openId);
         jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
-        jsobj1.put("url","https://www.yo-pe.com/pejump/"+partyIdFrom+"/"+partyIdFrom+"111"+"/"+payToPartyId+"/"+productId);
+        //增加SPM逻辑
+        jsobj1.put("url","https://www.yo-pe.com/pejump/"+partyIdFrom+"/"+partyIdFrom+"111"+"/"+payToPartyId+"/"+productId+"/NA");
 
         JSONObject jsobjminipro = new JSONObject();
         jsobjminipro.put("appid","wx299644ef4c9afbde");

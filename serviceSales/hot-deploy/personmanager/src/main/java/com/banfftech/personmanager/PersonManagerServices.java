@@ -512,11 +512,11 @@ public class PersonManagerServices {
 
         GenericValue distributingLeaflets = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
 
+            distributingLeaflets.create();
         }else{
             System.out.println("*Exsits DistributingLeaflets Data : "+createDistributingLeafletsMap);
         }
 
-        distributingLeaflets.create();
 
         return resultMap;
     }

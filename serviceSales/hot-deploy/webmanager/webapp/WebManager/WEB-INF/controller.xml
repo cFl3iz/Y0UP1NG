@@ -279,6 +279,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 增加转发者记录 -->
+    <request-map uri="addDistributingLeaflets">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addDistributingLeaflets"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 确认我已经付款了,并且告诉卖家 -->
     <request-map uri="setOrderPaymentStatus">

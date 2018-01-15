@@ -513,6 +513,27 @@
                optional="true"/>
 </service>
 
+    <!-- 增加转发记录 -->
+    <service name="addDistributingLeaflets" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addDistributingLeaflets" auth="false">
+        <description>add DistributingLeaflets</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="sellerPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="buyerPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="workerPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
 
     <!-- Place Resource Order -->
     <service name="placeResourceOrder" engine="java"

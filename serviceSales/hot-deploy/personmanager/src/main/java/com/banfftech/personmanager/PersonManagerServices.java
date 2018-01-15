@@ -455,6 +455,67 @@ public class PersonManagerServices {
 
 
     /**
+     * add Distributing Leaflets (增加转发记录)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> addDistributingLeaflets(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String sellerPartyId = (String) context.get("sellerPartyId");
+        String buyerPartyId = (String) context.get("buyerPartyId");
+        String workerPartyId = (String) context.get("workerPartyId");
+        String productId = (String) context.get("productId");
+
+        String temp     = workerPartyId.substring(1);
+        String partyIdTo = "";
+        if(temp.indexOf(",")>0){
+            partyIdTo = temp.substring(0,temp.indexOf(","));
+        }else{
+            partyIdTo = temp.substring(0);
+        }
+
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdTo),false);
+
+
+
+        Map<String,Object> createDistributingLeafletsMap = new HashMap<String, Object>();
+
+        createDistributingLeafletsMap.put("sellerPartyId",sellerPartyId);
+
+        createDistributingLeafletsMap.put("buyerPartyId",buyerPartyId);
+
+        createDistributingLeafletsMap.put("workerPartyId",partyIdTo);
+
+        createDistributingLeafletsMap.put("productId",productId);
+
+        createDistributingLeafletsMap.put("workerName",person.get("firstName"));
+
+        createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
+
+        GenericValue msg = delegator.makeValue("DistributingLeaflets", createMessageLogMap);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+    /**
      * doAddPartyRelation
      * @param dctx
      * @param context

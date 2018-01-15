@@ -22,6 +22,17 @@
         <prim-key field="captcha"/>
         <prim-key field="fromDate"/>
     </entity>
+    <!-- 记录转发 -->
+    <entity entity-name="DistributingLeaflets" package-name="org.ofbiz.cloudLake.sms" title="DistributingLeaflets">
+        <description>记录转发信息</description>
+        <field name="DLId" type="id"></field>
+        <field name="productId" type="value"></field>
+        <field name="sellerPartyId" type="value"></field>
+        <field name="buyerPartyId" type="value"></field>
+        <field name="workerPartyId" type="value"></field>
+        <field name="workerName" type="value"></field>
+        <prim-key field="DLId"/>
+    </entity>
 
     <!--Message-->
     <entity entity-name="MessageLog" package-name="org.ofbiz.cloudLake.message" title="Message">

@@ -503,8 +503,12 @@ public class PersonManagerServices {
 
         createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
 
-        GenericValue msg = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
+        Systen.out.println("*createDistributingLeafletsMap="+createDistributingLeafletsMap);
 
+        GenericValue distributingLeaflets = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
+
+        distributingLeaflets.create();
+        
         return resultMap;
     }
 

@@ -558,6 +558,8 @@
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryPersonInfo"
              auth="false">
         <description>queryPersonInfo</description>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="userInfo" type="java.util.Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

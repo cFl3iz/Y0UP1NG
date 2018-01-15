@@ -498,6 +498,14 @@ public class PlatformManagerQueryServices {
             String to = (String) mp.get("toParty");
             String from = (String) mp.get("fromParty");
             String realPartyId = (String) mp.get("realToId");
+
+
+
+            List<GenericValue> distributingLeafletsList =  EntityQuery.use(delegator).from(
+                    "DistributingLeaflets").where("sellerPartyId",userLogin.get("partyId"),"buyerPartyId",realPartyId).queryList();
+
+            mp.put("distributingLeafletsList",distributingLeafletsList);
+
             findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));
 
@@ -543,9 +551,7 @@ public class PlatformManagerQueryServices {
 
 
             String relationStr = "";
-            System.out.println("===========================================================================>");
-            System.out.println("PartyIdTo="+userLogin.get("partyId"));
-            System.out.println("PartyIdFrom="+realPartyId);
+
 
             //查客户关系
             List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId).queryList();
@@ -554,14 +560,14 @@ public class PlatformManagerQueryServices {
                 for(int index = 0 ; index < partyRelationship.size(); index++ ){
                     GenericValue gv = partyRelationship.get(index);
                     String relation = (String) gv.get("partyRelationshipTypeId");
-                    System.out.println("relation="+relation);
+
                     relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
-                    System.out.println("relationStr="+relationStr);
+
                 }
             }else{
                 relationStr = "潜在客户";
             }
-            System.out.println("<===========================================================================");
+
             mp.put("custRelation",relationStr);
         }
 

@@ -489,6 +489,7 @@ public class PersonManagerServices {
 
 
 
+
         Map<String,Object> createDistributingLeafletsMap = new HashMap<String, Object>();
 
         createDistributingLeafletsMap.put("sellerPartyId",sellerPartyId);
@@ -499,13 +500,21 @@ public class PersonManagerServices {
 
         createDistributingLeafletsMap.put("productId",productId);
 
-        createDistributingLeafletsMap.put("workerName",person.get("firstName"));
+        createDistributingLeafletsMap.put("workerName", person.get("firstName"));
+
+        GenericValue distributingLeaflets =  EntityQuery.use(delegator).from("DistributingLeaflets").where(createDistributingLeafletsMap).queryFirst();
+
+        if(null == distributingLeaflets){
 
         createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
 
-        System.out.println("*createDistributingLeafletsMap="+createDistributingLeafletsMap);
+        System.out.println("*createDistributingLeafletsData :"+createDistributingLeafletsMap);
 
         GenericValue distributingLeaflets = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
+        
+        }else{
+            System.out.println("*Exsits DistributingLeaflets Data : "+createDistributingLeafletsMap);
+        }
 
         distributingLeaflets.create();
 

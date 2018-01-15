@@ -502,16 +502,16 @@ public class PersonManagerServices {
 
         createDistributingLeafletsMap.put("workerName", person.get("firstName"));
 
-        GenericValue distributingLeaflets =  EntityQuery.use(delegator).from("DistributingLeaflets").where(createDistributingLeafletsMap).queryFirst();
+        GenericValue findDistributingLeaflets =  EntityQuery.use(delegator).from("DistributingLeaflets").where(createDistributingLeafletsMap).queryFirst();
 
-        if(null == distributingLeaflets){
+        if(null == findDistributingLeaflets){
 
         createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
 
         System.out.println("*createDistributingLeafletsData :"+createDistributingLeafletsMap);
 
         GenericValue distributingLeaflets = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
-        
+
         }else{
             System.out.println("*Exsits DistributingLeaflets Data : "+createDistributingLeafletsMap);
         }

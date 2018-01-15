@@ -210,7 +210,7 @@
               alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
                 return false;
             }
-            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId;
+            var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
 //            alert("jump productId="+jumpurl);
 //            alert("jump productId="+productId);
 //            return false;

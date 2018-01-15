@@ -496,7 +496,7 @@ public class PersonManagerServices {
         if(partyId.equals(partyIdTo)){
             return resultMap;
         }
-        
+
         String partyIdFrom = partyId;
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdTo="+partyIdTo);
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>partyIdFrom="+partyIdFrom);

@@ -54,7 +54,13 @@
     </request-map>
 
 
-
+    <!-- queryPersonInfo -->
+    <request-map uri="queryPersonInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryPersonInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

@@ -2251,8 +2251,14 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         Map<String, Object> inputMap = UtilMisc.toMap();
+        String partyId = "";
 
-        String partyId = (String) userLogin.get("partyId");
+        if(userLogin==null){
+            partyId = (String) context.get("partyId");
+        }else{
+            partyId = (String) userLogin.get("partyId");
+        }
+
 
 
 
@@ -2332,31 +2338,31 @@ public class PersonManagerQueryServices {
 //        }
 
 
-        //Query Qr Code
+        //Query Qr Code 付款码信息 目前没有这个业务线注释掉
 
-        List<GenericValue> aliPayQrCodes =
-                EntityQuery.use(delegator).from("PartyContentAndDataResource").
-                        where("partyId", partyId, "partyContentTypeId", "ALIQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
-
-
-        GenericValue aliPayQrCode = null;
-
-        if(null != aliPayQrCodes && aliPayQrCodes.size()>0){
-            aliPayQrCode = aliPayQrCodes.get(0);
-            inputMap.put("aliPayQrCode",aliPayQrCode.getString("objectInfo"));
-        }
-
-        List<GenericValue> weChatQrCodes =
-                EntityQuery.use(delegator).from("PartyContentAndDataResource").
-                        where("partyId", partyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
-
-
-        GenericValue weChatQrCode = null;
-
-        if(null != weChatQrCodes && weChatQrCodes.size()>0){
-            weChatQrCode = weChatQrCodes.get(0);
-            inputMap.put("weChatQrCode",weChatQrCode.getString("objectInfo"));
-        }
+//        List<GenericValue> aliPayQrCodes =
+//                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+//                        where("partyId", partyId, "partyContentTypeId", "ALIQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
+//
+//
+//        GenericValue aliPayQrCode = null;
+//
+//        if(null != aliPayQrCodes && aliPayQrCodes.size()>0){
+//            aliPayQrCode = aliPayQrCodes.get(0);
+//            inputMap.put("aliPayQrCode",aliPayQrCode.getString("objectInfo"));
+//        }
+//
+//        List<GenericValue> weChatQrCodes =
+//                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+//                        where("partyId", partyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
+//
+//
+//        GenericValue weChatQrCode = null;
+//
+//        if(null != weChatQrCodes && weChatQrCodes.size()>0){
+//            weChatQrCode = weChatQrCodes.get(0);
+//            inputMap.put("weChatQrCode",weChatQrCode.getString("objectInfo"));
+//        }
 
 
 

@@ -503,7 +503,7 @@ public class PersonManagerServices {
 
         createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
 
-        GenericValue msg = delegator.makeValue("DistributingLeaflets", createMessageLogMap);
+        GenericValue msg = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
 
         return resultMap;
     }

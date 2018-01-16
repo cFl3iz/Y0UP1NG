@@ -551,7 +551,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     <input id="payToPartyFirstName" name="payToPartyFirstName" type="hidden" value="${resourceDetail.firstName}"/>
     <input id="productId" name="productId" type="hidden" value="${(productId)!}"/>
 </form>
-<input id="returnPayToPartyId" value="${(returnPayToPartyId)!}" />
+<input id="returnPayToPartyId" type="hidden" value="${(returnPayToPartyId)!}" />
 
 </#if>
 <#if !resourceDetail?has_content>

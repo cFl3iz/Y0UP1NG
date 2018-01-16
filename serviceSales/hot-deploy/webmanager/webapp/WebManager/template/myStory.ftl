@@ -199,6 +199,9 @@
             var productId      = $("#productId").val();
             var spm            = $("#spm").val();
 
+            if(spm ==null || spm ===""){
+                spm = "NA";
+            }
 
             if(payToPartyId === partyId){
                 alert("您的身份就是卖家。请勿刷单，否则平台将封杀您的账户。");

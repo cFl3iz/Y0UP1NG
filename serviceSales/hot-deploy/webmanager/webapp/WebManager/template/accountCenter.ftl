@@ -262,6 +262,9 @@
 
 
                     var partyId = $("#partyId").val();
+                    if (partyId == null || partyId == undefined || partyId == '' || partyId ==='' || partyId =='undefined') {
+                        location.reload();
+                    }
                     var productId = $("#productId").val();
                     //记录访客
                     var spm = $("#spm").val();
@@ -325,7 +328,7 @@
 
 
     function addDistributingLeaflets (productId,partyId,spm,payToParty){
-        if (partyId == null || partyId == undefined || partyId == '' || partyId ==='' || param =='undefined') {
+        if (partyId == null || partyId == undefined || partyId == '' || partyId ==='' || partyId =='undefined') {
             location.reload();
         }
         var url = "addDistributingLeaflets";

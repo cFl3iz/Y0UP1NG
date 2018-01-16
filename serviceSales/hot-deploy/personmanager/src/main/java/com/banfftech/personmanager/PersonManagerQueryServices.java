@@ -2090,16 +2090,16 @@ public class PersonManagerQueryServices {
         List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
         if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
             resourceDetail.put("orderId",queryMyResourceOrderList.get(0).get("orderId"));
-            for(GenericValue order : queryMyResourceOrderList){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
-
-                String partyId = (String) order.get("partyId");
-                GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
-                if(person!=null){
-                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
-                }
-                partyOrderList.add(rowMap);
-            }
+            partyOrderList = doForEachGetBuyerFromRelation(queryMyResourceOrderList,delegator,nowPartyId);
+//            for(GenericValue order : queryMyResourceOrderList){
+//                Map<String,Object> rowMap = new HashMap<String, Object>();
+//                String partyId = (String) order.get("partyId");
+//                GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
+//                if(person!=null){
+//                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
+//                }
+//                partyOrderList.add(rowMap);
+//            }
         }
 
         resourceDetail.put("partyBuyOrder",partyOrderList);
@@ -2137,6 +2137,37 @@ public class PersonManagerQueryServices {
 
 
         return resultMap;
+    }
+
+    private static List<Map<String, Object>> doForEachGetBuyerFromRelation(List<GenericValue> queryMyResourceOrderList,Delegator delegator,String partyId) {
+
+        List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
+        List<Map<String,Object>> noContactList = new ArrayList<Map<String, Object>>();
+
+        for(GenericValue order : queryMyResourceOrderList){
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+            String orderPartyId = (String) order.get("partyId");
+            GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", orderPartyId), false);
+            if(orderPerson!=null){
+                rowMap.put("firstName",(String) orderPerson.get("firstName"));
+            }
+
+            GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",orderPartyId,"partyIdFrom",partyId,"partyRelationshipTypeId","CONTACT_REL").queryFirst();
+            if(null!=partyRelationship){
+                partyOrderList.add(rowMap);
+            }else{
+                noContactList.add(rowMap);
+            }
+
+        }
+
+        if(noContactList.size()>0){
+            for(int i = 0 ; i < noContactList.size() ; i++){
+                partyOrderList.add(noContactList[i]);
+            }
+        }
+
+        return partyOrderList;
     }
 
 

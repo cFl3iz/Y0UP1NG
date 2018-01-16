@@ -117,14 +117,14 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                         </div>
                     </a> </li>
                 </ul>
-                <ul class="table-view" style="margin-top:10px;">
-                    <li class="table-view-cell">
-                        <a  style="font-size: 18px;font-style:bold;color:#666;">
-        <#assign listSize = resourceDetail.partyBuyOrder?size/>
-                        <span class="badge">${(listSize?default(0))!} ${uiLabel.Person}</span> ${uiLabel.FriendSay}
-                        </a>
-                    </li>
-                </ul>
+                <#--<ul class="table-view" style="margin-top:10px;">-->
+                    <#--<li class="table-view-cell">-->
+                        <#--<a  style="font-size: 18px;font-style:bold;color:#666;">-->
+        <#--<#assign listSize = resourceDetail.partyBuyOrder?size/>-->
+                        <#--<span class="badge">${(listSize?default(0))!} ${uiLabel.Person}</span> ${uiLabel.FriendSay}-->
+                        <#--</a>-->
+                    <#--</li>-->
+                <#--</ul>-->
                 <div class="ipo">
                     <ul class="table-view">
                         <li class="table-view-cell media"> <a class="">

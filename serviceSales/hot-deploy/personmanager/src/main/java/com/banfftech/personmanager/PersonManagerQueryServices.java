@@ -1701,10 +1701,8 @@ public class PersonManagerQueryServices {
                             System.out.println("已确认收款");
 
                             rowMap.put("orderPayStatus","已确认收款");
-                           rowMap.put("payStatusCode","1");
-                        if(null != orderStatus && orderStatus.equals("PAYMENT")|| null != orderStatus && orderStatus.equals("ALL")){
-                           myResourceOrderList.add(rowMap);
-                        }
+                            rowMap.put("payStatusCode","1");
+
                     }else{
 
                         rowMap.put("payStatusCode","0");
@@ -1721,9 +1719,7 @@ public class PersonManagerQueryServices {
                             rowMap.put("orderPayStatus","已确认收款");
 
                             rowMap.put("payStatusCode","1");
-                            if(null != orderStatus && orderStatus.equals("PAYMENT") || null != orderStatus && orderStatus.equals("ALL")){
-                            myResourceOrderList.add(rowMap);
-                            }
+
                         }
                         if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
 
@@ -1740,10 +1736,15 @@ public class PersonManagerQueryServices {
                 }
 
                 //不查询已收款的订单时,直接放入
-                if(null != orderStatus && !orderStatus.equals("PAYMENT") && !orderStatus.equals("ALL") ){
+                if(null != orderStatus && !orderStatus.equals("PAYMENT")){
                     myResourceOrderList.add(rowMap);
                 }
+                if(null != orderStatus && orderStatus.equals("PAYMENT")){
+                    if(!rowMap.get("orderPayStatus").equals("未付款")){
+                        myResourceOrderList.add(rowMap);
+                    }
 
+                }
             }
         }
 

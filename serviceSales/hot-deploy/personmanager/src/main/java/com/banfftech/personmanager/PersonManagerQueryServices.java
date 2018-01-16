@@ -2163,7 +2163,8 @@ public class PersonManagerQueryServices {
 
         if(noContactList.size()>0){
             for(int i = 0 ; i < noContactList.size() ; i++){
-                partyOrderList.add(noContactList[i]);
+                Map<String,Object> rowMap = noContactList.get(i);
+                partyOrderList.add(rowMap);
             }
         }
 

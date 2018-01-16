@@ -485,6 +485,11 @@ public class PersonManagerServices {
             partyIdTo = temp.substring(0);
         }
 
+
+        if(partyIdTo != null && buyerPartyId !=null && partyIdTo.equals(buyerPartyId)){
+            return resultMap;
+        }
+
         GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdTo),false);
 
 

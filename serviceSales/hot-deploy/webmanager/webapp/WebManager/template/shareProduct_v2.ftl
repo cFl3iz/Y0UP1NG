@@ -552,7 +552,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     <input id="productId" name="productId" type="hidden" value="${(productId)!}"/>
 </form>
 <input id="returnPayToPartyId" type="hidden" value="${(returnPayToPartyId)!}" />
-
+<input id="partyId" type="hidden" value="${(partyId)!}" />
 </#if>
 <#if !resourceDetail?has_content>
 NOT FOUND:550

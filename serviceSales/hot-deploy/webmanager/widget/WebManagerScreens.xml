@@ -64,6 +64,8 @@
 
                 <set field="productId" value="${parameters.productId}"/>
 
+                <set field="partyId" value="${parameters.partyId}"/>
+
                 <set field="tarjeta" from-field="parameters.tarjeta" type="String" default-value=""/>
 
                 <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
@@ -85,6 +87,7 @@
                 <set field="mark" value="${resourceDetail.mark}"/>
 
                 <set field="payToPartyId" value="${returnPayToPartyId}" />
+
 
 
                 <!-- 微信授权登录后的回调地址 -->

@@ -199,7 +199,7 @@
             $("#contactBtn").css("disabled","disabled");
             return false;
         }
-        location.href='shareProduct?productId='+productId;
+        location.href='shareProduct?productId='+productId+"&partyId="+partyId;
     }
 
     function contactMe() {

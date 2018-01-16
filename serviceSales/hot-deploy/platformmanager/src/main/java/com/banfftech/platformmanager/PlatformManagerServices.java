@@ -316,7 +316,7 @@ public class PlatformManagerServices {
 
 
         jsobjminipro.put("appid","wx299644ef4c9afbde");
-        jsobjminipro.put("pagepath","pages/order/order?unioId="+openId);
+        jsobjminipro.put("pagepath","pages/orderDetail/orderDetail?unioId="+openId+"&orderId="+orderId);
         jsobj1.put("miniprogram",jsobjminipro);
 
         jsobj3.put("value", "订单状态更新啦!");

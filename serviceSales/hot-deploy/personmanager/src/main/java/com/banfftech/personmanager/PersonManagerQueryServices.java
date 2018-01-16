@@ -2139,7 +2139,7 @@ public class PersonManagerQueryServices {
         return resultMap;
     }
 
-    private static List<Map<String, Object>> doForEachGetBuyerFromRelation(List<GenericValue> queryMyResourceOrderList,Delegator delegator,String partyId) {
+    private static List<Map<String, Object>> doForEachGetBuyerFromRelation(List<GenericValue> queryMyResourceOrderList,Delegator delegator,String partyId)throws GenericEntityException {
 
         List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
         List<Map<String,Object>> noContactList = new ArrayList<Map<String, Object>>();

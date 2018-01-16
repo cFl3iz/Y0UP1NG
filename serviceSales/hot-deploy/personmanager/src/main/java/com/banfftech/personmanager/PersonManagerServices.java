@@ -504,7 +504,11 @@ public class PersonManagerServices {
 
         GenericValue findDistributingLeaflets =  EntityQuery.use(delegator).from("DistributingLeaflets").where(createDistributingLeafletsMap).queryFirst();
 
-        if(null == findDistributingLeaflets){
+
+        //查客户关系
+        GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",sellerPartyId ,"partyIdFrom",buyerPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
+
+        if(null == findDistributingLeaflets && partyRelationship ==null){
 
         createDistributingLeafletsMap.put("DLId",delegator.getNextSeqId("DistributingLeaflets"));
 
@@ -512,7 +516,7 @@ public class PersonManagerServices {
 
         GenericValue distributingLeaflets = delegator.makeValue("DistributingLeaflets", createDistributingLeafletsMap);
 
-            distributingLeaflets.create();
+        distributingLeaflets.create();
         }else{
             System.out.println("*Exsits DistributingLeaflets Data : "+createDistributingLeafletsMap);
         }

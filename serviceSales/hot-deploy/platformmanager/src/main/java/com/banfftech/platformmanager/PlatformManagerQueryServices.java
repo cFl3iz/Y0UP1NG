@@ -554,16 +554,15 @@ public class PlatformManagerQueryServices {
 
 
             //查客户关系
-            List<GenericValue> partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId).queryList();
-            System.out.println("partyRelationship="+partyRelationship.size());
-            if(partyRelationship!=null && partyRelationship.size()>0){
-                for(int index = 0 ; index < partyRelationship.size(); index++ ){
-                    GenericValue gv = partyRelationship.get(index);
-                    String relation = (String) gv.get("partyRelationshipTypeId");
+            GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
 
-                    relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
-
-                }
+            if(partyRelationship!=null){
+//                for(int index = 0 ; index < partyRelationship.size(); index++ ){
+//                    GenericValue gv = partyRelationship.get(index);
+//                    String relation = (String) gv.get("partyRelationshipTypeId");
+//                    relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
+//                }
+                relationStr = "客户";
             }else{
                 relationStr = "潜在客户";
             }

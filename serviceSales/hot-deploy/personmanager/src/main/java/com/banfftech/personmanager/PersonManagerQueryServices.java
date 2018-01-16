@@ -2079,12 +2079,15 @@ public class PersonManagerQueryServices {
 
         EntityCondition findOrderConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("productId", productId));
+        EntityCondition findOrderConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
 
-
+        EntityConditionList<EntityCondition> listOrderConditions = EntityCondition
+                .makeCondition(findOrderConditions,findOrderConditions2);
 
         //Query My Resource
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                findOrderConditions, orderFieldSet,
+                listOrderConditions, orderFieldSet,
                 UtilMisc.toList("-orderDate"), null, false);
 
         List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
@@ -2143,7 +2146,7 @@ public class PersonManagerQueryServices {
 
         List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
         List<Map<String,Object>> noContactList = new ArrayList<Map<String, Object>>();
-
+        Map<String,String> names = new HashMap<String, String>();
         for(GenericValue order : queryMyResourceOrderList){
             Map<String,Object> rowMap = new HashMap<String, Object>();
             String orderPartyId = (String) order.get("partyId");
@@ -2154,9 +2157,17 @@ public class PersonManagerQueryServices {
 
             GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",orderPartyId,"partyIdFrom",partyId,"partyRelationshipTypeId","CONTACT_REL").queryFirst();
             if(null!=partyRelationship){
-                partyOrderList.add(rowMap);
+
+                if(!names.containsKey((String) rowMap.get("firstName"))){
+                    names.put((String) rowMap.get("firstName"),"");
+                    partyOrderList.add(rowMap);
+                }
+
             }else{
-                noContactList.add(rowMap);
+                if(!names.containsKey((String) rowMap.get("firstName"))) {
+                    names.put((String) rowMap.get("firstName"), "");
+                    noContactList.add(rowMap);
+                }
             }
 
         }

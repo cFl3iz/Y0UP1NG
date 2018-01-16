@@ -1697,8 +1697,7 @@ public class PersonManagerQueryServices {
 
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
-                    if(orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED")>0){
-
+                    if(orderPaymentPrefAndPaymentstatusId.equals("PMNT_RECEIVED")){
                             System.out.println("已确认收款");
 
                             rowMap.put("orderPayStatus","已确认收款");
@@ -1717,7 +1716,7 @@ public class PersonManagerQueryServices {
 //                    rowMap.put("orderPayStatus","未付款");
                     if(null!=payment){
                         String paymentStatusId = (String) payment.get("statusId");
-                        if(paymentStatusId.toUpperCase().indexOf("RECEIVED")>0){
+                        if(paymentStatusId.equals("PMNT_RECEIVED")){
 
                             rowMap.put("orderPayStatus","已确认收款");
 

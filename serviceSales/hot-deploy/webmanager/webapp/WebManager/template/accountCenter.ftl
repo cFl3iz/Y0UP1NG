@@ -325,7 +325,7 @@
 
 
     function addDistributingLeaflets (productId,partyId,spm,payToParty){
-        if(null == partyId || partyId === ""){
+        if (partyId == null || partyId == undefined || partyId == '' || partyId ==='' || param =='undefined') {
             location.reload();
         }
         var url = "addDistributingLeaflets";

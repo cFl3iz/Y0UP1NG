@@ -485,6 +485,8 @@ public class PersonManagerServices {
             partyIdTo = temp.substring(0);
         }
 
+        System.out.println("============================>worker="+partyIdTo+"|sellerPartyId="+sellerPartyId +"buyerPartyId=>"+buyerPartyId);
+
 
         if(partyIdTo != null && buyerPartyId !=null && partyIdTo.equals(buyerPartyId)){
             return resultMap;

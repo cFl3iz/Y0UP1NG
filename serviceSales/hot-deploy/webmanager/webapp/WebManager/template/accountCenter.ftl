@@ -340,7 +340,7 @@
         }
 
         if (blen == 0) {
-            alert("partyId="+partyId+",blen="+blen+",spm="+spm+"重定向");
+         //   alert("partyId="+partyId+",blen="+blen+",spm="+spm+"重定向");
             location.href = 'myStory?productId='+productId+"&spm="+spm;
         }
         var url = "addDistributingLeaflets";

@@ -1863,6 +1863,8 @@ public class PersonManagerServices {
 
         pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
 
+        Map<String,Object> doJpushMap = new HashMap<String, Object>();
+
         if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
 
@@ -1877,14 +1879,15 @@ public class PersonManagerServices {
             long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
 
             String badege_str = count + "";
-
-            try {
-                dispatcher.runAsync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin,"productId",objectId, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
-            } catch (GenericServiceException e1) {
-                Debug.logError(e1.getMessage(), module);
-                return "error";
-            }
-
+            doJpushMap.put("userLogin",admin);
+            doJpushMap.put("productId",objectId);
+            doJpushMap.put("badge", badege_str);
+            doJpushMap.put("message", "message");
+            doJpushMap.put("content", text);
+            doJpushMap.put("regId", jpushId);
+            doJpushMap.put("deviceType", partyIdentificationTypeId);
+            doJpushMap.put("sendType", "");
+            doJpushMap.put("objectId", partyIdFrom);
 
         }
 
@@ -1954,6 +1957,16 @@ public class PersonManagerServices {
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
 
         }
+
+
+        try {
+            System.out.println("*push notif Or Message !!!!!!!!!!!!!!!!!");
+            dispatcher.runSync("pushNotifOrMessage", doJpushMap);
+        } catch (GenericServiceException e1) {
+            Debug.logError(e1.getMessage(), module);
+            return "error";
+        }
+
         return "success";
     }
 

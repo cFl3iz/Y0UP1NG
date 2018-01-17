@@ -329,7 +329,16 @@
 
     function addDistributingLeaflets (productId,partyId,spm,payToParty){
 
-        if (partyId == null) {
+        var l = partyId.length;
+        var blen = 0;
+        for(i=0; i<l; i++) {
+            if ((partyId.charCodeAt(i) & 0xff00) != 0) {
+                blen ++;
+            }
+            blen ++;
+        }
+        alert("addDis partyId="+partyId+",blen="+blen);
+        if (blen == 0) {
             alert("addDis partyId="+partyId);
             location.reload();
         }

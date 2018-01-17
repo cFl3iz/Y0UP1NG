@@ -485,7 +485,7 @@ public class PersonManagerQueryServices {
         resultMap.put("partyRelation",relationStr);
         resultMap.put("resourceDetail",resourceDetail);
 
-        resultMap.put("queryConsumerInfoList",returnList);
+//        resultMap.put("queryConsumerInfoList",returnList);
 
         return resultMap;
     }

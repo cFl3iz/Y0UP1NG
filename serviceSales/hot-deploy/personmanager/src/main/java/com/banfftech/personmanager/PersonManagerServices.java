@@ -1915,7 +1915,7 @@ public class PersonManagerServices {
         //推送极光
 
         try {
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin,"productId",objectId, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
+            dispatcher.runAsync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin,"productId",objectId, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
             return "error";

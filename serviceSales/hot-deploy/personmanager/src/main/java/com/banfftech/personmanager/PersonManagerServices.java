@@ -1601,15 +1601,18 @@ public class PersonManagerServices {
 
       //  if (markIt.equals("true")) {
 
-            if(placingCustCount==null || placingCustCount <= 0) {
+            if(placingCustCount==null && placingCustCount <= 0) {
                 Long custCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId","CUSTOMER","productId", productId).queryCount();
                 //此处如果对这个产品已经有客户角色,不再增加潜在客户角色
                 if(custCount==null || custCount <= 0) {
                     dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
                 }
             }else{
+                if(null !=   placingCustCount &&placingCustCount>0){
+                     
                 GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
                 dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
+                }
             }
    //     } else {
 

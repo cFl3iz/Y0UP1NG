@@ -452,6 +452,8 @@
 
         <attribute name="partyRelation" type="String" mode="OUT"
                    optional="true"/>
+        <attribute name="distributingLeaflets" type="List" mode="OUT"
+                   optional="true"/>
 
         <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
                    optional="true"/>

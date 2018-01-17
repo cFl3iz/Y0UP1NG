@@ -481,6 +481,11 @@ public class PersonManagerQueryServices {
                 null, null, false).get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
 
+        List<GenericValue> distributingLeafletsList =  EntityQuery.use(delegator).from(
+                "DistributingLeaflets").where("sellerPartyId",userLogin.get("partyId"),"buyerPartyId",realPartyId,"productId",product).queryList();
+        if(null != distributingLeafletsList && distributingLeafletsList.size()>0){
+            resultMap.put("distributingLeaflets",distributingLeafletsList.get(distributingLeafletsList.size()-1));
+        }
 
         resultMap.put("partyRelation",relationStr);
         resultMap.put("resourceDetail",resourceDetail);

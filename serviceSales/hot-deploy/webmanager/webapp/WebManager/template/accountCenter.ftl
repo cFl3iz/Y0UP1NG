@@ -269,7 +269,7 @@
                     //记录访客
                     var spm = $("#spm").val();
                     doAddProductRole(partyId,productId,"VISITOR");
-                    alert("spm="+spm);
+
                     if(spm != null && spm != ""){
                         var payToParty = ${(resourceDetail.payToPartyId)!};
                         doAddPartyRelation(partyId,spm);
@@ -341,7 +341,7 @@
 
         if (blen == 0) {
             alert("addDis partyId="+partyId+",blen="+blen);
-            location.reload();
+            location.href = 'myStory?productId='+productId+"&spm="+spm;
         }
         var url = "addDistributingLeaflets";
         var param = {

@@ -230,6 +230,8 @@
         <response name="success" type="request-redirect" value="myStory">
             <redirect-parameter name="tarjeta" from="tarjeta"/>
             <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="spm" from="spm"/>
+            
             <redirect-parameter name="partyId" from="partyId"/>
             <redirect-parameter name="productId" from="productId"/>
         </response>

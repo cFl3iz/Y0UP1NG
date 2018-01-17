@@ -149,7 +149,7 @@
 
                 <set field="spm" value="${parameters.spm}"/>
 
-                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${(spm)!}"/>
+                <set field="fromurl" value="http://www.lyndonspace.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${spm}"/>
 
                 <set field="nowPersonName" value="${parameters.nowPersonName}"/>
 

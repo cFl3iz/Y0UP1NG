@@ -119,7 +119,9 @@ public class WebServices {
 
         request.setAttribute("spm",spm);
 
-        request.setAttribute("subscribe",subscribe);
+        System.out.println("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]spm="+spm);
+
+        request.setAttribute("subscribe", subscribe);
 
         return "success";
     }

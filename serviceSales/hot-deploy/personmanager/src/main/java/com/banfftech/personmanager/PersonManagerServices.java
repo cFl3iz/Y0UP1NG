@@ -1862,26 +1862,28 @@ public class PersonManagerServices {
         }
 
         pushWeChatMessageInfoMap.put("firstName", person.get("firstName"));
-        String badege_str = "";
-        long count = 0;
-        String jpushId = "";
-        String partyIdentificationTypeId = "";
+
         if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
 
             GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-             jpushId = (String) partyIdentification.getString("idValue");
-             partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
             //查角标
             EntityCondition findValCondition = EntityCondition.makeCondition(
                     EntityCondition.makeCondition("badge", EntityOperator.EQUALS, "true"),
                     EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo));
-             count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
+            long count = delegator.findCountByCondition("MessageLog", findValCondition, null, null);
 
-             badege_str = count + "";
+            String badege_str = count + "";
 
-
+            try {
+                dispatcher.runAsync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin,"productId",objectId, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+                return "error";
+            }
 
 
         }
@@ -1909,17 +1911,6 @@ public class PersonManagerServices {
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
 
         msg.create();
-
-
-
-        //推送极光
-
-        try {
-            dispatcher.runAsync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin,"productId",objectId, "badge", badege_str, "message", "message", "content", text, "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", partyIdFrom));
-        } catch (GenericServiceException e1) {
-            Debug.logError(e1.getMessage(), module);
-            return "error";
-        }
 
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();

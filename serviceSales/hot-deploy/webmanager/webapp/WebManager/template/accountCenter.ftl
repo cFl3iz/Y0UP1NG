@@ -331,7 +331,7 @@
 
         var l = partyId.length;
         var blen = 0;
-        for(i=0; i<l; i++) {
+        for(var i=0; i<l; i++) {
             if ((partyId.charCodeAt(i) & 0xff00) != 0) {
                 blen ++;
             }

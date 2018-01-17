@@ -337,9 +337,9 @@
             }
             blen ++;
         }
-        alert("addDis partyId="+partyId+",blen="+blen);
+
         if (blen == 0) {
-            alert("addDis partyId="+partyId);
+            alert("addDis partyId="+partyId+",blen="+blen);
             location.reload();
         }
         var url = "addDistributingLeaflets";

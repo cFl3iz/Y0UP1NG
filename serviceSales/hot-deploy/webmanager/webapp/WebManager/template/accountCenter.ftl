@@ -58,7 +58,7 @@
 
     function weChatOauthLogin(fromurl) {
         //  alert("weChat Oauth Login");
-        alert("fromurl =" + fromurl);
+//        alert("fromurl =" + fromurl);
         var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8b1eb42f8cadbff1&redirect_uri=' + encodeURIComponent(fromurl) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
         location.href = url;
     }

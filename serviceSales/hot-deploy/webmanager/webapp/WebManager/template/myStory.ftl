@@ -232,11 +232,11 @@
 
             var mark = $("#mark").val();
 
-            if(mark != null && mark.trim() !="" && mark==="true"){
-
-            }else{
+//            if(mark != null && mark.trim() !="" && mark==="true"){
+//
+//            }else{}
                 markOrOutMark(true);
-            }
+
 
             location.href = jumpurl;
 

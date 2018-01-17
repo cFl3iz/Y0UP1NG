@@ -554,7 +554,7 @@ public class PlatformManagerQueryServices {
 
 
             //查客户关系
-         //   GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
+          //   GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
 
           //  if(partyRelationship!=null){
 //                for(int index = 0 ; index < partyRelationship.size(); index++ ){
@@ -563,9 +563,9 @@ public class PlatformManagerQueryServices {
 //                    relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
 //                }
           //      relationStr = "客户";
-        //    }else{
+          //    }else{
           //      relationStr = "潜在客户";
-         //   }
+          //   }
 
             mp.put("custRelation",relationStr);
         }

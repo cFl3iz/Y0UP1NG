@@ -442,12 +442,20 @@
         <attribute name="realPartyId" type="String" mode="INOUT"
                    optional="true"/>
 
-        <attribute name="queryConsumerInfoList" type="List" mode="OUT"
+        <attribute name="productId" type="String" mode="IN"
                    optional="true"/>
-        <attribute name="orderList" type="List" mode="OUT"
-                   optional="true"/>
+
+        <!--<attribute name="queryConsumerInfoList" type="List" mode="OUT"-->
+                   <!--optional="true"/>-->
+        <!--<attribute name="orderList" type="List" mode="OUT"-->
+                   <!--optional="true"/>-->
+
         <attribute name="partyRelation" type="String" mode="OUT"
                    optional="true"/>
+
+        <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

@@ -485,6 +485,8 @@ public class PersonManagerQueryServices {
                 "DistributingLeaflets").where("sellerPartyId",(String)userLogin.get("partyId"),"buyerPartyId",realPartyId,"productId",productId).queryList();
         if(null != distributingLeafletsList && distributingLeafletsList.size()>0){
             resultMap.put("distributingLeaflets",distributingLeafletsList.get(distributingLeafletsList.size()-1).getAllFields());
+        }else {
+            resultMap.put("distributingLeaflets",null);
         }
 
         resultMap.put("partyRelation",relationStr);

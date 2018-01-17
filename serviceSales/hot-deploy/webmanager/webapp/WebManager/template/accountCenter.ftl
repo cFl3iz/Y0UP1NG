@@ -269,6 +269,7 @@
                     //记录访客
                     var spm = $("#spm").val();
                     doAddProductRole(partyId,productId,"VISITOR");
+                    alert("spm="+spm);
                     if(spm != null && spm != ""){
                         var payToParty = ${(resourceDetail.payToPartyId)!};
                         doAddPartyRelation(partyId,spm);

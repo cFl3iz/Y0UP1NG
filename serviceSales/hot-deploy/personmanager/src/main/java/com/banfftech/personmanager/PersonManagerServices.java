@@ -1597,7 +1597,7 @@ public class PersonManagerServices {
 
         String partyId = (String) userLogin.get("partyId");
 
-        Long placingCustCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER","productId", productId).queryCount();
+        Long placingCustCount =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER","productId", productId,"partyId",partyId).queryCount();
 
       //  if (markIt.equals("true")) {
 
@@ -1609,7 +1609,6 @@ public class PersonManagerServices {
                 }
             }else{
                 if(placingCustCount>0){
-
                 GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
                 dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
                 }

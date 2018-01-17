@@ -486,7 +486,7 @@ public class PersonManagerQueryServices {
         if(null != distributingLeafletsList && distributingLeafletsList.size()>0){
             resultMap.put("distributingLeaflets",distributingLeafletsList.get(distributingLeafletsList.size()-1).getAllFields());
         }else {
-            resultMap.put("distributingLeaflets","本人");
+            resultMap.put("distributingLeaflets",new HashMap<String,Object>());
         }
 
         resultMap.put("partyRelation",relationStr);

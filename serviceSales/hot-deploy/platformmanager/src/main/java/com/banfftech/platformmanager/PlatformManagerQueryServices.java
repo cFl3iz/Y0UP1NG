@@ -424,7 +424,9 @@ public class PlatformManagerQueryServices {
             Map<String, String> user = null;
 
             String realToId = "";
+
             String toParty = (String) gv.get("partyIdTo");
+
             if (bizType != null & bizType.equals("findOne")) {
                 user = queryPersonBaseInfo(delegator, fromParty);
             } else {
@@ -486,8 +488,6 @@ public class PlatformManagerQueryServices {
             rowMap.put("text", message);
             rowMap.put("createdAt", tsStr);
             rowMap.put("objectId", gvObjectId);
-
-
 
             returnList.add(rowMap);
 
@@ -554,18 +554,18 @@ public class PlatformManagerQueryServices {
 
 
             //查客户关系
-            GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
+         //   GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",userLogin.get("partyId"),"partyIdFrom",realPartyId,"roleTypeIdTo","SHIP_FROM_VENDOR","roleTypeIdFrom","BILL_TO_CUSTOMER").queryFirst();
 
-            if(partyRelationship!=null){
+          //  if(partyRelationship!=null){
 //                for(int index = 0 ; index < partyRelationship.size(); index++ ){
 //                    GenericValue gv = partyRelationship.get(index);
 //                    String relation = (String) gv.get("partyRelationshipTypeId");
 //                    relationStr += UtilProperties.getMessage(resourceUiLabels,relation, locale)+",";
 //                }
-                relationStr = "客户";
-            }else{
-                relationStr = "潜在客户";
-            }
+          //      relationStr = "客户";
+        //    }else{
+          //      relationStr = "潜在客户";
+         //   }
 
             mp.put("custRelation",relationStr);
         }

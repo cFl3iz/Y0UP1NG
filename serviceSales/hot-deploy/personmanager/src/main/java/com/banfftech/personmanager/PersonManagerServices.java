@@ -1961,15 +1961,15 @@ public class PersonManagerServices {
             dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
 
         }
-
-
-//        try {
-//            System.out.println("*push notif Or Message !!!!!!!!!!!!!!!!!");
-//           dispatcher.runSync("pushNotifOrMessage", doJpushMap);
-//        } catch (GenericServiceException e1) {
-//            Debug.logError(e1.getMessage(), module);
-//            return "error";
-//        }
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+            try {
+                System.out.println("*push notif Or Message !!!!!!!!!!!!!!!!!");
+                dispatcher.runSync("pushNotifOrMessage", doJpushMap);
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+                return "error";
+            }
+        }
 
         return "success";
     }

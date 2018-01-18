@@ -1963,13 +1963,13 @@ public class PersonManagerServices {
         }
 
 
-        try {
-            System.out.println("*push notif Or Message !!!!!!!!!!!!!!!!!");
-       //     dispatcher.runSync("pushNotifOrMessage", doJpushMap);
-        } catch (GenericServiceException e1) {
-            Debug.logError(e1.getMessage(), module);
-            return "error";
-        }
+//        try {
+//            System.out.println("*push notif Or Message !!!!!!!!!!!!!!!!!");
+//           dispatcher.runSync("pushNotifOrMessage", doJpushMap);
+//        } catch (GenericServiceException e1) {
+//            Debug.logError(e1.getMessage(), module);
+//            return "error";
+//        }
 
         return "success";
     }

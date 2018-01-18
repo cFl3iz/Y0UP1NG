@@ -180,9 +180,9 @@ public class JPushServices {
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		Delegator delegator = dispatcher.getDelegator();
 
-		GenericValue userLogin = (GenericValue) context.get("userLogin");
-
-		String partyId = (String) userLogin.get("partyId");
+//		GenericValue userLogin = (GenericValue) context.get("userLogin");
+//
+//		String partyId = (String) userLogin.get("partyId");
 
 		// all 所有人
 		String sendType = (String) context.get("sendType");

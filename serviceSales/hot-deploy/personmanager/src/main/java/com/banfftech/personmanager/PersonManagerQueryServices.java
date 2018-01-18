@@ -405,10 +405,65 @@ public class PersonManagerQueryServices {
     }
 
 
+    /**
+     * query CustSalesReport
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryCustSalesReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+        String productId = (String) context.get("productId");
 
 
 
+        List<GenericValue> custList =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", PeConstant.PRODUCT_CUSTOMER,"productId", productId).queryList();
+        List<GenericValue> placingCustList=  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER","productId", productId).queryList();
+        List<GenericValue> visitorList =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "VISITOR","productId",productId).queryList();
+        List<GenericValue> partnerList =  EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PARTNER","productId", productId).queryList();
 
+        // 客户、 潜在客户、 访问者 、 合作伙伴(转发者)
+        resultMap.put("custList",custList.size()>0?forEeachCustList(custList,delegator):new ArrayList<Map<String,String>>());
+        resultMap.put("placingCustList",placingCustList.size()>0?forEeachCustList(placingCustList,delegator):new ArrayList<Map<String,String>>());
+        resultMap.put("visitorList",visitorList.size()>0?forEeachCustList(visitorList,delegator):new ArrayList<Map<String,String>>());
+        resultMap.put("partnerList",partnerList.size()>0? forEeachCustList(partnerList,delegator):new ArrayList<Map<String,String>>());
+
+
+        return resultMap;
+    }
+
+    private static List<Map<String, String>> forEeachCustList(List<GenericValue> custList,Delegator delegator) throws GenericEntityException {
+        List<Map<String,String>> returnList = new ArrayList<Map<String, String>>();
+
+        for(GenericValue gv : custList){
+            String partyId = (String)gv.get("partyId");
+
+            Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,partyId);
+
+            returnList.add(userInfoMap);
+        }
+
+        return  returnList;
+    }
 
 
     /**

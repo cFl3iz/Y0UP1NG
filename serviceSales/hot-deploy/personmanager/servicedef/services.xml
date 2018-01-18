@@ -403,6 +403,27 @@
     </service>
 
 
+    <!-- queryCustSalesReport -->
+    <service name="queryCustSalesReport" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryCustSalesReport" auth="false">
+        <description>queryCustSalesReport</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="custList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="placingCustList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="visitorList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="partnerList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <!-- markOrOutMarkProduct -->
     <service name="markOrOutMarkProduct" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

@@ -451,8 +451,10 @@ public class WeChatOrderQueryServices {
 
         }
 
-        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
-
+       GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
+        if(null != order && null != order.get("internalCode")) {
+            rowMap.put("internalCode",order.get("internalCode"));
+        }
         //TODO QUERY orderExpressInfo
 //        if(null != order && null != order.get("internalCode")){
 //

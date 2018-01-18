@@ -185,7 +185,7 @@ public class JPushServices {
 //		String partyId = (String) userLogin.get("partyId");
 
 		System.out.println(" PUSH JPUSH  >>>>>>>>>>>>>>>>>>>>>>>> context="+context);
-		
+
 		// all 所有人
 		String sendType = (String) context.get("sendType");
 

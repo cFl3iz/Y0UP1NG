@@ -3506,9 +3506,9 @@ public class PersonManagerServices {
             address1 = (String) address.get("address1");
         }
         if(address1==null){
-            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","您好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址(若已更新收货地址,勿理会本条提示*_*)!","objectId",productId));
+            dispatcher.runSync("pushMessage",UtilMisc.toMap("userLogin",admin,"partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","您好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址(若已更新收货地址,勿理会本条提示*_*)!","objectId",productId));
         }else{
-            dispatcher.runSync("pushMessage",UtilMisc.toMap("partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","您的订单收货地址:"+address1+",无误请点击→","objectId",productId));
+            dispatcher.runSync("pushMessage",UtilMisc.toMap("userLogin",admin,"partyIdTo",partyId,"partyIdFrom",payToPartyId,"text","您的订单收货地址:"+address1+",无误请点击→","objectId",productId));
         }
 
 

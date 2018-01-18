@@ -451,7 +451,7 @@ public class PersonManagerQueryServices {
         return resultMap;
     }
 
-    private static List<Map<String, String>> forEeachCustList(List<GenericValue> custList,Delegator delegator) throws GenericEntityException {
+    private static List<Map<String, String>> forEeachCustList(List<GenericValue> custList,Delegator delegator) throws GenericEntityException ,GenericServiceException{
         List<Map<String,String>> returnList = new ArrayList<Map<String, String>>();
 
         for(GenericValue gv : custList){

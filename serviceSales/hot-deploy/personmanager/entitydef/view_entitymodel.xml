@@ -196,7 +196,7 @@
 
 
         <view-link entity-alias="PartyRelationship" rel-entity-alias="ProductRole">
-            <key-map rel-field-name="partyIdTo" field-name="partyId"/>
+            <key-map field-name="partyIdTo" rel-field-name="partyId" />
         </view-link>
 
         <view-link entity-alias="ProductRole" rel-entity-alias="Product">

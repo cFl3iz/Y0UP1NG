@@ -58,6 +58,12 @@ public class WeChatOrderQueryServices {
 
         String openId = (String) context.get("openId");
         System.out.println("*OPENID = " + openId);
+
+        int viewIndex = 0;
+        int viewSize = 10;
+
+
+
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
 
@@ -69,21 +75,24 @@ public class WeChatOrderQueryServices {
         //查询联系人列表
 
 
-        List<GenericValue> myContactList  = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo", partyId,"partyRelationshipTypeId",PeConstant.CONTACT).queryList();
+        List<GenericValue> myContactList  = EntityQuery.use(delegator).from("PartyContactResources").
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
 
 
-        for(GenericValue gv : myContactList){
+//        for(GenericValue gv : myContactList){
+//
+//            Map<String,Object> rowMap = new HashMap<String, Object>();
+//
+//            String contactPartyId = (String) gv.get("partyId");
+//
+//
+//
+//        }
 
-            Map<String,Object> rowMap = new HashMap<String, Object>();
 
-            String contactPartyId = (String) gv.get("partyIdFrom");
-
-
-
-        }
-
-
-        resultMap.put("resourcesList",returnList);
+        resultMap.put("resourcesList",myContactList);
 
         return  resultMap;
     }

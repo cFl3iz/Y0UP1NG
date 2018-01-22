@@ -182,6 +182,7 @@
 
 
         <alias entity-alias="PartyRelationship" field="partyIdTo" name="partyIdTo"/>
+        <alias entity-alias="PartyRelationship" field="partyIdFrom" name="partyIdFrom"/>
         <alias entity-alias="PartyRelationship" field="partyRelationshipTypeId" name="partyRelationshipTypeId"/>
 
         <alias entity-alias="ProductRole" field="partyId" name="partyId"/>
@@ -196,7 +197,7 @@
 
 
         <view-link entity-alias="PartyRelationship" rel-entity-alias="ProductRole">
-            <key-map field-name="partyIdTo" rel-field-name="partyId" />
+            <key-map field-name="partyIdFrom" rel-field-name="partyId" />
         </view-link>
 
         <view-link entity-alias="ProductRole" rel-entity-alias="Product">

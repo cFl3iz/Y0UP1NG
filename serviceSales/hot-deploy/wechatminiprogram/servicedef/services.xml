@@ -52,7 +52,7 @@
         <description>queryContactResourceList</description>
         <attribute name="openId" type="String" mode="IN" optional="true" />
 
-        <attribute name="viewIndex" type="String" mode="IN" optional="true" />
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
 
         <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
         <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />

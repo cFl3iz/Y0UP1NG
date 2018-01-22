@@ -168,4 +168,48 @@
 
 
 
+
+    <!-- 联系人的资源视图实体 -->
+    <view-entity entity-name="PartyContactResources" package-name="com.banfftech.personerp">
+        <member-entity entity-name="PartyRelationship" entity-alias="PartyRelationship" />
+        <member-entity entity-name="ProductRole" entity-alias="ProductRole" />
+        <member-entity entity-name="Product" entity-alias="Product" />
+        <member-entity entity-alias="PP" entity-name="ProductPrice"/>
+
+        <alias field="price" name="price" entity-alias="PP"/>
+        <alias field="productPriceTypeId" name="productPriceTypeId" entity-alias="PP"/>
+
+
+
+        <alias entity-alias="PartyRelationship" field="partyIdTo" name="partyIdTo"/>
+        <alias entity-alias="PartyRelationship" field="partyRelationshipTypeId" name="partyRelationshipTypeId"/>
+
+        <alias entity-alias="ProductRole" field="partyId" name="partyId"/>
+        <alias entity-alias="ProductRole" field="roleTypeId" name="roleTypeId"/>
+
+        <alias entity-alias="Product" field="productId" name="productId"/>
+        <alias entity-alias="Product" field="productName" name="productName"/>
+        <alias entity-alias="Product" field="detailImageUrl" name="detailImageUrl"/>
+        <alias entity-alias="Product" field="price" name="price"/>
+        <alias entity-alias="Product" field="description" name="description"/>
+
+
+
+        <view-link entity-alias="PartyRelationship" rel-entity-alias="ProductRole">
+            <key-map rel-field-name="partyIdTo" field-name="partyId"/>
+        </view-link>
+
+        <view-link entity-alias="ProductRole" rel-entity-alias="Product">
+            <key-map rel-field-name="productId" field-name="productId"/>
+        </view-link>
+
+        <view-link entity-alias="Product" rel-entity-alias="PP">
+            <key-map field-name="productId" rel-field-name="productId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PP" field-name="productPriceTypeId" operator="equals" value="DEFAULT_PRICE"/>
+            </entity-condition>
+        </view-link>
+
+    </view-entity>
+
 </entitymodel>

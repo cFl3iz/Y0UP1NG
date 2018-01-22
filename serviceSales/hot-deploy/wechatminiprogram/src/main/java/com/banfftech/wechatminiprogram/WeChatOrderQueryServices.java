@@ -139,7 +139,7 @@ public class WeChatOrderQueryServices {
         resultMap.put("resourcesList",returnList);
         resultMap.put("total",resourceCount);
         resultMap.put("from",viewIndex);
-        resultMap.put("current_page",viewIndex+1);
+        resultMap.put("current_page",viewIndex);
         resultMap.put("last_page",resourceCount);
 
         return  resultMap;

@@ -61,8 +61,9 @@ public class WeChatOrderQueryServices {
 
         int viewIndex = 0;
         int viewSize = 10;
-
-
+        int lowIndex = 0;
+        int highIndex = 0;
+        int resourceCount  = 0;
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
@@ -74,12 +75,16 @@ public class WeChatOrderQueryServices {
 
         //查询联系人列表
 
-
-        List<GenericValue> myContactList  = EntityQuery.use(delegator).from("PartyContactResources").
+        PagedList<GenericValue> myContactListPage = null;
+        myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
                 .distinct()
-                .queryPagedList(viewIndex, viewSize);
+                .queryPagedList(viewIndex, viewSize).getData();
 
+        List<GenericValue> myContactList = myContactListPage.getData();
+        resourceCount = myContactListPage.getSize();
+        lowIndex = myContactListPage.getStartIndex();
+        highIndex = myContactListPage.getEndIndex();
 
 //        for(GenericValue gv : myContactList){
 //

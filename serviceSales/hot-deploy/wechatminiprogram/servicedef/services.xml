@@ -52,10 +52,10 @@
         <description>queryContactResourceList</description>
         <attribute name="openId" type="String" mode="IN" optional="true" />
 
-        <attribute name="total" type="String" mode="OUT" optional="true" />
-        <attribute name="from" type="String" mode="OUT" optional="true" />
-        <attribute name="current_page" type="String" mode="OUT" optional="true" />
-        <attribute name="last_page" type="String" mode="OUT" optional="true" />
+        <attribute name="total" type="int" mode="OUT" optional="true" />
+        <attribute name="from" type="int" mode="OUT" optional="true" />
+        <attribute name="current_page" type="int" mode="OUT" optional="true" />
+        <attribute name="last_page" type="int" mode="OUT" optional="true" />
 
 
 

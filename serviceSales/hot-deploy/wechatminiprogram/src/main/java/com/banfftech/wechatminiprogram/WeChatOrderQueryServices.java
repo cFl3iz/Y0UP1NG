@@ -5,6 +5,7 @@ import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.collections.PagedList;
 import org.apache.ofbiz.base.util.Debug;
+import java.sql.Timestamp;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
@@ -31,6 +32,7 @@ import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonAddressInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
 
 /**
  * Created by S on 2017/11/20.
@@ -95,6 +97,10 @@ public class WeChatOrderQueryServices {
             String contactPartyId = (String) gv.get("partyIdFrom");
 
             Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,contactPartyId);
+
+            Timestamp createdDateTp = (Timestamp) gv.get("createdDate");
+
+            rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
 
             rowMap.put("user",userInfoMap);
 

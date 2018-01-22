@@ -194,7 +194,7 @@
         <alias entity-alias="Product" field="price" name="price"/>
         <alias entity-alias="Product" field="description" name="description"/>
 
-
+        <alias entity-alias="Product" field="createdDate" name="createdDate"/>
 
         <view-link entity-alias="PartyRelationship" rel-entity-alias="ProductRole">
             <key-map field-name="partyIdFrom" rel-field-name="partyId" />

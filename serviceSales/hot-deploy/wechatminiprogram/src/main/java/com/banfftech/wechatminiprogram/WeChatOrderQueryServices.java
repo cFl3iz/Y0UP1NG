@@ -3,6 +3,7 @@ import net.sf.json.JSONObject;
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import org.apache.ofbiz.entity.GenericEntity;
+import org.apache.ofbiz.base.util.collections.PagedList;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;

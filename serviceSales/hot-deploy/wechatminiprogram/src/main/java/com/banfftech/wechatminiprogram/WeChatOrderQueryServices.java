@@ -80,7 +80,7 @@ public class WeChatOrderQueryServices {
         myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
                 .distinct()
-                .queryPagedList(viewIndex, viewSize).getData();
+                .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> myContactList = myContactListPage.getData();
         resourceCount = myContactListPage.getSize();

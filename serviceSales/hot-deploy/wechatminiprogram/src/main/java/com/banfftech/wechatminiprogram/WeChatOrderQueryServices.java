@@ -87,18 +87,46 @@ public class WeChatOrderQueryServices {
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
 
-//        for(GenericValue gv : myContactList){
-//
-//            Map<String,Object> rowMap = new HashMap<String, Object>();
-//
-//            String contactPartyId = (String) gv.get("partyId");
-//
-//
-//
-//        }
+
+        for(GenericValue gv : myContactList){
+
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+            String contactPartyId = (String) gv.get("partyIdFrom");
+
+            Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,contactPartyId);
+
+            rowMap.put("user",userInfoMap);
+
+            rowMap.put("contactPartyId",contactPartyId);
+
+            rowMap.put("productId",(String) gv.get("productId"));
+
+            rowMap.put("description",(String) gv.get("description"));
+
+            rowMap.put("productName",(String) gv.get("productName"));
+
+            rowMap.put("detailImageUrl",(String) gv.get("detailImageUrl"));
+
+            rowMap.put("price",(String) gv.get("price"));
+            HashSet<String> fieldSet = new HashSet<String>();
+            fieldSet.add("drObjectInfo");
+            fieldSet.add("productId");
+            EntityCondition findConditions3 = EntityCondition
+                    .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
+            List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                    findConditions3, fieldSet,
+                    null, null, false);
+            rowMap.put("morePicture",pictures);
+
+        }
 
 
         resultMap.put("resourcesList",myContactList);
+        resultMap.put("total",resourceCount+"");
+        resultMap.put("from",viewIndex+"");
+        resultMap.put("current_page",viewIndex+"");
+        resultMap.put("last_page",resourceCount+"");
 
         return  resultMap;
     }

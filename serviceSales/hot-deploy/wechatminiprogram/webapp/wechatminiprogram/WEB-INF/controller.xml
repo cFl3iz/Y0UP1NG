@@ -64,6 +64,18 @@
 
 
 
+
+    <!-- queryContactResourceList -->
+    <request-map uri="queryContactResourceList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryContactResourceList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
     <!-- 我收藏的产品 -->
     <request-map uri="queryMyCollectProduct">
         <security https="false" auth="false"/>

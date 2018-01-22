@@ -2780,7 +2780,9 @@ public class PersonManagerServices {
 
         dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
 
-        //  System.out.println("********************************************createInventoryItemOut="+receiveInventoryProductOut);
+
+        //Add Admin Role
+        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"productId",productId,"partyId",partyId,"roleTypeId","ADMIN"));
 
         request.setAttribute("productId", productId);
 

@@ -41,6 +41,55 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * 查询好友的资源列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryContactResourceList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String openId = (String) context.get("openId");
+        System.out.println("*OPENID = " + openId);
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+
+
+        //查询联系人列表
+
+
+        List<GenericValue> myContactList  = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo", partyId,"partyRelationshipTypeId",PeConstant.CONTACT).queryList();
+
+
+        for(GenericValue gv : myContactList){
+
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+            String contactPartyId = (String) gv.get("partyIdFrom");
+
+
+
+        }
+
+
+        resultMap.put("resourcesList",returnList);
+
+        return  resultMap;
+    }
+
+
+    /**
      * 查询绝对想要的资源列表
      * @param dctx
      * @param context
@@ -455,6 +504,9 @@ public class WeChatOrderQueryServices {
         if(null != order && null != order.get("internalCode")) {
             rowMap.put("internalCode",order.get("internalCode"));
         }
+
+
+
         //TODO QUERY orderExpressInfo
 //        if(null != order && null != order.get("internalCode")){
 //

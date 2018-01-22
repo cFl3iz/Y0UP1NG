@@ -45,6 +45,20 @@
     </service>
 
 
+    <!-- 查询联系圈的资源 -->
+    <service name="queryContactResourceList" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryContactResourceList" auth="false">
+        <description>queryContactResourceList</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="collectList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
 
 
     <!-- queryPostalAddress -->

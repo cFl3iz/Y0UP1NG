@@ -52,7 +52,7 @@
         <description>queryContactResourceList</description>
         <attribute name="openId" type="String" mode="IN"
                    optional="true" />
-        <attribute name="collectList" type="List" mode="OUT"
+        <attribute name="resourcesList" type="List" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

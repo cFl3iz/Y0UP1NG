@@ -92,10 +92,13 @@ public class WeChatOrderQueryServices {
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> myContactList = myContactListPage.getData();
-        resourceCount = Integer.parseInt( EntityQuery.use(delegator).from("PartyContactResources").
+
+        List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
                 .distinct()
-                .queryCount()+"");
+                .queryList();
+        resourceCount = myContactListCountList.size();
+
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
 

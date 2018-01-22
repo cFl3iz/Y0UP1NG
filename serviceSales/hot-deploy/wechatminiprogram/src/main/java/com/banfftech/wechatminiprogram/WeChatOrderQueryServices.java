@@ -108,7 +108,7 @@ public class WeChatOrderQueryServices {
 
             rowMap.put("detailImageUrl",(String) gv.get("detailImageUrl"));
 
-            rowMap.put("price",(String) gv.get("price"));
+            rowMap.put("price",gv.get("price") + "");
             HashSet<String> fieldSet = new HashSet<String>();
             fieldSet.add("drObjectInfo");
             fieldSet.add("productId");

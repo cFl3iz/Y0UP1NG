@@ -118,11 +118,12 @@ public class WeChatOrderQueryServices {
                     findConditions3, fieldSet,
                     null, null, false);
             rowMap.put("morePicture",pictures);
+            returnList.add(rowMap);
 
         }
 
 
-        resultMap.put("resourcesList",myContactList);
+        resultMap.put("resourcesList",returnList);
         resultMap.put("total",resourceCount+"");
         resultMap.put("from",viewIndex+"");
         resultMap.put("current_page",viewIndex+"");

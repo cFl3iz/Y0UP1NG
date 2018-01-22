@@ -143,7 +143,18 @@ public class WeChatOrderQueryServices {
 
 
         resultMap.put("resourcesList",returnList);
-        resultMap.put("total",resourceCount%viewSize);
+
+        //总共有多少页码
+        int countIndex = (resourceCount%viewSize);
+        //viewIndex 当前页码
+
+
+        if(resourceCount!=0 && resourceCount>viewSize){
+            resultMap.put("total",resourceCount%viewSize == 0 ? resourceCount / viewSize : resourceCount / viewSize+1 );
+        }else{
+            resultMap.put("total",1);
+        }
+
         resultMap.put("from",viewIndex);
 
 

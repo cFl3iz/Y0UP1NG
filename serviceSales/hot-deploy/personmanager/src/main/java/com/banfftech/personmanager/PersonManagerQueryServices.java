@@ -1866,6 +1866,159 @@ public class PersonManagerQueryServices {
     }
 
 
+    /**
+     * queryResourceDetailFrom PeMiniProgram
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryResourceDetailMiniProgram(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String nowPartyId = (String) context.get("partyId");
+
+
+        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",nowPartyId),false);
+
+        if(null != nowPerson){
+            resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
+        }
+
+        String productId = (String) context.get("productId");
+        resultMap.put("productId",productId);
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("productId");
+        fieldSet.add("productName");
+        fieldSet.add("productStoreId");
+        fieldSet.add("createdDate");
+        fieldSet.add("salesDiscontinuationDate");
+        fieldSet.add("price");
+        fieldSet.add("detailImageUrl");
+        fieldSet.add("prodCatalogId");
+        fieldSet.add("payToPartyId");
+        fieldSet.add("description");
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("productId", productId));
+
+        GenericValue product = delegator.findList("ProductAndCategoryMember",
+                findConditions, fieldSet,
+                null, null, false).get(0);
+        Map<String, Object> resourceDetail = product.getAllFields();
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
+        if(person!=null){
+
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", resourceDetail.get("payToPartyId"), "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+            GenericValue partyContent = null;
+            if(null != contentsList && contentsList.size()>0){
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+
+                String contentId = partyContent.getString("contentId");
+                resourceDetail.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                resourceDetail.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
+            resourceDetail.put("firstName",(String) person.get("firstName"));
+
+            //PartyNoteView
+            GenericValue partyNoteView = EntityQuery.use(delegator).from("PartyNoteView").where("targetPartyId", resourceDetail.get("payToPartyId")).queryFirst();
+            if(UtilValidate.isNotEmpty(partyNoteView)){
+                resourceDetail.put("partyNote",partyNoteView.get("noteInfo"));
+            }else{
+                resourceDetail.put("partyNote","这位卖家还未设置个人说明...");
+            }
+
+        }
+
+
+
+
+
+        Set<String> orderFieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("productId");
+
+
+
+        EntityCondition findOrderConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("productId", productId));
+        EntityCondition findOrderConditions2 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
+
+        EntityConditionList<EntityCondition> listOrderConditions = EntityCondition
+                .makeCondition(findOrderConditions,findOrderConditions2);
+
+        //Query My Resource
+        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                listOrderConditions, orderFieldSet,
+                UtilMisc.toList("-orderDate"), null, false);
+
+        List<Map<String,Object>> partyOrderList = new ArrayList<Map<String, Object>>();
+        if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
+            resourceDetail.put("orderId",queryMyResourceOrderList.get(0).get("orderId"));
+            partyOrderList = doForEachGetBuyerFromRelation(queryMyResourceOrderList,delegator,nowPartyId);
+
+        }
+
+        resourceDetail.put("partyBuyOrder",partyOrderList);
+
+
+        // Query Product More Images & Text
+        List<Map<String,Object>> productMoreDetails = new ArrayList<Map<String, Object>>();
+        resourceDetail.put("productMoreDetails",productMoreDetails);
+
+
+
+
+        fieldSet = new HashSet<String>();
+        fieldSet.add("drObjectInfo");
+        fieldSet.add("productId");
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition("productId", EntityOperator.EQUALS, productId);
+        List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                findConditions3, fieldSet,
+                null, null, false);
+
+
+        Long custCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId",PeConstant.PRODUCT_CUSTOMER).queryCount();
+        Long placingCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId","PLACING_CUSTOMER").queryCount();
+
+        resourceDetail.put("custCount",custCount);
+        resourceDetail.put("placingCount",placingCount);
+
+        resourceDetail.put("morePicture",pictures);
+        resultMap.put("resourceDetail", resourceDetail);
+
+        if(null != userLogin){
+            resultMap.put("partyId", (String) userLogin.get("partyId"));
+        }
+
+
+        return resultMap;
+    }
 
     /**
      * 查询资源详情
@@ -1889,7 +2042,7 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String nowPartyId = (String) context.get("partyId");
-        
+
 
         GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",nowPartyId),false);
 

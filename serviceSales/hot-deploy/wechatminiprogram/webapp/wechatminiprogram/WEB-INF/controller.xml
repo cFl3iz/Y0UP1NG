@@ -63,9 +63,9 @@
     </request-map>
 
 
-    <request-map uri="queryResourceDetail">
+    <request-map uri="queryResourceDetailMiniProgram">
         <security https="false" auth="false"/>
-        <event type="service" invoke="queryResourceDetail"/>
+        <event type="service" invoke="queryResourceDetailMiniProgram"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

@@ -1916,41 +1916,23 @@ public class PersonManagerQueryServices {
         GenericValue product = delegator.findList("ProductAndCategoryMember",
                 findConditions, fieldSet,
                 null, null, false).get(0);
-        Map<String, Object> resourceDetail = product.getAllFields();
-        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
-        if(person!=null){
 
 
-            List<GenericValue> contentsList =
-                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
-                            where("partyId", resourceDetail.get("payToPartyId"), "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
 
+       // Map<String, Object> resourceDetail = product.getAllFields();
+        Map<String, Object> resourceDetail = new HashMap<String, Object>();
 
-            GenericValue partyContent = null;
-            if(null != contentsList && contentsList.size()>0){
-                partyContent = contentsList.get(0);
-            }
+        resourceDetail.put("id",(String)product.get("productId"));
+        resourceDetail.put("title",(String)product.get("productName"));
+        resourceDetail.put("desc",(String)product.get("description"));
+        resourceDetail.put("source","龙熙的转发");
+        resourceDetail.put("cover_url",(String)product.get("detailImageUrl"));
+        String payToId = (String) resourceDetail.get("payToPartyId");
+        Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,payToId);
+        resourceDetail.put("user",userInfoMap);
 
-            if (UtilValidate.isNotEmpty(partyContent)) {
-
-                String contentId = partyContent.getString("contentId");
-                resourceDetail.put("headPortrait",
-                        partyContent.getString("objectInfo"));
-            } else {
-                resourceDetail.put("headPortrait",
-                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
-            }
-            resourceDetail.put("firstName",(String) person.get("firstName"));
-
-            //PartyNoteView
-            GenericValue partyNoteView = EntityQuery.use(delegator).from("PartyNoteView").where("targetPartyId", resourceDetail.get("payToPartyId")).queryFirst();
-            if(UtilValidate.isNotEmpty(partyNoteView)){
-                resourceDetail.put("partyNote",partyNoteView.get("noteInfo"));
-            }else{
-                resourceDetail.put("partyNote","这位卖家还未设置个人说明...");
-            }
-
-        }
+        resourceDetail.put("is_follow","false");
+        resourceDetail.put("is_like","false");
 
 
 
@@ -1980,10 +1962,9 @@ public class PersonManagerQueryServices {
         if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
             resourceDetail.put("orderId",queryMyResourceOrderList.get(0).get("orderId"));
             partyOrderList = doForEachGetBuyerFromRelation(queryMyResourceOrderList,delegator,nowPartyId);
-
         }
-
-        resourceDetail.put("partyBuyOrder",partyOrderList);
+        //实际购买的人
+        resourceDetail.put("likes",partyOrderList);
 
 
         // Query Product More Images & Text
@@ -2006,15 +1987,18 @@ public class PersonManagerQueryServices {
         Long custCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId",PeConstant.PRODUCT_CUSTOMER).queryCount();
         Long placingCount = EntityQuery.use(delegator).from("ProductRole").where("productId",productId,"roleTypeId","PLACING_CUSTOMER").queryCount();
 
-        resourceDetail.put("custCount",custCount);
-        resourceDetail.put("placingCount",placingCount);
+        resourceDetail.put("like_count",custCount);
+        resourceDetail.put("doc_class",UtilMisc.toMap("title","其他","desc","其他"));
+//        resourceDetail.put("placingCount",placingCount);
 
         resourceDetail.put("morePicture",pictures);
+
         resultMap.put("resourceDetail", resourceDetail);
 
-        if(null != userLogin){
-            resultMap.put("partyId", (String) userLogin.get("partyId"));
-        }
+//        if(null != userLogin){
+//            resultMap.put("partyId", (String) userLogin.get("partyId"));
+//        }
+
 
 
         return resultMap;

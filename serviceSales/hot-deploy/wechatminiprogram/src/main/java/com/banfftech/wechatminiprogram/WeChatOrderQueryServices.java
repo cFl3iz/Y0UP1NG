@@ -152,7 +152,12 @@ public class WeChatOrderQueryServices {
         if(resourceCount!=0 && resourceCount>viewSize){
             resultMap.put("total",resourceCount%viewSize == 0 ? resourceCount / viewSize : resourceCount / viewSize+1 );
         }else{
-            resultMap.put("total",1);
+            if(null == myContactListCountList || myContactListCountList.size() == 0){
+                resultMap.put("total",-1);
+            }else{
+                resultMap.put("total",1);
+            }
+
         }
 
         resultMap.put("from",viewIndex);

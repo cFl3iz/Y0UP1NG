@@ -102,6 +102,8 @@ public class WeChatOrderQueryServices {
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
 
+        if(null != myContactList){
+
 
         for(GenericValue gv : myContactList){
 
@@ -114,6 +116,8 @@ public class WeChatOrderQueryServices {
             Timestamp createdDateTp = (Timestamp) gv.get("createdDate");
 
             rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
+
+            rowMap.put("partyId",partyId);
 
             rowMap.put("user",userInfoMap);
 
@@ -142,6 +146,7 @@ public class WeChatOrderQueryServices {
         }
 
 
+        }
         resultMap.put("resourcesList",returnList);
 
         //总共有多少页码

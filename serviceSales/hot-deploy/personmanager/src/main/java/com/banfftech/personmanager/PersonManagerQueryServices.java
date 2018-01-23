@@ -1889,6 +1889,8 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String nowPartyId = (String) context.get("partyId");
+        
+
         GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",nowPartyId),false);
 
         if(null != nowPerson){
@@ -1980,15 +1982,7 @@ public class PersonManagerQueryServices {
         if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
             resourceDetail.put("orderId",queryMyResourceOrderList.get(0).get("orderId"));
             partyOrderList = doForEachGetBuyerFromRelation(queryMyResourceOrderList,delegator,nowPartyId);
-//            for(GenericValue order : queryMyResourceOrderList){
-//                Map<String,Object> rowMap = new HashMap<String, Object>();
-//                String partyId = (String) order.get("partyId");
-//                GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", order.get("partyId")), false);
-//                if(person!=null){
-//                    rowMap.put("firstName",(String) orderPerson.get("firstName"));
-//                }
-//                partyOrderList.add(rowMap);
-//            }
+
         }
 
         resourceDetail.put("partyBuyOrder",partyOrderList);

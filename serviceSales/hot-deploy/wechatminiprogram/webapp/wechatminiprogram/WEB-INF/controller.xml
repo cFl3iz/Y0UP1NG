@@ -63,6 +63,12 @@
     </request-map>
 
 
+    <request-map uri="queryResourceDetail">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryResourceDetail"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- queryContactResourceList -->

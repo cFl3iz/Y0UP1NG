@@ -116,7 +116,12 @@ public class PersonManagerQueryServices {
         GenericValue product = delegator.findList("ProductAndCategoryMember",
                 findConditions, fieldSet,
                 null, null, false).get(0);
+
+
         Map<String, Object> resourceDetail = product.getAllFields();
+        if(product!=null && product.get("salesDiscontinuationDate") == null ){
+            resourceDetail.put("salesDiscontinuationDate","");
+        }
 
 //        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
 //

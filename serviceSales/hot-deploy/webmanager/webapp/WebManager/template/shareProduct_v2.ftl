@@ -188,7 +188,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
 
                                  <#list productFeaturesList as featuresListMapKey>
 
-                                        <div class="pro-color"> <span class="part-note-msg"> ${(featuresListMapKey)!} </span>
+                                        <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
                                             <#assign  fList = productFeaturesList[featuresListMapKey]/>
                                             ${fList}
                                             <#list fList as fList>

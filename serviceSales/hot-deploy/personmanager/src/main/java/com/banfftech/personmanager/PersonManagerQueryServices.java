@@ -2232,7 +2232,14 @@ public class PersonManagerQueryServices {
         resourceDetail.put("placingCount",placingCount);
 
         resourceDetail.put("morePicture",pictures);
+
+        //查询ProductFeature
+        Map<String,Object> queryProductFeature = dispatcher.runSync("queryProductFeatures",UtilMisc.toMap("userLogin",userLogin,"productId",productId));
+
+        List<GenericValue> productFeaturesList = (List<GenericValue>) queryProductFeature.get("productFeaturesList");
+
         resultMap.put("resourceDetail", resourceDetail);
+        resultMap.put("productFeaturesList",productFeaturesList);
 
         if(null != userLogin){
             resultMap.put("partyId", (String) userLogin.get("partyId"));

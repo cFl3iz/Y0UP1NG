@@ -179,17 +179,32 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                 <!-- 已选 -->
                                 <div class="prod-spec" id="prodSpecArea">
                                     <!-- 已选 -->
-                                    <div class="spec-desc"> <span class="part-note-msg">已选</span>
-                                        <div id="specDetailInfo_spec" class="base-txt"> 款式 默认款 &nbsp;&nbsp; <span class="amount" id="amount">1</span>件 </div>
-                                    </div>
+                                    <#--<div class="spec-desc"> <span class="part-note-msg">已选</span>-->
+                                        <#--<div id="specDetailInfo_spec" class="base-txt"> 款式 默认款 &nbsp;&nbsp; <span class="amount" id="amount">1</span>件 </div>-->
+                                    <#--</div>-->
                                     <div class="nature-container" id="natureCotainer">
                                         <!--颜色 5.5版本之前的规格属性-->
-                                        <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
-                                            <p id="color">
-                                                <a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>
+                             <#if productFeaturesList?keys>
 
+                                 <#list productFeaturesList as featuresListMapKey>
+
+                                        <div class="pro-color"> <span class="part-note-msg"> ${(featuresListMapKey)!} </span>
+                                            <#assign  fList = productFeaturesList[featuresListMapKey]/>
+                                            <#list fList as fList>
+                                            <p id="color">
+                                                <a title="${(fList.optionValue)!}" class="a-item selected J_ping"   report-eventparam="${(fList.optionValue)!}" >${(fList.optionValue)!}</a>
                                             </p>
+                                            </#list>
                                         </div>
+                                 </#list>
+                              </#if>
+                                        <#if !productFeaturesList?keys>
+                                            <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
+                                                <p id="color">
+                                                    <a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>
+                                                </p>
+                                            </div>
+                                        </#if>
                                         <!--尺寸-->
                                         <!--容量-->
                                         <!--数量-->

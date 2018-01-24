@@ -78,6 +78,8 @@
 
                 <set field="morePicture" value="${resourceDetail.morePicture}"/>
 
+                <set field="productFeaturesList" value="${resultMap.productFeaturesList}"/>
+
                 <!--<set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>-->
 
 

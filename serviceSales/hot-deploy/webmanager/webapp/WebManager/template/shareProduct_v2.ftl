@@ -190,6 +190,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
 
                                         <div class="pro-color"> <span class="part-note-msg"> ${(featuresListMapKey)!} </span>
                                             <#assign  fList = productFeaturesList[featuresListMapKey]/>
+                                            ${fList}
                                             <#list fList as fList>
                                             <p id="color">
                                                 <a title="${(fList.optionValue)!}" class="a-item selected J_ping"   report-eventparam="${(fList.optionValue)!}" >${(fList.optionValue)!}</a>

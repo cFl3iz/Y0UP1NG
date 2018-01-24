@@ -2249,9 +2249,16 @@ public class PersonManagerQueryServices {
 
                 List<Map<String,Object>> innerList = (List<Map<String,Object>>) mp.get(key);
                 for(int i =0 ; i < innerList.size();i++){
+
                      Map<String,Object> nowMap = innerList.get(i);
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
-                     strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                    if(i==0){
+                        strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+
+                    }else{
+                        strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+
+                    }
                     strProductFeaturesList += "</p>";
                 }
 

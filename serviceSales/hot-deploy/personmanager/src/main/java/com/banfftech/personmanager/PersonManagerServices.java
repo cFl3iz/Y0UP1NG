@@ -2628,6 +2628,22 @@ public class PersonManagerServices {
         BigDecimal quantityTotal = new BigDecimal("99999999");
 
 
+        String productFeature = (String) request.getParameter("productFeatures");
+
+        if(productFeature!=null){
+            System.out.println("productFeature =" + productFeature);
+            JSONObject  dataJson=new JSONObject(productFeature);
+            System.out.println("dataJson =" + dataJson);
+        }
+
+        //create ProductFeature
+//        Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureTypeId","OTHER_FEATURE","description",""));
+//        String featureId = createProductFetureMap.get("productFeatureId");
+//        Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
+//                "productFeatureId",productFeatureId,"productId","","productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
+
+
+
         String description   = (String) request.getParameter("description");
 
         System.out.println("*description = " + description);

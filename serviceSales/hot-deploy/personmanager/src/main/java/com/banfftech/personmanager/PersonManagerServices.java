@@ -2804,19 +2804,19 @@ public class PersonManagerServices {
 
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
-                JSONArray myJsonArray = myJsonArray.get(index);
+                JSONArray myJsonArray = (JSONArray) myJsonArray.get(index);
 
-                JSONObject feature = myJsonArray.get(0);
+                JSONObject feature = (JSONObject) myJsonArray.get(0);
 
                 String optionTitle = (String) feature.get("optionTitle");
 
                 // Create Product Feature
                 Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureTypeId","OTHER_FEATURE","description",optionTitle));
 
-                String featureId = createProductFetureMap.get("productFeatureId");
+                String featureId = (String) createProductFetureMap.get("productFeatureId");
 
 
-                JSONArray optionList = feature.get("optionList");
+                JSONArray optionList = (JSONArray) feature.get("optionList");
 
 
                 if(optionList.size()>0){
@@ -2824,9 +2824,9 @@ public class PersonManagerServices {
 
                         //Create Product Feature Attribute
 
-                        JSONObject optionList = optionList.get(0);
+                        JSONObject optionList = (JSONObject) optionList.get(0);
 
-                        String optionValue = optionList.get("value");
+                        String optionValue = (String) optionList.get("value");
 
                         Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"attrName",optionTitle,"attrValue",optionValue,"productId",productId));
 
@@ -2836,7 +2836,7 @@ public class PersonManagerServices {
                 }
                 //Create Product & ProductFeature Relation
                 Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
-                        "productFeatureId",productFeatureId,"productId",productId,"productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
+                        "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
             }
 
 

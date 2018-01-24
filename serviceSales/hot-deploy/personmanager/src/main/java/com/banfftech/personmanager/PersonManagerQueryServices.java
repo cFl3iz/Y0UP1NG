@@ -1927,7 +1927,7 @@ public class PersonManagerQueryServices {
         resourceDetail.put("desc",(String)product.get("description"));
         resourceDetail.put("source","龙熙的转发");
         resourceDetail.put("cover_url",(String)product.get("detailImageUrl"));
-        String payToId = (String) resourceDetail.get("payToPartyId");
+        String payToId = (String) product.get("payToPartyId");
         Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,payToId);
         resourceDetail.put("user",userInfoMap);
 
@@ -2170,6 +2170,26 @@ public class PersonManagerQueryServices {
             GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", orderPartyId), false);
             if(orderPerson!=null){
                 rowMap.put("firstName",(String) orderPerson.get("firstName"));
+            }
+            //查头像
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", orderPartyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0,999999).getData();
+
+
+            GenericValue partyContent = null;
+            if(null != contentsList && contentsList.size()>0){
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+
+
+                rowMap.put("avatar",
+                        partyContent.getString("objectInfo"));
+            } else {
+                rowMap.put("avatar",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
             }
 
             GenericValue partyRelationship = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdTo",orderPartyId,"partyIdFrom",partyId,"partyRelationshipTypeId","CONTACT_REL").queryFirst();

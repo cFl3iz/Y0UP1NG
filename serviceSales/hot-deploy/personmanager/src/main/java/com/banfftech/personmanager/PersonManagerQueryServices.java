@@ -429,30 +429,55 @@ public class PersonManagerQueryServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        List<Map<String,List<Map<String,Object>>>> returnList = new ArrayList<Map<String, List<Map<String, Object>>>>();
 
 //        GenericValue userLogin = (GenericValue) context.get("userLogin");
 //
 //        String partyId = (String) userLogin.get("partyId");
          String productId = (String) context.get("productId");
 
-        List<GenericValue> productFeatures = EntityQuery.use(delegator).from("ProductFeatureApplAttr").where("productId", productId).queryList();
+        List<GenericValue> productFeatures = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
 
         for(GenericValue gv : productFeatures){
-            Map<String,Object> rowMap = new HashMap<String, Object>();
 
-            String attrName = (String) gv.get("attrName");
-            String attrValue = (String) gv.get("attrValue");
+            Map<String,List<Map<String,Object>>> rowMap = new HashMap<String, List<Map<String, Object>>>();
 
-            attrName = attrName.substring(0,attrName.indexOf("|"));
 
-            rowMap.put("attrName",attrName);
-            rowMap.put("attrValue",attrValue);
+            String productFeatureId = (String) gv.get("productFeatureId");
 
+            String description = (String) gv.get("description");
+
+            List<GenericValue> productFeaturesAttrs = EntityQuery.use(delegator).from("ProductFeatureApplAttr").where("productId", productId,"productFeatureId",productFeatureId).queryList();
+
+            List<Map<String,Object>> rowMapList = new ArrayList<Map<String, Object>>();
+
+            for(GenericValue gv2 : productFeaturesAttrs){
+                Map<String,Object> rowMaps = new HashMap<String, Object>();
+                rowMaps.put("optionValue",(String) gv2.get("attrValue"));
+                rowMapList.add(rowMaps);
+            }
+            rowMap.put(description,rowMapList);
+
+//
+//            String attrName = (String) gv.get("attrName");
+//
+//            String attrValue = (String) gv.get("attrValue");
+//
+//            attrName = attrName.substring(0,attrName.indexOf("|"));
+//
+//            rowMap.put("attrName",attrName);
+//
+//            rowMap.put("attrValue",attrValue);
+//
+//            returnList.add(rowMap);
             returnList.add(rowMap);
         }
 
+
+
+
         resultMap.put("productFeaturesList",returnList);
+
         return resultMap;
     }
 

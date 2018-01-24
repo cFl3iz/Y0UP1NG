@@ -411,6 +411,54 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * 查询产品的特征及特征属性
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryProductFeatures(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//
+//        String partyId = (String) userLogin.get("partyId");
+         String productId = (String) context.get("productId");
+
+        List<GenericValue> productFeatures = EntityQuery.use(delegator).from("ProductFeatureApplAttr").where("productId", productId).queryList();
+
+        for(GenericValue gv : productFeatures){
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+            String attrName = (String) gv.get("attrName");
+            String attrValue = (String) gv.get("attrValue");
+
+            attrName = attrName.substring(0,attrName.indexOf("|"));
+
+            rowMap.put("attrName",attrName);
+            rowMap.put("attrValue",attrValue);
+
+            returnList.add(rowMap);
+        }
+
+        resultMap.put("productFeaturesList",returnList);
+        return resultMap;
+    }
+
+
+
+    /**
      * query CustSalesReport
      * @param dctx
      * @param context

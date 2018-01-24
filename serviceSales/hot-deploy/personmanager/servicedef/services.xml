@@ -207,6 +207,22 @@
     </service>
 
 
+
+
+    <service name="queryProductFeatures" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductFeatures" auth="false">
+        <description>queryProductFeatures</description>
+
+        <attribute name="productId" type="String" mode="INOUT"
+               optional="true"/>
+        <attribute name="productFeaturesList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <!-- query Resource Detail -->
     <service name="queryResourceDetailMiniProgram" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

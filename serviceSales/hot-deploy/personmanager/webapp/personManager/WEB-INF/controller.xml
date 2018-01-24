@@ -72,6 +72,14 @@
 
 
 
+    <request-map uri="queryProductFeatures">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryProductFeatures"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="queryCustSalesReport">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryCustSalesReport"/>

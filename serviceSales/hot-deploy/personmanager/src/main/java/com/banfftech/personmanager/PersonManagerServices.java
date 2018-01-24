@@ -2632,7 +2632,7 @@ public class PersonManagerServices {
 
         if(productFeature!=null){
             System.out.println("productFeature =" + productFeature);
-            JSONObject  dataJson=new JSONObject(productFeature);
+            JSONObject  dataJson=JSONObject.fromObject(productFeature);
             System.out.println("dataJson =" + dataJson);
         }
 

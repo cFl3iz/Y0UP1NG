@@ -1229,7 +1229,7 @@ public class PersonManagerServices {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JSONObject jsonMap2 = JSONObject.fromObject(entityStr);
+        net.sf.json.JSONObject jsonMap2 = net.sf.json.JSONObject.fromObject(entityStr);
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
         JSONArray list = null;
         try {
@@ -2806,7 +2806,7 @@ public class PersonManagerServices {
 
                 JSONArray myJsonArray2 = (JSONArray) myJsonArray.get(index);
 
-                JSONObject feature = (JSONObject) myJsonArray2.get(0);
+                net.sf.json.JSONObject feature = (net.sf.json.JSONObject) myJsonArray2.get(0);
 
                 String optionTitle = (String) feature.get("optionTitle");
 
@@ -2820,11 +2820,11 @@ public class PersonManagerServices {
 
 
                 if(optionList.size()>0){
-                    for(int optionListIndex ; optionListIndex < optionList.size(); optionListIndex++){
+                    for(int optionListIndex  =0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute
 
-                        JSONObject optionList2 = (JSONObject) optionList.get(0);
+                        net.sf.json.JSONObject optionList2 = (net.sf.json.JSONObject) optionList.get(0);
 
                         String optionValue = (String) optionList2.get("value");
 

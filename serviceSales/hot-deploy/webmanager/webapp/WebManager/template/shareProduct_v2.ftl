@@ -185,7 +185,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <div class="nature-container" id="natureCotainer">
                                         <!--颜色 5.5版本之前的规格属性-->
 
-                                    ${(strProductFeaturesList)!}
+                                    ${(resultMap)!}
                                  <#--<#list productFeaturesList as featuresListMapKey>-->
 
                                         <#--<div class="pro-color"> <span class="part-note-msg"> 规格 </span>-->

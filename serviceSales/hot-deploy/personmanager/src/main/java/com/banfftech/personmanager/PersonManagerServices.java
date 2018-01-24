@@ -2815,9 +2815,12 @@ public class PersonManagerServices {
 
                 String featureId = (String) createProductFetureMap.get("productFeatureId");
 
+
+
+
                     //Create Product & ProductFeature Relation
                 Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
-                        "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
+                        "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","OPTIONAL_FEATURE"));
 
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 

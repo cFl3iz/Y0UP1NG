@@ -184,7 +184,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <#--</div>-->
                                     <div class="nature-container" id="natureCotainer">
                                         <!--颜色 5.5版本之前的规格属性-->
-                             <#if productFeaturesList?keys>
+                             <#if productFeaturesList?has_content>
 
                                  <#list productFeaturesList as featuresListMapKey>
 
@@ -198,13 +198,13 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                         </div>
                                  </#list>
                               </#if>
-                                        <#if !productFeaturesList?keys>
-                                            <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
-                                                <p id="color">
-                                                    <a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>
-                                                </p>
-                                            </div>
-                                        </#if>
+                                        <#--<#if !productFeaturesList?keys>-->
+                                            <#--<div class="pro-color"> <span class="part-note-msg"> 规格 </span>-->
+                                                <#--<p id="color">-->
+                                                    <#--<a title="款式 默认款" class="a-item selected J_ping"   report-eventparam="款式 默认款" >款式 默认款</a>-->
+                                                <#--</p>-->
+                                            <#--</div>-->
+                                        <#--</#if>-->
                                         <!--尺寸-->
                                         <!--容量-->
                                         <!--数量-->

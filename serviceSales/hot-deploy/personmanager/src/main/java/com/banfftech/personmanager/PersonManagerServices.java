@@ -2828,7 +2828,11 @@ public class PersonManagerServices {
 
                         String optionValue = (String) optionList2.get("value");
 
-                        Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionValue,"attrValue",optionValue,"productId",productId));
+                        System.out.println(">>>>>>>optionValue="+optionValue);
+                        System.out.println(">>>>>>>featureId="+featureId);
+                        System.out.println(">>>>>>>optionTitle="+optionTitle);
+                        
+                        Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
 
 
 

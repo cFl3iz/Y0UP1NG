@@ -2804,9 +2804,9 @@ public class PersonManagerServices {
 
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
-                JSONArray myJsonArray = (JSONArray) myJsonArray.get(index);
+                JSONArray myJsonArray2 = (JSONArray) myJsonArray.get(index);
 
-                JSONObject feature = (JSONObject) myJsonArray.get(0);
+                JSONObject feature = (JSONObject) myJsonArray2.get(0);
 
                 String optionTitle = (String) feature.get("optionTitle");
 
@@ -2824,9 +2824,9 @@ public class PersonManagerServices {
 
                         //Create Product Feature Attribute
 
-                        JSONObject optionList = (JSONObject) optionList.get(0);
+                        JSONObject optionList2 = (JSONObject) optionList.get(0);
 
-                        String optionValue = (String) optionList.get("value");
+                        String optionValue = (String) optionList2.get("value");
 
                         Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"attrName",optionTitle,"attrValue",optionValue,"productId",productId));
 

@@ -2238,13 +2238,14 @@ public class PersonManagerQueryServices {
 
         List<Map<String,Object>> productFeaturesList = (List<Map<String,Object>>) queryProductFeature.get("productFeaturesList");
 
-        String strProductFeaturesList = "<div class=\"pro-color\"> <span class=\"part-note-msg\">";
+        String strProductFeaturesList = "<div class=\"pro-color\">";
 
         for(Map<String,Object> mp : productFeaturesList){
             Set set = mp.keySet();//得到所有map里面key的集合\
             for(Iterator iter = set.iterator(); iter.hasNext();)//遍历
             {
                 String key = (String)iter.next();
+                strProductFeaturesList += "<span class=\"part-note-msg\">";
                 strProductFeaturesList = strProductFeaturesList + key + "</span>";
 
                 List<Map<String,Object>> innerList = (List<Map<String,Object>>) mp.get(key);

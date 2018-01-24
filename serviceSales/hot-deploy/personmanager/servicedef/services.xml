@@ -274,7 +274,7 @@
         <attribute name="nowPersonName" type="String" mode="OUT"
                    optional="true"/>
 
-        <attribute name="productFeaturesList" type="List" mode="OUT"
+        <attribute name="strProductFeaturesList" type="String" mode="OUT"
                    optional="true"/>
 
 

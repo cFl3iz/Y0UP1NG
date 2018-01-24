@@ -184,20 +184,18 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                                     <#--</div>-->
                                     <div class="nature-container" id="natureCotainer">
                                         <!--颜色 5.5版本之前的规格属性-->
-                             <#if productFeaturesList?has_content>
+                             <#if strProductFeaturesList?has_content>
+                                    ${(strProductFeaturesList)!}
+                                 <#--<#list productFeaturesList as featuresListMapKey>-->
 
-                                 <#list productFeaturesList as featuresListMapKey>
+                                        <#--<div class="pro-color"> <span class="part-note-msg"> 规格 </span>-->
 
-                                        <div class="pro-color"> <span class="part-note-msg"> 规格 </span>
-                                            <#assign  fList = productFeaturesList[featuresListMapKey]/>
-                                            ${fList}
-                                            <#list fList as fList>
-                                            <p id="color">
-                                                <a title="${(fList.optionValue)!}" class="a-item selected J_ping"   report-eventparam="${(fList.optionValue)!}" >${(fList.optionValue)!}</a>
-                                            </p>
-                                            </#list>
-                                        </div>
-                                 </#list>
+                                            <#--<p id="color">-->
+                                                <#--<a title="${(fList.optionValue)!}" class="a-item selected J_ping"   report-eventparam="${(fList.optionValue)!}" >${(fList.optionValue)!}</a>-->
+                                            <#--</p>-->
+
+                                        <#--</div>-->
+                                 <#--</#list>-->
                               </#if>
                                         <#--<#if !productFeaturesList?keys>-->
                                             <#--<div class="pro-color"> <span class="part-note-msg"> 规格 </span>-->

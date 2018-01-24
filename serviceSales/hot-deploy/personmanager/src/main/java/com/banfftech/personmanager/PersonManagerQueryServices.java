@@ -37,7 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import main.java.com.banfftech.platformmanager.util.GZIP;
-
+import sun.net.www.content.text.Generic;
 
 
 /**
@@ -2236,10 +2236,32 @@ public class PersonManagerQueryServices {
         //查询ProductFeature
         Map<String,Object> queryProductFeature = dispatcher.runSync("queryProductFeatures",UtilMisc.toMap("userLogin",userLogin,"productId",productId));
 
-        List<GenericValue> productFeaturesList = (List<GenericValue>) queryProductFeature.get("productFeaturesList");
+        List<Map<String,Object>> productFeaturesList = (List<Map<String,Object>>) queryProductFeature.get("productFeaturesList");
+
+        String strProductFeaturesList = "<div class=\"pro-color\"> <span class=\"part-note-msg\">";
+
+        for(Map<String,Object> mp : productFeaturesList){
+            Set set = mp.keySet();//得到所有map里面key的集合\
+            for(Iterator iter = set.iterator(); iter.hasNext();)//遍历
+            {
+                String key = (String)iter.next();
+                strProductFeaturesList = strProductFeaturesList + key + "</span>";
+
+                List<Map<String,Object>> innerList = (List<Map<String,Object>>) mp.get(key);
+                for(int i =0 ; i < innerList.size();i++){
+                     Map<String,Object> nowMap = innerList.get(i);
+                     strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
+                     strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                    strProductFeaturesList += "</p>";
+                }
+
+            }
+            strProductFeaturesList += "</div>";
+        }
+
 
         resultMap.put("resourceDetail", resourceDetail);
-        resultMap.put("productFeaturesList",productFeaturesList);
+        resultMap.put("strProductFeaturesList",strProductFeaturesList);
 
         if(null != userLogin){
             resultMap.put("partyId", (String) userLogin.get("partyId"));

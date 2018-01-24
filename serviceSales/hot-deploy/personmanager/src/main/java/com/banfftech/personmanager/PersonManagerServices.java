@@ -75,6 +75,7 @@ import main.java.com.banfftech.platformmanager.oss.OSSUnit;
 
 
 import net.sf.json.JSONArray;
+import org.json.JSONObject;
 import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
@@ -2630,18 +2631,9 @@ public class PersonManagerServices {
 
         String productFeature = (String) request.getParameter("productFeatures");
 
-        if(productFeature!=null){
-            System.out.println("productFeature =" + productFeature);
-            JSONArray myJsonArray = JSONArray.fromObject(productFeature);
-//            JSONObject  dataJson=JSONObject.fromObject(productFeature);
-            System.out.println("myJsonArray =" + myJsonArray);
-        }
 
-        //create ProductFeature
-//        Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureTypeId","OTHER_FEATURE","description",""));
-//        String featureId = createProductFetureMap.get("productFeatureId");
-//        Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
-//                "productFeatureId",productFeatureId,"productId","","productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
+
+
 
 
 
@@ -2800,6 +2792,61 @@ public class PersonManagerServices {
 
         //Add Admin Role
         dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"productId",productId,"partyId",partyId,"roleTypeId","ADMIN"));
+
+
+
+
+
+
+        if(productFeature!=null){
+
+            JSONArray myJsonArray = JSONArray.fromObject(productFeature);
+
+            for (int index = 0 ; index < myJsonArray.size(); index++){
+
+                JSONArray myJsonArray = myJsonArray.get(index);
+
+                JSONObject feature = myJsonArray.get(0);
+
+                String optionTitle = (String) feature.get("optionTitle");
+
+                // Create Product Feature
+                Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureTypeId","OTHER_FEATURE","description",optionTitle));
+
+                String featureId = createProductFetureMap.get("productFeatureId");
+
+
+                JSONArray optionList = feature.get("optionList");
+
+
+                if(optionList.size()>0){
+                    for(int optionListIndex ; optionListIndex < optionList.size(); optionListIndex++){
+
+                        //Create Product Feature Attribute
+
+                        JSONObject optionList = optionList.get(0);
+
+                        String optionValue = optionList.get("value");
+
+                        Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"attrName",optionTitle,"attrValue",optionValue,"productId",productId));
+
+
+
+                    }
+                }
+                //Create Product & ProductFeature Relation
+                Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
+                        "productFeatureId",productFeatureId,"productId",productId,"productFeatureApplTypeId","FEATURE_IACTN_INCOMP"));
+            }
+
+
+        }
+
+
+
+
+
+
 
         request.setAttribute("productId", productId);
 

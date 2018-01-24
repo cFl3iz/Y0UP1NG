@@ -2256,9 +2256,11 @@ public class PersonManagerQueryServices {
                 }
 
             }
-            strProductFeaturesList += "</div>";
-        }
 
+        }
+        strProductFeaturesList += "</div>";
+
+        System.out.println("strProductFeaturesList="+strProductFeaturesList);
 
         resultMap.put("resourceDetail", resourceDetail);
         resultMap.put("strProductFeaturesList",strProductFeaturesList);

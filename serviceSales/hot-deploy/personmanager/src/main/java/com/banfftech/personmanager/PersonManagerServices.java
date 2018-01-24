@@ -2632,8 +2632,9 @@ public class PersonManagerServices {
 
         if(productFeature!=null){
             System.out.println("productFeature =" + productFeature);
-            JSONObject  dataJson=JSONObject.fromObject(productFeature);
-            System.out.println("dataJson =" + dataJson);
+            JSONArray myJsonArray = JSONArray.fromObject(productFeature);
+//            JSONObject  dataJson=JSONObject.fromObject(productFeature);
+            System.out.println("myJsonArray =" + myJsonArray);
         }
 
         //create ProductFeature

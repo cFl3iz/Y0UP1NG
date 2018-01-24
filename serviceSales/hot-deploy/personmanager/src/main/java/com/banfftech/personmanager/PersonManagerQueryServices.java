@@ -1887,13 +1887,21 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String nowPartyId = (String) context.get("partyId");
+        String openId = (String) context.get("unioId");
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        String partyId = "NA";
 
-
-        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",nowPartyId),false);
-
-        if(null != nowPerson){
-            resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
         }
+
+//        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+//
+//        if(null != nowPerson){
+//            resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
+//        }
+
+
 
         String productId = (String) context.get("productId");
         resultMap.put("productId",productId);
@@ -1930,6 +1938,8 @@ public class PersonManagerQueryServices {
         String payToId = (String) product.get("payToPartyId");
         Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,payToId);
         resourceDetail.put("user",userInfoMap);
+
+        resourceDetail.put("payToId",payToId);
 
         resourceDetail.put("is_follow","false");
         resourceDetail.put("is_like","false");
@@ -1992,7 +2002,7 @@ public class PersonManagerQueryServices {
 //        resourceDetail.put("placingCount",placingCount);
 
         resourceDetail.put("morePicture",pictures);
-
+        resourceDetail.put("nowPartyId",partyId);
         resultMap.put("resourceDetail", resourceDetail);
 
 //        if(null != userLogin){

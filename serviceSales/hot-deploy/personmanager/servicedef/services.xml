@@ -214,7 +214,8 @@
         <description>queryResourceDetailMiniProgram</description>
         <attribute name="productId" type="String" mode="INOUT"
                    optional="true"/>
-
+        <attribute name="unioId" type="String" mode="IN"
+                   optional="true"/>
 
         <attribute name="partyId" type="String" mode="IN"
                    optional="true"/>

@@ -1,4 +1,4 @@
-<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
+<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
 <style>
     .picture_text{
         color:#000000;

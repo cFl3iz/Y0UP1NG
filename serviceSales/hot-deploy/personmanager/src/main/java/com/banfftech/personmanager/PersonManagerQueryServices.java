@@ -2255,15 +2255,15 @@ public class PersonManagerQueryServices {
 
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
 
-                    if(i==0){
-
-                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-
-                    }else{
+//                    if(i==0){
+//
+//                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+//
+//                    }else{ }
 
                         strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
-                    }
+
                     strProductFeaturesList += "</p>";
                 }
 

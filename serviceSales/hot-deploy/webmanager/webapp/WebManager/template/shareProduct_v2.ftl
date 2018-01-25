@@ -309,10 +309,10 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                     var rowId  = $(element).attr("id");
                     var rowValue = $(element).html();
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-                      
+
 //                    alert("rowId="+rowId);
                        if(featureId == rowId){
-                           alert("featureId="+featureId+"|rowId="+rowId +"|featureValue="+featureValue +"|rowValue=" );
+                           alert("featureId="+featureId+"|rowId="+rowId +"|featureValue="+featureValue +"|rowValue="+rowValue );
                          $(element).removeClass("a-item selected J_ping");
                           $(element).addClass("a-item J_ping");
                             $(element).attr("title","noselected");

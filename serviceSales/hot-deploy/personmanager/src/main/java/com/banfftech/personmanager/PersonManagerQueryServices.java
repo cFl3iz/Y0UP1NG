@@ -2257,11 +2257,11 @@ public class PersonManagerQueryServices {
 
                     if(i==0){
 
-                        strProductFeaturesList += "<a href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }else{
 
-                        strProductFeaturesList += "<a href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }
                     strProductFeaturesList += "</p>";

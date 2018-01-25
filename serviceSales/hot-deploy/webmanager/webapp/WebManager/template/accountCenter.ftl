@@ -9,9 +9,9 @@
 
 <script>
 
-    function selectFeature(e){
-        alert($(e));
-    }
+//    function selectFeature(e){
+//        alert($(e));
+//    }
 
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){

@@ -294,20 +294,28 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 </div>
 </body>
 <script type="text/javascript">
+    function isContains(str, substr) {
+        return new RegExp(substr).test(str);
+    }
     function selectFeature(e){
         var featureValue = $(e).html();
         var title = $(e).attr("title");
-        var exp = "'a[id*=\""+featureValue+"\"]'";
+
         alert(featureValue);
         alert(title);
-        alert(exp);
-        alert($(e).attr("id"));
-        $(exp).each(
+
+
+        $('a').each(
                 function(index,element){
-                    alert(index);
-                    $(element).removeClass("a-item selected J_ping");
-                    $(element).addClass("a-item J_ping");
-                    $(element).attr("title","noselected");
+//                    var rowtitle  = $(element).attr("title");
+                    var rowfeatureValue  = $(element).html();
+                    alert("rowfeatureValue="+rowfeatureValue);
+                    if(isContains(featureValue,rowfeatureValue)){
+                        $(element).removeClass("a-item selected J_ping");
+                        $(element).addClass("a-item J_ping");
+                        $(element).attr("title","noselected");
+                    }
+
                 }
         );
         $(e).attr("title","selected");

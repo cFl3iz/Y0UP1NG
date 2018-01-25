@@ -295,7 +295,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 </body>
 <script type="text/javascript">
     function selectFeature(e){
-        alert($(e).css());
+        alert($(e));
     }
 
 

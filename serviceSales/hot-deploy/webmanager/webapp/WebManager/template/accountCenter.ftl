@@ -10,7 +10,7 @@
 <script>
 
     function selectFeature(e){
-        alert($(e).css());
+        alert($(e));
     }
 
     //弹出隐藏层

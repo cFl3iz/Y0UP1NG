@@ -297,7 +297,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     function selectFeature(e){
         var featureValue = $(e).html();
         var title = $(e).attr("title");
-        var exp = "'a[id*="+featureValue+"]'";
+        var exp = "'a[id*=\""+featureValue+"\"]'";
         alert(featureValue);
         alert(title);
         alert(exp);

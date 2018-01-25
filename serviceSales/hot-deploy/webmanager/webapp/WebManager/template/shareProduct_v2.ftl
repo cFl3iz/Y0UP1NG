@@ -303,12 +303,15 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var featureId = $(e).attr("id");
         alert(featureValue);
         alert(title);
-        
+
         $('a').each(
                 function(index,element){
                     var rowId  = $(element).attr("id");
+                    if(rowId != null && rowId!='undefined'&& rowId != undefined ){
+                        
+                    }
                     alert("rowId="+rowId);
-                    if(isContains(featureId,rowfeatureValue)){
+                    if(isContains(featureId,rowId)){
                         $(element).removeClass("a-item selected J_ping");
                         $(element).addClass("a-item J_ping");
                         $(element).attr("title","noselected");

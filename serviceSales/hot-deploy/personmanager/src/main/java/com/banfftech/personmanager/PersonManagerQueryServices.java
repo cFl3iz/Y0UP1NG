@@ -2256,10 +2256,10 @@ public class PersonManagerQueryServices {
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
 
                     if(i==0){
-                        strProductFeaturesList += "<a href=\"javascript:void(0)\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"selectFeature(this);\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }else{
-                        strProductFeaturesList += "<a href=\"javascript:void(0)\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"selectFeature(this);\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }
                     strProductFeaturesList += "</p>";

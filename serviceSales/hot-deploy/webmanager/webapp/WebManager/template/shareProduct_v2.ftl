@@ -302,9 +302,10 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var featureValue = $(selectObj).html();
         var title = $(selectObj).attr("title");
         var featureId = $(selectObj).attr("id");
-
+        console.log(e);
         $('a').each(
                 function(index,element){
+                    console.log(index);
                     var rowId  = $(element).attr("id");
                     var rowValue = $(element).html();
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){

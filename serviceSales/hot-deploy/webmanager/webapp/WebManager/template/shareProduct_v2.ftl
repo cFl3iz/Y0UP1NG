@@ -298,11 +298,14 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         return new RegExp(substr).test(str);
     }
     function selectFeature(e){
-        var featureValue = $(e).html();
-        var title = $(e).attr("title");
-        var featureId = $(e).attr("id");
+        var  selectObj = e;
+        var featureValue = $(selectObj).html();
+        var title = $(selectObj).attr("title");
+        var featureId = $(selectObj).attr("id");
 //        alert(featureValue);
 //        alert(title);
+        $(selectObj).attr("title","selected");
+        $(selectObj).attr("class","a-item selected J_ping");
 
         $('a').each(
                 function(index,element){
@@ -311,8 +314,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){
 
 //                    alert("rowId="+rowId);
-                       if(featureId == rowId){
-                           alert("featureId="+featureId+"|rowId="+rowId +"|featureValue="+featureValue +"|rowValue="+rowValue );
+                       if(featureId == rowId && featureValue!=rowValue){
+                         //  alert("featureId="+featureId+"|rowId="+rowId +"|featureValue="+featureValue +"|rowValue="+rowValue );
                        //     $(element).removeClass("a-item selected J_ping");
                             $(element).attr("class","a-item J_ping");
                             $(element).attr("title","noselected");
@@ -321,9 +324,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 
                 }
         );
-        $(e).attr("title","selected");
-        $(e).removeClass("a-item J_ping");
-        $(e).addClass("a-item selected J_ping");
+
+
+
     }
 
 

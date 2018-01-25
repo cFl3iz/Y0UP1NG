@@ -302,22 +302,17 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var featureValue = $(selectObj).html();
         var title = $(selectObj).attr("title");
         var featureId = $(selectObj).attr("id");
-//        alert(featureValue);
-//        alert(title);
 
-        $(selectObj).attr("title","selected");
-        $(selectObj).attr("class","a-item selected J_ping");
-        alert("on select value = " + featureValue);
+
+//        $(selectObj).attr("title","selected");
+//        $(selectObj).attr("class","a-item selected J_ping");
+
         $('a').each(
                 function(index,element){
                     var rowId  = $(element).attr("id");
                     var rowValue = $(element).html();
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-
-//                    alert("rowId="+rowId);
                        if(featureId == rowId && featureValue!=rowValue){
-                         //  alert("featureId="+featureId+"|rowId="+rowId +"|featureValue="+featureValue +"|rowValue="+rowValue );
-                       //     $(element).removeClass("a-item selected J_ping");
                             $(element).attr("class","a-item J_ping");
                             $(element).attr("title","noselected");
                          }

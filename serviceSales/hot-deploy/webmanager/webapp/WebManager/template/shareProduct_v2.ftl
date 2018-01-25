@@ -11,6 +11,9 @@
         border: 1px solid #bfbfbf;
         color: #232326;
     }
+    .pro-buy-style p a:active,.pro-color p a:active,.pro-size p a:active,.pro-spec p a:active {
+         
+    }
 </style>
 <script>
      function buyProductModel(){

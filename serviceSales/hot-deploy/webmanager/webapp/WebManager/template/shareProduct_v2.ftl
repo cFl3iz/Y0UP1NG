@@ -3,6 +3,10 @@
     .picture_text{
         color:#000000;
     }
+    p a.fuckSelect{
+        border: 1px solid #f23030;
+        color: green;
+    }
 </style>
 <script>
      function buyProductModel(){
@@ -298,29 +302,29 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         return new RegExp(substr).test(str);
     }
     function selectFeature(e){
-//        var  selectObj = e;
-//        var featureValue = $(selectObj).html();
-//        var title = $(selectObj).attr("title");
-//        var featureId = $(selectObj).attr("id");
-//        console.log(e);
-//        $('a').each(
-//                function(index,element){
-//                    console.log(index);
-//                    var rowId  = $(element).attr("id");
-//                    var rowValue = $(element).html();
-//                    if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-//                         if(featureId == rowId && featureValue!=rowValue){
-//                            $(element).attr("class","a-item J_ping");
-//                            $(element).attr("title","noselected");
-//                         }
-//                        if(featureId == rowId && featureValue==rowValue){
-//                            $(element).attr("title","selected");
-////                            $(element).attr("class","a-item J_ping selected");
-//                        }
-//                    }
-//
-//                }
-//        );
+        var  selectObj = e;
+        var featureValue = $(selectObj).html();
+        var title = $(selectObj).attr("title");
+        var featureId = $(selectObj).attr("id");
+        console.log(e);
+        $('a').each(
+                function(index,element){
+                    console.log(index);
+                    var rowId  = $(element).attr("id");
+                    var rowValue = $(element).html();
+                    if(rowId != null && rowId!='undefined'&& rowId != undefined ){
+                         if(featureId == rowId && featureValue!=rowValue){
+                            $(element).attr("class","a-item J_ping");
+                            $(element).attr("title","noselected");
+                         }
+                        if(featureId == rowId && featureValue==rowValue){
+                            $(element).attr("title","selected");
+                             $(element).attr("class","fuckSelect");
+                        }
+                    }
+
+                }
+        );
 
     }
 

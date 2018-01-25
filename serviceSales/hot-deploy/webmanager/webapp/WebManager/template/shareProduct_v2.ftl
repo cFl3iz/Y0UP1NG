@@ -308,12 +308,12 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                 function(index,element){
                     var rowId  = $(element).attr("id");
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-                    alert("rowId="+rowId);
-                    if(isContains(featureId,rowId)|| featureId.indexOf(rowId) > 0){
-                        $(element).removeClass("a-item selected J_ping");
-                        $(element).addClass("a-item J_ping");
-                        $(element).attr("title","noselected");
-                    }
+//                    alert("rowId="+rowId);
+                       if(featureId === rowId){
+                         $(element).removeClass("a-item selected J_ping");
+                          $(element).addClass("a-item J_ping");
+                            $(element).attr("title","noselected");
+                         }
                     }
 
                 }

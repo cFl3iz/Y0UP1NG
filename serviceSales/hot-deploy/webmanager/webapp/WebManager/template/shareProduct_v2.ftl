@@ -295,11 +295,20 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
 </body>
 <script type="text/javascript">
     function selectFeature(e){
-        var featureValue = $(e).val();
+        var featureValue = $(e).html();
         var title = $(e).attr("title");
-
+        var exp = "a[id*="+featureValue+"]";
         alert(featureValue);
         alert(title);
+        $(exp).each(
+                function(index,element){
+                    alert(index);
+                    $(element).css("a-item J_ping");
+                    $(element).attr("title","noselected");
+                }
+        );
+        $(e).attr("title","selected");
+        $(e).css("a-item selected J_ping");
     }
 
 

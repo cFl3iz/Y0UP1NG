@@ -304,8 +304,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var featureId = $(selectObj).attr("id");
 
 
-//        $(selectObj).attr("title","selected");
-//        $(selectObj).attr("class","a-item selected J_ping");
+        $(selectObj).attr("title","selected");
+        $(selectObj).attr("class","a-item J_ping selected");
 
         $('a').each(
                 function(index,element){

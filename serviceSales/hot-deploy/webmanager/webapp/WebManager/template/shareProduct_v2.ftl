@@ -300,11 +300,10 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     function selectFeature(e){
         var featureValue = $(e).html();
         var title = $(e).attr("title");
-        var featureId =$(e).attr("id");
+        var featureId = $(e).attr("id");
         alert(featureValue);
         alert(title);
-        alert(exp);
-
+        
         $('a').each(
                 function(index,element){
                     var rowId  = $(element).attr("id");

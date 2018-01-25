@@ -2250,7 +2250,7 @@ public class PersonManagerQueryServices {
 
                 List<Map<String,Object>> innerList = (List<Map<String,Object>>) mp.get(key);
 
-                strProductFeaturesList += "<a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"display:none;\">" +"</a>";
+                strProductFeaturesList += "<p id=\"color\"><a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"display:none;\">" +"</a></p>";
 
                 for(int i =0 ; i < innerList.size();i++){
 

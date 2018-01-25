@@ -2252,12 +2252,14 @@ public class PersonManagerQueryServices {
                 for(int i =0 ; i < innerList.size();i++){
 
                      Map<String,Object> nowMap = innerList.get(i);
+
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
+
                     if(i==0){
-                        strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"javascript:void(0)\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item selected J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }else{
-                        strProductFeaturesList += "<a title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+                        strProductFeaturesList += "<a href=\"javascript:void(0)\" onclick=\"selectFeature(this);\" title=\" " + nowMap.get("optionValue") + "\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
 
                     }
                     strProductFeaturesList += "</p>";

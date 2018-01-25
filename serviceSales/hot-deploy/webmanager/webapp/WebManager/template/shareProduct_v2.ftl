@@ -303,19 +303,19 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var title = $(selectObj).attr("title");
         var featureId = $(selectObj).attr("id");
 
-
-        $(selectObj).attr("title","selected");
-        $(selectObj).attr("class","a-item J_ping selected");
-
         $('a').each(
                 function(index,element){
                     var rowId  = $(element).attr("id");
                     var rowValue = $(element).html();
                     if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-                       if(featureId == rowId && featureValue!=rowValue){
+                         if(featureId == rowId && featureValue!=rowValue){
                             $(element).attr("class","a-item J_ping");
                             $(element).attr("title","noselected");
                          }
+                        if(featureId == rowId && featureValue==rowValue){
+                            $(element).attr("title","selected");
+                            $(element).attr("class","a-item J_ping selected");
+                        }
                     }
 
                 }

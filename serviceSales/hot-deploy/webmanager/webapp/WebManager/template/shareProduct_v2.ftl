@@ -300,17 +300,16 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
     function selectFeature(e){
         var featureValue = $(e).html();
         var title = $(e).attr("title");
-
+        var featureId =$(e).attr("id");
         alert(featureValue);
         alert(title);
-
+        alert(exp);
 
         $('a').each(
                 function(index,element){
-//                    var rowtitle  = $(element).attr("title");
-                    var rowfeatureValue  = $(element).html();
-                    alert("rowfeatureValue="+rowfeatureValue);
-                    if(isContains(featureValue,rowfeatureValue)){
+                    var rowId  = $(element).attr("id");
+                    alert("rowId="+rowId);
+                    if(isContains(featureId,rowfeatureValue)){
                         $(element).removeClass("a-item selected J_ping");
                         $(element).addClass("a-item J_ping");
                         $(element).attr("title","noselected");

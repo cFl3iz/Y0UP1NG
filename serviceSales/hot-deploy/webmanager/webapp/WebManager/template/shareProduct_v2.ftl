@@ -8,8 +8,8 @@
         color: green;
     }
     .pro-buy-style p a.selected,.pro-color p a.selected,.pro-size p a.selected,.pro-spec p a.selected {
-        /*border: 1px solid #f23030;*/
-        /*color: #f23030*/
+        border: 1px solid #0000;
+        color: #0000;
     }
 </style>
 <script>

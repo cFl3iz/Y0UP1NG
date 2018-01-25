@@ -2254,16 +2254,16 @@ public class PersonManagerQueryServices {
                      Map<String,Object> nowMap = innerList.get(i);
 
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
-
-                    if(i==0){
-
-                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item J_ping selected\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-
-                    }else{
-
-                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-
-                    }
+                    strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+//                    if(i==0){
+//
+//                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item J_ping selected\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+//
+//                    }else{
+//
+//                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
+//
+//                    }
                     strProductFeaturesList += "</p>";
                 }
 

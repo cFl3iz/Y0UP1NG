@@ -1,11 +1,11 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 <style>
     .picture_text{
         color:#000000;
     }
     p a.fuckSelect{
         border: 1px solid #f23030;
-        color: green;
+        color: #232326;
     }
     .pro-buy-style p a.selected,.pro-color p a.selected,.pro-size p a.selected,.pro-spec p a.selected {
         border: 1px solid #bfbfbf;

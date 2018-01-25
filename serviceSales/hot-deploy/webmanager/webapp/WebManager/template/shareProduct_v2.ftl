@@ -300,7 +300,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
         var exp = "a[id*="+featureValue+"]";
         alert(featureValue);
         alert(title);
-        $(exp).each(
+        $('a[id*='+featureValue+']').each(
                 function(index,element){
                     alert(index);
                     $(element).css("a-item J_ping");
@@ -308,7 +308,8 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                 }
         );
         $(e).attr("title","selected");
-        $(e).css("a-item selected J_ping");
+        $(e).removeClass("a-item J_ping");
+        $(e).addClass("a-item selected J_ping");
     }
 
 

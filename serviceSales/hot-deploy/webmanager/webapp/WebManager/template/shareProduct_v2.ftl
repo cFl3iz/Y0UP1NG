@@ -7,6 +7,10 @@
         border: 1px solid #f23030;
         color: green;
     }
+    .pro-buy-style p a.selected,.pro-color p a.selected,.pro-size p a.selected,.pro-spec p a.selected {
+        /*border: 1px solid #f23030;*/
+        /*color: #f23030*/
+    }
 </style>
 <script>
      function buyProductModel(){

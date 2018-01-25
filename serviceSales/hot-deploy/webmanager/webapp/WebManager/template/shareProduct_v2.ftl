@@ -315,7 +315,7 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                          }
                         if(featureId == rowId && featureValue==rowValue){
                             $(element).attr("title","selected");
-                            $(element).attr("class","a-item J_ping selected");
+//                            $(element).attr("class","a-item J_ping selected");
                         }
                     }
 

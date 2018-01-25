@@ -8,6 +8,11 @@
 
 
 <script>
+
+    function selectFeature(e){
+        alert($(e).css());
+    }
+
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
         document.getElementById(show_div).style.display='block';

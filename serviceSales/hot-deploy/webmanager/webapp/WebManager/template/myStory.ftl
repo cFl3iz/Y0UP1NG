@@ -65,11 +65,20 @@
         <#if resourceDetail.partyBuyOrder?has_content>
 
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
-            <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
-           <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
-            <img style="height:55px;width:55px;border-radius:27px;" src="${partyBuyOrderList.avatar}"/> <span style="float: right;"> ${partyBuyOrderList.firstName}于${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}买过这个产品。</span><br/>
-           </#list>
-            </span>
+            <ul class="m-grids-2">
+              <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
+                <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
+                  <li class="grids-item">
+                    <div class="grids-icon">
+                        <img style="height:55px;width:55px;border-radius:27px;" src="${partyBuyOrderList.avatar}"/>
+                    </div>
+                    <div class="grids-txt">${partyBuyOrderList.firstName}于${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}买过这个产品。</div>
+                   </li>
+                  </#list>
+                 </span>
+            </ul>
+
+
         </p>
         </#if>
 

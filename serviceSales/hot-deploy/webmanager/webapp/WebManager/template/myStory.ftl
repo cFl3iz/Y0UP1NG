@@ -73,7 +73,7 @@
                         <img style="height:55px;width:55px;border-radius:27px;" src="${partyBuyOrderList.avatar}"/>
                     </div>
                       <br/>
-                    <div class="grids-txt">${partyBuyOrderList.firstName}在${partyBuyOrderList.orderDate?string("yyyy-MM-dd")} <br/>买过。</div>
+                    <div class="grids-txt">${partyBuyOrderList.firstName}<br/>在${partyBuyOrderList.orderDate?string("yyyy-MM-dd")} <br/>买过这个资源。</div>
                    </li>
                   </#list>
                  </span>

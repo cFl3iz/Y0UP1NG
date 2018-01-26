@@ -2295,6 +2295,7 @@ public class PersonManagerQueryServices {
         Map<String,String> names = new HashMap<String, String>();
         for(GenericValue order : queryMyResourceOrderList){
             Map<String,Object> rowMap = new HashMap<String, Object>();
+            rowMap.put("orderDate",order.get("orderDate"));
             String orderPartyId = (String) order.get("partyId");
             GenericValue orderPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", orderPartyId), false);
             if(orderPerson!=null){

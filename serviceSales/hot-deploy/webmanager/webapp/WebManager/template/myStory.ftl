@@ -57,7 +57,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    <span style="font-size:6px;">shares:${(spm)!}</span>
+    <span style="font-size:1px;">shares:${(spm)!}</span>
 
     <section class="g-scrollview">
 
@@ -68,8 +68,8 @@
             <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
            <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
             <img src="${partyBuyOrderList.avatar}"/>
-            <br/>${partyBuyOrderList.firstName} 购买时间:${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}
-           </#list>买过这个产品。
+            <br/>${partyBuyOrderList.firstName}于${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}买过这个产品。
+           </#list>
             </span>
         </p>
         </#if>

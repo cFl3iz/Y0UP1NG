@@ -68,7 +68,7 @@
             <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
            <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
             <img src="${partyBuyOrderList.avatar}"/>
-            <br/>${partyBuyOrderList.firstName},
+            <br/>${partyBuyOrderList.firstName} 购买时间:${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}
            </#list>买过这个产品。
             </span>
         </p>

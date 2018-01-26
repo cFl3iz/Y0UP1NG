@@ -72,7 +72,8 @@
                     <div class="grids-icon">
                         <img style="height:55px;width:55px;border-radius:27px;" src="${partyBuyOrderList.avatar}"/>
                     </div>
-                    <div class="grids-txt">${partyBuyOrderList.firstName}于${partyBuyOrderList.orderDate?string("yyyy-MM-dd")}买过这个产品。</div>
+                      <br/>
+                    <div class="grids-txt">${partyBuyOrderList.firstName}在${partyBuyOrderList.orderDate?string("yyyy-MM-dd")} <br/>买过。</div>
                    </li>
                   </#list>
                  </span>

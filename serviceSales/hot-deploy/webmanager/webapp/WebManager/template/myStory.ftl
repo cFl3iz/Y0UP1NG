@@ -67,7 +67,7 @@
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
             <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
            <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
-            ${partyBuyOrderList.avatar}
+            <img src="${partyBuyOrderList.avatar}"/>
             <br/>${partyBuyOrderList.firstName},
            </#list>买过这个产品。
             </span>

@@ -88,6 +88,8 @@
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <input id="mark" type="hidden" value="${(mark)!}"/>
 
+<input id="productFeatures"  type="hidden" value="" />
+
 <div id="content">
     <div class="scroller">
         <div id="p-summary" class="page">
@@ -234,7 +236,7 @@ ${(resourceDetail.detailImageUrl?default('http://personerp.oss-cn-hangzhou.aliyu
                             <!--延保start-->
                             <div class="warranty-wrap bdr-t" style="display: block;">
                                 <div id="spec_yanbaoInfo" class="warranty-title"> 保障服务 </div>
-                                <div id="spec_yanbaoItems">卖家承诺如果是好东西包退货</div>
+                                <div id="spec_yanbaoItems">卖家承诺运输途中损坏包退货</div>
                             </div>
                             <!--延保end-->
                         </div>
@@ -325,8 +327,9 @@ http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/close.png" widt
                             $(element).attr("title","noselected");
                          }
                         if(featureId == rowId && featureValue==rowValue){
-                            $(element).attr("title","selected");
+                             $(element).attr("title","selected");
                              $(element).attr("class","fuckSelect");
+                            $(element).addClass("fuckSelect");
                         }
                     }
 

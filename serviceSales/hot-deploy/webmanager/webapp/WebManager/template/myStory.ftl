@@ -58,7 +58,22 @@
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <span style="font-size:6px;">shares:${(spm)!}</span>
+
     <section class="g-scrollview">
+
+        <!-- 买过的人 -->
+        <#if resourceDetail.partyBuyOrder?has_content>
+
+        <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
+            <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
+           <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
+            ${partyBuyOrderList.avatar}
+            <br/>${partyBuyOrderList.firstName},
+           </#list>买过这个产品。
+            </span>
+        </p>
+        </#if>
+
         <div class="m-slider">
             <div class="slider-wrapper">
                 <div class="slider-item">
@@ -111,17 +126,7 @@
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
 
-        <!-- 买过的人 -->
-   <#if resourceDetail.partyBuyOrder?has_content>
 
-        <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
-            <span style="font-family: PingFangSC-Light, sans-serif;color:red;">
-       <#list resourceDetail.partyBuyOrder as partyBuyOrderList>
-            ${partyBuyOrderList.firstName},
-       </#list>买过这个产品。
-            </span>
-        </p>
-   </#if>
 
         <div style="border:1px solid #8C8C8C;padding:10px;">
             <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; max-width: 100%; min-height: 1em; text-align: justify; line-height: 1.75em; box-sizing: border-box !important; word-wrap: break-word !important;">

@@ -93,8 +93,11 @@ public class WeChatOrderQueryServices {
 
         List<GenericValue> myContactList = myContactListPage.getData();
 
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+
         List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
+                .orderBy(orderBy)
                 .distinct()
                 .queryList();
         resourceCount = myContactListCountList.size();

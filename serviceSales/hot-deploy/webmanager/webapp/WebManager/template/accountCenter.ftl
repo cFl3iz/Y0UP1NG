@@ -1,5 +1,17 @@
 <!-- 此后所有验证授权因用Tarjeta保存 -->
+<style>
+    p a.fuckSelect{
+        border: 1px solid #f23030;
+        color: #232326;
+    }
+    .pro-buy-style p a.selected,.pro-color p a.selected,.pro-size p a.selected,.pro-spec p a.selected {
+        border: 1px solid #bfbfbf;
+        color: #232326;
+    }
+    .pro-buy-style p a:active,.pro-color p a:active,.pro-size p a:active,.pro-spec p a:active {
 
+    }
+</style>
 
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <#--<link href="http://cdn.staticfile.org/emoji/0.2.2/emoji.css" rel="stylesheet" type="text/css" />-->
@@ -12,7 +24,33 @@
 //    function selectFeature(e){
 //        alert($(e));
 //    }
+function selectFeature(e){
+    var  selectObj = e;
+    var featureValue = $(selectObj).html();
+    var title = $(selectObj).attr("title");
+    var featureId = $(selectObj).attr("id");
+    console.log(e);
+    $('a').each(
+            function(index,element){
+                console.log(index);
+                var rowId  = $(element).attr("id");
+                var rowValue = $(element).html();
+                if(rowId != null && rowId!='undefined'&& rowId != undefined ){
+                    if(featureId == rowId && featureValue!=rowValue){
+                        $(element).attr("class","a-item J_ping");
+                        $(element).attr("title","noselected");
+                    }
+                    if(featureId == rowId && featureValue==rowValue){
+                        $(element).attr("title","selected");
+                        $(element).attr("class","fuckSelect");
+                        $(element).addClass("fuckSelect");
+                    }
+                }
 
+            }
+    );
+
+}
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
         document.getElementById(show_div).style.display='block';

@@ -167,6 +167,27 @@
 
 
 
+    <!-- 我的产品特征类型偏好设置 -->
+    <view-entity entity-name="UserPreferenceProductFeatures" package-name="com.banfftech.personerp">
+        <member-entity entity-name="UserPreference" entity-alias="UserPreference" />
+        <member-entity entity-name="ProductFeatureType" entity-alias="ProductFeatureType" />
+
+        <alias field="userLoginId" name="userLoginId" entity-alias="UserPreference"/>
+        <alias field="userPrefTypeId" name="userPrefTypeId" entity-alias="UserPreference"/>
+        <alias field="userPrefGroupTypeId" name="userPrefGroupTypeId" entity-alias="UserPreference"/>
+        <alias field="userPrefValue" name="userPrefValue" entity-alias="UserPreference"/>
+
+        <alias field="productFeatureTypeId" name="productFeatureTypeId" entity-alias="ProductFeatureType"/>
+        <alias field="description" name="description" entity-alias="ProductFeatureType"/>
+
+        <view-link entity-alias="ProductFeatureType" rel-entity-alias="UserPreference">
+            <key-map field-name="productFeatureTypeId" rel-field-name="userPrefTypeId" />
+            <entity-condition>
+                <condition-expr entity-alias="UserPreference" field-name="userPrefGroupTypeId" operator="equals" value="PRODUCT_FEATURES"/>
+            </entity-condition>
+        </view-link>
+    </view-entity>
+
 
 
     <!-- 联系人的资源视图实体 -->

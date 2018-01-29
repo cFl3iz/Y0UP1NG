@@ -223,6 +223,24 @@
                    optional="true"/>
     </service>
 
+
+    <!-- 查询用户产品特征类型的偏好设置
+            即便没有该用户偏好设置也会返回系统预设的产品特征类型
+     -->
+    <service name="queryUserProductFeaturePreference" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryUserProductFeaturePreference" auth="false">
+        <description>queryUserProductFeaturePreference</description>
+
+        <attribute name="featureTypeList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
     <!-- query Resource Detail -->
     <service name="queryResourceDetailMiniProgram" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

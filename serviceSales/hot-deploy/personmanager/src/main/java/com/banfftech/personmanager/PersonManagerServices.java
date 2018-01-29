@@ -2587,7 +2587,7 @@ public class PersonManagerServices {
 
 
     /**
-     * release Resource
+     * 发布资源(产品)
      *
      * @param request
      * @param response
@@ -2609,52 +2609,46 @@ public class PersonManagerServices {
 
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
+        //当事人标识
         String partyId = (String) userLogin.get("partyId");
-
-
+        //AdminRunService
         GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
-
-        // 分类Id
+        //分类Id
         String productCategoryId = (String) request.getParameter("productCategoryId");
-
-        // 价格
+        //价格
         String productPrice = (String) request.getParameter("productPrice");
-
+        //产品名称
         String productName = (String) request.getParameter("productName");
-
+        //封面图
         String defaultImageUrl = (String) request.getParameter("defaultImageUrl");
-
+        //库存量
         String quantityTotalStr = (String) request.getParameter("quantityTotal");
-
+        //默认库存
         BigDecimal quantityTotal = new BigDecimal("99999999");
-
-
+        //产品特征数组
         String productFeature = (String) request.getParameter("productFeatures");
-
+        //产品说明
         String description   = (String) request.getParameter("description");
-
-        System.out.println("*description = " + description);
 
         if (!UtilValidate.isEmpty(quantityTotalStr)) {
             quantityTotal = new BigDecimal(quantityTotalStr);
         }
 
-
-        // Default Price
+        //默认的价格是0
         BigDecimal price = BigDecimal.ZERO;
 
         if (!UtilValidate.isEmpty(productPrice)) {
             price = new BigDecimal(productPrice);
         }
 
-        // 不分梨用户
+        //不分梨用户过来需要先给他创建店铺和目录
         if (null == productCategoryId) {
             productCategoryId = createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
         }
 
 
-        //创建产品Map
+        //创建产品
         Map<String, Object> createProductInMap = new HashMap<String, Object>();
         createProductInMap.put("userLogin", admin);
         long ctm = System.currentTimeMillis();
@@ -2663,6 +2657,7 @@ public class PersonManagerServices {
         createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
         createProductInMap.put("description",description );
 
+        //产品ID
         String productId = "";
 
         if (!UtilValidate.isEmpty(defaultImageUrl)) {
@@ -2671,42 +2666,31 @@ public class PersonManagerServices {
         } else {
 
             try {
-
+                //上传图片到Oss
                 ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
-
                 List<FileItem> items = dfu.parseRequest(request);
-
-
                 int itemSize = 0;
                 int index = 0;
-
-                // if(null!=items){
                 if (null != items) {
                     itemSize = items.size();
-
-
+                    //循环上传请求中的所有文件
                     for (FileItem item : items) {
-
-
                         InputStream in = item.getInputStream();
-
                         String fileName = item.getName();
-
-
                         if (!UtilValidate.isEmpty(fileName) && index ==0) {
-
-
                             long tm = System.currentTimeMillis();
                             String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
                                     "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
-
                             if (pictureKey != null && !pictureKey.equals("")) {
-
-
                                 createProductInMap.put("smallImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
                                 createProductInMap.put("detailImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                // Create Product
+                                //调用服务创建产品(资源)
                                 Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+
+                                if (!ServiceUtil.isSuccess(createProductOutMap)) {
+                                    Debug.logError("*Mother Fuck Create Product OutMap Error:"+createProductOutMap, module);
+                                    return createProductOutMap;
+                                }
                                 productId = (String) createProductOutMap.get("productId");
                             }
                         }
@@ -2714,25 +2698,16 @@ public class PersonManagerServices {
                             long tm = System.currentTimeMillis();
                             String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
                                     "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
-
                             if (pictureKey != null && !pictureKey.equals("")) {
-
-
                                     //创建产品内容和数据资源附图
                                     createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
-
-
                             }
                         }
                         index++;
                     }
                 }
-
-
             } catch (Exception e) {
-
                 e.printStackTrace();
-
             }
 
 
@@ -2742,7 +2717,7 @@ public class PersonManagerServices {
 
 
 
-        // Create Product Price
+        //创建产品价格(默认所有变形产品都和虚拟产品价格一致)
         Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
         createProductPriceInMap.put("userLogin", admin);
         createProductPriceInMap.put("productId", productId);
@@ -2751,20 +2726,27 @@ public class PersonManagerServices {
         createProductPriceInMap.put("productPricePurposeId", PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE);
         createProductPriceInMap.put("productPriceTypeId", PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID);
         createProductPriceInMap.put("productStoreGroupId", PeConstant.NA);
-        dispatcher.runSync("createProductPrice", createProductPriceInMap);
+        Map<String,Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
+        if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
+            Debug.logError("*Mother Fuck Create Product Price Error:"+createProductPriceServiceResultMap, module);
+            return createProductPriceServiceResultMap;
+        }
 
-
-        // Add Product To Category 产品 关联 分类
+        //产品关联分类
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
         addProductToCategoryInMap.put("userLogin", admin);
         addProductToCategoryInMap.put("productId", productId);
         addProductToCategoryInMap.put("productCategoryId", productCategoryId);
-        dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+        Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+            Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);
+            return addProductToCategoryServiceResultMap;
+        }
 
-
+        //找到仓库
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
 
-        // 为产品创建库存量
+        //为产品创建库存量
         Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
                 "facilityId", (String) facility.get("facilityId"),
                 "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
@@ -2780,21 +2762,37 @@ public class PersonManagerServices {
 
         Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
         );
+        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+            Debug.logError("*Mother Fuck Receive Inventory Product Error:"+receiveInventoryProductOut, module);
+            return receiveInventoryProductOut;
+        }
 
-        dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
-
-
-        //Add Admin Role
-        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"productId",productId,"partyId",partyId,"roleTypeId","ADMIN"));
-
-
+      //  dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
 
 
+        //给产品增加用户角色
+        Map<String, Object> addProductRoleServiceResoutMap = dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "productId", productId, "partyId", partyId, "roleTypeId", "ADMIN"));
+        if (!ServiceUtil.isSuccess(addProductRoleServiceResoutMap)) {
+            Debug.logError("*Mother Fuck Added ProductRoleService  Error:"+addProductRoleServiceResoutMap, module);
+            return addProductRoleServiceResoutMap;
+        }
 
 
+
+
+        //是一个虚拟产品而且要变形
         if(productFeature!=null){
+            //更新产品为虚拟产品
+            Map<String, Object> updateProductServiceResultMap =  dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", admin, "productId", productId, "isVirtual", "Y", "virtualVariantMethodEnum", "VV_FEATURETREE"));
+            if (!ServiceUtil.isSuccess(updateProductServiceResultMap)) {
+                Debug.logError("*Mother Fuck updateProductService  Error:"+updateProductServiceResultMap, module);
+                return updateProductServiceResultMap;
+            }
 
             JSONArray myJsonArray = JSONArray.fromObject(productFeature);
+
+
+            //创建特征or选择数据中的特征
 
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
@@ -2809,15 +2807,11 @@ public class PersonManagerServices {
 
                 String featureId = (String) createProductFetureMap.get("productFeatureId");
 
-
-
-
-                    //Create Product & ProductFeature Relation
+                //Create Product & ProductFeature Relation
                 Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
                         "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","OPTIONAL_FEATURE"));
 
                 JSONArray optionList = (JSONArray) feature.get("optionList");
-
 
                 if(optionList.size()>0){
                     for(int optionListIndex  =0 ; optionListIndex < optionList.size(); optionListIndex++){
@@ -2834,8 +2828,6 @@ public class PersonManagerServices {
 
                         Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
 
-
-
                     }
                 }
 
@@ -2843,11 +2835,6 @@ public class PersonManagerServices {
 
 
         }
-
-
-
-
-
 
 
         request.setAttribute("productId", productId);
@@ -3303,18 +3290,18 @@ public class PersonManagerServices {
             grandTotal = subTotal = new BigDecimal(price);
         }
 
-        GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", productId).queryFirst();
-
-        String qantStr = (String)productAttrQu.get("attrValue");
-
-        int qant = Integer.parseInt(qantStr);
-
-        if(qant <= 0){
-            return ServiceUtil.returnSuccess();
-        }else{
-            qant = qant - 1;
-            productAttrQu.set("attrValue",qant+"");
-        }
+//        GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", productId).queryFirst();
+//
+//        String qantStr = (String)productAttrQu.get("attrValue");
+//
+//        int qant = Integer.parseInt(qantStr);
+//
+//        if(qant <= 0){
+//            return ServiceUtil.returnSuccess();
+//        }else{
+//            qant = qant - 1;
+//            productAttrQu.set("attrValue",qant+"");
+//        }
 
 
 
@@ -3364,8 +3351,7 @@ public class PersonManagerServices {
 
         Map<String, Object> appendOrderItemOutMap = null;
         try {
-//            for(int i = 0 ; i < amount;i++){ }
-            //TODO
+
             appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
 
         } catch (GenericServiceException e1) {

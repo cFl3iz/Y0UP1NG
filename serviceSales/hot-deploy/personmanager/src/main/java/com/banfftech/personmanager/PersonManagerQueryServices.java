@@ -411,6 +411,61 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * 查询用户产品特征类型的偏好设置
+     * @author S
+     * @param dctx
+     * @param context
+     * @return ServiceResultMap
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryUserProductFeaturePreference(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String,Object>> productFeatureList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String userLoginId = (String) userLogin.get("userLoginId");
+
+        //查询系统预设的产品特征类型
+        List<GenericValue> systemDefaultFeatureTypes = EntityQuery.use(delegator).from("ProductFeatureType").where().queryList();
+
+        //查询用户偏好设置中保存的特征类型
+        List<GenericValue> productFeaturePreferenceList = EntityQuery.use(delegator).from("UserPreferenceProductFeatures").where("userLoginId",userLoginId).queryList();
+
+
+
+
+        if(null != productFeaturePreferenceList && productFeaturePreferenceList.size()>0){
+            for(GenericValue gv : productFeaturePreferenceList){
+                Map<String,Object> rowMap = gv.getAllFields();
+                productFeatureList.add(rowMap);
+            }
+        }
+
+        for(GenericValue gv : systemDefaultFeatureTypes){
+            Map<String,Object> rowMap = gv.getAllFields();
+            productFeatureList.add(rowMap);
+        }
+
+
+        resultMap.put("featureTypeList",productFeatureList);
+
+        return resultMap;
+    }
+
+
+
+    /**
      * 查询产品的特征及特征属性
      * @param dctx
      * @param context
@@ -2668,9 +2723,9 @@ public class PersonManagerQueryServices {
                     rowMap.put("visitorCount",visitorCount);
                     rowMap.put("partnerCount",partnerCount);
 
-                    GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", (String)gv.get("productId")).queryFirst();
-
-                    rowMap.put("kuCun",(String)productAttrQu.get("attrValue"));
+//                    GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", (String)gv.get("productId")).queryFirst();
+//
+//                    rowMap.put("kuCun",(String)productAttrQu.get("attrValue"));
 
                     rowMap.put("productName",(String)gv.get("productName"));
                     rowMap.put("productId",(String)gv.get("productId"));

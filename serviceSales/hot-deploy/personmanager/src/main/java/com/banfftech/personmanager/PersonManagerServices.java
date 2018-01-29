@@ -2817,7 +2817,7 @@ public class PersonManagerServices {
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
                 //最后变形要用到的特征Ids
-                String runProductFeatureIds = "";
+//                String runProductFeatureIds = "";
                 //最后变形要用到的productVariantId
 
 
@@ -2851,7 +2851,7 @@ public class PersonManagerServices {
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 
                 if(optionList.size()>0){
-
+                    Long sequenceNum = 10;
                     for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute
@@ -2878,17 +2878,22 @@ public class PersonManagerServices {
                         }
                        // Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
 
+
+                        //创建变形产品
+                        Map<String,Object> quickAddVariantMap = dispatcher.runAsync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum));
+                        Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
+                        if(!ServiceUtil.isSuccess(quickAddVariantMap)){
+                            Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
+                            return "error";
+                        }
+                        sequenceNum +=10;
+
                     }
                 }
 
             }
 
-            //创建变形产品
-//            Map<String,Object> quickAddVariantMap = dispatcher.runAsync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds",productFeatureIds,"productVariantId",""));
-//            if(!ServiceUtil.isSuccess(quickAddVariantMap)){
-//                Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
-//                return "error";
-//            }
+
 
         }
 

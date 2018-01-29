@@ -2787,6 +2787,7 @@ public class PersonManagerServices {
 
         //是一个虚拟产品而且要变形
         if(productFeature!=null){
+            Debug.logInfo("*["+productId+"] Is a Virtual Product ! ------------------------------------------------------------------------ ",module);
             //更新产品为虚拟产品
             Map<String, Object> updateProductServiceResultMap =  dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", admin, "productId", productId, "isVirtual", "Y", "virtualVariantMethodEnum", "VV_FEATURETREE"));
             if (!ServiceUtil.isSuccess(updateProductServiceResultMap)) {
@@ -2794,6 +2795,19 @@ public class PersonManagerServices {
               //  return updateProductServiceResultMap;
                 return "error";
             }
+            //给产品创建特征组
+            String productFeatureCategoryId = "";
+            Map<String, Object> createProductFeatureCategoryResultMap =  dispatcher.runSync("createProductFeatureCategory",UtilMisc.toMap("userLogin",admin,"description",productId+"_"+productName+"的特征组"));
+            if (!ServiceUtil.isSuccess(createProductFeatureCategoryResultMap)) {
+                Debug.logError("*Mother Fuck createProductFeatureCategory  Error:"+createProductFeatureCategoryResultMap, module);
+                //  return updateProductServiceResultMap;
+                return "error";
+            }else{
+                productFeatureCategoryId = (String) createProductFeatureCategoryResultMap.get("productFeatureCategoryId");
+            }
+
+            Debug.logInfo("*CreateProductFeatureCategory |productFeatureCategoryId="+productFeatureCategoryId,module);
+
 
             JSONArray myJsonArray = JSONArray.fromObject(productFeature);
 
@@ -2802,43 +2816,78 @@ public class PersonManagerServices {
 
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
+                //最后变形要用到的特征Ids
+                String runProductFeatureIds = "";
+                //最后变形要用到的productVariantId
+
+
                 JSONArray myJsonArray2 = (JSONArray) myJsonArray.get(index);
 
                 net.sf.json.JSONObject feature = (net.sf.json.JSONObject) myJsonArray2.get(0);
 
                 String optionTitle = (String) feature.get("optionTitle");
 
-                // Create Product Feature
-                Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureTypeId","OTHER_FEATURE","description",optionTitle));
+                String productFeatureTypeId = (String) feature.get("productFeatureTypeId");
 
-                String featureId = (String) createProductFetureMap.get("productFeatureId");
+                //如果 productFeatureTypeId 是空 ,说明不是从数据库选择出来的已有类型。需要创建!
+                if(!UtilValidate.isEmpty(productFeatureTypeId)){
+                    //创建新的特征类型
+                   Map<String,Object> createFeatureTypeResultMap = dispatcher.runSync("createProductFeatureType",UtilMisc.toMap("userLogin",admin,"description",optionTitle,"productFeatureTypeId",delegator.getNextSeqId("ProductFeatureType")));
+                   if(!ServiceUtil.isSuccess(createFeatureTypeResultMap)){
+                       Debug.logError("*Mother Fuck createProductFeatureType  Error:"+createFeatureTypeResultMap, module);
+                        return "error";
+                   }
+                    productFeatureTypeId =  (String)  createFeatureTypeResultMap.get("productFeatureTypeId");
+                    //把这个特征类型给到当前用户的偏好设置
+                    Map<String,Object> setUserPreferenceResultMap = dispatcher.runSync("setUserPreference",UtilMisc.toMap("userLogin",admin,"userPrefLoginId",userLogin.get("userLoginId"),"userPrefTypeId",productFeatureTypeId,"userPrefGroupTypeId","PRODUCT_FEATURES","userPrefValue",optionTitle));
+                    if(!ServiceUtil.isSuccess(setUserPreferenceResultMap)){
+                        Debug.logError("*Mother Fuck setUserPreferenceResultMap  Error:"+setUserPreferenceResultMap, module);
+                        return "error";
+                    }
+                }
 
-                //Create Product & ProductFeature Relation
-                Map<String,Object> applyFeatureToProductMap= dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
-                        "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","OPTIONAL_FEATURE"));
+
 
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 
                 if(optionList.size()>0){
-                    for(int optionListIndex  =0 ; optionListIndex < optionList.size(); optionListIndex++){
+
+                    for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute
-
                         net.sf.json.JSONObject optionList2 = (net.sf.json.JSONObject) optionList.get(optionListIndex);
-
                         String optionValue = (String) optionList2.get("value");
 
-                        System.out.println(">>>>>>>optionValue="+optionValue);
-                        System.out.println(">>>>>>>featureId="+featureId);
-                        System.out.println(">>>>>>>optionTitle="+optionTitle);
+                        Debug.logInfo("*optionValue:" +optionValue,module);
+                        Debug.logInfo("*featureId:" +featureId,module);
+                        Debug.logInfo("*optionTitle:" +optionTitle,module);
 
-                        Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
+
+                        //创建特征
+                        Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureCategoryId",productFeatureCategoryId,"productFeatureTypeId",productFeatureTypeId,"description",optionTitle));
+
+                        String featureId = (String) createProductFetureMap.get("productFeatureId");
+                        runProductFeatureIds += "|"+featureId;
+                        //建立产品与特征的关联
+                        Map<String,Object> applyFeatureToProductMap = dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
+                                "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","SELECTABLE_FEATURE"));
+                        if(!ServiceUtil.isSuccess(applyFeatureToProductMap)){
+                            Debug.logError("*Mother Fuck applyFeatureToProduct  Error:"+applyFeatureToProductMap, module);
+                            return "error";
+                        }
+                       // Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
 
                     }
                 }
 
             }
 
+            //创建变形产品
+//            Map<String,Object> quickAddVariantMap = dispatcher.runAsync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds",productFeatureIds,"productVariantId",""));
+//            if(!ServiceUtil.isSuccess(quickAddVariantMap)){
+//                Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
+//                return "error";
+//            }
 
         }
 

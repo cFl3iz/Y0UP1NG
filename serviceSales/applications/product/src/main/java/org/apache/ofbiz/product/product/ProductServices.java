@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.System;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
@@ -658,6 +659,13 @@ public class ProductServices {
         String variantProductId = (String) context.get("productVariantId");
         String productFeatureIds = (String) context.get("productFeatureIds");
         Long prodAssocSeqNum = (Long) context.get("sequenceNum");
+
+        System.out.println("======================================================================================================");
+        System.out.println("productId="+productId);
+        System.out.println("variantProductId="+variantProductId);
+        System.out.println("productFeatureIds="+productFeatureIds);
+        System.out.println("prodAssocSeqNum="+prodAssocSeqNum);
+        System.out.println("======================================================================================================");
 
         try {
             // read the product, duplicate it with the given id

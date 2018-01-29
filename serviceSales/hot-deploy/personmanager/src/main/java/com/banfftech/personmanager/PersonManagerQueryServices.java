@@ -442,6 +442,7 @@ public class PersonManagerQueryServices {
         //查询用户偏好设置中保存的特征类型
         List<GenericValue> productFeaturePreferenceList = EntityQuery.use(delegator).from("UserPreferenceProductFeatures").where("userLoginId",userLoginId).queryList();
 
+        //TODO FIX 别人的偏好设置不作为系统预设查出来
 
 
 
@@ -455,8 +456,15 @@ public class PersonManagerQueryServices {
         //系统预设的FeatureType
         for(GenericValue gv : systemDefaultFeatureTypes){
             Map<String,Object> rowMap = gv.getAllFields();
+            //rowMap.put("description",UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh")));
+            String getI18N =UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh"));
 
-            rowMap.put("description",UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh")));
+            if(getI18N.equals("ProductFeatureType.description."+rowMap.get("productFeatureTypeId"))){
+                continue;
+            }else{
+                rowMap.put("description",getI18N);
+            }
+
             productFeatureList.add(rowMap);
         }
 
@@ -520,7 +528,7 @@ public class PersonManagerQueryServices {
 //            }
 
             String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+productFeatureTypeId, new Locale("zh"));
-            if(getI18N.equals(productFeatureTypeId)){
+            if(getI18N.equals("ProductFeatureType.description."+productFeatureTypeId)){
                 GenericValue productFeatureType = delegator.findOne("ProductFeatureType",UtilMisc.toMap("productFeatureTypeId",productFeatureTypeId),false);
                 rowMap.put((String) productFeatureType.get("description"),description);
             }else{

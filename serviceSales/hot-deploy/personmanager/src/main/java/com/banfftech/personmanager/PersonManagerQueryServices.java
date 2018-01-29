@@ -456,7 +456,7 @@ public class PersonManagerQueryServices {
         for(GenericValue gv : systemDefaultFeatureTypes){
             Map<String,Object> rowMap = gv.getAllFields();
 
-            rowMap.put("description",UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("description")+"".toUpperCase(), new Locale("zh")));
+            rowMap.put("description",UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh")));
             productFeatureList.add(rowMap);
         }
 

@@ -455,7 +455,8 @@ public class PersonManagerQueryServices {
         //系统预设的FeatureType
         for(GenericValue gv : systemDefaultFeatureTypes){
             Map<String,Object> rowMap = gv.getAllFields();
-            rowMap.put("description",UtilProperties.getMessage("productEntityLabels.xml",(String)rowMap.get("description"), locale));
+
+            rowMap.put("description",UtilProperties.getMessage("productEntityLabels.xml",(String)rowMap.get("description"), new Locale("zh")));
             productFeatureList.add(rowMap);
         }
 

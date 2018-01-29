@@ -2851,7 +2851,7 @@ public class PersonManagerServices {
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 
                 if(optionList.size()>0){
-                    Long sequenceNum = 10;
+                    Long sequenceNum = new Long(10);
                     for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute
@@ -2867,7 +2867,7 @@ public class PersonManagerServices {
                         Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureCategoryId",productFeatureCategoryId,"productFeatureTypeId",productFeatureTypeId,"description",optionTitle));
 
                         String featureId = (String) createProductFetureMap.get("productFeatureId");
-                        runProductFeatureIds += "|"+featureId;
+//                        runProductFeatureIds += "|"+featureId;
                         Debug.logInfo("*featureId:" +featureId,module);
                         //建立产品与特征的关联
                         Map<String,Object> applyFeatureToProductMap = dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
@@ -2880,7 +2880,7 @@ public class PersonManagerServices {
 
 
                         //创建变形产品
-                        Map<String,Object> quickAddVariantMap = dispatcher.runAsync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum));
+                        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum));
                         Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
                         if(!ServiceUtil.isSuccess(quickAddVariantMap)){
                             Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);

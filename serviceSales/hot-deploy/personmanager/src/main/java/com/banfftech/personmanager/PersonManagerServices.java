@@ -2859,7 +2859,7 @@ public class PersonManagerServices {
                         String optionValue = (String) optionList2.get("value");
 
                         Debug.logInfo("*optionValue:" +optionValue,module);
-                        Debug.logInfo("*featureId:" +featureId,module);
+
                         Debug.logInfo("*optionTitle:" +optionTitle,module);
 
 
@@ -2868,6 +2868,7 @@ public class PersonManagerServices {
 
                         String featureId = (String) createProductFetureMap.get("productFeatureId");
                         runProductFeatureIds += "|"+featureId;
+                        Debug.logInfo("*featureId:" +featureId,module);
                         //建立产品与特征的关联
                         Map<String,Object> applyFeatureToProductMap = dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
                                 "productFeatureId",featureId,"productId",productId,"productFeatureApplTypeId","SELECTABLE_FEATURE"));

@@ -2689,7 +2689,8 @@ public class PersonManagerServices {
 
                                 if (!ServiceUtil.isSuccess(createProductOutMap)) {
                                     Debug.logError("*Mother Fuck Create Product OutMap Error:"+createProductOutMap, module);
-                                    return createProductOutMap;
+                                 //   return createProductOutMap;
+                                    return "error";
                                 }
                                 productId = (String) createProductOutMap.get("productId");
                             }
@@ -2729,7 +2730,8 @@ public class PersonManagerServices {
         Map<String,Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
         if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
             Debug.logError("*Mother Fuck Create Product Price Error:"+createProductPriceServiceResultMap, module);
-            return createProductPriceServiceResultMap;
+           // return createProductPriceServiceResultMap;
+            return "error";
         }
 
         //产品关联分类
@@ -2740,7 +2742,8 @@ public class PersonManagerServices {
         Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
         if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
             Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);
-            return addProductToCategoryServiceResultMap;
+           // return addProductToCategoryServiceResultMap;
+            return "error";
         }
 
         //找到仓库
@@ -2764,7 +2767,8 @@ public class PersonManagerServices {
         );
         if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
             Debug.logError("*Mother Fuck Receive Inventory Product Error:"+receiveInventoryProductOut, module);
-            return receiveInventoryProductOut;
+            //return receiveInventoryProductOut;
+            return "error";
         }
 
       //  dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
@@ -2774,7 +2778,8 @@ public class PersonManagerServices {
         Map<String, Object> addProductRoleServiceResoutMap = dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "productId", productId, "partyId", partyId, "roleTypeId", "ADMIN"));
         if (!ServiceUtil.isSuccess(addProductRoleServiceResoutMap)) {
             Debug.logError("*Mother Fuck Added ProductRoleService  Error:"+addProductRoleServiceResoutMap, module);
-            return addProductRoleServiceResoutMap;
+          //  return addProductRoleServiceResoutMap;
+            return "error";
         }
 
 
@@ -2786,7 +2791,8 @@ public class PersonManagerServices {
             Map<String, Object> updateProductServiceResultMap =  dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", admin, "productId", productId, "isVirtual", "Y", "virtualVariantMethodEnum", "VV_FEATURETREE"));
             if (!ServiceUtil.isSuccess(updateProductServiceResultMap)) {
                 Debug.logError("*Mother Fuck updateProductService  Error:"+updateProductServiceResultMap, module);
-                return updateProductServiceResultMap;
+              //  return updateProductServiceResultMap;
+                return "error";
             }
 
             JSONArray myJsonArray = JSONArray.fromObject(productFeature);

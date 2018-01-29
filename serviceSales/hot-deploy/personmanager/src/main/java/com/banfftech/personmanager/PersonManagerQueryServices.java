@@ -487,7 +487,7 @@ public class PersonManagerQueryServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        List<Map<String,List<Map<String,Object>>>> returnList = new ArrayList<Map<String, List<Map<String, Object>>>>();
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
 //        GenericValue userLogin = (GenericValue) context.get("userLogin");
 //
@@ -498,23 +498,36 @@ public class PersonManagerQueryServices {
 
         for(GenericValue gv : productFeatures){
 
-            Map<String,List<Map<String,Object>>> rowMap = new HashMap<String, List<Map<String, Object>>>();
+            Map<String,Object> rowMap = new HashMap<String, Object>();
 
 
             String productFeatureId = (String) gv.get("productFeatureId");
 
+            String productFeatureTypeId = (String) gv.get("productFeatureTypeId");
+
             String description = (String) gv.get("description");
 
-            List<GenericValue> productFeaturesAttrs = EntityQuery.use(delegator).from("ProductFeatureApplAttr").where("productId", productId,"productFeatureId",productFeatureId).queryList();
 
-            List<Map<String,Object>> rowMapList = new ArrayList<Map<String, Object>>();
 
-            for(GenericValue gv2 : productFeaturesAttrs){
-                Map<String,Object> rowMaps = new HashMap<String, Object>();
-                rowMaps.put("optionValue",(String) gv2.get("attrValue"));
-                rowMapList.add(rowMaps);
+//            List<GenericValue> productFeaturesAttrs = EntityQuery.use(delegator).from("ProductFeatureApplAttr").where("productId", productId,"productFeatureId",productFeatureId).queryList();
+//
+//            List<Map<String,Object>> rowMapList = new ArrayList<Map<String, Object>>();
+//
+//            for(GenericValue gv2 : productFeaturesAttrs){
+//                Map<String,Object> rowMaps = new HashMap<String, Object>();
+//                rowMaps.put("optionValue",(String) gv2.get("attrValue"));
+//                rowMapList.add(rowMaps);
+//            }
+
+            String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+productFeatureTypeId, new Locale("zh"));
+            if(getI18N.equals(productFeatureTypeId)){
+                GenericValue productFeatureType = delegator.findOne("ProductFeatureType",UtilMisc.toMap("productFeatureTypeId",productFeatureTypeId),false);
+                rowMap.put((String) productFeatureType.get("description"),description);
+            }else{
+                //说明是预设的
+                rowMap.put(getI18N,description);
             }
-            rowMap.put(description,rowMapList);
+
 
 //
 //            String attrName = (String) gv.get("attrName");

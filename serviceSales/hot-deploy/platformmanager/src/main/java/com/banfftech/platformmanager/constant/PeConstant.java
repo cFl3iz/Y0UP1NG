@@ -55,7 +55,8 @@ public class PeConstant {
     /**
      * PRODUCT TYPE
      */
-    public static final String PRODUCT_TYPE_ID = "SERVICE";
+    public static final String PRODUCT_TYPE_ID = "FINISHED_GOOD";
+
 
 
     /**

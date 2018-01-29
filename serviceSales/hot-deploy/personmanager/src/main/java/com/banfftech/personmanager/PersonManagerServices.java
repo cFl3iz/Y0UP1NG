@@ -2864,7 +2864,7 @@ public class PersonManagerServices {
 
 
                         //创建特征
-                        Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureCategoryId",productFeatureCategoryId,"productFeatureTypeId",productFeatureTypeId,"description",optionTitle));
+                        Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureCategoryId",productFeatureCategoryId,"productFeatureTypeId",productFeatureTypeId,"description",optionValue));
 
                         String featureId = (String) createProductFetureMap.get("productFeatureId");
 //                        runProductFeatureIds += "|"+featureId;

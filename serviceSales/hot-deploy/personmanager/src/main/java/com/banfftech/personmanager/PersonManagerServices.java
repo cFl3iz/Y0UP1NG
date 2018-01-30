@@ -2808,6 +2808,10 @@ public class PersonManagerServices {
 
             JSONArray myJsonArray = JSONArray.fromObject(productFeature);
 
+            //用于存储变形产品的组合,理论上有多少行就有多少个组合出的变形产品
+            List<Map<String,Object>> quickAddVariantList = new ArrayList<Map<String, Object>>();
+
+            List<String> quickAddVariantStrList = new ArrayList<String>();
 
             //创建特征or选择数据中的特征
 
@@ -2844,10 +2848,10 @@ public class PersonManagerServices {
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 
                 if(optionList.size()>0){
-                    Long sequenceNum = new Long(10);
+
                     Debug.logInfo("* >>>optionListIndex>>> =" + optionList, module);
                     for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
-
+                        String quickAddVariantStr = "";
                         //Create Product Feature Attribute
                         net.sf.json.JSONObject optionList2 = (net.sf.json.JSONObject) optionList.get(optionListIndex);
                         String optionValue = (String) optionList2.get("value");
@@ -2863,19 +2867,28 @@ public class PersonManagerServices {
                             Debug.logError("*Mother Fuck applyFeatureToProduct  Error:"+applyFeatureToProductMap, module);
                             return "error";
                         }
-                        //创建变形产品
-                        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productId+"_"+optionListIndex,"sequenceNum",sequenceNum));
-                        Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
-                        if(!ServiceUtil.isSuccess(quickAddVariantMap)){
-                            Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
-                            return "error";
-                        }
-                        sequenceNum +=10;
+                        quickAddVariantStr = optionTitle+"|"+optionValue+","+featureId;
+                        quickAddVariantStrList.add(quickAddVariantStr);
+//                        Map<String,Object> quickAddMap = new HashMap<String, Object>();
+//                        quickAddMap.put(optionValue,featureId);
+//                        quickAddVariantList.add(quickAddMap);
+
                     }
                 }
             }
         }
 
+        Debug.logInfo("*quickAddVariantStrList:" +quickAddVariantStrList,module);
+
+        //创建变形产品
+ //       Long sequenceNum = new Long(10);
+//        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productId+"_"+optionListIndex,"sequenceNum",sequenceNum));
+//        Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
+//        if(!ServiceUtil.isSuccess(quickAddVariantMap)){
+//            Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
+//            return "error";
+//        }
+//        sequenceNum +=10;
 
         request.setAttribute("productId", productId);
 

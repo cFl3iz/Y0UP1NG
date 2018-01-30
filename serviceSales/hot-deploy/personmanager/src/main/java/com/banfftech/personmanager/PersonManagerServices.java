@@ -2904,8 +2904,8 @@ public class PersonManagerServices {
         Long sequenceNum = new Long(10);
         for(String rowStr : quickAddVariantStrList){
             String nowFeatureName = rowStr.substring(0,rowStr.indexOf("|"));
-            String nowFeatureValue = rowStr.substring(rowStr.indexOf(",")+1,rowStr.lastIndexOf(","));
-            String nowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length()-1);
+            String nowFeatureValue = rowStr.substring(rowStr.indexOf("|")+1,rowStr.indexOf(","));
+            String nowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length());
             Debug.logInfo("*nowFeatureName:"+nowFeatureName,module);
             Debug.logInfo("*nowFeatureValue:"+nowFeatureName,module);
             Debug.logInfo("*nowFeatureTypeId:"+nowFeatureName,module);

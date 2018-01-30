@@ -583,8 +583,13 @@ public class PersonManagerQueryServices {
                     Debug.logInfo("else rowsMap ="+rowsMap,module);
 
                     if(rowMap!=null && rowMap.get(key)!=null && rowsMap!=null && rowsMap.get(key) !=null){
-                        List<String> beforeList =  rowsMap.get(key);
-                        Debug.logInfo("beforeList ="+beforeList,module);
+                        List<String> beforeList = null;
+                        if(returnMapList!=null && returnMapList.size()>0){
+                            for(Map<String,List<String>> mapStringList :returnMapList){
+                                  beforeList =   mapStringList.get(key);
+                            }
+                        }
+                         Debug.logInfo("beforeList ="+beforeList,module);
                         if(beforeList!=null ){
                             beforeList.add((String)rowMap.get(key));
                             rowsMap.put(key,beforeList);
@@ -594,7 +599,10 @@ public class PersonManagerQueryServices {
 
                 }
             }
-            returnMapList.add(rowsMap);
+            if(rowsMap!=null){
+                returnMapList.add(rowsMap);
+            }
+
         }
 
         Debug.logInfo("keyList ="+keyList,module);

@@ -2876,9 +2876,10 @@ public class PersonManagerServices {
                     }
                 }
             }
+            Debug.logInfo("*quickAddVariantStrList:" +quickAddVariantStrList,module);
         }
 
-        Debug.logInfo("*quickAddVariantStrList:" +quickAddVariantStrList,module);
+
 
         //创建变形产品
  //       Long sequenceNum = new Long(10);

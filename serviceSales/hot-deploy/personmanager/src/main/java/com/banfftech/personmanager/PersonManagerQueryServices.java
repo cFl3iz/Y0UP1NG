@@ -456,15 +456,21 @@ public class PersonManagerQueryServices {
         //系统预设的FeatureType
         for(GenericValue gv : systemDefaultFeatureTypes){
             Map<String,Object> rowMap = gv.getAllFields();
-            //rowMap.put("description",UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh")));
+
+
             String getI18N =UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh"));
 
+//            GenericValue userPreference= EntityQuery.use(delegator).from("UserPreference").where("userPrefTypeId",rowMap.get("productFeatureTypeId"),"userLoginId",userLoginId).queryFirst();
+//            if(userPreference!=null){
+//                continue;
+//            }
+
+            //没有这个国际化配置,说明是新增的不是预设的
             if(getI18N.equals("ProductFeatureType.description."+rowMap.get("productFeatureTypeId"))){
                 continue;
             }else{
                 rowMap.put("description",getI18N);
             }
-
             productFeatureList.add(rowMap);
         }
 
@@ -552,10 +558,34 @@ public class PersonManagerQueryServices {
             returnList.add(rowMap);
         }
 
+        List<Map<String,List<String>>> returnMapList = new ArrayList<Map<String, List<String>>>();
 
 
 
-        resultMap.put("productFeaturesList",returnList);
+//                [{"颜色":"红色"},{"颜色":"白色"},{"颜色":"蓝色"},{"品牌":"彪马"},{"品牌":"kappa"},{"品牌":"尼克"}]
+
+        List<String> keyList = new ArrayList<String>();
+
+        for(Map<String,Object> rowMap : returnList){
+            Map<String,List<String>> rowsMap = new HashMap<String, List<String>>();
+            for(String key : rowMap.keySet()) {
+                if(!keyList.contains(key)){
+                    keyList.add(key);
+                    List<String> innerList = new ArrayList<String>();
+                    innerList.add((String)rowMap.get(key));
+                    rowsMap.put(key,innerList);
+                }else{
+                    List<String> beforeList =  rowsMap.get(key);
+                    beforeList.add((String)rowMap.get(key));
+                    rowsMap.put(key,beforeList);
+                }
+            }
+            returnMapList.add(rowsMap);
+        }
+
+
+
+        resultMap.put("productFeaturesList",returnMapList);
 
         return resultMap;
     }

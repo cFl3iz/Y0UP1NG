@@ -2929,7 +2929,7 @@ public class PersonManagerServices {
                     Debug.logInfo("*noReAddMap:"+noReAddMap,module);
                     Debug.logInfo("*noReAddMap.containsKey(isExsitsStr):"+noReAddMap.containsKey(isExsitsStr),module);
                     //这个组合是否已经产生变形产品?
-                    if(noReAddMap.containsKey(isExsitsStr)){
+                    if(noReAddMap.containsKey(isExsitsStr)||noReAddMap.containsKey(innerNowFeatureTypeId+nowFeatureTypeId)){
                         continue;
                     }else{
                     noReAddMap.put(isExsitsStr,"");

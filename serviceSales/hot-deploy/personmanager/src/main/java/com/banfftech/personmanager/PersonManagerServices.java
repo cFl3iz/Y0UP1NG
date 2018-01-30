@@ -2909,8 +2909,8 @@ public class PersonManagerServices {
             String nowFeatureValue = rowStr.substring(rowStr.indexOf("|")+1,rowStr.indexOf(","));
             String nowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length());
             Debug.logInfo("*nowFeatureName:"+nowFeatureName,module);
-            Debug.logInfo("*nowFeatureValue:"+nowFeatureName,module);
-            Debug.logInfo("*nowFeatureTypeId:"+nowFeatureName,module);
+            Debug.logInfo("*nowFeatureValue:"+nowFeatureValue,module);
+            Debug.logInfo("*nowFeatureTypeId:"+nowFeatureTypeId,module);
 
             for(String innerRowStr : quickAddVariantStrList){
                 String innerNowFeatureName = innerRowStr.substring(0,innerRowStr.indexOf("|"));
@@ -2925,6 +2925,9 @@ public class PersonManagerServices {
                 }else{
                     //创建变形产品
                     String isExsitsStr = nowFeatureTypeId+innerNowFeatureTypeId;
+                    Debug.logInfo("*isExsitsStr:"+isExsitsStr,module);
+                    Debug.logInfo("*noReAddMap:"+noReAddMap,module);
+                    Debug.logInfo("*noReAddMap.containsKey(isExsitsStr):"+noReAddMap.containsKey(isExsitsStr),module);
                     //这个组合是否已经产生变形产品?
                     if(noReAddMap.containsKey(isExsitsStr)){
                         continue;

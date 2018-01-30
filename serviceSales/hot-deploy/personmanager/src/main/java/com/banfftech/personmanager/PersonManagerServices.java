@@ -2845,7 +2845,7 @@ public class PersonManagerServices {
 
                 if(optionList.size()>0){
                     Long sequenceNum = new Long(10);
-                    Debug.logInfo("* >>> optionListIndex 准备变形 =" + optionListIndex, module);
+                    Debug.logInfo("* >>>optionListIndex>>> =" + optionListIndex, module);
                     for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute

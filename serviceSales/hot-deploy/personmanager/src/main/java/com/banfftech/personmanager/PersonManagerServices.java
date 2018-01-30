@@ -2911,9 +2911,9 @@ public class PersonManagerServices {
             Debug.logInfo("*nowFeatureTypeId:"+nowFeatureName,module);
 
             for(String innerRowStr : quickAddVariantStrList){
-                String innerNowFeatureName = rowStr.substring(0,rowStr.indexOf("|"));
-                String innerNowFeatureValue = rowStr.substring(rowStr.indexOf(",")+1,rowStr.lastIndexOf(","));
-                String innerNowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length()-1);
+                String innerNowFeatureName = innerRowStr.substring(0,innerRowStr.indexOf("|"));
+                String innerNowFeatureValue = innerRowStr.substring(innerRowStr.indexOf("|")+1,innerRowStr.indexOf(","));
+                String innerNowFeatureTypeId = innerRowStr.substring(innerRowStr.indexOf(",")+1,innerRowStr.length());
                 Debug.logInfo("*innerNowFeatureName:"+innerNowFeatureName,module);
                 Debug.logInfo("*innerNowFeatureValue:"+innerNowFeatureValue,module);
                 Debug.logInfo("*innerNowFeatureTypeId:"+innerNowFeatureTypeId,module);

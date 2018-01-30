@@ -263,6 +263,7 @@ under the License.
     <ProductContentType description="Image Alt Text - Medium" hasTable="N" parentTypeId="" productContentTypeId="MEDIUM_IMAGE_ALT"/>
     <ProductContentType description="Image Alt Text - Large" hasTable="N" parentTypeId="" productContentTypeId="LARGE_IMAGE_ALT"/>
     <ProductContentType description="Image Alt Text - Detail" hasTable="N" parentTypeId="" productContentTypeId="DETAIL_IMAGE_ALT"/>
+    <ProductContentType description="ADDITIONAL_OTHER IMAGE"  hasTable="N" parentTypeId="" productContentTypeId="ADDITIONAL_OTHER" createdTxStamp="2018-01-30 13:53:41.0" createdStamp="2018-01-30 13:53:41.0"  lastUpdatedStamp="2018-01-30 13:53:41.0" lastUpdatedTxStamp="2018-01-30 13:53:41.0" />
     <ProductContentType description="Image - Additional View 1" hasTable="N" parentTypeId="" productContentTypeId="ADDITIONAL_IMAGE_1"/>
     <ProductContentType description="Image - Additional View 2" hasTable="N" parentTypeId="" productContentTypeId="ADDITIONAL_IMAGE_2"/>
     <ProductContentType description="Image - Additional View 3" hasTable="N" parentTypeId="" productContentTypeId="ADDITIONAL_IMAGE_3"/>

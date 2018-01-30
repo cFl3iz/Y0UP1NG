@@ -2551,7 +2551,8 @@ public class PersonManagerServices {
     private static void createProductContentAndDataResource(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
 
         // Create Content
-        String contentTypeId = "ADDITIONAL_IMAGE_" + count;
+   //    String contentTypeId = "ADDITIONAL_IMAGE_" + count;
+        String contentTypeId = "ADDITIONAL_OTHER";
         Map<String, Object> resultMap1 = dispatcher.runSync("createContent", UtilMisc.toMap("userLogin", admin));
         String contentId = (String) resultMap1.get("contentId");
         dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin", admin, "productContentTypeId", contentTypeId, "productId", productId, "contentId", contentId));

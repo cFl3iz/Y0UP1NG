@@ -2877,23 +2877,67 @@ public class PersonManagerServices {
                 }
             }
             Debug.logInfo("*quickAddVariantStrList:" +quickAddVariantStrList,module);
+            quickAddVariantMethod(quickAddVariantStrList,dispatcher,userLogin,productId);
         }
 
 
 
-        //创建变形产品
- //       Long sequenceNum = new Long(10);
-//        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productId+"_"+optionListIndex,"sequenceNum",sequenceNum));
-//        Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
-//        if(!ServiceUtil.isSuccess(quickAddVariantMap)){
-//            Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
-//            return "error";
-//        }
-//        sequenceNum +=10;
 
         request.setAttribute("productId", productId);
 
         return "success";
+
+    }
+
+    /**
+     * 快速创建变形产品
+     * @param quickAddVariantStrList
+     * @param dispatcher
+     * @param userLogin
+     * @param productId
+     * @throws GenericServiceException
+     */
+    private static void quickAddVariantMethod(List<String> quickAddVariantStrList, LocalDispatcher dispatcher, GenericValue userLogin, String productId) throws GenericServiceException {
+
+        //:[颜色|红,10070, 颜色|黄,10071, 尺寸|180,10072, 尺寸|170,10073]
+        Debug.logInfo("*FUCK LOGIC START ====================================================================================>:",module);
+        Long sequenceNum = new Long(10);
+        for(String rowStr : quickAddVariantStrList){
+            String nowFeatureName = rowStr.substring(0,rowStr.indexOf("|"));
+            String nowFeatureValue = rowStr.substring(rowStr.indexOf(",")+1,rowStr.lastIndexOf(","));
+            String nowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length()-1);
+            Debug.logInfo("*nowFeatureName:"+nowFeatureName,module);
+            Debug.logInfo("*nowFeatureValue:"+nowFeatureName,module);
+            Debug.logInfo("*nowFeatureTypeId:"+nowFeatureName,module);
+
+            for(String innerRowStr : quickAddVariantStrList){
+                String innerNowFeatureName = rowStr.substring(0,rowStr.indexOf("|"));
+                String innerNowFeatureValue = rowStr.substring(rowStr.indexOf(",")+1,rowStr.lastIndexOf(","));
+                String innerNowFeatureTypeId = rowStr.substring(rowStr.indexOf(",")+1,rowStr.length()-1);
+                Debug.logInfo("*innerNowFeatureName:"+innerNowFeatureName,module);
+                Debug.logInfo("*innerNowFeatureValue:"+innerNowFeatureValue,module);
+                Debug.logInfo("*innerNowFeatureTypeId:"+innerNowFeatureTypeId,module);
+                //是一个类型则跳过,只创建不同类型的组合产品
+                if(nowFeatureName.equals(innerNowFeatureName)){
+                    continue;
+                }else{
+                    //创建变形产品
+                    Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+nowFeatureTypeId+"|"+innerNowFeatureTypeId,"productVariantId",productId+"_"+sequenceNum,"sequenceNum",sequenceNum));
+                    Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+nowFeatureTypeId+"|"+innerNowFeatureTypeId,"productVariantId",productId+"_"+sequenceNum,"sequenceNum",sequenceNum),module);
+                    if(!ServiceUtil.isSuccess(quickAddVariantMap)){
+                        Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
+                    }
+                    sequenceNum +=10;
+                }
+
+            }
+        }
+        Debug.logInfo("*FUCK LOGIC END ====================================================================================>:",module);
+
+
+
+
+
 
     }
 

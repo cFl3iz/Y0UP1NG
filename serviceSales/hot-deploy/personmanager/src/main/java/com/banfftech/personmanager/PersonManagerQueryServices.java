@@ -576,8 +576,11 @@ public class PersonManagerQueryServices {
                     rowsMap.put(key,innerList);
                 }else{
                     List<String> beforeList =  rowsMap.get(key);
-                    beforeList.add((String)rowMap.get(key));
-                    rowsMap.put(key,beforeList);
+                    if(rowMap!=null && rowMap.get(key)!=null){
+                        beforeList.add((String)rowMap.get(key));
+                        rowsMap.put(key,beforeList);
+                    }
+
                 }
             }
             returnMapList.add(rowsMap);

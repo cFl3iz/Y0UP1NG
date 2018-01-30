@@ -2833,7 +2833,7 @@ public class PersonManagerServices {
                 Debug.logInfo("* >>> productFeatureTypeId =" + productFeatureTypeId, module);
 
                 //如果 productFeatureTypeId 是空 ,说明不是从数据库选择出来的已有类型。需要创建!
-                if(!UtilValidate.isEmpty(productFeatureTypeId)){
+                if(UtilValidate.isEmpty(productFeatureTypeId)){
                     //创建新的特征类型
                    Map<String,Object> createFeatureTypeResultMap = dispatcher.runSync("createProductFeatureType",UtilMisc.toMap("userLogin",admin,"description",optionTitle,"productFeatureTypeId",delegator.getNextSeqId("ProductFeatureType")));
                    if(!ServiceUtil.isSuccess(createFeatureTypeResultMap)){

@@ -601,7 +601,7 @@ public class PersonManagerQueryServices {
                             beforeList.add((String)rowMap.get(key));
                             rowsMap.put(key,beforeList);
                           //  returnMapList.add(rowsMap);
-                        } 
+                        }
                 }
             }
 

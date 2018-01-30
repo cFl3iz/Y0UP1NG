@@ -2900,6 +2900,8 @@ public class PersonManagerServices {
     private static void quickAddVariantMethod(List<String> quickAddVariantStrList, LocalDispatcher dispatcher, GenericValue userLogin, String productId) throws GenericServiceException {
 
         //:[颜色|红,10070, 颜色|黄,10071, 尺寸|180,10072, 尺寸|170,10073]
+        //这是一个防止重复添加的Map
+        Map<String,String> noReAddMap = new HashMap<String, String>();
         Debug.logInfo("*FUCK LOGIC START ====================================================================================>:",module);
         Long sequenceNum = new Long(10);
         for(String rowStr : quickAddVariantStrList){
@@ -2922,12 +2924,19 @@ public class PersonManagerServices {
                     continue;
                 }else{
                     //创建变形产品
+                    String isExsitsStr = nowFeatureTypeId+innerNowFeatureTypeId;
+                    //这个组合是否已经产生变形产品?
+                    if(noReAddMap.containsKey(isExsitsStr)){
+                        continue;
+                    }else{
+                    noReAddMap.put(isExsitsStr,"");
                     Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+nowFeatureTypeId+"|"+innerNowFeatureTypeId,"productVariantId",productId+"_"+sequenceNum,"sequenceNum",sequenceNum));
                     Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+nowFeatureTypeId+"|"+innerNowFeatureTypeId,"productVariantId",productId+"_"+sequenceNum,"sequenceNum",sequenceNum),module);
-                    if(!ServiceUtil.isSuccess(quickAddVariantMap)){
+                        if(!ServiceUtil.isSuccess(quickAddVariantMap)){
                         Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
+                        }
+                        sequenceNum +=10;
                     }
-                    sequenceNum +=10;
                 }
 
             }

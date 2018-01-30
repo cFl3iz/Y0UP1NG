@@ -564,20 +564,27 @@ public class PersonManagerQueryServices {
 
 //                [{"颜色":"红色"},{"颜色":"白色"},{"颜色":"蓝色"},{"品牌":"彪马"},{"品牌":"kappa"},{"品牌":"尼克"}]
 
-        List<String> keyList = new ArrayList<String>();
 
+        List<String> keyList = new ArrayList<String>();
+        Debug.logInfo("sbreturnList="+returnList,module);
         for(Map<String,Object> rowMap : returnList){
+
             Map<String,List<String>> rowsMap = new HashMap<String, List<String>>();
             for(String key : rowMap.keySet()) {
+                Debug.logInfo("key="+key,module);
+                Debug.logInfo("keyList.contains(key)="+keyList.contains(key),module);
                 if(!keyList.contains(key)){
                     keyList.add(key);
                     List<String> innerList = new ArrayList<String>();
                     innerList.add((String)rowMap.get(key));
                     rowsMap.put(key,innerList);
                 }else{
+                    Debug.logInfo("else rowMap ="+rowMap,module);
+                    Debug.logInfo("else rowsMap ="+rowsMap,module);
 
                     if(rowMap!=null && rowMap.get(key)!=null && rowsMap!=null && rowsMap.get(key) !=null){
                         List<String> beforeList =  rowsMap.get(key);
+                        Debug.logInfo("beforeList ="+beforeList,module);
                         if(beforeList!=null ){
                             beforeList.add((String)rowMap.get(key));
                             rowsMap.put(key,beforeList);
@@ -590,8 +597,8 @@ public class PersonManagerQueryServices {
             returnMapList.add(rowsMap);
         }
 
-
-
+        Debug.logInfo("keyList ="+keyList,module);
+        Debug.logInfo("returnMapList ="+returnMapList,module);
         resultMap.put("productFeaturesList",returnMapList);
 
         return resultMap;

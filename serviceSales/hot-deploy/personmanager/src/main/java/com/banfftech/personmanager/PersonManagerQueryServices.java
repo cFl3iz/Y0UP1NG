@@ -578,6 +578,7 @@ public class PersonManagerQueryServices {
                     List<String> innerList = new ArrayList<String>();
                     innerList.add((String)rowMap.get(key));
                     rowsMap.put(key,innerList);
+                    returnMapList.add(rowsMap);
                 }else{
                     Debug.logInfo("else rowMap ="+rowMap,module);
                     Debug.logInfo("else rowsMap ="+rowsMap,module);
@@ -586,22 +587,26 @@ public class PersonManagerQueryServices {
                         List<String> beforeList = null;
                         if(returnMapList!=null && returnMapList.size()>0){
                             for(Map<String,List<String>> mapStringList :returnMapList){
-                                  beforeList =   mapStringList.get(key);
+                                  if(null != mapStringList.get(key)){
+                                      beforeList = mapStringList.get(key)   ;
+                                      break;
+                                  }else{
+                                      continue;
+                                  }
                             }
                         }
                          Debug.logInfo("beforeList ="+beforeList,module);
                         if(beforeList!=null ){
                             beforeList.add((String)rowMap.get(key));
                             rowsMap.put(key,beforeList);
+                            returnMapList.add(rowsMap);
                         }
 
                     }
 
                 }
             }
-            if(rowsMap!=null){
-                returnMapList.add(rowsMap);
-            }
+
 
         }
 

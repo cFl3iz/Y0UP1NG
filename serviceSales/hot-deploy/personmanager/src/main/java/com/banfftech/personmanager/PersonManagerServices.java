@@ -2717,8 +2717,6 @@ public class PersonManagerServices {
 
 
 
-
-
         //创建产品价格(默认所有变形产品都和虚拟产品价格一致)
         Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
         createProductPriceInMap.put("userLogin", admin);
@@ -2784,8 +2782,6 @@ public class PersonManagerServices {
         }
 
 
-
-
         //是一个虚拟产品而且要变形
         if(productFeature!=null){
             Debug.logInfo("*["+productId+"] Is a Virtual Product ! ------------------------------------------------------------------------ ",module);
@@ -2817,11 +2813,6 @@ public class PersonManagerServices {
 
             for (int index = 0 ; index < myJsonArray.size(); index++){
 
-                //最后变形要用到的特征Ids
-//                String runProductFeatureIds = "";
-                //最后变形要用到的productVariantId
-
-
                 JSONArray myJsonArray2 = (JSONArray) myJsonArray.get(index);
 
                 net.sf.json.JSONObject feature = (net.sf.json.JSONObject) myJsonArray2.get(0);
@@ -2850,28 +2841,20 @@ public class PersonManagerServices {
                     }
                 }
 
-
-
                 JSONArray optionList = (JSONArray) feature.get("optionList");
 
                 if(optionList.size()>0){
                     Long sequenceNum = new Long(10);
+                    Debug.logInfo("* >>> optionListIndex 准备变形 =" + optionListIndex, module);
                     for(int optionListIndex  = 0 ; optionListIndex < optionList.size(); optionListIndex++){
 
                         //Create Product Feature Attribute
                         net.sf.json.JSONObject optionList2 = (net.sf.json.JSONObject) optionList.get(optionListIndex);
                         String optionValue = (String) optionList2.get("value");
-
-                        Debug.logInfo("*optionValue:" +optionValue,module);
-
-                        Debug.logInfo("*optionTitle:" +optionTitle,module);
-
-
                         //创建特征
                         Map<String,Object> createProductFetureMap= dispatcher.runSync("createProductFeature",UtilMisc.toMap("userLogin",admin,"productFeatureCategoryId",productFeatureCategoryId,"productFeatureTypeId",productFeatureTypeId,"description",optionValue));
 
                         String featureId = (String) createProductFetureMap.get("productFeatureId");
-//                        runProductFeatureIds += "|"+featureId;
                         Debug.logInfo("*featureId:" +featureId,module);
                         //建立产品与特征的关联
                         Map<String,Object> applyFeatureToProductMap = dispatcher.runSync("applyFeatureToProduct",UtilMisc.toMap("userLogin",admin,
@@ -2880,25 +2863,17 @@ public class PersonManagerServices {
                             Debug.logError("*Mother Fuck applyFeatureToProduct  Error:"+applyFeatureToProductMap, module);
                             return "error";
                         }
-                       // Map<String,Object> createProductFeatureApplAttrMap = dispatcher.runSync("createProductFeatureApplAttr",UtilMisc.toMap("userLogin",admin,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"productFeatureId",featureId ,"attrName",optionTitle+"|"+optionListIndex,"attrValue",optionValue,"productId",productId));
-
-
                         //创建变形产品
-                        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum));
+                        Map<String,Object> quickAddVariantMap = dispatcher.runSync("quickAddVariant", UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productId+"_"+optionListIndex,"sequenceNum",sequenceNum));
                         Debug.logInfo("*quickAddVariantMap:" +UtilMisc.toMap("userLogin", userLogin,"productId",productId,"productFeatureIds","|"+featureId,"productVariantId",productName+"_"+optionListIndex,"sequenceNum",sequenceNum),module);
                         if(!ServiceUtil.isSuccess(quickAddVariantMap)){
                             Debug.logError("*Mother Fuck quick Add Variant Error:"+quickAddVariantMap, module);
                             return "error";
                         }
                         sequenceNum +=10;
-
                     }
                 }
-
             }
-
-
-
         }
 
 

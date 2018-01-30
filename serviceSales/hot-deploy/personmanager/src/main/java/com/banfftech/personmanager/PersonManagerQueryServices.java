@@ -575,10 +575,14 @@ public class PersonManagerQueryServices {
                     innerList.add((String)rowMap.get(key));
                     rowsMap.put(key,innerList);
                 }else{
-                    List<String> beforeList =  rowsMap.get(key);
-                    if(rowMap!=null && rowMap.get(key)!=null){
-                        beforeList.add((String)rowMap.get(key));
-                        rowsMap.put(key,beforeList);
+
+                    if(rowMap!=null && rowMap.get(key)!=null && rowsMap!=null && rowsMap.get(key) !=null){
+                        List<String> beforeList =  rowsMap.get(key);
+                        if(beforeList!=null ){
+                            beforeList.add((String)rowMap.get(key));
+                            rowsMap.put(key,beforeList);
+                        }
+
                     }
 
                 }

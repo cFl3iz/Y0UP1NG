@@ -2382,25 +2382,17 @@ public class PersonManagerQueryServices {
                 strProductFeaturesList += "<span class=\"part-note-msg\">";
                 strProductFeaturesList = strProductFeaturesList + key + "</span>";
 
-                List<Map<String,Object>> innerList = (List<Map<String,Object>>) mp.get(key);
+                List<String> innerList = (List<String>) mp.get(key);
 
                 strProductFeaturesList += "<p id=\"color\"><a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" style=\"display:none;\">" +"</a></p>";
 
                 for(int i =0 ; i < innerList.size();i++){
 
-                     Map<String,Object> nowMap = innerList.get(i);
+                     String rowKey = innerList.get(i);
 
                      strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
-                     strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-//                    if(i==0){
-//
-//                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"selected\" class=\"a-item J_ping selected\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-//
-//                    }else{
-//
-//                        strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + nowMap.get("optionValue") + "  \" > " + nowMap.get("optionValue") +"</a>";
-//
-//                    }
+                     strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + rowKey + "  \" > " + rowKey +"</a>";
+
                     strProductFeaturesList += "</p>";
                 }
 

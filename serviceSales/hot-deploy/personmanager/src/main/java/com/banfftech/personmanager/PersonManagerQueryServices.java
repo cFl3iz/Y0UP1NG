@@ -583,7 +583,7 @@ public class PersonManagerQueryServices {
                     Debug.logInfo("else rowMap ="+rowMap,module);
                     Debug.logInfo("else rowsMap ="+rowsMap,module);
 
-                 
+
                         List<String> beforeList = null;
                         Debug.logInfo("returnMapList ="+returnMapList,module);
                         if(returnMapList!=null && returnMapList.size()>0){
@@ -600,11 +600,8 @@ public class PersonManagerQueryServices {
                         if(beforeList!=null ){
                             beforeList.add((String)rowMap.get(key));
                             rowsMap.put(key,beforeList);
-                            returnMapList.add(rowsMap);
-                        }
-
-
-
+                          //  returnMapList.add(rowsMap);
+                        } 
                 }
             }
 

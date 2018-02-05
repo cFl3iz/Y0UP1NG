@@ -22,7 +22,7 @@ import org.apache.ofbiz.service.ServiceUtil;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import sun.net.www.content.text.Generic;
-import sun.security.ssl.Debug;
+import org.apache.ofbiz.base.util.Debug;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -147,7 +147,7 @@ public class WeChatMiniProgramServices {
         GenericValue prodCatalogRole =  EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId,"roleTypeId","ADMIN").queryFirst();
 
         System.out.println("prodCatalogRole=>>"+prodCatalogRole);
-        
+
         //产品关联分类
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
         addProductToCategoryInMap.put("userLogin", admin);

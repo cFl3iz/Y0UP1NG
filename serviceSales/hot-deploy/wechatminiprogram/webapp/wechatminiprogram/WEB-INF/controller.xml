@@ -71,6 +71,17 @@
     </request-map>
 
 
+
+    <request-map uri="wechatReleaseResource">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="wechatReleaseResource"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
     <!-- queryContactResourceList -->
     <request-map uri="queryContactResourceList">
         <security https="false" auth="false"/>

@@ -22,10 +22,12 @@ import org.apache.ofbiz.service.ServiceUtil;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import sun.net.www.content.text.Generic;
+import sun.security.ssl.Debug;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -67,6 +69,136 @@ public class WeChatMiniProgramServices {
         }
 
     }
+
+
+    /**
+     * wechat ReleaseResource
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> wechatReleaseResource(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        BigDecimal quantityTotal = new BigDecimal("99999999");
+        String unioId = (String) context.get("unioId");
+        String productName = (String) context.get("productName");
+        String filePath = (String) context.get("filePath");
+        String description = (String) context.get("description");
+        //默认的价格是0
+        BigDecimal price = BigDecimal.ZERO;
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+
+
+        GenericValue userLogin = delegator.findOne("UserLogin", false, UtilMisc.toMap("partyId", partyId));
+
+
+        //创建产品
+        Map<String, Object> createProductInMap = new HashMap<String, Object>();
+        createProductInMap.put("userLogin", admin);
+        long ctm = System.currentTimeMillis();
+        createProductInMap.put("internalName", partyId + "_" + ctm);
+        createProductInMap.put("productName", productName);
+        createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
+        createProductInMap.put("description",description );
+
+        createProductInMap.put("smallImageUrl",filePath) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+        createProductInMap.put("detailImageUrl", filePath);
+        //调用服务创建产品(资源)
+        Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+
+        if (!ServiceUtil.isSuccess(createProductOutMap)) {
+            Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
+            return createProductOutMap;
+        }
+
+        String productId = (String) createProductOutMap.get("productId");
+
+        //创建产品价格(默认所有变形产品都和虚拟产品价格一致)
+        Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
+        createProductPriceInMap.put("userLogin", admin);
+        createProductPriceInMap.put("productId", productId);
+        createProductPriceInMap.put("currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+        createProductPriceInMap.put("price", price);
+        createProductPriceInMap.put("productPricePurposeId", PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE);
+        createProductPriceInMap.put("productPriceTypeId", PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID);
+        createProductPriceInMap.put("productStoreGroupId", PeConstant.NA);
+        Map<String,Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
+        if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
+            Debug.logError("*Mother Fuck Create Product Price Error:"+createProductPriceServiceResultMap, module);
+              return createProductPriceServiceResultMap;
+
+        }
+
+        //产品关联分类
+        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+        addProductToCategoryInMap.put("userLogin", admin);
+        addProductToCategoryInMap.put("productId", productId);
+        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+        Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+            Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);
+           return addProductToCategoryServiceResultMap;
+
+        }
+
+        //找到仓库
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+
+        //为产品创建库存量
+        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                "facilityId", (String) facility.get("facilityId"),
+                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                "productId", productId,
+                "description ", "卖家发布产品时的录入库存",
+                "quantityAccepted", quantityTotal,
+                "quantityRejected", BigDecimal.ZERO,
+                "unitCost", price,
+                "ownerPartyId", partyId,
+                "partyId", partyId,
+                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+        );
+        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+            Debug.logError("*Mother Fuck Receive Inventory Product Error:"+receiveInventoryProductOut, module);
+             return receiveInventoryProductOut;
+
+        }
+
+        //  dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
+
+
+        //给产品增加用户角色
+        Map<String, Object> addProductRoleServiceResoutMap = dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "productId", productId, "partyId", partyId, "roleTypeId", "ADMIN"));
+        if (!ServiceUtil.isSuccess(addProductRoleServiceResoutMap)) {
+            Debug.logError("*Mother Fuck Added ProductRoleService  Error:"+addProductRoleServiceResoutMap, module);
+              return addProductRoleServiceResoutMap;
+
+        }
+
+
+
+
+        return resultMap;
+    }
+
+
 
 
     /**

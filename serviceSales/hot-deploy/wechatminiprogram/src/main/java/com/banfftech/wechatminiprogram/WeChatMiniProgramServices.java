@@ -116,7 +116,7 @@ public class WeChatMiniProgramServices {
         createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
         createProductInMap.put("description",description );
 
-        createProductInMap.put("smallImageUrl",filePath) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+        createProductInMap.put("smallImageUrl",filePath +"?x-oss-process=image/resize,m_pad,h_50,w_50");
         createProductInMap.put("detailImageUrl", filePath);
         //调用服务创建产品(资源)
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
@@ -144,11 +144,15 @@ public class WeChatMiniProgramServices {
 
         }
 
+        GenericValue prodCatalogRole =  EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId,"roleTypeId","ADMIN").queryFirst();
+
+        System.out.println("prodCatalogRole=>>"+prodCatalogRole);
+        
         //产品关联分类
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
         addProductToCategoryInMap.put("userLogin", admin);
         addProductToCategoryInMap.put("productId", productId);
-        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+        addProductToCategoryInMap.put("productCategoryId", prodCatalogRole.get("productCategoryId"));
         Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
         if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
             Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);

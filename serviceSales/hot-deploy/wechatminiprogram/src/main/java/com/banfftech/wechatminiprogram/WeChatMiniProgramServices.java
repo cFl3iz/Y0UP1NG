@@ -153,7 +153,7 @@ public class WeChatMiniProgramServices {
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
         addProductToCategoryInMap.put("userLogin", admin);
         addProductToCategoryInMap.put("productId", productId);
-        addProductToCategoryInMap.put("productCategoryId", prodCatalogRole.get("productCategoryId"));
+        addProductToCategoryInMap.put("productCategoryId", prodCatalogRole.get("prodCatalogId"));
         Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
         if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
             Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);

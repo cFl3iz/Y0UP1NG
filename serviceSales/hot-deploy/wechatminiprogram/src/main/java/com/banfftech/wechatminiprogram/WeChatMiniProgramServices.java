@@ -104,7 +104,8 @@ public class WeChatMiniProgramServices {
         }
 
 
-        GenericValue userLogin = delegator.findOne("UserLogin", false, UtilMisc.toMap("partyId", partyId));
+        GenericValue userLogin =EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+
 
 
         //创建产品

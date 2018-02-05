@@ -292,7 +292,7 @@
         <attribute name="nowPersonName" type="String" mode="OUT"
                    optional="true"/>
 
-        <attribute name="strProductFeaturesList" type="String" mode="OUT"
+        <attribute name="productFeatureAndApplList" type="List" mode="OUT"
                    optional="true"/>
 
 

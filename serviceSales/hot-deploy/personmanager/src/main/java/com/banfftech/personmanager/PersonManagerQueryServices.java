@@ -2367,44 +2367,52 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("morePicture",pictures);
 
-        //查询ProductFeature
-        Map<String,Object> queryProductFeature = dispatcher.runSync("queryProductFeatures",UtilMisc.toMap("userLogin",userLogin,"productId",productId));
+        //查询 ProductVirtualAndVariantInfo  查看这个产品是否是虚拟产品 有没有变形产品
+//        Map<String,Object> queryProductFeature = dispatcher.runSync("ProductVirtualAndVariantInfo",UtilMisc.toMap("userLogin",userLogin,"productId",productId));
 
-        List<Map<String,Object>> productFeaturesList = (List<Map<String,Object>>) queryProductFeature.get("productFeaturesList");
 
-        String strProductFeaturesList = "<div class=\"pro-color\">";
+//         List<GenericValue> productVirtualAndVariantInfoList = EntityQuery.use(delegator).from("ProductVirtualAndVariantInfo").where("productId",productId).queryList();
 
-        for(Map<String,Object> mp : productFeaturesList){
-            Set set = mp.keySet();//得到所有map里面key的集合\
-            for(Iterator iter = set.iterator(); iter.hasNext();)//遍历
-            {
-                String key = (String)iter.next();
-                strProductFeaturesList += "<span class=\"part-note-msg\">";
-                strProductFeaturesList = strProductFeaturesList + key + "</span>";
+        List<GenericValue> productFeatureAndApplList = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId",productId).queryList();
 
-                List<String> innerList = (List<String>) mp.get(key);
 
-                strProductFeaturesList += "<p id=\"color\"><a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" style=\"display:none;\">" +"</a></p>";
 
-                for(int i =0 ; i < innerList.size();i++){
 
-                     String rowKey = innerList.get(i);
-
-                     strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
-                     strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + rowKey + "  \" > " + rowKey +"</a>";
-
-                    strProductFeaturesList += "</p>";
-                }
-
-            }
-
-        }
-        strProductFeaturesList += "</div>";
-
-        System.out.println("strProductFeaturesList="+strProductFeaturesList);
+//        List<Map<String,Object>> productFeaturesList = (List<Map<String,Object>>) queryProductFeature.get("productFeaturesList");
+//
+//        String strProductFeaturesList = "<div class=\"pro-color\">";
+//
+//        for(Map<String,Object> mp : productFeaturesList){
+//            Set set = mp.keySet();//得到所有map里面key的集合\
+//            for(Iterator iter = set.iterator(); iter.hasNext();)//遍历
+//            {
+//                String key = (String)iter.next();
+//                strProductFeaturesList += "<span class=\"part-note-msg\">";
+//                strProductFeaturesList = strProductFeaturesList + key + "</span>";
+//
+//                List<String> innerList = (List<String>) mp.get(key);
+//
+//                strProductFeaturesList += "<p id=\"color\"><a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" style=\"display:none;\">" +"</a></p>";
+//
+//                for(int i =0 ; i < innerList.size();i++){
+//
+//                     String rowKey = innerList.get(i);
+//
+//                     strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
+//                     strProductFeaturesList += "<a id=\""+key +"\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + rowKey + "  \" > " + rowKey +"</a>";
+//
+//                    strProductFeaturesList += "</p>";
+//                }
+//
+//            }
+//
+//        }
+//        strProductFeaturesList += "</div>";
+//
+//        System.out.println("strProductFeaturesList="+strProductFeaturesList);
 
         resultMap.put("resourceDetail", resourceDetail);
-        resultMap.put("strProductFeaturesList",strProductFeaturesList);
+         resultMap.put("productFeatureAndApplList",productFeatureAndApplList);
 
         if(null != userLogin){
             resultMap.put("partyId", (String) userLogin.get("partyId"));

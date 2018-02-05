@@ -150,9 +150,12 @@
             ${uiLabel.ContactMe}
             </button>
             <#if !resourceDetail.salesDiscontinuationDate?has_content>
-            <button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">
-            ${uiLabel.GoToPay}
-            </button>
+            <#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->
+            <#--${uiLabel.GoToPay}-->
+            <#--</button>-->
+                <button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">
+                ${uiLabel.GoToPay}
+                </button>
             </#if>
             <#if resourceDetail.salesDiscontinuationDate?has_content>
             <button type="button" class="btn-block btn-disabled">

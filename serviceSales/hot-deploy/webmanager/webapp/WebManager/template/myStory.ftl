@@ -153,7 +153,7 @@
             <#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->
             <#--${uiLabel.GoToPay}-->
             <#--</button>-->
-                <button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">
+                <button type="button" onclick="custRequest('${productId}');" class="btn-block btn-primary">
                 ${uiLabel.GoToPay}
                 </button>
             </#if>
@@ -207,6 +207,12 @@
 
 
     }
+
+    function custRequest(productId){
+        alert("已为您发送询价请求");
+    }
+
+
 
     function gotoBuyProduct(productId){
         var payToPartyId = $("#payToPartyId").val();

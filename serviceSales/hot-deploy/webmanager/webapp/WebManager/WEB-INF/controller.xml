@@ -51,6 +51,15 @@
         <security https="false" auth="false"/>
         <response name="success" type="view" value="shareProduct"/>
     </request-map>
+
+
+
+    <request-map uri="ViewSelectProductFeature">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="ViewSelectProductFeature"/>
+    </request-map>
+
+
     <!-- Share Category -->
     <request-map uri="shareCategory">
         <security https="false" auth="false"/>
@@ -303,6 +312,7 @@
 
 
     <view-map name="myStory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myStory"/>
+    <view-map name="ViewSelectProductFeature" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#ViewSelectProductFeature"/>
     <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
     <view-map name="myOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrderDetail"/>
 

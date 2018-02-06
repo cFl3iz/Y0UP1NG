@@ -209,7 +209,9 @@
     }
 
     function custRequest(productId){
-        alert("已为您发送询价请求");
+        var payToPartyId = $("#payToPartyId").val();
+        var partyId      = $("#partyId").val();
+          location.href = 'ViewSelectProductFeature?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId;
     }
 
 

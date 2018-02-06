@@ -155,10 +155,10 @@
 
 <body style="background-color:#1fc587">
 
-<input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="text"/>
-<input id="rowTypeCount" name="rowTypeCount" value="${(resultMap.rowTypeCount)!}" type="text"/>
-<input id="partyId" name="partyId" value="${(partyId)!}" type="text"/>
-<input id="productId" name="productId" value="${(productId)!}" type="text"/>
+<input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="hidden"/>
+<input id="rowTypeCount" name="rowTypeCount" value="${(resultMap.rowTypeCount)!}" type="hidden"/>
+<input id="partyId" name="partyId" value="${(partyId)!}" type="hidden"/>
+<input id="productId" name="productId" value="${(productId)!}" type="hidden"/>
 <#assign strHtml = resultMap.htmlBuilder>
 <#assign beforeKey = "">
 <#assign count = 1>
@@ -167,7 +167,7 @@
 
 
 <div class="wrapper">
-    <div id="answer" class="card_wrap">
+    <div id="answer" class="card_wrap" style="color:#1fc587;">
         ${resultMap}
         <!--Q1-->
         <#--<div class="card_cont card1">-->

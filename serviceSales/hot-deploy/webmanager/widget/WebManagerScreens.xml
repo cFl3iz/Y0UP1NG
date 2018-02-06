@@ -147,7 +147,9 @@
                 <set field="productId" value="${parameters.productId}"/>
                 <set field="partyId" value="${parameters.partyId}"/>
                 <set field="payToPartyId" value="${parameters.payToPartyId}"/>
-
+                <service service-name="queryProductFeatures2" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                </service>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
             </actions>
             <widgets>
@@ -186,6 +188,7 @@
                 <set field="nowPersonName" value="${parameters.nowPersonName}"/>
 
                 <set field="partyId" value="${parameters.partyId}"/>
+
 
 
 

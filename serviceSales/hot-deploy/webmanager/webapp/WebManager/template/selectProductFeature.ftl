@@ -98,8 +98,56 @@
         $.fn.answerSheet = function(options) {var defaults={mold:'card',};var opts = $.extend({},defaults,options);return $(this).each(function(){var obj = $(this).find('.card_cont');var _length = obj.length,_b = _length -1,_len = _length - 1, _cont = '.card_cont';for(var a = 1; a <= _length; a++){obj.eq(_b).css({'z-index':a});_b-=1;}$(this).show();if(opts.mold == 'card'){obj.find('ul li label').click(function(){var _idx =  $(this).parents(_cont).index(),_cards =  obj,_cardcont = $(this).parents(_cont);if(_idx == _len){return;}else{setTimeout(function(){_cardcont.addClass('cardn');setTimeout(function(){_cards.eq(_idx + 3).addClass('card3');_cards.eq(_idx + 2).removeClass('card3').addClass('card2');_cards.eq(_idx + 1).removeClass('card2').addClass('card1');_cardcont.removeClass('card1');},200);},100);}});$('.card_bottom').find('.prev').click(function(){var _idx =  $(this).parents(_cont).index(), _cardcont = $(this).parents(_cont);obj.eq(_idx + 2).removeClass('card3').removeClass('cardn');obj.eq(_idx + 1).removeClass('card2').removeClass('cardn').addClass('card3');obj.eq(_idx).removeClass('card1').removeClass('cardn').addClass('card2');setTimeout(function(){obj.eq(_idx - 1).addClass('card1').removeClass('cardn');},200);})}});};
     </script>
     <script>
+        function commitCustRequest(){
+            var rowTypeCount = $("#rowTypeCount").val();
+            var redios = $(":radio:checked");
+            var partyId = $("#partyId").val();
+            var payToPartyId = $("#payToPartyId").val();
+            var markText = $("#markText").val();
+            var productId = $("#productId").val();
+
+            var redioLenght = redios.length;
+//            alert(redioLenght + "|" + rowTypeCount + " is Right = " + (redioLenght==rowTypeCount));
+            if(!(redioLenght==rowTypeCount)){
+                alert("当前页面请至少选择一项!");
+                return false;
+            }
+            var selectFeatures = "";
+            for(var i = 0 ; i < redios.length;i++){
+                selectFeatures = selectFeatures + $(redios[i]).val() + ",";
+            }
+
+            var url = "createCustRequest";
+
+            var param = {
+                partyId:partyId,
+                payToPartyId:payToPartyId,
+                productId:productId,
+                selectFeatures:selectFeatures,
+                markText:markText
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async:false,
+                success: function (data) {
+                    if(data.code === "200"){
+                       alert("您的询价啊请求已提交成功!请关闭当前页面回家等通知...");
+                    }
+                    if(data.code === "500"){
+                        alert("CODE-403:网络出现问题请刷新页面重试");
+                    }
+                },
+                error: function (data) {
+                    alert("CODE-403:网络出现问题请刷新页面重试");
+                }
+            });
+
+        }
         $(function(){
             $("#answer").answerSheet({});
+
         })
 
     </script>
@@ -108,70 +156,77 @@
 <body style="background-color:#1fc587">
 
 <input id="payToPartyId" name="payToPartyId" value="${(payToPartyId)!}" type="text"/>
+<input id="rowTypeCount" name="rowTypeCount" value="${(resultMap.rowTypeCount)!}" type="text"/>
 <input id="partyId" name="partyId" value="${(partyId)!}" type="text"/>
 <input id="productId" name="productId" value="${(productId)!}" type="text"/>
+<#assign strHtml = resultMap.htmlBuilder>
+<#assign beforeKey = "">
+<#assign count = 1>
+<#--${listKeys}-->
+
 
 
 <div class="wrapper">
     <div id="answer" class="card_wrap">
+        ${resultMap}
         <!--Q1-->
-        <div class="card_cont card1">
-            <div class="card">
-                <p class="question"><span>Q1</span>color?</p>
-                <ul class="select">
-                    <li>
-                        <input id="q1_1" type="radio" name="r-group-1" >
-                        <label for="q1_1">red</label>
-                    </li>
-                    <li>
-                        <input id="q1_2" type="radio" name="r-group-1">
-                        <label for="q1_2">black</label>
-                    </li>
-                    <li>
-                        <input id="q1_3" type="radio" name="r-group-1">
-                        <label for="q1_3">white</label>
-                    </li>
-                    <li>
-                        <input id="q1_4" type="radio" name="r-group-1">
-                        <label for="q1_4">green</label>
-                    </li>
-                    <li>
-                        <input id="q1_5" type="radio" name="r-group-1">
-                        <label for="q1_5">stat</label>
-                    </li>
-                </ul>
-                <div class="card_bottom"><span><b>1</b>/2</span></div>
-            </div>
-        </div>
-        <!--Q2-->
-        <div class="card_cont card2" >
-            <div class="card">
-                <p class="question"><span>Q2</span>SIZE</p>
-                <ul class="select">
-                    <li>
-                        <input id="q2_1" type="radio" name="r-group-2" >
-                        <label for="q2_1">25</label>
-                    </li>
-                    <li>
-                        <input id="q2_2" type="radio" name="r-group-2">
-                        <label for="q2_2">36</label>
-                    </li>
-                    <li>
-                        <input id="q2_3" type="radio" name="r-group-2">
-                        <label for="q2_3">37</label>
-                    </li>
-                    <li>
-                        <input id="q2_4" type="radio" name="r-group-2">
-                        <label for="q2_4">42</label>
-                    </li>
-                    <li>
-                        <input id="q2_5" type="radio" name="r-group-2">
-                        <label for="q2_5">47</label>
-                    </li>
-                </ul>
-                <div class="card_bottom"><a class="prev">BACK</a><span><b>2</b>/2</span></div>
-            </div>
-        </div>
+        <#--<div class="card_cont card1">-->
+            <#--<div class="card">-->
+                <#--<p class="question"><span>Q1</span>color?</p>-->
+                <#--<ul class="select">-->
+                    <#--<li>-->
+                        <#--<input id="q1_1" type="radio" name="r-group-1" >-->
+                        <#--<label for="q1_1">red</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q1_2" type="radio" name="r-group-1">-->
+                        <#--<label for="q1_2">black</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q1_3" type="radio" name="r-group-1">-->
+                        <#--<label for="q1_3">white</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q1_4" type="radio" name="r-group-1">-->
+                        <#--<label for="q1_4">green</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q1_5" type="radio" name="r-group-1">-->
+                        <#--<label for="q1_5">stat</label>-->
+                    <#--</li>-->
+                <#--</ul>-->
+                <#--<div class="card_bottom"><span><b>1</b>/2</span></div>-->
+            <#--</div>-->
+        <#--</div>-->
+        <#--<!--Q2&ndash;&gt;-->
+        <#--<div class="card_cont card2" >-->
+            <#--<div class="card">-->
+                <#--<p class="question"><span>Q2</span>SIZE</p>-->
+                <#--<ul class="select">-->
+                    <#--<li>-->
+                        <#--<input id="q2_1" type="radio" name="r-group-2" >-->
+                        <#--<label for="q2_1">25</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q2_2" type="radio" name="r-group-2">-->
+                        <#--<label for="q2_2">36</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q2_3" type="radio" name="r-group-2">-->
+                        <#--<label for="q2_3">37</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q2_4" type="radio" name="r-group-2">-->
+                        <#--<label for="q2_4">42</label>-->
+                    <#--</li>-->
+                    <#--<li>-->
+                        <#--<input id="q2_5" type="radio" name="r-group-2">-->
+                        <#--<label for="q2_5">47</label>-->
+                    <#--</li>-->
+                <#--</ul>-->
+                <#--<div class="card_bottom"><a class="prev">BACK</a><span><b>2</b>/2</span></div>-->
+            <#--</div>-->
+        <#--</div>-->
 
     </div><!--/card_wrap-->
 

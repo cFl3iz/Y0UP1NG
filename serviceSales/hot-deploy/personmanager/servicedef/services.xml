@@ -223,6 +223,22 @@
                    optional="true"/>
     </service>
 
+    <service name="queryProductFeatures2" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductFeatures2" auth="false">
+        <description>queryProductFeatures2</description>
+
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="htmlBuilder" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="rowTypeCount" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
     <!-- 查询用户产品特征类型的偏好设置
             即便没有该用户偏好设置也会返回系统预设的产品特征类型
@@ -321,6 +337,21 @@
         <attribute name="noteInfo" type="String" mode="IN"
                    optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 发送客户请求 -->
+    <service name="createCustRequestFromWeb" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromWeb"
+             auth="false">
+        <description>createCustRequestFromWeb</description>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="selectFeatures" type="String" mode="IN" optional="true"/>
+        <attribute name="markText" type="String" mode="IN" optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

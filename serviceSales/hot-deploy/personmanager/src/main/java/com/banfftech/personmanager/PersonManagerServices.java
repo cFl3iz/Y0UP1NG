@@ -456,6 +456,99 @@ public class PersonManagerServices {
 
 
     /**
+     * 创建客户请求
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> createCustRequestFromWeb(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String partyId = (String) context.get("partyId");
+        String payToPartyId = (String) context.get("payToPartyId");
+        String productId = (String) context.get("productId");
+        String selectFeatures = (String) context.get("selectFeatures");
+        String markText = (String) context.get("markText");
+
+        HashSet<String> fieldSet = new HashSet<String>();
+        fieldSet.add("productId");
+        fieldSet.add("description");
+
+        Set<String> descriptionSet = new HashSet<String>();
+
+        String selectFeaturesList [] = selectFeatures.split(",");
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition("productId", EntityOperator.NOT_EQUAL, productId);
+
+        for (String  str : selectFeaturesList) {
+            String rowStr = str.substring(str.indexOf("_")+1);
+            descriptionSet.add(rowStr);
+        }
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("description", EntityOperator.IN, descriptionSet);
+
+        EntityCondition   findConditions3 = EntityCondition
+                    .makeCondition(findConditions,EntityOperator.AND,findConditions2);
+
+
+        List<GenericValue> productFeatureAndAppl =  EntityQuery.use(delegator).from("ProductFeatureAndAppl").where(findConditions3).distinct().queryList();
+               // delegator.findList("ProductFeatureAndAppl", findConditions3, fieldSet, null, null, false);
+        if(null != productFeatureAndAppl && productFeatureAndAppl.size()>0 ){
+//            for(GenericValue gv : productFeatureAndAppl){
+//                String
+//            }
+//            GenericValue productAppl = (GenericValue)productFeatureAndAppl.get(0);
+//            System.out.println("");
+        }
+        String productStoreId ="";
+        if(null != payToPartyId){
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", payToPartyId)).queryFirst();
+              productStoreId = (String) store.get("productStoreId");
+        }
+
+
+         Map<String,Object> createCustRequest =  dispatcher.runSync("createCustRequest",
+                 UtilMisc.toMap("userLogin",admin,
+                         "custRequestTypeId","RF_QUOTE",
+                         "fromPartyId",partyId,
+                         "description",markText,
+                         "maximumAmountUomId","CNY",
+                         "productStoreId",productStoreId,
+                         "salesChannelEnumId","WEB_SALES_CHANNEL",
+                         "currencyUomId","CNY",
+                         "internalComment","",
+                         "reason","",
+                         "story","",
+                         "productId",productId,
+                         "custRequestName","资源询价=>",
+                          "quantity",BigDecimal.ONE));
+
+
+
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+    /**
      * add Distributing Leaflets (增加转发记录)
      * @param dctx
      * @param context

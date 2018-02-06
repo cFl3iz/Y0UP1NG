@@ -617,6 +617,125 @@ public class PersonManagerQueryServices {
 
 
 
+
+
+
+
+
+
+    public static Map<String, Object> queryProductFeatures2(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String productId = (String) context.get("productId");
+
+        List<GenericValue> productFeatures = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
+
+        for(GenericValue gv : productFeatures){
+
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+            String productFeatureId = (String) gv.get("productFeatureId");
+
+            String productFeatureTypeId = (String) gv.get("productFeatureTypeId");
+
+            String description = (String) gv.get("description");
+
+
+            String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+productFeatureTypeId, new Locale("zh"));
+            if(getI18N.equals("ProductFeatureType.description."+productFeatureTypeId)){
+                GenericValue productFeatureType = delegator.findOne("ProductFeatureType",UtilMisc.toMap("productFeatureTypeId",productFeatureTypeId),false);
+                rowMap.put("type",(String) productFeatureType.get("description"));
+                rowMap.put("typeValue",description);
+                rowMap.put("typeId",productFeatureTypeId);
+            }else{
+                //说明是预设的
+                rowMap.put("typeId",productFeatureTypeId);
+                rowMap.put("type",getI18N);
+                rowMap.put("typeValue",description);
+            }
+
+
+            returnList.add(rowMap);
+        }
+
+        String nowKey ="";
+        String beforeKey ="";
+        String htmlBuilder ="";
+        int rowCount = 1 ; //共几行计数
+        int rowTypeCount = 1 ; //几种类型计数
+
+        for(Map<String,Object> rowMap : returnList){
+            String keyValue = (String)rowMap.get("typeValue");
+            String typeId = (String) rowMap.get("typeId");
+
+                 if(rowCount == 1){
+                     htmlBuilder = "<div class=\"card_cont card1\">" + "<div class=\"card\">"+
+                             "<p class=\"question\"><span>1</span>"+(String) rowMap.get("type")+"</p>\n" +
+                             "<ul class=\"select\">";
+
+                 }
+                 nowKey =  (String) rowMap.get("type");
+                 if(nowKey.equals(beforeKey)&& rowCount != 1){
+                     //说明是一个特种类型
+                     htmlBuilder += "<li>" +
+                             "<input id=\"q"+rowTypeCount+"_"+rowCount+"\" type=\"radio\" name=\"r-group-"+rowTypeCount+"\" value=\""+typeId+"_"+keyValue+"\" >" +
+                             "<label for=\"q"+rowTypeCount+"_"+rowCount+"\">" + keyValue +
+                             "</label>"+"</li>";
+                 }
+                 if(!nowKey.equals(beforeKey)&& rowCount == 1){
+                     //第一行数据
+                     htmlBuilder += "<li>" +
+                             "<input id=\"q"+rowTypeCount+"_"+rowCount+"\" value=\""+typeId+"_"+keyValue+"\" type=\"radio\" name=\"r-group-"+rowTypeCount+"\" >" +
+                             "<label for=\"q"+rowTypeCount+"_"+rowCount+"\">" + keyValue +
+                             "</label>"+"</li>";
+                 }
+
+                 if(!nowKey.equals(beforeKey) && rowCount != 1){
+                     //更换特征类型
+                     rowTypeCount += 1;//类型计数+1
+                     //上个选项收尾
+                     htmlBuilder += "</ul></div></div> ";
+                     //新的选项
+                     htmlBuilder += "<div class=\"card_cont card"+ rowTypeCount +"\">" + "<div class=\"card\">"+
+                             "<p class=\"question\"><span>"+rowTypeCount+"</span>"+nowKey+"</p>\n" +
+                             "<ul class=\"select\">";
+                     htmlBuilder += "<li>" +
+                             "<input id=\"q"+rowTypeCount+"_"+rowCount+"\" value=\""+typeId+"_"+keyValue+"\" type=\"radio\" name=\"r-group-"+rowTypeCount+"\" >" +
+                             "<label for=\"q"+rowTypeCount+"_"+rowCount+"\">" + keyValue +
+                             "</label>"+"</li>";
+                 }
+
+                 beforeKey = nowKey;
+                 rowCount +=1;
+        }
+        //收尾
+
+         htmlBuilder += "</ul><br/><input id='markText' size=\"25\" style=\"width:255px;height=30px;\"/ placeholder=\"给卖家的留言..\" value=\"\"/>" +
+                 "<br/><br/><br/><br/><button style='width:100px;background-color: #e9686b;color:white;' onclick='javascript:commitCustRequest();'>提交</button></div></div>";
+//        resultMap.put("productFeaturesList",returnList);
+         resultMap.put("htmlBuilder",htmlBuilder);
+         resultMap.put("rowTypeCount",rowTypeCount+"");
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
     /**
      * query CustSalesReport
      * @param dctx

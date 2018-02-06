@@ -153,9 +153,18 @@
             <#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->
             <#--${uiLabel.GoToPay}-->
             <#--</button>-->
+                <!-- 拥有特征的产品询价 -->
+                <#if productFeatureAndApplList?has_content>
                 <button type="button" onclick="custRequest('${productId}');" class="btn-block btn-primary">
                 ${uiLabel.GoToPay}
                 </button>
+                </#if>
+                <#if !productFeatureAndApplList?has_content>
+                    <button type="button" onclick="contactMe();" class="btn-block btn-primary">
+                    ${uiLabel.GoToPay}
+                    </button>
+                </#if>
+
             </#if>
             <#if resourceDetail.salesDiscontinuationDate?has_content>
             <button type="button" class="btn-block btn-disabled">
@@ -209,8 +218,8 @@
     }
 
     function custRequest(productId){
-        var payToPartyId = $("#payToPartyId").val();
-        var partyId      = $("#partyId").val();
+          var payToPartyId = $("#payToPartyId").val();
+          var partyId      = $("#partyId").val();
           location.href = 'ViewSelectProductFeature?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId;
     }
 

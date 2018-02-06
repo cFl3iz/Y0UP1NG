@@ -154,12 +154,12 @@
             <#--${uiLabel.GoToPay}-->
             <#--</button>-->
                 <!-- 拥有特征的产品询价 -->
-                <#if productFeatureAndApplList?has_content>
+                <#if resultMap.productFeatureAndApplList?has_content>
                 <button type="button" onclick="custRequest('${productId}');" class="btn-block btn-primary">
                 ${uiLabel.GoToPay}
                 </button>
                 </#if>
-                <#if !productFeatureAndApplList?has_content>
+                <#if !resultMap.productFeatureAndApplList?has_content>
                     <button type="button" onclick="contactMe();" class="btn-block btn-primary">
                     ${uiLabel.GoToPay}
                     </button>

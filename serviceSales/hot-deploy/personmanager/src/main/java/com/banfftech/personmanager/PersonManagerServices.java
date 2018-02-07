@@ -89,7 +89,7 @@ public class PersonManagerServices {
 
 
     public final static String module = PersonManagerServices.class.getName();
-
+    public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
@@ -479,6 +479,9 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
         String selectFeatures = (String) context.get("selectFeatures");
         String markText = (String) context.get("markText");
+        if(null!=markText){
+            markText = "备注:"+markText;
+        }
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         HashSet<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");
@@ -496,7 +499,14 @@ public class PersonManagerServices {
         for (String  str : selectFeaturesList) {
             String rowStr = str.substring(str.indexOf("_")+1);
             String type   = str.substring(0,str.indexOf("_"));
-            feature += type+"要"+rowStr+"的,";
+            String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+ type , new Locale("zh"));
+            if(getI18N.equals("ProductFeatureType.description."+type)){
+                GenericValue featureType = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                feature += type+"要"+rowStr+"的,";
+            }else{
+                feature += getI18N+"要"+rowStr+"的,";
+            }
+
             descriptionSet.add(rowStr);
         }
 
@@ -2898,7 +2908,7 @@ public class PersonManagerServices {
 
         //是一个虚拟产品而且要变形
         if(productFeature!=null){
-            Debug.logInfo("*["+productId+"] Is a Virtual Product ! ------------------------------------------------------------------------ ",module);
+            Debug.logInfo("*["+productId+"] Is a Virtual Product ! -------------------------------------------------------------- productFeature = ---------- " + productFeature,module);
             //更新产品为虚拟产品
             Map<String, Object> updateProductServiceResultMap =  dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", admin, "productId", productId, "isVirtual", "Y", "virtualVariantMethodEnum", "VV_FEATURETREE"));
             if (!ServiceUtil.isSuccess(updateProductServiceResultMap)) {

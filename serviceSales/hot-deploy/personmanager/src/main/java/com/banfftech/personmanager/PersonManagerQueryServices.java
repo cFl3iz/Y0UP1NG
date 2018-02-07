@@ -465,6 +465,11 @@ public class PersonManagerQueryServices {
                 rowMap.put("productName",product.get("productName"));
                 rowMap.put("productImage",product.get("smallImageUrl"));
 
+
+
+
+
+
                 returnList.add(rowMap);
             }
         }
@@ -522,12 +527,12 @@ public class PersonManagerQueryServices {
             Map<String,Object> rowMap = gv.getAllFields();
 
 
-            String getI18N =UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh"));
 
 //            GenericValue userPreference= EntityQuery.use(delegator).from("UserPreference").where("userPrefTypeId",rowMap.get("productFeatureTypeId"),"userLoginId",userLoginId).queryFirst();
 //            if(userPreference!=null){
 //                continue;
 //            }
+            String getI18N =UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+rowMap.get("productFeatureTypeId"), new Locale("zh"));
 
             //没有这个国际化配置,说明是新增的不是预设的
             if(getI18N.equals("ProductFeatureType.description."+rowMap.get("productFeatureTypeId"))){

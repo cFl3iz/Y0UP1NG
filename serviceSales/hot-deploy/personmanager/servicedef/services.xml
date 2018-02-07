@@ -285,6 +285,17 @@
                    optional="true"/>
     </service>
 
+    <service name="queryPartyRequests" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryPartyRequests" auth="false">
+        <description>queryPartyRequests</description>
+        <attribute name="requestList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- query Resource Detail -->
     <service name="queryResourceDetail" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

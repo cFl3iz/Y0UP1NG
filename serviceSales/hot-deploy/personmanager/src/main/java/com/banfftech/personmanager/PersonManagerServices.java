@@ -536,15 +536,28 @@ public class PersonManagerServices {
                          "salesChannelEnumId","WEB_SALES_CHANNEL",
                          "currencyUomId","CNY",
                          "internalComment","",
-                         "reason","",
-                         "story","",
+                         "reason",markText,
+                         "story",feature,
                          "productId",productId,
-                         "custRequestName","资源询价=>",
+                         "custRequestName","资源询价=>"+product.get("productName"),
                           "quantity",BigDecimal.ONE));
+        String custRequestId = (String) createCustRequest.get("custRequestId");
+        //发出请求的会员
+        Map<String,Object> createCustRequestPartyRequesterMap =  dispatcher.runSync("createCustRequestParty",
+                UtilMisc.toMap("userLogin",admin,
+                        "custRequestId",custRequestId,
+                        "partyId",partyId,
+                        "roleTypeId","REQ_REQUESTER"));
 
+        //请求接受者
+        Map<String,Object> createCustRequestPartyTakerMap =  dispatcher.runSync("createCustRequestParty",
+                UtilMisc.toMap("userLogin",admin,
+                        "custRequestId",custRequestId,
+                        "partyId",payToPartyId,
+                        "roleTypeId","REQ_TAKER"));
 
         //推送一条消息
-        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:"+""+product.get("productName")+"。"+feature+"。"+markText, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
+        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:" + product.get("productName") + "。" + feature + "。" + markText, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
 
 
         return resultMap;
@@ -3970,6 +3983,22 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      */
     public static String createPersonStoreAndCatalogAndCategory(Locale locale, GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
+        //授予当事人询价角色
+        GenericValue partyRoleRequester = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_REQUESTER").queryFirst();
+        if (null == partyRoleRequester) {
+            Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REQ_REQUESTER");
+            dispatcher.runSync("createPartyRole", createPartyRoleMap);
+        }
+        //授予当事人询价接受角色
+        GenericValue partyRoleTaker = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_TAKER").queryFirst();
+        if (null == partyRoleTaker) {
+            Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REQ_TAKER");
+            dispatcher.runSync("createPartyRole", createPartyRoleMap);
+        }
+
+
 
         // Create Party Role 授予当事人角色,如果没有
         GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();

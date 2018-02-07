@@ -411,6 +411,70 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * query PartyRequests
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryPartyRequests(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = (String) userLogin.get("partyId");
+
+        List<GenericValue> custRequestAndRoleList = EntityQuery.use(delegator).from("CustRequestAndRole").where("partyId",partyId,"roleTypeId","REQ_TAKER").queryList();
+
+        if(custRequestAndRoleList.size()>0){
+            for(GenericValue gv :custRequestAndRoleList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String custRequestId = (String)  gv.get("custRequestId");
+                rowMap.put("custRequestId",custRequestId);
+                GenericValue  custRequester = EntityQuery.use(delegator).from("CustRequestAndRole").where("custRequestId",custRequestId,"roleTypeId","REQ_REQUESTER").queryFirst();
+                String custId = (String) custRequester.get("partyId");
+
+                Map<String,String> customerInfo =  queryPersonBaseInfo(delegator,custId);
+                rowMap.put("custInfo",customerInfo);
+                rowMap.put("custPartyId",custId);
+                GenericValue  custRequestAndContent = EntityQuery.use(delegator).from("CustRequestAndContent").where("custRequestId",custRequestId).queryFirst();
+                String custRequestName = (String) custRequestAndContent.get("custRequestName");
+                rowMap.put("custRequestName",custRequestName);
+
+
+                String reason = (String) custRequestAndContent.get("reason");
+                String story = (String) custRequestAndContent.get("story");
+                String productId = (String) custRequestAndContent.get("productId");
+
+                rowMap.put("reason",reason);
+                rowMap.put("featureDesc",story);
+                rowMap.put("productId",productId);
+
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                rowMap.put("productName",product.get("productName"));
+                rowMap.put("productImage",product.get("smallImageUrl"));
+
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("requestList",returnList);
+
+        return resultMap;
+    }
+
+    /**
      * 查询用户产品特征类型的偏好设置
      * @author S
      * @param dctx

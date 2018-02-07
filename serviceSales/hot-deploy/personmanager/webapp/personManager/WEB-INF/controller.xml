@@ -79,6 +79,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryPartyRequests">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryPartyRequests"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 查询用户产品特征类型的偏好设置
             即便没有该用户偏好设置也会返回系统预设的产品特征类型

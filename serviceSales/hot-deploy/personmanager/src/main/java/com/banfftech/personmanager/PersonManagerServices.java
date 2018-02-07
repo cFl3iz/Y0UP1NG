@@ -496,7 +496,7 @@ public class PersonManagerServices {
         for (String  str : selectFeaturesList) {
             String rowStr = str.substring(str.indexOf("_")+1);
             String type   = str.substring(str.indexOf("_"));
-            feature += type+"=>"+rowStr+",";
+            feature += type+"要"+rowStr+"的,";
             descriptionSet.add(rowStr);
         }
 
@@ -544,7 +544,7 @@ public class PersonManagerServices {
 
 
         //推送一条消息
-        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:"+""+product.get("productName")+"。"+feature, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
+        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:"+""+product.get("productName")+"。"+feature+"。"+markText, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
 
 
         return resultMap;

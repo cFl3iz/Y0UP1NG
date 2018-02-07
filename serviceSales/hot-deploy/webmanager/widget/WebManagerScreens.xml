@@ -147,6 +147,8 @@
                 <set field="productId" value="${parameters.productId}"/>
                 <set field="partyId" value="${parameters.partyId}"/>
                 <set field="payToPartyId" value="${parameters.payToPartyId}"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="spm" value="${parameters.spm}"/>
                 <service service-name="queryProductFeatures2" result-map="resultMap">
                     <field-map field-name="productId"/>
                 </service>

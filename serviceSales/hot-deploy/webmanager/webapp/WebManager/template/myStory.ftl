@@ -220,7 +220,9 @@
     function custRequest(productId){
           var payToPartyId = $("#payToPartyId").val();
           var partyId      = $("#partyId").val();
-          location.href = 'ViewSelectProductFeature?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId;
+          var spm            = $("#spm").val();
+        var tarjeta = $("#tarjeta").val();
+          location.href = 'ViewSelectProductFeature?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
     }
 
 

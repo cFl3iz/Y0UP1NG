@@ -98,6 +98,109 @@
         $.fn.answerSheet = function(options) {var defaults={mold:'card',};var opts = $.extend({},defaults,options);return $(this).each(function(){var obj = $(this).find('.card_cont');var _length = obj.length,_b = _length -1,_len = _length - 1, _cont = '.card_cont';for(var a = 1; a <= _length; a++){obj.eq(_b).css({'z-index':a});_b-=1;}$(this).show();if(opts.mold == 'card'){obj.find('ul li label').click(function(){var _idx =  $(this).parents(_cont).index(),_cards =  obj,_cardcont = $(this).parents(_cont);if(_idx == _len){return;}else{setTimeout(function(){_cardcont.addClass('cardn');setTimeout(function(){_cards.eq(_idx + 3).addClass('card3');_cards.eq(_idx + 2).removeClass('card3').addClass('card2');_cards.eq(_idx + 1).removeClass('card2').addClass('card1');_cardcont.removeClass('card1');},200);},100);}});$('.card_bottom').find('.prev').click(function(){var _idx =  $(this).parents(_cont).index(), _cardcont = $(this).parents(_cont);obj.eq(_idx + 2).removeClass('card3').removeClass('cardn');obj.eq(_idx + 1).removeClass('card2').removeClass('cardn').addClass('card3');obj.eq(_idx).removeClass('card1').removeClass('cardn').addClass('card2');setTimeout(function(){obj.eq(_idx - 1).addClass('card1').removeClass('cardn');},200);})}});};
     </script>
     <script>
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+
+        function checkSubscribe() {
+            var flag = false;
+            var subscribe = getCookie("subscribe");
+            if (subscribe === "1") {
+                flag = true;
+            } else {
+                clearCookie("tarjeta");
+                flag = false;
+            }
+            return flag;
+        }
+        function contactMe() {
+            var flag = checkSubscribe();
+            if (flag == true) {
+//            $("#miniChatForm").submit();
+                var payToPartyId = $("#payToPartyId").val();
+                var partyId      = $("#partyId").val();
+                var productId      = $("#productId").val();
+                var spm            = $("#spm").val();
+
+                if(spm ==null || spm ===""){
+                    spm = "NA";
+                }
+
+                if(payToPartyId === partyId){
+                    alert("您的身份就是卖家。请勿刷单，否则平台将封杀您的账户。");
+                    $("#contactBtn").css("disabled","disabled");
+                    return false;
+                }
+
+                if(payToPartyId == null || payToPartyId ===""){
+                    alert("Code:409 - > 超时的授权认证,请关闭当前页面再次打开即可正常使用。");
+                    return false;
+                }
+                var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
+//            alert("jump productId="+jumpurl);
+//            alert("jump productId="+productId);
+//            return false;
+
+                var mark = $("#mark").val();
+
+//            if(mark != null && mark.trim() !="" && mark==="true"){
+//
+//            }else{}
+                markOrOutMark(true);
+
+
+                location.href = jumpurl;
+
+            } else {
+                alert("您没有关注公众号");
+//                ShowDiv('MyDiv','fade');
+            }
+
+        }
+        function markOrOutMark(markBoolean){
+
+            var tarjeta = $("#tarjeta").val();
+
+            var productId = $("#productId").val();
+
+
+
+//        alert(markBoolean);
+
+            var url = "markOrOutMarkProduct";
+
+            var param = {
+                productId:productId,
+                tarjeta:tarjeta,
+                markIt:markBoolean
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async:false,
+                success: function (data) {
+                    if(data.code === "200"){
+
+                    }
+                    if(data.code === "500"){
+                        alert("CODE:409 网络延迟,请刷新页面重试!");
+                    }
+
+                },
+                error: function (data) {
+                    alert("CODE:409 网络延迟,请刷新页面重试!");
+                }
+            });
+
+
+        }
+
         function commitCustRequest(){
             var rowTypeCount = $("#rowTypeCount").val();
             var redios = $(":radio:checked");
@@ -133,7 +236,8 @@
                 async:false,
                 success: function (data) {
                     if(data.code === "200"){
-                       alert("您的询价啊请求已提交成功!请关闭当前页面回家等通知...");
+                       alert("询价已提交成功!");
+                        contactMe();
                     }
                     if(data.code === "500"){
                         alert("CODE-403:网络出现问题请刷新页面重试");
@@ -159,6 +263,8 @@
 <input id="rowTypeCount" name="rowTypeCount" value="${(resultMap.rowTypeCount)!}" type="hidden"/>
 <input id="partyId" name="partyId" value="${(partyId)!}" type="hidden"/>
 <input id="productId" name="productId" value="${(productId)!}" type="hidden"/>
+<input id="spm" name="spm" value="${(spm)!}" type="hidden"/>
+<input id="tarjeta" name="tarjeta" value="${(tarjeta)!}" type="hidden"/>
 <#assign strHtml = resultMap.htmlBuilder>
 <#assign beforeKey = "">
 <#assign count = 1>

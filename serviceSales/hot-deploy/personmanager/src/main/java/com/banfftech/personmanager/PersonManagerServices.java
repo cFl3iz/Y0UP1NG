@@ -479,7 +479,7 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
         String selectFeatures = (String) context.get("selectFeatures");
         String markText = (String) context.get("markText");
-
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         HashSet<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");
         fieldSet.add("description");
@@ -491,8 +491,12 @@ public class PersonManagerServices {
         EntityCondition findConditions2 = EntityCondition
                 .makeCondition("productId", EntityOperator.NOT_EQUAL, productId);
 
+        String feature = "我选的特征:";
+
         for (String  str : selectFeaturesList) {
             String rowStr = str.substring(str.indexOf("_")+1);
+            String type   = str.substring(str.indexOf("_"));
+            feature += type+"=>"+rowStr+",";
             descriptionSet.add(rowStr);
         }
 
@@ -539,7 +543,8 @@ public class PersonManagerServices {
                           "quantity",BigDecimal.ONE));
 
 
-
+        //推送一条消息
+        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:"+""+product.get("productName")+"。"+feature, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
 
 
         return resultMap;

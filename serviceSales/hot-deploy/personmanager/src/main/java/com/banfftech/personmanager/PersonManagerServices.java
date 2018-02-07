@@ -501,8 +501,8 @@ public class PersonManagerServices {
             String type   = str.substring(0,str.indexOf("_"));
             String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+ type , new Locale("zh"));
             if(getI18N.equals("ProductFeatureType.description."+type)){
-                GenericValue featureType = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-                feature += type+"要"+rowStr+"的,";
+                GenericValue featureType = delegator.findOne("UserPreferenceProductFeatures", UtilMisc.toMap("productFeatureTypeId", type), false);
+                feature += featureType.get("description")+"要"+rowStr+"的,";
             }else{
                 feature += getI18N+"要"+rowStr+"的,";
             }
@@ -2950,7 +2950,7 @@ public class PersonManagerServices {
                 Debug.logInfo("* >>> feature =" + feature, module);
                 Debug.logInfo("* >>> feature.get(\"productFeatureTypeId\") =" + feature.get("productFeatureTypeId"), module);
                 String productFeatureTypeId = (String) feature.get("productFeatureTypeId");
-            
+
 
                 Debug.logInfo("* >>> productFeatureTypeId =" + productFeatureTypeId, module);
 

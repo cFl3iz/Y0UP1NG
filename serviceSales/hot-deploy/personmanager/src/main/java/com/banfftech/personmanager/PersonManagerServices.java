@@ -495,7 +495,7 @@ public class PersonManagerServices {
 
         for (String  str : selectFeaturesList) {
             String rowStr = str.substring(str.indexOf("_")+1);
-            String type   = str.substring(str.indexOf("_"));
+            String type   = str.substring(0,str.indexOf("_"));
             feature += type+"要"+rowStr+"的,";
             descriptionSet.add(rowStr);
         }

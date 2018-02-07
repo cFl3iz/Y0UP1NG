@@ -448,14 +448,17 @@ public class PersonManagerQueryServices {
                 Map<String,String> customerInfo =  queryPersonBaseInfo(delegator,custId);
                 rowMap.put("custInfo",customerInfo);
                 rowMap.put("custPartyId",custId);
-                GenericValue  custRequestAndContent = EntityQuery.use(delegator).from("CustRequestAndContent").where("custRequestId",custRequestId).queryFirst();
-                String custRequestName = (String) custRequestAndContent.get("custRequestName");
+
+                //TODO FIX
+                GenericValue  custRequest = EntityQuery.use(delegator).from("CustRequest").where("custRequestId",custRequestId).queryFirst();
+                GenericValue  custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where("custRequestId",custRequestId).queryFirst();
+                String custRequestName = (String) custRequest.get("custRequestName");
                 rowMap.put("custRequestName",custRequestName);
 
 
-                String reason = (String) custRequestAndContent.get("reason");
-                String story = (String) custRequestAndContent.get("story");
-                String productId = (String) custRequestAndContent.get("productId");
+                String reason = (String) custRequest.get("reason");
+                String story = (String) custRequestItem.get("story");
+                String productId = (String) custRequestItem.get("productId");
 
                 rowMap.put("reason",reason);
                 rowMap.put("featureDesc",story);

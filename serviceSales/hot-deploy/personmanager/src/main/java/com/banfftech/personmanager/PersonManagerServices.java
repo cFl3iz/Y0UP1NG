@@ -502,7 +502,7 @@ public class PersonManagerServices {
             String getI18N = UtilProperties.getMessage(resourceUiLabels,"ProductFeatureType.description."+ type , new Locale("zh"));
             if(getI18N.equals("ProductFeatureType.description."+type)){
                 GenericValue featureType = EntityQuery.use(delegator).from("UserPreferenceProductFeatures").where("productFeatureTypeId", type).queryFirst();
-              
+
                 feature += featureType.get("description")+"要"+rowStr+"的,";
             }else{
                 feature += getI18N+"要"+rowStr+"的,";

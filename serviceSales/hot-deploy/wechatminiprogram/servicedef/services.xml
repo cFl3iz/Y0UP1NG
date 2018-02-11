@@ -125,7 +125,7 @@
         <attribute name="filePath" type="String" mode="IN"
                    optional="true"/>
 
-        <attribute name="productId" type="String" mode="IN"
+        <attribute name="productId" type="String" mode="OUT"
                    optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -198,7 +198,7 @@ public class WeChatMiniProgramServices {
         }
 
 
-
+        resultMap.put("productId",productId);
 
         return resultMap;
     }

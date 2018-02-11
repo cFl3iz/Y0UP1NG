@@ -351,6 +351,37 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+
+    <!-- createPartyToPartyRelation -->
+    <service name="createPartyToPartyRelation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createPartyToPartyRelation"
+             auth="false">
+        <description>创建两个当事人的关系</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="relationShipType" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- 响应客户请求并创建报价单 -->
+    <service name="returnFormAndCreateQuoteFromCustRequest" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="returnFormAndCreateQuoteFromCustRequest"
+             auth="false">
+        <description>returnFormAndCreateQuoteFromCustRequest</description>
+
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="formField" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="custPartyId" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
     <!-- 发送客户请求 -->
     <service name="createCustRequestFromWeb" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromWeb"

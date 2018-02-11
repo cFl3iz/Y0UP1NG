@@ -288,6 +288,24 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <!-- Create PartyRelationShip -->
+    <request-map uri="createPartyToPartyRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPartyToPartyRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- 响应客户询价请求、并且创建报价单。 -->
+    <request-map uri="returnFormAndCreateQuoteFromCustRequest">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="returnFormAndCreateQuoteFromCustRequest"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personmanager/widget/PersonManagerScreens.xml#main"/>
 </site-conf>

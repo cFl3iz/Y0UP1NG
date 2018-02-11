@@ -21,9 +21,6 @@
 
 <script>
 
-//    function selectFeature(e){
-//        alert($(e));
-//    }
 function selectFeature(e){
     var  selectObj = e;
     var featureValue = $(selectObj).html();
@@ -219,11 +216,7 @@ function selectFeature(e){
     $(
             function () {
 
-                //fix emoji
-//                var $emojitext = $("#author");
-//                alert($emojitext);
-//                var emojitexthtml = $emojitext.html().trim().replace(/\n/g, '<br/>');
-//                $emojitext.html(jEmoji.unifiedToHTML(emojitexthtml));
+
 
 
                 // clearCookie("tarjeta");
@@ -312,9 +305,10 @@ function selectFeature(e){
                     //记录访客
                     var spm = $("#spm").val();
                     doAddProductRole(partyId,productId,"VISITOR");
-
+                    //记录资源主与当前访问人的联系关系
+                    var payToParty = ${(resourceDetail.payToPartyId)!};
+                    doAddContactRelation(partyId,payToParty);
                     if(spm != null && spm != ""){
-                        var payToParty = ${(resourceDetail.payToPartyId)!};
                         doAddPartyRelation(partyId,spm);
                         addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
@@ -406,7 +400,28 @@ function selectFeature(e){
             }
         });
     }
+    function doAddContactRelation (p,toP){
+        var url = "createPartyToPartyRelation";
 
+        var param = {
+            partyIdFrom:p,
+            partyIdTo:toP,
+            relationShipType:'CONTACT_REL'
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+
+            },
+            error: function (data) {
+                alert("CODE-403:网络出现问题请刷新页面重试");
+            }
+        });
+
+    }
     function doAddPartyRelation(partyId,spm){
         var url = "doAddPartyRelation";
 

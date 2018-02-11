@@ -73,6 +73,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="createPartyToPartyRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPartyToPartyRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="createCustRequest">
         <security https="false" auth="false"/>
         <event type="service" invoke="createCustRequestFromWeb"/>

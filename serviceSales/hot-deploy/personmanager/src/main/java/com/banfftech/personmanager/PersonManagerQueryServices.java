@@ -435,8 +435,19 @@ public class PersonManagerQueryServices {
                 String dataResourceId = (String) content.get("dataResourceId");
 
                 GenericValue electronicText = EntityQuery.use(delegator).from("ElectronicText").where("dataResourceId", dataResourceId).queryFirst();
+                DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String tsStr = "";
+                try {
+                    
+                    tsStr = sdf.format(electronicText.get("createdStamp"));
+
+                }catch (Exception e){
+
+                }
+                rowMap.put("ts",tsStr);
 
                 rowMap.put("contentId", contentId);
+
                 rowMap.put("text", electronicText.get("textData"));
 
                 String createdByUserLogin = (String) gv.get("createdByUserLogin");

@@ -339,6 +339,20 @@
                    optional="true"/>
     </service>
 
+    <!-- 吐槽List -->
+    <service name="queryProductTuCaoList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductTuCaoList" auth="false">
+        <description>queryProductTuCaoList</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tuCaoList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- Update Person Info -->
     <service name="updatePersonInfo" engine="java" default-entity-name="Person"
              location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo"

@@ -411,13 +411,77 @@ public class PersonManagerQueryServices {
 
 
     /**
-     * query PartyRequests
+     * queryProductTuCaoList
      * @param dctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
+    public static Map<String, Object> queryProductTuCaoList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String productId = (String) context.get("productId");
+
+        List<GenericValue> productContentAndInfos = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId",productId).queryList();
+
+        if(productContentAndInfos.size()>0){
+            for(GenericValue gv : productContentAndInfos){
+
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                String contentId =(String) gv.get("contentId");
+
+                GenericValue content = EntityQuery.use(delegator).from("Content").where("contentId",contentId).queryFirst();
+
+                String dataResourceId = (String) content.get("content");
+
+                GenericValue electronicText = EntityQuery.use(delegator).from("ElectronicText").where("dataResourceId",dataResourceId).queryFirst();
+
+                    rowMap.put("contentId",rowMap);
+                    rowMap.put("text",electronicText.get("textData"));
+
+                    String createdByUserLogin =(String) gv.get("createdByUserLogin");
+
+                    GenericValue findUserLogin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", createdByUserLogin));
+
+                    String tuCaoPartyId = (String)  findUserLogin.get("partyId");
+
+                    rowMap.put("userInfo",queryPersonBaseInfo(delegator,tuCaoPartyId));
+
+                    returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("tuCaoList",returnList);
+        return resultMap;
+    }
+
+
+
+        /**
+         * query PartyRequests
+         * @param dctx
+         * @param context
+         * @return
+         * @throws GenericEntityException
+         * @throws GenericServiceException
+         */
     public static Map<String, Object> queryPartyRequests(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -2401,6 +2465,14 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("morePicture",pictures);
         resourceDetail.put("nowPartyId",partyId);
+
+
+        Map<String,Object> queryTuCaoMap = dispatcher.runSync("queryProductTuCaoList",UtilMisc.toMap("userLogin",userLogin,"productId",productId));
+
+        List<Map<String,Object>> tuCaoList = ( List<Map<String,Object>> ) queryTuCaoMap.get("tuCaoList");
+
+        resourceDetail.put("tuCaoList",tuCaoList);
+
         resultMap.put("resourceDetail", resourceDetail);
 
 //        if(null != userLogin){

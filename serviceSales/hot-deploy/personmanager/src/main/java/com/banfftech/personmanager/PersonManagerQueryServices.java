@@ -2331,7 +2331,7 @@ public class PersonManagerQueryServices {
         resourceDetail.put("payToId", payToId);
 
         resourceDetail.put("is_follow", "false");
-        resourceDetail.put("is_like", "false");
+
 
 
         Set<String> orderFieldSet = new HashSet<String>();
@@ -2380,7 +2380,16 @@ public class PersonManagerQueryServices {
         Long custCount = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", PeConstant.PRODUCT_CUSTOMER).queryCount();
         Long placingCount = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryCount();
 
-        resourceDetail.put("like_count", custCount);
+
+        Long iLike = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", "PLACING_CUSTOMER","partyId",partyId).queryCount();
+        if(iLike>0){
+            resourceDetail.put("is_like", "true");
+        }else{
+            resourceDetail.put("is_like", "false");
+        }
+     
+
+        resourceDetail.put("like_count", placingCount);
         resourceDetail.put("doc_class", UtilMisc.toMap("title", "其他", "desc", "其他"));
 //        resourceDetail.put("placingCount",placingCount);
 

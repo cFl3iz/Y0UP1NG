@@ -1871,7 +1871,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws GenericEntityException
      */
-    public static String  tuCaoProduct(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException{
+    public static String  tuCaoProduct(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException,GenericEntityException{
 
         // Servlet Head
 

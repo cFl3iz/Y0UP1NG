@@ -422,7 +422,7 @@ public class PersonManagerQueryServices {
 
         System.out.println(">>>>>>>>>>>>>>productId="+productId);
         System.out.println(">>>>>>>>>>>>>>productContentAndInfos="+productContentAndInfos);
-        
+
         if (productContentAndInfos.size() > 0) {
             for (GenericValue gv : productContentAndInfos) {
 
@@ -436,7 +436,7 @@ public class PersonManagerQueryServices {
 
                 GenericValue electronicText = EntityQuery.use(delegator).from("ElectronicText").where("dataResourceId", dataResourceId).queryFirst();
 
-                rowMap.put("contentId", rowMap);
+                rowMap.put("contentId", contentId);
                 rowMap.put("text", electronicText.get("textData"));
 
                 String createdByUserLogin = (String) gv.get("createdByUserLogin");
@@ -2381,9 +2381,9 @@ public class PersonManagerQueryServices {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> queryTuCaoMap= " + queryTuCaoMap);
 
-      //  List<Map<String, Object>> tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
+        List<Map<String, Object>> tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
 
-        resourceDetail.put("tuCaoList", null);
+        resourceDetail.put("tuCaoList", tuCaoList);
 
         resultMap.put("resourceDetail", resourceDetail);
 

@@ -365,6 +365,16 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- 吐槽/评论 -->
+    <service name="tuCao" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="tuCao"
+             auth="false">
+        <description>tuCao</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <!-- 响应客户请求并创建报价单 -->
     <service name="returnFormAndCreateQuoteFromCustRequest" engine="java"

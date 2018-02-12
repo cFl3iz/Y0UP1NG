@@ -269,6 +269,15 @@
     </request-map>
 
 
+    <request-map uri="tuCao">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="tuCao"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
 
     <!--  Create OrderHeader & OrderItem -->
     <request-map uri="placeResourceOrder">

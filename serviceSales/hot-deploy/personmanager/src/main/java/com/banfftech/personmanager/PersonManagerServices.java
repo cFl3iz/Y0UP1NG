@@ -454,6 +454,46 @@ public class PersonManagerServices {
 
 
     /**
+     * 对产品的评论
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> tuCao(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String userLoginId = (String) userLogin.get("userLoginId");
+        String productId = (String) context.get("productId");
+        String text = (String) context.get("text");
+
+
+        Map<String,Object> createProductContentMap =  dispatcher.runSync("createSimpleTextContentForProduct",
+                UtilMisc.toMap("productContentTypeId","TUCAO","productId",productId,"text",text,"createdByUserLogin",userLoginId));
+
+        if(ServiceUtil.isError(createProductContentMap)){
+            return createProductContentMap;
+        }
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+    /**
      * createPartyToPartyRelation
      *
      * @param dctx

@@ -438,7 +438,7 @@ public class PersonManagerQueryServices {
                 DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 String tsStr = "";
                 try {
-                    
+
                     tsStr = sdf.format(electronicText.get("createdStamp"));
 
                 }catch (Exception e){

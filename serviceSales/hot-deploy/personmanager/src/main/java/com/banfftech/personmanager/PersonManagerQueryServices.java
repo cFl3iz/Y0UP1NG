@@ -448,7 +448,7 @@ public class PersonManagerQueryServices {
 
                 GenericValue content = EntityQuery.use(delegator).from("Content").where("contentId",contentId).queryFirst();
 
-                String dataResourceId = (String) content.get("content");
+                String dataResourceId = (String) content.get("dataResourceId");
 
                 GenericValue electronicText = EntityQuery.use(delegator).from("ElectronicText").where("dataResourceId",dataResourceId).queryFirst();
 

@@ -480,7 +480,7 @@ public class PersonManagerServices {
 
 
         Map<String,Object> createProductContentMap =  dispatcher.runSync("createSimpleTextContentForProduct",
-                UtilMisc.toMap("productContentTypeId","TUCAO","productId",productId,"text",text,"createdByUserLogin",userLoginId));
+                UtilMisc.toMap("userLogin",userLogin,"productContentTypeId","TUCAO","productId",productId,"text",text,"createdByUserLogin",userLoginId));
 
         if(ServiceUtil.isError(createProductContentMap)){
             return createProductContentMap;

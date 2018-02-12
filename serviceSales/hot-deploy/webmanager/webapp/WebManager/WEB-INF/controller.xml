@@ -91,6 +91,8 @@
 
 
 
+
+
     <!-- Mini Chat -->
     <request-map uri="miniChat">
         <security https="false" auth="false"/>
@@ -139,6 +141,16 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+    <request-map uri="tuCao">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerServices"
+               invoke="tuCaoProduct"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="createPersonPartyPostalAddress">
         <security https="false" auth="false"/>

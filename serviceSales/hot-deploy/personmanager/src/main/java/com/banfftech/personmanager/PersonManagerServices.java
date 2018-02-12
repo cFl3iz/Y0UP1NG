@@ -472,6 +472,8 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
+        Debug.logInfo("*tuCaoProduct => Now UserLoing:"+userLogin,module);
+
         String userLoginId = (String) userLogin.get("userLoginId");
         String productId = (String) context.get("productId");
         String text = (String) context.get("text");
@@ -1858,6 +1860,52 @@ public class PersonManagerServices {
         } catch (UnsupportedEncodingException e) {
             return false;
         }
+    }
+
+
+    /**
+     * 对产品的吐槽
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String  tuCaoProduct(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException{
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+        String productId = (String) request.getParameter("productId");
+
+        String unioId = (String) request.getParameter("unioId");
+
+        String text = (String) request.getParameter("text");
+
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+
+        GenericValue partyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+
+       Map<String,Object> tuCaoResultMap =  dispatcher.runSync("tuCao",UtilMisc.toMap("userLogin",partyUserLogin,"text",text,"productId",productId));
+
+        if (ServiceUtil.isError(tuCaoResultMap)) {
+            return "error";
+        }
+
+        return "success";
     }
 
     /**

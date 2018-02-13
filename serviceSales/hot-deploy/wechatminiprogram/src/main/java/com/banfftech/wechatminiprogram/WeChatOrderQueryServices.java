@@ -140,9 +140,10 @@ public class WeChatOrderQueryServices {
             fieldSet.add("productId");
             EntityCondition findConditions3 = EntityCondition
                     .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
+            List<String> orderByField = UtilMisc.toList("-createdDate");
             List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
                     findConditions3, fieldSet,
-                    null, null, false);
+                    orderByField, null, false);
             rowMap.put("morePicture",pictures);
             returnList.add(rowMap);
 

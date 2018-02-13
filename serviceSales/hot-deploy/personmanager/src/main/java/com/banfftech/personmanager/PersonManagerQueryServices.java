@@ -2333,7 +2333,7 @@ public class PersonManagerQueryServices {
         if(!partyId.equals(payToId)){
             dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin",admin,"partyIdFrom",partyId,"partyIdTo",payToId,"relationShipType",PeConstant.CONTACT));
         }
-        
+
 
         resourceDetail.put("payToId", payToId);
 
@@ -2407,8 +2407,11 @@ public class PersonManagerQueryServices {
         Map<String, Object> queryTuCaoMap = dispatcher.runSync("queryProductTuCaoList", UtilMisc.toMap("userLogin", userLogin, "productId", productId));
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> queryTuCaoMap= " + queryTuCaoMap);
+        List<Map<String, Object>> tuCaoList = new ArrayList<Map<String, Object>>();
+        if(null!=queryTuCaoMap.get("tuCaoList")){
+            tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
+        }
 
-        List<Map<String, Object>> tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
 
         resourceDetail.put("tuCaoList", tuCaoList);
 

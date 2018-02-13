@@ -90,6 +90,7 @@
         <description>queryMyProduct</description>
         <attribute name="partyId" type="String" mode="IN"
                    optional="true"/>
+
         <attribute name="productList" type="List" mode="OUT"
                    optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

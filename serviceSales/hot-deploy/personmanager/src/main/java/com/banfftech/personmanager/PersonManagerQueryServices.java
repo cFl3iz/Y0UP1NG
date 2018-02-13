@@ -2273,7 +2273,7 @@ public class PersonManagerQueryServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2327,6 +2327,11 @@ public class PersonManagerQueryServices {
         String payToId = (String) product.get("payToPartyId");
         Map<String, String> userInfoMap = queryPersonBaseInfo(delegator, payToId);
         resourceDetail.put("user", userInfoMap);
+
+
+        //异步记录访客与资源主建立联系关系
+        dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin",admin,"partyIdFrom",partyId,"partyIdTo",payToId,"relationShipType",PeConstant.CONTACT));
+        
 
         resourceDetail.put("payToId", payToId);
 
@@ -2387,7 +2392,7 @@ public class PersonManagerQueryServices {
         }else{
             resourceDetail.put("is_like", "false");
         }
-     
+
 
         resourceDetail.put("like_count", placingCount);
         resourceDetail.put("doc_class", UtilMisc.toMap("title", "其他", "desc", "其他"));

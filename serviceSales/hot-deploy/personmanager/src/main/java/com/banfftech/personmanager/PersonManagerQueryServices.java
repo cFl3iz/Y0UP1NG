@@ -2330,7 +2330,9 @@ public class PersonManagerQueryServices {
 
 
         //异步记录访客与资源主建立联系关系
-        dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin",admin,"partyIdFrom",partyId,"partyIdTo",payToId,"relationShipType",PeConstant.CONTACT));
+        if(!partyId.equals(payToId)){
+            dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin",admin,"partyIdFrom",partyId,"partyIdTo",payToId,"relationShipType",PeConstant.CONTACT));
+        }
         
 
         resourceDetail.put("payToId", payToId);

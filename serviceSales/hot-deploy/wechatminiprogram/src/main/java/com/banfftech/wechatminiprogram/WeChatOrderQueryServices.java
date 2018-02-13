@@ -84,16 +84,16 @@ public class WeChatOrderQueryServices {
 
 
         //查询联系人列表
-
+        List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN").orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> myContactList = myContactListPage.getData();
 
-        List<String> orderBy = UtilMisc.toList("-createdDate");
+
 
         List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
@@ -140,10 +140,10 @@ public class WeChatOrderQueryServices {
             fieldSet.add("productId");
             EntityCondition findConditions3 = EntityCondition
                     .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
-            List<String> orderByField = UtilMisc.toList("-createdDate");
+
             List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
                     findConditions3, fieldSet,
-                    orderByField, null, false);
+                    null, null, false);
             rowMap.put("morePicture",pictures);
             returnList.add(rowMap);
 

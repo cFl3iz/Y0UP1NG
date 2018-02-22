@@ -302,7 +302,28 @@ public class PlatformLoginWorker {
         }
     }
 
+    public static String getEncoding(String str) {
+        String encode[] = new String[]{
+                "UTF-8",
+                "ISO-8859-1",
+                "GB2312",
+                "GBK",
+                "GB18030",
+                "Big5",
+                "Unicode",
+                "ASCII"
+        };
+        for (int i = 0; i < encode.length; i++){
+            try {
+                if (str.equals(new String(str.getBytes(encode[i]), encode[i]))) {
+                    return encode[i];
+                }
+            } catch (Exception ex) {
+            }
+        }
 
+        return "";
+    }
     /**
      * weChatMiniAppLogin 小程序登录
      * @param dctx
@@ -331,7 +352,8 @@ public class PlatformLoginWorker {
         String language = (String) context.get("language");
         String avatarUrl = (String) context.get("avatarUrl");
 
-        nickName = new String(nickName.getBytes("utf-8"),"ISO-8859-1");
+        System.out.println("=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>nickName type = "+getEncoding(nickName));
+
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
 

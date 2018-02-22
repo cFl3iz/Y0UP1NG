@@ -3318,6 +3318,8 @@ public class PersonManagerServices {
      */
     private static Map<String, Object> createRelationC2CRSS(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
 
+        if(!partyIdFrom.equals(partyIdTo)){
+
         String partyRelationshipTypeId = "";
         // Create Supplier Relation
         partyRelationshipTypeId = PeConstant.SUPPLIER;
@@ -3352,7 +3354,7 @@ public class PersonManagerServices {
             return createPartyRelationshipOutMap;
         }
 
-
+        }
         return ServiceUtil.returnSuccess();
     }
 
@@ -3369,6 +3371,11 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      */
     private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
+
+
+        if(!partyIdFrom.equals(partyIdTo)){
+
+
 
         String partyRelationshipTypeId = "";
         // Create Supplier Relation
@@ -3399,7 +3406,7 @@ public class PersonManagerServices {
             return createPartyRelationshipOutMap;
         }
 
-
+        }
         return ServiceUtil.returnSuccess();
     }
 

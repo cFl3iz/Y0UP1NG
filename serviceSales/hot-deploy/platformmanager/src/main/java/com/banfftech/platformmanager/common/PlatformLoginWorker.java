@@ -303,6 +303,136 @@ public class PlatformLoginWorker {
 
 
     /**
+     * weChatMiniAppLogin 小程序登录
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> weChatMiniAppLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+
+        //TODO 需要从小程序把用户信息穿过来
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = null;
+
+        String unioId = (String) context.get("unioId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
+
+        String   partyId, token ="";
+
+
+        Map<String,String> userInfoMap = new HashMap<String, String>();
+
+        userInfoMap.put("nickname",nickName);
+        userInfoMap.put("sex",gender);
+        userInfoMap.put("language",language);
+        userInfoMap.put("avatarUrl",avatarUrl);
+
+
+        if(partyIdentificationList.size()>1){
+
+            partyId =  (String) partyIdentificationList.get(partyIdentificationList.size()-1).get("partyId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+        }else{
+            if(null != partyIdentificationList && partyIdentificationList.size()>0 && partyIdentificationList.get(0) != null){
+                partyId =(String) partyIdentificationList.get(0).get("partyId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+
+            }else{
+
+                Debug.logInfo("*CREATE NEW USER", module);
+                //立即注册
+                Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+                createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
+                createPeUserMap.put("userLogin", admin);
+                createPeUserMap.put("uuid", "");
+                Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
+                String newUserLoginId = (String) serviceResultMap.get("userLoginId");
+                userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+                partyId = (String)userLogin.get("partyId");
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin,partyId,delegator,unioId,userInfoMap,userLogin,dispatcher);
+
+
+            }
+        }
+
+
+
+
+        //有效时间
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", userLogin.get("userLoginId"));
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        token = signer.sign(claims);
+
+
+
+        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+
+        //去SpringBootMongoDB注册IM用户
+
+        List<GenericValue> contentsList =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+        GenericValue partyContent = null;
+        String avatar = "";
+        if (null != contentsList && contentsList.size() > 0) {
+            partyContent = contentsList.get(0);
+        }
+
+        if (UtilValidate.isNotEmpty(partyContent)) {
+
+            avatar = partyContent.getString("objectInfo");
+        } else {
+            avatar = "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png";
+
+        }
+
+        String registerUrl = "https://www.yo-pe.com/api/common/register";
+
+        String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatar);
+
+        System.out.println("*RegisterMongoDB-ImUser");
+
+        System.out.println("*response = " + response);
+
+        result.put("partyId", partyId);
+
+        result.put("tarjeta", token);
+
+        return result;
+    }
+
+    /**
      * weChat App 'Web' Login /微信公众平台登录
      * @param dctx
      * @param context

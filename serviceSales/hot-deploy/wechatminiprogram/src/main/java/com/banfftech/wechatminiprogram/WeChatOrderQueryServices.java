@@ -114,6 +114,10 @@ public class WeChatOrderQueryServices {
 
             String contactPartyId = (String) gv.get("partyIdFrom");
 
+            if(partyId.equals(contactPartyId)){
+                continue;
+            }
+
             Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,contactPartyId);
 
             Timestamp createdDateTp = (Timestamp) gv.get("createdDate");

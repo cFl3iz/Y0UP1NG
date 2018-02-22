@@ -70,7 +70,7 @@ public class PersonManagerQueryServices {
 
 
 
-        String openId = (String) context.get("unioId");
+        String openId = (String)request.getParameter("unioId");
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
 

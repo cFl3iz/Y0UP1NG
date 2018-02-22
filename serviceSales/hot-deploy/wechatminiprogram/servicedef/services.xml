@@ -50,15 +50,13 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryContactResourceList" auth="false">
         <description>queryContactResourceList</description>
-        <attribute name="openId" type="String" mode="IN" optional="true" />
 
+        <attribute name="openId" type="String" mode="IN" optional="true" />
         <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
         <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
         <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
         <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
         <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
-
-
 
         <attribute name="resourcesList" type="List" mode="OUT"
                    optional="true" />

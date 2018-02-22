@@ -327,6 +327,26 @@
                    optional="true"/>
     </service>
 
+
+
+
+    <service name="queryCustRequestList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryCustRequestList" auth="false">
+        <description>queryCust RequestList</description>
+        <attribute name="roleTypeId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="custRequestList" type="List" mode="OUT"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
     <!-- Query My RelationShip -->
     <service name="queryMyRelationShip" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
@@ -374,8 +394,6 @@
         <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
         <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
         <attribute name="relationShipType" type="String" mode="IN" optional="true"/>
-
-
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

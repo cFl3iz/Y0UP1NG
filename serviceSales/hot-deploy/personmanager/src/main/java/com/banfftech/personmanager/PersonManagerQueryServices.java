@@ -53,6 +53,107 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * Query CustRequestList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryCustRequestList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId  = (String) userLogin.get("partyId");
+
+        String roleTypeId =  (String) context.get("roleTypeId");
+
+        String viewIndexStr  = (String) context.get("viewIndex");
+
+        //String viewSize  = (String) context.get("viewSize");
+
+
+        int viewIndex = 0;
+
+        if(viewIndexStr!=null){
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+
+        int viewSize = 5;
+
+        // Default 'REQ_REQUESTER'
+        if (!UtilValidate.isNotEmpty(roleTypeId)) {
+            roleTypeId = "REQ_REQUESTER";
+        }
+
+        if (UtilValidate.isNotEmpty(viewIndexStr)) {
+            viewIndex =  Integer.parseInt(viewIndexStr);
+        }
+
+
+
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+
+        PagedList<GenericValue> custRequestAndRolePage = null;
+
+        custRequestAndRolePage = EntityQuery.use(delegator).from("CustRequestAndRole").
+                where("partyId", partyId,"roleTypeId", roleTypeId).orderBy(orderBy)
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
+
+
+        List<GenericValue> custRequestAndRoleList = custRequestAndRolePage.getData();
+
+
+        if(null!= custRequestAndRoleList && custRequestAndRoleList.size()>0){
+            for(GenericValue gv : custRequestAndRoleList){
+
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String custRequestName = (String) gv.get("custRequestName");
+                rowMap.put("custRequestName",custRequestName);
+                String description = (String) gv.get("description");
+                rowMap.put("description",description);
+                String createdDate = (String) gv.get("createdDate");
+                rowMap.put("createdDate",createdDate);
+                String requestPartyId = (String) gv.get("partyId");
+                rowMap.put("requestPartyId",requestPartyId);
+                String custRequestId = (String) gv.get("custRequestId");
+                rowMap.put("custRequestId",custRequestId);
+
+                // TODO CustRequestItem
+                GenericValue custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
+                String productId = (String) custRequestItem.get("productId");
+                GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
+                rowMap.put("productName",product.get("productName"));
+                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
+                rowMap.put("price",productPrice.get("price"));
+
+                returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("custRequestList",returnList);
+
+        return resultMap;
+    }
+
+
+
+    /**
      * queryProduct Detail
      *
      * @param request

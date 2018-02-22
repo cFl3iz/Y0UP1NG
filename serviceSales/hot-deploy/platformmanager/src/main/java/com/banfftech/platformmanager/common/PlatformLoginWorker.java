@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
@@ -310,7 +311,7 @@ public class PlatformLoginWorker {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> weChatMiniAppLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> weChatMiniAppLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
 
 
         //TODO 需要从小程序把用户信息穿过来
@@ -330,6 +331,7 @@ public class PlatformLoginWorker {
         String language = (String) context.get("language");
         String avatarUrl = (String) context.get("avatarUrl");
 
+        nickName = new String(nickName.getBytes("utf-8"),"ISO-8859-1");
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
 
@@ -419,7 +421,7 @@ public class PlatformLoginWorker {
 
         String registerUrl = "https://www.yo-pe.com/api/common/register";
 
-        String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatar);
+        String response = HttpHelper.sendPost(registerUrl,"username="+ partyId+"&password="+partyId+"111"+"&nickname="+person.get("firstName")+"&avatar="+avatarUrl);
 
         System.out.println("*RegisterMongoDB-ImUser");
 

@@ -52,6 +52,43 @@ public class PersonManagerQueryServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+    /**
+     * queryCustRequestList
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String webQueryCustRequestList(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException, GenericEntityException {
+
+        // Servlet Head
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+
+
+        String openId = (String) context.get("unioId");
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+
+        Map<String,Object> serviceResultMap =   dispatcher.runSync("queryCustRequestList",UtilMisc.toMap("userLogin",userLogin));
+
+        List<GenericValue> custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
+
+        request.setAttribute("custRequestList",custRequestList);
+
+        return "success";
+    }
+
 
     /**
      * Query CustRequestList

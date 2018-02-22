@@ -142,12 +142,21 @@
     </request-map>
 
 
-
     <request-map uri="tuCao">
         <security https="false" auth="false"/>
         <event type="java"
                path="main.java.com.banfftech.personmanager.PersonManagerServices"
                invoke="tuCaoProduct"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="webQueryCustRequestList">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+               invoke="webQueryCustRequestList"></event>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

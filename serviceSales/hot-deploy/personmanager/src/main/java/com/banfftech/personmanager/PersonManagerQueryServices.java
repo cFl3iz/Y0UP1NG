@@ -180,6 +180,9 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : custRequestAndRoleList){
 
                 Map<String,Object> rowMap = new HashMap<String, Object>();
+
+
+
                 String custRequestName = (String) gv.get("custRequestName");
                 rowMap.put("custRequestName",custRequestName);
                 String description = (String) gv.get("description");
@@ -212,7 +215,7 @@ public class PersonManagerQueryServices {
                         }else{
                             productId = (String) custRequestItem.get("productId");
                         }
-                    
+
                     if(!productId.equals(reqProductId)){
                         continue;
                     }
@@ -226,6 +229,8 @@ public class PersonManagerQueryServices {
                 rowMap.put("detailImageUrl",product.get("detailImageUrl"));
                 GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
                 rowMap.put("price",productPrice.get("price"));
+
+                rowMap.put("user", queryPersonBaseInfo(delegator, partyId));
 
                 returnList.add(rowMap);
             }

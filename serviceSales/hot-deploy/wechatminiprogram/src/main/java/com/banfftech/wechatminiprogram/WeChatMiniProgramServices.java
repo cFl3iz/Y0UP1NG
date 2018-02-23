@@ -92,9 +92,9 @@ public class WeChatMiniProgramServices {
         BigDecimal quantityTotal = new BigDecimal("99999999");
         String unioId = (String) context.get("unioId");
         String kuCun = (String) context.get("kuCun");
-        if(UtilValidate.isNotEmpty(kuCun)){
-            quantityTotal = new BigDecimal(kuCun);
-        }
+//        if(UtilValidate.isNotEmpty(kuCun)){
+//            quantityTotal = new BigDecimal(kuCun);
+//        }
         String productName = (String) context.get("productName");
         String filePath = (String) context.get("filePath");
         String description = (String) context.get("description");

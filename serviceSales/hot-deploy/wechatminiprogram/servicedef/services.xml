@@ -117,6 +117,10 @@
         <description>wechatReleaseResource</description>
         <attribute name="unioId" type="String" mode="IN"
                    optional="true"/>
+        <!-- 可能出现的库存量 -->
+        <attribute name="kuCun" type="String" mode="IN"
+                   optional="true"/>
+
         <attribute name="productName" type="String" mode="IN"
                    optional="true"/>
         <attribute name="description" type="String" mode="IN"

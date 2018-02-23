@@ -188,6 +188,7 @@ public class PersonManagerQueryServices {
                 String productId = (String) custRequestItem.get("productId");
                 GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
                 rowMap.put("productName",product.get("productName"));
+                rowMap.put("detailImageUrl",product.get("detailImageUrl"));
                 GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
                 rowMap.put("price",productPrice.get("price"));
 

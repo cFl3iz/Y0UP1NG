@@ -88,7 +88,7 @@ public class PersonManagerQueryServices {
 
         Map<String,Object> serviceResultMap =   dispatcher.runSync("queryCustRequestList",UtilMisc.toMap("userLogin",userLogin,"productId",requestProductId));
         List<GenericValue> custRequestList = null;
-        if(ServiceUtil.isSuccess(serviceResultMap)){
+        if(ServiceUtil.isSuccess(serviceResultMap) && null != serviceResultMap.get("custRequestList")){
             custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
         }
 
@@ -126,12 +126,11 @@ public class PersonManagerQueryServices {
         GenericValue userLogin =null;
         if (UtilValidate.isNotEmpty(reqProductId)) {
             GenericValue productAdmin = EntityQuery.use(delegator).from("ProductRole").where("productId", reqProductId, "roleTypeId", "ADMIN").queryFirst();
-            String partyId = (String) productAdmin.get("productId");
+            String partyId = (String) productAdmin.get("partyId");
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",partyId).queryFirst();
         }else{
               userLogin = (GenericValue) context.get("userLogin");
         }
-
 
         String partyId  = (String) userLogin.get("partyId");
 

@@ -357,6 +357,11 @@ public class PlatformLoginWorker {
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
 
+        if(partyIdentificationList!=null & partyIdentificationList.size()>0){
+            return result;
+        }
+
+
         String   partyId, token ="";
 
 

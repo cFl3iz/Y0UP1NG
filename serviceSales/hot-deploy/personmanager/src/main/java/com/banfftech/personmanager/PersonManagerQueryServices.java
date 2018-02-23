@@ -162,8 +162,10 @@ public class PersonManagerQueryServices {
         if (UtilValidate.isNotEmpty(viewIndexStr)) {
             viewIndex =  Integer.parseInt(viewIndexStr);
         }
-
-
+//查请求接受者的请求列表,当产品id不为空的时候
+        if (UtilValidate.isNotEmpty(reqProductId)) {
+            roleTypeId = "REQ_TAKER";
+        }
 
         List<String> orderBy = UtilMisc.toList("-createdDate");
 

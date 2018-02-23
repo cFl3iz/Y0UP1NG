@@ -218,17 +218,19 @@ public class PersonManagerQueryServices {
                         }else{
                             productId = (String) custRequestItem.get("productId");
                         }
+                    GenericValue custRole = EntityQuery.use(delegator).from("CustRequestAndRole").where("custRequestId", custRequestId, "roleTypeId", "REQ_REQUESTER").queryFirst();
+                    rowMap.put("user", queryPersonBaseInfo(delegator, (String) custRole.get("partyId")));
                 }else{
                      custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
-                      productId = (String) custRequestItem.get("productId");
+                     productId = (String) custRequestItem.get("productId");
+                    GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
+                    rowMap.put("productName",product.get("productName"));
+                    rowMap.put("detailImageUrl",product.get("detailImageUrl"));
+                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
+                    rowMap.put("price",productPrice.get("price"));
                 }
 
-                GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
-                rowMap.put("productName",product.get("productName"));
-                rowMap.put("detailImageUrl",product.get("detailImageUrl"));
-                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
-                rowMap.put("price",productPrice.get("price"));
-                rowMap.put("user", queryPersonBaseInfo(delegator, partyId));
+
 
                 returnList.add(rowMap);
             }

@@ -206,8 +206,13 @@ public class PersonManagerQueryServices {
                 String productId = "";
                 //TODO FIX
                 if (UtilValidate.isNotEmpty(reqProductId)) {
-                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId,"productId",reqProductId)).queryFirst();
-                      productId = (String) custRequestItem.get("productId");
+                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("productId",reqProductId)).queryFirst();
+                        if(null == custRequestItem){
+                            continue;
+                        }else{
+                            productId = (String) custRequestItem.get("productId");
+                        }
+                    
                     if(!productId.equals(reqProductId)){
                         continue;
                     }

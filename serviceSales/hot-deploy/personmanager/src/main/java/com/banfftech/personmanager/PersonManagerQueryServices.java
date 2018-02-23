@@ -91,7 +91,7 @@ public class PersonManagerQueryServices {
         if(ServiceUtil.isSuccess(serviceResultMap)){
             custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
         }
-        
+
 
 
         request.setAttribute("custRequestList",custRequestList);
@@ -122,8 +122,16 @@ public class PersonManagerQueryServices {
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String reqProductId   = (String) context.get("productId");
+        GenericValue userLogin =null;
+        if (UtilValidate.isNotEmpty(reqProductId)) {
+            GenericValue productAdmin = EntityQuery.use(delegator).from("ProductRole").where("productId", reqProductId, "roleTypeId", "ADMIN").queryFirst();
+            String partyId = (String) productAdmin.get("productId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",partyId).queryFirst();
+        }else{
+              userLogin = (GenericValue) context.get("userLogin");
+        }
 
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId  = (String) userLogin.get("partyId");
 
@@ -133,7 +141,7 @@ public class PersonManagerQueryServices {
 
         //String viewSize  = (String) context.get("viewSize");
 
-        String reqProductId   = (String) context.get("productId");
+
 
         int viewIndex = 0;
 

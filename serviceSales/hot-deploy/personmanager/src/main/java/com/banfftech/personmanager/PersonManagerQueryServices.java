@@ -123,6 +123,10 @@ public class PersonManagerQueryServices {
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String reqProductId   = (String) context.get("productId");
+
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> reqProductId =" + reqProductId);
+
         GenericValue userLogin =null;
         if (UtilValidate.isNotEmpty(reqProductId)) {
             GenericValue productAdmin = EntityQuery.use(delegator).from("ProductRole").where("productId", reqProductId, "roleTypeId", "ADMIN").queryFirst();
@@ -180,10 +184,7 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : custRequestAndRoleList){
 
                 Map<String,Object> rowMap = new HashMap<String, Object>();
-
-
-
-                String custRequestName = (String) gv.get("custRequestName");
+                 String custRequestName = (String) gv.get("custRequestName");
                 rowMap.put("custRequestName",custRequestName);
                 String description = (String) gv.get("description");
                 rowMap.put("description",description);
@@ -215,10 +216,6 @@ public class PersonManagerQueryServices {
                         }else{
                             productId = (String) custRequestItem.get("productId");
                         }
-
-                    if(!productId.equals(reqProductId)){
-                        continue;
-                    }
                 }else{
                      custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
                       productId = (String) custRequestItem.get("productId");
@@ -229,7 +226,6 @@ public class PersonManagerQueryServices {
                 rowMap.put("detailImageUrl",product.get("detailImageUrl"));
                 GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
                 rowMap.put("price",productPrice.get("price"));
-
                 rowMap.put("user", queryPersonBaseInfo(delegator, partyId));
 
                 returnList.add(rowMap);

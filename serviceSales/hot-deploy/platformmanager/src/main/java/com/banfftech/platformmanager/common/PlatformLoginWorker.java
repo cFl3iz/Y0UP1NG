@@ -365,7 +365,7 @@ public class PlatformLoginWorker {
         userInfoMap.put("nickname",nickName);
         userInfoMap.put("sex",gender);
         userInfoMap.put("language",language);
-        userInfoMap.put("avatarUrl",avatarUrl);
+        userInfoMap.put("headimgurl",avatarUrl);
 
 
         if(partyIdentificationList.size()>1){

@@ -203,6 +203,7 @@ public class WeChatMiniProgramServices {
 
 
         resultMap.put("productId",productId);
+        resultMap.put("payToPartyId",partyId);
 
         return resultMap;
     }

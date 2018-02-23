@@ -705,6 +705,88 @@ public class PersonManagerServices {
 
 
     /**
+     * 小程序创建的询价
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> createCustRequestFromMiniApp(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String unioId = (String) context.get("unioId");
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        String partyId = "NA";
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+        String payToPartyId = (String) context.get("payToPartyId");
+        String productId = (String) context.get("productId");
+
+        String markText ="没有备注";
+
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
+
+        String feature = "";
+
+
+
+        String productStoreId = "";
+        if (null != payToPartyId) {
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", payToPartyId)).queryFirst();
+            productStoreId = (String) store.get("productStoreId");
+        }
+
+
+        Map<String, Object> createCustRequest = dispatcher.runSync("createCustRequest",
+                UtilMisc.toMap("userLogin", admin,
+                        "custRequestTypeId", "RF_QUOTE",
+                        "fromPartyId", partyId,
+                        "description", markText,
+                        "maximumAmountUomId", "CNY",
+                        "productStoreId", productStoreId,
+                        "salesChannelEnumId", "WEB_SALES_CHANNEL",
+                        "currencyUomId", "CNY",
+                        "internalComment", "",
+                        "reason", markText,
+                        "story", feature,
+                        "productId", productId,
+                        "custRequestName", "资源询价=>" + product.get("productName"),
+                        "quantity", BigDecimal.ONE));
+        String custRequestId = (String) createCustRequest.get("custRequestId");
+        //发出请求的会员
+        Map<String, Object> createCustRequestPartyRequesterMap = dispatcher.runSync("createCustRequestParty",
+                UtilMisc.toMap("userLogin", admin,
+                        "custRequestId", custRequestId,
+                        "partyId", partyId,
+                        "roleTypeId", "REQ_REQUESTER"));
+
+        //请求接受者
+        Map<String, Object> createCustRequestPartyTakerMap = dispatcher.runSync("createCustRequestParty",
+                UtilMisc.toMap("userLogin", admin,
+                        "custRequestId", custRequestId,
+                        "partyId", payToPartyId,
+                        "roleTypeId", "REQ_TAKER"));
+
+        //推送一条消息
+        pushMsgBase(productId, partyId, payToPartyId, delegator, dispatcher, admin, "我要询个价,你的这个资源:" + product.get("productName") + "。" + feature + "。" + markText, new HashMap<String, Object>(), admin, new HashMap<String, Object>(), "TEXT");
+
+
+        return resultMap;
+    }
+
+
+    /**
      * add Distributing Leaflets (增加转发记录)
      *
      * @param dctx

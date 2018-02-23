@@ -432,6 +432,7 @@
         <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="selectFeatures" type="String" mode="IN" optional="true"/>
+        <!-- 备注 -->
         <attribute name="markText" type="String" mode="IN" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

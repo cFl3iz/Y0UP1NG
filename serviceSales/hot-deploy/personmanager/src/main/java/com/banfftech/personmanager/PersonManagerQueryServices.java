@@ -184,10 +184,10 @@ public class PersonManagerQueryServices {
 
         List<GenericValue> custRequestAndRoleList = custRequestAndRolePage.getData();
 
+        System.out.println("?>>>>>>>>>>>>==> custRequestAndRoleListSize = " + custRequestAndRoleList.size());
 
         if(null!= custRequestAndRoleList && custRequestAndRoleList.size()>0){
             for(GenericValue gv : custRequestAndRoleList){
-
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String custRequestName = (String) gv.get("custRequestName");
                 rowMap.put("custRequestName",custRequestName);
@@ -214,23 +214,28 @@ public class PersonManagerQueryServices {
                 GenericValue custRequestItem = null;
                 String productId = "";
 
-                System.out.println(">>>UtilValidate.isNotEmpty(reqProductId="+UtilValidate.isNotEmpty(reqProductId));
+
 
                 if (UtilValidate.isNotEmpty(reqProductId)) {
-                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("productId",reqProductId)).queryFirst();
+                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
                         if(null == custRequestItem){
                             continue;
                         }else{
                             productId = (String) custRequestItem.get("productId");
+                            System.out.println(">>> Row productId ="+productId + " req productId ="+reqProductId);
                         }
-                    GenericValue custRole = EntityQuery.use(delegator).from("CustRequestAndRole").where("custRequestId", custRequestId, "roleTypeId", "REQ_REQUESTER").queryFirst();
-                    rowMap.put("user", queryPersonBaseInfo(delegator, (String) custRole.get("partyId")));
-                    returnList.add(rowMap);
+
+                    if(productId.equals(reqProductId)){
+                        GenericValue custRole = EntityQuery.use(delegator).from("CustRequestAndRole").where("custRequestId", custRequestId, "roleTypeId", "REQ_REQUESTER").queryFirst();
+                        rowMap.put("user", queryPersonBaseInfo(delegator, (String) custRole.get("partyId")));
+                        returnList.add(rowMap);
+                    }
+
                 }else{
                      custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
                      productId = (String) custRequestItem.get("productId");
                     GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
-                    rowMap.put("productName",product.get("productName"));
+                    rowMap.put("productName", product.get("productName"));
                     rowMap.put("detailImageUrl",product.get("detailImageUrl"));
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
                     rowMap.put("price",productPrice.get("price"));

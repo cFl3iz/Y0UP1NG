@@ -171,8 +171,12 @@ public class PersonManagerQueryServices {
                 long  s1=date.getTime();//将时间转为毫秒
                 long s2=System.currentTimeMillis();//得到当前的毫秒
                 long dayago= (s2-s1)/1000/60;
+                if(dayago>0){
+                    rowMap.put("createdDate",dayago+"分钟前");
+                }else{
+                    rowMap.put("createdDate","刚刚");
+                }
 
-                rowMap.put("createdDate",dayago+"分钟前");
 
                 String requestPartyId = (String) gv.get("partyId");
                 rowMap.put("requestPartyId",requestPartyId);

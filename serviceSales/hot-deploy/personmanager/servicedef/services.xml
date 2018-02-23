@@ -422,6 +422,19 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+
+
+    <service name="createCustRequestFromMiniApp" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromMiniApp"
+             auth="false">
+        <description>createCustRequestFromMiniApp</description>
+
+        <attribute name="unioId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
     <!-- 发送客户请求 -->
     <service name="createCustRequestFromWeb" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromWeb"

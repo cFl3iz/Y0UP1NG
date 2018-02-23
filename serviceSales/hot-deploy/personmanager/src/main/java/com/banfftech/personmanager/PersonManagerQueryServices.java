@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -98,7 +99,7 @@ public class PersonManagerQueryServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> queryCustRequestList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> queryCustRequestList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, ParseException {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -164,8 +165,15 @@ public class PersonManagerQueryServices {
                 rowMap.put("custRequestName",custRequestName);
                 String description = (String) gv.get("description");
                 rowMap.put("description",description);
-                String createdDate = (String) gv.get("createdDate");
-                rowMap.put("createdDate",createdDate);
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                 String createdDate = sdf.format(gv.get("createdDate"));
+                java.util.Date date=sdf.parse(createdDate);
+                long  s1=date.getTime();//将时间转为毫秒
+                long s2=System.currentTimeMillis();//得到当前的毫秒
+                long dayago= (s2-s1)/1000/60/60;
+
+                rowMap.put("createdDate",dayago+"小时前");
+
                 String requestPartyId = (String) gv.get("partyId");
                 rowMap.put("requestPartyId",requestPartyId);
                 String custRequestId = (String) gv.get("custRequestId");

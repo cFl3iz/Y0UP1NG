@@ -87,8 +87,12 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
 
         Map<String,Object> serviceResultMap =   dispatcher.runSync("queryCustRequestList",UtilMisc.toMap("userLogin",userLogin,"productId",requestProductId));
+        List<GenericValue> custRequestList = null;
+        if(ServiceUtil.isSuccess(serviceResultMap)){
+            custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
+        }
+        
 
-        List<GenericValue> custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
 
         request.setAttribute("custRequestList",custRequestList);
 

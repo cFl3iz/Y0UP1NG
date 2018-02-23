@@ -69,7 +69,12 @@ public class PersonManagerQueryServices {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
+        String requestProductId = (String)request.getParameter("productId");
 
+//        //指定查产品客户请求列表
+//        if(UtilValidate.isNotEmpty(requestProductId)){
+//
+//        }
 
         String openId = (String)request.getParameter("unioId");
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
@@ -81,7 +86,7 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
 
-        Map<String,Object> serviceResultMap =   dispatcher.runSync("queryCustRequestList",UtilMisc.toMap("userLogin",userLogin));
+        Map<String,Object> serviceResultMap =   dispatcher.runSync("queryCustRequestList",UtilMisc.toMap("userLogin",userLogin,"productId",requestProductId));
 
         List<GenericValue> custRequestList= (List<GenericValue>) serviceResultMap.get("custRequestList");
 
@@ -124,6 +129,7 @@ public class PersonManagerQueryServices {
 
         //String viewSize  = (String) context.get("viewSize");
 
+        String reqProductId   = (String) context.get("productId");
 
         int viewIndex = 0;
 
@@ -147,6 +153,8 @@ public class PersonManagerQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
 
         PagedList<GenericValue> custRequestAndRolePage = null;
+
+
 
         custRequestAndRolePage = EntityQuery.use(delegator).from("CustRequestAndRole").
                 where("partyId", partyId,"roleTypeId", roleTypeId).orderBy(orderBy)
@@ -183,9 +191,20 @@ public class PersonManagerQueryServices {
                 String custRequestId = (String) gv.get("custRequestId");
                 rowMap.put("custRequestId",custRequestId);
 
-                // TODO CustRequestItem
-                GenericValue custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
-                String productId = (String) custRequestItem.get("productId");
+                GenericValue custRequestItem = null;
+                String productId = "";
+                //TODO FIX
+                if (UtilValidate.isNotEmpty(reqProductId)) {
+                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId,"productId",reqProductId)).queryFirst();
+                      productId = (String) custRequestItem.get("productId");
+                    if(!productId.equals(reqProductId)){
+                        continue;
+                    }
+                }else{
+                     custRequestItem = EntityQuery.use(delegator).from("CustRequestItem").where(UtilMisc.toMap("custRequestId", custRequestId)).queryFirst();
+                      productId = (String) custRequestItem.get("productId");
+                }
+
                 GenericValue product = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", productId)).queryFirst();
                 rowMap.put("productName",product.get("productName"));
                 rowMap.put("detailImageUrl",product.get("detailImageUrl"));

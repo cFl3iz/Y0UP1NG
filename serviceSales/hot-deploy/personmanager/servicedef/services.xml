@@ -336,6 +336,8 @@
         <description>queryCust RequestList</description>
         <attribute name="roleTypeId" type="String" mode="IN"
                    optional="true"/>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
         <attribute name="custRequestList" type="List" mode="OUT"
                    optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

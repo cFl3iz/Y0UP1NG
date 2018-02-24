@@ -2490,13 +2490,6 @@ public class PersonManagerQueryServices {
             partyId = (String) partyIdentification.get("partyId");
         }
 
-//        GenericValue nowPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
-//
-//        if(null != nowPerson){
-//            resultMap.put("nowPersonName",(String) nowPerson.get("firstName"));
-//        }
-
-
         String productId = (String) context.get("productId");
         resultMap.put("productId", productId);
 
@@ -2614,6 +2607,20 @@ public class PersonManagerQueryServices {
         List<Map<String, Object>> tuCaoList = new ArrayList<Map<String, Object>>();
         if(null!=queryTuCaoMap.get("tuCaoList")){
             tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
+        }
+
+        GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", (String)gv.get("productId")).queryFirst();
+        if(null!=productAddress){
+            resourceDetail.put("address", productAddress.get("attrValue"));
+        }
+
+        GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", (String)gv.get("productId")).queryFirst();
+        if(null!=productlongitude) {
+            resourceDetail.put("longitude", productlongitude.get("attrValue"));
+        }
+        GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", (String)gv.get("productId")).queryFirst();
+        if(null!=productlatitude) {
+            resourceDetail.put("latitude", productlatitude.get("attrValue"));
         }
 
 

@@ -94,6 +94,15 @@ public class WeChatMiniProgramServices {
         String unioId = (String) context.get("unioId");
         String kuCun = (String) context.get("kuCun");
         String priceStr = (String) context.get("price");
+        //详细地址
+        String address = (String) context.get("address");
+
+        //经纬度
+        String latitude = (String) context.get("latitude");
+        String longitude = (String) context.get("longitude");
+
+
+
 //        if(UtilValidate.isNotEmpty(kuCun)){
 //            quantityTotal = new BigDecimal(kuCun);
 //        }
@@ -121,7 +130,7 @@ public class WeChatMiniProgramServices {
         String [] filePathsArray = filePaths.split(",");
 
         System.out.println("->File filePathsArray = " + filePathsArray);
-        
+
         //创建产品
         Map<String, Object> createProductInMap = new HashMap<String, Object>();
         createProductInMap.put("userLogin", admin);
@@ -214,7 +223,15 @@ public class WeChatMiniProgramServices {
 
         }
 
-        //  dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","quantityAccepted","attrValue",quantityTotal+""));
+        if(UtilValidate.isNotEmpty(address)){
+           dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","address","attrValue",address+""));
+        }
+        if(UtilValidate.isNotEmpty(longitude)){
+           dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","longitude","attrValue",longitude+""));
+        }
+        if(UtilValidate.isNotEmpty(latitude)){
+            dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","latitude","attrValue",latitude+""));
+        }
 
 
         //给产品增加用户角色

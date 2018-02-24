@@ -147,8 +147,8 @@ public class WeChatMiniProgramServices {
         for(int i = 0 ; i <  filePathsArray.length;i++){
             System.out.println("->File Path = " + filePathsArray[i]);
             if(i==0){
-                createProductInMap.put("smallImageUrl",filePathsArray[i] +"?x-oss-process=image/resize,m_pad,h_50,w_50");
-                createProductInMap.put("detailImageUrl", filePathsArray[i]);
+                createProductInMap.put("smallImageUrl","http://"+filePathsArray[i] +"?x-oss-process=image/resize,m_pad,h_50,w_50");
+                createProductInMap.put("detailImageUrl","http://"+ filePathsArray[i]);
                 //调用服务创建产品(资源)
                 Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
                 if (!ServiceUtil.isSuccess(createProductOutMap)) {

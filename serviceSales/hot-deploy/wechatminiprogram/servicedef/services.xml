@@ -120,7 +120,14 @@
         <!-- 可能出现的库存量 -->
         <attribute name="kuCun" type="String" mode="IN"
                    optional="true"/>
+        <attribute name="address" type="String" mode="IN"
+                   optional="true"/>
 
+        <attribute name="latitude" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="longitude" type="String" mode="IN"
+                   optional="true"/>
         <attribute name="productName" type="String" mode="IN"
                    optional="true"/>
         <attribute name="description" type="String" mode="IN"

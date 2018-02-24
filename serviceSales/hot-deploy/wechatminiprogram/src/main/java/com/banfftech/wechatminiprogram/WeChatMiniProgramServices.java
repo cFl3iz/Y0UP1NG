@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -92,17 +93,21 @@ public class WeChatMiniProgramServices {
         BigDecimal quantityTotal = new BigDecimal("99999999");
         String unioId = (String) context.get("unioId");
         String kuCun = (String) context.get("kuCun");
+        String priceStr = (String) context.get("price");
 //        if(UtilValidate.isNotEmpty(kuCun)){
 //            quantityTotal = new BigDecimal(kuCun);
 //        }
         String productName = (String) context.get("productName");
-        String filePath = (String) context.get("filePath");
+        String filePaths = (String) context.get("filePath");
         String description = (String) context.get("description");
         //默认的价格是0
+
         BigDecimal price = BigDecimal.ZERO;
+        if(UtilValidate.isNotEmpty(priceStr)){
+             price = new BigDecimal(priceStr);
+        }
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
-
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
@@ -111,7 +116,12 @@ public class WeChatMiniProgramServices {
         GenericValue userLogin =EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
 
+        System.out.println("->File filePaths = " + filePaths);
 
+        String [] filePathsArray = filePaths.split(",");
+
+        System.out.println("->File filePathsArray = " + filePathsArray);
+        
         //创建产品
         Map<String, Object> createProductInMap = new HashMap<String, Object>();
         createProductInMap.put("userLogin", admin);
@@ -121,17 +131,32 @@ public class WeChatMiniProgramServices {
         createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
         createProductInMap.put("description",description );
 
-        createProductInMap.put("smallImageUrl",filePath +"?x-oss-process=image/resize,m_pad,h_50,w_50");
-        createProductInMap.put("detailImageUrl", filePath);
-        //调用服务创建产品(资源)
-        Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+        String productId = "";
 
-        if (!ServiceUtil.isSuccess(createProductOutMap)) {
-            Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
-            return createProductOutMap;
+        for(int i = 0 ; i <  filePathsArray.length;i++){
+            System.out.println("->File Path = " + filePathsArray[i]);
+            if(i==0){
+                createProductInMap.put("smallImageUrl",filePathsArray[i] +"?x-oss-process=image/resize,m_pad,h_50,w_50");
+                createProductInMap.put("detailImageUrl", filePathsArray[i]);
+                //调用服务创建产品(资源)
+                Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+                if (!ServiceUtil.isSuccess(createProductOutMap)) {
+                    Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
+                    return createProductOutMap;
+                }
+                productId = (String) createProductOutMap.get("productId");
+            }
+            if(i>0){
+                //创建产品内容和数据资源附图
+                createProductContentAndDataResource(delegator, dispatcher, admin, productId, "",filePathsArray[i] , i);
+            }
         }
 
-        String productId = (String) createProductOutMap.get("productId");
+
+
+
+
+
 
         //创建产品价格(默认所有变形产品都和虚拟产品价格一致)
         Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
@@ -142,7 +167,9 @@ public class WeChatMiniProgramServices {
         createProductPriceInMap.put("productPricePurposeId", PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE);
         createProductPriceInMap.put("productPriceTypeId", PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID);
         createProductPriceInMap.put("productStoreGroupId", PeConstant.NA);
+
         Map<String,Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
+
         if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
             Debug.logError("*Mother Fuck Create Product Price Error:"+createProductPriceServiceResultMap, module);
               return createProductPriceServiceResultMap;
@@ -150,8 +177,6 @@ public class WeChatMiniProgramServices {
         }
 
         GenericValue prodCatalogRole =  EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId,"roleTypeId","ADMIN").queryFirst();
-
-        System.out.println("prodCatalogRole=>>"+prodCatalogRole);
 
         //产品关联分类
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
@@ -162,7 +187,6 @@ public class WeChatMiniProgramServices {
         if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
             Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);
            return addProductToCategoryServiceResultMap;
-
         }
 
         //找到仓库

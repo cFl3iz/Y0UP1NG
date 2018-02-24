@@ -2946,7 +2946,7 @@ public class PersonManagerServices {
      * @param discription
      * @param dataInfo
      */
-    private static void createProductContentAndDataResource(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
+    public static void createProductContentAndDataResource(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
 
         // Create Content
         //    String contentTypeId = "ADDITIONAL_IMAGE_" + count;

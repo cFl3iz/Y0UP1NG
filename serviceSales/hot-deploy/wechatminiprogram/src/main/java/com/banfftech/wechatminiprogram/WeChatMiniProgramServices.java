@@ -101,7 +101,9 @@ public class WeChatMiniProgramServices {
         String latitude = (String) context.get("latitude");
         String longitude = (String) context.get("longitude");
 
-
+        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> address = "  + address);
+        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> latitude = "  + latitude);
+        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> longitude = "  + longitude);
 
 //        if(UtilValidate.isNotEmpty(kuCun)){
 //            quantityTotal = new BigDecimal(kuCun);

@@ -2609,16 +2609,16 @@ public class PersonManagerQueryServices {
             tuCaoList = (List<Map<String, Object>>) queryTuCaoMap.get("tuCaoList");
         }
 
-        GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", (String)gv.get("productId")).queryFirst();
+        GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", productId).queryFirst();
         if(null!=productAddress){
             resourceDetail.put("address", productAddress.get("attrValue"));
         }
 
-        GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", (String)gv.get("productId")).queryFirst();
+        GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", productId).queryFirst();
         if(null!=productlongitude) {
             resourceDetail.put("longitude", productlongitude.get("attrValue"));
         }
-        GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", (String)gv.get("productId")).queryFirst();
+        GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", productId).queryFirst();
         if(null!=productlatitude) {
             resourceDetail.put("latitude", productlatitude.get("attrValue"));
         }

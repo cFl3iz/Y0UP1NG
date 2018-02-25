@@ -639,6 +639,9 @@ public class PersonManagerQueryServices {
                 String dataResourceId = (String) content.get("dataResourceId");
 
                 GenericValue electronicText = EntityQuery.use(delegator).from("ElectronicText").where("dataResourceId", dataResourceId).queryFirst();
+                if(null!= electronicText){
+
+
                 DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 String tsStr = "";
                 try {
@@ -663,6 +666,7 @@ public class PersonManagerQueryServices {
                 rowMap.put("userInfo", queryPersonBaseInfo(delegator, tuCaoPartyId));
 
                 returnList.add(rowMap);
+                }
             }
         }
 

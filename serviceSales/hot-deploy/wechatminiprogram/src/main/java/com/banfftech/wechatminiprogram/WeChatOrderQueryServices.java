@@ -130,7 +130,23 @@ public class WeChatOrderQueryServices {
 
             rowMap.put("contactPartyId",contactPartyId);
 
-            rowMap.put("productId",(String) gv.get("productId"));
+            String productId = (String) gv.get("productId");
+
+            GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", productId).queryFirst();
+            if(null!=productAddress){
+                rowMap.put("address", productAddress.get("attrValue"));
+            }
+
+            GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", productId).queryFirst();
+            if(null!=productlongitude) {
+                rowMap.put("longitude", productlongitude.get("attrValue"));
+            }
+            GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", productId).queryFirst();
+            if(null!=productlatitude) {
+                rowMap.put("latitude", productlatitude.get("attrValue"));
+            }
+
+            rowMap.put("productId",productId);
 
             rowMap.put("description",(String) gv.get("description"));
 

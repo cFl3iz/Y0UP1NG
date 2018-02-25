@@ -2630,6 +2630,15 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("tuCaoList", tuCaoList);
 
+
+        //查询价格,如果有
+        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(UtilMisc.toMap("productId", productId)).queryFirst();
+        if(null!=productPrice){
+            resourceDetail.put("price",productPrice.get("price"));
+        }
+        
+
+
         resultMap.put("resourceDetail", resourceDetail);
 
 //        if(null != userLogin){

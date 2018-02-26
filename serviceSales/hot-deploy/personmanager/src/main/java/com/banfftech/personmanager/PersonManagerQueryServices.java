@@ -141,8 +141,8 @@ public class PersonManagerQueryServices {
         JSONObject jsonMap2 = JSONObject.fromObject(responseStr2);
         String session_key = ""+jsonMap2.get("session_key");
         System.out.println("JSON MAP2=" + jsonMap2);
-
-
+        System.out.println("iv=" + iv);
+        System.out.println("encryptedData=" + encryptedData);
 
       // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
 

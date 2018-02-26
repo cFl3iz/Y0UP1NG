@@ -1,6 +1,7 @@
 package main.java.com.banfftech.personmanager;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.util.AesCbcUtil;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
@@ -143,10 +144,15 @@ public class PersonManagerQueryServices {
 
 
 
-       UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
+      // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
 
-//        System.out.println("DE CODE TEL = " + tel);
+        byte[] resultByte  =  AesCbcUtil.decrypt(Base64.decodeBase64(encryptedData),Base64.decodeBase64(session_key),Base64.decodeBase64(iv));
+        if(null != resultByte && resultByte.length > 0){
+            String userInfo = new String(resultByte, "UTF-8");
+            System.out.println("userInfo = " + userInfo);
+        }else{
 
+        }
         resultMap.put("tel","15000035538");
 
         return resultMap;

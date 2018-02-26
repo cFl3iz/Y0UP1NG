@@ -2636,7 +2636,7 @@ public class PersonManagerQueryServices {
         if(null!=productPrice){
             resourceDetail.put("price",productPrice.get("price"));
         }
-        
+
 
 
         resultMap.put("resourceDetail", resourceDetail);

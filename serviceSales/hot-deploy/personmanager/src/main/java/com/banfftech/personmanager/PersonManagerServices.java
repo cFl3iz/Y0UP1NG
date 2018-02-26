@@ -3036,7 +3036,7 @@ public class PersonManagerServices {
         //默认的价格是0
         BigDecimal price = BigDecimal.ZERO;
 
-        if (!UtilValidate.isEmpty(productPrice)) {
+        if (!UtilValidate.isEmpty(productPrice) && !productPrice.trim().equals("")) {
             price = new BigDecimal(productPrice);
         }
 

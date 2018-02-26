@@ -41,6 +41,8 @@ import java.util.*;
 import main.java.com.banfftech.platformmanager.util.GZIP;
 import sun.net.www.content.text.Generic;
 
+import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
+
 
 /**
  * Created by S on 2017/9/12.
@@ -122,9 +124,24 @@ public class PersonManagerQueryServices {
 
 
         String code = (String) context.get("code");
+
         String iv = (String) context.get("iv");
+
         String encryptedData = (String) context.get("encryptedData");
 
+
+        String responseStr2 = sendGet(PeConstant.WECHAT_MINI_PROGRAM_SNS_PATH,
+                "appid=" + PeConstant.WECHAT_MINI_PROGRAM_APP_ID +
+                        "&secret=" + PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID +
+                        "&js_code=" + code + "&grant_type=authorization_code");
+
+        JSONObject jsonMap2 = JSONObject.fromObject(responseStr2);
+
+        System.out.println("JSON MAP2=" + jsonMap2);
+
+//        String sessionKey = (String) jsonMap2.get("unionid");
+
+        //String tel = decrypt();
 
         resultMap.put("tel","15000035538");
 

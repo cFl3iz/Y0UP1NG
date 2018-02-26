@@ -163,7 +163,7 @@ public class PersonManagerQueryServices {
 //        // 偏移量
 //        byte[] ivByte = Base64Util.decode(iv);
 
-       JSONObject json = getUserInfo(encryptedData,session_key,iv);
+       JSONObject json = getUserInfo("kxaFIw2PNrA/0Nb0r970l8s4/zgC6d+QFjZrRopIHy4clCdpCHUmxSj1dqFKPBa3odyTs80Pe1mr/v9F8+rSqsUYpekIVYjowdYQQPY8u2a8Gne811P0+nu572sq1jdyquIVT77VGB1BQF7Y22ppz9cjg6Zdz7rFvAGIG+6QQWN4QflH6byMaDNXDOi+YbRVM2RIhrBp7Bexya70ywkzog==",session_key,"EqKU4Vx70Y6FeunD6iZj+g==");
         //decrypt(keyByte,ivByte,dataByte);
 
 //        System.out.println("JSON DATA - > " +json);

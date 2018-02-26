@@ -157,15 +157,15 @@ public class PersonManagerQueryServices {
         System.out.println("encryptedData=" + encryptedData);
 
       // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
-        byte[] dataByte = Base64Util.decode(encryptedData);
-        // 加密秘钥
-        byte[] keyByte = Base64Util.decode(session_key);
-        // 偏移量
-        byte[] ivByte = Base64Util.decode(iv);
+//        byte[] dataByte = Base64Util.decode(encryptedData);
+//        // 加密秘钥
+//        byte[] keyByte = Base64Util.decode(session_key);
+//        // 偏移量
+//        byte[] ivByte = Base64Util.decode(iv);
 
-       // JSONObject json = getUserInfo(encryptedData,session_key,iv);
-        decrypt(keyByte,ivByte,dataByte);
-        
+       JSONObject json = getUserInfo(encryptedData,session_key,iv);
+        //decrypt(keyByte,ivByte,dataByte);
+
 //        System.out.println("JSON DATA - > " +json);
         resultMap.put("tel","15000035538");
 

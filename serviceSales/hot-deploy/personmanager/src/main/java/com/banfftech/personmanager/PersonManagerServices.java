@@ -3035,9 +3035,13 @@ public class PersonManagerServices {
 
         //默认的价格是0
         BigDecimal price = BigDecimal.ZERO;
-
-        if (!UtilValidate.isEmpty(productPrice) && !productPrice.trim().equals("")) {
-            price = new BigDecimal(productPrice);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>productPrice="+productPrice);
+        try {
+            if (!UtilValidate.isEmpty(productPrice) && !productPrice.trim().equals("")) {
+                price = new BigDecimal(productPrice);
+            }
+        }catch (Exception e){
+            price = BigDecimal.ZERO;
         }
 
         //不分梨用户过来需要先给他创建店铺和目录

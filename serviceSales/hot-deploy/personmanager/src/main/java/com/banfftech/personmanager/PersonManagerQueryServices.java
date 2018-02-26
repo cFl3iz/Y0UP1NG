@@ -157,8 +157,10 @@ public class PersonManagerQueryServices {
 
       // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
 
-        JSONObject json = getUserInfo(encryptedData,session_key,iv);
-        System.out.println("JSON DATA - > " +json);
+//        JSONObject json = getUserInfo(encryptedData,session_key,iv);
+//        System.out.println("JSON DATA - > " +json);
+
+
         resultMap.put("tel","15000035538");
 
         return resultMap;

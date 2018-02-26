@@ -22,7 +22,7 @@ public class UtilTools {
      * @return
      * @throws Exception
      */
-    public static String decrypt(byte[] key, byte[] iv, byte[] encData) throws Exception {
+    public static void decrypt(byte[] key, byte[] iv, byte[] encData) throws Exception {
         AlgorithmParameterSpec ivSpec = new IvParameterSpec(iv);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
@@ -30,7 +30,6 @@ public class UtilTools {
 //解析解密后的字符串
         String data = new String(cipher.doFinal(encData),"UTF-8");
         System.out.println("decode => " + data);
-        return data;
     }
 
      public static String dateToStr(java.sql.Timestamp time, String strFormat) {

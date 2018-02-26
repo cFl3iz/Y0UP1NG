@@ -46,6 +46,7 @@ import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
+import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -156,14 +157,29 @@ public class PersonManagerQueryServices {
         System.out.println("encryptedData=" + encryptedData);
 
       // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
+        byte[] dataByte = Base64Util.decode(encryptedData);
+        // 加密秘钥
+        byte[] keyByte = Base64Util.decode(session_key);
+        // 偏移量
+        byte[] ivByte = Base64Util.decode(iv);
 
-        JSONObject json = getUserInfo(encryptedData,session_key,iv);
-        System.out.println("JSON DATA - > " +json);
+       // JSONObject json = getUserInfo(encryptedData,session_key,iv);
+        decrypt(keyByte,ivByte,dataByte);
+        
+//        System.out.println("JSON DATA - > " +json);
         resultMap.put("tel","15000035538");
 
         return resultMap;
     }
-
+    public static byte[] decrypt(byte[] key, byte[] iv, byte[] encData)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        AlgorithmParameterSpec ivSpec = new IvParameterSpec(iv);
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+        return cipher.doFinal(encData);
+    }
     /**
      * 解密用户敏感数据获取用户信息
      * @param sessionKey 数据进行加密签名的密钥
@@ -177,7 +193,7 @@ public class PersonManagerQueryServices {
         byte[] keyByte = Base64Util.decode(sessionKey);
         // 偏移量
         byte[] ivByte = Base64Util.decode(iv);
-     
+
             // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
             int base = 16;
             if (keyByte.length % base != 0) {

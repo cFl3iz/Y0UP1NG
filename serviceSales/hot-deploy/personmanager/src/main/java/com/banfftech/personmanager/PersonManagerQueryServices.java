@@ -159,8 +159,6 @@ public class PersonManagerQueryServices {
 
         JSONObject json = getUserInfo(encryptedData,session_key,iv);
         System.out.println("JSON DATA - > " +json);
-
-
         resultMap.put("tel","15000035538");
 
         return resultMap;
@@ -191,7 +189,7 @@ public class PersonManagerQueryServices {
             }
             // 初始化
             Security.addProvider(new BouncyCastleProvider());
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding","JCE");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
             AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
             parameters.init(new IvParameterSpec(ivByte));

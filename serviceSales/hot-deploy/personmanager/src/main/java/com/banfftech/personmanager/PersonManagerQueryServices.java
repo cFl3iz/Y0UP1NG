@@ -101,6 +101,38 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * getTel FromEncryptedData
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws ParseException
+     */
+    public static Map<String, Object> getTelFromEncryptedData(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, ParseException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String code = (String) context.get("code");
+        String iv = (String) context.get("iv");
+        String encryptedData = (String) context.get("encryptedData");
+
+
+        resultMap.put("tel","15000035538");
+
+        return resultMap;
+    }
+
+
+    /**
      * Query CustRequestList
      * @param dctx
      * @param context

@@ -223,6 +223,23 @@
                    optional="true"/>
     </service>
 
+    <service name="getTelFromEncryptedData" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="getTelFromEncryptedData" auth="false">
+        <description>getTelFromEncryptedData</description>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <attribute name="iv" type="String" mode="IN" optional="true"/>
+        <attribute name="encryptedData" type="String" mode="IN" optional="true"/>
+
+        <attribute name="tel" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="queryProductFeatures2" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryProductFeatures2" auth="false">

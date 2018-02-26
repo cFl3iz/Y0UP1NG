@@ -1,5 +1,9 @@
 package main.java.com.banfftech.platformmanager.util;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.spec.AlgorithmParameterSpec;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
@@ -10,7 +14,24 @@ import java.util.regex.Pattern;
  */
 public class UtilTools {
 
-
+    /**
+     * 解密
+     * @param key
+     * @param iv
+     * @param encData
+     * @return
+     * @throws Exception
+     */
+    public static String decrypt(byte[] key, byte[] iv, byte[] encData) throws Exception {
+        AlgorithmParameterSpec ivSpec = new IvParameterSpec(iv);
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+//解析解密后的字符串
+        String data = new String(cipher.doFinal(encData),"UTF-8");
+        System.out.println("decode => " + data);
+        return data;
+    }
 
      public static String dateToStr(java.sql.Timestamp time, String strFormat) {
              DateFormat df = new SimpleDateFormat(strFormat);

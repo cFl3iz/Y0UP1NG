@@ -130,7 +130,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <request-map uri="getTelFromEncryptedData">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getTelFromEncryptedData"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

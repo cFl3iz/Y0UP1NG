@@ -4,7 +4,6 @@ package main.java.com.banfftech.platformmanager.util;
  * Created by S on 2018/2/26.
  */
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;

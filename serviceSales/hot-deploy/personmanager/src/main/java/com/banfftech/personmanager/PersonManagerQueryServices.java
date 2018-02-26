@@ -2,10 +2,10 @@ package main.java.com.banfftech.personmanager;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.AesCbcUtil;
+import main.java.com.banfftech.platformmanager.util.Base64Util;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
-import org.apache.commons.codec.binary.Base64;
 
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
@@ -172,11 +172,11 @@ public class PersonManagerQueryServices {
      */
     public JSONObject getUserInfo(String encryptedData,String sessionKey,String iv) throws UnsupportedEncodingException, InvalidAlgorithmParameterException, InvalidKeyException, InvalidParameterSpecException, BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
         // 被加密的数据
-        byte[] dataByte = Base64.decodeBase64(encryptedData);
+        byte[] dataByte = Base64Util.decode(encryptedData);
         // 加密秘钥
-        byte[] keyByte = Base64.decodeBase64(sessionKey);
+        byte[] keyByte = Base64Util.decode(sessionKey);
         // 偏移量
-        byte[] ivByte = Base64.decodeBase64(iv);
+        byte[] ivByte = Base64Util.decode(iv);
         try {
             // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
             int base = 16;

@@ -1,6 +1,7 @@
 package main.java.com.banfftech.personmanager;
 
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
+import main.java.com.banfftech.platformmanager.util.UtilTools;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -40,6 +41,7 @@ import java.util.*;
 
 import main.java.com.banfftech.platformmanager.util.GZIP;
 import sun.net.www.content.text.Generic;
+import org.apache.commons.codec.binary.Base64;
 
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 
@@ -111,7 +113,7 @@ public class PersonManagerQueryServices {
      * @throws GenericServiceException
      * @throws ParseException
      */
-    public static Map<String, Object> getTelFromEncryptedData(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, ParseException {
+    public static Map<String, Object> getTelFromEncryptedData(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -136,14 +138,16 @@ public class PersonManagerQueryServices {
                         "&js_code=" + code + "&grant_type=authorization_code");
 
         JSONObject jsonMap2 = JSONObject.fromObject(responseStr2);
-
+        String session_key = ""+jsonMap2.get("session_key");
         System.out.println("JSON MAP2=" + jsonMap2);
 
-//        String sessionKey = (String) jsonMap2.get("unionid");
 
-        //String tel = decrypt();
 
-        resultMap.put("tel","15000035538");
+        String tel = UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
+
+        System.out.println("DE CODE TEL = " + tel);
+
+        resultMap.put("tel",tel);
 
         return resultMap;
     }

@@ -177,7 +177,7 @@ public class PersonManagerQueryServices {
         byte[] keyByte = Base64Util.decode(sessionKey);
         // 偏移量
         byte[] ivByte = Base64Util.decode(iv);
-        try {
+     
             // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
             int base = 16;
             if (keyByte.length % base != 0) {
@@ -199,9 +199,7 @@ public class PersonManagerQueryServices {
                 String result = new String(resultByte, "UTF-8");
                 return JSONObject.fromObject(result);
             }
-        }catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        }
+
         return null;
     }
 

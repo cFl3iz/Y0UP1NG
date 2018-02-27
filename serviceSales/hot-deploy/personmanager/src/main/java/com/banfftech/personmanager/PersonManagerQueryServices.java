@@ -152,10 +152,11 @@ public class PersonManagerQueryServices {
 
         JSONObject jsonMap2 = JSONObject.fromObject(responseStr2);
         String session_key = ""+jsonMap2.get("session_key");
+        System.out.println("===========================>");
         System.out.println("JSON MAP2=" + jsonMap2);
         System.out.println("iv=" + iv);
         System.out.println("encryptedData=" + encryptedData);
-
+        System.out.println("===========================>");
       // UtilTools.decrypt(Base64.decodeBase64(session_key),Base64.decodeBase64(iv),Base64.decodeBase64(encryptedData));
 //        byte[] dataByte = Base64Util.decode(encryptedData);
 //        // 加密秘钥
@@ -163,7 +164,7 @@ public class PersonManagerQueryServices {
 //        // 偏移量
 //        byte[] ivByte = Base64Util.decode(iv);
         //TODO FIX ME  偏移量错误
-       JSONObject json = getUserInfo(session_key,"mxmlD6hRhcZTy9fW82n+8g==","GgQFy9Rxhy02HrMPbTH6ucbS37D6G2TzJYArl2fPs8o6BPrUbr5Qe/DWn4o2ZVR2L3xSZB3iyiiNb+gGfpewwQS3YiN6wqY5DQQwVO9xvdFdhSY4PRyhb2xuHx9peMotFAoWIZgKLE8R/vJ3bnrbk65EwSkmgWe2kU/fUuWIuZmVeMSfanf2vqTLhHK0CMFvoXG2o0jkQCLC56AyfAaaNQ==");
+       JSONObject json = getUserInfo(session_key,iv,encryptedData);
         //decrypt(keyByte,ivByte,dataByte);
 
 //        System.out.println("JSON DATA - > " +json);

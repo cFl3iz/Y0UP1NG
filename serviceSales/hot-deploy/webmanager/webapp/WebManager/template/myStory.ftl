@@ -153,10 +153,10 @@
         ${uiLabel.GoToPay}
         </button>
             <#--<#if !resourceDetail.salesDiscontinuationDate?has_content>-->
-            <#--<#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->-->
-            <#--<#--${uiLabel.GoToPay}-->-->
-            <#--<#--</button>-->-->
-                <#--<!-- 拥有特征的产品询价 -->-->
+             <#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->
+            <#--${uiLabel.GoToPay} -->
+        <#--<#--</button>-->
+                <#--<!-- 拥有特征的产品询价 -->
                 <#--<#if resultMap.productFeatureAndApplList?has_content>-->
                 <#--<button type="button" onclick="custRequest('${productId}');" class="btn-block btn-primary">-->
                 <#--${uiLabel.GoToPay}-->

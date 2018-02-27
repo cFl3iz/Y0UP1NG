@@ -235,8 +235,8 @@
         var tarjeta = $("#tarjeta").val();
 
 
-        var prodCatalogId = "${(resourceDetail.prodCatalogId)!}";
-        var productStoreId = "${(resourceDetail.productStoreId)!}";
+        var prodCatalogId =  $("#prodCatalogId").val();
+        var productStoreId = $("#productStoreId").val();
         var url = "placeResourceOrder";
 
         var param = {
@@ -331,6 +331,9 @@
 </script>
 
 <input id="spm" type="hidden" value="${(spm)!}" />
+
+<input id="productStoreId" name="productStoreId" type="hidden" value="${resourceDetail.productStoreId}"/>
+<input id="prodCatalogId" name="prodCatalogId" type="hidden" value="${resourceDetail.prodCatalogId}"/>
 
 
 <input id="productName" type="hidden" value="${(resourceDetail.productName)!}" />

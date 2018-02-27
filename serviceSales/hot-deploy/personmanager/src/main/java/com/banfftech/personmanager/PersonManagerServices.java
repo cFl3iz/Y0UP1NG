@@ -4175,18 +4175,18 @@ public class PersonManagerServices {
         dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
 
 
-        if (!UtilValidate.isEmpty(tel)) {
-            // Create Party Telecom Number
-            Map<String, Object> inputTelecom = UtilMisc.toMap();
-            inputTelecom.put("partyId", partyId);
-            inputTelecom.put("contactNumber", tel);
-            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
-            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-            inputTelecom.put("userLogin", admin);
-            Map<String, Object> createTelecom = null;
-            createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-
-        }
+//        if (!UtilValidate.isEmpty(tel)) {
+//            // Create Party Telecom Number
+//            Map<String, Object> inputTelecom = UtilMisc.toMap();
+//            inputTelecom.put("partyId", partyId);
+//            inputTelecom.put("contactNumber", tel);
+//            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+//            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+//            inputTelecom.put("userLogin", admin);
+//            Map<String, Object> createTelecom = null;
+//            createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+//
+//        }
 
         createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 

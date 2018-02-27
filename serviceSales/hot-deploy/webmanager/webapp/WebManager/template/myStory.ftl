@@ -1,4 +1,4 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 
 <style>
     hr {
@@ -240,7 +240,7 @@
         var url = "placeResourceOrder";
 
         var param = {
-            payToPartyId:payToParty,
+            payToPartyId:payToPartyId,
             productId:productId,
             prodCatalogId:prodCatalogId,
             productStoreId:productStoreId,

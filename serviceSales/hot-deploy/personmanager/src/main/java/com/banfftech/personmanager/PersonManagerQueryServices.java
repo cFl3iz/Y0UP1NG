@@ -2825,8 +2825,6 @@ public class PersonManagerQueryServices {
         String detailImageUrl = (String) resourceDetail.get("detailImageUrl");
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
         if (person != null) {
-
-
             List<GenericValue> contentsList =
                     EntityQuery.use(delegator).from("PartyContentAndDataResource").
                             where("partyId", resourceDetail.get("payToPartyId"), "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
@@ -2849,12 +2847,12 @@ public class PersonManagerQueryServices {
             resourceDetail.put("firstName", (String) person.get("firstName"));
 
             //PartyNoteView
-            GenericValue partyNoteView = EntityQuery.use(delegator).from("PartyNoteView").where("targetPartyId", resourceDetail.get("payToPartyId")).queryFirst();
-            if (UtilValidate.isNotEmpty(partyNoteView)) {
-                resourceDetail.put("partyNote", partyNoteView.get("noteInfo"));
-            } else {
-                resourceDetail.put("partyNote", "这位卖家还未设置个人说明...");
-            }
+//            GenericValue partyNoteView = EntityQuery.use(delegator).from("PartyNoteView").where("targetPartyId", resourceDetail.get("payToPartyId")).queryFirst();
+//            if (UtilValidate.isNotEmpty(partyNoteView)) {
+//                resourceDetail.put("partyNote", partyNoteView.get("noteInfo"));
+//            } else {
+//                resourceDetail.put("partyNote", "这位卖家还未设置个人说明...");
+//            }
 
         }
 
@@ -2918,7 +2916,6 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("custCount", custCount);
         resourceDetail.put("placingCount", placingCount);
-
         resourceDetail.put("morePicture", picturesListParp);
 
         //查询 ProductVirtualAndVariantInfo  查看这个产品是否是虚拟产品 有没有变形产品
@@ -2927,7 +2924,7 @@ public class PersonManagerQueryServices {
 
 //         List<GenericValue> productVirtualAndVariantInfoList = EntityQuery.use(delegator).from("ProductVirtualAndVariantInfo").where("productId",productId).queryList();
 
-        List<GenericValue> productFeatureAndApplList = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
+//        List<GenericValue> productFeatureAndApplList = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
 
 
 //        List<Map<String,Object>> productFeaturesList = (List<Map<String,Object>>) queryProductFeature.get("productFeaturesList");
@@ -2963,8 +2960,14 @@ public class PersonManagerQueryServices {
 //
 //        System.out.println("strProductFeaturesList="+strProductFeaturesList);
 
+        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+
+        if(null!=inventoryItem){
+            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
+        }
+
         resultMap.put("resourceDetail", resourceDetail);
-        resultMap.put("productFeatureAndApplList", productFeatureAndApplList);
+//      resultMap.put("productFeatureAndApplList", productFeatureAndApplList);
 
         if (null != userLogin) {
             resultMap.put("partyId", (String) userLogin.get("partyId"));

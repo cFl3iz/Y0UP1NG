@@ -235,8 +235,8 @@
         var tarjeta = $("#tarjeta").val();
 
 
-        var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
-        var productStoreId = ${(resourceDetail.productStoreId)!};
+        var prodCatalogId = "${(resourceDetail.prodCatalogId)!}";
+        var productStoreId = "${(resourceDetail.productStoreId)!}";
         var url = "placeResourceOrder";
 
         var param = {

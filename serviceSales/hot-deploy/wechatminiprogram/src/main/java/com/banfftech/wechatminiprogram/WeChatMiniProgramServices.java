@@ -253,7 +253,7 @@ public class WeChatMiniProgramServices {
             //先找有没有PartyAndPostalAddress
             //PartyAndPostalAddress
 
-            List<GenericValue> partyAndPostalAddress =  EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId", partyId,"address1",address).queryFirst();
+            List<GenericValue> partyAndPostalAddress =  EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId", partyId,"address1",address).queryList();
 
             if(null != partyAndPostalAddress && partyAndPostalAddress.size()>0){
 

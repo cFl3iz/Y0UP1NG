@@ -2822,6 +2822,7 @@ public class PersonManagerQueryServices {
                 findConditions, fieldSet,
                 null, null, false).get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
+        String detailImageUrl = (String) resourceDetail.get("detailImageUrl");
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
         if (person != null) {
 
@@ -2900,15 +2901,25 @@ public class PersonManagerQueryServices {
         List<GenericValue> pictures = delegator.findList("ProductContentAndInfo",
                 findConditions3, fieldSet,
                 null, null, false);
-
-
+        List<Map<String,Object>> picturesListParp = new ArrayList<Map<String, Object>>();
+        Map<String,Object> firstMap = new HashMap<String, Object>();
+        firstMap.put("drObjectInfo",detailImageUrl);
+        picturesListParp.add(firstMap);
+        if(null!= pictures && pictures.size() > 0){
+            for(GenericValue gv : pictures){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String drObjectInfo = (String) gv.get("drObjectInfo");
+                rowMap.put("drObjectInfo",drObjectInfo);
+                picturesListParp.add(rowMap);
+            }
+        }
         Long custCount = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", PeConstant.PRODUCT_CUSTOMER).queryCount();
         Long placingCount = EntityQuery.use(delegator).from("ProductRole").where("productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryCount();
 
         resourceDetail.put("custCount", custCount);
         resourceDetail.put("placingCount", placingCount);
 
-        resourceDetail.put("morePicture", pictures);
+        resourceDetail.put("morePicture", picturesListParp);
 
         //查询 ProductVirtualAndVariantInfo  查看这个产品是否是虚拟产品 有没有变形产品
 //        Map<String,Object> queryProductFeature = dispatcher.runSync("ProductVirtualAndVariantInfo",UtilMisc.toMap("userLogin",userLogin,"productId",productId));

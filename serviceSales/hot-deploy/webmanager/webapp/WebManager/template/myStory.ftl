@@ -1,4 +1,4 @@
-<#--<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />-->
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 
 <style>
     hr {
@@ -238,7 +238,7 @@
         var prodCatalogId =  $("#prodCatalogId").val();
         var productStoreId = $("#productStoreId").val();
         var url = "placeResourceOrder";
-
+        var amount = 1;
         var param = {
             payToPartyId:payToPartyId,
             productId:productId,

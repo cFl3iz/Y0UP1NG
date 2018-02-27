@@ -446,8 +446,8 @@
 
     <property key="GoToPay">
         <value xml:lang="en">GoToPay</value>
-        <value xml:lang="zh">询价</value>
-        <value xml:lang="zh_CN">询价</value>
+        <value xml:lang="zh">下单</value>
+        <value xml:lang="zh_CN">下单</value>
     </property>
 
 

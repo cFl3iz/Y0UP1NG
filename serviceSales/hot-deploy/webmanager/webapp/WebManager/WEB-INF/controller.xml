@@ -161,6 +161,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="SelectAddress">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewWebOrderDetail"/>
+    </request-map>
+
+
+
     <request-map uri="createCustRequestFromMiniApp">
         <security https="false" auth="false"/>
         <event type="service" invoke="createCustRequestFromMiniApp"/>

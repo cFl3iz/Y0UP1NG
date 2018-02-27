@@ -249,6 +249,25 @@ public class WeChatMiniProgramServices {
 
         if(UtilValidate.isNotEmpty(address)){
            dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","address","attrValue",address+""));
+
+            //先找有没有PartyAndPostalAddress
+            //PartyAndPostalAddress
+
+            List<GenericValue> partyAndPostalAddress =  EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId", partyId,"address1",address).queryFirst();
+
+            if(null != partyAndPostalAddress && partyAndPostalAddress.size()>0){
+
+            }else{
+            //发货地址:SHIP_ORIG_LOCATION
+            String contactMechPurposeTypeId = "SHIP_ORIG_LOCATION";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1",address, "postalCode", PeConstant.DEFAULT_POST_CODE,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+//            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                return createPartyPostalAddressOutMap;
+            }
+            }
         }
         if(UtilValidate.isNotEmpty(longitude)){
            dispatcher.runSync("createProductAttribute",UtilMisc.toMap("userLogin",admin,"productId",productId,"attrName","longitude","attrValue",longitude+""));

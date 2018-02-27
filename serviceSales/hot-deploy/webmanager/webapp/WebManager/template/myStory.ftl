@@ -233,7 +233,43 @@
         var partyId      = $("#partyId").val();
         var spm            = $("#spm").val();
         var tarjeta = $("#tarjeta").val();
-        location.href = 'SelectAddress?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
+
+
+        var prodCatalogId = ${(resourceDetail.prodCatalogId)!};
+        var productStoreId = ${(resourceDetail.productStoreId)!};
+        var url = "placeResourceOrder";
+
+        var param = {
+            payToPartyId:payToParty,
+            productId:productId,
+            prodCatalogId:prodCatalogId,
+            productStoreId:productStoreId,
+            tarjeta:tarjeta,
+            amount:amount
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+                //   alert("code="+data.code);
+                if(data.code === "200"){
+                    var orderId = data.orderId;
+                    location.href = 'SelectAddress?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
+                }
+                if(data.code === "500"){
+                    alert("CODE-403:网络出现问题请刷新页面重试");
+                }
+
+            },
+            error: function (data) {
+                alert("CODE-403:网络出现问题请刷新页面重试");
+            }
+        });
+
+
+
     }
 
 

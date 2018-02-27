@@ -133,8 +133,7 @@ public class WeChatMiniProgramServices {
         GenericValue userLogin =EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
         if(UtilValidate.isNotEmpty(tel)){
-        GenericValue telecomNumber = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("contactNumber",tel,"partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+        GenericValue telecomNumber =    EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("contactNumber",tel,"partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList() ;
         if(UtilValidate.isNotEmpty(telecomNumber)){
         }else{
             // Create Person Contact Info

@@ -149,7 +149,7 @@
             <button type="button" id="contactBtn" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
-        <button type="button" onclick="selectAddress();" class="btn-block btn-primary">
+        <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
         ${uiLabel.GoToPay}
         </button>
             <#--<#if !resourceDetail.salesDiscontinuationDate?has_content>-->

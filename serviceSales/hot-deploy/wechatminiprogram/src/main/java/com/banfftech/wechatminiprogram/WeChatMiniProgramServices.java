@@ -91,6 +91,9 @@ public class WeChatMiniProgramServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         BigDecimal quantityTotal = new BigDecimal("99999999");
+
+        String tel = (String) context.get("tel");
+
         String unioId = (String) context.get("unioId");
         String kuCun = (String) context.get("kuCun");
         String priceStr = (String) context.get("price");
@@ -117,6 +120,9 @@ public class WeChatMiniProgramServices {
         if(UtilValidate.isNotEmpty(priceStr)){
              price = new BigDecimal(priceStr);
         }
+
+
+
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
         if (UtilValidate.isNotEmpty(partyIdentification)) {
@@ -126,6 +132,23 @@ public class WeChatMiniProgramServices {
 
         GenericValue userLogin =EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
+        if(UtilValidate.isNotEmpty(tel)){
+        GenericValue telecomNumber = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("contactNumber",tel,"partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+        if(UtilValidate.isNotEmpty(telecomNumber)){
+        }else{
+            // Create Person Contact Info
+                Map<String, Object> inputTelecom = UtilMisc.toMap();
+                inputTelecom.put("partyId", partyId);
+                inputTelecom.put("contactNumber", tel);
+                inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+                inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+                inputTelecom.put("userLogin", userLogin);
+                Map<String, Object> createTelecom = null;
+                createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+        }
+        }
 
         System.out.println("->File filePaths = " + filePaths);
 

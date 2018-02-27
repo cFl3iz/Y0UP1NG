@@ -2964,6 +2964,8 @@ public class PersonManagerQueryServices {
 
         if(null!=inventoryItem){
             resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
+            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
+            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
         }
 
         resultMap.put("resourceDetail", resourceDetail);

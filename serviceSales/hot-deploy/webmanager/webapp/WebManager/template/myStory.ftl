@@ -256,7 +256,7 @@
                 //   alert("code="+data.code);
                 if(data.code === "200"){
                     var orderId = data.orderId;
-                    location.href = 'SelectAddress?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
+                    location.href = 'SelectAddress?orderId='+orderId+'&productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
                 }
                 if(data.code === "500"){
                     alert("CODE-403:网络出现问题请刷新页面重试");

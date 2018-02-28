@@ -3893,12 +3893,12 @@ public class PersonManagerServices {
         String orderId = (String) createOrderHeaderOutMap.get("orderId");
 
 
-        //createOrderItemShipGroup
+        //createOrderItemShipGroup default SHUNFENG_EXPRESS
         Map<String, Object> createOrderItemShipGroupInMap = new HashMap<String, Object>();
         createOrderItemShipGroupInMap.put("userLogin", userLogin);
         createOrderItemShipGroupInMap.put("orderId", orderId);
         createOrderItemShipGroupInMap.put("facilityId", (String) facility.get("facilityId"));
-        createOrderItemShipGroupInMap.put("carrierPartyId", payToPartyId);
+        createOrderItemShipGroupInMap.put("carrierPartyId", "SHUNFENG_EXPRESS");
         createOrderItemShipGroupInMap.put("shipmentMethodTypeId", "EXPRESS");
 //        createOrderItemShipGroupInMap.put("supplierPartyId", payToPartyId);
         Map<String, Object> createOrderItemShipGroupOut = dispatcher.runSync("createOrderItemShipGroup", createOrderItemShipGroupInMap);
@@ -4383,6 +4383,16 @@ public class PersonManagerServices {
                 "partyId", partyId, "inventoryFacilityId", facilityId));
 
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
+
+
+        //店铺关联货运方法 Default 顺分
+        Map<String, Object> createProductStoreShipMethMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,
+                "productStoreId", productStoreId,
+                "productStoreShipMethId","10000",
+                "roleTypeId","CARRIER",
+                "shipmentMethodTypeId","EXPRESS"));
+
 
 
         // 关联店铺角色

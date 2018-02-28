@@ -454,6 +454,67 @@ public class PersonManagerServices {
 
 
     /**
+     * 用户的联系信息
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> getUserContactInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        String unioId = (String) context.get("unioId");
+
+        Debug.logInfo("*getUserContactInfo =>", module);
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+
+        String partyId = "NA";
+
+        if (UtilValidate.isNotEmpty(partyIdentification)) {
+            partyId = (String) partyIdentification.get("partyId");
+        }
+
+        Map<String,Object> userContactInfo = new HashMap<String, Object>();
+
+        //查询联系号码
+        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
+
+        if (null != teleContact) {
+            String contactNumber = (String) teleContact.get("contactNumber");
+            userContactInfo.put("contactTel", contactNumber);
+        }
+        //查询邮政地址,目的:收货地址
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("contactMechId");
+        fieldSet.add("partyId");
+        fieldSet.add("address1");
+        EntityCondition findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId));
+        List<GenericValue>  queryAddress = delegator.findList("PartyAndPostalAddress",
+                findConditions, fieldSet,
+                UtilMisc.toList("-fromDate"), null, false);
+
+        String address1 = null;
+
+        if (queryAddress != null & queryAddress.size() > 0) {
+            GenericValue address = queryAddress.get(0);
+            address1 = (String) address.get("address1");
+            userContactInfo.put("address",address1);
+        }
+
+        resultMap.put("userContactInfo",userContactInfo);
+        return resultMap;
+    }
+
+
+
+    /**
      * 对产品的评论
      * @param dctx
      * @param context

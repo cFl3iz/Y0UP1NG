@@ -490,6 +490,20 @@
     </service>
 
 
+    <service name="getUserContactInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="getUserContactInfo" auth="false">
+        <description>getUserContactInfo</description>
+
+        <attribute name="unioId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="contactInfo" type="Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <!-- 查询快递信息 -->
     <service name="queryExpressInfo" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

@@ -104,7 +104,7 @@
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
-                            <input type="radio" value="man" name="radio" checked/>
+                            <input type="radio" value="${(list.contactMechId)!}" name="radio" checked/>
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
@@ -113,7 +113,7 @@
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
-                            <input type="radio" value="man" name="radio" />
+                            <input type="radio" value="${(list.contactMechId)!}" name="radio" />
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
@@ -237,18 +237,8 @@
                 var dialog = win.YDUI.dialog;
                 $('#J_Notify_apply').on('click', function () {
 
-                    var address1 = $("#address1").val();
-                    var address2 = $("#address2").val();
-
-                    var flag = true;
-
-                    if (address1 == null || address1 === "") {
-                        flag = false;
-                    }
-                    if (address2 == null || address2 === "") {
-                        flag = false;
-                    }
-
+                    var val_payPlatform = $('input[name="radio"]:checked ').val();
+                    alert(val_payPlatform);
                     <#--if (flag) {-->
                         <#--dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {-->
                             <#--$("#J_Notify").attr({"disabled": "disabled"});-->

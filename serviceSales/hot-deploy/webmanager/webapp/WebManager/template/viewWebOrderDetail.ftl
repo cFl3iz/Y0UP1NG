@@ -96,15 +96,16 @@
         </div>
     </#if>
     <#if addressInfo?has_content>
-        <div class="m-celltitle">${uiLabel.CheckAddress}</div>
-
+       <form id="selectPartyPostalAddress2OrderForm" action="selectPartyPostalAddress2Order">
+        <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
+        <input name="orderId" id="orderId" type="hidden"/>
         <div class="m-cell">
             <#list addressInfo as list>
                 <#if list_index ==0 >
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
-                            <input type="radio" value="${(list.contactMechId)!}" name="radio" checked/>
+                            <input type="radio" value="${(list.contactMechId)!}" name="contactMechId" checked/>
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
@@ -113,7 +114,7 @@
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
-                            <input type="radio" value="${(list.contactMechId)!}" name="radio" />
+                            <input type="radio" value="${(list.contactMechId)!}" name="contactMechId" />
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
@@ -123,6 +124,7 @@
         <div class="m-button">
             <input type="button" class="btn-block btn-primary" id="J_Notify_apply" value="${uiLabel.apply}"/>
         </div>
+       </form>
     <#--<div class="m-cell">-->
     <#--<div class="cell-item">-->
     <#--<div class="cell-left">${uiLabel.AddressScope}</div>-->
@@ -237,8 +239,8 @@
                 var dialog = win.YDUI.dialog;
                 $('#J_Notify_apply').on('click', function () {
 
-                    var val_payPlatform = $('input[name="radio"]:checked ').val();
-                    alert(val_payPlatform);
+//                    var val_payPlatform = $('input[name="radio"]:checked ').val();
+//                    alert(val_payPlatform);
                     <#--if (flag) {-->
                         <#--dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {-->
                             <#--$("#J_Notify").attr({"disabled": "disabled"});-->
@@ -247,6 +249,10 @@
                     <#--} else {-->
                         <#--alert("请填写完整收货地址...");-->
                     <#--}-->
+                    dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {
+                        $("#J_Notify_apply").attr({"disabled": "disabled"});
+                        $("#selectPartyPostalAddress2OrderForm").submit();
+                    });
 
                 });
 

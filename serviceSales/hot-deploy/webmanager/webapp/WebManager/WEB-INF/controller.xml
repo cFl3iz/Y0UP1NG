@@ -167,6 +167,16 @@
     </request-map>
 
 
+    <request-map uri="selectPartyPostalAddress2Order">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="selectPartyPostalAddress2Order"/>
+        <response name="success" type="request-redirect" value="myOrder">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+        </response>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="getUserContactInfo">
         <security https="false" auth="false"/>
         <event type="service" invoke="getUserContactInfo"/>

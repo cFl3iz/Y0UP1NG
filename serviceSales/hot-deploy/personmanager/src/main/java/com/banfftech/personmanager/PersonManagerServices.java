@@ -1636,7 +1636,47 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+    /**
+     * selectPartyPostalAddress2Order
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> selectPartyPostalAddress2Order(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
 
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+        String contactMechId = (String) context.get("contactMechId");
+
+
+        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,
+                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
+
+        if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+            return updateShipGroupShipInfoOutMap;
+        }
+
+
+        return  resultMap;
+    }
     /**
      * updateShipGroupShipInfoForWeChat发货
      *

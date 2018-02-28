@@ -590,6 +590,24 @@
 
 
     <!-- 更新货运信息 -->
+    <service name="selectPartyPostalAddress2Order" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="selectPartyPostalAddress2Order" auth="false">
+        <description>selectPartyPostalAddress2Order</description>
+
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="contactMechId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 更新货运信息 -->
     <service name="updateShipGroupShipInfoForWeChat" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="updateShipGroupShipInfoForWeChat" auth="false">
@@ -631,6 +649,9 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+
 
 
     <!-- queryCustSalesReport -->

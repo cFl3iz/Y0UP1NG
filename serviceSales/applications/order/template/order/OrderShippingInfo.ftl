@@ -399,7 +399,7 @@ under the License.
                               i.e shipmentMethodTypeId & carrierPartyId & roleTypeId. Values are separated by
                               "@" symbol.
                               -->
-                                  shipGroup = ${(shipGroup)!}
+
                               <select name="shipmentMethod">
 
                                   <#if shipGroup.shipmentMethodTypeId?has_content>

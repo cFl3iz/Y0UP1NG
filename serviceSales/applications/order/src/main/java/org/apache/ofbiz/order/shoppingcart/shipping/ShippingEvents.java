@@ -162,7 +162,8 @@ public class ShippingEvents {
         if ("NO_SHIPPING".equals(shipmentMethodTypeId)) {
             return ServiceUtil.returnSuccess();
         }
-
+        System.out.println("*->shipmentMethodTypeId="+shipmentMethodTypeId);
+        System.out.println("*->carrierPartyId="+carrierPartyId);
         if (shipmentMethodTypeId == null || carrierPartyId == null) {
             if ("SALES_ORDER".equals(orderTypeId)) {
                 errorMessageList.add("Please Select Your Shipping Method.");

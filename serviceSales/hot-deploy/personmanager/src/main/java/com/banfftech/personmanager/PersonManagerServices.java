@@ -3867,18 +3867,6 @@ public class PersonManagerServices {
             grandTotal = subTotal = new BigDecimal(price);
         }
 
-//        GenericValue productAttrQu = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","quantityAccepted","productId", productId).queryFirst();
-//
-//        String qantStr = (String)productAttrQu.get("attrValue");
-//
-//        int qant = Integer.parseInt(qantStr);
-//
-//        if(qant <= 0){
-//            return ServiceUtil.returnSuccess();
-//        }else{
-//            qant = qant - 1;
-//            productAttrQu.set("attrValue",qant+"");
-//        }
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
@@ -3888,10 +3876,7 @@ public class PersonManagerServices {
         Map<String, Object> createOrderHeaderInMap = new HashMap<String, Object>();
         createOrderHeaderInMap.put("userLogin", userLogin);
         createOrderHeaderInMap.put("productStoreId", productStoreId);
-
         createOrderHeaderInMap.put("originFacilityId", originFacilityId);
-
-
         createOrderHeaderInMap.put("salesChannelEnumId", "WEB_SALES_CHANNEL");
         createOrderHeaderInMap.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
         createOrderHeaderInMap.put("orderTypeId", PeConstant.SALES_ORDER);
@@ -3909,9 +3894,7 @@ public class PersonManagerServices {
 
 
         // Add Product To Order Item
-
         Map<String, Object> appendOrderItemInMap = new HashMap<String, Object>();
-
         appendOrderItemInMap.put("userLogin", userLogin);
         appendOrderItemInMap.put("orderId", orderId);
         appendOrderItemInMap.put("productId", productId);
@@ -3924,12 +3907,9 @@ public class PersonManagerServices {
         appendOrderItemInMap.put("calcTax", new Boolean("false"));
 
         //appendOrderItem
-
         Map<String, Object> appendOrderItemOutMap = null;
         try {
-
             appendOrderItemOutMap = dispatcher.runSync("appendOrderItem", appendOrderItemInMap);
-
         } catch (GenericServiceException e1) {
             Debug.logError(e1.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ProductNoLongerForSale", locale));
@@ -3984,9 +3964,7 @@ public class PersonManagerServices {
             addPLACING_CUSTOMERInMap.put("orderId", orderId);
             addPLACING_CUSTOMERInMap.put("partyId", partyId);
             addPLACING_CUSTOMERInMap.put("roleTypeId", "PLACING_CUSTOMER");
-
             Map<String, Object> addPLACING_CUSTOMEROutMap = dispatcher.runSync("addOrderRole", addPLACING_CUSTOMERInMap);
-
             if (ServiceUtil.isError(addPLACING_CUSTOMEROutMap)) {
                 return addPLACING_CUSTOMEROutMap;
             }
@@ -4088,6 +4066,7 @@ public class PersonManagerServices {
         if (partyId.equals(payToPartyId)) {
             return resultMap;
         }
+
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER", "productId", productId).queryFirst();
         //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色
         if (productRole != null && productRole.get("partyId") != null) {
@@ -4095,30 +4074,24 @@ public class PersonManagerServices {
             GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
             dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
         }
+
         //授予客户角色
         GenericValue productRoleCust = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", PeConstant.PRODUCT_CUSTOMER, "productId", productId).queryFirst();
         if (null == productRoleCust) {
             dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
         }
 
-        //已注释掉,将客户做成店铺客户的角色逻辑
-//        GenericValue custStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"productStoreId",productStoreId,"roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE).queryFirst();
-//        if (!UtilValidate.isNotEmpty(custStoreRole)) {
-//            //如果没有客户角色就创建一个客户角色
-//            Map<String, Object> createProductStoreRoleOutMap =   dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", PeConstant.PRODUCT_STORE_CUST_ROLE));
-//            if (!ServiceUtil.isSuccess(createProductStoreRoleOutMap)) {
-//                return createProductStoreRoleOutMap;
-//            }
-//        }
+
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("contactMechId");
         fieldSet.add("partyId");
         fieldSet.add("address1");
+
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
-        //Query My Resource
+        //Query   Address
         List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
                 findConditions, fieldSet,
                 UtilMisc.toList("-fromDate"), null, false);
@@ -4133,20 +4106,6 @@ public class PersonManagerServices {
         } else {
             dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您的订单收货地址:" + address1 + ",无误请点击→", "objectId", productId));
         }
-
-
-        //确认客户关系
-//        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-//
-//
-//        createPartyRelationshipInMap.put("roleTypeIdTo", "SHIP_FROM_VENDOR");
-//        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
-//        createPartyRelationshipInMap.put("userLogin", admin);
-//        createPartyRelationshipInMap.put("partyIdFrom", partyId);
-//        createPartyRelationshipInMap.put("partyIdTo", payToPartyId);
-//        createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
-//
-//        dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
 
         //推卖家

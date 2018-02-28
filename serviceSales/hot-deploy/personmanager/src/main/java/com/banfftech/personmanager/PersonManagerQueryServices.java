@@ -543,6 +543,16 @@ public class PersonManagerQueryServices {
 
         resourceDetail.put("morePicture", pictures);
 
+
+        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+
+        if(null!=inventoryItem){
+            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
+            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
+            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
+        }
+
+
         request.setAttribute("resourceDetail", resourceDetail);
 
         request.setAttribute("tarjeta", token);

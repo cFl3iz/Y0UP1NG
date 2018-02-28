@@ -239,8 +239,8 @@
                 var dialog = win.YDUI.dialog;
                 $('#J_Notify_apply').on('click', function () {
                     $("#J_Notify_apply").attr({"disabled": "disabled"});
-                    var val_payPlatform = $('input[name="contactMechId"]:checked ').val();
-                    alert(val_payPlatform);
+//                    var val_payPlatform = $('input[name="contactMechId"]:checked ').val();
+//                    alert(val_payPlatform);
                     <#--if (flag) {-->
                         <#--dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {-->
                             <#--$("#J_Notify").attr({"disabled": "disabled"});-->

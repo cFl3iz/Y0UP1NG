@@ -475,15 +475,16 @@ public class PersonManagerServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
         String partyId = "NA";
+        Map<String,Object> userContactInfo = new HashMap<String, Object>();
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
-        }
 
-        Map<String,Object> userContactInfo = new HashMap<String, Object>();
+
+
 
         //查询联系号码
-        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
+        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", partyId).queryFirst();
 
         if (null != teleContact) {
             String contactNumber = (String) teleContact.get("contactNumber");
@@ -507,7 +508,7 @@ public class PersonManagerServices {
             address1 = (String) address.get("address1");
             userContactInfo.put("address",address1);
         }
-
+        }
         resultMap.put("userContactInfo",userContactInfo);
         return resultMap;
     }

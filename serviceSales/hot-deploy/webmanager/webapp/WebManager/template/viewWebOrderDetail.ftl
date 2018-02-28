@@ -238,9 +238,9 @@
             !function (win, $) {
                 var dialog = win.YDUI.dialog;
                 $('#J_Notify_apply').on('click', function () {
-
-//                    var val_payPlatform = $('input[name="radio"]:checked ').val();
-//                    alert(val_payPlatform);
+                    $("#J_Notify_apply").attr({"disabled": "disabled"});
+                    var val_payPlatform = $('input[name="contactMechId"]:checked ').val();
+                    alert(val_payPlatform);
                     <#--if (flag) {-->
                         <#--dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {-->
                             <#--$("#J_Notify").attr({"disabled": "disabled"});-->
@@ -250,7 +250,7 @@
                         <#--alert("请填写完整收货地址...");-->
                     <#--}-->
                     dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {
-                        $("#J_Notify_apply").attr({"disabled": "disabled"});
+
                         $("#selectPartyPostalAddress2OrderForm").submit();
                     });
 

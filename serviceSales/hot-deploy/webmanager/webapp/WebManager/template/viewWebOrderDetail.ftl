@@ -157,8 +157,8 @@
         <div class="m-button">
             <input type="button" class="btn-block btn-primary" id="J_Notify_apply" value="${uiLabel.apply}"/>
         </div>
-           <div class="m-button">
-               <input type="button" class="btn-block" id="J_Notify_other" value="${uiLabel.otherAddress}"/>
+           <div class="m-button" id="J_Notify_other_box">
+               <input type="button" class="btn-block btn-danger" id="J_Notify_other" value="${uiLabel.otherAddress}"/>
            </div>
        </form>
     <#--<div class="m-cell">-->
@@ -294,6 +294,8 @@
 
 
                 $('#J_Notify_other').on('click', function () {
+                    alert("界面微调");
+                    $("#J_Notify_other_box").hide();
                     $("#createAddress2OrderBlock").show();
                 }
 

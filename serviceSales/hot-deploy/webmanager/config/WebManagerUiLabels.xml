@@ -370,7 +370,11 @@
         <value xml:lang="zh">确认收货地址</value>
         <value xml:lang="zh_CN">确认收货地址</value>
     </property>
-
+    <property key="otherAddress">
+        <value xml:lang="en">other Address</value>
+        <value xml:lang="zh">其他地址-></value>
+        <value xml:lang="zh_CN">其他地址-></value>
+    </property>
 
     <property key="MyLocation">
         <value xml:lang="en">MyLocation</value>

@@ -96,6 +96,39 @@
         </div>
     </#if>
     <#if addressInfo?has_content>
+    <div id="createAddress2OrderBlock" style="display: none;">
+        <div id="addressSettingBox">
+            <div class="m-celltitle">${uiLabel.SetAddress}</div>
+            <div class="m-cell">
+                <div class="cell-item">
+                    <div class="cell-left">${uiLabel.AddressScope}</div>
+                    <div class="cell-right cell-arrow">
+                        <input type="text" class="cell-input" readonly id="J_Address"
+                               placeholder="${uiLabel.SelectAddress}">
+                    </div>
+                </div>
+            </div>
+            <form id="createPersonPartyPostalAddressForm" action="createPersonPartyPostalAddress">
+                <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
+                <input name="address1" id="address1" type="hidden"/>
+                <input name="orderId" id="orderId" type="hidden"/>
+                <div class="m-celltitle">${uiLabel.AddressDetail}</div>
+                <div class="m-cell">
+                    <div class="cell-item">
+                        <div class="cell-right">
+                            <textarea name="address2" id="address2" class="cell-textarea"
+                                      placeholder="${uiLabel.AddressDetailDemo}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="m-button">
+            <input type="button" class="btn-block btn-primary" id="J_Notify" value="${uiLabel.Setting}"/>
+        </div>
+    </div>
+
+
        <form id="selectPartyPostalAddress2OrderForm" action="selectPartyPostalAddress2Order">
         <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
         <input name="orderId" id="orderId" value="${(orderId)!}" type="hidden"/>
@@ -124,6 +157,9 @@
         <div class="m-button">
             <input type="button" class="btn-block btn-primary" id="J_Notify_apply" value="${uiLabel.apply}"/>
         </div>
+           <div class="m-button">
+               <input type="button" class="btn-block" id="J_Notify_other" value="${uiLabel.otherAddress}"/>
+           </div>
        </form>
     <#--<div class="m-cell">-->
     <#--<div class="cell-item">-->
@@ -255,6 +291,12 @@
                     });
 
                 });
+
+
+                $('#J_Notify_other').on('click', function () {
+                    $("#createAddress2OrderBlock").show();
+                }
+
 
 
                 // 顶部提示框

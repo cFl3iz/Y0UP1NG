@@ -1899,7 +1899,7 @@ public class PersonManagerQueryServices {
 
             personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 
-            personAddressInfoMap = queryPersonAddressInfo(delegator, partyId,orderId);
+            personAddressInfoMap = queryPersonAddressInfoFromOrder(delegator, partyId, orderId);
 
             rowMap.put("personInfoMap", personInfoMap);
 
@@ -2364,13 +2364,26 @@ public class PersonManagerQueryServices {
      * @param payFromPartyId
      * @return
      */
-    public static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId,String orderId) throws GenericEntityException {
+    public static Map<String, String> queryPersonAddressInfo(Delegator delegator, String partyId) throws GenericEntityException {
+
+        Map<String, String> personMap = new HashMap<String, String>();
+        //查这笔订单中买家的收货地址
+
+        GenericValue postalAddress = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("PartyAndPostalAddress").where(UtilMisc.toMap("partyId", partyId, "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+        if (UtilValidate.isNotEmpty(postalAddress))
+            personMap.put("contactAddress", "" + postalAddress.get("address1"));
+
+        return personMap;
+    }
+
+    public static Map<String, String> queryPersonAddressInfoFromOrder(Delegator delegator, String partyId,String orderId) throws GenericEntityException {
 
         Map<String, String> personMap = new HashMap<String, String>();
 
 
         GenericValue  postalAddress = EntityUtil.
-        getFirst(EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").where(UtilMisc.toMap("orderId", orderId)).queryList());
+                getFirst(EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").where(UtilMisc.toMap("orderId", orderId)).queryList());
         if (UtilValidate.isNotEmpty(postalAddress)){
             personMap.put("city", "" + postalAddress.get("city"));
             personMap.put("address", "" + postalAddress.get("address1"));
@@ -2385,7 +2398,6 @@ public class PersonManagerQueryServices {
 
         return personMap;
     }
-
 
     /**
      * QueryPersonBaseInfo

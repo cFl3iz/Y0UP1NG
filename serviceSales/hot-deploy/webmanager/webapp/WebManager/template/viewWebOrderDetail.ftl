@@ -294,10 +294,10 @@
 
 
                 $('#J_Notify_other').on('click', function () {
-                    alert("界面微调");
+
                     $("#J_Notify_other_box").hide();
                     $("#createAddress2OrderBlock").show();
-                }
+                });
 
 
 

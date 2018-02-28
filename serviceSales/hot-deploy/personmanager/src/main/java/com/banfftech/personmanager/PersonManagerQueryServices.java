@@ -2798,6 +2798,15 @@ public class PersonManagerQueryServices {
             resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
         }
 
+
+        //查询卖家提供的联系电话
+        GenericValue telecomNumber = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", payToId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+        if (UtilValidate.isNotEmpty(telecomNumber)) {
+            resourceDetail.put("contactNumber", telecomNumber.getString("contactNumber"));
+        }
+
+
         resultMap.put("resourceDetail", resourceDetail);
 
 //        if(null != userLogin){

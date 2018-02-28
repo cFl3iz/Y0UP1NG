@@ -1889,6 +1889,9 @@ public class PersonManagerServices {
 
         String tarjeta = (String) context.get("tarjeta");
 
+        //订单id
+        String orderId = (String) context.get("orderId");
+
         String partyId = (String) userLogin.get("partyId");
 
         resultMap.put("tarjeta", tarjeta);
@@ -1934,6 +1937,16 @@ public class PersonManagerServices {
                 UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
                         "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
 
+
+        //更新一下订单的货运地址
+        //updateShipGroupShipInfo
+        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,
+                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
+
+        if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+            return updateShipGroupShipInfoOutMap;
+        }
 
         return resultMap;
     }

@@ -361,8 +361,14 @@
 
     <property key="Setting">
         <value xml:lang="en">Setting</value>
-        <value xml:lang="zh">完成</value>
-        <value xml:lang="zh_CN">完成</value>
+        <value xml:lang="zh">保存</value>
+        <value xml:lang="zh_CN">保存</value>
+    </property>
+
+    <property key="apply">
+        <value xml:lang="en">Select</value>
+        <value xml:lang="zh">确认收货地址</value>
+        <value xml:lang="zh_CN">确认收货地址</value>
     </property>
 
 

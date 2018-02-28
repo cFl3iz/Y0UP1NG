@@ -485,6 +485,9 @@
         <attribute name="address2" type="String" mode="IN"
                    optional="true"/>
 
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

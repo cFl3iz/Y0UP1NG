@@ -4154,6 +4154,8 @@ public class OrderServices {
         for (int gi = origin; gi < shipGroupsSize; gi++) {
             String shipmentMethodTypeId = cart.getShipmentMethodTypeId(gi);
             String carrierPartyId = cart.getCarrierPartyId(gi);
+            //TODO FIX ME 为什么
+            Debug.logInfo("Getting ship estimate for group cart="+cart+"|gi="+gi, module);
             Debug.logInfo("Getting ship estimate for group #" + gi + " [" + shipmentMethodTypeId + " / " + carrierPartyId + "]", module);
             Map<String, Object> result = ShippingEvents.getShipGroupEstimate(dispatcher, delegator, cart, gi);
             if (("SALES_ORDER".equals(cart.getOrderType())) && (ServiceUtil.isError(result))) {

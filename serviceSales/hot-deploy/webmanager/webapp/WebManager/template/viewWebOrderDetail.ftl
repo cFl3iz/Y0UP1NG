@@ -98,7 +98,7 @@
     <#if addressInfo?has_content>
        <form id="selectPartyPostalAddress2OrderForm" action="selectPartyPostalAddress2Order">
         <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
-        <input name="orderId" id="orderId" type="hidden"/>
+        <input name="orderId" id="orderId" value="${(orderId)!}" type="hidden"/>
         <div class="m-cell">
             <#list addressInfo as list>
                 <#if list_index ==0 >

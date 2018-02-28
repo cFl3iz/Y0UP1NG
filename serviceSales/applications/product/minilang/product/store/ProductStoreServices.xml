@@ -151,6 +151,7 @@ under the License.
         <call-simple-method method-name="isStoreInventoryRequiredInline"/>
 
         <set from-field="parameters.facilityId" field="facilityId"/>
+        <log level="info" message="=>=>parameters.facilityId= [${parameters.facilityId}]"/>
         <if-empty field="facilityId">
             <if-compare field="productStore.oneInventoryFacility" operator="equals" value="Y">
                 <if-empty field="productStore.inventoryFacilityId">

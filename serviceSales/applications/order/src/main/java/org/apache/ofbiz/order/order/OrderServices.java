@@ -4146,6 +4146,9 @@ public class OrderServices {
             Locale locale, GenericValue userLogin, String orderId, Map<String, Object> changeMap, boolean calcTax,
             boolean deleteItems) throws GeneralException {
         // get/set the shipping estimates. If it's a SALES ORDER, then return an error if there are no ship estimates
+
+        Debug.logInfo("IN Order Services L:4150 cart = " + cart.getProductStoreId(), module);
+
         int shipGroupsSize = cart.getShipGroupSize();
         int realShipGroupsSize = (new OrderReadHelper(delegator, orderId)).getOrderItemShipGroups().size();
         // If an empty csi has initially been added to cart.shipInfo by ShoppingCart.setItemShipGroupQty() (called indirectly by ShoppingCart.setUserLogin() and then ProductPromoWorker.doPromotions(), etc.)
@@ -4154,7 +4157,6 @@ public class OrderServices {
         for (int gi = origin; gi < shipGroupsSize; gi++) {
             String shipmentMethodTypeId = cart.getShipmentMethodTypeId(gi);
             String carrierPartyId = cart.getCarrierPartyId(gi);
-            //TODO FIX ME 为什么
             Debug.logInfo("Getting ship estimate for group cart="+cart+"|gi="+gi, module);
             Debug.logInfo("Getting ship estimate for group #" + gi + " [" + shipmentMethodTypeId + " / " + carrierPartyId + "]", module);
             Map<String, Object> result = ShippingEvents.getShipGroupEstimate(dispatcher, delegator, cart, gi);
@@ -4491,8 +4493,10 @@ public class OrderServices {
         List<String> resErrorMessages = new LinkedList<String>();
         try {
             Debug.logInfo("Calling reserve inventory...", module);
+            Debug.logInfo("Calling reserve productStoreId="+productStoreId, module);
             reserveInventory(delegator, dispatcher, userLogin, locale, orderItemShipGroupAssoc, dropShipGroupIds, itemValuesBySeqId,
                     orderTypeId, productStoreId, resErrorMessages);
+
         } catch (GeneralException e) {
             Debug.logError(e, module);
             throw new GeneralException(e.getMessage());
@@ -6326,6 +6330,7 @@ public class OrderServices {
         //load cart from order to update new shipping method or address
         ShoppingCart shoppingCart = null;
         try {
+            Debug.logInfo("IN ProductServices 6333 get ShoppingCart userLogin = " + userLogin +" order Id =" + orderId, module);
             shoppingCart = loadCartForUpdate(dispatcher, delegator, userLogin, orderId);
         } catch(GeneralException e) {
             Debug.logError(e, module);

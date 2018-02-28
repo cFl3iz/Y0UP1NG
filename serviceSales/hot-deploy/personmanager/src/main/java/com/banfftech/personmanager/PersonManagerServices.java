@@ -509,7 +509,7 @@ public class PersonManagerServices {
             userContactInfo.put("address",address1);
         }
         }
-        resultMap.put("userContactInfo",userContactInfo);
+        resultMap.put("contactInfo",userContactInfo);
         return resultMap;
     }
 

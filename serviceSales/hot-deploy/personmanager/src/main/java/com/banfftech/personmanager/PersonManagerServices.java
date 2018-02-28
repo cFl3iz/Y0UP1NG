@@ -3900,7 +3900,7 @@ public class PersonManagerServices {
         createOrderItemShipGroupInMap.put("facilityId", (String) facility.get("facilityId"));
         createOrderItemShipGroupInMap.put("carrierPartyId", payToPartyId);
         createOrderItemShipGroupInMap.put("shipmentMethodTypeId", "EXPRESS");
-        createOrderItemShipGroupInMap.put("supplierPartyId", payToPartyId);
+//        createOrderItemShipGroupInMap.put("supplierPartyId", payToPartyId);
         Map<String, Object> createOrderItemShipGroupOut = dispatcher.runSync("createOrderItemShipGroup", createOrderItemShipGroupInMap);
         if (ServiceUtil.isError(createOrderItemShipGroupOut)) {
             return createOrderItemShipGroupOut;

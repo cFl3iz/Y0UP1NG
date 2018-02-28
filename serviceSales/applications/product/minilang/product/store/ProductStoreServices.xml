@@ -219,12 +219,15 @@ under the License.
                 <field-map field-name="facilityId" from-field="facilityId"/>
                 <order-by field-name="sequenceNum"/>
             </entity-and>
+            <log level="info" message="=>=>ProductStoreFacility= [${productStoreFacilities}]"/>
             <iterate list="productStoreFacilities" entry="productStoreFacility">
                 <!-- Search Product Store Facilities to insure the facility passed in is associated to the Product Store passed in -->
                 <set field="facilityFound" from-field="productStoreFacility"/>
                 <log level="info" message="ProductStoreService:Facility Found : [${facilityFound}]"/>
             </iterate>
             <if-empty field="facilityFound">
+                <log level="info" message="=>productStore.productStoreId:[${productStore.productStoreId}]"/>
+                <log level="info" message="=>facilityId:[${facilityId}]"/>
                 <add-error>
                     <fail-property resource="ProductUiLabels" property="FacilityNoAssociatedWithProcuctStore"/>
                 </add-error>

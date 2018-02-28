@@ -133,8 +133,13 @@
     <#--</label>-->
     <#--</label>-->
     <#--</div>-->
-        <button class="bac"
-                onclick="javascript:location.href = 'myOrder?tarjeta=${tarjeta}'">${uiLabel.ViewMyOrder}</button>
+
+    <!-- 订单的跳转在这里 -->
+        <#--<button class="bac"-->
+                <#--onclick="javascript:location.href = 'myOrder?tarjeta=${tarjeta}'">${uiLabel.ViewMyOrder}</button>-->
+
+
+
     <#--<span style="font-size:25px;color:darkgray;">${uiLabel.Over}</span>-->
 
     <#--<div class="m-button">-->

@@ -1922,20 +1922,20 @@ public class PersonManagerServices {
             return createPartyPostalAddressOutMap;
         }
 
-        //寄送账单地址
-        dispatcher.runAsync("createPartyContactMechPurpose",
-                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
-                        "contactMechPurposeTypeId", "BILLING_LOCATION"));
-
-        //通信地址
-        dispatcher.runAsync("createPartyContactMechPurpose",
-                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
-                        "contactMechPurposeTypeId", "GENERAL_LOCATION"));
-
-        //首选地址
-        dispatcher.runAsync("createPartyContactMechPurpose",
-                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
-                        "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
+//        //寄送账单地址
+//        dispatcher.runAsync("createPartyContactMechPurpose",
+//                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+//                        "contactMechPurposeTypeId", "BILLING_LOCATION"));
+//
+//        //通信地址
+//        dispatcher.runAsync("createPartyContactMechPurpose",
+//                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+//                        "contactMechPurposeTypeId", "GENERAL_LOCATION"));
+//
+//        //首选地址
+//        dispatcher.runAsync("createPartyContactMechPurpose",
+//                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,
+//                        "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
 
 
         //更新一下订单的货运地址

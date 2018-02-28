@@ -826,6 +826,9 @@
                    optional="true"/>
         <attribute name="price" type="String" mode="IN"
                    optional="true"/>
+        <!-- 订单备注 -->
+        <attribute name="orderReMark" type="String" mode="IN"
+                   optional="true"/>
         <attribute name="amount" type="String" mode="IN"
                    optional="true"/>
         <attribute name="prodCatalogId" type="String" mode="IN"

@@ -229,6 +229,11 @@
     }
 
     function selectAddress(productId){
+
+        var orderReMark;
+        orderReMark= prompt("订单备注");
+
+
         var payToPartyId = $("#payToPartyId").val();
         var partyId      = $("#partyId").val();
         var spm            = $("#spm").val();
@@ -245,7 +250,8 @@
             prodCatalogId:prodCatalogId,
             productStoreId:productStoreId,
             tarjeta:tarjeta,
-            amount:amount
+            amount:amount,
+            orderReMark:orderReMark
         };
         $.ajax({
             type: 'POST',

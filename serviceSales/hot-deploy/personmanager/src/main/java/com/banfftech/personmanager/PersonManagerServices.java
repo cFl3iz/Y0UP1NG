@@ -3893,24 +3893,25 @@ public class PersonManagerServices {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String partyId = (String) userLogin.get("partyId");
+        Delegator       delegator  = dispatcher.getDelegator();
+        Locale             locale  = (Locale) context.get("locale");
+        GenericValue     userLogin = (GenericValue) context.get("userLogin");
+        String             partyId = (String) userLogin.get("partyId");
 
 
         // Admin Do Run Service
-        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue admin    = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productStoreId = (String) context.get("productStoreId");
-        String amount_str = (String) context.get("amount");
-        String payToPartyId = (String) context.get("payToPartyId");
-        String productId = (String) context.get("productId");
-        String price = (String) context.get("price");
-        String prodCatalogId = (String) context.get("prodCatalogId");
+        String amount_str     = (String) context.get("amount");
+        String payToPartyId   = (String) context.get("payToPartyId");
+        String productId      = (String) context.get("productId");
+        String price          = (String) context.get("price");
+        String prodCatalogId  = (String) context.get("prodCatalogId");
+        String orderReMark    = (String) context.get("orderReMark");
 
-        BigDecimal subTotal = BigDecimal.ZERO;
+        BigDecimal subTotal   = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
-        BigDecimal amount = BigDecimal.ONE;
+        BigDecimal amount     = BigDecimal.ONE;
 
 
         if (!UtilValidate.isEmpty(amount_str)) {
@@ -3946,6 +3947,9 @@ public class PersonManagerServices {
         }
 
         String orderId = (String) createOrderHeaderOutMap.get("orderId");
+        if (!UtilValidate.isEmpty(orderReMark)) {
+                dispatcher.runSync("createOrderNote",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"noteName","买家备注","note",orderReMark,"internalNote","N"));
+        }
 
 
         //createOrderItemShipGroup default SHUNFENG_EXPRESS

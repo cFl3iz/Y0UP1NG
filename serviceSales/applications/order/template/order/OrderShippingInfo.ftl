@@ -399,7 +399,9 @@ under the License.
                               i.e shipmentMethodTypeId & carrierPartyId & roleTypeId. Values are separated by
                               "@" symbol.
                               -->
+                                  shipGroup = ${(shipGroup)!}
                               <select name="shipmentMethod">
+
                                   <#if shipGroup.shipmentMethodTypeId?has_content>
                                   <option value="${shipGroup.shipmentMethodTypeId}@${shipGroup.carrierPartyId!}@${shipGroup.carrierRoleTypeId!}"><#if shipGroup.carrierPartyId?? && shipGroup.carrierPartyId != "_NA_">${shipGroup.carrierPartyId!}</#if>&nbsp;${shipmentMethodType.get("description",locale)!}</option>
                                   </#if>

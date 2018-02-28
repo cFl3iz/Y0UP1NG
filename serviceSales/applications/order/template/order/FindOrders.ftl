@@ -348,7 +348,7 @@ function toggleOrderIdList() {
                 <td width='25%' align='right' class='label'>${uiLabelMap.OrderSelectShippingMethod}</td>
                 <td width='5%'>&nbsp;</td>
                 <td align='left'>
-                    shipmentMethod = ${(shipmentMethod)}
+
                   <select name="shipmentMethod">
                     <#if currentCarrierShipmentMethod?has_content>
                       <#assign currentShipmentMethodType = currentCarrierShipmentMethod.getRelatedOne("ShipmentMethodType", false)>

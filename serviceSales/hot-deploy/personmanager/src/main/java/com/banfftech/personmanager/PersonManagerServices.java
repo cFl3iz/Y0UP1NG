@@ -1932,6 +1932,8 @@ public class PersonManagerServices {
         //订单id
         String orderId = (String) context.get("orderId");
 
+        resultMap.put("orderId",orderId);
+
         String partyId = (String) userLogin.get("partyId");
 
         resultMap.put("tarjeta", tarjeta);

@@ -101,12 +101,19 @@
         <div class="m-cell">
             <#list addressInfo as list>
                 <#if list_index ==0 >
-
-
                     <label class="cell-item">
                         <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
                         <label class="cell-right">
                             <input type="radio" value="man" name="radio" checked/>
+                            <i class="cell-radio-icon"></i>
+                        </label>
+                    </label>
+                </#if>
+                <#if list_index !=0 >
+                    <label class="cell-item">
+                        <span class="cell-left">${(list.address1)!}${(list.address2)!}</span>
+                        <label class="cell-right">
+                            <input type="radio" value="man" name="radio" />
                             <i class="cell-radio-icon"></i>
                         </label>
                     </label>
@@ -228,6 +235,30 @@
         <script>
             !function (win, $) {
                 var dialog = win.YDUI.dialog;
+                $('#J_Notify_apply').on('click', function () {
+
+                    var address1 = $("#address1").val();
+                    var address2 = $("#address2").val();
+
+                    var flag = true;
+
+                    if (address1 == null || address1 === "") {
+                        flag = false;
+                    }
+                    if (address2 == null || address2 === "") {
+                        flag = false;
+                    }
+
+                    <#--if (flag) {-->
+                        <#--dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {-->
+                            <#--$("#J_Notify").attr({"disabled": "disabled"});-->
+                            <#--$("#createPersonPartyPostalAddressForm").submit();-->
+                        <#--});-->
+                    <#--} else {-->
+                        <#--alert("请填写完整收货地址...");-->
+                    <#--}-->
+
+                });
 
 
                 // 顶部提示框

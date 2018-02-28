@@ -60,16 +60,17 @@
     </div>
             </form>
         </div>
-                <div class="m-celltitle">${uiLabel.SettingAbout}</div>
-                <div class="m-cell" id="SetDefaultAddress">
-                    <label class="cell-item">
-                        <span class="cell-left">${uiLabel.SetDefaultAddress}</span>
-                        <label class="cell-right">
-                            <input type="checkbox" class="m-switch" checked/>
+        <!-- 暂时没有偏好设置 -->
+                <#--<div class="m-celltitle">${uiLabel.SettingAbout}</div>-->
+                <#--<div class="m-cell" id="SetDefaultAddress">-->
+                    <#--<label class="cell-item">-->
+                        <#--<span class="cell-left">${uiLabel.SetDefaultAddress}</span>-->
+                        <#--<label class="cell-right">-->
+                            <#--<input type="checkbox" class="m-switch" checked/>-->
 
-                        </label>
-                    </label>
-                </div>
+                        <#--</label>-->
+                    <#--</label>-->
+                <#--</div>-->
                 <#--<div class="m-cell">-->
                     <#--<label class="cell-item">-->
                         <#--<span class="cell-left">${uiLabel.NoFuckSetting}</span>-->

@@ -289,8 +289,8 @@
 
     <property key="CheckAddress">
         <value xml:lang="en">Check Address</value>
-        <value xml:lang="zh">这是您的收货地址</value>
-        <value xml:lang="zh_CN">这是您的收货地址</value>
+        <value xml:lang="zh">选择您的收货地址</value>
+        <value xml:lang="zh_CN">选择您的收货地址</value>
     </property>
 
     <property key="AddressDetail">
@@ -333,14 +333,14 @@
 
     <property key="CreateOrderSuccess">
         <value xml:lang="en">Create Order Success!.</value>
-        <value xml:lang="zh">已为您下单</value>
-        <value xml:lang="zh_CN">已为您下单</value>
+        <value xml:lang="zh">需要您的邮政地址作为货运目的</value>
+        <value xml:lang="zh_CN">需要您的邮政地址作为货运目的</value>
     </property>
 
     <property key="SetAddress">
         <value xml:lang="en">Set Address</value>
-        <value xml:lang="zh">您还未设置收货地址,补充便于发货。</value>
-        <value xml:lang="zh_CN">您还未设置收货地址,补充便于发货。</value>
+        <value xml:lang="zh">您还未设置地址,补充便于发货。</value>
+        <value xml:lang="zh_CN">您还未设置地址,补充便于发货。</value>
     </property>
 
 
@@ -354,8 +354,8 @@
 
     <property key="AddressDetailDemo">
         <value xml:lang="en">Tips:Shanghai PuDong 15N-301</value>
-        <value xml:lang="zh">如:上浦路69弄29号101-501 沈府棋牌</value>
-        <value xml:lang="zh_CN">如:上浦路69弄29号101-501 沈府棋牌</value>
+        <value xml:lang="zh">如:东方路223弄9号E301</value>
+        <value xml:lang="zh_CN">如:东方路223弄9号E301</value>
     </property>
 
 

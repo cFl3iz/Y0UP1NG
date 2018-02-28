@@ -3869,7 +3869,7 @@ public class PersonManagerServices {
 
 
 
-        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
         String originFacilityId = (String) facility.get("facilityId");
 
         // Do Create OrderHeader

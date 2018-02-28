@@ -3893,6 +3893,19 @@ public class PersonManagerServices {
         String orderId = (String) createOrderHeaderOutMap.get("orderId");
 
 
+        //createOrderItemShipGroup
+        Map<String, Object> createOrderItemShipGroupInMap = new HashMap<String, Object>();
+        createOrderItemShipGroupInMap.put("userLogin", userLogin);
+        createOrderItemShipGroupInMap.put("orderId", orderId);
+        createOrderItemShipGroupInMap.put("facilityId", (String) facility.get("facilityId"));
+        createOrderItemShipGroupInMap.put("carrierPartyId", payToPartyId);
+        createOrderItemShipGroupInMap.put("shipmentMethodTypeId", "EXPRESS");
+        createOrderItemShipGroupInMap.put("supplierPartyId", payToPartyId);
+        Map<String, Object> createOrderItemShipGroupOut = dispatcher.runSync("createOrderItemShipGroup", createOrderItemShipGroupInMap);
+        if (ServiceUtil.isError(createOrderItemShipGroupOut)) {
+            return createOrderItemShipGroupOut;
+        }
+
         // Add Product To Order Item
         Map<String, Object> appendOrderItemInMap = new HashMap<String, Object>();
         appendOrderItemInMap.put("userLogin", userLogin);

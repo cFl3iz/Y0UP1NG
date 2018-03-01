@@ -2636,7 +2636,7 @@ public class PersonManagerQueryServices {
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         //Scope Param
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String nowPartyId = (String) context.get("partyId");
         String openId = (String) context.get("unioId");
@@ -2646,6 +2646,27 @@ public class PersonManagerQueryServices {
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
+
+
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+
+        //有效时间
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", userLogin.get("userLoginId"));
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        String token = signer.sign(claims);
 
         String productId = (String) context.get("productId");
         resultMap.put("productId", productId);
@@ -2674,6 +2695,10 @@ public class PersonManagerQueryServices {
         Map<String, Object> resourceDetail = new HashMap<String, Object>();
 
         resourceDetail.put("id", (String) product.get("productId"));
+
+        resourceDetail.put("prodCatalogId", (String) product.get("prodCatalogId"));
+        resourceDetail.put("productStoreId", (String) product.get("productStoreId"));
+
         resourceDetail.put("title", (String) product.get("productName"));
         resourceDetail.put("desc", (String) product.get("description"));
         resourceDetail.put("source", "龙熙的转发");
@@ -2810,6 +2835,8 @@ public class PersonManagerQueryServices {
             resourceDetail.put("contactNumber", telecomNumber.getString("contactNumber"));
         }
 
+
+        resourceDetail.put("tarjeta",token);
 
         resultMap.put("resourceDetail", resourceDetail);
 

@@ -1926,14 +1926,19 @@ public class PersonManagerQueryServices {
         //TODO QUERY orderExpressInfo
         Map<String, Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo", UtilMisc.toMap("userLogin", userLogin, "code", order.get("internalCode")));
         List<JSONObject> expressInfos = null;
+        try{
         if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
             expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+            resultMap.put("orderExpressName", queryExpressInfoMap.get("name"));
+        }
+        }catch (Exception e){
+            resultMap.put("orderExpressName", "");
         }
 
         rowMap.put("custPartyId",custPartyId);
         resultMap.put("orderInfo", rowMap);
         resultMap.put("orderExpressInfo", expressInfos);
-        resultMap.put("orderExpressName", queryExpressInfoMap.get("name"));
+
 
 
         return resultMap;

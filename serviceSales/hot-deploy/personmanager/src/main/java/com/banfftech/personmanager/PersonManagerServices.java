@@ -2117,10 +2117,11 @@ public class PersonManagerServices {
         if (placingCustCount <= 0) {
             Debug.logInfo("* placingCustCount <= 0 ="+ (placingCustCount <= 0),module);
             Long custCount = EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "CUSTOMER", "productId", productId).queryCount();
-            //此处如果对这个产品已经有客户角色,不再增加潜在客户角色
-            if (custCount == null || custCount <= 0) {
+            //此处如果对这个产品已经有客户角色,不再增加潜在客户角色 ,
+            // 2018-3-1 不用如此痛苦.
+         //   if (custCount == null || custCount <= 0) {}
                 dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
-            }
+            
         } else {
             if (placingCustCount > 0) {
                 Debug.logInfo("* placingCustCount "+ (placingCustCount),module);

@@ -2103,6 +2103,9 @@ public class PersonManagerServices {
 
         String productId = (String) context.get("productId");
 
+        Debug.logInfo("* markOrOutMarkProduct = productId="+productId,module);
+        Debug.logInfo("* userLogin = userLogin="+userLogin,module);
+
         String markIt = (String) context.get("markIt");
 
         String partyId = (String) userLogin.get("partyId");
@@ -2110,8 +2113,9 @@ public class PersonManagerServices {
         Long placingCustCount = EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER", "productId", productId, "partyId", partyId).queryCount();
 
         //  if (markIt.equals("true")) {
-
+        Debug.logInfo("* placingCustCount ="+ placingCustCount,module);
         if (placingCustCount <= 0) {
+            Debug.logInfo("* placingCustCount <= 0 ="+ (placingCustCount <= 0),module);
             Long custCount = EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "CUSTOMER", "productId", productId).queryCount();
             //此处如果对这个产品已经有客户角色,不再增加潜在客户角色
             if (custCount == null || custCount <= 0) {
@@ -2119,6 +2123,7 @@ public class PersonManagerServices {
             }
         } else {
             if (placingCustCount > 0) {
+                Debug.logInfo("* placingCustCount "+ (placingCustCount),module);
                 GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
                 dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
             }
@@ -2168,6 +2173,11 @@ public class PersonManagerServices {
 
         String text = (String) request.getParameter("text");
 
+        Debug.logInfo("*likeResource unioId = "+unioId,module);
+        Debug.logInfo("*likeResource productId = "+productId,module);
+
+
+
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
         String partyId = "NA";
@@ -2178,7 +2188,13 @@ public class PersonManagerServices {
 
         GenericValue partyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
-        dispatcher.runSync("markOrOutMarkProduct",UtilMisc.toMap("productId",productId,"userLogin",partyUserLogin));
+
+
+
+        Map<String,Object> markOutMap = dispatcher.runSync("markOrOutMarkProduct",UtilMisc.toMap("productId",productId,"userLogin",partyUserLogin));
+
+
+        Debug.logInfo("*likeResource markOutMap = "+markOutMap,module);
 
         return "success";
     }
@@ -4006,7 +4022,7 @@ public class PersonManagerServices {
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
-        Debug.logInfo("*placeResourceOrder ownerPartyID = " + payToPartyId,module);
+        Debug.logInfo("*placeResourceOrder ownerPartyID = " + payToPartyId, module);
         String originFacilityId = (String) facility.get("facilityId");
 
         // Do Create OrderHeader

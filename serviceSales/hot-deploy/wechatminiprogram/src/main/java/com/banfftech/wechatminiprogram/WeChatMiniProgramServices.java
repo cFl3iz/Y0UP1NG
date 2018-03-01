@@ -96,6 +96,7 @@ public class WeChatMiniProgramServices {
 
         String unioId = (String) context.get("unioId");
         String kuCun = (String) context.get("kuCun");
+
         String priceStr = (String) context.get("price");
         //详细地址
         String address = (String) context.get("address");
@@ -108,9 +109,9 @@ public class WeChatMiniProgramServices {
         System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> latitude = "  + latitude);
         System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> longitude = "  + longitude);
 
-//        if(UtilValidate.isNotEmpty(kuCun)){
-//            quantityTotal = new BigDecimal(kuCun);
-//        }
+        if(UtilValidate.isNotEmpty(kuCun) && !kuCun.trim().equals("")){
+            quantityTotal = new BigDecimal(kuCun);
+        }
         String productName = (String) context.get("productName");
         String filePaths = (String) context.get("filePath");
         String description = (String) context.get("description");

@@ -1941,7 +1941,7 @@ public class PersonManagerServices {
 
 
 
-        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",address1 + " " + address2).queryList();
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",provinceName+" "+cityName+" "+ countyName+" "+detailInfo).queryList();
 
         String contactMechId = "";
 
@@ -1949,7 +1949,7 @@ public class PersonManagerServices {
             // 货运目的地址
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                    UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
+                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName+" "+cityName+" "+ countyName+" "+detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId));
               contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {

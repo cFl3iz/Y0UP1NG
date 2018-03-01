@@ -2793,7 +2793,7 @@ public class PersonManagerQueryServices {
         String originFacilityId = (String) facility.get("facilityId");
         //获得库存信息 getInventoryAvailableByFacility
         Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                "facilityId",originFacilityId,"productId",product));
+                "facilityId",originFacilityId,"productId",productId));
         if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
             resourceDetail.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
             resourceDetail.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
@@ -3016,7 +3016,7 @@ public class PersonManagerQueryServices {
         String originFacilityId = (String) facility.get("facilityId");
         //获得库存信息 getInventoryAvailableByFacility
         Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                "facilityId",originFacilityId,"productId",product));
+                "facilityId",originFacilityId,"productId",productId));
         if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
             resourceDetail.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
             resourceDetail.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));

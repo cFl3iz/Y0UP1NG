@@ -4006,6 +4006,7 @@ public class PersonManagerServices {
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+        Debug.logInf("*placeResourceOrder ownerPartyID = " + payToPartyId,module);
         String originFacilityId = (String) facility.get("facilityId");
 
         // Do Create OrderHeader

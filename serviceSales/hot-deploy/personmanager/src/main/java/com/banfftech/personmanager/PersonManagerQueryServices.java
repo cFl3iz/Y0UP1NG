@@ -2789,14 +2789,18 @@ public class PersonManagerQueryServices {
         if(null!=productPrice){
             resourceDetail.put("price",productPrice.get("price"));
         }
-
-        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
-
-        if(null!=inventoryItem){
-            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
-            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
-            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToId).queryFirst();
+        String originFacilityId = (String) facility.get("facilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",originFacilityId,"productId",product));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            resourceDetail.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+            resourceDetail.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
+
+
+
 
 
         //查询卖家提供的联系电话
@@ -2840,7 +2844,7 @@ public class PersonManagerQueryServices {
 
         String nowPartyId = (String) context.get("partyId");
 
-
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         GenericValue nowPerson = delegator.findOne("Person", UtilMisc.toMap("partyId", nowPartyId), false);
 
         if (null != nowPerson) {
@@ -2869,6 +2873,7 @@ public class PersonManagerQueryServices {
                 findConditions, fieldSet,
                 null, null, false).get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
+        String payToId = (String) product.get("payToPartyId");
         String detailImageUrl = (String) resourceDetail.get("detailImageUrl");
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
         if (person != null) {
@@ -3007,12 +3012,14 @@ public class PersonManagerQueryServices {
 //
 //        System.out.println("strProductFeaturesList="+strProductFeaturesList);
 
-        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
-
-        if(null!=inventoryItem){
-            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
-            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
-            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToId).queryFirst();
+        String originFacilityId = (String) facility.get("facilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",originFacilityId,"productId",product));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            resourceDetail.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+            resourceDetail.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
 
         resultMap.put("resourceDetail", resourceDetail);

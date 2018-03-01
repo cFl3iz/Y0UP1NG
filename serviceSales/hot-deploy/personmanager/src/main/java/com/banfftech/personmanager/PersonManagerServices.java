@@ -1895,6 +1895,84 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+    /**
+     * createPersonPartyPostalAddressFromMiniprogram
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createPersonPartyPostalAddressFromMiniprogram(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String tarjeta = (String) context.get("tarjeta");
+        String orderId = (String) context.get("orderId");
+        String userName = (String) context.get("userName");
+        String postalCode = (String) context.get("postalCode");
+        String provinceName = (String) context.get("provinceName");
+        String cityName = (String) context.get("cityName");
+        String countyName = (String) context.get("countyName");
+        String detailInfo = (String) context.get("detailInfo");
+        String nationalCode = (String) context.get("nationalCode");
+        String telNumber = (String) context.get("telNumber");
+
+        resultMap.put("orderId",orderId);
+
+        String partyId = (String) userLogin.get("partyId");
+
+        resultMap.put("tarjeta", tarjeta);
+
+
+
+
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",address1 + " " + address2).queryList();
+
+        String contactMechId = "";
+
+        if(null == partyAndPostalAddress || partyAndPostalAddress.size()==0){
+            // 货运目的地址
+            String contactMechPurposeTypeId = "SHIPPING_LOCATION";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+              contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                return createPartyPostalAddressOutMap;
+            }
+        }else{
+            GenericValue contactAddress = (GenericValue) partyAndPostalAddress.get(0);
+            contactMechId = (String) contactAddress.get("contactMechId");
+        }
+
+        //更新一下订单的货运地址
+        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,
+                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
+
+        if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+            return updateShipGroupShipInfoOutMap;
+        }
+
+        return resultMap;
+    }
+
+
 
     /**
      * createPerson PartyPostalAddress
@@ -1954,16 +2032,18 @@ public class PersonManagerServices {
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
         String firstName = (String) person.get("firstName");
 
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",address1 + " " + address2).queryList();
+        if(null == partyAndPostalAddress || partyAndPostalAddress.size()==0){
         // 货运目的地址
         String contactMechPurposeTypeId = "SHIPPING_LOCATION";
         Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                 UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
                         "contactMechPurposeTypeId", contactMechPurposeTypeId));
         String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
-        if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
             return createPartyPostalAddressOutMap;
+           }
         }
-
 //        //寄送账单地址
 //        dispatcher.runAsync("createPartyContactMechPurpose",
 //                UtilMisc.toMap("userLogin", admin, "contactMechId", contactMechId,

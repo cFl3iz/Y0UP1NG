@@ -1860,6 +1860,10 @@ public class PersonManagerQueryServices {
 
         GenericValue orderHeaderItemAndRoles = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", orderId).queryFirst();
 
+        GenericValue custOrderRole  = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
+
+        String custPartyId = (String) custOrderRole.get("partyId");
+
         if (null != orderHeaderItemAndRoles) {
 
             rowMap = orderHeaderItemAndRoles.getAllFields();
@@ -1907,7 +1911,7 @@ public class PersonManagerQueryServices {
             Map<String, String> personAddressInfoMap = null;
 
 
-            personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
+            personInfoMap = queryPersonBaseInfo(delegator, custPartyId);
 
             personAddressInfoMap = queryPersonAddressInfoFromOrder(delegator, partyId, orderId);
 
@@ -1926,7 +1930,7 @@ public class PersonManagerQueryServices {
             expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
         }
 
-
+        rowMap.put("custPartyId",custPartyId);
         resultMap.put("orderInfo", rowMap);
         resultMap.put("orderExpressInfo", expressInfos);
         resultMap.put("orderExpressName", queryExpressInfoMap.get("name"));

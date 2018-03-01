@@ -284,7 +284,7 @@
         <attribute name="unioId" type="String" mode="IN"
                    optional="true"/>
 
-        <attribute name="partyId" type="String" mode="IN"
+        <attribute name="nowPartyId" type="String" mode="INOUT"
                    optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="IN"

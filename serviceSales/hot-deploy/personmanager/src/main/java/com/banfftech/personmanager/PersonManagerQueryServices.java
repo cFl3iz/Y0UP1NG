@@ -2656,6 +2656,7 @@ public class PersonManagerQueryServices {
             partyId = (String) partyIdentification.get("partyId");
         }
 
+        resultMap.put("nowPartyId",partyId);
 
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
 

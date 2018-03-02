@@ -1579,10 +1579,12 @@ public class PersonManagerServices {
                 BigDecimal paymentMethodAmount = BigDecimal.ZERO;
                 try {
                     paymentMethodAmount = (BigDecimal) ObjectType.simpleTypeConvert(paymentMethodAmountStr, "BigDecimal", null, locale);
+                    Debug.logInfo("1616:paymentMethodAmount="+paymentMethodAmount, module);
                 } catch (GeneralException e) {
                 //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
                     return "error";
                 }
+                Debug.logInfo("1616:paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0="+(paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0), module);
                 if (paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0) {
                     // create a payment, payment reference and payment appl record, when not exist yet.
                     Map<String, Object> results = null;
@@ -1598,6 +1600,7 @@ public class PersonManagerServices {
                //         request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
                         return "error";
                     }
+                    Debug.logInfo("1616:results == null="+(results), module);
 
                     if ((results == null) || (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR))) {
                         Debug.logError((String) results.get(ModelService.ERROR_MESSAGE), module);

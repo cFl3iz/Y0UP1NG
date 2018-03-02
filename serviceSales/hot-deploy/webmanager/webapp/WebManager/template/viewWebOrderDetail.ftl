@@ -51,7 +51,7 @@
             <form id="createPersonPartyPostalAddressForm" action="createPersonPartyPostalAddress">
                 <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
                 <input name="address1" id="address1" type="hidden"/>
-                <input name="orderId" id="orderId" type="hidden"/>
+                <input name="orderId" id="orderId" value="${orderId}" type="hidden"/>
                 <div class="m-celltitle">${uiLabel.AddressDetail}</div>
                 <div class="m-cell">
                     <div class="cell-item">

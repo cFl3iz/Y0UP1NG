@@ -276,6 +276,15 @@
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="genericPaymentService" auth="false">
         <description>genericPaymentService</description>
+
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderItems" type="List" mode="IN" optional="true"/>
+        <attribute name="orderPaymentPreference" type="org.apache.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="paymentConfig" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentGatewayConfigId" type="String" mode="IN" optional="true"/>
+        <attribute name="processAmount" type="String" mode="IN" optional="true"/>
+        <attribute name="shippingAddress" type="String" mode="IN" optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

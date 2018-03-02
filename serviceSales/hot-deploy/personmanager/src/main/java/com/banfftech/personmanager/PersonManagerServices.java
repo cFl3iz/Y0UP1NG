@@ -1613,10 +1613,15 @@ public class PersonManagerServices {
         List<GenericValue> toBeStored = new LinkedList<GenericValue>();
         for (GenericValue paymentMethodType : paymentMethodTypes) {
             String paymentMethodTypeId = paymentMethodType.getString("paymentMethodTypeId");
+            Debug.logInfo("1616:paymentMethodTypeId="+paymentMethodTypeId, module);
+            Debug.logInfo("1616:paymentMethodStr="+paymentMethodStr, module);
+
             String amountStr = "0";
+            Debug.logInfo("1616:paymentMethodTypeId.equals(paymentMethodStr)="+(paymentMethodTypeId.equals(paymentMethodStr)), module);
             if(paymentMethodTypeId.equals(paymentMethodStr)){
                 amountStr = paymentAmountStr;
             }
+            Debug.logInfo("1616:amountStr="+amountStr, module);
 
                     //request.getParameter(paymentMethodTypeId + "_amount");
             String paymentReference = "";
@@ -1629,6 +1634,10 @@ public class PersonManagerServices {
              //       request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
                     return "error";
                 }
+                Debug.logInfo("1616:paymentTypeAmount="+paymentTypeAmount, module);
+
+                Debug.logInfo("1616:paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0="+(paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0), module);
+
                 if (paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0) {
                     // create the OrderPaymentPreference
                     // TODO: this should be done with a service
@@ -1644,6 +1653,7 @@ public class PersonManagerServices {
                     }
 
                     try {
+                        Debug.logInfo("1616:create a new OrderPaymentPreference", module);
                         delegator.create(paymentPreference);
                     } catch (GenericEntityException ex) {
                          Debug.logError(ex, "Cannot create a new OrderPaymentPreference", module);

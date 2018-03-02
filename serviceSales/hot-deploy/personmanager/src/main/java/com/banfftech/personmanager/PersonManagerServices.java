@@ -549,8 +549,9 @@ public class PersonManagerServices {
             Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt,module);
             Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
 
-            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
-            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
+            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
         }
         //说明现库存比要设置的库存小,需要做差异加法
         if(availableToPromiseTotal.compareTo(quantity)<0){
@@ -560,6 +561,7 @@ public class PersonManagerServices {
             Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
             createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(quantityInt-availableToPromiseTotalInt)));
             createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(quantityInt-quantityInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
         }
         //一模一样的库存我还差异个屁?
         if(availableToPromiseTotal.compareTo(quantity)==0){

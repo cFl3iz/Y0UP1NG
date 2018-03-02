@@ -4948,7 +4948,7 @@ public class PersonManagerServices {
                 "productStoreId", productStoreId,
                 "productStoreShipMethId","10000",
                 "roleTypeId","CARRIER",
-                "shipmentMethodTypeId","EXPRESS"));
+                "shipmentMethodTypeId","SHUNFENG_EXPRESS"));
 
 
 

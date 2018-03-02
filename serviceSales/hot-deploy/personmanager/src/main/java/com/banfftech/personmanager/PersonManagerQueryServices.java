@@ -118,6 +118,30 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * genericPaymentService
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> genericPaymentService(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        return resultMap;
+    }
+
+
+    /**
      * getTel FromEncryptedData
      * @param dctx
      * @param context

@@ -272,6 +272,14 @@
     </service>
 
 
+    <service name="genericPaymentService" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="genericPaymentService" auth="false">
+        <description>genericPaymentService</description>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
 
     <!-- query Resource Detail -->

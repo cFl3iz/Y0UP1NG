@@ -4665,7 +4665,7 @@ public class PersonManagerServices {
 
             //微信支付设置
             Map<String, Object> createProductStorePaymentSettingOutMap = dispatcher.runSync("createProductStorePaymentSetting", UtilMisc.toMap("userLogin", admin,
-                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId", "EXT_WXPAY", "paymentServiceTypeEnumId", "PRDS_PAY_AUTH"));
+                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId", "EXT_WXPAY", "paymentServiceTypeEnumId", "PRDS_PAY_AUTH","paymentService","genericPaymentService"));
             if (!ServiceUtil.isSuccess(createProductStorePaymentSettingOutMap)) {
                 return createProductStorePaymentSettingOutMap;
             }

@@ -1386,8 +1386,8 @@ public class PersonManagerServices {
         createOrderPaymentPreferenceMap.put("createdByUserLogin",userLogin.get("userLoginId"));
         createOrderPaymentPreferenceMap.put("maxAmount",orderHeader.get("grandTotal"));
         createOrderPaymentPreferenceMap.put("overflowFlag","N");
-        createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_WXPAY");
-        //createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+         createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_WXPAY");
+         // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
         createOrderPaymentPreferenceMap.put("presentFlag","N");
         createOrderPaymentPreferenceMap.put("statusId","PAYMENT_RECEIVED");
         createOrderPaymentPreferenceMap.put("swipedFlag","N");

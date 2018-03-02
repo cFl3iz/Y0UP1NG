@@ -423,7 +423,7 @@ public class PersonManagerQueryServices {
 
 
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", nowPartyId)).queryFirst();
-
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         //有效时间
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
         String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);

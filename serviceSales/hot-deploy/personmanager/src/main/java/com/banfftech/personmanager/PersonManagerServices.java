@@ -478,11 +478,13 @@ public class PersonManagerServices {
         String partyId   = (String) userLogin.get("partyId");
         String productId = (String) context.get("productId");
         String productName = (String) context.get("productName");
-        String productPrice = (String) context.get("productPrice");
+        String productPriceStr = (String) context.get("productPrice");
+
+
         String quantityTotaStr = (String) context.get("quantityTotal");
 
         BigDecimal quantity = new BigDecimal(quantityTotaStr);
-
+        BigDecimal price = new BigDecimal(productPriceStr);
 
         //1.Update Product
         Map<String,Object> serviceResultMap = dispatcher.runSync("updateProduct",UtilMisc.toMap("userLogin",userLogin
@@ -492,18 +494,21 @@ public class PersonManagerServices {
             return serviceResultMap;
         }
         //2. Update ProductPrice
-
-       serviceResultMap = dispatcher.runSync("updateProductPrice",UtilMisc.toMap("userLogin",userLogin
-                ,"currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,"fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
-               "price",new BigDecimal(productPrice),
-               "productPricePurposeId","PURCHASE",
-               "productPriceTypeId","DEFAULT_PRICE",
-               "productStoreGroupId","_NA_",
-               "productId",productId));
-
-        if (!ServiceUtil.isSuccess(serviceResultMap)) {
-            return serviceResultMap;
-        }
+        //TODO 不再使用原生服务更新产品价格
+//       serviceResultMap = dispatcher.runSync("updateProductPrice",UtilMisc.toMap("userLogin",userLogin
+//                ,"currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,"fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+//               "price",new BigDecimal(productPrice),
+//               "productPricePurposeId","PURCHASE",
+//               "productPriceTypeId","DEFAULT_PRICE",
+//               "productStoreGroupId","_NA_",
+//               "productId",productId));
+//
+//        if (!ServiceUtil.isSuccess(serviceResultMap)) {
+//            return serviceResultMap;
+//        }
+        GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
+        productPriceEntity.set("price",price);
+        productPriceEntity.store();
 
 
         //3. Create Inventory Item ..

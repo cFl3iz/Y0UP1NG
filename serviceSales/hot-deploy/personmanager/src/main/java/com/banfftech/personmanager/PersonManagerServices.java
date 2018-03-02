@@ -457,6 +457,112 @@ public class PersonManagerServices {
 
 
     /**
+     * Update Resource Bis Info
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> updateResourceInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String partyId   = (String) userLogin.get("partyId");
+        String productId = (String) context.get("productId");
+        String productName = (String) context.get("productName");
+        String productPrice = (String) context.get("productPrice");
+        String quantityTotaStr = (String) context.get("quantityTota");
+
+        BigDecimal quantity = new BigDecimal(quantityTotaStr);
+
+
+        //1.Update Product
+        Map<String,Object> serviceResultMap = dispatcher.runSync("updateProduct",UtilMisc.toMap("userLogin",userLogin
+        ,"productId",productId,"productName",productName));
+
+        if (!ServiceUtil.isSuccess(serviceResultMap)) {
+            return serviceResultMap;
+        }
+        //2. Update ProductPrice
+
+       serviceResultMap = dispatcher.runSync("updateProductPrice",UtilMisc.toMap("userLogin",userLogin
+                ,"currencyUomId",PeConstant.DEFAULT_CURRENCY_UOM_ID,"fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+               "price",new BigDecimal(productPrice),
+               "productPricePurposeId","PURCHASE",
+               "productPriceTypeId","DEFAULT_PRICE",
+               "productStoreGroupId","_NA_",
+               "productId",productId));
+
+        if (!ServiceUtil.isSuccess(serviceResultMap)) {
+            return serviceResultMap;
+        }
+
+
+        //3. Create Inventory Item ..
+
+        //3.1 Get Now InventoryItem Quantity
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+        String originFacilityId = (String) facility.get("facilityId");
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",originFacilityId,"productId",productId));
+        if (!ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+          return getInventoryAvailableByFacilityMap;
+        }
+        BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+        BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+
+        GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
+        String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+//          -1,表示bigdemical小于bigdemical2；
+//           0,表示bigdemical等于bigdemical2；
+//           1,表示bigdemical大于bigdemical2；
+
+        Map<String,Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+        createInventoryItemDetailMap.put("userLogin",admin);
+        createInventoryItemDetailMap.put("inventoryItemId",inventoryItemId);
+
+
+        //说明现库存比要设置的库存大,需要做差异减法
+        if(availableToPromiseTotal.compareTo(quantity)>0){
+            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+            int quantityInt = quantity.intValue();
+            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
+        }
+        //说明现库存比要设置的库存小,需要做差异加法
+        if(availableToPromiseTotal.compareTo(quantity)<0){
+            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+            int quantityInt = quantity.intValue();
+            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(quantityInt-availableToPromiseTotalInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(quantityInt-quantityInt)));
+        }
+        //一模一样的库存我还差异个屁?
+        if(availableToPromiseTotal.compareTo(quantity)==0){
+
+        }
+
+
+        //3.2 Do create
+        Map<String,Object>    createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail",createInventoryItemDetailMap);
+
+        if (!ServiceUtil.isSuccess(createInventoryItemDetailOutMap)) {
+            return createInventoryItemDetailOutMap;
+        }
+
+        return resultMap;
+    }
+
+    /**
      * 用户的联系信息
      * @param dctx
      * @param context

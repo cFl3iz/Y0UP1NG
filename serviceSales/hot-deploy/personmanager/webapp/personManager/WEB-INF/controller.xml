@@ -286,7 +286,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <request-map uri="updateResourceInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateResourceInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!--  Create OrderHeader & OrderItem -->

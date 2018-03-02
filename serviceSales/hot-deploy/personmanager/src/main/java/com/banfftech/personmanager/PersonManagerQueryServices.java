@@ -568,13 +568,24 @@ public class PersonManagerQueryServices {
         resourceDetail.put("morePicture", pictures);
 
 
-        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
-
-        if(null!=inventoryItem){
-            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
-            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
-            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
+//        GenericValue inventoryItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+//
+//        if(null!=inventoryItem){
+//            resourceDetail.put("availableToPromiseTotal",inventoryItem.get("availableToPromiseTotal"));
+//            resourceDetail.put("quantityOnHandTotal",inventoryItem.get("quantityOnHandTotal"));
+//            resourceDetail.put("accountingQuantityTotal",inventoryItem.get("accountingQuantityTotal"));
+//        }
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+       String payToPartyId = (String) product.get("payToPartyId");
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+        String originFacilityId = (String) facility.get("facilityId");
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",originFacilityId,"productId",productId));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            resourceDetail.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+            resourceDetail.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
+
 
 
         request.setAttribute("resourceDetail", resourceDetail);

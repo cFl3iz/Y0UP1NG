@@ -290,6 +290,18 @@
                    optional="true"/>
     </service>
 
+    <!-- 更新资源 -->
+    <service name="updateResourceInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updateResourceInfo" auth="false">
+        <description>updateResourceInfo</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="productPrice" type="String" mode="IN" optional="true"/>
+        <attribute name="quantityTota" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
     <!-- query Resource Detail -->

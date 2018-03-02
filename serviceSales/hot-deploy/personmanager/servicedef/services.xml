@@ -298,7 +298,7 @@
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="productName" type="String" mode="IN" optional="true"/>
         <attribute name="productPrice" type="String" mode="IN" optional="true"/>
-        <attribute name="quantityTota" type="String" mode="IN" optional="true"/>
+        <attribute name="quantityTotal" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

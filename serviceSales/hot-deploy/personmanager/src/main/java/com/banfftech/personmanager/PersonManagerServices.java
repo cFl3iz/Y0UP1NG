@@ -479,7 +479,7 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
         String productName = (String) context.get("productName");
         String productPrice = (String) context.get("productPrice");
-        String quantityTotaStr = (String) context.get("quantityTota");
+        String quantityTotaStr = (String) context.get("quantityTotal");
 
         BigDecimal quantity = new BigDecimal(quantityTotaStr);
 

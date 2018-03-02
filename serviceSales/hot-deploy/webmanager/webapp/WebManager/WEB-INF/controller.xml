@@ -206,7 +206,10 @@
             <redirect-parameter name="tarjeta" from="tarjeta"/>
             <redirect-parameter name="orderId" from="orderId"/>
         </response>
-        <response name="error" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="orderId" from="orderId"/>
+        </response>
     </request-map>
 
     <!-- markOrOutMarkProduct -->

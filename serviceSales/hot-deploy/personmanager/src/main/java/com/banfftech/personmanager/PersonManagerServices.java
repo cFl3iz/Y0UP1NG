@@ -1389,7 +1389,7 @@ public class PersonManagerServices {
         createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_WXPAY");
         //createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
         createOrderPaymentPreferenceMap.put("presentFlag","N");
-        createOrderPaymentPreferenceMap.put("statusId","PAYMENT_NOT_RECEIVED");
+        createOrderPaymentPreferenceMap.put("statusId","PAYMENT_RECEIVED");
         createOrderPaymentPreferenceMap.put("swipedFlag","N");
 
         Map<String,Object> createOrderPaymentPreferenceOutMap =

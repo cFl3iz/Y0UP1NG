@@ -619,19 +619,19 @@ public class PaymentGatewayServices {
         Delegator delegator = orderHeader.getDelegator();
         GenericValue paymentSettings = null;
         String paymentMethodTypeId = paymentPreference.getString("paymentMethodTypeId");
-        Debug.logInf("->getPaymentSettings paymentPreference = " + paymentPreference,module);
-        Debug.logInf("->getPaymentSettings paymentServiceType = " + paymentServiceType,module);
-        Debug.logInf("->getPaymentSettings orderHeader = " + orderHeader,module);
-        Debug.logInf("->getPaymentSettings paymentMethodTypeId = " + paymentMethodTypeId,module);
+        Debug.logInfo("->getPaymentSettings paymentPreference = " + paymentPreference, module);
+        Debug.logInfo("->getPaymentSettings paymentServiceType = " + paymentServiceType, module);
+        Debug.logInfo("->getPaymentSettings orderHeader = " + orderHeader, module);
+        Debug.logInfo("->getPaymentSettings paymentMethodTypeId = " + paymentMethodTypeId, module);
 
 
         if (paymentMethodTypeId != null) {
             String productStoreId = orderHeader.getString("productStoreId");
-            Debug.logInf("->getPaymentSettings productStoreId = " + productStoreId,module);
+            Debug.logInfo("->getPaymentSettings productStoreId = " + productStoreId, module);
 
             if (productStoreId != null) {
                 paymentSettings = ProductStoreWorker.getProductStorePaymentSetting(delegator, productStoreId, paymentMethodTypeId, paymentServiceType, anyServiceType);
-                Debug.logInf("->getPaymentSettings productStoreId != null " + paymentSettings,module);
+                Debug.logInfo("->getPaymentSettings productStoreId != null " + paymentSettings,module);
 
             }
         }

@@ -1381,7 +1381,7 @@ public class PersonManagerServices {
         createOrderPaymentPreferenceMap.put("userLogin",admin);
         createOrderPaymentPreferenceMap.put("orderId",orderId);
         createOrderPaymentPreferenceMap.put("createdByUserLogin",userLogin.get("userLoginId"));
-        createOrderPaymentPreferenceMap.put("maxAmount",new BigDecimal(orderHeader.get("grandTotal")));
+        createOrderPaymentPreferenceMap.put("maxAmount",orderHeader.get("grandTotal"));
         createOrderPaymentPreferenceMap.put("overflowFlag","N");
         createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
         createOrderPaymentPreferenceMap.put("presentFlag","N");

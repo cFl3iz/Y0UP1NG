@@ -4946,9 +4946,15 @@ public class PersonManagerServices {
         Map<String, Object> createProductStoreShipMethMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId,
                 "productStoreId", productStoreId,
-                "productStoreShipMethId","SHUNFENG_EXPRESS",
+                "productStoreShipMethId","10000",
                 "roleTypeId","CARRIER",
-                "shipmentMethodTypeId","EXPRESS"));
+                "shipmentMethodTypeId","EXPRESS",
+                "partyId","SHUNFENG_EXPRESS",
+                "allowUspsAddr","Y",
+                "requireUspsAddr","N",
+                "allowCompanyAddr","Y",
+                "requireCompanyAddr","N"
+            ,   "includeNoChargeItems","Y"));
 
 
 

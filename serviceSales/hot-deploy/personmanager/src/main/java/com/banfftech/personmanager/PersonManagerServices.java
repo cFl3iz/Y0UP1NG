@@ -538,10 +538,17 @@ public class PersonManagerServices {
         createInventoryItemDetailMap.put("inventoryItemId",inventoryItemId);
 
 
+        Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal,module);
+        Debug.logInfo("*update resource quantity = " + quantity,module);
+        Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity)>0),module);
+
         //说明现库存比要设置的库存大,需要做差异减法
         if(availableToPromiseTotal.compareTo(quantity)>0){
             int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
             int quantityInt = quantity.intValue();
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt,module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
+
             createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
             createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
         }
@@ -549,6 +556,8 @@ public class PersonManagerServices {
         if(availableToPromiseTotal.compareTo(quantity)<0){
             int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
             int quantityInt = quantity.intValue();
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt,module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
             createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(quantityInt-availableToPromiseTotalInt)));
             createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(quantityInt-quantityInt)));
         }

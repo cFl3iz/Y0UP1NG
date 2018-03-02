@@ -282,8 +282,8 @@
         <attribute name="orderPaymentPreference" type="org.apache.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
         <attribute name="paymentConfig" type="String" mode="IN" optional="true"/>
         <attribute name="paymentGatewayConfigId" type="String" mode="IN" optional="true"/>
-        <attribute name="processAmount" type="String" mode="IN" optional="true"/>
-        <attribute name="shippingAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="processAmount" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="shippingAddress" type="org.apache.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
         <attribute name="currency" type="String" mode="IN" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

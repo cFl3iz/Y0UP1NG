@@ -477,6 +477,7 @@ public class PersonManagerServices {
 
         String partyId   = (String) userLogin.get("partyId");
         String productId = (String) context.get("productId");
+        String description = (String) context.get("description");
         String productName = (String) context.get("productName");
         String productPriceStr = (String) context.get("productPrice");
 
@@ -488,7 +489,7 @@ public class PersonManagerServices {
 
         //1.Update Product
         Map<String,Object> serviceResultMap = dispatcher.runSync("updateProduct",UtilMisc.toMap("userLogin",userLogin
-        ,"productId",productId,"productName",productName));
+        ,"productId",productId,"productName",productName,"description",description));
 
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
             return serviceResultMap;

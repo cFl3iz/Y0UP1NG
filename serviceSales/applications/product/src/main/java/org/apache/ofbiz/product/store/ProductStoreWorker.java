@@ -205,6 +205,7 @@ public final class ProductStoreWorker {
         GenericValue storePayment = null;
         try {
             storePayment = EntityQuery.use(delegator).from("ProductStorePaymentSetting").where("productStoreId", productStoreId, "paymentMethodTypeId", paymentMethodTypeId, "paymentServiceTypeEnumId", paymentServiceTypeEnumId).cache().queryOne();
+            Debug.logInfo("->ProductStorePaymentSetting storePayment= " + storePayment,module);
         } catch (GenericEntityException e) {
             Debug.logError(e, "Problems looking up store payment settings", module);
         }

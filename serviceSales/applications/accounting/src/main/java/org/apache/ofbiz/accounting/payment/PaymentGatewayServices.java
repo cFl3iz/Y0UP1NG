@@ -452,10 +452,12 @@ public class PaymentGatewayServices {
         if (reauth) {
             serviceType = REAUTH_SERVICE_TYPE;
         }
-
+        Debug.logInfo("->authPayment serviceType= " + serviceType,module);
         GenericValue paymentSettings = getPaymentSettings(orh.getOrderHeader(), paymentPreference, serviceType, false);
         if (paymentSettings != null) {
             String customMethodId = paymentSettings.getString("paymentCustomMethodId");
+            Debug.logInfo("->authPayment customMethodId= " + customMethodId,module);
+
             if (UtilValidate.isNotEmpty(customMethodId)) {
                 serviceName = getPaymentCustomMethod(orh.getOrderHeader().getDelegator(), customMethodId);
             }
@@ -617,11 +619,20 @@ public class PaymentGatewayServices {
         Delegator delegator = orderHeader.getDelegator();
         GenericValue paymentSettings = null;
         String paymentMethodTypeId = paymentPreference.getString("paymentMethodTypeId");
+        Debug.logInf("->getPaymentSettings paymentPreference = " + paymentPreference,module);
+        Debug.logInf("->getPaymentSettings paymentServiceType = " + paymentServiceType,module);
+        Debug.logInf("->getPaymentSettings orderHeader = " + orderHeader,module);
+        Debug.logInf("->getPaymentSettings paymentMethodTypeId = " + paymentMethodTypeId,module);
+
 
         if (paymentMethodTypeId != null) {
             String productStoreId = orderHeader.getString("productStoreId");
+            Debug.logInf("->getPaymentSettings productStoreId = " + productStoreId,module);
+
             if (productStoreId != null) {
                 paymentSettings = ProductStoreWorker.getProductStorePaymentSetting(delegator, productStoreId, paymentMethodTypeId, paymentServiceType, anyServiceType);
+                Debug.logInf("->getPaymentSettings productStoreId != null " + paymentSettings,module);
+
             }
         }
         return paymentSettings;

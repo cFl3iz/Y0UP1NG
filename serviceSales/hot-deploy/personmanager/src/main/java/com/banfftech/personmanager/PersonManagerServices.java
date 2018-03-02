@@ -1481,7 +1481,7 @@ public class PersonManagerServices {
 //        }
 
         //应用收款支付.....
-        receiveOfflinePayment("CASH",orderHeader.get("grandTotal").toString(),orderId,payFromPartyId,locale,delegator,dispatcher,userLogin);
+        receiveOfflinePayment("EXT_WXPAY",orderHeader.get("grandTotal").toString(),orderId,payFromPartyId,locale,delegator,dispatcher,userLogin);
 
 
 

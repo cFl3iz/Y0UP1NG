@@ -1374,16 +1374,33 @@ public class PersonManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-        //找到买家
-        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        Map<String,Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
+        createOrderPaymentPreferenceMap.put("userLogin",admin);
+        createOrderPaymentPreferenceMap.put("orderId",orderId);
+        createOrderPaymentPreferenceMap.put("createdByUserLogin",userLogin.get("userLoginId"));
+        createOrderPaymentPreferenceMap.put("maxAmount",admin);
+        createOrderPaymentPreferenceMap.put("overflowFlag","N");
+        createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+        createOrderPaymentPreferenceMap.put("presentFlag","N");
+        createOrderPaymentPreferenceMap.put("statusId","PAYMENT_RECEIVED");
+        createOrderPaymentPreferenceMap.put("swipedFlag","N");
 
-        String payFromPartyId = (String) orderCust.get("partyId");
+        Map<String,Object> createOrderPaymentPreferenceOutMap =
+        dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
+        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
+            return createOrderPaymentPreferenceOutMap;
+        }
 
-
-        GenericValue payFromUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", payFromPartyId).queryFirst();
-        //卖家确定自己已经收到钱了
-        Map<String, Object> createPaymentResult = dispatcher.runSync("createPaymentFromCust", UtilMisc.toMap("userLogin", payFromUserLogin, "payToPartyId", partyId, "orderId", orderId));
-
+//        //找到买家
+//        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+//
+//        String payFromPartyId = (String) orderCust.get("partyId");
+//
+//
+//        GenericValue payFromUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", payFromPartyId).queryFirst();
+//        //卖家确定自己已经收到钱了
+//        Map<String, Object> createPaymentResult = dispatcher.runSync("createPaymentFromCust", UtilMisc.toMap("userLogin", payFromUserLogin, "payToPartyId", partyId, "orderId", orderId));
+//
 
         //查找订单支付Id
         // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
@@ -1395,16 +1412,16 @@ public class PersonManagerServices {
 
         // GenericValue payment = EntityQuery.use(delegator).from("Payment").where("paymentTypeId", PeConstant.CUSTOMER_PAYMENT, "partyIdFrom", payFromPartyId, "partyIdTo", partyId).queryFirst();
 
-        String paymentId = (String) createPaymentResult.get("paymentId");
-
-        System.out.println("====================================== Payment Id =  " + paymentId);
-
-        Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
-
-        if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
-            return setPaymentStatusMap;
-        }
-
+//        String paymentId = (String) createPaymentResult.get("paymentId");
+//
+//        System.out.println("====================================== Payment Id =  " + paymentId);
+//
+//        Map<String, Object> setPaymentStatusMap = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
+//
+//        if (!ServiceUtil.isSuccess(setPaymentStatusMap)) {
+//            return setPaymentStatusMap;
+//        }
+//
 
         //推送提醒买家
 

@@ -1606,7 +1606,9 @@ public class PersonManagerServices {
                     }
                 }
                 OrderChangeHelper.approveOrder(dispatcher, userLogin, orderId);
-                return "success";
+
+                //谁让你返回的
+                //return "success";
             }
         }
 

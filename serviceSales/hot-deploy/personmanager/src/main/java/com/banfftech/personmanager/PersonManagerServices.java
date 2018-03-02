@@ -1535,12 +1535,12 @@ public class PersonManagerServices {
         List<GenericValue> paymentMethodTypes = null;
 
         try {
-            paymentMethodTypes = EntityQuery.use(delegator).from("PaymentMethodType").where(EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.NOT_EQUAL, "EXT_OFFLINE")).queryList();
+            paymentMethodTypes = EntityQuery.use(delegator).from("PaymentMethodType").where(EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.EQUALS, "EXT_WXPAY")).queryList();
         } catch (GenericEntityException e) {
             Debug.logError(e, "Problems getting payment types", module);
 
         }
-
+        Debug.logInfo("1616:paymentMethodTypes="+paymentMethodTypes, module);
         if (paymentMethodTypes == null) {
            // request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsWithPaymentTypeLookup", locale));
             return "error";
@@ -1564,7 +1564,7 @@ public class PersonManagerServices {
         //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderErrorProcessingOfflinePayments", locale));
             return "error";
         }
-
+        Debug.logInfo("1616:paymentMethods="+paymentMethods, module);
         for (GenericValue paymentMethod : paymentMethods) {
             String paymentMethodId = paymentMethod.getString("paymentMethodId");
             String paymentMethodAmountStr = "0";
@@ -1611,6 +1611,7 @@ public class PersonManagerServices {
         }
 
         List<GenericValue> toBeStored = new LinkedList<GenericValue>();
+        Debug.logInfo("1616:paymentMethodTypes="+paymentMethodTypes, module);
         for (GenericValue paymentMethodType : paymentMethodTypes) {
             String paymentMethodTypeId = paymentMethodType.getString("paymentMethodTypeId");
             Debug.logInfo("1616:paymentMethodTypeId="+paymentMethodTypeId, module);

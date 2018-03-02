@@ -2121,7 +2121,7 @@ public class PersonManagerServices {
             // 2018-3-1 不用如此痛苦.
          //   if (custCount == null || custCount <= 0) {}
                 dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
-            
+
         } else {
             if (placingCustCount > 0) {
                 Debug.logInfo("* placingCustCount "+ (placingCustCount),module);
@@ -4252,30 +4252,32 @@ public class PersonManagerServices {
         }
 
 
+        //TODO 这个推送买家的逻辑先不用了 Query   Address
+//        Set<String> fieldSet = new HashSet<String>();
+//        fieldSet.add("contactMechId");
+//        fieldSet.add("partyId");
+//        fieldSet.add("address1");
+//
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyId));
+//
+//
+//        List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
+//                findConditions, fieldSet,
+//                UtilMisc.toList("-fromDate"), null, false);
+//
+//        String address1 = null;
+//        if (queryAddressList != null & queryAddressList.size() > 0) {
+//            GenericValue address = queryAddressList.get(0);
+//            address1 = (String) address.get("address1");
+//        }
+//        if (address1 == null) {
+//            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址(若已更新收货地址,勿理会本条提示*_*)!", "objectId", productId));
+//        } else {
+//            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您的订单收货地址:" + address1 + ",无误请点击→", "objectId", productId));
+//        }
+                dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
 
-        Set<String> fieldSet = new HashSet<String>();
-        fieldSet.add("contactMechId");
-        fieldSet.add("partyId");
-        fieldSet.add("address1");
-
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
-
-        //Query   Address
-        List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
-                findConditions, fieldSet,
-                UtilMisc.toList("-fromDate"), null, false);
-
-        String address1 = null;
-        if (queryAddressList != null & queryAddressList.size() > 0) {
-            GenericValue address = queryAddressList.get(0);
-            address1 = (String) address.get("address1");
-        }
-        if (address1 == null) {
-            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您好,我已收到您下的订单,但我没有您的收货地址,请直接发给我您的地址(若已更新收货地址,勿理会本条提示*_*)!", "objectId", productId));
-        } else {
-            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您的订单收货地址:" + address1 + ",无误请点击→", "objectId", productId));
-        }
 
 
         //推卖家
@@ -4296,6 +4298,15 @@ public class PersonManagerServices {
             }
 
         }
+
+
+        //  auto approved
+
+        Map<String,Object> changeOrderStatusOutMap =  dispatcher.runSync("changeOrderStatus",
+                UtilMisc.toMap("userLogin",admin,
+                "orderId",orderId,
+                "statusId",PeConstant.ORDER_APPROVED_STATUS_ID));
+
         return resultMap;
     }
 

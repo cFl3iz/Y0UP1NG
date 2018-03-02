@@ -284,6 +284,7 @@
         <attribute name="paymentGatewayConfigId" type="String" mode="IN" optional="true"/>
         <attribute name="processAmount" type="String" mode="IN" optional="true"/>
         <attribute name="shippingAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="currency" type="String" mode="IN" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

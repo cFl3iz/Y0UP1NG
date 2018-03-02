@@ -1392,9 +1392,9 @@ public class PersonManagerServices {
         }
 
 //        //找到买家
-//        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
-//
-//        String payFromPartyId = (String) orderCust.get("partyId");
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+
+        String payFromPartyId = (String) orderCust.get("partyId");
 //
 //
 //        GenericValue payFromUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", payFromPartyId).queryFirst();

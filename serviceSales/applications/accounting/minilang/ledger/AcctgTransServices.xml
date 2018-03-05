@@ -257,6 +257,7 @@ under the License.
                 </add-error>
             </then>
         </if>
+        <log level="info" message="todo find AcctgTransEntry parameters.acctgTransId = ${parameters.acctgTransId} "/>
         <entity-condition entity-name="AcctgTransEntry" list="acctgTransEntryList">
             <condition-expr field-name="acctgTransId" from-field="parameters.acctgTransId"/>
             <order-by field-name="acctgTransEntrySeqId"/>

@@ -1036,22 +1036,29 @@ under the License.
     <simple-method method-name="createAcctgTransForSalesShipmentIssuance" short-description="Create an accounting transactions for a sales shipment issuance (D: INVENTORY_ACCOUNT, C: COGS_ACCOUNT)">
         <!-- retrieve ledger rounding properties -->
         <call-simple-method method-name="getGlArithmeticSettingsInline"/>
-
+        <log level="info" message="*createAcctgTransForSalesShipmentIssuance"/>
         <entity-one entity-name="ItemIssuance" value-field="itemIssuance"/>
+        <log level="info" message="*ItemIssuance=${ItemIssuance}"/>
         <get-related-one value-field="itemIssuance" relation-name="InventoryItem" to-value-field="inventoryItem"/>
         <entity-and entity-name="OrderRole" list="billToCustomers">
             <field-map field-name="orderId" from-field="itemIssuance.orderId"/>
             <field-map field-name="roleTypeId" value="BILL_TO_CUSTOMER"/>
         </entity-and>
+        <log level="info" message="*OrderRole=${OrderRole}"/>
         <first-from-list list="billToCustomers" entry="billToCustomer"/>
+        <log level="info" message="*billToCustomers=${billToCustomers}"/>
         <!-- prepare the double posting (D/C) entries (AcctgTransEntry) -->
         <!-- Credit -->
         <!-- TODO: handle serialized inventory -->
         <set field="partyAccountingPreferencesCallMap.organizationPartyId" from-field="inventoryItem.ownerPartyId"/>
+        <log level="info" message="*partyAccountingPreferencesCallMap.organizationPartyId=${partyAccountingPreferencesCallMap.organizationPartyId}"/>
         <call-service service-name="getPartyAccountingPreferences" in-map-name="partyAccountingPreferencesCallMap">
              <result-to-field result-name="partyAccountingPreference" field="partyAcctgPreference"/>
         </call-service>
         <set field="totalAmount" value="0.0" type="BigDecimal"/>
+        <log level="info" message="*+partyAccountingPreferencesCallMap =  ${partyAccountingPreferencesCallMap}"/>
+        <log level="info" message="*+partyAcctgPreference =  ${partyAcctgPreference}"/>
+
         <if>
             <condition>
                 <or>
@@ -1090,12 +1097,16 @@ under the License.
                 <set field="acctgTransEntries[]" from-field="creditEntry" type="Object"/>
             </then>
             <else>
+                <log level="info" message="*partyAcctgPreference.cogsMethodId ${partyAcctgPreference.cogsMethodId}"/>
+
                 <if-compare field="partyAcctgPreference.cogsMethodId" operator="equals" value="COGS_FIFO" type="String">
                     <set value="+datetimeReceived" field="orderByString"/>
                 </if-compare>
+                <log level="info" message="*+datetimeReceived ${orderByString}"/>
                 <if-compare field="partyAcctgPreference.cogsMethodId" operator="equals" value="COGS_LIFO" type="String">
                     <set value="-datetimeReceived" field="orderByString"/>
                 </if-compare>
+                <log level="info" message="*+partyAcctgPreference ${partyAcctgPreference}"/>
                 <if-empty field="orderByString">
                     <add-error>
                         <fail-property resource="AccountingUiLabels" property="AccountingCOGSCostingMethodIsNotSupported"/>

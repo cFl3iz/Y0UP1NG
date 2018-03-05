@@ -2255,7 +2255,7 @@ public class PersonManagerQueryServices {
 
         if (null != orderStatus && orderStatus.equals("SHIPMENT")) {
 
-            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
+            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
 
             EntityCondition listConditions3 = EntityCondition
                     .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);

@@ -214,7 +214,6 @@ under the License.
             </add-error>
         </if-compare>
         <check-errors/>
-        <log level="info" message="->acctgTrans=${acctgTrans}"/>
 
         <!-- check trial balance -->
         <set from-field="parameters.acctgTransId" field="trialBalanceCallMap.acctgTransId"/>
@@ -257,12 +256,11 @@ under the License.
                 </add-error>
             </then>
         </if>
-        <log level="info" message="todo find AcctgTransEntry parameters.acctgTransId = ${parameters.acctgTransId} "/>
         <entity-condition entity-name="AcctgTransEntry" list="acctgTransEntryList">
             <condition-expr field-name="acctgTransId" from-field="parameters.acctgTransId"/>
             <order-by field-name="acctgTransEntrySeqId"/>
         </entity-condition>
-        <log level="info" message="todo find AcctgTransEntry acctgTransEntryList = ${acctgTransEntryList} "/>
+
         <!-- check the scheduled posting date, but only if it's set -->
         <if-not-empty field="acctgTrans.scheduledPostingDate">
             <set field="scheduledPostingDate" from-field="acctgTrans.scheduledPostingDate"/>
@@ -289,13 +287,8 @@ under the License.
             <if-empty field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]">
                 <clear-field field="findCustomTimePeriodCallMap"/>
                 <clear-field field="customTimePeriodList"/>
-                <entity-and entity-name="CustomTimePeriod" list="customTimePeriodsList">
-                    <field-map field-name="organizationPartyId" from-field="acctgTransEntry.organizationPartyId"/>
-                </entity-and>
-                <set field="nowCustFitmePeriod" from-field="customTimePeriodsList[0]"/>
-                <log level="info" message="->customTimePeriodsList=${customTimePeriodsList}"/>
-                <!--<set from-field="acctgTrans.transactionDate" field="findCustomTimePeriodCallMap.findDate"/>-->
-                <set field="findCustomTimePeriodCallMap.findDate" from-field="nowCustFitmePeriod.fromDate" type="Timestamp"/>
+
+                <set from-field="acctgTrans.transactionDate" field="findCustomTimePeriodCallMap.findDate"/>
                 <set from-field="acctgTransEntry.organizationPartyId" field="findCustomTimePeriodCallMap.organizationPartyId"/>
                 <set from-field="onlyIncludePeriodTypeIdList" field="findCustomTimePeriodCallMap.onlyIncludePeriodTypeIdList"/>
                 <!-- should we excludeNoOrganizationPeriods? for now, YES, which means to find a CustomTimePeriod one must be setup at least for the top level Organization Party -->

@@ -1987,7 +1987,7 @@ public class PersonManagerServices {
         querys.put("type", "auto");
         List<JSONObject> strlist = null;
         String type = null;
-        JSONObject result = null;
+        net.sf.json.JSONObject result = null;
         String entityStr = null;
 
         HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
@@ -2003,7 +2003,7 @@ public class PersonManagerServices {
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
         JSONArray list = null;
         try {
-            result = (net.sf.json.JSONObject) jsonMap2.get("result");
+            result =  jsonMap2.get("result");
             Debug.logInfo("*QueryExpressInfo="+result,module);
 
             type = (String) result.get("type");

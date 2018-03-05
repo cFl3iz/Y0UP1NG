@@ -287,9 +287,13 @@ under the License.
             <if-empty field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]">
                 <clear-field field="findCustomTimePeriodCallMap"/>
                 <clear-field field="customTimePeriodList"/>
-
+                <entity-and entity-name="CustomTimePeriod" list="customTimePeriodsList">
+                    <field-map field-name="organizationPartyId" from-field="acctgTransEntry.organizationPartyId"/>
+                </entity-and>
+                <set field="nowCustFitmePeriod" from-field="customTimePeriodsList[0]"/>
+                <log level="info" message="->customTimePeriodsList=${customTimePeriodsList}"/>
                 <!--<set from-field="acctgTrans.transactionDate" field="findCustomTimePeriodCallMap.findDate"/>-->
-                <set field="findCustomTimePeriodCallMap.findDate" value="2018-03-05 12:13:57.0"/>
+                <set field="findCustomTimePeriodCallMap.findDate" from-field="nowCustFitmePeriod.fromDate" type="Timestamp"/>
                 <set from-field="acctgTransEntry.organizationPartyId" field="findCustomTimePeriodCallMap.organizationPartyId"/>
                 <set from-field="onlyIncludePeriodTypeIdList" field="findCustomTimePeriodCallMap.onlyIncludePeriodTypeIdList"/>
                 <!-- should we excludeNoOrganizationPeriods? for now, YES, which means to find a CustomTimePeriod one must be setup at least for the top level Organization Party -->

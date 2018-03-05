@@ -2296,7 +2296,16 @@ public class PersonManagerQueryServices {
                 String statusId = (String) gv.get("statusId");
 
 
+                if(!statusId.equals("ORDER_SENT")){
+                    rowMap.put("orderShipment","未发货");
+                }else{
+                    rowMap.put("orderShipment","已发货");
+                }
+
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+
+
                 //有物流信息
 //                if(statusId.equals("ORDER_COMPLETED")){
 //                    Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",rowMap.get("internalCode")));

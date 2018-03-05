@@ -212,7 +212,7 @@
         <alias entity-alias="Product" field="productId" name="productId"/>
         <alias entity-alias="Product" field="productName" name="productName"/>
         <alias entity-alias="Product" field="detailImageUrl" name="detailImageUrl"/>
-        <alias entity-alias="Product" field="price" name="price"/>
+        <!--<alias entity-alias="Product" field="price" name="price"/>-->
         <alias entity-alias="Product" field="description" name="description"/>
 
         <alias entity-alias="Product" field="createdDate" name="createdDate"/>

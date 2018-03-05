@@ -214,6 +214,7 @@ under the License.
             </add-error>
         </if-compare>
         <check-errors/>
+        <log level="info" message="->acctgTrans=${acctgTrans}"/>
 
         <!-- check trial balance -->
         <set from-field="parameters.acctgTransId" field="trialBalanceCallMap.acctgTransId"/>
@@ -260,7 +261,6 @@ under the License.
             <condition-expr field-name="acctgTransId" from-field="parameters.acctgTransId"/>
             <order-by field-name="acctgTransEntrySeqId"/>
         </entity-condition>
-
         <!-- check the scheduled posting date, but only if it's set -->
         <if-not-empty field="acctgTrans.scheduledPostingDate">
             <set field="scheduledPostingDate" from-field="acctgTrans.scheduledPostingDate"/>
@@ -282,6 +282,7 @@ under the License.
         <!-- get current period(s) and check if closed -->
         <!-- also check if the glAccountId, amount, currencyUomId fields are all set -->
         <iterate list="acctgTransEntryList" entry="acctgTransEntry">
+            <log level="info" message="->acctgTransEntryList=${acctgTransEntryList}"/>
             <!-- we want to do this for each organizationPartyId, so only do this if we haven't already found the list for the current org -->
             <if-empty field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]">
                 <clear-field field="findCustomTimePeriodCallMap"/>
@@ -292,6 +293,8 @@ under the License.
                 <set from-field="onlyIncludePeriodTypeIdList" field="findCustomTimePeriodCallMap.onlyIncludePeriodTypeIdList"/>
                 <!-- should we excludeNoOrganizationPeriods? for now, YES, which means to find a CustomTimePeriod one must be setup at least for the top level Organization Party -->
                 <set value="Y" field="findCustomTimePeriodCallMap.excludeNoOrganizationPeriods"/>
+                <log level="info" message="->findCustomTimePeriodCallMap=${findCustomTimePeriodCallMap}"/>
+
                 <call-service service-name="findCustomTimePeriods" in-map-name="findCustomTimePeriodCallMap">
                     <result-to-field result-name="customTimePeriodList"/>
                 </call-service>

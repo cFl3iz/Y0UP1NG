@@ -4918,6 +4918,16 @@ public class PersonManagerServices {
             dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
         }
 
+        //内部团体角色
+        GenericValue partyInternalOrganizatioRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO").queryFirst();
+        if (null == partyInternalOrganizatioRole) {
+            Map<String, Object> partyInternalOrganizatioRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "INTERNAL_ORGANIZATIO");
+            dispatcher.runSync("createPartyRole", partyInternalOrganizatioRoleMap);
+        }
+
+
+
         //发出账单的厂家
         GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
         if (null == partyBillVendorRole) {
@@ -5015,6 +5025,9 @@ public class PersonManagerServices {
         addProductCategoryToProdCatalogInMap.put("productCategoryId", productCategoryId);
 
         Map<String, Object> addProductCategoryToProdCatalogOutMap = dispatcher.runSync("addProductCategoryToProdCatalog", addProductCategoryToProdCatalogInMap);
+
+
+        //createPartyAcctgPreference
 
         return productCategoryId;
     }

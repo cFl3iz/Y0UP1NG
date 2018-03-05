@@ -2003,7 +2003,7 @@ public class PersonManagerServices {
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
         JSONArray list = null;
         try {
-            result = (JSONObject) jsonMap2.get("result");
+            result = (net.sf.json.JSONObject) jsonMap2.get("result");
             Debug.logInfo("*QueryExpressInfo="+result,module);
 
             type = (String) result.get("type");

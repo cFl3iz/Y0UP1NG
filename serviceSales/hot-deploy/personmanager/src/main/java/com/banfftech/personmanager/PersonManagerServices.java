@@ -2013,6 +2013,7 @@ public class PersonManagerServices {
             Debug.logInfo("*list="+list,module);
         } catch (Exception e) {
             Debug.logInfo("--" + UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale), module);
+            Debug.logInfo(e, module);
             //return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));
         }
 

@@ -2114,6 +2114,8 @@ public class PersonManagerServices {
 
         String contactMechId = "";
 
+
+
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
 

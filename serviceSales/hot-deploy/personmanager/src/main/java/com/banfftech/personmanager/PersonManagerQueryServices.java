@@ -1905,6 +1905,8 @@ public class PersonManagerQueryServices {
 
             GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
+
+
             if (null != orderPaymentPrefAndPayment) {
 
                 String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
@@ -1957,22 +1959,30 @@ public class PersonManagerQueryServices {
         }
 
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
-
-        //TODO QUERY orderExpressInfo
-        Map<String, Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo", UtilMisc.toMap("userLogin", userLogin, "code", order.get("internalCode")));
-        List<JSONObject> expressInfos = null;
-        try{
-        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
-            expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
-            resultMap.put("orderExpressName", queryExpressInfoMap.get("name"));
+        String stuatusId = (String)order.get("statusId");
+        if(!stuatusId.equals("ORDER_SENT")){
+            rowMap.put("orderShipment","未发货");
+        }else{
+            rowMap.put("orderShipment","已发货");
+            if(rowMap.get("orderPayStatus").equals("已收款")){
+                rowMap.put("orderCompleted","已完成");
+            }
         }
-        }catch (Exception e){
-            resultMap.put("orderExpressName", "");
-        }
+//        //TODO QUERY orderExpressInfo
+//        Map<String, Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo", UtilMisc.toMap("userLogin", userLogin, "code", order.get("internalCode")));
+//        List<JSONObject> expressInfos = null;
+//        try{
+//        if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+//            expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+//            resultMap.put("orderExpressName", queryExpressInfoMap.get("name"));
+//        }
+//        }catch (Exception e){
+//            resultMap.put("orderExpressName", "");
+//        }
 
         rowMap.put("custPartyId",custPartyId);
         resultMap.put("orderInfo", rowMap);
-        resultMap.put("orderExpressInfo", expressInfos);
+        resultMap.put("orderExpressInfo", null);
 
 
 

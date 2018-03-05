@@ -2004,8 +2004,13 @@ public class PersonManagerServices {
         JSONArray list = null;
         try {
             result = (JSONObject) jsonMap2.get("result");
+            Debug.logInfo("*QueryExpressInfo="+result,module);
+
             type = (String) result.get("type");
+            Debug.logInfo("*QueryExpressInfo="+type,module);
+
             list = (JSONArray) result.get("list");
+            Debug.logInfo("*list="+list,module);
         } catch (Exception e) {
             Debug.logInfo("--" + UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale), module);
             //return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale));

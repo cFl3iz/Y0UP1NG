@@ -2296,11 +2296,7 @@ public class PersonManagerQueryServices {
                 String statusId = (String) gv.get("statusId");
 
 
-                if(!statusId.equals("ORDER_SENT")){
-                    rowMap.put("orderShipment","未发货");
-                }else{
-                    rowMap.put("orderShipment","已发货");
-                }
+
 
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
 
@@ -2398,7 +2394,14 @@ public class PersonManagerQueryServices {
                     }
 
                 }
-
+                if(!statusId.equals("ORDER_SENT")){
+                    rowMap.put("orderShipment","未发货");
+                }else{
+                    rowMap.put("orderShipment","已发货");
+                    if(rowMap.get("orderPayStatus").equals("已确认收款")){
+                        rowMap.put("orderCompleted","已完成");
+                    }
+                }
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RowMap" + rowMap);
                 //不查询已收款的订单时,直接放入
                 if (null != orderStatus && !orderStatus.equals("PAYMENT")) {

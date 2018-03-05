@@ -2353,22 +2353,9 @@ public class PersonManagerQueryServices {
 
                 if (null != orderPaymentPrefAndPayment) {
 
-                    rowMap.put("orderPayStatus", "已确认收款");
+                    rowMap.put("orderPayStatus", "已收款");
                     rowMap.put("payStatusCode", "1");
 
-//                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
-//
-//                    if(orderPaymentPrefAndPaymentstatusId.equals("PMNT_RECEIVED")){
-//                            System.out.println("已确认收款");
-//
-//                            rowMap.put("orderPayStatus","已确认收款");
-//                            rowMap.put("payStatusCode","1");
-//
-//                    }else{
-//
-//                        rowMap.put("payStatusCode","0");
-//                        rowMap.put("orderPayStatus","未付款");
-//                    }
                 } else {
 
 
@@ -2376,21 +2363,15 @@ public class PersonManagerQueryServices {
                         String paymentStatusId = (String) payment.get("statusId");
                         if (paymentStatusId != null) {
 
-                            rowMap.put("orderPayStatus", "已确认收款");
+                            rowMap.put("orderPayStatus", "已收款");
 
                             rowMap.put("payStatusCode", "1");
 
                         }
-//                        if(paymentStatusId.toUpperCase().indexOf("NOT_PAID")>0){
-//
-//                            rowMap.put("orderPayStatus","未付款");
-//                            rowMap.put("payStatusCode","1");
-//                        }
-
                     } else {
 
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未付款");
+                        rowMap.put("orderPayStatus", "未收款");
                     }
 
                 }
@@ -2398,7 +2379,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("orderShipment","未发货");
                 }else{
                     rowMap.put("orderShipment","已发货");
-                    if(rowMap.get("orderPayStatus").equals("已确认收款")){
+                    if(rowMap.get("orderPayStatus").equals("已收款")){
                         rowMap.put("orderCompleted","已完成");
                     }
                 }

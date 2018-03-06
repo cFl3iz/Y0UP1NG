@@ -3415,6 +3415,26 @@ public class PersonManagerQueryServices {
 
         //Scope Param
         GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String viewSizeStr   = (String) context.get("viewSize");
+        String viewIndexStr  = (String) context.get("viewIndex");
+        String isDiscontinuation   = (String) context.get("isDiscontinuation");
+
+        //Default Value
+        int viewSize  = 10;
+        int viewIndex =0;
+
+        if (UtilValidate.isNotEmpty(viewSizeStr)) {
+            viewSize = Integer.parseInt(viewSizeStr);
+        }
+        if (UtilValidate.isNotEmpty(viewIndexStr)) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+        // 0:查询未下架的正常资源。   1:查已下架的资源  (默认0)
+        if (UtilValidate.isEmpty(isDiscontinuation)) {
+            isDiscontinuation = "0";
+        }
+
         String partyId = (String) userLogin.get("partyId");
         String productCategoryId = "NA";
         List<GenericValue> myResourceList = null;
@@ -3425,8 +3445,10 @@ public class PersonManagerQueryServices {
         GenericValue rodCatalogRole = EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
 
         EntityFindOptions findOptions = new EntityFindOptions();
-//        findOptions.setFetchSize(0);
-//        findOptions.setMaxRows(4);
+
+        findOptions.setFetchSize(viewIndex);
+        findOptions.setMaxRows(viewSize);
+
         //Select Fields
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("productId");
@@ -3448,9 +3470,14 @@ public class PersonManagerQueryServices {
             //findConditions
             EntityCondition findConditions = EntityCondition
                     .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
-            EntityCondition findConditions2 = EntityCondition
-                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
 
+            EntityCondition findConditions2 = null;
+
+            if(isDiscontinuation.equals("0")){
+                findConditions2 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+            }else{
+                findConditions2 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
+            }
 
             EntityConditionList<EntityCondition> listConditions = EntityCondition
                     .makeCondition(findConditions, findConditions2);

@@ -3457,7 +3457,8 @@ public class PersonManagerQueryServices {
 
         EntityFindOptions findOptions = new EntityFindOptions();
 
-        findOptions.setFetchSize(viewIndex);
+        //findOptions.setFetchSize(viewIndex);
+
         findOptions.setMaxRows(viewSize);
 
         //Select Fields

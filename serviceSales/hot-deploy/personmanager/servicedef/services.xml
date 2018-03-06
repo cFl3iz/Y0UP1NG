@@ -201,7 +201,7 @@
         <description>Query My Resource</description>
 
         <attribute name="viewSize" type="String" mode="IN" optional="true"/>
-        <attribute name="viewIndex" type="String" mode="IN" optional="true"/>
+        <!--<attribute name="viewIndex" type="String" mode="IN" optional="true"/>-->
         <attribute name="isDiscontinuation" type="String" mode="IN" optional="true"/>
 
 

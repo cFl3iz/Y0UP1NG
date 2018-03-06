@@ -2012,6 +2012,8 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) userLogin.get("partyId");
         List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
+        String isCancelled = (String) context.get("isCancelled");
+
 
 
         Set<String> fieldSet = new HashSet<String>();
@@ -2034,9 +2036,18 @@ public class PersonManagerQueryServices {
         EntityCondition findConditions = EntityCondition
                 .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3, EntityOperator.AND, findConditions);
 
+
+        EntityCondition listConditions2 = null;
+
+        //如果isCancelled 为1  则查询取消的订单。
+        if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        }else{
+            listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+        }
 
         List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                 listConditions2, fieldSet,

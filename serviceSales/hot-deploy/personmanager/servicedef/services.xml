@@ -126,8 +126,10 @@
              invoke="queryMyResourceOrder" auth="false">
         <description>Query MyResourceOrder</description>
 
-        <attribute name="area" type="String" mode="IN"
-                   optional="true"/>
+
+
+        <attribute name="area" type="String" mode="IN"  optional="true"/>
+        <attribute name="isCancelled" type="String" mode="IN"  optional="true"/>
 
         <attribute name="orderStatus" type="String" mode="INOUT"
                    optional="true"/>

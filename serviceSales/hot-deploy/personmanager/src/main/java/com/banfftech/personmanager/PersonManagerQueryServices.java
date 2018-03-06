@@ -2012,7 +2012,7 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) userLogin.get("partyId");
         List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
-        String isCancelled = (String) context.get("isCancelled");
+
 
 
 
@@ -2040,6 +2040,7 @@ public class PersonManagerQueryServices {
 
         EntityCondition listConditions2 = null;
 
+        String isCancelled = (String) context.get("isCancelled");
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
             EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
@@ -2268,8 +2269,21 @@ public class PersonManagerQueryServices {
                 .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
 
 
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+
+        EntityCondition listConditions2 = null;
+
+        String isCancelled = (String) context.get("isCancelled");
+        //如果isCancelled 为1  则查询取消的订单。
+        if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        }else{
+            listConditions2 = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+        }
+
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
 
 
         List<GenericValue> queryMyResourceOrderList = null;

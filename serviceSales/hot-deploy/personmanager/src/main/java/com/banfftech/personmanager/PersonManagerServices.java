@@ -2182,16 +2182,36 @@ public class PersonManagerServices {
             return updateShipGroupShipInfoOutMap;
         }
 
+        GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+        String stautsId = (String) orderHeader.get("statusId");
 
-        //更变订单状态
+        if(stautsId.equals("ORDER_APPROVED")){
+            Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                    "changeReason", "订单发送", "setItemStatus", "Y"));
 
-        Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
-                "changeReason", "订单发送", "setItemStatus", "Y"));
+            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                return changeOrderStatusOutMap;
+            }
+        }else{
+            Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
+                    "changeReason", "订单批准", "setItemStatus", "Y"));
 
-        if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
-            return changeOrderStatusOutMap;
+            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                return changeOrderStatusOutMap;
+            }
+            changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                    "changeReason", "订单发送", "setItemStatus", "Y"));
+
+            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                return changeOrderStatusOutMap;
+            }
         }
+
+
+
 
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
 

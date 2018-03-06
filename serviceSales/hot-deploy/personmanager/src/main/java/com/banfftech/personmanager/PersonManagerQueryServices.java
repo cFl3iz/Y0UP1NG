@@ -2279,7 +2279,9 @@ public class PersonManagerQueryServices {
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         }else{
-            listConditions2 = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         }
 
 //        EntityCondition listConditions2 = EntityCondition

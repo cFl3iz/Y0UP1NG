@@ -310,7 +310,7 @@ function selectFeature(e){
                     doAddContactRelation(partyId,payToParty);
                     if(spm != null && spm != ""){
                         doAddPartyRelation(partyId,spm);
-                        addDistributingLeaflets(productId,partyId,spm,payToParty);
+                       // addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";

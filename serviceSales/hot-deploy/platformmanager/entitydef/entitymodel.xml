@@ -56,17 +56,37 @@
         <prim-key field="captcha"/>
         <prim-key field="fromDate"/>
     </entity>
-    <!-- 记录转发 -->
-    <entity entity-name="DistributingLeaflets" package-name="org.ofbiz.cloudLake.sms" title="DistributingLeaflets">
-        <description>记录转发信息</description>
-        <field name="DLId" type="id"></field>
-        <field name="productId" type="value"></field>
-        <field name="sellerPartyId" type="value"></field>
-        <field name="buyerPartyId" type="value"></field>
-        <field name="workerPartyId" type="value"></field>
-        <field name="workerName" type="value"></field>
-        <prim-key field="DLId"/>
-    </entity>
+
+    <!-- 转发信息 -->
+    <!--<entity entity-name="ShareRequest" package-name="org.ofbiz.cloudLake.information" title="InformationShare">-->
+        <!--<description>Information Share</description>-->
+        <!--<field name="shareId" type="id" ></field>           &lt;!&ndash;PK&ndash;&gt;-->
+        <!--<field name="shareTypeId" type="id"></field>        &lt;!&ndash; TYPE ID &ndash;&gt;-->
+        <!--<field name="objectId" type="id"></field>        &lt;!&ndash; Share Obj Id &ndash;&gt;-->
+        <!--<field name="sharePartyIdFrom" type="value"></field>&lt;!&ndash; 转发来自当事人 &ndash;&gt;-->
+        <!--<field name="sharePartyIdTo" type="value"></field>  &lt;!&ndash; 转发目标当事人 &ndash;&gt;-->
+        <!--<field name="ownerPartyId" type="value"></field>    &lt;!&ndash; 转发对象拥有人 &ndash;&gt;-->
+        <!--<field name="infoDesc" type="value"></field>        &lt;!&ndash; description &ndash;&gt;-->
+        <!--<field name="fromDate" type="date-time"></field>    &lt;!&ndash; 转发时间 &ndash;&gt;-->
+
+        <!--<prim-key field="shareId"/>-->
+        <!--<prim-key field="objectId"/>-->
+
+        <!--<prim-key field="shareTypeId"/>-->
+
+        <!--<relation type="one" rel-entity-name="InformationShareType">-->
+            <!--<key-map field-name="shareTypeId"/>-->
+        <!--</relation>-->
+    <!--</entity>-->
+
+    <!--&lt;!&ndash; 分享类型 &ndash;&gt;-->
+    <!--<entity entity-name="ShareType" package-name="org.ofbiz.cloudLake.information" title="ShareType">-->
+        <!--<description>Information Share Type</description>-->
+        <!--<field name="shareTypeId" type="id"></field>-->
+        <!--<field name="description" type="value"></field>-->
+        <!--<prim-key field="shareTypeId"/>-->
+    <!--</entity>-->
+
 
     <!--Message-->
     <entity entity-name="MessageLog" package-name="org.ofbiz.cloudLake.message" title="Message">

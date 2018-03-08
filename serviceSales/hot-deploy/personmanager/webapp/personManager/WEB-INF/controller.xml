@@ -40,7 +40,24 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- shareInformation / 引用 转发 -->
+    <request-map uri="shareInformation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="shareInformation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
+
+
+    <!-- 分享转发记录 -->
+
+    <request-map uri="createInformationShare">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createInformationShare"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

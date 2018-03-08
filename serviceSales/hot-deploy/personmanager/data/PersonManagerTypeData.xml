@@ -11,4 +11,8 @@
     <!-- 用户产品特征偏好设置-->
     <UserPrefGroupType createdStamp="2018-01-29 14:08:35.0" createdTxStamp="2018-01-29 14:08:35.0" description="我自己设置的产品特征" lastUpdatedStamp="2018-01-29 14:08:35.0" lastUpdatedTxStamp="2018-01-29 14:08:35.0" userPrefGroupTypeId="PRODUCT_FEATURES"/>
 
+
+    <!-- 产品资源类型 -->
+    <InformationShareType createdStamp="2018-03-07 17:18:17.0" createdTxStamp="2018-03-07 17:18:17.0" description="产品资源分享类型" lastUpdatedStamp="2018-03-07 17:18:17.0" lastUpdatedTxStamp="2018-03-07 17:18:17.0" shareTypeId="PRODUCT"/>
+
 </entity-engine-xml>

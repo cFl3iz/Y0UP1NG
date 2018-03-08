@@ -488,6 +488,13 @@ public class PersonManagerServices {
 
         GenericValue workEffortAndProductAndParty = null;
 
+
+        // 卖家本人打开了分享,无意义。
+        if(payToPartyId.equals(receivePartyId)){
+            return resultMap;
+        }
+
+
         // 说明上层引用就是资源主
         if (UtilValidate.isEmpty(spm)) {
              workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
@@ -5109,7 +5116,7 @@ public class PersonManagerServices {
                     "roleTypeId", "ADDRESSEE");
             dispatcher.runSync("createPartyRole", partyAddresseeRoleMap);
         }
-        
+
 
         //内部团体角色
         GenericValue partyInternalOrganizatioRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO").queryFirst();

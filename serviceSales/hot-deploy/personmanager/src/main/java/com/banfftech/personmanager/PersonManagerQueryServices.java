@@ -147,7 +147,7 @@ public class PersonManagerQueryServices {
         String sharePartyId = (String) context.get("sharePartyId");
 
         // 以资源主的角度去找他对于这个产品作为引用人的数据。
-        GenerciValue workEffort = null;
+        GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
         if(null != sharePartyId && !sharePartyId.trim().equals("")){
             workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId)).queryFirst();
@@ -173,7 +173,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
 
                     // 查询此人分享了多少次
-                    GenerciValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId)).queryFirst();
+                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId)).queryFirst();
 
                     rowMap.put("shareCount",shareCountWorker.get("percentComplete")+"");
 

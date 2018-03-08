@@ -141,6 +141,20 @@
     </service>
 
 
+    <!-- 查询当前产品的转发链条 -->
+
+    <service name="queryProductShareFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductShareFirstLines" auth="false">
+        <description>queryProductShareLines</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- Query MyResource Order -->
     <service name="queryMyResourceOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

@@ -118,6 +118,79 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * 查询分享链条
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryProductShareFirstLines(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String productId = (String) context.get("productId");
+
+        String payToPartyId = (String) context.get("payToPartyId");
+
+        // 以资源主的角度去找他对于这个产品作为引用人的数据。
+        GenerciValue workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
+        if(null!=workEffort){
+
+            String workEffortId = (String) workEffort.get("workEffortId");
+            // 找作为addressee的人的列表。
+            List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",workEffortId)).queryList();
+            // 有人点开过
+            if(null!= firstShareLines && firstShareLines.size()>0){
+                for(GenericValue gv : firstShareLines){
+
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                    String rowPartyId = (String) gv.get("partyId");
+
+                    rowMap.put("rowParty",rowPartyId);
+
+                    rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
+
+                    // 查询此人分享了多少次
+                    GenerciValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId)).queryFirst();
+
+                    rowMap.put("shareCount",shareCountWorker.get("percentComplete")+"");
+
+                    returnList.add(rowMap);
+                }
+            }
+
+        }else{
+            // 还没转发出去过
+        }
+
+        resultMap.put("firstShareLines",returnList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
+
+    /**
      * genericPaymentService
      * @param dctx
      * @param context

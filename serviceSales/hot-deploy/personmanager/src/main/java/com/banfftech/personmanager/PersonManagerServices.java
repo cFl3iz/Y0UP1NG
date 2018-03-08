@@ -561,12 +561,8 @@ public class PersonManagerServices {
         if(null!= workEffortAndProductAndPartyReFerrer){
             long percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
             String updateWorkEffortId  = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
-            Map<String,Object> updateWorkEffortResult = dispatcher.runAsync("updateWorkEffort"
-                    ,UtilMisc.toMap("userLogin",admin,"workEffortId",updateWorkEffortId,"percentComplete",percentComplete+1));
-            if (!ServiceUtil.isSuccess(updateWorkEffortResult)) {
-                Debug.logInfo("* updateWorkEffortResult Fail:"+updateWorkEffortResult,module);
-                return updateWorkEffortResult;
-            }
+            dispatcher.runAsync("updateWorkEffort",UtilMisc.toMap("userLogin",admin,"workEffortId",updateWorkEffortId,"percentComplete",percentComplete+1));
+
         }
 
 

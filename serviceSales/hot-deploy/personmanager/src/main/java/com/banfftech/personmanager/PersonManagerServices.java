@@ -545,11 +545,28 @@ public class PersonManagerServices {
         // 资源ID
         String productId = (String) context.get("productId");
 
+        // 以资源主的角度去看有没有发布过这个分享数据
         GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
 
+        // 已分享过,则不再记录了
         if(null != workEffortAndProductAndParty){
             Debug.logInfo("->Work Effort AndProductAndParty Is Exsits!<-",module);
             return resultMap;
+        }
+
+        // 以转发人的角度去看有没有转发过这个分享数据?
+        GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyIdFrom)).queryFirst();
+
+        // 已转发过,则增加转发次数,否则正常转发。
+        if(null!= workEffortAndProductAndPartyReFerrer){
+            long percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
+            String updateWorkEffortId  = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
+            Map<String,Object> updateWorkEffortResult = dispatcher.runAsync("updateWorkEffort"
+                    ,UtilMisc.toMap("userLogin",admin,"workEffortId",updateWorkEffortId,"percentComplete",percentComplete+1));
+            if (!ServiceUtil.isSuccess(updateWorkEffortResult)) {
+                Debug.logInfo("* updateWorkEffortResult Fail:"+updateWorkEffortResult,module);
+                return updateWorkEffortResult;
+            }
         }
 
 
@@ -564,7 +581,7 @@ public class PersonManagerServices {
         // 创建转发引用WorkEffort
         createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                 "workEffortName", "引用:"+productName, "workEffortTypeId", "EVENT", "description", "",
-                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"percentComplete",new Long(0));
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                 createWorkEffortMap);
 

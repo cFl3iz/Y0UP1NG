@@ -189,7 +189,7 @@
     </view-entity>
 
 
-    <!-- 检查是否存在这条转发 -->
+    <!-- 检查是否存在这条转发:资源主 -->
     <view-entity entity-name="WorkEffortAndProductAndParty" package-name="com.banfftech.personerp">
         <member-entity entity-name="WorkEffortPartyAssignByRole" entity-alias="workEffortPartyAssignByRole" />
         <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
@@ -213,6 +213,31 @@
 
     </view-entity>
 
+    <!-- 检查是否存在这条转发:转发人 -->
+    <view-entity entity-name="WorkEffortAndProductAndPartyReFerrer" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignByRole" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
+
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 资源ID -->
+        <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- 分享次数 -->
+        <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
+
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="REFERRER"/>
+        </entity-condition>
+
+    </view-entity>
 
     <!-- 联系人的资源视图实体 -->
     <view-entity entity-name="PartyContactResources" package-name="com.banfftech.personerp">

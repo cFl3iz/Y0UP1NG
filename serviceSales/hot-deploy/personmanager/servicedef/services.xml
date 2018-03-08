@@ -148,6 +148,7 @@
         <description>queryProductShareLines</description>
         <attribute name="productId" type="String" mode="IN"  optional="true"/>
         <attribute name="payToPartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="sharePartyId" type="String" mode="IN"  optional="true"/>
         <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -144,8 +144,17 @@ public class PersonManagerQueryServices {
 
         String payToPartyId = (String) context.get("payToPartyId");
 
+        String sharePartyId = (String) context.get("sharePartyId");
+
         // 以资源主的角度去找他对于这个产品作为引用人的数据。
-        GenerciValue workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
+        GenerciValue workEffort = null;
+        // 在第一行的基础上找下一行数据。
+        if(null != sharePartyId && !sharePartyId.trim().equals("")){
+            workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId)).queryFirst();
+        }else{
+         //查首行数据
+        workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
+        }
         if(null!=workEffort){
 
             String workEffortId = (String) workEffort.get("workEffortId");

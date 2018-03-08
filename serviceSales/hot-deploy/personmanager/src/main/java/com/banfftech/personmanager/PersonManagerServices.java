@@ -476,6 +476,7 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
 
+
         // 当前收到引用的当事人
         String receivePartyId = (String) userLogin.get("partyId");
         // 来自引用当事人
@@ -485,14 +486,25 @@ public class PersonManagerServices {
         // 资源ID
         String productId = (String) context.get("productId");
 
+        GenericValue workEffortAndProductAndParty = null;
+
         // 说明上层引用就是资源主
         if (UtilValidate.isEmpty(spm)) {
-
+             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
         }else{
         // 说明上层引用不是资源主
-
+             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",spm)).queryFirst();
         }
 
+        String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+
+        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
+                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        Map<String,Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+            Debug.logInfo("*createAddresseeMap Fail:"+createAddresseeMap,module);
+            return createAddresseeResultMap;
+        }
 
         return resultMap;
     }
@@ -4939,24 +4951,11 @@ public class PersonManagerServices {
                 userLoginId, "groupId", "FULLADMIN");
         dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
 
-
-//        if (!UtilValidate.isEmpty(tel)) {
-//            // Create Party Telecom Number
-//            Map<String, Object> inputTelecom = UtilMisc.toMap();
-//            inputTelecom.put("partyId", partyId);
-//            inputTelecom.put("contactNumber", tel);
-//            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
-//            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-//            inputTelecom.put("userLogin", admin);
-//            Map<String, Object> createTelecom = null;
-//            createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-//
-//        }
-
+        // 创建会员店铺及目录和分类
         createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
 
-        //创建当事人支付方法
+
 
         // Create Default Pay Method To Party
         GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
@@ -4999,14 +4998,18 @@ public class PersonManagerServices {
             dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
         }
 
+        // 创建当事人
 
-        //创建当事人税务机关
 
+
+        // 创建当事人税务机关
         Map<String, Object> createTaxAuthorityOutMap = dispatcher.runSync("createTaxAuthority",
                 UtilMisc.toMap("userLogin", admin,
                         "includeTaxInPrice", "N",
                         "taxAuthGeoId", "CHN",
                         "taxAuthPartyId", partyId));
+
+
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         resultMap.put("userLoginId", userLoginId);
@@ -5091,6 +5094,22 @@ public class PersonManagerServices {
                     "roleTypeId", "SHIP_FROM_VENDOR");
             dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
         }
+
+        // 引用者角色
+        GenericValue partyReferrerRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REFERRER").queryFirst();
+        if (null == partyReferrerRole) {
+            Map<String, Object> createPartyReferrerRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REFERRER");
+            dispatcher.runSync("createPartyRole", createPartyReferrerRoleMap);
+        }
+        // 收信人角色
+        GenericValue partyAddresseeRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADDRESSEE").queryFirst();
+        if (null == partyAddresseeRole) {
+            Map<String, Object> partyAddresseeRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "ADDRESSEE");
+            dispatcher.runSync("createPartyRole", partyAddresseeRoleMap);
+        }
+        
 
         //内部团体角色
         GenericValue partyInternalOrganizatioRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO").queryFirst();

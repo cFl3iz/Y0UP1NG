@@ -177,7 +177,7 @@ public class PersonManagerQueryServices {
 
                     String shareCount = "0";
 
-                    if(null !=shareCountWorker.get("percentComplete")){
+                    if(null!= shareCountWorker && null !=shareCountWorker.get("percentComplete")){
                         shareCount = shareCountWorker.get("percentComplete") + "";
                     }
 

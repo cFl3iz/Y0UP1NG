@@ -138,7 +138,7 @@ public class PersonManagerQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-        List<Map<String,Map<String,Object>>> returnList = new ArrayList<Map<String, Map<String, Object>>>();
+        List<Map<String,Object>> returnList = new ArrayList<Map<String,Object>>();
 
         String productId = (String) context.get("productId");
 
@@ -165,13 +165,12 @@ public class PersonManagerQueryServices {
             if(null!= firstShareLines && firstShareLines.size()>0){
                 for(GenericValue gv : firstShareLines){
 
-                    Map<String,Map<String,Object>> rowMap = new HashMap<String, Map<String, Object>>();
-                    Map<String,Object> smallMap = new HashMap<String, Object>();
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
                     String rowPartyId = (String) gv.get("partyId");
 
-                    smallMap.put("rowParty",rowPartyId);
+                    rowMap.put("rowParty",rowPartyId);
 
-                    smallMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
+                    rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
 
                     // 查询此人分享了多少次
                     GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
@@ -182,9 +181,8 @@ public class PersonManagerQueryServices {
                         shareCount = shareCountWorker.get("percentComplete") + "";
                     }
 
-                    smallMap.put("shareCount",shareCount);
+                    rowMap.put("shareCount",shareCount);
 
-                    rowMap.put(rowPartyId,smallMap);
 
                     returnList.add(rowMap);
                 }

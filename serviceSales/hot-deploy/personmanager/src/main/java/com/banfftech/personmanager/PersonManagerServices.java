@@ -499,6 +499,11 @@ public class PersonManagerServices {
             return resultMap;
         }
 
+        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("spm="+spm);
+        System.out.println("receivePartyId="+receivePartyId);
+        System.out.println("payToPartyId="+payToPartyId);
+        System.out.println("partyId="+partyId);
 
         // 说明上层引用就是资源主
         if (UtilValidate.isEmpty(spm)) {
@@ -507,8 +512,8 @@ public class PersonManagerServices {
         // 说明上层引用不是资源主
              workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",spm)).queryFirst();
         }
-
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+        System.out.println("workEffortId="+workEffortId);
 
         GenericValue  workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"partyId",receivePartyId,"workEffortId",workEffortId)).queryFirst();
         //已经记录过了

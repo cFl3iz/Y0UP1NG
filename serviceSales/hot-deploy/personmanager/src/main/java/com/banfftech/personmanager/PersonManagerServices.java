@@ -577,7 +577,11 @@ public class PersonManagerServices {
 
         // 已转发过,则增加转发次数,否则正常转发。
         if(null!= workEffortAndProductAndPartyReFerrer){
-            long percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
+            long percentComplete = new Long(0);
+            if(workEffortAndProductAndPartyReFerrer.get("percentComplete")!=null){
+                percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
+            }
+
             String updateWorkEffortId  = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
             dispatcher.runAsync("updateWorkEffort",UtilMisc.toMap("userLogin",admin,"workEffortId",updateWorkEffortId,"percentComplete",percentComplete+1));
 

@@ -61,7 +61,7 @@
 
 
 
-    <request-map uri="queryProductShareLines">
+    <request-map uri="queryProductShareFirstLines">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryProductShareFirstLines"/>
         <response name="success" type="request" value="result_json"/>

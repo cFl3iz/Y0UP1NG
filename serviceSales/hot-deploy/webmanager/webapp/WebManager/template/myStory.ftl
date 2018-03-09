@@ -57,7 +57,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    <span style="font-size:1px;">shares:${(spm)!}</span>
+    <span style="font-size:15px;">shares:${(spm)!}</span>
 
     <section class="g-scrollview">
 

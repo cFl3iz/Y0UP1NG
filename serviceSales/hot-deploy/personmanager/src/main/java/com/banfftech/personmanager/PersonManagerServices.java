@@ -472,11 +472,16 @@ public class PersonManagerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue userLogin = null;
+
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-
-
+        String partyId = (String) context.get("partyId");
+        if (!UtilValidate.isEmpty(partyId)) {
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId",partyId)).queryFirst();
+        }else{
+            userLogin =  (GenericValue) context.get("userLogin");
+        }
         // 当前收到引用的当事人
         String receivePartyId = (String) userLogin.get("partyId");
         // 来自引用当事人

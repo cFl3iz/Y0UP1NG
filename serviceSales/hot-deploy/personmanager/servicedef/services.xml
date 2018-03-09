@@ -99,6 +99,7 @@
              invoke="receivedInformation" auth="false">
         <description>receivedInformation</description>
          <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
         <!-- 来自谁的引用? 如果没有值, 说明发给你的人就是资源主 -->

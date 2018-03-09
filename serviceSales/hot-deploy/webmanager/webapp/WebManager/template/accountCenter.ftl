@@ -313,7 +313,7 @@ function selectFeature(e){
                        // addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
 
-                    receivedInformation(tarjeta,spm,productId,payToParty);
+                    receivedInformation(partyId,spm,productId,payToParty);
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
@@ -427,11 +427,11 @@ function selectFeature(e){
     }
 
     //记录当前用户成为收信人
-    function receivedInformation(tarjeta,spm,productId,payToPartyId){
+    function receivedInformation(partyId,spm,productId,payToPartyId){
         var url = "receivedInformation";
 
         var param = {
-            tarjeta:tarjeta,
+            partyId:partyId,
             spm:spm,
             productId:productId,
             payToPartyId:payToPartyId

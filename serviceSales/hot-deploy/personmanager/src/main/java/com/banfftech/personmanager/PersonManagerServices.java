@@ -567,7 +567,7 @@ public class PersonManagerServices {
         GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
 
         // 已分享过,则不再记录了
-        if(null != workEffortAndProductAndParty){
+        if(null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)){
             Debug.logInfo("->Work Effort AndProductAndParty Is Exsits!<-",module);
             return resultMap;
         }

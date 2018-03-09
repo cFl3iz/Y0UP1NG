@@ -606,7 +606,7 @@ public class PersonManagerServices {
         // 创建转发引用WorkEffort
         createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                 "workEffortName", "引用:"+productName, "workEffortTypeId", "EVENT", "description", productId+sharePartyIdFrom,
-                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"percentComplete",new Long(0));
+                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"percentComplete",new Long(1));
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                 createWorkEffortMap);
 

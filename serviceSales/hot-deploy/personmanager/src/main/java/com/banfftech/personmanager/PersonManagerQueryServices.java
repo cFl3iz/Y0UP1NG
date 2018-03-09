@@ -157,7 +157,7 @@ public class PersonManagerQueryServices {
         }
         if(null!=workEffort){
 
-            
+
             String workEffortId = (String) workEffort.get("workEffortId");
             // 找作为addressee的人的列表。
             List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",workEffortId)).queryList();

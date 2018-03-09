@@ -507,10 +507,10 @@ public class PersonManagerServices {
 
         // 说明上层引用就是资源主
         if (UtilValidate.isEmpty(spm)) {
-             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
+             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId,"description",productId+payToPartyId)).queryFirst();
         }else{
         // 说明上层引用不是资源主
-             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",spm)).queryFirst();
+             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",spm,"description",productId+spm)).queryFirst();
         }
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
         System.out.println("workEffortId="+workEffortId);
@@ -578,7 +578,8 @@ public class PersonManagerServices {
         }
 
         // 以转发人的角度去看有没有转发过这个分享数据?
-        GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyIdFrom)).queryFirst();
+        GenericValue workEffortAndProductAndPartyReFerrer =
+                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyIdFrom)).queryFirst();
 
         // 已转发过,则增加转发次数,否则正常转发。
         if(null!= workEffortAndProductAndPartyReFerrer){
@@ -601,9 +602,10 @@ public class PersonManagerServices {
         String productName = (String) product.get("productName");
 
 
+        //注意这个desc 很重要,起到了真正意义上的标识作用
         // 创建转发引用WorkEffort
         createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                "workEffortName", "引用:"+productName, "workEffortTypeId", "EVENT", "description", "",
+                "workEffortName", "引用:"+productName, "workEffortTypeId", "EVENT", "description", productId+sharePartyIdFrom,
                 "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"percentComplete",new Long(0));
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                 createWorkEffortMap);

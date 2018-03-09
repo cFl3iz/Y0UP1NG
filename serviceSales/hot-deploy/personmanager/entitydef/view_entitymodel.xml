@@ -201,6 +201,8 @@
         <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
         <!-- 资源ID -->
         <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="workEffortProductGoods"/>
 
 
         <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
@@ -227,7 +229,8 @@
         <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
         <!-- 分享次数 -->
         <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
-
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="workEffortProductGoods"/>
 
         <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
             <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
@@ -254,7 +257,8 @@
         <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
         <!-- 分享次数 -->
         <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
-
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="workEffortProductGoods"/>
 
         <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
             <key-map rel-field-name="workEffortId" field-name="workEffortId"/>

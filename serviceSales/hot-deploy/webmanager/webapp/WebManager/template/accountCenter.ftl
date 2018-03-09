@@ -454,7 +454,6 @@ function selectFeature(e){
 
     function shareInformation(partyId,productId,payToPartyId){
         var url = "shareInformation";
-        alert('partyId='+partyId+"|payToPartyId="+payToPartyId);
         var param = {
             partyId:partyId,
             productId:productId,

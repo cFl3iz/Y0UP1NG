@@ -510,6 +510,12 @@ public class PersonManagerServices {
 
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
 
+        GenericValue  workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"partyId",receivePartyId,"workEffortId",workEffortId)).queryFirst();
+        //已经记录过了
+        if(workEffortAndProductAndPartyAddressee!=null){
+            return resultMap;
+        }
+
         Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
                 "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
         Map<String,Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);

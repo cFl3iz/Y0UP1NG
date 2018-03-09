@@ -175,7 +175,13 @@ public class PersonManagerQueryServices {
                     // 查询此人分享了多少次
                     GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
 
-                    rowMap.put("shareCount",shareCountWorker.get("percentComplete")+"");
+                    String shareCount = "0";
+
+                    if(null !=shareCountWorker.get("percentComplete")){
+                        shareCount = shareCountWorker.get("percentComplete") + "";
+                    }
+
+                    rowMap.put("shareCount",shareCount);
 
                     returnList.add(rowMap);
                 }

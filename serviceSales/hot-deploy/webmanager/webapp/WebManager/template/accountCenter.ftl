@@ -332,7 +332,7 @@ function selectFeature(e){
                         success: function () {
                             //alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
                             doAddProductRole(partyId,productId,"PARTNER");
-                            shareInformation(tarjeta,productId,payToParty);
+                            shareInformation(partyId,productId,payToParty);
 // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
@@ -452,11 +452,11 @@ function selectFeature(e){
     }
 
 
-    function shareInformation(tarjeta,productId,payToPartyId){
+    function shareInformation(partyId,productId,payToPartyId){
         var url = "shareInformation";
 
         var param = {
-            tarjeta:tarjeta,
+            partyId:partyId,
             productId:productId,
             payToPartyId:payToPartyId
         };

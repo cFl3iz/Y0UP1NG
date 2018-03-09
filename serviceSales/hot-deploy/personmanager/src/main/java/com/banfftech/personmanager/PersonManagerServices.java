@@ -539,7 +539,14 @@ public class PersonManagerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue userLogin = null;
+        String partyId = (String) context.get("partyId");
+        if (!UtilValidate.isEmpty(partyId)) {
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId",partyId)).queryFirst();
+        }else{
+            userLogin =  (GenericValue) context.get("userLogin");
+        }
+
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         Map<String,Object> createWorkEffortMap = new HashMap<String, Object>();
 

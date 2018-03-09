@@ -624,7 +624,7 @@ public class PersonManagerServices {
         //REFERRER
         //增加当前转发者对于转发引用的关联角色
         Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
-                "roleTypeId", "SHIP_FROM_VENDOR", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+                "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
         Map<String,Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
         if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
             Debug.logInfo("*create Referrer Map Fail:"+createReferrerMap,module);

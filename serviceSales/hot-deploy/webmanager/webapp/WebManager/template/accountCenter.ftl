@@ -313,7 +313,9 @@ function selectFeature(e){
                        // addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
 
-                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/${(spm)!},"+ partyId +"/${(payToPartyId)!}";
+                    receivedInformation(tarjeta,spm,productId,payToParty);
+
+                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();
                     var imgUrl = $("#imgUrl").val();
 
@@ -422,6 +424,34 @@ function selectFeature(e){
         });
 
     }
+
+    //记录当前用户成为收信人
+    function receivedInformation(tarjeta,spm,productId,payToPartyId){
+        var url = "receivedInformation";
+
+        var param = {
+            tarjeta:tarjeta,
+            spm:spm,
+            productId:productId,
+            payToPartyId:payToPartyId
+        };
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: param,
+            async:false,
+            success: function (data) {
+
+            },
+            error: function (data) {
+
+            }
+        });
+
+    }
+
+
+
     function doAddPartyRelation(partyId,spm){
         var url = "doAddPartyRelation";
 

@@ -510,7 +510,7 @@ public class PersonManagerServices {
              workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
         }else{
         // 说明上层引用不是资源主
-             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",spm)).queryFirst();
+             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",spm)).queryFirst();
         }
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
         System.out.println("workEffortId="+workEffortId);

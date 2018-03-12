@@ -57,7 +57,7 @@
 
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
-    <span style="font-size:15px;">shares:${(spm)!}</span>
+    <span style="font-size:10px;">shares:${(spm)!}</span>
 
     <section class="g-scrollview">
 
@@ -103,7 +103,7 @@
         Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; font-size: medium; white-space:
         normal;"><br></p>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; line-height: 1.75em;">
-            <span id="author" style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">作者:${(resourceDetail.firstName?default('StoreName'))!} 库存:${(resourceDetail.availableToPromiseTotal)!}</span>
+            <span id="author" style="color: rgb(127, 127, 127); font-family: PingFangSC-Light, sans-serif;">作者:${(resourceDetail.firstName?default('StoreName'))!} <span style="color:#ee735c;">库存:${(resourceDetail.availableToPromiseTotal)!}</span></span>
         </p>
         <hr/>
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">

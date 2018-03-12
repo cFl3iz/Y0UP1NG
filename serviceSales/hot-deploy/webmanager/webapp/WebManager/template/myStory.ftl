@@ -140,14 +140,15 @@
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
 
-        <div class="demo-spinner demo-small-pitch">
-            <span class="demo-spinner-title">购买数量</span>
-            <div class="gw_num">
-                <em class="jian">-</em>
-                <input type="text" value="1" class="num"/>
-                <em class="add">+</em>
-            </div>
+        <div class="gw_num">
+            <em class="jian">-</em>
+            <input type="text" value="1" class="num"/>
+            <em class="add">+</em>
         </div>
+        <#--<div class="demo-spinner demo-small-pitch">-->
+            <#--<span class="demo-spinner-title">购买数量</span>-->
+            <#---->
+        <#--</div>-->
 
 
         <div style="border:1px solid #8C8C8C;padding:10px;">

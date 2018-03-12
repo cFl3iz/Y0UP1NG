@@ -138,11 +138,11 @@
 
         <div class="demo-spinner demo-small-pitch">
             <span class="demo-spinner-title">购买数量</span>
-            <#--<div class="form-inline" data-box="buy">-->
-            <#--<button type="button">-</button>-->
-                <#--<input type="text" id="BuyNum_1" min="1" max="${(resourceDetail.availableToPromiseTotal)!}" step="1" value="1" pattern="[0-9]*" name="BuyNum" />-->
-            <#--<button type="button">+</button>-->
-            <#--</div>-->
+            <div class="form-inline" data-box="buy">
+            <button type="button">-</button>
+                <input type="text" id="BuyNum_1" min="1" max="${(resourceDetail.availableToPromiseTotal)!}" step="1" value="1" pattern="[0-9]*" name="BuyNum" />
+            <button type="button">+</button>
+            </div>
         </div>
 
 
@@ -197,39 +197,7 @@
 
 
 <script>
-//    function getElementByAttr(tag, attr, value) {
-//        var aElements = document.getElementsByTagName(tag);
-//        var aEle = [];
-//        for (var i = 0; i < aElements.length; i++) {
-//            if (aElements[i].getAttribute(attr) == value)
-//                aEle.push(aElements[i]);
-//        }
-//        return aEle;
-//    }
-//    window.onload = function () {
-//        var box = getElementByAttr("div", "data-box", "buy");
-//        for (var i = 0; i < box.length; i++) {
-//            calculate(box[i]);
-//
-//        }
-//    }
-//    function calculate(box) {
-//        var oBtn = box.getElementsByTagName("button");
-//        var ipt = box.getElementsByTagName("input")[0];
-//        var number = parseInt(ipt.value);
-//        oBtn[0].onclick = function () {
-//            number--;
-//            if (number < 0) {
-//                number = 0;
-//            }
-//            ipt.value = number;
-//
-//        }
-//        oBtn[1].onclick = function () {
-//            number++;
-//            ipt.value = number;
-//        }
-//    }
+
 
 
 

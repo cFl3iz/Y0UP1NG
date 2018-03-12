@@ -213,10 +213,42 @@ function selectFeature(e){
         setCookie(name, "", -1);
     }
 
+    function getElementByAttr(tag, attr, value) {
+        var aElements = document.getElementsByTagName(tag);
+        var aEle = [];
+        for (var i = 0; i < aElements.length; i++) {
+            if (aElements[i].getAttribute(attr) == value)
+                aEle.push(aElements[i]);
+        }
+        return aEle;
+    }
+
+    function calculate(box) {
+        var oBtn = box.getElementsByTagName("button");
+        var ipt = box.getElementsByTagName("input")[0];
+        var number = parseInt(ipt.value);
+        oBtn[0].onclick = function () {
+            number--;
+            if (number < 0) {
+                number = 0;
+            }
+            ipt.value = number;
+
+        }
+        oBtn[1].onclick = function () {
+            number++;
+            ipt.value = number;
+        }
+    }
+
     $(
             function () {
 
-
+                var box = getElementByAttr("div", "data-box", "buy");
+                for (var i = 0; i < box.length; i++) {
+                    calculate(box[i]);
+                    alert(box[i]);
+                }
 
 
                 // clearCookie("tarjeta");

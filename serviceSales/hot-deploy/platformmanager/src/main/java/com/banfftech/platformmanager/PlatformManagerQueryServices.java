@@ -501,10 +501,10 @@ public class PlatformManagerQueryServices {
 
 
 
-            List<GenericValue> distributingLeafletsList =  EntityQuery.use(delegator).from(
-                    "DistributingLeaflets").where("sellerPartyId",userLogin.get("partyId"),"buyerPartyId",realPartyId).queryList();
-
-            mp.put("distributingLeafletsList",distributingLeafletsList);
+//            List<GenericValue> distributingLeafletsList =  EntityQuery.use(delegator).from(
+//                    "DistributingLeaflets").where("sellerPartyId",userLogin.get("partyId"),"buyerPartyId",realPartyId).queryList();
+//
+//            mp.put("distributingLeafletsList",distributingLeafletsList);
 
             findConditions3 = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyIdTo", to));

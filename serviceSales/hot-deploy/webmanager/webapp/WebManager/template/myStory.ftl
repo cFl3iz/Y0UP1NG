@@ -155,7 +155,7 @@
         ${uiLabel.GoToPay}
         </button>
 </#if>
-        <#if resourceDetail.availableToPromiseTotal  lt 0>
+        <#if resourceDetail.availableToPromiseTotal  lt 1>
             <button type="button" onclick="alert('没有库存了,您可以直接联系卖家!');" class="btn-block btn-primary">
             ${uiLabel.NotInventory}
             </button>

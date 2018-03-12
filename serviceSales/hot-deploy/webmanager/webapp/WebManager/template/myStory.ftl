@@ -282,8 +282,8 @@
 
         var J_Input = $("#J_Input").val();
         var availableToPromiseTotal = $("#availableToPromiseTotal").val();
-        alert("jinput =" + J_Input);
-        alert("availableToPromiseTotal =" + availableToPromiseTotal);
+//        alert("jinput =" + J_Input);
+//        alert("availableToPromiseTotal =" + availableToPromiseTotal);
         if(parseInt(J_Input) <= 0 ||  parseInt(J_Input) > parseInt(availableToPromiseTotal) ){
             alert("数量错误,请调整!");
             $("#J_Input").val("1");

@@ -287,13 +287,13 @@
         if(parseInt(J_Input) <= 0 ||  parseInt(J_Input) > parseInt(availableToPromiseTotal) ){
             alert("数量错误,请调整!");
             $("#J_Input").val("1");
+            return false;
         }
 
         var orderReMark;
         orderReMark= prompt("订单备注");
 
 
-        return false;
 
         var payToPartyId = $("#payToPartyId").val();
         var partyId      = $("#partyId").val();
@@ -304,7 +304,7 @@
         var prodCatalogId =  $("#prodCatalogId").val();
         var productStoreId = $("#productStoreId").val();
         var url = "placeResourceOrder";
-        var amount = 1;
+        var amount = parseInt(J_Input);
         var param = {
             payToPartyId:payToPartyId,
             productId:productId,

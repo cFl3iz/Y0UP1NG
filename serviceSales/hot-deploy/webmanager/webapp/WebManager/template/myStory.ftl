@@ -167,14 +167,14 @@
         </script>
         <div class="demo-spinner demo-small-pitch">
             <span class="demo-spinner-title">购买数量:</span>
-            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 1, unit:${(resourceDetail.availableToPromiseTotal)!}}">
+            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 1, unit:1 ,max:${(resourceDetail.availableToPromiseTotal)!}}">
                 <a href="javascript:;" class="J_Del"></a>
-                <input type="text" class="J_Input" placeholder=""/>
+                <input type="text" id="J_Input" class="J_Input" placeholder=""/>
                 <a href="javascript:;" class="J_Add"></a>
             </span>
         </div>
 </#if>
-
+        <input type="hidden" id="availableToPromiseTotal" value="${(resourceDetail.availableToPromiseTotal)!}"/>
         <div style="border:1px solid #8C8C8C;padding:10px;">
             <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal; max-width: 100%; min-height: 1em; text-align: justify; line-height: 1.75em; box-sizing: border-box !important; word-wrap: break-word !important;">
             <span style="margin: 0px; padding: 0px; font-size: 16px; font-family: PingFangSC-Light, sans-serif;"><em
@@ -282,6 +282,14 @@
         var orderReMark;
         orderReMark= prompt("订单备注");
 
+        var J_Input = $("#J_Input").val();
+        var availableToPromiseTotal = $("#availableToPromiseTotal").val();
+        alert("jinput =" + J_Input);
+        alert("availableToPromiseTotal =" + availableToPromiseTotal);
+        if(parseInt(J_Input) <= 0 ||  parseInt(J_Input) > parseInt(availableToPromiseTotal) ){
+            alert("数量错误,请调整!");
+        }
+        return false;
 
         var payToPartyId = $("#payToPartyId").val();
         var partyId      = $("#partyId").val();

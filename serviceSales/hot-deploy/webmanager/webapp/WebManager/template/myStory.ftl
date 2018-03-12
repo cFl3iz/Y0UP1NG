@@ -38,6 +38,24 @@
 </style>
 
 <script>
+    !function () {
+        $('#J_Quantity').spinner({
+            input: '.J_Input',
+            add: '.J_Add',
+            minus: '.J_Del',
+            unit: function () {
+                return 1 + 2;
+            },
+            max: function () {
+                return (1 + 2 + 3 + 4 + 5) * 5;
+            },
+            callback: function (value, $ele) {
+                // $ele 当前文本框[jQuery对象]
+                // $ele.css('background', '#FF5E53');
+                console.log('值：' + value);
+            }
+        });
+    }();
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
         document.getElementById(show_div).style.display='block';
@@ -135,6 +153,14 @@
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
 
+        <div class="demo-spinner demo-small-pitch">
+            <span class="demo-spinner-title">Data API调用（设置最小值为6，累计值为3）</span>
+            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 6, unit: 3}">
+                <a href="javascript:;" class="J_Del"></a>
+                <input type="text" class="J_Input" placeholder=""/>
+                <a href="javascript:;" class="J_Add"></a>
+            </span>
+        </div>
 
 
         <div style="border:1px solid #8C8C8C;padding:10px;">

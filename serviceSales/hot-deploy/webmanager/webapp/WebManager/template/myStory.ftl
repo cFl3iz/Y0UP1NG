@@ -149,9 +149,17 @@
             <button type="button" id="contactBtn" onclick="contactMe();" class="btn-block btn-warning">
             ${uiLabel.ContactMe}
             </button>
+        <!-- 如果还有库存才可以购买 -->
+<#if resourceDetail.availableToPromiseTotal  gt 0>
         <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
         ${uiLabel.GoToPay}
         </button>
+</#if>
+        <#if resourceDetail.availableToPromiseTotal  lt 0>
+            <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
+            ${uiLabel.GoToPay}
+            </button>
+        </#if>
             <#--<#if !resourceDetail.salesDiscontinuationDate?has_content>-->
              <#--<button type="button" onclick="gotoBuyProduct('${productId}');" class="btn-block btn-primary">-->
             <#--${uiLabel.GoToPay} -->

@@ -156,8 +156,8 @@
         </button>
 </#if>
         <#if resourceDetail.availableToPromiseTotal  lt 0>
-            <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
-            ${uiLabel.GoToPay}
+            <button type="button" onclick="alert('没有库存了,您可以直接联系卖家!');" class="btn-block btn-primary">
+            ${uiLabel.NotInventory}
             </button>
         </#if>
             <#--<#if !resourceDetail.salesDiscontinuationDate?has_content>-->

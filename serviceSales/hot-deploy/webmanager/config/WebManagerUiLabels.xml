@@ -28,6 +28,12 @@
     </property>
 
 
+    <property key="NotInventory">
+        <value xml:lang="en">Not Inventory.</value>
+        <value xml:lang="zh">卖完了</value>
+        <value xml:lang="zh_CN">卖完了</value>
+    </property>
+
     <property key="DownReFlash">
         <value xml:lang="en">DownReFlash</value>
         <value xml:lang="zh">下拉刷新</value>

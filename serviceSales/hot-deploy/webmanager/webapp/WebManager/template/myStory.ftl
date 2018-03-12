@@ -35,6 +35,10 @@
         z-index:1002;
         overflow: auto;
     }
+    .gw_num{border: 1px solid #dbdbdb;width: 110px;line-height: 26px;overflow: hidden;}
+    .gw_num em{display: block;height: 26px;width: 26px;float: left;color: #7A7979;border-right: 1px solid #dbdbdb;text-align: center;cursor: pointer;}
+    .gw_num .num{display: block;float: left;text-align: center;width: 52px;font-style: normal;font-size: 14px;line-height: 24px;border: 0;}
+    .gw_num em.add{float: right;border-right: 0;border-left: 1px solid #dbdbdb;}
 </style>
 
 <script>
@@ -138,10 +142,10 @@
 
         <div class="demo-spinner demo-small-pitch">
             <span class="demo-spinner-title">购买数量</span>
-            <div class="form-inline" data-box="buy">
-            <button type="button">-</button>
-                <input type="text" id="BuyNum_1" min="1" max="${(resourceDetail.availableToPromiseTotal)!}" step="1" value="1" pattern="[0-9]*" name="BuyNum" />
-            <button type="button">+</button>
+            <div class="gw_num">
+                <em class="jian">-</em>
+                <input type="text" value="1" class="num"/>
+                <em class="add">+</em>
             </div>
         </div>
 

@@ -138,11 +138,9 @@
 
         <div class="demo-spinner demo-small-pitch">
             <span class="demo-spinner-title">购买数量</span>
-            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', unit: 1 ,min: 1}">
-                <a href="javascript:;" class="J_Del"></a>
-                <input type="text" class="J_Input" value="1" placeholder=""/>
-                <a href="javascript:;" class="J_Add"></a>
-            </span>
+            <select>
+                <option value="">1</option>
+            </select>
         </div>
 
 

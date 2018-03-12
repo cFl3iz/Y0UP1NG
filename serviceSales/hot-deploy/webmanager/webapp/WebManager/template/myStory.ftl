@@ -156,7 +156,7 @@
         </button>
 </#if>
         <#if resourceDetail.availableToPromiseTotal  lt 1>
-            <button type="button" onclick="alert('没有库存了,您可以直接联系卖家!');" class="btn-block btn-primary">
+            <button type="button" onclick="alert('没有库存了,您可以直接联系卖家!');" class="btn-block btn-disabled">
             ${uiLabel.NotInventory}
             </button>
         </#if>

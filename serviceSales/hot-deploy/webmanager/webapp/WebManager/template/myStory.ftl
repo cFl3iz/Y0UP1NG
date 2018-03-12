@@ -61,6 +61,27 @@
 </script>
 
 
+<script>
+    !function () {
+        $('#J_Quantity').spinner({
+            input: '.J_Input',
+            add: '.J_Add',
+            minus: '.J_Del',
+            unit: function () {
+                return 1 + 2;
+            },
+            max: function () {
+                return (1 + 2 + 3 + 4 + 5) * 5;
+            },
+            callback: function (value, $ele) {
+                // $ele 当前文本框[jQuery对象]
+                // $ele.css('background', '#FF5E53');
+                console.log('值：' + value);
+            }
+        });
+    }();
+</script>
+
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <span style="font-size:10px;">shares:${(spm)!}</span>
 
@@ -140,15 +161,15 @@
         <p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; clear: both; font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: medium; white-space: normal;">
             <br></p>
 
-        <div class="gw_num">
-            <em class="jian">-</em>
-            <input type="text" value="1" class="num"/>
-            <em class="add">+</em>
+
+        <div class="demo-spinner demo-small-pitch">
+            <span class="demo-spinner-title">数量</span>
+            <span class="m-spinner" id="J_Quantity">
+                <a href="javascript:;" class="J_Del"></a>
+                <input type="text" class="J_Input" placeholder=""/>
+                <a href="javascript:;" class="J_Add"></a>
+            </span>
         </div>
-        <#--<div class="demo-spinner demo-small-pitch">-->
-            <#--<span class="demo-spinner-title">购买数量</span>-->
-            <#---->
-        <#--</div>-->
 
 
         <div style="border:1px solid #8C8C8C;padding:10px;">

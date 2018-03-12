@@ -279,8 +279,6 @@
 
     function selectAddress(productId){
 
-        var orderReMark;
-        orderReMark= prompt("订单备注");
 
         var J_Input = $("#J_Input").val();
         var availableToPromiseTotal = $("#availableToPromiseTotal").val();
@@ -288,7 +286,13 @@
         alert("availableToPromiseTotal =" + availableToPromiseTotal);
         if(parseInt(J_Input) <= 0 ||  parseInt(J_Input) > parseInt(availableToPromiseTotal) ){
             alert("数量错误,请调整!");
+            $("#J_Input").val("1");
         }
+
+        var orderReMark;
+        orderReMark= prompt("订单备注");
+
+
         return false;
 
         var payToPartyId = $("#payToPartyId").val();

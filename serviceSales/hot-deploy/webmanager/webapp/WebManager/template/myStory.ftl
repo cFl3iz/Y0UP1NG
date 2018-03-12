@@ -44,10 +44,10 @@
             add: '.J_Add',
             minus: '.J_Del',
             unit: function () {
-                return 1 + 2;
+                return 1;
             },
             max: function () {
-                return (1 + 2 + 3 + 4 + 5) * 5;
+                return 2;
             },
             callback: function (value, $ele) {
                 // $ele 当前文本框[jQuery对象]
@@ -154,8 +154,8 @@
             <br></p>
 
         <div class="demo-spinner demo-small-pitch">
-            <span class="demo-spinner-title">Data API调用（设置最小值为6，累计值为3）</span>
-            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 6, unit: 3}">
+            <span class="demo-spinner-title">购买数量</span>
+            <span class="m-spinner" id="J_Quantity">
                 <a href="javascript:;" class="J_Del"></a>
                 <input type="text" class="J_Input" placeholder=""/>
                 <a href="javascript:;" class="J_Add"></a>

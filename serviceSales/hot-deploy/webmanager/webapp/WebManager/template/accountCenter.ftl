@@ -216,7 +216,23 @@ function selectFeature(e){
     $(
             function () {
 
-
+                //数字选择框
+                $('#J_Quantity').spinner({
+                    input: '.J_Input',
+                    add: '.J_Add',
+                    minus: '.J_Del',
+                    unit: function () {
+                        return 1;
+                    },
+                    max: function () {
+                        return 2;
+                    },
+                    callback: function (value, $ele) {
+                        // $ele 当前文本框[jQuery对象]
+                        // $ele.css('background', '#FF5E53');
+                        console.log('值：' + value);
+                    }
+                });
 
 
                 // clearCookie("tarjeta");

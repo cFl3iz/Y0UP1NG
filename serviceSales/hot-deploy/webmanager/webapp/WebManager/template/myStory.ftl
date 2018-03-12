@@ -38,24 +38,7 @@
 </style>
 
 <script>
-    !function () {
-        $('#J_Quantity').spinner({
-            input: '.J_Input',
-            add: '.J_Add',
-            minus: '.J_Del',
-            unit: function () {
-                return 1;
-            },
-            max: function () {
-                return 2;
-            },
-            callback: function (value, $ele) {
-                // $ele 当前文本框[jQuery对象]
-                // $ele.css('background', '#FF5E53');
-                console.log('值：' + value);
-            }
-        });
-    }();
+
     //弹出隐藏层
     function ShowDiv(show_div,bg_div){
         document.getElementById(show_div).style.display='block';
@@ -157,7 +140,7 @@
             <span class="demo-spinner-title">购买数量</span>
             <span class="m-spinner" id="J_Quantity">
                 <a href="javascript:;" class="J_Del"></a>
-                <input type="text" class="J_Input" placeholder=""/>
+                <input type="text" class="J_Input" placeholder="1"/>
                 <a href="javascript:;" class="J_Add"></a>
             </span>
         </div>

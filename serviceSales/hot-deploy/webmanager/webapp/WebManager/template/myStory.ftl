@@ -167,7 +167,7 @@
         </script>
         <div class="demo-spinner demo-small-pitch">
             <span class="demo-spinner-title">购买数量:</span>
-            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 1, unit:1 ,max:${(resourceDetail.availableToPromiseTotal)!}}">
+            <span class="m-spinner" data-ydui-spinner="{input: '.J_Input', add: '.J_Add', minus: '.J_Del', min: 1, unit: 1 max: 2}">
                 <a href="javascript:;" class="J_Del"></a>
                 <input type="text" id="J_Input" class="J_Input" placeholder=""/>
                 <a href="javascript:;" class="J_Add"></a>

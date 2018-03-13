@@ -254,7 +254,7 @@ function selectFeature(e){
 //                        alert(JSON.stringify(data));
 //                        alert("register success");
                         wx.config({
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
+                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
                             appId: data.data.appId, // 必填，公众号的唯一标识
                             timestamp: data.data.timestamp, // 必填，生成签名的时间戳
                             nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
@@ -283,16 +283,16 @@ function selectFeature(e){
 
 
                     //验证是否可用
-                    wx.checkJsApi({
-                        jsApiList: [
-                            'getLocation',
-                            'onMenuShareTimeline',
-                            'onMenuShareAppMessage'
-                        ],
-                        success: function (res) {
-                            alert(JSON.stringify(res));
-                        }
-                    });
+//                    wx.checkJsApi({
+//                        jsApiList: [
+//                            'getLocation',
+//                            'onMenuShareTimeline',
+//                            'onMenuShareAppMessage'
+//                        ],
+//                        success: function (res) {
+//                            alert(JSON.stringify(res));
+//                        }
+//                    });
 
 
 
@@ -313,7 +313,7 @@ function selectFeature(e){
                        // addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
 
-                    receivedInformation(partyId,spm,productId,payToParty);
+                 //   receivedInformation(partyId,spm,productId,payToParty);
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();

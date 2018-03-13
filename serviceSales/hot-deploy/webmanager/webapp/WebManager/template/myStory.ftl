@@ -61,26 +61,6 @@
 </script>
 
 
-<script>
-    !function () {
-        $('#J_Quantity').spinner({
-            input: '.J_Input',
-            add: '.J_Add',
-            minus: '.J_Del',
-            unit: function () {
-                return 1 + 2;
-            },
-            max: function () {
-                return (1 + 2 + 3 + 4 + 5) * 5;
-            },
-            callback: function (value, $ele) {
-                // $ele 当前文本框[jQuery对象]
-                // $ele.css('background', '#FF5E53');
-                console.log('值：' + value);
-            }
-        });
-    }();
-</script>
 
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <span style="font-size:10px;">shares:${(spm)!}</span>

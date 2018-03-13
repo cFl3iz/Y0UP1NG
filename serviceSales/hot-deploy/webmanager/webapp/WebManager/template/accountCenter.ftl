@@ -313,7 +313,7 @@ function selectFeature(e){
                        // addDistributingLeaflets(productId,partyId,spm,payToParty);
                     }
 
-                 //   receivedInformation(partyId,spm,productId,payToParty);
+                    receivedInformation(partyId,spm,productId,payToParty);
 
                     var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/"+ partyId +"/${(payToPartyId)!}";
                     var title = $("#productName").val();

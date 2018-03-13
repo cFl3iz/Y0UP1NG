@@ -254,7 +254,7 @@ function selectFeature(e){
 //                        alert(JSON.stringify(data));
 //                        alert("register success");
                         wx.config({
-                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
+                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
                             appId: data.data.appId, // 必填，公众号的唯一标识
                             timestamp: data.data.timestamp, // 必填，生成签名的时间戳
                             nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
@@ -323,8 +323,8 @@ function selectFeature(e){
 
                     nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
 
-                     alert("nowPersonName="+nowPersonName);
-                    
+
+
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题
                         desc: nowPersonName, // 分享描述

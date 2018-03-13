@@ -320,8 +320,11 @@ function selectFeature(e){
                     var imgUrl = $("#imgUrl").val();
 
                     var nowPersonName = $("#nowPersonName").val();
-//                    alert("nowPersonName=")+nowPersonName;
+
                     nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
+
+                     alert("nowPersonName="+nowPersonName);
+                    
                     wx.onMenuShareAppMessage({
                         title:title, // 分享标题
                         desc: nowPersonName, // 分享描述

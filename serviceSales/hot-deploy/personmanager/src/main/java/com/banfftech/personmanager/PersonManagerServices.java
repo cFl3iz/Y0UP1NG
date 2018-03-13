@@ -4273,7 +4273,7 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
+    private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException,GenericEntityException {
 
 
         if (!partyIdFrom.equals(partyIdTo)) {

@@ -278,8 +278,7 @@ function selectFeature(e){
 
                 wx.ready(function () {
 
-                   alert("wx register .ready");
-
+//                   alert("wx register .ready");
 
 
                     //验证是否可用

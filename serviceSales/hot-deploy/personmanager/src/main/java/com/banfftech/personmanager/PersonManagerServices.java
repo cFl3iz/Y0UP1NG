@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.ObjectType;
@@ -37,6 +38,7 @@ import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.apache.ofbiz.order.order.OrderChangeHelper;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -98,6 +100,7 @@ public class PersonManagerServices {
     public static final String resourceError = "PlatformManagerErrorUiLabels.xml";
 
     public static final String resource_error = "OrderErrorUiLabels";
+
     /**
      * PartyRelationShipENUM
      */
@@ -458,6 +461,7 @@ public class PersonManagerServices {
 
     /**
      * 收到资源引用
+     *
      * @param dctx
      * @param context
      * @return
@@ -478,9 +482,9 @@ public class PersonManagerServices {
 
         String partyId = (String) context.get("partyId");
         if (!UtilValidate.isEmpty(partyId)) {
-            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId",partyId)).queryFirst();
-        }else{
-            userLogin =  (GenericValue) context.get("userLogin");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+        } else {
+            userLogin = (GenericValue) context.get("userLogin");
         }
         // 当前收到引用的当事人
         String receivePartyId = (String) userLogin.get("partyId");
@@ -495,37 +499,37 @@ public class PersonManagerServices {
 
 
         // 卖家本人打开了分享,无意义。
-        if(payToPartyId.equals(receivePartyId)){
+        if (payToPartyId.equals(receivePartyId)) {
             return resultMap;
         }
 
         System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("spm="+spm);
-        System.out.println("receivePartyId="+receivePartyId);
-        System.out.println("payToPartyId="+payToPartyId);
-        System.out.println("partyId="+partyId);
+        System.out.println("spm=" + spm);
+        System.out.println("receivePartyId=" + receivePartyId);
+        System.out.println("payToPartyId=" + payToPartyId);
+        System.out.println("partyId=" + partyId);
 
         // 说明上层引用就是资源主
         if (UtilValidate.isEmpty(spm)) {
-             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId,"description",productId+payToPartyId)).queryFirst();
-        }else{
-        // 说明上层引用不是资源主
-             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",spm,"description",productId+spm)).queryFirst();
+            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId)).queryFirst();
+        } else {
+            // 说明上层引用不是资源主
+            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
         }
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
-        System.out.println("workEffortId="+workEffortId);
+        System.out.println("workEffortId=" + workEffortId);
 
-        GenericValue  workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"partyId",receivePartyId,"workEffortId",workEffortId)).queryFirst();
+        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
         //已经记录过了
-        if(workEffortAndProductAndPartyAddressee!=null){
+        if (workEffortAndProductAndPartyAddressee != null) {
             return resultMap;
         }
 
         Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
                 "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-        Map<String,Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
         if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
-            Debug.logInfo("*createAddresseeMap Fail:"+createAddresseeMap,module);
+            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
             return createAddresseeResultMap;
         }
 
@@ -536,6 +540,7 @@ public class PersonManagerServices {
      * 转发-> 资源主的第一次发送资源到微信也是转发。转发就是引用。
      * 资源主转发自己的资源只有一条workEffort数据。
      * 每个人的转发都只有一次数据 不会出现重复。但这条数据讲会递增接收人。
+     *
      * @param dctx
      * @param context
      * @return
@@ -553,49 +558,49 @@ public class PersonManagerServices {
         GenericValue userLogin = null;
         String partyId = (String) context.get("partyId");
         if (!UtilValidate.isEmpty(partyId)) {
-            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId",partyId)).queryFirst();
-        }else{
-            userLogin =  (GenericValue) context.get("userLogin");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+        } else {
+            userLogin = (GenericValue) context.get("userLogin");
         }
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-        Map<String,Object> createWorkEffortMap = new HashMap<String, Object>();
+        Map<String, Object> createWorkEffortMap = new HashMap<String, Object>();
 
         // 当前引用当事人
         String sharePartyIdFrom = (String) userLogin.get("partyId");
         // 资源主
-        String payToPartyId     = (String) context.get("payToPartyId");
+        String payToPartyId = (String) context.get("payToPartyId");
         // 资源ID
         String productId = (String) context.get("productId");
 
         // 以资源主的角度去看有没有发布过这个分享数据
-        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId)).queryFirst();
+        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId)).queryFirst();
 
         // 已分享过,则不再记录了
-        if(null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)){
-            Debug.logInfo("->Work Effort AndProductAndParty Is Exsits!<-",module);
+        if (null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)) {
+            Debug.logInfo("->Work Effort AndProductAndParty Is Exsits!<-", module);
             return resultMap;
         }
 
         // 以转发人的角度去看有没有转发过这个分享数据?
         GenericValue workEffortAndProductAndPartyReFerrer =
-                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyIdFrom)).queryFirst();
+                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
 
         // 已转发过,则增加转发次数,否则正常转发。
-        if(null!= workEffortAndProductAndPartyReFerrer){
+        if (null != workEffortAndProductAndPartyReFerrer) {
             long percentComplete = new Long(0);
-            if(workEffortAndProductAndPartyReFerrer.get("percentComplete")!=null){
+            if (workEffortAndProductAndPartyReFerrer.get("percentComplete") != null) {
                 percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
             }
 
-            String updateWorkEffortId  = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
-            dispatcher.runAsync("updateWorkEffort",UtilMisc.toMap("userLogin",admin,"workEffortId",updateWorkEffortId,"percentComplete",percentComplete+1));
+            String updateWorkEffortId = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
+            dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
 
         }
 
 
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-        if(null == product){
+        if (null == product) {
             ServiceUtil.returnError("*Product Not Found");
         }
         // 资源名称
@@ -605,13 +610,13 @@ public class PersonManagerServices {
         //注意这个desc 很重要,起到了真正意义上的标识作用
         // 创建转发引用WorkEffort
         createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                "workEffortName", "引用:"+productName, "workEffortTypeId", "EVENT", "description", productId+sharePartyIdFrom,
-                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),"percentComplete",new Long(1));
+                "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
+                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                 createWorkEffortMap);
 
         if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-            Debug.logInfo("*Create WorkEffort Fail:"+createWorkEffortMap,module);
+            Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
             return serviceResultByCreateWorkEffortMap;
         }
 
@@ -622,9 +627,9 @@ public class PersonManagerServices {
         // 增加资源主角色对于引用
         Map<String, Object> createShipFromVendorMap = UtilMisc.toMap("userLogin", admin, "partyId", payToPartyId,
                 "roleTypeId", "SHIP_FROM_VENDOR", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-        Map<String,Object> createAdminAssignPartyResultMap = dispatcher.runSync("assignPartyToWorkEffort", createShipFromVendorMap);
+        Map<String, Object> createAdminAssignPartyResultMap = dispatcher.runSync("assignPartyToWorkEffort", createShipFromVendorMap);
         if (!ServiceUtil.isSuccess(createAdminAssignPartyResultMap)) {
-            Debug.logInfo("*assignPartyToWorkEffort Fail:"+createShipFromVendorMap,module);
+            Debug.logInfo("*assignPartyToWorkEffort Fail:" + createShipFromVendorMap, module);
             return createAdminAssignPartyResultMap;
         }
 
@@ -632,39 +637,29 @@ public class PersonManagerServices {
         //增加当前转发者对于转发引用的关联角色
         Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
                 "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-        Map<String,Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
         if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-            Debug.logInfo("*create Referrer Map Fail:"+createReferrerMap,module);
+            Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
             return createReferrerResultMap;
         }
 
         // 把引用转发关联上产品
-        Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin,"statusId","WEGS_CREATED",
-                "workEffortGoodStdTypeId","GENERAL_SALES","workEffortId", workEffortId,"productId",productId);
-        Map<String,Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+        Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+                "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
+        Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
         if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
-            Debug.logInfo("*Create WorkEffortGoodStandard Fail:"+createWorkEffortGoodStandardMap,module);
+            Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
             return createWorkEffortGoodStandardResultMap;
         }
-
 
 
         return resultMap;
     }
 
 
-
-
-
-
-
-
-
-
-
-
     /**
      * Update Resource Bis Info
+     *
      * @param dctx
      * @param context
      * @return
@@ -682,7 +677,7 @@ public class PersonManagerServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String partyId   = (String) userLogin.get("partyId");
+        String partyId = (String) userLogin.get("partyId");
         String productId = (String) context.get("productId");
         String description = (String) context.get("description");
         String productName = (String) context.get("productName");
@@ -695,8 +690,8 @@ public class PersonManagerServices {
         BigDecimal price = new BigDecimal(productPriceStr);
 
         //1.Update Product
-        Map<String,Object> serviceResultMap = dispatcher.runSync("updateProduct",UtilMisc.toMap("userLogin",userLogin
-        ,"productId",productId,"productName",productName,"description",description));
+        Map<String, Object> serviceResultMap = dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", userLogin
+                , "productId", productId, "productName", productName, "description", description));
 
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
             return serviceResultMap;
@@ -715,7 +710,7 @@ public class PersonManagerServices {
 //            return serviceResultMap;
 //        }
         GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
-        productPriceEntity.set("price",price);
+        productPriceEntity.set("price", price);
         productPriceEntity.store();
 
 
@@ -724,14 +719,13 @@ public class PersonManagerServices {
         //3.1 Get Now InventoryItem Quantity
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
         String originFacilityId = (String) facility.get("facilityId");
-        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                "facilityId",originFacilityId,"productId",productId));
+        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                "facilityId", originFacilityId, "productId", productId));
         if (!ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-          return getInventoryAvailableByFacilityMap;
+            return getInventoryAvailableByFacilityMap;
         }
         BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
         BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
-
 
 
         GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
@@ -740,44 +734,44 @@ public class PersonManagerServices {
 //           0,表示bigdemical等于bigdemical2；
 //           1,表示bigdemical大于bigdemical2；
 
-        Map<String,Object> createInventoryItemDetailMap = new HashMap<String, Object>();
-        createInventoryItemDetailMap.put("userLogin",admin);
-        createInventoryItemDetailMap.put("inventoryItemId",inventoryItemId);
+        Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+        createInventoryItemDetailMap.put("userLogin", admin);
+        createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
 
 
-        Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal,module);
-        Debug.logInfo("*update resource quantity = " + quantity,module);
-        Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity)>0),module);
+        Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+        Debug.logInfo("*update resource quantity = " + quantity, module);
+        Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
 
         //说明现库存比要设置的库存大,需要做差异减法
-        if(availableToPromiseTotal.compareTo(quantity)>0){
+        if (availableToPromiseTotal.compareTo(quantity) > 0) {
             int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
             int quantityInt = quantity.intValue();
-            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt,module);
-            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
 
-            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
-            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
-            createInventoryItemDetailMap.put("quantityOnHandDiff",new BigDecimal("-"+(availableToPromiseTotalInt-quantityInt)));
+            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
         }
         //说明现库存比要设置的库存小,需要做差异加法
-        if(availableToPromiseTotal.compareTo(quantity)<0){
+        if (availableToPromiseTotal.compareTo(quantity) < 0) {
             int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
             int quantityInt = quantity.intValue();
-            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt,module);
-            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt,module);
-            createInventoryItemDetailMap.put("accountingQuantityDiff",new BigDecimal(""+(quantityInt-availableToPromiseTotalInt)));
-            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal(""+(quantityInt-quantityInt)));
-            createInventoryItemDetailMap.put("quantityOnHandDiff",new BigDecimal(""+(availableToPromiseTotalInt-quantityInt)));
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - quantityInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (availableToPromiseTotalInt - quantityInt)));
         }
         //一模一样的库存我还差异个屁?
-        if(availableToPromiseTotal.compareTo(quantity)==0){
+        if (availableToPromiseTotal.compareTo(quantity) == 0) {
 
         }
 
 
         //3.2 Do create
-        Map<String,Object>    createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail",createInventoryItemDetailMap);
+        Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
         if (!ServiceUtil.isSuccess(createInventoryItemDetailOutMap)) {
             return createInventoryItemDetailOutMap;
@@ -788,6 +782,7 @@ public class PersonManagerServices {
 
     /**
      * 用户的联系信息
+     *
      * @param dctx
      * @param context
      * @return
@@ -808,48 +803,46 @@ public class PersonManagerServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
         String partyId = "NA";
-        Map<String,Object> userContactInfo = new HashMap<String, Object>();
+        Map<String, Object> userContactInfo = new HashMap<String, Object>();
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
 
 
+            //查询联系号码
+            GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", partyId).queryFirst();
 
+            if (null != teleContact) {
+                String contactNumber = (String) teleContact.get("contactNumber");
+                userContactInfo.put("contactTel", contactNumber);
+            }
+            //查询邮政地址,目的:收货地址
+            Set<String> fieldSet = new HashSet<String>();
+            fieldSet.add("contactMechId");
+            fieldSet.add("partyId");
+            fieldSet.add("address1");
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyId", partyId));
+            List<GenericValue> queryAddress = delegator.findList("PartyAndPostalAddress",
+                    findConditions, fieldSet,
+                    UtilMisc.toList("-fromDate"), null, false);
 
-        //查询联系号码
-        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", partyId).queryFirst();
+            String address1 = null;
 
-        if (null != teleContact) {
-            String contactNumber = (String) teleContact.get("contactNumber");
-            userContactInfo.put("contactTel", contactNumber);
+            if (queryAddress != null & queryAddress.size() > 0) {
+                GenericValue address = queryAddress.get(0);
+                address1 = (String) address.get("address1");
+                userContactInfo.put("address", address1);
+            }
         }
-        //查询邮政地址,目的:收货地址
-        Set<String> fieldSet = new HashSet<String>();
-        fieldSet.add("contactMechId");
-        fieldSet.add("partyId");
-        fieldSet.add("address1");
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
-        List<GenericValue>  queryAddress = delegator.findList("PartyAndPostalAddress",
-                findConditions, fieldSet,
-                UtilMisc.toList("-fromDate"), null, false);
-
-        String address1 = null;
-
-        if (queryAddress != null & queryAddress.size() > 0) {
-            GenericValue address = queryAddress.get(0);
-            address1 = (String) address.get("address1");
-            userContactInfo.put("address",address1);
-        }
-        }
-        resultMap.put("contactInfo",userContactInfo);
+        resultMap.put("contactInfo", userContactInfo);
         return resultMap;
     }
 
 
-
     /**
      * 对产品的评论
+     *
      * @param dctx
      * @param context
      * @return
@@ -867,27 +860,22 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        Debug.logInfo("*tuCaoProduct => Now UserLoing:"+userLogin,module);
+        Debug.logInfo("*tuCaoProduct => Now UserLoing:" + userLogin, module);
 
         String userLoginId = (String) userLogin.get("userLoginId");
         String productId = (String) context.get("productId");
         String text = (String) context.get("text");
 
 
-        Map<String,Object> createProductContentMap =  dispatcher.runSync("createSimpleTextContentForProduct",
-                UtilMisc.toMap("userLogin",userLogin,"productContentTypeId","TUCAO","productId",productId,"text",text,"createdByUserLogin",userLoginId));
+        Map<String, Object> createProductContentMap = dispatcher.runSync("createSimpleTextContentForProduct",
+                UtilMisc.toMap("userLogin", userLogin, "productContentTypeId", "TUCAO", "productId", productId, "text", text, "createdByUserLogin", userLoginId));
 
-        if(ServiceUtil.isError(createProductContentMap)){
+        if (ServiceUtil.isError(createProductContentMap)) {
             return createProductContentMap;
         }
 
         return resultMap;
     }
-
-
-
-
-
 
 
     /**
@@ -926,7 +914,7 @@ public class PersonManagerServices {
                 return createPartyRelationshipOutMap;
             }
         }
-        dataCount = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom",partyIdFrom , "partyIdTo", partyIdTo, "partyRelationshipTypeId", relationShipType).queryCount();
+        dataCount = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "partyRelationshipTypeId", relationShipType).queryCount();
         if (0 == dataCount) {
             createPartyRelationshipInMap = new HashMap<String, Object>();
             createPartyRelationshipInMap.put("userLogin", admin);
@@ -1101,6 +1089,7 @@ public class PersonManagerServices {
 
     /**
      * 小程序创建的询价
+     *
      * @param dctx
      * @param context
      * @return
@@ -1127,13 +1116,12 @@ public class PersonManagerServices {
         String payToPartyId = (String) context.get("payToPartyId");
         String productId = (String) context.get("productId");
 
-        String markText ="没有备注";
+        String markText = "没有备注";
 
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
 
 
         String feature = "";
-
 
 
         String productStoreId = "";
@@ -1710,20 +1698,20 @@ public class PersonManagerServices {
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
 
-        Map<String,Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
-        createOrderPaymentPreferenceMap.put("userLogin",admin);
-        createOrderPaymentPreferenceMap.put("orderId",orderId);
-        createOrderPaymentPreferenceMap.put("createdByUserLogin",userLogin.get("userLoginId"));
-        createOrderPaymentPreferenceMap.put("maxAmount",orderHeader.get("grandTotal"));
-        createOrderPaymentPreferenceMap.put("overflowFlag","N");
-         createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_WXPAY");
-         // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
-        createOrderPaymentPreferenceMap.put("presentFlag","N");
-        createOrderPaymentPreferenceMap.put("statusId","PAYMENT_RECEIVED");
-        createOrderPaymentPreferenceMap.put("swipedFlag","N");
+        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
+        createOrderPaymentPreferenceMap.put("userLogin", admin);
+        createOrderPaymentPreferenceMap.put("orderId", orderId);
+        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
+        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
+        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
+        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
+        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+        createOrderPaymentPreferenceMap.put("presentFlag", "N");
+        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
+        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
 
-        Map<String,Object> createOrderPaymentPreferenceOutMap =
-        dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
+        Map<String, Object> createOrderPaymentPreferenceOutMap =
+                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
         if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
             return createOrderPaymentPreferenceOutMap;
         }
@@ -1732,7 +1720,6 @@ public class PersonManagerServices {
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
         String payFromPartyId = (String) orderCust.get("partyId");
-
 
 
 //
@@ -1812,8 +1799,7 @@ public class PersonManagerServices {
 //        }
 
         //应用收款支付.....
-        receiveOfflinePayment("EXT_WXPAY",orderHeader.get("grandTotal").toString(),orderId,payFromPartyId,locale,delegator,dispatcher,userLogin);
-
+        receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
@@ -1841,10 +1827,7 @@ public class PersonManagerServices {
     }
 
 
-
-    public static String receiveOfflinePayment(String paymentMethodStr,String paymentAmountStr,String orderId,String partyId,Locale locale,Delegator delegator,LocalDispatcher dispatcher,GenericValue userLogin) {
-
-
+    public static String receiveOfflinePayment(String paymentMethodStr, String paymentAmountStr, String orderId, String partyId, Locale locale, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) {
 
 
         // get the order header & payment preferences
@@ -1870,9 +1853,9 @@ public class PersonManagerServices {
             Debug.logError(e, "Problems getting payment types", module);
 
         }
-        Debug.logInfo("1616:paymentMethodTypes="+paymentMethodTypes, module);
+        Debug.logInfo("1616:paymentMethodTypes=" + paymentMethodTypes, module);
         if (paymentMethodTypes == null) {
-           // request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsWithPaymentTypeLookup", locale));
+            // request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsWithPaymentTypeLookup", locale));
             return "error";
         }
 
@@ -1882,7 +1865,7 @@ public class PersonManagerServices {
             paymentMethods = EntityQuery.use(delegator).from("PaymentMethod").where("partyId", partyId).queryList();
         } catch (GenericEntityException e) {
             Debug.logError(e, "Problems getting payment methods", module);
-           // request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsWithPaymentMethodLookup", locale));
+            // request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsWithPaymentMethodLookup", locale));
             return "error";
         }
 
@@ -1891,30 +1874,30 @@ public class PersonManagerServices {
             placingCustomer = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
         } catch (GenericEntityException e) {
             Debug.logError(e, "Problems looking up order payment preferences", module);
-        //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderErrorProcessingOfflinePayments", locale));
+            //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderErrorProcessingOfflinePayments", locale));
             return "error";
         }
-        Debug.logInfo("1616:paymentMethods="+paymentMethods, module);
+        Debug.logInfo("1616:paymentMethods=" + paymentMethods, module);
         for (GenericValue paymentMethod : paymentMethods) {
             String paymentMethodId = paymentMethod.getString("paymentMethodId");
             String paymentMethodAmountStr = "0";
-            if(paymentMethodId.equals(paymentMethodStr)){
+            if (paymentMethodId.equals(paymentMethodStr)) {
                 paymentMethodAmountStr = paymentAmountStr;
             }
 
-                    //request.getParameter(paymentMethodId + "_amount");
+            //request.getParameter(paymentMethodId + "_amount");
             String paymentMethodReference = "";
-                    //request.getParameter(paymentMethodId + "_reference");
+            //request.getParameter(paymentMethodId + "_reference");
             if (UtilValidate.isNotEmpty(paymentMethodAmountStr)) {
                 BigDecimal paymentMethodAmount = BigDecimal.ZERO;
                 try {
                     paymentMethodAmount = (BigDecimal) ObjectType.simpleTypeConvert(paymentMethodAmountStr, "BigDecimal", null, locale);
-                    Debug.logInfo("1616:paymentMethodAmount="+paymentMethodAmount, module);
+                    Debug.logInfo("1616:paymentMethodAmount=" + paymentMethodAmount, module);
                 } catch (GeneralException e) {
-                //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
+                    //    request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
                     return "error";
                 }
-                Debug.logInfo("1616:paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0="+(paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0), module);
+                Debug.logInfo("1616:paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0=" + (paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0), module);
                 if (paymentMethodAmount.compareTo(BigDecimal.ZERO) > 0) {
                     // create a payment, payment reference and payment appl record, when not exist yet.
                     Map<String, Object> results = null;
@@ -1927,14 +1910,14 @@ public class PersonManagerServices {
                                         "userLogin", userLogin));
                     } catch (GenericServiceException e) {
                         Debug.logError(e, "Failed to execute service createPaymentFromOrder", module);
-               //         request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+                        //         request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
                         return "error";
                     }
-                    Debug.logInfo("1616:results == null="+(results), module);
+                    Debug.logInfo("1616:results == null=" + (results), module);
 
                     if ((results == null) || (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR))) {
                         Debug.logError((String) results.get(ModelService.ERROR_MESSAGE), module);
-                     //   request.setAttribute("_ERROR_MESSAGE_", results.get(ModelService.ERROR_MESSAGE));
+                        //   request.setAttribute("_ERROR_MESSAGE_", results.get(ModelService.ERROR_MESSAGE));
                         return "error";
                     }
                 }
@@ -1946,38 +1929,38 @@ public class PersonManagerServices {
         }
 
         List<GenericValue> toBeStored = new LinkedList<GenericValue>();
-        Debug.logInfo("1616:paymentMethodTypes="+paymentMethodTypes, module);
+        Debug.logInfo("1616:paymentMethodTypes=" + paymentMethodTypes, module);
         for (GenericValue paymentMethodType : paymentMethodTypes) {
             String paymentMethodTypeId = paymentMethodType.getString("paymentMethodTypeId");
-            Debug.logInfo("1616:paymentMethodTypeId="+paymentMethodTypeId, module);
-            Debug.logInfo("1616:paymentMethodStr="+paymentMethodStr, module);
+            Debug.logInfo("1616:paymentMethodTypeId=" + paymentMethodTypeId, module);
+            Debug.logInfo("1616:paymentMethodStr=" + paymentMethodStr, module);
 
             String amountStr = "0";
-            Debug.logInfo("1616:paymentMethodTypeId.equals(paymentMethodStr)="+(paymentMethodTypeId.equals(paymentMethodStr)), module);
-            if(paymentMethodTypeId.equals(paymentMethodStr)){
+            Debug.logInfo("1616:paymentMethodTypeId.equals(paymentMethodStr)=" + (paymentMethodTypeId.equals(paymentMethodStr)), module);
+            if (paymentMethodTypeId.equals(paymentMethodStr)) {
                 amountStr = paymentAmountStr;
             }
-            Debug.logInfo("1616:amountStr="+amountStr, module);
+            Debug.logInfo("1616:amountStr=" + amountStr, module);
 
-                    //request.getParameter(paymentMethodTypeId + "_amount");
+            //request.getParameter(paymentMethodTypeId + "_amount");
             String paymentReference = "";
-                    //request.getParameter(paymentMethodTypeId + "_reference");
+            //request.getParameter(paymentMethodTypeId + "_reference");
             if (UtilValidate.isNotEmpty(amountStr)) {
                 BigDecimal paymentTypeAmount = BigDecimal.ZERO;
                 try {
                     paymentTypeAmount = (BigDecimal) ObjectType.simpleTypeConvert(amountStr, "BigDecimal", null, locale);
                 } catch (GeneralException e) {
-             //       request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
+                    //       request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemsPaymentParsingAmount", locale));
                     return "error";
                 }
-                Debug.logInfo("1616:paymentTypeAmount="+paymentTypeAmount, module);
+                Debug.logInfo("1616:paymentTypeAmount=" + paymentTypeAmount, module);
 
-                Debug.logInfo("1616:paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0="+(paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0), module);
+                Debug.logInfo("1616:paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0=" + (paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0), module);
 
                 if (paymentTypeAmount.compareTo(BigDecimal.ZERO) > 0) {
                     // create the OrderPaymentPreference
                     // TODO: this should be done with a service
-                    Map<String, String> prefFields = UtilMisc.<String, String> toMap("orderPaymentPreferenceId", delegator.getNextSeqId("OrderPaymentPreference"));
+                    Map<String, String> prefFields = UtilMisc.<String, String>toMap("orderPaymentPreferenceId", delegator.getNextSeqId("OrderPaymentPreference"));
                     GenericValue paymentPreference = delegator.makeValue("OrderPaymentPreference", prefFields);
                     paymentPreference.set("paymentMethodTypeId", paymentMethodType.getString("paymentMethodTypeId"));
                     paymentPreference.set("maxAmount", paymentTypeAmount);
@@ -1992,8 +1975,8 @@ public class PersonManagerServices {
                         Debug.logInfo("1616:create a new OrderPaymentPreference", module);
                         delegator.create(paymentPreference);
                     } catch (GenericEntityException ex) {
-                         Debug.logError(ex, "Cannot create a new OrderPaymentPreference", module);
-              //          request.setAttribute("_ERROR_MESSAGE_", ex.getMessage());
+                        Debug.logError(ex, "Cannot create a new OrderPaymentPreference", module);
+                        //          request.setAttribute("_ERROR_MESSAGE_", ex.getMessage());
                         return "error";
                     }
 
@@ -2005,13 +1988,13 @@ public class PersonManagerServices {
                                 "paymentFromId", placingCustomer.getString("partyId"), "comments", "Payment received offline and manually entered."));
                     } catch (GenericServiceException e) {
                         Debug.logError(e, "Failed to execute service createPaymentFromPreference", module);
-              //          request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+                        //          request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
                         return "error";
                     }
 
                     if ((results == null) || (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR))) {
                         Debug.logError((String) results.get(ModelService.ERROR_MESSAGE), module);
-                //        request.setAttribute("_ERROR_MESSAGE_", results.get(ModelService.ERROR_MESSAGE));
+                        //        request.setAttribute("_ERROR_MESSAGE_", results.get(ModelService.ERROR_MESSAGE));
                         return "error";
                     }
                 }
@@ -2062,7 +2045,7 @@ public class PersonManagerServices {
             delegator.storeAll(toBeStored);
         } catch (GenericEntityException e) {
             Debug.logError(e, "Problems storing payment information", module);
-      //      request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemStoringReceivedPaymentInformation", locale));
+            //      request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resource_error, "OrderProblemStoringReceivedPaymentInformation", locale));
             return "error";
         }
 
@@ -2210,14 +2193,14 @@ public class PersonManagerServices {
         Debug.logInfo("*QueryExpressInfo:" + jsonMap2, module);
         JSONArray list = null;
         try {
-            result = net.sf.json.JSONObject.fromObject(jsonMap2.get("result")+"");
-            Debug.logInfo("*QueryExpressInfo="+result,module);
+            result = net.sf.json.JSONObject.fromObject(jsonMap2.get("result") + "");
+            Debug.logInfo("*QueryExpressInfo=" + result, module);
 
             type = (String) result.get("type");
-            Debug.logInfo("*QueryExpressInfo="+type,module);
+            Debug.logInfo("*QueryExpressInfo=" + type, module);
 
             list = (JSONArray) result.get("list");
-            Debug.logInfo("*list="+list,module);
+            Debug.logInfo("*list=" + list, module);
         } catch (Exception e) {
             Debug.logInfo("--" + UtilProperties.getMessage(resourceError, "ExpressInfoNotFound", locale), module);
             Debug.logInfo(e, module);
@@ -2240,6 +2223,7 @@ public class PersonManagerServices {
 
     /**
      * selectPartyPostalAddress2Order
+     *
      * @param dctx
      * @param context
      * @return
@@ -2277,8 +2261,9 @@ public class PersonManagerServices {
         }
 
 
-        return  resultMap;
+        return resultMap;
     }
+
     /**
      * updateShipGroupShipInfoForWeChat发货
      *
@@ -2320,7 +2305,6 @@ public class PersonManagerServices {
         String shipmentMethodId = "";
 
         String contactMechId = "";
-
 
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
@@ -2392,7 +2376,7 @@ public class PersonManagerServices {
         GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
         String stautsId = (String) orderHeader.get("statusId");
 
-        if(stautsId.equals("ORDER_APPROVED")){
+        if (stautsId.equals("ORDER_APPROVED")) {
             Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
                     "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
                     "changeReason", "订单发送", "setItemStatus", "Y"));
@@ -2400,7 +2384,7 @@ public class PersonManagerServices {
             if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
                 return changeOrderStatusOutMap;
             }
-        }else{
+        } else {
             Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
                     "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
                     "changeReason", "订单批准", "setItemStatus", "Y"));
@@ -2416,8 +2400,6 @@ public class PersonManagerServices {
                 return changeOrderStatusOutMap;
             }
         }
-
-
 
 
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
@@ -2521,6 +2503,7 @@ public class PersonManagerServices {
 
     /**
      * createPersonPartyPostalAddressFromMiniprogram
+     *
      * @param dctx
      * @param context
      * @return
@@ -2556,30 +2539,28 @@ public class PersonManagerServices {
         String nationalCode = (String) context.get("nationalCode");
         String telNumber = (String) context.get("telNumber");
 
-        resultMap.put("orderId",orderId);
+        resultMap.put("orderId", orderId);
 
         String partyId = (String) userLogin.get("partyId");
 
         resultMap.put("tarjeta", tarjeta);
 
 
-
-
-        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",provinceName+" "+cityName+" "+ countyName+" "+detailInfo).queryList();
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
 
         String contactMechId = "";
 
-        if(null == partyAndPostalAddress || partyAndPostalAddress.size()==0){
+        if (null == partyAndPostalAddress || partyAndPostalAddress.size() == 0) {
             // 货运目的地址
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName+" "+cityName+" "+ countyName+" "+detailInfo, "postalCode", postalCode,
+                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId));
-              contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+            contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                 return createPartyPostalAddressOutMap;
             }
-        }else{
+        } else {
             GenericValue contactAddress = (GenericValue) partyAndPostalAddress.get(0);
             contactMechId = (String) contactAddress.get("contactMechId");
         }
@@ -2595,7 +2576,6 @@ public class PersonManagerServices {
 
         return resultMap;
     }
-
 
 
     /**
@@ -2634,7 +2614,7 @@ public class PersonManagerServices {
         //订单id
         String orderId = (String) context.get("orderId");
 
-        resultMap.put("orderId",orderId);
+        resultMap.put("orderId", orderId);
 
         String partyId = (String) userLogin.get("partyId");
 
@@ -2656,17 +2636,17 @@ public class PersonManagerServices {
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
         String firstName = (String) person.get("firstName");
 
-        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1",address1 + " " + address2).queryList();
-        if(null == partyAndPostalAddress || partyAndPostalAddress.size()==0){
-        // 货运目的地址
-        String contactMechPurposeTypeId = "SHIPPING_LOCATION";
-        Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
-                        "contactMechPurposeTypeId", contactMechPurposeTypeId));
-        String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1", address1 + " " + address2).queryList();
+        if (null == partyAndPostalAddress || partyAndPostalAddress.size() == 0) {
+            // 货运目的地址
+            String contactMechPurposeTypeId = "SHIPPING_LOCATION";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "toName", firstName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", address1 + " " + address2, "postalCode", PeConstant.DEFAULT_POST_CODE,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
-            return createPartyPostalAddressOutMap;
-           }
+                return createPartyPostalAddressOutMap;
+            }
         }
 //        //寄送账单地址
 //        dispatcher.runAsync("createPartyContactMechPurpose",
@@ -2727,8 +2707,8 @@ public class PersonManagerServices {
 
         String productId = (String) context.get("productId");
 
-        Debug.logInfo("* markOrOutMarkProduct = productId="+productId,module);
-        Debug.logInfo("* userLogin = userLogin="+userLogin,module);
+        Debug.logInfo("* markOrOutMarkProduct = productId=" + productId, module);
+        Debug.logInfo("* userLogin = userLogin=" + userLogin, module);
 
         String markIt = (String) context.get("markIt");
 
@@ -2737,18 +2717,18 @@ public class PersonManagerServices {
         Long placingCustCount = EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "PLACING_CUSTOMER", "productId", productId, "partyId", partyId).queryCount();
 
         //  if (markIt.equals("true")) {
-        Debug.logInfo("* placingCustCount ="+ placingCustCount,module);
+        Debug.logInfo("* placingCustCount =" + placingCustCount, module);
         if (placingCustCount <= 0) {
-            Debug.logInfo("* placingCustCount <= 0 ="+ (placingCustCount <= 0),module);
+            Debug.logInfo("* placingCustCount <= 0 =" + (placingCustCount <= 0), module);
             Long custCount = EntityQuery.use(delegator).from("ProductRole").where("roleTypeId", "CUSTOMER", "productId", productId).queryCount();
             //此处如果对这个产品已经有客户角色,不再增加潜在客户角色 ,
             // 2018-3-1 不用如此痛苦.
-         //   if (custCount == null || custCount <= 0) {}
-                dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
+            //   if (custCount == null || custCount <= 0) {}
+            dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER"));
 
         } else {
             if (placingCustCount > 0) {
-                Debug.logInfo("* placingCustCount "+ (placingCustCount),module);
+                Debug.logInfo("* placingCustCount " + (placingCustCount), module);
                 GenericValue partyMarkRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
                 dispatcher.runSync("removePartyFromProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", productId, "roleTypeId", "PLACING_CUSTOMER", "fromDate", partyMarkRole.get("fromDate")));
             }
@@ -2774,13 +2754,14 @@ public class PersonManagerServices {
 
     /**
      * 点赞了
+     *
      * @param request
      * @param response
      * @return
      * @throws GenericServiceException
      * @throws GenericEntityException
      */
-    public static String  likeResource(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException,GenericEntityException {
+    public static String likeResource(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException, GenericEntityException {
 
         // Servlet Head
 
@@ -2798,9 +2779,8 @@ public class PersonManagerServices {
 
         String text = (String) request.getParameter("text");
 
-        Debug.logInfo("*likeResource unioId = "+unioId,module);
-        Debug.logInfo("*likeResource productId = "+productId,module);
-
+        Debug.logInfo("*likeResource unioId = " + unioId, module);
+        Debug.logInfo("*likeResource productId = " + productId, module);
 
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
@@ -2814,25 +2794,24 @@ public class PersonManagerServices {
         GenericValue partyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
 
+        Map<String, Object> markOutMap = dispatcher.runSync("markOrOutMarkProduct", UtilMisc.toMap("productId", productId, "userLogin", partyUserLogin));
 
 
-        Map<String,Object> markOutMap = dispatcher.runSync("markOrOutMarkProduct",UtilMisc.toMap("productId",productId,"userLogin",partyUserLogin));
-
-
-        Debug.logInfo("*likeResource markOutMap = "+markOutMap,module);
+        Debug.logInfo("*likeResource markOutMap = " + markOutMap, module);
 
         return "success";
     }
 
     /**
      * 对产品的吐槽
+     *
      * @param request
      * @param response
      * @return
      * @throws GenericServiceException
      * @throws GenericEntityException
      */
-    public static String  tuCaoProduct(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException,GenericEntityException{
+    public static String tuCaoProduct(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException, GenericEntityException {
 
         // Servlet Head
 
@@ -2860,7 +2839,7 @@ public class PersonManagerServices {
 
         GenericValue partyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
-       Map<String,Object> tuCaoResultMap =  dispatcher.runSync("tuCao",UtilMisc.toMap("userLogin",partyUserLogin,"text",text,"productId",productId));
+        Map<String, Object> tuCaoResultMap = dispatcher.runSync("tuCao", UtilMisc.toMap("userLogin", partyUserLogin, "text", text, "productId", productId));
 
         if (ServiceUtil.isError(tuCaoResultMap)) {
             return "error";
@@ -3873,12 +3852,12 @@ public class PersonManagerServices {
 
         //默认的价格是0
         BigDecimal price = BigDecimal.ZERO;
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>productPrice="+productPrice);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>productPrice=" + productPrice);
         try {
             if (!UtilValidate.isEmpty(productPrice) && !productPrice.trim().equals("")) {
                 price = new BigDecimal(productPrice);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             price = BigDecimal.ZERO;
         }
 
@@ -4242,41 +4221,41 @@ public class PersonManagerServices {
      */
     private static Map<String, Object> createRelationC2CRSS(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
 
-        if(!partyIdFrom.equals(partyIdTo)){
+        if (!partyIdFrom.equals(partyIdTo)) {
 
-        String partyRelationshipTypeId = "";
-        // Create Supplier Relation
-        partyRelationshipTypeId = PeConstant.SUPPLIER;
-        String roleTypeIdFrom = "BILL_TO_CUSTOMER";
-        String roleTypeIdTo = "SHIP_FROM_VENDOR";
-        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-        createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdFrom);
-        createPartyRelationshipInMap.put("roleTypeIdTo", roleTypeIdTo);
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
-        createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+            String partyRelationshipTypeId = "";
+            // Create Supplier Relation
+            partyRelationshipTypeId = PeConstant.SUPPLIER;
+            String roleTypeIdFrom = "BILL_TO_CUSTOMER";
+            String roleTypeIdTo = "SHIP_FROM_VENDOR";
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdFrom);
+            createPartyRelationshipInMap.put("roleTypeIdTo", roleTypeIdTo);
+            createPartyRelationshipInMap.put("userLogin", admin);
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
+            createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+            Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
-        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-            return createPartyRelationshipOutMap;
-        }
+            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                return createPartyRelationshipOutMap;
+            }
 
-        partyRelationshipTypeId = PeConstant.CUSTOMER;
-        createPartyRelationshipInMap = new HashMap<String, Object>();
+            partyRelationshipTypeId = PeConstant.CUSTOMER;
+            createPartyRelationshipInMap = new HashMap<String, Object>();
 
-        createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdTo);
-        createPartyRelationshipInMap.put("roleTypeIdTo", roleTypeIdFrom);
+            createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdTo);
+            createPartyRelationshipInMap.put("roleTypeIdTo", roleTypeIdFrom);
 
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
-        createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-        createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+            createPartyRelationshipInMap.put("userLogin", admin);
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+            createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+            createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
-        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-            return createPartyRelationshipOutMap;
-        }
+            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                return createPartyRelationshipOutMap;
+            }
 
         }
         return ServiceUtil.returnSuccess();
@@ -4297,38 +4276,42 @@ public class PersonManagerServices {
     private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException {
 
 
-        if(!partyIdFrom.equals(partyIdTo)){
+        if (!partyIdFrom.equals(partyIdTo)) {
 
 
+            String partyRelationshipTypeId = "";
+            // Create Supplier Relation
+            partyRelationshipTypeId = PeConstant.CONTACT;
+            GenericValue isExsitsRela = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdTo, "partyIdTo", partyIdFrom, "partyRelationshipTypeId", partyRelationshipTypeId).queryFirst();
 
-        String partyRelationshipTypeId = "";
-        // Create Supplier Relation
-        partyRelationshipTypeId = PeConstant.CONTACT;
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("userLogin", admin);
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
+            createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+            Map<String, Object> createPartyRelationshipOutMap = null;
+            if (null == isExsitsRela) {
+                createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
-        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                    return createPartyRelationshipOutMap;
+                }
+            }
+            partyRelationshipTypeId = PeConstant.CONTACT;
+            createPartyRelationshipInMap = new HashMap<String, Object>();
 
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", partyIdTo);
-        createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+             isExsitsRela = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "partyRelationshipTypeId", partyRelationshipTypeId).queryFirst();
 
-        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-            return createPartyRelationshipOutMap;
-        }
-
-        partyRelationshipTypeId = PeConstant.CONTACT;
-        createPartyRelationshipInMap = new HashMap<String, Object>();
-
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
-        createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-        createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-
-        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-            return createPartyRelationshipOutMap;
-        }
+            createPartyRelationshipInMap.put("userLogin", admin);
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+            createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+            if(isExsitsRela ==  null){
+                createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+            }
+            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                return createPartyRelationshipOutMap;
+            }
 
         }
         return ServiceUtil.returnSuccess();
@@ -4614,25 +4597,25 @@ public class PersonManagerServices {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator       delegator  = dispatcher.getDelegator();
-        Locale             locale  = (Locale) context.get("locale");
-        GenericValue     userLogin = (GenericValue) context.get("userLogin");
-        String             partyId = (String) userLogin.get("partyId");
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
 
 
         // Admin Do Run Service
-        GenericValue admin    = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productStoreId = (String) context.get("productStoreId");
-        String amount_str     = (String) context.get("amount");
-        String payToPartyId   = (String) context.get("payToPartyId");
-        String productId      = (String) context.get("productId");
-        String price          = (String) context.get("price");
-        String prodCatalogId  = (String) context.get("prodCatalogId");
-        String orderReMark    = (String) context.get("orderReMark");
+        String amount_str = (String) context.get("amount");
+        String payToPartyId = (String) context.get("payToPartyId");
+        String productId = (String) context.get("productId");
+        String price = (String) context.get("price");
+        String prodCatalogId = (String) context.get("prodCatalogId");
+        String orderReMark = (String) context.get("orderReMark");
 
-        BigDecimal subTotal   = BigDecimal.ZERO;
+        BigDecimal subTotal = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
-        BigDecimal amount     = BigDecimal.ONE;
+        BigDecimal amount = BigDecimal.ONE;
 
 
         if (!UtilValidate.isEmpty(amount_str)) {
@@ -4643,7 +4626,6 @@ public class PersonManagerServices {
         if (!UtilValidate.isEmpty(price)) {
             grandTotal = subTotal = new BigDecimal(price);
         }
-
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
@@ -4670,7 +4652,7 @@ public class PersonManagerServices {
 
         String orderId = (String) createOrderHeaderOutMap.get("orderId");
         if (!UtilValidate.isEmpty(orderReMark)) {
-                dispatcher.runSync("createOrderNote",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"noteName","买家备注","note",orderReMark,"internalNote","N"));
+            dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "noteName", "买家备注", "note", orderReMark, "internalNote", "N"));
         }
 
 
@@ -4900,8 +4882,7 @@ public class PersonManagerServices {
 //        } else {
 //            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您的订单收货地址:" + address1 + ",无误请点击→", "objectId", productId));
 //        }
-                dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
-
+        dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
 
 
         //推卖家
@@ -4926,10 +4907,10 @@ public class PersonManagerServices {
 
         //  auto approved
 
-        Map<String,Object> changeOrderStatusOutMap =  dispatcher.runSync("changeOrderStatus",
-                UtilMisc.toMap("userLogin",admin,
-                "orderId",orderId,
-                "statusId",PeConstant.ORDER_APPROVED_STATUS_ID));
+        Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus",
+                UtilMisc.toMap("userLogin", admin,
+                        "orderId", orderId,
+                        "statusId", PeConstant.ORDER_APPROVED_STATUS_ID));
 
         return resultMap;
     }
@@ -5004,8 +4985,6 @@ public class PersonManagerServices {
         createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
 
-
-
         // Create Default Pay Method To Party
         GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
         newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
@@ -5050,14 +5029,12 @@ public class PersonManagerServices {
         // 创建当事人
 
 
-
         // 创建当事人税务机关
         Map<String, Object> createTaxAuthorityOutMap = dispatcher.runSync("createTaxAuthority",
                 UtilMisc.toMap("userLogin", admin,
                         "includeTaxInPrice", "N",
                         "taxAuthGeoId", "CHN",
                         "taxAuthPartyId", partyId));
-
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -5169,7 +5146,6 @@ public class PersonManagerServices {
         }
 
 
-
         //发出账单的厂家
         GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
         if (null == partyBillVendorRole) {
@@ -5198,16 +5174,15 @@ public class PersonManagerServices {
         Map<String, Object> createProductStoreShipMethMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId,
                 "productStoreId", productStoreId,
-                "productStoreShipMethId","10000",
-                "roleTypeId","CARRIER",
-                "shipmentMethodTypeId","EXPRESS",
-                "partyId","SHUNFENG_EXPRESS",
-                "allowUspsAddr","Y",
-                "requireUspsAddr","N",
-                "allowCompanyAddr","Y",
-                "requireCompanyAddr","N"
-            ,   "includeNoChargeItems","Y"));
-
+                "productStoreShipMethId", "10000",
+                "roleTypeId", "CARRIER",
+                "shipmentMethodTypeId", "EXPRESS",
+                "partyId", "SHUNFENG_EXPRESS",
+                "allowUspsAddr", "Y",
+                "requireUspsAddr", "N",
+                "allowCompanyAddr", "Y",
+                "requireCompanyAddr", "N"
+                , "includeNoChargeItems", "Y"));
 
 
         // 关联店铺角色
@@ -5315,7 +5290,7 @@ public class PersonManagerServices {
 
             //微信支付设置
             Map<String, Object> createProductStorePaymentSettingOutMap = dispatcher.runSync("createProductStorePaymentSetting", UtilMisc.toMap("userLogin", admin,
-                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId", "EXT_WXPAY", "paymentServiceTypeEnumId", "PRDS_PAY_AUTH","paymentService","genericPaymentService"));
+                    "productStoreId", personStoreId, "applyToAllProducts", "Y", "paymentMethodTypeId", "EXT_WXPAY", "paymentServiceTypeEnumId", "PRDS_PAY_AUTH", "paymentService", "genericPaymentService"));
             if (!ServiceUtil.isSuccess(createProductStorePaymentSettingOutMap)) {
                 return createProductStorePaymentSettingOutMap;
             }

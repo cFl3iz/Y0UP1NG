@@ -306,7 +306,7 @@ function selectFeature(e){
                     doAddProductRole(partyId,productId,"VISITOR");
                     //记录资源主与当前访问人的联系关系
                     var payToParty = ${(resourceDetail.payToPartyId)!};
-                    alert("payToParty = " + payToParty);
+
                     doAddContactRelation(partyId,payToParty);
                     if(spm != null && spm != ""){
                         doAddPartyRelation(partyId,spm);

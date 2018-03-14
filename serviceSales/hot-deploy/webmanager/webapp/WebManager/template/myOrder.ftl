@@ -23,10 +23,10 @@
 </style>
 <#if orderList?has_content>
 <script>
-    function viewQrCode(e) {
-        alert(e);
-//        var   jumpurl = "viewContactQrCode?qrCodePath="+$(e).name+"&title=卖家的收款码";
-//        location.href = jumpurl;
+    function viewQrCode(path) {
+
+        var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
+        location.href = jumpurl;
     }
 
 
@@ -63,7 +63,7 @@
                         <h1 class="list-title">${list.productName}</h1>
                         <#assign payStat = "${list.payStatusCode}" />
                         <#if payStat == '0'>
-                            <a href="javascript:viewQrCode(${(list.weChatPayQrCode)!}">
+                            <a href="javascript:viewQrCode('${(list.weChatPayQrCode)!}');">
                                 <div class="list-mes-item">
                                     <div>
                                 <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span

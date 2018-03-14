@@ -47,7 +47,7 @@
 
                 <#assign orderStatusCode = "${list.orderStatusCode}" />
 
-                <a href="javascript:goMyOrderDetail('${list.orderId}','${tarjeta}','${orderStatusCode}');" class="list-item">
+                <#--<a href="javascript:goMyOrderDetail('${list.orderId}','${tarjeta}','${orderStatusCode}');" class="list-item">-->
                     <div class="list-img">
                         <img src="${list.detailImageUrl}" data-url="${list.detailImageUrl}">
                     </div>
@@ -76,13 +76,13 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" class="btn-block btn-primary">付款</button>
+                                        <button type="button" onclick="javascript:viewQrCode(${(list.weChatPayQrCode)!});" class="btn-block btn-primary">去付款</button>
                                     </span>
                                 </#if>
                             </div>
                         </div>
                     </div>
-                </a>
+                <#--</a>-->
             </#list>
         </article>
 

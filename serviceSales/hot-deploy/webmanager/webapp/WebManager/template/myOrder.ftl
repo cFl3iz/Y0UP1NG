@@ -61,7 +61,8 @@
                     <div class="list-mes">
 
                         <h1 class="list-title">${list.productName}</h1>
-
+                <#if payStat == '0'>
+                <a href="javascript:viewQrCode(${(list.weChatPayQrCode)!}">
                         <div class="list-mes-item">
                             <div>
                                 <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span
@@ -83,11 +84,43 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary" style="z-index: 999999;">去付款</button>
+                                        <button type="button"  value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary" style="z-index: 999999;">去付款</button>
                                     </span>
                                 </#if>
                             </div>
                         </div>
+                </a>
+                </#if>
+
+                        <#if payStat != '0'>
+                            <div class="list-mes-item">
+                                <div>
+                                <span class="list" style="font-size:17px;">${uiLabel.orderTime}<span
+                                        style="font-size:19px;">&nbsp;${list.orderDate?string("yyyy-MM-dd")}</span></span><br/>
+                                <span class="list" style="font-size:17px;">${uiLabel.orderPrice}&nbsp;¥<span
+                                        style="font-size:19px;">${list.grandTotal}</span></span>
+
+                                    <br/>
+                                <span class="list" style="font-size:17px;">${uiLabel.orderStatus}<span
+                                        style="font-size:19px;">${list.statusId}</span></span>
+                                </div>
+                                <div>
+                                    <#assign payStat = "${list.payStatusCode}" />
+                                <#--${payStat}-->
+                                    <#if payStat == '1'>
+                                        <span class="list"><span style="color:#008000;font-size:19px;">
+                                        ${list.orderPayStatus}</span>
+                                    </span>
+                                    </#if>
+                                    <#if payStat == '0'>
+                                        <span class="list">
+                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary" style="z-index: 999999;">去付款</button>
+                                    </span>
+                                    </#if>
+                                </div>
+                            </div>
+                        </#if>
+
                     </div>
                 <#--</a>-->
                 <hr/>

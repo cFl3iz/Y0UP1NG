@@ -143,6 +143,7 @@
         <section>
             <actions>
                 <set field="qrCodePath" value="${parameters.qrCodePath}"/>
+                <set field="title" value="${parameters.title}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
             </actions>
             <widgets>

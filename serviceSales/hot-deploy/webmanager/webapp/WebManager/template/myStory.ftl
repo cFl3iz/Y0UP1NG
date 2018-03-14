@@ -361,7 +361,7 @@
             var weChatContactQrCode = $("#weChatContactQrCode").val();
 
             //更换跳转地址到二维码
-            jumpurl = "viewContactQrCode?qrCodePath="+weChatContactQrCode;
+            jumpurl = "viewContactQrCode?qrCodePath="+weChatContactQrCode+"&title=加我微信吧";
 
 
 //            alert("jump productId="+jumpurl);

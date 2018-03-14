@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title>加我微信吧!</title>
+    <title>${(title)!}</title>
     <style type="text/css">
         .floatResult {
             /*display: none;*/

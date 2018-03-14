@@ -2171,6 +2171,17 @@ public class PersonManagerQueryServices {
 
                 rowMap.put("payToPartyId", payToPartyId);
 
+                // 查询卖家付款二维码。
+                GenericValue wxPayQrCodes =
+                        EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                                where("partyId", payToPartyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
+
+                if(null != wxPayQrCodes ){
+                    rowMap.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
+                }
+
+
+
                 String statusId = (String) gv.get("statusId");
 
                 //区分订单状态

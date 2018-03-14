@@ -53,7 +53,7 @@
         <article class="m-list list-theme4">
 
             <#list orderList as list>
-                ${(list)!}
+
                 <#assign orderStatusCode = "${list.orderStatusCode}" />
 
                 <div class="list-item">

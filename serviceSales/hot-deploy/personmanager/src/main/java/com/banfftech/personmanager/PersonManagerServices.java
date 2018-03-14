@@ -1698,23 +1698,23 @@ public class PersonManagerServices {
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
 
-        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
-        createOrderPaymentPreferenceMap.put("userLogin", admin);
-        createOrderPaymentPreferenceMap.put("orderId", orderId);
-        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
-        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
-        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
-        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
-        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
-        createOrderPaymentPreferenceMap.put("presentFlag", "N");
-        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
-        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
-
-        Map<String, Object> createOrderPaymentPreferenceOutMap =
-                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
-        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
-            return createOrderPaymentPreferenceOutMap;
-        }
+//        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
+//        createOrderPaymentPreferenceMap.put("userLogin", admin);
+//        createOrderPaymentPreferenceMap.put("orderId", orderId);
+//        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
+//        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
+//        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
+//        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
+//        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+//        createOrderPaymentPreferenceMap.put("presentFlag", "N");
+//        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
+//        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
+//
+//        Map<String, Object> createOrderPaymentPreferenceOutMap =
+//                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
+//        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
+//            return createOrderPaymentPreferenceOutMap;
+//        }
 
 //        //找到买家
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();

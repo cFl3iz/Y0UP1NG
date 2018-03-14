@@ -7,5 +7,8 @@
     </style>
 </head>
 <body>
-<img id="bg" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/1489557679.png"/>
+<div style="text-align: center; width: 500px; border: green solid 1px;">
+    <img alt="" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/1489557679.png" style="margin: 0 auto;" />
+</div>
+
 </body>

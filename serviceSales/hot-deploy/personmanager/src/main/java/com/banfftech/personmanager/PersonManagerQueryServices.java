@@ -2000,7 +2000,7 @@ public class PersonManagerQueryServices {
 
                 String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
-                if (statusId.toUpperCase().indexOf("RECEIVED") > 0) {
+                if (statusId.equals("PAYMENT_RECEIVED")) {
 
                     rowMap.put("orderPayStatus", "已付款");
 
@@ -2223,7 +2223,7 @@ public class PersonManagerQueryServices {
 
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
-                    if (orderPaymentPrefAndPaymentstatusId.toUpperCase().indexOf("RECEIVED") > 0) {
+                    if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
 
                         rowMap.put("orderPayStatus", "已确认收款");
                         rowMap.put("payStatusCode", "1");
@@ -2236,7 +2236,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("orderPayStatus", "未付款");
                     if (null != payment) {
                         String paymentStatusId = (String) payment.get("statusId");
-                        if (paymentStatusId.toUpperCase().indexOf("RECEIVED") > 0) {
+                        if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
                             rowMap.put("orderPayStatus", "已确认收款");
                             rowMap.put("payStatusCode", "1");
                         }

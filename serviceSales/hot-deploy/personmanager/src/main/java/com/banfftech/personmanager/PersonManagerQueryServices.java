@@ -1993,7 +1993,7 @@ public class PersonManagerQueryServices {
 
             rowMap = orderHeaderItemAndRoles.getAllFields();
 
-            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", orderId).queryFirst();
 
 
             Debug.logInfo("===================================> orderPaymentPrefAndPayment="+orderPaymentPrefAndPayment,module);
@@ -2217,7 +2217,7 @@ public class PersonManagerQueryServices {
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
 
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", gv.get("orderId")).queryFirst();
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
 

@@ -76,7 +76,7 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <button>去付款</button>
+                                        <button type="button" class="btn-block btn-primary">去付款</button>
                                     </span>
                                 </#if>
                             </div>

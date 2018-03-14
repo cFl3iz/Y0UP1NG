@@ -124,7 +124,7 @@ public class PeConstant {
     public static final String DEFAULT_HEAD_DISK = "datas/images/headPortrait/";
 
     // 二维码存放地址
-    public static final String DEFAULT_RR_CODE_DISK = "datas/images/qr_code/";
+    public static final String DEFAULT_RR_CODE_DISK = "datas/qr_code/";
 
     // Default GEO Country
     public static final String DEFAULT_GEO_COUNTRY = "CHN";

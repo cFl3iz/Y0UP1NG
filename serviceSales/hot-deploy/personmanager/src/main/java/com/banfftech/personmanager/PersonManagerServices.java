@@ -574,7 +574,7 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
 
         // 以资源主的角度去看有没有发布过这个分享数据
-        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId)).queryFirst();
+        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId,"description", productId + payToPartyId)).queryFirst();
 
         // 已分享过,则不再记录了
         if (null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)) {
@@ -584,7 +584,7 @@ public class PersonManagerServices {
 
         // 以转发人的角度去看有没有转发过这个分享数据?
         GenericValue workEffortAndProductAndPartyReFerrer =
-                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
+                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom,"description", productId + sharePartyIdFrom)).queryFirst();
 
         // 已转发过,则增加转发次数,否则正常转发。
         if (null != workEffortAndProductAndPartyReFerrer) {

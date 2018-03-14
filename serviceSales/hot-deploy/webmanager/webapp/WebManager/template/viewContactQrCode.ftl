@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>加我微信吧!</title>
     <style type="text/css">
         .floatResult {
             /*display: none;*/
@@ -71,7 +71,7 @@
     <div class="result">
         <span class="span"></span>
             <span class="image">
-                <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/1489557679.png" >
+                <img src="${(qrCodePath)!}" >
             </span>
         <span class="span"></span>
     </div>

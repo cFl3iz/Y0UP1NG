@@ -3205,6 +3205,27 @@ public class PersonManagerQueryServices {
 //
 //        System.out.println("strProductFeaturesList="+strProductFeaturesList);
 
+
+
+        // 查询卖家的联系二维码。
+        GenericValue wxContactQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", payToId, "partyContentTypeId", "WECHATCONTACTQRCODE").orderBy("-fromDate").queryFirst();
+
+
+        if(null != wxContactQrCodes ){
+            resourceDetail.put("weChatContactQrCode",wxContactQrCodes.getString("objectInfo"));
+        }
+        // 查询卖家付款二维码。
+        GenericValue wxPayQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", payToId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
+
+        if(null != wxPayQrCodes ){
+            resourceDetail.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
+        }
+
+
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToId).queryFirst();
         String originFacilityId = (String) facility.get("facilityId");
         //获得库存信息 getInventoryAvailableByFacility
@@ -3489,8 +3510,6 @@ public class PersonManagerQueryServices {
 
 
         if(null != wxPayQrCodes ){
-//            String payQrCode = (String) wxPayQrCodes.getString("objectInfo");
-//            payQrCode = payQrCode.replaceAll("https://",'');
             inputMap.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
         }
         GenericValue wxContactQrCodes =

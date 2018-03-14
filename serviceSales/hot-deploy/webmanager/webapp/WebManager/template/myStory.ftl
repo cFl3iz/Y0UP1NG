@@ -358,8 +358,10 @@
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
 
+            var weChatContactQrCode = $("#weChatContactQrCode").val();
+
             //更换跳转地址到二维码
-            jumpurl = "viewContactQrCode?qrCodePath=1";
+            jumpurl = "viewContactQrCode?qrCodePath="+weChatContactQrCode;
 
 
 //            alert("jump productId="+jumpurl);
@@ -391,6 +393,7 @@
 
 <input id="productName" type="hidden" value="${(resourceDetail.productName)!}" />
 <input id="imgUrl" type="hidden" value="${(resourceDetail.detailImageUrl)!}" />
+<input id="weChatContactQrCode"  type="hidden" value="${(resourceDetail.weChatContactQrCode)!}" />
 
 <input id="mark" type="hidden" value="${(mark)!}"/>
 <input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>

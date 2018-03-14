@@ -26,9 +26,9 @@
     function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
 
         if(orderStatusCode === "0"){
-          var flag =  confirm("卖家还没发货,是否立即推送提醒?");
+          var flag =  confirm("是否立即推送提醒?");
            if(flag){
-               alert("已为您提醒卖家发货!");
+               alert("已为您提醒卖家!");
            }
         }
         if(orderStatusCode === "1"){
@@ -75,8 +75,8 @@
                                     </span>
                                 </#if>
                                 <#if payStat == '0'>
-                                    <span class="list"><span style="color:indianred;font-size:19px;">
-                                        ${list.orderPayStatus}</span>
+                                    <span class="list">
+                                        <button>去付款</button>
                                     </span>
                                 </#if>
                             </div>

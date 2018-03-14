@@ -23,6 +23,12 @@
 </style>
 <#if orderList?has_content>
 <script>
+    function viewQrCode (weChatPayQrCode){
+        var   jumpurl = "viewContactQrCode?qrCodePath="+weChatPayQrCode+"&title=卖家的收款码";
+        location.href = jumpurl;
+    }
+
+
     function goMyOrderDetail(orderId,tarjeta,orderStatusCode){
 
         if(orderStatusCode === "0"){
@@ -76,13 +82,14 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <button type="button" onclick="javascript:viewQrCode(${(list.weChatPayQrCode)!});" class="btn-block btn-primary">去付款</button>
+                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" class="btn-block btn-primary">去付款</button>
                                     </span>
                                 </#if>
                             </div>
                         </div>
                     </div>
                 <#--</a>-->
+                <hr/>
             </#list>
         </article>
 
@@ -92,10 +99,7 @@
 
 <script>
 
-    function viewQrCode (weChatPayQrCode){
-        var   jumpurl = "viewContactQrCode?qrCodePath="+weChatPayQrCode+"&title=卖家的收款码";
-        location.href = jumpurl;
-    }
+
 
     !function () {
         $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});

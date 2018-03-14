@@ -24,7 +24,7 @@
 <#if orderList?has_content>
 <script>
     function viewQrCode (e){
-        alert($(e).next().attr("value"));
+        alert(e);
 //        var   jumpurl = "viewContactQrCode?qrCodePath="+$(e).name+"&title=卖家的收款码";
 //        location.href = jumpurl;
     }
@@ -83,9 +83,8 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <a href="javascript:viewQrCode(this);">
-                                        <button type="button" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary">去付款</button>
-                                        </a>
+                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary">去付款</button>
+
                                     </span>
                                 </#if>
                             </div>

@@ -1987,6 +1987,7 @@ public class PersonManagerQueryServices {
         GenericValue custOrderRole  = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
 
         String custPartyId = (String) custOrderRole.get("partyId");
+        Debug.logInfo("===================================> orderHeaderItemAndRoles="+orderHeaderItemAndRoles,module);
 
         if (null != orderHeaderItemAndRoles) {
 
@@ -1995,11 +1996,12 @@ public class PersonManagerQueryServices {
             GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
 
+            Debug.logInfo("===================================> orderPaymentPrefAndPayment="+orderPaymentPrefAndPayment,module);
 
             if (null != orderPaymentPrefAndPayment) {
 
                 String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
-
+                Debug.logInfo("===================================> PayStatus="+statusId,module);
                 if (statusId.equals("PAYMENT_RECEIVED")) {
 
                     rowMap.put("orderPayStatus", "已付款");

@@ -4421,7 +4421,7 @@ public class PersonManagerServices {
 
                         if (pictureKey != null && !pictureKey.equals("")) {
 
-                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_RR_CODE_DISK + tm + fileName.substring(fileName.indexOf(".")), partyContentType);
+                            createContentAndDataResource(partyId, delegator, admin, dispatcher, pictureKey, "http://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.DEFAULT_RR_CODE_DISK + tm + fileName.substring(fileName.indexOf(".")), partyContentType);
 
                         }
                     }

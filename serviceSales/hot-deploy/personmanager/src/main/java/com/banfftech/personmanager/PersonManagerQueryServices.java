@@ -3487,6 +3487,8 @@ public class PersonManagerQueryServices {
 
 
         if(null != wxPayQrCodes ){
+//            String payQrCode = (String) wxPayQrCodes.getString("objectInfo");
+//            payQrCode = payQrCode.replaceAll("https://",'');
             inputMap.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
         }
         GenericValue wxContactQrCodes =

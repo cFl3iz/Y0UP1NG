@@ -83,8 +83,7 @@
                                 </#if>
                                 <#if payStat == '0'>
                                     <span class="list">
-                                        <#--<button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary">去付款</button>-->
-                                        <a href="javaScript:viewQrCode(${(list.weChatPayQrCode)!});">去付款</a>
+                                        <button type="button" onclick="viewQrCode(${(list.weChatPayQrCode)!});" value="${(list.weChatPayQrCode)!}"  class="btn-block btn-primary" style="z-index: 999999;">去付款</button>
                                     </span>
                                 </#if>
                             </div>

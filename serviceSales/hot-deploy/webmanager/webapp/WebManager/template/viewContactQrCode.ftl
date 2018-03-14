@@ -2,44 +2,78 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style type="text/css">
-
-        .ui-flex {
-            display: -webkit-box !important;
-            display: -webkit-flex !important;
-            display: -ms-flexbox !important;
-            display: flex !important;
-            -webkit-flex-wrap: wrap;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap
+        .floatResult {
+            /*display: none;*/
         }
 
-        .ui-flex, .ui-flex *, .ui-flex :after, .ui-flex :before {
-            box-sizing: border-box
+        .floatResult .bg {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
         }
 
-        .ui-flex.justify-center {
-            -webkit-box-pack: center;
-            -webkit-justify-content: center;
-            -ms-flex-pack: center;
-            justify-content: center
+        .floatResult .result {
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
         }
-        .ui-flex.center {
-            -webkit-box-pack: center;
-            -webkit-justify-content: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-            -ms-flex-align: center;
-            align-items: center
+
+        .floatResult .result .span {
+            display: inline-block;
+            width: 1%;
+            height: 100%;
+            vertical-align: middle;
         }
+
+        .floatResult .result .image {
+            width: 80%;
+            height: auto;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .floatResult .result img {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .floatResult .result .imgBtn {
+            display: inline-block;
+            width: 70%;
+            position: absolute;
+            left: 50%;
+            bottom: 8%;
+            margin-left: -35%;
+            height: 44px;
+            line-height: 42px;
+            font-size: 18px;
+            color: #fff;
+            text-align: center;
+            border-radius: 22px;
+            background: #ff4345;
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="ui-flex justify-center center" style="border: green solid 1px; width: 500px; height: 500px;">
-    <div class="cell">
-        <img alt="" src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/1489557679.png" style="" />
+
+<div class="floatResult">
+    <div class="bg"></div>
+    <div class="result">
+        <span class="span"></span>
+            <span class="image">
+                <img src="http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/1489557679.png" >
+            </span>
+        <span class="span"></span>
     </div>
 </div>
 

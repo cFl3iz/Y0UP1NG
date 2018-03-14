@@ -139,6 +139,27 @@
 
 
 
+    <screen name="viewContactQrCode">
+        <section>
+            <actions>
+                <set field="qrCodePath" value="${parameters.qrCodePath}"/>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/viewContactQrCode.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
 
 
     <screen name="ViewSelectProductFeature">

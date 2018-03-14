@@ -336,7 +336,7 @@
     function contactMe() {
         var flag = checkSubscribe();
         if (flag == true) {
-//            $("#miniChatForm").submit();
+
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();
             var productId      = $("#productId").val();
@@ -357,6 +357,11 @@
                 return false;
             }
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
+
+            //更换跳转地址到二维码
+            jumpurl = "viewContactQrCode?qrCodePath=1";
+
+
 //            alert("jump productId="+jumpurl);
 //            alert("jump productId="+productId);
 //            return false;

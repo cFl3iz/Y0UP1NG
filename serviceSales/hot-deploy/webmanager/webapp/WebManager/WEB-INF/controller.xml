@@ -166,6 +166,13 @@
         <response name="success" type="view" value="viewWebOrderDetail"/>
     </request-map>
 
+    <!-- 联系卖家微信号 -->
+    <request-map uri="viewContactQrCode">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewContactQrCode"/>
+    </request-map>
+
+
 
     <request-map uri="selectPartyPostalAddress2Order">
         <security https="false" auth="false"/>
@@ -416,6 +423,7 @@
 
 
     <view-map name="myStory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myStory"/>
+    <view-map name="viewContactQrCode" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#viewContactQrCode"/>
     <view-map name="ViewSelectProductFeature" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#ViewSelectProductFeature"/>
     <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
     <view-map name="myOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrderDetail"/>

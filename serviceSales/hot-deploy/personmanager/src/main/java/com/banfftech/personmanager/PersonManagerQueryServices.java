@@ -3481,17 +3481,24 @@ public class PersonManagerQueryServices {
 
         //Query Qr Code 付款码信息 目前没有这个业务线注释掉
 
-//        List<GenericValue> aliPayQrCodes =
-//                EntityQuery.use(delegator).from("PartyContentAndDataResource").
-//                        where("partyId", partyId, "partyContentTypeId", "ALIQRCODE").orderBy("-fromDate").queryPagedList(0,999999).getData();
-//
-//
-//        GenericValue aliPayQrCode = null;
-//
-//        if(null != aliPayQrCodes && aliPayQrCodes.size()>0){
-//            aliPayQrCode = aliPayQrCodes.get(0);
-//            inputMap.put("aliPayQrCode",aliPayQrCode.getString("objectInfo"));
-//        }
+        GenericValue wxPayQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
+
+
+        if(null != wxPayQrCodes ){
+            inputMap.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
+        }
+        GenericValue wxContactQrCodes =
+                EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                        where("partyId", partyId, "partyContentTypeId", "WECHATCONTACTQRCODE").orderBy("-fromDate").queryFirst();
+
+
+        if(null != wxContactQrCodes ){
+            inputMap.put("weChatContactQrCode",wxContactQrCodes.getString("objectInfo"));
+        }
+
+
 //
 //        List<GenericValue> weChatQrCodes =
 //                EntityQuery.use(delegator).from("PartyContentAndDataResource").

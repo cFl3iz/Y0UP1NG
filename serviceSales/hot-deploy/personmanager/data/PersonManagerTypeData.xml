@@ -5,6 +5,7 @@
     <!-- 卖家的两个二维码 -->
     <PartyContentType createdStamp="2017-11-15 11:31:23.0" createdTxStamp="2017-11-15 11:31:23.0" description="支付宝付款二维码" lastUpdatedStamp="2017-11-15 11:31:23.0" lastUpdatedTxStamp="2017-11-15 11:31:23.0" partyContentTypeId="ALIQRCODE"/>
     <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信付款二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATQRCODE"/>
+    <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信名片二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATCONTACTQRCODE"/>
 
 
     <!-- 用户偏好设置组-->

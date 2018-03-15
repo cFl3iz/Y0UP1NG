@@ -743,17 +743,16 @@ public class WeChatOrderQueryServices {
                     rowMap.put("payStatusCode", "1");
 
                 } else {
-
-
+                    rowMap.put("orderPayStatus", "未付款");
                 }
 
-                if(!statusId.equals("ORDER_SENT")){
-                    rowMap.put("orderShipment","未发货");
-                }else{
+                if(statusId.equals("ORDER_SENT")){
                     rowMap.put("orderShipment","已发货");
-                    if(rowMap.get("orderPayStatus").equals("已收款")){
+                    if(null!=rowMap.get("orderPayStatus")&&rowMap.get("orderPayStatus").equals("已收款")){
                         rowMap.put("orderCompleted","已完成");
                     }
+                }else{
+                    rowMap.put("orderShipment","未发货");
                 }
 
 

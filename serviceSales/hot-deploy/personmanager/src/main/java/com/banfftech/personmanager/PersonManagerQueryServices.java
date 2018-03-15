@@ -2096,6 +2096,7 @@ public class PersonManagerQueryServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
+        String orderStatusId =  (String) context.get("orderStatus");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
@@ -2130,20 +2131,41 @@ public class PersonManagerQueryServices {
 
 
         EntityCondition listConditions2 = null;
-
+        EntityCondition listConditions3 = null;
         String isCancelled = (String) context.get("isCancelled");
+
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
             EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
             EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         }else{
-            listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+            if (null != orderStatusId && orderStatusId.equals("SHIPMENT")) {
+                EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+                  listConditions3 = EntityCondition
+                        .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
+            }else{
+                listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+            }
+
         }
 
-        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                listConditions2, fieldSet,
-                UtilMisc.toList("-orderDate"), null, false);
+
+
+        List<GenericValue> queryMyResourceOrderList = null;
+
+        if(listConditions3!=null){
+            //说明查已发货的
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions3, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
+        }else{
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions2, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
+        }
+
+
 
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
@@ -2266,7 +2288,16 @@ public class PersonManagerQueryServices {
                 }
 
 
-                orderList.add(rowMap);
+                //不查询已收款的订单时,直接放入
+                if (null != orderStatusId && !orderStatusId.equals("PAYMENT")) {
+                    orderList.add(rowMap);
+                }
+                if (null != orderStatusId && orderStatusId.equals("PAYMENT")) {
+                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
+                        orderList.add(rowMap);
+                    }
+                }
+
             }
         }
 

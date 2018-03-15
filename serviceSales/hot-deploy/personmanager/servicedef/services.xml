@@ -189,6 +189,7 @@
         <description>Query MyOrders</description>
         <attribute name="tarjeta" type="String" mode="IN"
                    optional="true"/>
+        <attribute name="orderStatus" type="String" mode="IN"   optional="true"/>
 
         <attribute name="isCancelled" type="String" mode="IN"
                    optional="true"/>

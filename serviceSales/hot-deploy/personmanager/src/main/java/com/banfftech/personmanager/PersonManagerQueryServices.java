@@ -2129,7 +2129,7 @@ public class PersonManagerQueryServices {
                 .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 
 
-
+        System.out.println("orderStatusId  ==   ? " +orderStatusId);
         EntityCondition listConditions2 = null;
         EntityCondition listConditions3 = null;
         String isCancelled = (String) context.get("isCancelled");
@@ -2153,6 +2153,8 @@ public class PersonManagerQueryServices {
 
 
         List<GenericValue> queryMyResourceOrderList = null;
+
+        System.out.println("list condition3 == null ? " + (listConditions3!=null));
 
         if(listConditions3!=null){
             //说明查已发货的

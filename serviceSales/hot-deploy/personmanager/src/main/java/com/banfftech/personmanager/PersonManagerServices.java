@@ -516,7 +516,7 @@ public class PersonManagerServices {
             // 说明上层引用不是资源主
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
         }
-        
+
         if(null==workEffortAndProductAndParty){
             return resultMap;
         }

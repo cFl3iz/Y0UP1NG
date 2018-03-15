@@ -2300,6 +2300,9 @@ public class PersonManagerQueryServices {
                         orderList.add(rowMap);
                     }
                 }
+                if(UtilValidate.isEmpty(orderStatusId)){
+                    orderList.add(rowMap);
+                }
 
             }
         }

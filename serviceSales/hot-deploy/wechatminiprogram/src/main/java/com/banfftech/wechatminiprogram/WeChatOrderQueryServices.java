@@ -716,7 +716,6 @@ public class WeChatOrderQueryServices {
                 UtilMisc.toList("-orderDate"), null, false);
         System.out.println("*queryMyResourceOrderList = " + queryMyResourceOrderList);
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
-
             for (GenericValue gv : queryMyResourceOrderList) {
                 Map<String, Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
@@ -728,8 +727,40 @@ public class WeChatOrderQueryServices {
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
                 String payToPartyId = (String) productStore.get("payToPartyId");
                 rowMap.put("payToPartyId", payToPartyId);
+
+
+
+
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", rowMap.get("orderId")).queryFirst();
+
+
                 String statusId = (String) gv.get("statusId");
-                rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
+
+                if (null != orderPaymentPrefAndPayment) {
+
+                    rowMap.put("orderPayStatus", "已收款");
+                    rowMap.put("payStatusCode", "1");
+
+                } else {
+
+
+                }
+
+                if(!statusId.equals("ORDER_SENT")){
+                    rowMap.put("orderShipment","未发货");
+                }else{
+                    rowMap.put("orderShipment","已发货");
+                    if(rowMap.get("orderPayStatus").equals("已收款")){
+                        rowMap.put("orderCompleted","已完成");
+                    }
+                }
+
+
+
+
+                //String statusId = (String) gv.get("statusId");
+//                rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String, String> personInfoMap = null;

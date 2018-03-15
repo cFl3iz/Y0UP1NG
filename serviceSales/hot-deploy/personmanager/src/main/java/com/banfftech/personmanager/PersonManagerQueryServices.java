@@ -2553,6 +2553,8 @@ public class PersonManagerQueryServices {
                         rowMap.put("orderCompleted","已完成");
                     }
                 }
+
+
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RowMap" + rowMap);
                 //不查询已收款的订单时,直接放入
                 if (null != orderStatus && !orderStatus.equals("PAYMENT")) {

@@ -69,6 +69,14 @@
     </request-map>
 
 
+
+    <request-map uri="queryMyOrders">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyOrders"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- query My OrdersDetail -->
     <request-map uri="queryMyOrdersDetail">
         <security https="false" auth="false"/>

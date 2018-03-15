@@ -168,6 +168,10 @@ public class PeConstant {
     public static final String WECHAT_MINI_PROGRAM_APP_ID = "wx299644ef4c9afbde";
 
 
+    /**
+     * 小程序获取AccessToken地址
+     */
+    public static final String WECHAT_MINI_PROGRAM_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
 
 
     /**

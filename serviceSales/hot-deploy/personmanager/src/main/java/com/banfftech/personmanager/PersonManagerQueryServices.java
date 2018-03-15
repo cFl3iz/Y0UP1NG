@@ -2564,7 +2564,7 @@ public class PersonManagerQueryServices {
                     myResourceOrderList.add(rowMap);
                 }
                 if (null != orderStatus && orderStatus.equals("PAYMENT")) {
-                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
+                    if (!rowMap.get("orderPayStatus").equals("未收款")) {
                         myResourceOrderList.add(rowMap);
                     }
                 }

@@ -2105,7 +2105,7 @@ public class PersonManagerQueryServices {
         String partyId = (String) userLogin.get("partyId");
         List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
 
-
+        System.out.println("partyId ==  "+partyId);
 
 
         Set<String> fieldSet = new HashSet<String>();
@@ -2162,11 +2162,12 @@ public class PersonManagerQueryServices {
                     listConditions3, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
         }else{
+            System.out.println("in else ==  ");
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions2, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
         }
-
+        System.out.println("queryMyResourceOrderList ==  " + queryMyResourceOrderList);
 
 
 

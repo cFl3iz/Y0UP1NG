@@ -21,6 +21,7 @@
         float: right;
     }
 </style>
+order list = ${(orderList)!}
 <#if orderList?has_content>
 <script>
     function viewQrCode(path) {

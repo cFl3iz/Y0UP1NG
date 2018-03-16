@@ -4278,15 +4278,22 @@ public class PersonManagerServices {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "ADMIN");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "ADMIN");
-                createPartyRelationshipInMap.put("userLogin", admin);
+//                createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
                 createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                createPartyRelationshipInMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
-                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-                    return createPartyRelationshipOutMap;
-                }
+//                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//
+//                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+//                    return createPartyRelationshipOutMap;
+//                }
+
+                GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+
+                partyRelationship.create();
+
             }
 
         }else{

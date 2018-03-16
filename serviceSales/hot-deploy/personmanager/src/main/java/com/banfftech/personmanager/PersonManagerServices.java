@@ -658,6 +658,65 @@ public class PersonManagerServices {
         }
 
 
+
+
+
+
+        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+
+        GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId",sharePartyIdFrom).queryFirst();
+
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+
+        createMessageLogMap.put("partyIdFrom", partyId);
+
+        createMessageLogMap.put("message", person.get("firstName")+"帮您转发了["+sQueryProduct.get("productName")+"]");
+
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+        createMessageLogMap.put("partyIdTo", payToPartyId);
+
+        createMessageLogMap.put("badge", "CHECK");
+
+        createMessageLogMap.put("messageLogTypeId", "SYSTEM");
+
+        createMessageLogMap.put("objectId", productId);
+
+
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+        msg.create();
+
+        //推送先不用ECA
+        // 查询registrationID
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            String type = "JPUSH_IOS";
+            if (partyIdentificationTypeId != null && partyIdentificationTypeId.toLowerCase().indexOf("android") > 0) {
+                type = "JPUSH_ANDROID";
+            }
+            try {
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", person.get("firstName")+"帮您转发了["+sQueryProduct.get("productName")+"]", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", productId));
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+//                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+            }
+
+        }
+
         return resultMap;
     }
 

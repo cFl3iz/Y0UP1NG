@@ -4915,6 +4915,32 @@ public class PersonManagerServices {
         }
 
 
+        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+
+        createMessageLogMap.put("partyIdFrom", partyId);
+
+        createMessageLogMap.put("message", maiJiaName+" 购买了"+amount_str+"件"+sQueryProduct.get("productName"));
+
+        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+        createMessageLogMap.put("partyIdTo", payToPartyId);
+
+        createMessageLogMap.put("badge", "CHECK");
+
+        createMessageLogMap.put("messageLogTypeId", "SYSTEM");
+
+        createMessageLogMap.put("objectId", productId);
+
+
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+        msg.create();
+
+
         //  auto approved
 
         Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus",

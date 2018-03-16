@@ -341,6 +341,7 @@ public class PlatformManagerQueryServices {
 
         EntityCondition findConditions3 = null;
         EntityCondition findConditions4 = null;
+
         if(UtilValidate.isNotEmpty(productId)){
 
 
@@ -383,13 +384,23 @@ public class PlatformManagerQueryServices {
 
 
         List<GenericValue> queryMessageLogList = null;
+
+
+        EntityCondition findSystemMsgCondition = EntityCondition
+                .makeCondition(UtilMisc.toMap("messageLogTypeId", "SYSTEM"));
+
+        EntityCondition veryBigCondition = EntityCondition
+                .makeCondition(listBigConditions, EntityOperator.AND,findSystemMsgCondition );
+
+
         if (bizType != null & bizType.equals("findOne")) {
+
             queryMessageLogList = delegator.findList("MessageLog",
-                    listBigConditions, fieldSet,
+                    veryBigCondition, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
         } else {
             queryMessageLogList = delegator.findList("MessageLog",
-                    listBigConditions, fieldSet,
+                    veryBigCondition, fieldSet,
                     UtilMisc.toList("-fromDate"), null, false);
         }
 

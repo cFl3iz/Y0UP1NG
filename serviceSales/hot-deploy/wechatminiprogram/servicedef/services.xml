@@ -5,6 +5,17 @@
     <vendor></vendor>
     <version>1.0</version>
 
+    <service name="queryMyResourceOrderFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyResourceOrderFromWeChat" auth="false">
+        <description>queryMyResourceOrderFromWeChat</description>
+        <attribute name="unioId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
     <service name="queryOrderDetailFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"

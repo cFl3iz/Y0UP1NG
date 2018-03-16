@@ -3053,7 +3053,7 @@ public class PersonManagerQueryServices {
 
 
         //查询已有的人际关系列表和人际关系类型
-        List<GenericValue> myPersonalRelations = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipAndType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",payToId)).queryList());
+        List<GenericValue> myPersonalRelations = EntityQuery.use(delegator).from("PartyRelationshipAndType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",payToId)).queryList();
         List<Map<String,Object>> returnRelationsList = new ArrayList<Map<String, Object>>();
         if(null!=myPersonalRelations && myPersonalRelations.size()>0){
             for(GenericValue gv : myPersonalRelations){
@@ -3067,7 +3067,7 @@ public class PersonManagerQueryServices {
         }
 
         //系统中能够被定义人际关系的类型列表,包含当前访问者可能已和资源主存在的关系类型
-        List<GenericValue> personalRelationsType = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL")).queryList());
+        List<GenericValue> personalRelationsType = EntityQuery.use(delegator).from("PartyRelationshipType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL")).queryList();
         List<Map<String,Object>> returnPersonalRelationsTypeList = new ArrayList<Map<String, Object>>();
         if(null!=myPersonalRelations && myPersonalRelations.size()>0) {
 
@@ -3076,9 +3076,9 @@ public class PersonManagerQueryServices {
                 String partyRelationshipTypeId = (String) typeRow.get("partyRelationshipTypeId");
                 String partyRelationshipName = (String) typeRow.get("partyRelationshipName");
 //                String description = (String) typeRow.get("description");
-                GenericValue queryIsExsitsRelation = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipAndType").where(
+                GenericValue queryIsExsitsRelation = EntityQuery.use(delegator).from("PartyRelationshipAndType").where(
                         UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",payToId,"partyIdFrom",
-                                partyId,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst());
+                                partyId,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst();
 
                 //说明这个关系已经存在 不必再次添加了
                 if(queryIsExsitsRelation != null){

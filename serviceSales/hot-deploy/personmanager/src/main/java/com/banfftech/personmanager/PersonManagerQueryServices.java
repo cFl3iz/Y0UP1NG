@@ -3069,7 +3069,7 @@ public class PersonManagerQueryServices {
         //系统中能够被定义人际关系的类型列表,包含当前访问者可能已和资源主存在的关系类型
         List<GenericValue> personalRelationsType = EntityQuery.use(delegator).from("PartyRelationshipType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL")).queryList();
         List<Map<String,Object>> returnPersonalRelationsTypeList = new ArrayList<Map<String, Object>>();
-        if(null!=myPersonalRelations && myPersonalRelations.size()>0) {
+        if(null!=personalRelationsType && personalRelationsType.size()>0) {
 
             for (GenericValue typeRow : personalRelationsType) {
                 Map<String,Object> rowPersonalMap = new HashMap<String, Object>();

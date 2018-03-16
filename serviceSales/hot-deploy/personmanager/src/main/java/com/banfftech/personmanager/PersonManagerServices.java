@@ -4271,15 +4271,21 @@ public class PersonManagerServices {
                     UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",partyIdTo,"partyIdFrom",
                             partyIdFrom,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst();
 
+
+
             //说明这个关系已经存在 不必再次添加了
             if(queryIsExsitsRelation == null) {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
-                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
                 createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+
+                System.out.println("partyIdFrom:"+partyIdFrom);
+                System.out.println("partyIdTo:"+partyIdTo);
+                System.out.println("partyRelationshipTypeId:"+partyRelationshipTypeId);
+
                 Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
                 if (ServiceUtil.isError(createPartyRelationshipOutMap)) {

@@ -34,7 +34,7 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <!-- 查询销售订单 -->
     <request-map uri="queryOrderDetailFromWeChat">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryOrderDetailFromWeChat"  />

@@ -189,6 +189,7 @@
     </view-entity>
 
 
+
     <!-- 检查是否存在这条转发:资源主 -->
     <view-entity entity-name="WorkEffortAndProductAndParty" package-name="com.banfftech.personerp">
         <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
@@ -270,6 +271,28 @@
             <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="ADDRESSEE"/>
         </entity-condition>
 
+    </view-entity>
+
+
+
+
+    <view-entity entity-name="PartyRelationshipAndType" package-name="com.banfftech.personerp">
+        <member-entity entity-name="PartyRelationship" entity-alias="PartyRelationship" />
+        <member-entity entity-name="PartyRelationshipType" entity-alias="PartyRelationshipType" />
+
+        <alias field="partyIdTo" name="partyIdTo" entity-alias="PartyRelationship"/>
+
+        <alias field="partyIdFrom" name="partyIdFrom" entity-alias="PartyRelationship"/>
+        <alias field="statusId" name="statusId" entity-alias="PartyRelationship"/>
+        <alias field="partyRelationshipTypeId" name="partyRelationshipTypeId" entity-alias="PartyRelationship"/>
+
+
+        <alias field="parentTypeId" name="parentTypeId" entity-alias="PartyRelationshipType"/>
+        <alias field="partyRelationshipName" name="partyRelationshipName" entity-alias="PartyRelationshipType"/>
+
+        <view-link entity-alias="PartyRelationship" rel-entity-alias="PartyRelationshipType">
+            <key-map field-name="partyRelationshipTypeId" />
+        </view-link>
     </view-entity>
 
     <!-- 联系人的资源视图实体 -->

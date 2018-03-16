@@ -3052,6 +3052,53 @@ public class PersonManagerQueryServices {
         }
 
 
+        //查询已有的人际关系列表和人际关系类型
+        List<GenericValue> myPersonalRelations = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipAndType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",payToId)).queryList());
+        List<Map<String,Object>> returnRelationsList = new ArrayList<Map<String, Object>>();
+        if(null!=myPersonalRelations && myPersonalRelations.size()>0){
+            for(GenericValue gv : myPersonalRelations){
+                Map<String,Object> rowRelationMap = new HashMap<String, Object>();
+                String relationPartyId = (String) gv.get("partyIdFrom");
+                Map<String,String> relationPartyMap =  queryPersonBaseInfo(delegator,relationPartyId);
+                rowRelationMap.put("relationDisc",relationPartyMap.get("firstName")+"是他的"+ (String) gv.get("partyRelationshipName"));
+                rowRelationMap.put("relationPartyAvatar",relationPartyMap.get("headPortrait"));
+                returnRelationsList.add(rowRelationMap);
+            }
+        }
+
+        //系统中能够被定义人际关系的类型列表,包含当前访问者可能已和资源主存在的关系类型
+        List<GenericValue> personalRelationsType = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipType").where(UtilMisc.toMap("parentTypeId","INTERPERSONAL")).queryList());
+        List<Map<String,Object>> returnPersonalRelationsTypeList = new ArrayList<Map<String, Object>>();
+        if(null!=myPersonalRelations && myPersonalRelations.size()>0) {
+
+            for (GenericValue typeRow : personalRelationsType) {
+                Map<String,Object> rowPersonalMap = new HashMap<String, Object>();
+                String partyRelationshipTypeId = (String) typeRow.get("partyRelationshipTypeId");
+                String partyRelationshipName = (String) typeRow.get("partyRelationshipName");
+//                String description = (String) typeRow.get("description");
+                GenericValue queryIsExsitsRelation = EntityUtil.getFirst(EntityQuery.use(delegator).from("PartyRelationshipAndType").where(
+                        UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",payToId,"partyIdFrom",
+                                partyId,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst());
+
+                //说明这个关系已经存在 不必再次添加了
+                if(queryIsExsitsRelation != null){
+                    rowPersonalMap.put("id","0");
+                }else{
+                    rowPersonalMap.put("id",partyRelationshipTypeId);
+                }
+
+                rowPersonalMap.put("name",partyRelationshipName);
+                rowPersonalMap.put("desc","卖家是我的"+partyRelationshipName);
+                returnPersonalRelationsTypeList.add(rowPersonalMap);
+            }
+        }
+
+
+        //和资源主有关系的人都在这个列表
+        resourceDetail.put("returnRelationsList",returnRelationsList);
+        resourceDetail.put("returnPersonalRelationsTypeList",returnPersonalRelationsTypeList);
+
+
         resourceDetail.put("tarjeta",token);
 
         resultMap.put("resourceDetail", resourceDetail);
@@ -3059,7 +3106,6 @@ public class PersonManagerQueryServices {
 //        if(null != userLogin){
 //            resultMap.put("partyId", (String) userLogin.get("partyId"));
 //        }
-
 
         return resultMap;
     }

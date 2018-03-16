@@ -7,6 +7,16 @@
     <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信付款二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATQRCODE"/>
     <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信名片二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATCONTACTQRCODE"/>
 
+    <!-- 父类型 -->
+    <PartyRelationshipType createdStamp="2018-03-16 18:17:13.0" createdTxStamp="2018-03-16 18:17:13.0" description="Interpersonal relationships" lastUpdatedStamp="2018-03-16 18:17:13.0" lastUpdatedTxStamp="2018-03-16 18:17:13.0" partyRelationshipName="Interpersonal relationships" partyRelationshipTypeId="INTERPERSONAL"/>
+    <!-- 一些当事人关系类型 -->
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="亲戚" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="亲戚" partyRelationshipTypeId="RELATIVES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="同事" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="同事" partyRelationshipTypeId="COLLEAGUES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="同学" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="同学" partyRelationshipTypeId="CLASSMATES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="邻居" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="邻居" partyRelationshipTypeId="NEIGHBOR"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="死党" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="死党" partyRelationshipTypeId="SWORN_FOLLOWERS"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="前任" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="前任" partyRelationshipTypeId="THE_FORMER"/>
+
 
     <!-- 用户偏好设置组-->
     <!-- 用户产品特征偏好设置-->

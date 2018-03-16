@@ -4259,20 +4259,49 @@ public class PersonManagerServices {
         String partyIdFrom = (String) context.get("partyIdFrom");
         String partyIdTo = (String) context.get("partyIdTo");
         String relationEnum = (String) context.get("relationEnum");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyRelationshipTypeId = (String) context.get("partyRelationshipTypeId");
 
         Map<String, Object> serviceResultMap = null;
-        switch (relationType.getRelationType(relationEnum)) {
-            case C2CRSS:
-                serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
-                if (ServiceUtil.isError(serviceResultMap)) {
-                    return serviceResultMap;
+        //指定了创建什么类型
+        if(null != partyRelationshipTypeId){
+            partyIdFrom = (String) userLogin.get("partyId");
+            GenericValue queryIsExsitsRelation = EntityQuery.use(delegator).from("PartyRelationshipAndType").where(
+                    UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",partyIdTo,"partyIdFrom",
+                            partyIdFrom,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst();
+
+            //说明这个关系已经存在 不必再次添加了
+            if(queryIsExsitsRelation == null) {
+                Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+                createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
+                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                    return createPartyRelationshipOutMap;
                 }
-            case CONTACT:
-                serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
-                if (ServiceUtil.isError(serviceResultMap)) {
-                    return serviceResultMap;
-                }
+            }
+
+        }else{
+            switch (relationType.getRelationType(relationEnum)) {
+                case C2CRSS:
+                    serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                    if (ServiceUtil.isError(serviceResultMap)) {
+                        return serviceResultMap;
+                    }
+                case CONTACT:
+                    serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                    if (ServiceUtil.isError(serviceResultMap)) {
+                        return serviceResultMap;
+                    }
+            }
         }
+
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();

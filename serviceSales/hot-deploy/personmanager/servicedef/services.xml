@@ -1023,6 +1023,9 @@
              invoke="addPartyRelationShip" auth="false">
         <description>add Party RelationShip</description>
 
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN"  optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN"  optional="true"/>
+
         <attribute name="partyIdFrom" type="String" mode="IN"
                    optional="true"/>
         <attribute name="partyIdTo" type="String" mode="IN"

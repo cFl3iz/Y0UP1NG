@@ -163,6 +163,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <request-map uri="addPartyRelationShip">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addPartyRelationShip"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- Query My Relation -->
     <request-map uri="queryMyRelationShip">

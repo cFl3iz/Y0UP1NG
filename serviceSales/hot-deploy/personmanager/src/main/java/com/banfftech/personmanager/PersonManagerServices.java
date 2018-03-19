@@ -2626,7 +2626,7 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
-        createMessageLogMap.put("message", "喂我告诉你,我已经发货了" + ",物流公司是" + name + "!物流单号:" + code);
+        createMessageLogMap.put("message", "hi~ 我发货了" + ",物流公司是" + name + "!物流单号:" + code);
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
@@ -5489,7 +5489,7 @@ public class PersonManagerServices {
         try {
             // Create Product Store
             Map<String, Object> createProductStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
-                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "storeName", storeName, "payToPartyId", partyId, "inventoryFacilityId", inventoryFacilityId));
+                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,"reserveInventory","Y", "storeName", storeName, "payToPartyId", partyId, "inventoryFacilityId", inventoryFacilityId));
             if (!ServiceUtil.isSuccess(createProductStoreOutMap)) {
                 return createProductStoreOutMap;
             }

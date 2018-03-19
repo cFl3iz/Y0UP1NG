@@ -2263,7 +2263,7 @@ public class PersonManagerQueryServices {
 
                     if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
 
-                        rowMap.put("orderPayStatus", "已确认收款");
+                        rowMap.put("orderPayStatus", "已收款");
                         rowMap.put("payStatusCode", "1");
                     } else {
                         rowMap.put("payStatusCode", "0");
@@ -2275,7 +2275,7 @@ public class PersonManagerQueryServices {
                     if (null != payment) {
                         String paymentStatusId = (String) payment.get("statusId");
                         if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
-                            rowMap.put("orderPayStatus", "已确认收款");
+                            rowMap.put("orderPayStatus", "已收款");
                             rowMap.put("payStatusCode", "1");
                         }
                         if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {

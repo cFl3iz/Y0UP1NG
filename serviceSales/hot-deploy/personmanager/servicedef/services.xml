@@ -725,7 +725,7 @@
 
         <attribute name="code" type="String" mode="IN"
                    optional="true"/>
-
+        <!-- 物流单位名称 -->
         <attribute name="carrierCode" type="String" mode="IN"
                    optional="true"/>
 

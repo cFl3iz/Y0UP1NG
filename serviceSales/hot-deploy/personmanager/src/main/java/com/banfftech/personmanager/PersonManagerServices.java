@@ -5271,6 +5271,17 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      */
     public static String createPersonStoreAndCatalogAndCategory(Locale locale, GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GenericEntityException, GenericServiceException {
+        //2018-03-18 卖家本身可能就是承运人...
+        GenericValue partyRoleCarrier = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CARRIER").queryFirst();
+        if (null == partyRoleCarrier) {
+            Map<String, Object> createPartyCarrierRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "CARRIER");
+            dispatcher.runSync("createPartyRole", createPartyCarrierRoleMap);
+        }
+
+
+
+
         //授予当事人询价角色
         GenericValue partyRoleRequester = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_REQUESTER").queryFirst();
         if (null == partyRoleRequester) {

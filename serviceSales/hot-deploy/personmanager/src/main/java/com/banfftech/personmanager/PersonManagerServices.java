@@ -2456,10 +2456,7 @@ public class PersonManagerServices {
 
         String sinceTheSend = (String) context.get("sinceTheSend");
 
-        if(null != sinceTheSend && sinceTheSend.equals("1")){
-            //卖家自发货,不用物流单位
 
-        }
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
@@ -2477,6 +2474,57 @@ public class PersonManagerServices {
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyId)).queryFirst();
 
         String productStoreId = (String) store.get("productStoreId");
+        if(null != sinceTheSend && sinceTheSend.equals("1")){
+            //卖家自发货,不用物流单位
+
+
+            //将买家信息更新到订单货运
+            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                    "userLogin", userLogin, "orderId", orderId,
+                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + partyId, "shipGroupSeqId", "00001"));
+
+            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+                return updateShipGroupShipInfoOutMap;
+            }
+
+            GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+            String stautsId = (String) orderHeader.get("statusId");
+
+            if (stautsId.equals("ORDER_APPROVED")) {
+                Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "changeReason", "订单发送", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
+            } else {
+                Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
+                        "changeReason", "订单批准", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
+                changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "changeReason", "订单发送", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
+            }
+
+            GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+            order.set("internalCode", "卖家自配送");
+            order.store();
+
+
+        }else{
+
+
+
+
 
         //查询店铺是否拥有该货运方式
         //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
@@ -2555,14 +2603,10 @@ public class PersonManagerServices {
             }
         }
 
-
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
-
         order.set("internalCode", code);
-
-
         order.store();
-
+        }
 
         //推送给微信用户
 
@@ -5396,8 +5440,11 @@ public class PersonManagerServices {
 
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
 
+        // 创建自己送货的货运方法
+        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS"));
 
-        //店铺关联货运方法 Default 顺分
+
+        //店铺关联货运方法顺丰
         Map<String, Object> createProductStoreShipMethMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId,
                 "productStoreId", productStoreId,
@@ -5405,6 +5452,20 @@ public class PersonManagerServices {
                 "roleTypeId", "CARRIER",
                 "shipmentMethodTypeId", "EXPRESS",
                 "partyId", "SHUNFENG_EXPRESS",
+                "allowUspsAddr", "Y",
+                "requireUspsAddr", "N",
+                "allowCompanyAddr", "Y",
+                "requireCompanyAddr", "N"
+                , "includeNoChargeItems", "Y"));
+
+        // 店铺关联货运方法，自己
+          dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,
+                "productStoreId", productStoreId,
+                "productStoreShipMethId", "10000",
+                "roleTypeId", "CARRIER",
+                "shipmentMethodTypeId", "EXPRESS",
+                "partyId", partyId,
                 "allowUspsAddr", "Y",
                 "requireUspsAddr", "N",
                 "allowCompanyAddr", "Y",

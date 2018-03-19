@@ -3257,6 +3257,7 @@ public class PersonManagerQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String drObjectInfo = (String) gv.get("drObjectInfo");
                 rowMap.put("drObjectInfo",drObjectInfo);
+                rowMap.put("contentId",gv.get("contentId"));
                 picturesListParp.add(rowMap);
             }
         }

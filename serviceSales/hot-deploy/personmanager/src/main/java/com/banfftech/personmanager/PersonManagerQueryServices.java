@@ -3171,7 +3171,7 @@ public class PersonManagerQueryServices {
                 null, null, false).get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
         String payToId = (String) product.get("payToPartyId");
-        String detailImageUrl;
+        String detailImageUrl = "";
         if(null !=  resourceDetail.get("detailImageUrl")){
             detailImageUrl = (String) resourceDetail.get("detailImageUrl");
         }
@@ -3259,7 +3259,7 @@ public class PersonManagerQueryServices {
         firstMap.put("drObjectInfo",detailImageUrl);
         //这是封面图,固定的contentId
         firstMap.put("contentId","308561217_784838898");
-        if(detailImageUrl !=null && !detailImageUrl.trim().equals("")){
+        if(  !detailImageUrl.trim().equals("")){
             picturesListParp.add(firstMap);
         }
 

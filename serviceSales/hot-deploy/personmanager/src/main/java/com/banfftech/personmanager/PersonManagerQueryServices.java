@@ -2290,6 +2290,14 @@ public class PersonManagerQueryServices {
 
                 }
 
+                if(!statusId.equals("ORDER_SENT")){
+                    rowMap.put("orderShipment","未发货");
+                }else{
+                    rowMap.put("orderShipment","已发货");
+                    if(rowMap.get("orderPayStatus").equals("已收款")){
+                        rowMap.put("orderCompleted","已完成");
+                    }
+                }
 
                 //不查询已收款的订单时,直接放入
                 if (null != orderStatusId && !orderStatusId.equals("PAYMENT")) {

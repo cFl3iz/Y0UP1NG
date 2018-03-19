@@ -302,7 +302,7 @@ public class PlatformManagerServices {
 //        jsobjminipro.put("appid","wx119831dae45a3f3f");
 //        jsobjminipro.put("pagepath","pages/index/");
 //        jsobj1.put("miniprogram",jsobjminipro);
-//        String url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
+//        String url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
 //                "orderId="+orderId+"&payToPartyId=" +
 //                ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
 //        System.out.println("*============================================================URL = " + url2);
@@ -414,7 +414,7 @@ public class PlatformManagerServices {
         if(jumpUrl!=null && !jumpUrl.trim().equals("")){
             url2 = jumpUrl;
         }else{
-             url2 = "http://www.lyndonspace.com:3400/WebManager/control/miniChat?" +
+             url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
                     "productId="+productId+"&payToPartyId=" +
                     ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
             System.out.println("*============================================================URL = " + url2);

@@ -1563,7 +1563,7 @@ public class PersonManagerServices {
 
                     pushWeChatMessageInfoMap.put("payToPartyId", partyId);
 
-                    pushWeChatMessageInfoMap.put("url", "http://www.lyndonspace.com:3400/WebManager/control/shareProduct?productId=" + productId);
+                    pushWeChatMessageInfoMap.put("url", "http://www.yo-pe.com:3400/WebManager/control/shareProduct?productId=" + productId);
 
                     //推微信
                     dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
@@ -2454,6 +2454,12 @@ public class PersonManagerServices {
 
         String contactMechId = "";
 
+        String sinceTheSend = (String) context.get("sinceTheSend");
+
+        if(null != sinceTheSend && sinceTheSend.equals("1")){
+            //卖家自发货,不用物流单位
+
+        }
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
@@ -2614,7 +2620,7 @@ public class PersonManagerServices {
             claims.put("iat", iat);
 
 
-            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.lyndonspace.com:3400/WebManager/control/myOrderDetail?orderId=" + orderId + "&tarjeta=" + signer.sign(claims));
+            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.yo-pe.com:3400/WebManager/control/myOrderDetail?orderId=" + orderId + "&tarjeta=" + signer.sign(claims));
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
@@ -5012,7 +5018,7 @@ public class PersonManagerServices {
             claims.put("iat", iat);
 
 
-            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.lyndonspace.com:3400/WebManager/control/myOrder?tarjeta=" + signer.sign(claims));
+            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.yo-pe.com:3400/WebManager/control/myOrder?tarjeta=" + signer.sign(claims));
 
             Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 

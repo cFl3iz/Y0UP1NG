@@ -1001,6 +1001,17 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- doRemoveProductFromCategory 真正意义上的删除产品无法恢复 -->
+    <service name="doRemoveProductFromCategory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="doRemoveProductFromCategory" auth="false">
+        <description>doRemoveProductFromCategory</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
     <!-- salesDiscontinuation 销售终止-->
     <service name="salesDiscontinuation" engine="java"

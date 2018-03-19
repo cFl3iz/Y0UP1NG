@@ -178,6 +178,13 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <!-- removeProductFromCategory -->
+    <request-map uri="removeProductFromCategory">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="doRemoveProductFromCategory"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- Query My Relation -->

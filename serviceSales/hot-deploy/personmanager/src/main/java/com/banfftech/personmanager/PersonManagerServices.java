@@ -460,7 +460,52 @@ public class PersonManagerServices {
 
 
     /**
+     * doRemoveProductFromCategory
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> doRemoveProductFromCategory(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String productId = (String) context.get("productId");
+
+        GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap("productId", productId)).queryFirst();
+
+        if (null != productAndCategoryMember) {
+
+
+            Map<String, Object> removeProductFromCategoryInMap = new HashMap<String, Object>();
+            removeProductFromCategoryInMap.put("userLogin", admin);
+            removeProductFromCategoryInMap.put("productId", productId);
+            removeProductFromCategoryInMap.put("productCategoryId", productAndCategoryMember.get("productCategoryId"));
+            removeProductFromCategoryInMap.put("fromDate",productAndCategoryMember.get("fromDate"));
+
+            Map<String, Object> removeProductFromCategoryOutMap = dispatcher.runSync("removeProductFromCategory", removeProductFromCategoryInMap);
+
+            if (ServiceUtil.isError(removeProductFromCategoryOutMap)) {
+                return removeProductFromCategoryOutMap;
+            }
+        }
+
+        return resultMap;
+    }
+
+
+    /**
      * recoveResource
+     *
      * @param dctx
      * @param context
      * @return
@@ -475,18 +520,17 @@ public class PersonManagerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin =  (GenericValue) context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String productId = (String) context.get("productId");
 
 
-
         Map<String, Object> updateProductInMap = new HashMap<String, Object>();
         updateProductInMap.put("userLogin", admin);
         updateProductInMap.put("productId", productId);
-        updateProductInMap.put("salesDiscontinuationDate",null);
+        updateProductInMap.put("salesDiscontinuationDate", null);
 
         Map<String, Object> updateProductOutMap = dispatcher.runSync("updateProduct", updateProductInMap);
 
@@ -496,7 +540,6 @@ public class PersonManagerServices {
 
         return resultMap;
     }
-
 
 
     /**
@@ -557,7 +600,7 @@ public class PersonManagerServices {
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
         }
 
-        if(null==workEffortAndProductAndParty){
+        if (null == workEffortAndProductAndParty) {
             return resultMap;
         }
 
@@ -619,7 +662,7 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
 
         // 以资源主的角度去看有没有发布过这个分享数据
-        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId,"description", productId + payToPartyId)).queryFirst();
+        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId)).queryFirst();
 
         // 已分享过,则不再记录了
         if (null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)) {
@@ -629,7 +672,7 @@ public class PersonManagerServices {
 
         // 以转发人的角度去看有没有转发过这个分享数据?
         GenericValue workEffortAndProductAndPartyReFerrer =
-                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom,"description", productId + sharePartyIdFrom)).queryFirst();
+                EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
 
         // 已转发过,则增加转发次数,否则正常转发。
         if (null != workEffortAndProductAndPartyReFerrer) {
@@ -698,19 +741,15 @@ public class PersonManagerServices {
         }
 
 
+        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-
-
-
-        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
-
-        GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId",sharePartyIdFrom).queryFirst();
+        GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyIdFrom).queryFirst();
 
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
-        createMessageLogMap.put("message", person.get("firstName")+"帮您转发了["+sQueryProduct.get("productName")+"]");
+        createMessageLogMap.put("message", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]");
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
@@ -749,7 +788,7 @@ public class PersonManagerServices {
                 type = "JPUSH_ANDROID";
             }
             try {
-                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", person.get("firstName")+"帮您转发了["+sQueryProduct.get("productName")+"]", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", productId));
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", productId));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
 //                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
@@ -4305,16 +4344,15 @@ public class PersonManagerServices {
 
         Map<String, Object> serviceResultMap = null;
         //指定了创建什么类型
-        if(null != partyRelationshipTypeId){
+        if (null != partyRelationshipTypeId) {
             partyIdFrom = (String) userLogin.get("partyId");
             GenericValue queryIsExsitsRelation = EntityQuery.use(delegator).from("PartyRelationshipAndType").where(
-                    UtilMisc.toMap("parentTypeId","INTERPERSONAL","partyIdTo",partyIdTo,"partyIdFrom",
-                            partyIdFrom,"partyRelationshipTypeId",partyRelationshipTypeId)).queryFirst();
-
+                    UtilMisc.toMap("parentTypeId", "INTERPERSONAL", "partyIdTo", partyIdTo, "partyIdFrom",
+                            partyIdFrom, "partyRelationshipTypeId", partyRelationshipTypeId)).queryFirst();
 
 
             //说明这个关系已经存在 不必再次添加了
-            if(queryIsExsitsRelation == null) {
+            if (queryIsExsitsRelation == null) {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "ADMIN");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "ADMIN");
@@ -4322,7 +4360,7 @@ public class PersonManagerServices {
                 createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
                 createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-                createPartyRelationshipInMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
 //                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 //
@@ -4336,7 +4374,7 @@ public class PersonManagerServices {
 
             }
 
-        }else{
+        } else {
             switch (relationType.getRelationType(relationEnum)) {
                 case C2CRSS:
                     serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
@@ -4350,7 +4388,6 @@ public class PersonManagerServices {
                     }
             }
         }
-
 
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -4420,7 +4457,7 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException,GenericEntityException {
+    private static Map<String, Object> createRelationCONTACT(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdTo, String partyIdFrom) throws GenericServiceException, GenericEntityException {
 
 
         if (!partyIdFrom.equals(partyIdTo)) {
@@ -4447,13 +4484,13 @@ public class PersonManagerServices {
             partyRelationshipTypeId = PeConstant.CONTACT;
             createPartyRelationshipInMap = new HashMap<String, Object>();
 
-             isExsitsRela = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "partyRelationshipTypeId", partyRelationshipTypeId).queryFirst();
+            isExsitsRela = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "partyRelationshipTypeId", partyRelationshipTypeId).queryFirst();
 
             createPartyRelationshipInMap.put("userLogin", admin);
             createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
             createPartyRelationshipInMap.put("partyIdTo", partyIdTo);
             createPartyRelationshipInMap.put("partyRelationshipTypeId", partyRelationshipTypeId);
-            if(isExsitsRela ==  null){
+            if (isExsitsRela == null) {
                 createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
             }
             if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
@@ -5052,13 +5089,13 @@ public class PersonManagerServices {
         }
 
 
-        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
-        createMessageLogMap.put("message", maiJiaName+" 购买了"+amount_str+"件"+sQueryProduct.get("productName"));
+        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件" + sQueryProduct.get("productName"));
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 

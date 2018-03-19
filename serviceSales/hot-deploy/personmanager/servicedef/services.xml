@@ -1002,7 +1002,7 @@
     </service>
 
 
-    <!-- salesDiscontinuation -->
+    <!-- salesDiscontinuation 销售终止-->
     <service name="salesDiscontinuation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="salesDiscontinuation" auth="false">
@@ -1012,6 +1012,15 @@
                    optional="true"/>
 
 
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <!-- recoveResource 恢复上架 -->
+ <service name="recoveResource" engine="java"  location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="recoveResource" auth="false">
+        <description>recoveResource</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

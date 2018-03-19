@@ -460,6 +460,46 @@ public class PersonManagerServices {
 
 
     /**
+     * recoveResource
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> recoveResource(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin =  (GenericValue) context.get("userLogin");
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String productId = (String) context.get("productId");
+
+
+
+        Map<String, Object> updateProductInMap = new HashMap<String, Object>();
+        updateProductInMap.put("userLogin", admin);
+        updateProductInMap.put("productId", productId);
+        updateProductInMap.put("salesDiscontinuationDate",null);
+
+        Map<String, Object> updateProductOutMap = dispatcher.runSync("updateProduct", updateProductInMap);
+
+        if (ServiceUtil.isError(updateProductOutMap)) {
+            return updateProductOutMap;
+        }
+
+        return resultMap;
+    }
+
+
+
+    /**
      * 收到资源引用
      *
      * @param dctx

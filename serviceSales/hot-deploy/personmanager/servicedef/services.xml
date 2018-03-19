@@ -695,6 +695,21 @@
     </service>
 
 
+    <service name="removeResourcePicture" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="removeResourcePicture" auth="false">
+        <description>removeResourcePicture</description>
+
+
+        <attribute name="productId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="contentId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- 更新货运信息 -->
     <service name="selectPartyPostalAddress2Order" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

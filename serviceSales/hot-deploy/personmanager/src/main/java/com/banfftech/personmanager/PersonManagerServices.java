@@ -2413,6 +2413,73 @@ public class PersonManagerServices {
     }
 
     /**
+     * 删除产品的图片
+     * @param dctx
+     * @param context
+     * @return
+     * @throws IOException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> removeResourcePicture(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        // Scope Param
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // contentId
+        String contentId = (String) context.get("contentId");
+        String productId = (String) context.get("productId");
+
+        //说明删除的是详情图
+        if(contentId!=null && contentId.equals("308561217_784838898")){
+
+            GenericValue product = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId).queryFirst();
+            product.set("detailImageUrl","");
+            product.store();
+
+
+        }else{
+
+
+        GenericValue contentAndDataResource = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId,"contentId",contentId).queryFirst();
+
+
+        // Update Content
+        try {
+            Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId,
+                    "fromDate",contentAndDataResource.get("fromDate") , "productContentTypeId", "ADDITIONAL_OTHER",
+                    "productId", productId);
+
+            dispatcher.runSync("removeProductContent", serviceInputMap);
+
+            String dataResourceId = (String) contentAndDataResource.get("dataResourceId");
+
+            GenericValue dataResource = EntityQuery.use(delegator).from("DataResource")
+                    .where("dataResourceId", dataResourceId).queryOne();
+
+            String pid = (String) dataResource.get("dataResourceName");
+
+            OSSUnit.deleteFile(OSSUnit.getOSSClient(), "personerp", "datas/product_img/", pid);
+
+        } catch (Exception e) {
+            inputMap.put("resultMsg", UtilProperties.getMessage("PersonManagerERRORLabels", "DELETEERROR", locale));
+        }
+
+
+        }
+        result.put("resultMap",inputMap);
+        return result;
+    }
+
+    /**
      * updateShipGroupShipInfoForWeChat发货
      *
      * @param dctx

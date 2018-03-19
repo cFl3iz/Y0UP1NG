@@ -3171,7 +3171,11 @@ public class PersonManagerQueryServices {
                 null, null, false).get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
         String payToId = (String) product.get("payToPartyId");
-        String detailImageUrl = (String) resourceDetail.get("detailImageUrl");
+        String detailImageUrl;
+        if(null !=  resourceDetail.get("detailImageUrl")){
+            detailImageUrl = (String) resourceDetail.get("detailImageUrl");
+        }
+
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", resourceDetail.get("payToPartyId")), false);
         if (person != null) {
             List<GenericValue> contentsList =
@@ -3250,11 +3254,15 @@ public class PersonManagerQueryServices {
                 findConditions3, fieldSet,
                 null, null, false);
         List<Map<String,Object>> picturesListParp = new ArrayList<Map<String, Object>>();
+
         Map<String,Object> firstMap = new HashMap<String, Object>();
         firstMap.put("drObjectInfo",detailImageUrl);
         //这是封面图,固定的contentId
         firstMap.put("contentId","308561217_784838898");
-        picturesListParp.add(firstMap);
+        if(detailImageUrl !=null && !detailImageUrl.trim().equals("")){
+            picturesListParp.add(firstMap);
+        }
+
         if(null!= pictures && pictures.size() > 0){
             for(GenericValue gv : pictures){
                 Map<String,Object> rowMap = new HashMap<String, Object>();

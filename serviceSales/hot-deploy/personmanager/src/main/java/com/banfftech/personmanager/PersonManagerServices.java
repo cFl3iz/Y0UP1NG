@@ -810,24 +810,29 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws Exception
      */
-    public static Map<String, Object> updateResourceInfo(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException, GenericServiceException, Exception {
+    public static String updateResourceInfo(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+
+        GenericValue userLogin = (GenericValue) session.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String partyId = (String) userLogin.get("partyId");
-        String productId = (String) context.get("productId");
-        String description = (String) context.get("description");
-        String productName = (String) context.get("productName");
-        String productPriceStr = (String) context.get("productPrice");
+        String productId = (String) request.getParameter("productId");
+        String description = (String) request.getParameter("description");
+        String productName =(String) request.getParameter("productName");
+        String productPriceStr = (String) request.getParameter("productPrice");
 
 
-        String quantityTotaStr = (String) context.get("quantityTotal");
+        String quantityTotaStr =  (String) request.getParameter("quantityTotal");
 
         BigDecimal quantity = new BigDecimal(quantityTotaStr);
         BigDecimal price = new BigDecimal(productPriceStr);
@@ -837,7 +842,7 @@ public class PersonManagerServices {
                 , "productId", productId, "productName", productName, "description", description));
 
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
-            return serviceResultMap;
+           return "error";
         }
         //2. Update ProductPrice
         //TODO 不再使用原生服务更新产品价格
@@ -856,6 +861,11 @@ public class PersonManagerServices {
         productPriceEntity.set("price", price);
         productPriceEntity.store();
 
+        GenericValue productEntity = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+
+        String detailImageUrl = (String)  productEntity.get("detailImageUrl");
+
+
 
         //3. Create Inventory Item ..
 
@@ -865,7 +875,7 @@ public class PersonManagerServices {
         Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                 "facilityId", originFacilityId, "productId", productId));
         if (!ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-            return getInventoryAvailableByFacilityMap;
+            return "error";
         }
         BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
         BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
@@ -917,10 +927,50 @@ public class PersonManagerServices {
         Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
         if (!ServiceUtil.isSuccess(createInventoryItemDetailOutMap)) {
-            return createInventoryItemDetailOutMap;
+            return "error";
         }
 
-        return resultMap;
+
+
+
+
+        try {
+            //上传图片到Oss
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+            List<FileItem> items = dfu.parseRequest(request);
+            int itemSize = 0;
+            int index = 0;
+            if (null != items) {
+                itemSize = items.size();
+                //循环上传请求中的所有文件
+                for (FileItem item : items) {
+                    InputStream in = item.getInputStream();
+                    String fileName = item.getName();
+
+                        long tm = System.currentTimeMillis();
+                        String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
+                        if (pictureKey != null && !pictureKey.equals("")) {
+                            if(detailImageUrl==null || detailImageUrl.equals("")){
+                                //说明首图没了，先弄首图
+                                detailImageUrl =  PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
+                                productEntity.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+                                productEntity.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                productEntity.store();
+                            }else{
+                                createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+
+                            }
+                        }
+
+                    index++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "success";
     }
 
     /**

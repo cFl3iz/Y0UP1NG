@@ -325,9 +325,7 @@
     <!-- Release Resource -->
     <request-map uri="releaseResource">
         <security https="false" auth="false"/>
-        <event type="java"
-               path="main.java.com.banfftech.personmanager.PersonManagerServices"
-               invoke="releaseResource"></event>
+        <event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="releaseResource"></event>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
@@ -350,7 +348,8 @@
 
     <request-map uri="updateResourceInfo">
         <security https="false" auth="false"/>
-        <event type="service" invoke="updateResourceInfo"/>
+        <event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updateResourceInfo"></event>
+        <!--<event type="service" invoke="updateResourceInfo"/>-->
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

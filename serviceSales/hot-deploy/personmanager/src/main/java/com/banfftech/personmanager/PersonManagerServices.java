@@ -2441,7 +2441,7 @@ public class PersonManagerServices {
         //说明删除的是详情图
         if(contentId!=null && contentId.equals("308561217_784838898")){
 
-            GenericValue product = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId).queryFirst();
+            GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
             product.set("detailImageUrl","");
             product.store();
 

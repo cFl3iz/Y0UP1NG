@@ -822,7 +822,7 @@ public class PersonManagerServices {
         HttpSession session = request.getSession();
 
 
-        GenericValue userLogin = (GenericValue) session.get("userLogin");
+        GenericValue userLogin =(GenericValue) session.getAttribute("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String partyId = (String) userLogin.get("partyId");

@@ -3458,7 +3458,7 @@ public class PersonManagerQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN").orderBy(orderBy)
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT).orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 

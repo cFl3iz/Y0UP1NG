@@ -3270,9 +3270,12 @@ public class PersonManagerQueryServices {
         if(null!= pictures && pictures.size() > 0){
             for(GenericValue gv : pictures){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
-                String drObjectInfo = (String) gv.get("drObjectInfo");
+                String drObjectInfo ="";
+                if(null!=gv.get("drObjectInfo")){
+                      drObjectInfo = (String) gv.get("drObjectInfo");
                 if(drObjectInfo.indexOf("http")<0){
                     drObjectInfo = "http://"+drObjectInfo;
+                 }
                 }
                 rowMap.put("drObjectInfo",drObjectInfo);
                 rowMap.put("contentId",gv.get("contentId"));

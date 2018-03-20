@@ -377,6 +377,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryPostalAddress">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryPostalAddress"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- add Product Content -->
     <request-map uri="addProductContent">
         <security https="false" auth="false"/>

@@ -1489,6 +1489,7 @@ public class PersonManagerQueryServices {
         fieldSet.add("contactMechId");
         fieldSet.add("partyId");
         fieldSet.add("address1");
+        fieldSet.add("postalCode");
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 

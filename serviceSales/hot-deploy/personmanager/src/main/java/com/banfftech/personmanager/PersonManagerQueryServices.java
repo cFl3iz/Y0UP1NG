@@ -3438,7 +3438,7 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        String partyId = (String) context.get("partyId");
+        String partyId = (String) userLogin.get("partyId");
 
         String viewIndexStr = (String) context.get("viewIndexStr");
 

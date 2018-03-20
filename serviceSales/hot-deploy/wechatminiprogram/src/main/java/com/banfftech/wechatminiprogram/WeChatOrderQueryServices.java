@@ -648,9 +648,9 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-        String unioId = (String) context.get("partyId");
+        String unioId = (String) context.get("openId");
 
-//        System.out.println("*OPENID = " + openId);
+         System.out.println("*unioId = " + unioId);
 //
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 

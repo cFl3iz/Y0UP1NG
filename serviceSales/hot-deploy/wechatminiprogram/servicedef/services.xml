@@ -4,12 +4,12 @@
     <description>WechatMiniProgram Services</description>
     <vendor></vendor>
     <version>1.0</version>
-
+    <!-- 微信小程序查询销售订单 -->
     <service name="queryMyResourceOrderFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryMyResourceOrderFromWeChat" auth="false">
         <description>queryMyResourceOrderFromWeChat</description>
-        <attribute name="unioId" type="String" mode="IN"
+        <attribute name="openId" type="String" mode="IN"
                    optional="true" />
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
                    optional="true" />

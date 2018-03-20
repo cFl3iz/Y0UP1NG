@@ -65,6 +65,7 @@ public class WeChatOrderQueryServices {
         String viewIndexStr = (String) context.get("viewIndexStr");
 
 
+
         int viewIndex = 0;
         if(viewIndexStr!=null){
             viewIndex = Integer.parseInt(viewIndexStr);

@@ -3538,7 +3538,17 @@ public class PersonManagerQueryServices {
                 List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
                         findConditions3, fieldSet,
                         null, null, false);
-                rowMap.put("morePicture",pictures);
+                List<Map<String,Object>> rowPicturesList = new ArrayList<Map<String, Object>>();
+                if(null!=pictures && pictures.size()>0){
+                    for(GenericValue picture : pictures){
+                        Map<String,Object> rowPicture = picture.getAllFields();
+                        rowPicture.put("drObjectInfo","http://"+rowPicture.get("drObjectInfo"));
+                        rowPicturesList.add(rowPicture);
+                    }
+                }
+
+                rowMap.put("morePicture",rowPicturesList);
+                
                 returnList.add(rowMap);
 
             }

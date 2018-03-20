@@ -3448,7 +3448,7 @@ public class PersonManagerQueryServices {
             viewIndex = Integer.parseInt(viewIndexStr);
         }
 
-        int viewSize = 3;
+        int viewSize = 9999;
         int lowIndex = 0;
         int highIndex = 0;
         int resourceCount  = 0;

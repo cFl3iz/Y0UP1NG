@@ -697,19 +697,9 @@ public class WeChatOrderQueryServices {
 
 
 
-        EntityCondition listConditions2 = null;
+         EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
 
-        String isCancelled = (String) context.get("isCancelled");
-        //如果isCancelled 为1  则查询取消的订单。
-        if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
-            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
-            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
-            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
-        }else{
-            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
-            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
-            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
-        }
+
 
 
         List<GenericValue> queryMyResourceOrderList = null;
@@ -719,7 +709,7 @@ public class WeChatOrderQueryServices {
             EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
 
             EntityCondition listConditions3 = EntityCondition
-                    .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
+                    .makeCondition(genericCondition, EntityOperator.AND, orderStatusCondition);
 
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions3, fieldSet,
@@ -727,11 +717,13 @@ public class WeChatOrderQueryServices {
 
         } else {
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                    listConditions2, fieldSet,
+                    genericCondition, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
 
         }
 
+        System.out.println("-----------------------------------------------------------------------------------> queryMyResourceOrderList = " + queryMyResourceOrderList);
+        System.out.println("-----------------------------------------------------------------------------------> queryMyResourceOrderList");
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 

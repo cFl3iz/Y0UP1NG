@@ -832,6 +832,9 @@ public class WeChatOrderQueryServices {
                         myResourceOrderList.add(rowMap);
                     }
                 }
+                if(null==orderStatus){
+                    myResourceOrderList.add(rowMap);
+                }
             }
         }
 

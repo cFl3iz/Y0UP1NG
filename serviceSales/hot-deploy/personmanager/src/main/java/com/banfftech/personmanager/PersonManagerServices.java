@@ -4964,7 +4964,7 @@ public class PersonManagerServices {
         String prodCatalogId = (String) context.get("prodCatalogId");
         String orderReMark = (String) context.get("orderReMark");
 
-        
+
         Debug.logInfo("*PlaceResourceOrder|productStoreId="+productStoreId,module);
         Debug.logInfo("*PlaceResourceOrder|amount_str="+amount_str,module);
         Debug.logInfo("*PlaceResourceOrder|payToPartyId="+payToPartyId,module);

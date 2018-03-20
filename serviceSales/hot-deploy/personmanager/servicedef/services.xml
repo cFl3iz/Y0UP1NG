@@ -202,6 +202,26 @@
     </service>
 
 
+
+    <!-- 查询联系圈的资源 -->
+    <service name="queryAppContactResourceList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryAppContactResourceList" auth="false">
+        <description>queryAppContactResourceList</description>
+
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="resourcesList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
     <!--  query MyOrdersDetail -->
     <service name="queryMyOrdersDetail" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

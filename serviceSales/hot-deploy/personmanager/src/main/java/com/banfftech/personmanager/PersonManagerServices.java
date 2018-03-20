@@ -4964,6 +4964,14 @@ public class PersonManagerServices {
         String prodCatalogId = (String) context.get("prodCatalogId");
         String orderReMark = (String) context.get("orderReMark");
 
+        
+        Debug.logInfo("*PlaceResourceOrder|productStoreId="+productStoreId,module);
+        Debug.logInfo("*PlaceResourceOrder|amount_str="+amount_str,module);
+        Debug.logInfo("*PlaceResourceOrder|payToPartyId="+payToPartyId,module);
+        Debug.logInfo("*PlaceResourceOrder|productId="+productId,module);
+        Debug.logInfo("*PlaceResourceOrder|prodCatalogId="+prodCatalogId,module);
+
+
         BigDecimal subTotal = BigDecimal.ZERO;
         BigDecimal grandTotal = BigDecimal.ZERO;
         BigDecimal amount = BigDecimal.ONE;

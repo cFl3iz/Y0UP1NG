@@ -3271,6 +3271,9 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : pictures){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String drObjectInfo = (String) gv.get("drObjectInfo");
+                if(drObjectInfo.indexOf("http")<0){
+                    drObjectInfo = "http://"+drObjectInfo;
+                }
                 rowMap.put("drObjectInfo",drObjectInfo);
                 rowMap.put("contentId",gv.get("contentId"));
                 picturesListParp.add(rowMap);
@@ -3538,17 +3541,17 @@ public class PersonManagerQueryServices {
                 List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
                         findConditions3, fieldSet,
                         null, null, false);
-                List<Map<String,Object>> rowPicturesList = new ArrayList<Map<String, Object>>();
-                if(null!=pictures && pictures.size()>0){
-                    for(GenericValue picture : pictures){
-                        Map<String,Object> rowPicture = picture.getAllFields();
-                        rowPicture.put("drObjectInfo","http://"+rowPicture.get("drObjectInfo"));
-                        rowPicturesList.add(rowPicture);
-                    }
-                }
+//                List<Map<String,Object>> rowPicturesList = new ArrayList<Map<String, Object>>();
+//                if(null!=pictures && pictures.size()>0){
+//                    for(GenericValue picture : pictures){
+//                        Map<String,Object> rowPicture = picture.getAllFields();
+//                        rowPicture.put("drObjectInfo","http://"+rowPicture.get("drObjectInfo"));
+//                        rowPicturesList.add(rowPicture);
+//                    }
+//                }
 
-                rowMap.put("morePicture",rowPicturesList);
-                
+                rowMap.put("morePicture",pictures);
+
                 returnList.add(rowMap);
 
             }

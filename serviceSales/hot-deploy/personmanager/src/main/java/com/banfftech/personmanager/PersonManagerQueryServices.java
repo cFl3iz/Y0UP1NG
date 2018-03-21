@@ -2067,7 +2067,7 @@ public class PersonManagerQueryServices {
 
             rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
         }
-        GenericValue orderNote =EntityQuery.use(delegator).from("OrderNote").
+        GenericValue orderNote =EntityQuery.use(delegator).from("OrderHeaderNoteView").
                 where("orderId", orderId).queryFirst();
         rowMap.put("orderNote",orderNote);
 

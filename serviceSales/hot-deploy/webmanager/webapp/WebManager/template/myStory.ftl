@@ -61,7 +61,7 @@
 </script>
 
 
-
+<#if resourceDetail?has_content>
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <span style="font-size:10px;">shares:${(spm)!}</span>
 
@@ -433,3 +433,8 @@
 </div>
 
 
+</#if>
+
+<#if !resourceDetail?has_content>
+资源不存在!
+</#if>

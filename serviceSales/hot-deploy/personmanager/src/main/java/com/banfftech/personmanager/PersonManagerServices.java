@@ -490,7 +490,7 @@ public class PersonManagerServices {
             removeProductFromCategoryInMap.put("userLogin", admin);
             removeProductFromCategoryInMap.put("productId", productId);
             removeProductFromCategoryInMap.put("productCategoryId", productAndCategoryMember.get("productCategoryId"));
-            removeProductFromCategoryInMap.put("fromDate",productAndCategoryMember.get("fromDate"));
+            removeProductFromCategoryInMap.put("fromDate", productAndCategoryMember.get("fromDate"));
 
             Map<String, Object> removeProductFromCategoryOutMap = dispatcher.runSync("removeProductFromCategory", removeProductFromCategoryInMap);
 
@@ -740,62 +740,65 @@ public class PersonManagerServices {
             return createWorkEffortGoodStandardResultMap;
         }
 
-
-        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-
-        GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyIdFrom).queryFirst();
-
-        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
-
-        createMessageLogMap.put("partyIdFrom", partyId);
-
-        createMessageLogMap.put("message", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]");
-
-        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-
-        createMessageLogMap.put("partyIdTo", payToPartyId);
-
-        createMessageLogMap.put("badge", "CHECK");
-
-        createMessageLogMap.put("messageLogTypeId", "SYSTEM");
-
-        createMessageLogMap.put("objectId", productId);
+        if (!sharePartyIdFrom.equals(payToPartyId)) {
 
 
-        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+            GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyIdFrom).queryFirst();
 
-        msg.create();
 
-        //推送先不用ECA
-        // 查询registrationID
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
-        List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
-        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
-        devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
-        EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
-        pConditions = EntityCondition.makeCondition(pConditions, devCondition);
-        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+            Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+            createMessageLogMap.put("partyIdFrom", partyId);
 
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            String type = "JPUSH_IOS";
-            if (partyIdentificationTypeId != null && partyIdentificationTypeId.toLowerCase().indexOf("android") > 0) {
-                type = "JPUSH_ANDROID";
-            }
-            try {
-                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", productId));
-            } catch (GenericServiceException e1) {
-                Debug.logError(e1.getMessage(), module);
+            createMessageLogMap.put("message", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]");
+
+            createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+
+            createMessageLogMap.put("partyIdTo", payToPartyId);
+
+            createMessageLogMap.put("badge", "CHECK");
+
+            createMessageLogMap.put("messageLogTypeId", "SYSTEM");
+
+            createMessageLogMap.put("objectId", productId);
+
+
+            createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+            GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+
+            msg.create();
+
+            //推送先不用ECA
+            // 查询registrationID
+            EntityCondition pConditions = EntityCondition.makeCondition("partyId", payToPartyId);
+            List<EntityCondition> devTypeExprs = new ArrayList<EntityCondition>();
+            devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_ANDROID"));
+            devTypeExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", "JPUSH_IOS"));
+            EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
+            pConditions = EntityCondition.makeCondition(pConditions, devCondition);
+            List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+            if (null != partyIdentifications && partyIdentifications.size() > 0) {
+
+                GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+                String jpushId = (String) partyIdentification.getString("idValue");
+                String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+                String type = "JPUSH_IOS";
+                if (partyIdentificationTypeId != null && partyIdentificationTypeId.toLowerCase().indexOf("android") > 0) {
+                    type = "JPUSH_ANDROID";
+                }
+                try {
+                    dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", person.get("firstName") + "帮您转发了[" + sQueryProduct.get("productName") + "]", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", productId));
+                } catch (GenericServiceException e1) {
+                    Debug.logError(e1.getMessage(), module);
 //                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
+                }
+
             }
-
         }
-
         return resultMap;
     }
 
@@ -822,17 +825,17 @@ public class PersonManagerServices {
         HttpSession session = request.getSession();
 
 
-        GenericValue userLogin =(GenericValue) session.getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String partyId = (String) userLogin.get("partyId");
         String productId = (String) request.getParameter("productId");
         String description = (String) request.getParameter("description");
-        String productName =(String) request.getParameter("productName");
+        String productName = (String) request.getParameter("productName");
         String productPriceStr = (String) request.getParameter("productPrice");
 
 
-        String quantityTotaStr =  (String) request.getParameter("quantityTotal");
+        String quantityTotaStr = (String) request.getParameter("quantityTotal");
 
         BigDecimal quantity = new BigDecimal(quantityTotaStr);
         BigDecimal price = new BigDecimal(productPriceStr);
@@ -842,7 +845,7 @@ public class PersonManagerServices {
                 , "productId", productId, "productName", productName, "description", description));
 
         if (!ServiceUtil.isSuccess(serviceResultMap)) {
-           return "error";
+            return "error";
         }
         //2. Update ProductPrice
         //TODO 不再使用原生服务更新产品价格
@@ -863,8 +866,7 @@ public class PersonManagerServices {
 
         GenericValue productEntity = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-        String detailImageUrl = (String)  productEntity.get("detailImageUrl");
-
+        String detailImageUrl = (String) productEntity.get("detailImageUrl");
 
 
         //3. Create Inventory Item ..
@@ -931,9 +933,6 @@ public class PersonManagerServices {
         }
 
 
-
-
-
         try {
             //上传图片到Oss
             ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
@@ -947,21 +946,21 @@ public class PersonManagerServices {
                     InputStream in = item.getInputStream();
                     String fileName = item.getName();
 
-                        long tm = System.currentTimeMillis();
-                        String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
-                        if (pictureKey != null && !pictureKey.equals("")) {
-                            if(detailImageUrl==null || detailImageUrl.equals("")){
-                                //说明首图没了，先弄首图
-                                detailImageUrl =  PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
-                                productEntity.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
-                                productEntity.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                productEntity.store();
-                            }else{
-                                createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                    long tm = System.currentTimeMillis();
+                    String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                            "personerp", PeConstant.PRODUCT_OSS_PATH, tm);
+                    if (pictureKey != null && !pictureKey.equals("")) {
+                        if (detailImageUrl == null || detailImageUrl.equals("")) {
+                            //说明首图没了，先弄首图
+                            detailImageUrl = PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf("."));
+                            productEntity.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")) + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+                            productEntity.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                            productEntity.store();
+                        } else {
+                            createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.PRODUCT_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
 
-                            }
                         }
+                    }
 
                     index++;
                 }
@@ -2466,6 +2465,7 @@ public class PersonManagerServices {
 
     /**
      * 删除产品的图片
+     *
      * @param dctx
      * @param context
      * @return
@@ -2491,43 +2491,43 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
 
         //说明删除的是详情图
-        if(contentId!=null && contentId.equals("308561217_784838898")){
+        if (contentId != null && contentId.equals("308561217_784838898")) {
 
             GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-            product.set("detailImageUrl","");
+            product.set("detailImageUrl", "");
             product.store();
 
 
-        }else{
+        } else {
 
 
-        GenericValue contentAndDataResource = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId,"contentId",contentId).queryFirst();
+            GenericValue contentAndDataResource = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId, "contentId", contentId).queryFirst();
 
 
-        // Update Content
-        try {
-            Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId,
-                    "fromDate",contentAndDataResource.get("fromDate") , "productContentTypeId", "ADDITIONAL_OTHER",
-                    "productId", productId);
+            // Update Content
+            try {
+                Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId,
+                        "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", "ADDITIONAL_OTHER",
+                        "productId", productId);
 
-            dispatcher.runSync("removeProductContent", serviceInputMap);
+                dispatcher.runSync("removeProductContent", serviceInputMap);
 
-            String dataResourceId = (String) contentAndDataResource.get("dataResourceId");
+                String dataResourceId = (String) contentAndDataResource.get("dataResourceId");
 
-            GenericValue dataResource = EntityQuery.use(delegator).from("DataResource")
-                    .where("dataResourceId", dataResourceId).queryOne();
+                GenericValue dataResource = EntityQuery.use(delegator).from("DataResource")
+                        .where("dataResourceId", dataResourceId).queryOne();
 
-            String pid = (String) dataResource.get("dataResourceName");
+                String pid = (String) dataResource.get("dataResourceName");
 
-            OSSUnit.deleteFile(OSSUnit.getOSSClient(), "personerp", "datas/product_img/", pid);
+                OSSUnit.deleteFile(OSSUnit.getOSSClient(), "personerp", "datas/product_img/", pid);
 
-        } catch (Exception e) {
-            inputMap.put("resultMsg", UtilProperties.getMessage("PersonManagerERRORLabels", "DELETEERROR", locale));
+            } catch (Exception e) {
+                inputMap.put("resultMsg", UtilProperties.getMessage("PersonManagerERRORLabels", "DELETEERROR", locale));
+            }
+
+
         }
-
-
-        }
-        result.put("resultMap",inputMap);
+        result.put("resultMap", inputMap);
         return result;
     }
 
@@ -2576,7 +2576,6 @@ public class PersonManagerServices {
         String sinceTheSend = (String) context.get("sinceTheSend");
 
 
-
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
 
 
@@ -2593,7 +2592,7 @@ public class PersonManagerServices {
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyId)).queryFirst();
 
         String productStoreId = (String) store.get("productStoreId");
-        if(null != sinceTheSend && sinceTheSend.equals("1")){
+        if (null != sinceTheSend && sinceTheSend.equals("1")) {
             //卖家自发货,不用物流单位
 
 
@@ -2639,92 +2638,89 @@ public class PersonManagerServices {
             order.store();
 
 
-        }else{
-
-
-
-
-
-        //查询店铺是否拥有该货运方式
-        //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
-
-        EntityCondition findConditions = EntityCondition
-                .makeCondition("partyId", EntityOperator.LIKE, "%" + name + "%");
-
-
-        EntityCondition findConditions2 = EntityCondition
-                .makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
-
-        EntityCondition listConditions = EntityCondition
-                .makeCondition(findConditions, EntityOperator.AND, findConditions2);
-
-
-        //QueryStoreShipmentMethList
-        List<GenericValue> queryStoreShipmentMethList = delegator.findList("ProductStoreShipmentMeth",
-                listConditions, null,
-                UtilMisc.toList("-createdStamp"), null, true);
-
-        if (queryStoreShipmentMethList != null && queryStoreShipmentMethList.size() > 0) {
-            GenericValue shimentMethod = (GenericValue) queryStoreShipmentMethList.get(0);
-            shipmentMethodId = (String) shimentMethod.get("partyId");
         } else {
-            //查询系统中是否有此货运方法,如果没有新增。
 
-            GenericValue party = delegator.findOne("PartyGroup", UtilMisc.toMap("partyId", carrierCode), false);
 
-            if (party == null) {
-                dispatcher.runSync("createSimpleCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "name", name, "carrierCode", carrierCode, "code", code));
+            //查询店铺是否拥有该货运方式
+            //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
+
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition("partyId", EntityOperator.LIKE, "%" + name + "%");
+
+
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
+
+            EntityCondition listConditions = EntityCondition
+                    .makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+
+            //QueryStoreShipmentMethList
+            List<GenericValue> queryStoreShipmentMethList = delegator.findList("ProductStoreShipmentMeth",
+                    listConditions, null,
+                    UtilMisc.toList("-createdStamp"), null, true);
+
+            if (queryStoreShipmentMethList != null && queryStoreShipmentMethList.size() > 0) {
+                GenericValue shimentMethod = (GenericValue) queryStoreShipmentMethList.get(0);
+                shipmentMethodId = (String) shimentMethod.get("partyId");
+            } else {
+                //查询系统中是否有此货运方法,如果没有新增。
+
+                GenericValue party = delegator.findOne("PartyGroup", UtilMisc.toMap("partyId", carrierCode), false);
+
+                if (party == null) {
+                    dispatcher.runSync("createSimpleCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "name", name, "carrierCode", carrierCode, "code", code));
+                }
+
+                //给卖家店铺增加此货运方法
+
+                dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                        "productStoreShipMethId", carrierCode, "productStoreId", productStoreId,
+                        "shipmentMethodTypeId", "EXPRESS", "partyId", carrierCode, "roleTypeId", "CARRIER"));
+                shipmentMethodId = carrierCode;
             }
 
-            //给卖家店铺增加此货运方法
 
-            dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
-                    "productStoreShipMethId", carrierCode, "productStoreId", productStoreId,
-                    "shipmentMethodTypeId", "EXPRESS", "partyId", carrierCode, "roleTypeId", "CARRIER"));
-            shipmentMethodId = carrierCode;
-        }
+            //将买家信息更新到订单货运
+            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                    "userLogin", userLogin, "orderId", orderId,
+                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
 
-
-        //将买家信息更新到订单货运
-        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
-                "userLogin", userLogin, "orderId", orderId,
-                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
-
-        if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
-            return updateShipGroupShipInfoOutMap;
-        }
-
-        GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
-        String stautsId = (String) orderHeader.get("statusId");
-
-        if (stautsId.equals("ORDER_APPROVED")) {
-            Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
-                    "changeReason", "订单发送", "setItemStatus", "Y"));
-
-            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
-                return changeOrderStatusOutMap;
+            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+                return updateShipGroupShipInfoOutMap;
             }
-        } else {
-            Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
-                    "changeReason", "订单批准", "setItemStatus", "Y"));
 
-            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
-                return changeOrderStatusOutMap;
+            GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+            String stautsId = (String) orderHeader.get("statusId");
+
+            if (stautsId.equals("ORDER_APPROVED")) {
+                Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "changeReason", "订单发送", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
+            } else {
+                Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
+                        "changeReason", "订单批准", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
+                changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
+                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "changeReason", "订单发送", "setItemStatus", "Y"));
+
+                if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
+                    return changeOrderStatusOutMap;
+                }
             }
-            changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                    "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
-                    "changeReason", "订单发送", "setItemStatus", "Y"));
 
-            if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
-                return changeOrderStatusOutMap;
-            }
-        }
-
-        GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
-        order.set("internalCode", code);
-        order.store();
+            GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
+            order.set("internalCode", code);
+            order.store();
         }
 
         //推送给微信用户
@@ -2872,7 +2868,7 @@ public class PersonManagerServices {
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
-                            "contactMechPurposeTypeId", contactMechPurposeTypeId,"comments",telNumber));
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                 return createPartyPostalAddressOutMap;
@@ -4984,11 +4980,11 @@ public class PersonManagerServices {
         String orderReMark = (String) context.get("orderReMark");
 
 
-        Debug.logInfo("*PlaceResourceOrder|productStoreId="+productStoreId,module);
-        Debug.logInfo("*PlaceResourceOrder|amount_str="+amount_str,module);
-        Debug.logInfo("*PlaceResourceOrder|payToPartyId="+payToPartyId,module);
-        Debug.logInfo("*PlaceResourceOrder|productId="+productId,module);
-        Debug.logInfo("*PlaceResourceOrder|prodCatalogId="+prodCatalogId,module);
+        Debug.logInfo("*PlaceResourceOrder|productStoreId=" + productStoreId, module);
+        Debug.logInfo("*PlaceResourceOrder|amount_str=" + amount_str, module);
+        Debug.logInfo("*PlaceResourceOrder|payToPartyId=" + payToPartyId, module);
+        Debug.logInfo("*PlaceResourceOrder|productId=" + productId, module);
+        Debug.logInfo("*PlaceResourceOrder|prodCatalogId=" + prodCatalogId, module);
 
 
         BigDecimal subTotal = BigDecimal.ZERO;
@@ -5468,8 +5464,6 @@ public class PersonManagerServices {
         }
 
 
-
-
         //授予当事人询价角色
         GenericValue partyRoleRequester = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_REQUESTER").queryFirst();
         if (null == partyRoleRequester) {
@@ -5585,7 +5579,7 @@ public class PersonManagerServices {
         String productStoreId = (String) createPersonStoreOutMap.get("storeId");
 
         // 创建自己送货的货运方法
-        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"partyId",partyId,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS"));
+        dispatcher.runSync("createCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CARRIER", "shipmentMethodTypeId", "EXPRESS"));
 
 
         //店铺关联货运方法顺丰
@@ -5603,7 +5597,7 @@ public class PersonManagerServices {
                 , "includeNoChargeItems", "Y"));
 
         // 店铺关联货运方法，自己
-          dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+        dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
                 "partyId", partyId,
                 "productStoreId", productStoreId,
                 "productStoreShipMethId", "10000",
@@ -5711,7 +5705,7 @@ public class PersonManagerServices {
         try {
             // Create Product Store
             Map<String, Object> createProductStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
-                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,"reserveInventory","Y", "storeName", storeName, "payToPartyId", partyId, "inventoryFacilityId", inventoryFacilityId));
+                    "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y", "storeName", storeName, "payToPartyId", partyId, "inventoryFacilityId", inventoryFacilityId));
             if (!ServiceUtil.isSuccess(createProductStoreOutMap)) {
                 return createProductStoreOutMap;
             }

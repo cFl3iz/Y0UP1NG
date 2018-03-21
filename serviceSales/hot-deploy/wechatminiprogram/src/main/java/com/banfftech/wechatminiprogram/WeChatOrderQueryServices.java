@@ -84,116 +84,91 @@ public class WeChatOrderQueryServices {
         }
 
 
-
-        EntityCondition salesDiscontinuationDateConditions = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
-        EntityCondition partyIdToConditions = EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId);
-        EntityCondition partyRelationshipTypeConditions = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
-        EntityCondition roleTypeConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
-
-//        EntityCondition listConditions1 = EntityCondition
-//                .makeCondition(salesDiscontinuationDateConditions,EntityOperator.AND, partyIdToConditions);
-//
-//       EntityCondition listConditions2 = EntityCondition
-//                .makeCondition(partyRelationshipTypeConditions,EntityOperator.AND, roleTypeConditions);
-//
-//       EntityCondition listConditions3 = EntityCondition
-//                .makeCondition(listConditions1,EntityOperator.AND,listConditions2);
-
-        EntityConditionList<EntityCondition> bigListConditions = EntityCondition
-                .makeCondition(salesDiscontinuationDateConditions, partyIdToConditions,partyRelationshipTypeConditions,roleTypeConditions);
-
-
         //查询联系人列表
         List<String> orderBy = UtilMisc.toList("-createdDate");
-//        PagedList<GenericValue> myContactListPage = null;
-//        myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
-//                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","").orderBy(orderBy)
-//                .distinct()
-//                .queryPagedList(viewIndex, viewSize);
+        PagedList<GenericValue> myContactListPage = null;
+        myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","").orderBy(orderBy)
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
 
-   //     List<GenericValue> myContactList = myContactListPage.getData();
-        List<GenericValue> myContactList = delegator.findList("PartyContactResources", bigListConditions, null,
-                UtilMisc.toList("-createdDate"), null, false);
+        List<GenericValue> myContactList = myContactListPage.getData();
 
 
-//                List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
-//                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","")
-//                .orderBy(orderBy)
-//                .distinct()
-//                .queryList();
-        resourceCount = myContactList.size();
 
-//        lowIndex = myContactListPage.getStartIndex();
-//        highIndex = myContactListPage.getEndIndex();
+        List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","")
+                .orderBy(orderBy)
+                .distinct()
+                .queryList();
+        resourceCount = myContactListCountList.size();
+
+        lowIndex = myContactListPage.getStartIndex();
+        highIndex = myContactListPage.getEndIndex();
 
         if(null != myContactList){
 
 
-        for(GenericValue gv : myContactList){
+            for(GenericValue gv : myContactList){
 
-            if(gv.get("salesDiscontinuationDate")!=null){
-                continue;
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                String contactPartyId = (String) gv.get("partyIdFrom");
+
+                if(partyId.equals(contactPartyId)){
+                    continue;
+                }
+
+                Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,contactPartyId);
+
+                Timestamp createdDateTp = (Timestamp) gv.get("createdDate");
+
+                rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
+
+                rowMap.put("partyId",partyId);
+
+                rowMap.put("user",userInfoMap);
+
+                rowMap.put("contactPartyId",contactPartyId);
+
+                String productId = (String) gv.get("productId");
+
+                GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", productId).queryFirst();
+                if(null!=productAddress){
+                    rowMap.put("address", productAddress.get("attrValue"));
+                }
+
+                GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", productId).queryFirst();
+                if(null!=productlongitude) {
+                    rowMap.put("longitude", productlongitude.get("attrValue"));
+                }
+                GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", productId).queryFirst();
+                if(null!=productlatitude) {
+                    rowMap.put("latitude", productlatitude.get("attrValue"));
+                }
+
+                rowMap.put("productId",productId);
+
+                rowMap.put("description",(String) gv.get("description"));
+
+                rowMap.put("productName",(String) gv.get("productName"));
+
+                rowMap.put("detailImageUrl",(String) gv.get("detailImageUrl"));
+
+                rowMap.put("price",gv.get("price") + "");
+                HashSet<String> fieldSet = new HashSet<String>();
+                fieldSet.add("drObjectInfo");
+                fieldSet.add("productId");
+                EntityCondition findConditions3 = EntityCondition
+                        .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
+
+                List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
+                        findConditions3, fieldSet,
+                        null, null, false);
+                rowMap.put("morePicture",pictures);
+                returnList.add(rowMap);
+
             }
-
-
-            Map<String,Object> rowMap = new HashMap<String, Object>();
-
-            String contactPartyId = (String) gv.get("partyIdFrom");
-
-            if(partyId.equals(contactPartyId)){
-                continue;
-            }
-
-            Map<String,String> userInfoMap =  queryPersonBaseInfo(delegator,contactPartyId);
-
-            Timestamp createdDateTp = (Timestamp) gv.get("createdDate");
-
-            rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
-
-            rowMap.put("partyId",partyId);
-
-            rowMap.put("user",userInfoMap);
-
-            rowMap.put("contactPartyId",contactPartyId);
-
-            String productId = (String) gv.get("productId");
-
-            GenericValue productAddress = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","address","productId", productId).queryFirst();
-            if(null!=productAddress){
-                rowMap.put("address", productAddress.get("attrValue"));
-            }
-
-            GenericValue productlongitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","longitude","productId", productId).queryFirst();
-            if(null!=productlongitude) {
-                rowMap.put("longitude", productlongitude.get("attrValue"));
-            }
-            GenericValue productlatitude = EntityQuery.use(delegator).from("ProductAttribute").where("attrName","latitude","productId", productId).queryFirst();
-            if(null!=productlatitude) {
-                rowMap.put("latitude", productlatitude.get("attrValue"));
-            }
-
-            rowMap.put("productId",productId);
-
-            rowMap.put("description",(String) gv.get("description"));
-
-            rowMap.put("productName",(String) gv.get("productName"));
-
-            rowMap.put("detailImageUrl",(String) gv.get("detailImageUrl"));
-
-            rowMap.put("price",gv.get("price") + "");
-            HashSet<String> fieldSet = new HashSet<String>();
-            fieldSet.add("drObjectInfo");
-            fieldSet.add("productId");
-            EntityCondition findConditions3 = EntityCondition
-                    .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
-
-            List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",
-                    findConditions3, fieldSet,
-                    null, null, false);
-            rowMap.put("morePicture",pictures);
-            returnList.add(rowMap);
-
-        }
 
 
         }
@@ -207,7 +182,7 @@ public class WeChatOrderQueryServices {
         if(resourceCount!=0 && resourceCount>viewSize){
             resultMap.put("total",resourceCount%viewSize == 0 ? resourceCount / viewSize : resourceCount / viewSize+1 );
         }else{
-            if(null == myContactList || myContactList.size() == 0){
+            if(null == myContactListCountList || myContactListCountList.size() == 0){
                 resultMap.put("total",-1);
             }else{
                 resultMap.put("total",1);
@@ -637,7 +612,7 @@ public class WeChatOrderQueryServices {
 
         }
 
-       GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
+        GenericValue order =  delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId),false);
         if(null != order && null != order.get("internalCode")) {
             rowMap.put("internalCode",order.get("internalCode"));
         }
@@ -676,7 +651,7 @@ public class WeChatOrderQueryServices {
 
         String unioId = (String) context.get("openId");
 
-         System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>unioId = " + unioId);
+        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>unioId = " + unioId);
 //
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
@@ -722,7 +697,7 @@ public class WeChatOrderQueryServices {
 
 
 
-         EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+        EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
 
 
 

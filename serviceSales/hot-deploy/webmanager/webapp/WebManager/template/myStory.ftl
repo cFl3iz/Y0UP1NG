@@ -259,7 +259,8 @@
     }
 
     function selectAddress(productId){
-
+        var flag = checkSubscribe();
+        if (flag == true) {
         var payToPartyId = $("#payToPartyId").val();
         var partyId      = $("#partyId").val();
         if(payToPartyId === partyId){
@@ -324,7 +325,9 @@
         });
 
 
-
+        }else{
+            ShowDiv('MyDiv','fade');
+        }
     }
 
 

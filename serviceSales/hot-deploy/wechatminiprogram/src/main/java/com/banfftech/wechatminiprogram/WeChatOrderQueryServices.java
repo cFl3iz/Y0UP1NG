@@ -127,6 +127,8 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("partyId",partyId);
 
+                rowMap.put("salesDiscontinuationDate",gv.get("salesDiscontinuationDate"));
+
                 rowMap.put("user",userInfoMap);
 
                 rowMap.put("contactPartyId",contactPartyId);

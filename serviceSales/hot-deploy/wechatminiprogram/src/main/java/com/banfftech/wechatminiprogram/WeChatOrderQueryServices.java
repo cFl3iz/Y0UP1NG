@@ -88,7 +88,7 @@ public class WeChatOrderQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN").orderBy(orderBy)
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate",GenericEntity.NULL_FIELD).orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
@@ -97,7 +97,7 @@ public class WeChatOrderQueryServices {
 
 
         List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN")
+                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate",GenericEntity.NULL_FIELD)
                 .orderBy(orderBy)
                 .distinct()
                 .queryList();

@@ -315,6 +315,7 @@
         <alias entity-alias="ProductRole" field="roleTypeId" name="roleTypeId"/>
 
         <alias entity-alias="Product" field="productId" name="productId"/>
+        <alias entity-alias="Product" field="salesDiscontinuationDate" name="salesDiscontinuationDate"/>
         <alias entity-alias="Product" field="productName" name="productName"/>
         <alias entity-alias="Product" field="detailImageUrl" name="detailImageUrl"/>
         <!--<alias entity-alias="Product" field="price" name="price"/>-->

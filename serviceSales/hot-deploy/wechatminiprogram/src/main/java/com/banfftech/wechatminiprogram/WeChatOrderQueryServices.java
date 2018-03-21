@@ -84,6 +84,24 @@ public class WeChatOrderQueryServices {
         }
 
 
+
+        EntityCondition findConditions1 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId);
+        EntityCondition findConditions3 = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
+        EntityCondition findConditions4 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
+
+        EntityConditionList<EntityCondition> listConditions1 = EntityCondition
+                .makeCondition(findConditions1, findConditions2);
+
+        EntityConditionList<EntityCondition> listConditions2 = EntityCondition
+                .makeCondition(findConditions3, findConditions4);
+
+        EntityConditionList<EntityCondition> listConditions3 = EntityCondition
+                .makeCondition(listConditions1,EntityOperator.AND,listConditions2);
+
+
+
+
         //查询联系人列表
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
@@ -92,11 +110,12 @@ public class WeChatOrderQueryServices {
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
-        List<GenericValue> myContactList = myContactListPage.getData();
+   //     List<GenericValue> myContactList = myContactListPage.getData();
+        List<GenericValue> myContactList = delegator.findList("PartyContactResources", listConditions3, null,
+                UtilMisc.toList("-createdDate"), null, false);
 
 
-
-        List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
+                List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","")
                 .orderBy(orderBy)
                 .distinct()

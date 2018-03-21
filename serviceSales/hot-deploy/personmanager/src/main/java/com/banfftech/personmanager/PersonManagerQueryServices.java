@@ -3531,7 +3531,7 @@ public class PersonManagerQueryServices {
 
                 String contactPartyId = (String) gv.get("partyIdFrom");
 
-                if(partyId.equals(contactPartyId)){
+                if(partyId.equals(contactPartyId) || gv.get("salesDiscontinuationDate") != null){
                     continue;
                 }
 

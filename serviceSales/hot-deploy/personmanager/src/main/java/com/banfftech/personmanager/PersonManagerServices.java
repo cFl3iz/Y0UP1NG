@@ -1886,7 +1886,9 @@ public class PersonManagerServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
         String orderId = (String) context.get("orderId");
-
+        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+        String productId = (String) orderItem.get("productId");
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
@@ -2012,7 +2014,7 @@ public class PersonManagerServices {
             GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
             String jpushId = (String) partyIdentification.getString("idValue");
             String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:+" + orderId + "的卖家已确认货款到账!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "资源:" + product.get("productName") + "的卖家已确认货款到账!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
         }
 
 

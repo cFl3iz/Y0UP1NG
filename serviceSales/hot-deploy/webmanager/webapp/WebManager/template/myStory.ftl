@@ -170,9 +170,11 @@
             </button>
         <!-- 如果还有库存才可以购买 -->
 <#if resourceDetail.availableToPromiseTotal  gt 0>
+    <#if !resourceDetail.salesDiscontinuationDate?has_content>
         <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
         ${uiLabel.GoToPay}
         </button>
+    </#if>
 </#if>
         <#if resourceDetail.availableToPromiseTotal  lt 1>
             <button type="button" onclick="alert('没有库存了,您可以直接联系卖家!');" class="btn-block btn-disabled">

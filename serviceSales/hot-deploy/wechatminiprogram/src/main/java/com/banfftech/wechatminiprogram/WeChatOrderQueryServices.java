@@ -85,16 +85,16 @@ public class WeChatOrderQueryServices {
 
 
 
-        EntityCondition findConditions1 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
-        EntityCondition findConditions2 = EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId);
-        EntityCondition findConditions3 = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
-        EntityCondition findConditions4 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
+        EntityCondition salesDiscontinuationDateConditions = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+        EntityCondition partyIdToConditions = EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId);
+        EntityCondition partyRelationshipTypeConditions = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
+        EntityCondition roleTypeConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
 
         EntityConditionList<EntityCondition> listConditions1 = EntityCondition
-                .makeCondition(findConditions1, findConditions2);
+                .makeCondition(salesDiscontinuationDateConditions, partyIdToConditions);
 
         EntityConditionList<EntityCondition> listConditions2 = EntityCondition
-                .makeCondition(findConditions3, findConditions4);
+                .makeCondition(partyRelationshipTypeConditions, roleTypeConditions);
 
         EntityConditionList<EntityCondition> listConditions3 = EntityCondition
                 .makeCondition(listConditions1,EntityOperator.AND,listConditions2);

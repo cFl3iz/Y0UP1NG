@@ -2596,14 +2596,14 @@ public class PersonManagerServices {
             //卖家自发货,不用物流单位
 
 
-            //将买家信息更新到订单货运
-            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
-                    "userLogin", userLogin, "orderId", orderId,
-                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + partyId, "shipGroupSeqId", "00001"));
-
-            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
-                return updateShipGroupShipInfoOutMap;
-            }
+            //将买家信息更新到订单货运 出现地址改错的问题， 暂时注释。
+//            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+//                    "userLogin", userLogin, "orderId", orderId,
+//                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + partyId, "shipGroupSeqId", "00001"));
+//
+//            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+//                return updateShipGroupShipInfoOutMap;
+//            }
 
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
             String stautsId = (String) orderHeader.get("statusId");
@@ -2681,14 +2681,14 @@ public class PersonManagerServices {
             }
 
 
-            //将买家信息更新到订单货运
-            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
-                    "userLogin", userLogin, "orderId", orderId,
-                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
-
-            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
-                return updateShipGroupShipInfoOutMap;
-            }
+            //将买家信息更新到订单货运 出现地址改错的问题,先注释
+//            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+//                    "userLogin", userLogin, "orderId", orderId,
+//                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
+//
+//            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
+//                return updateShipGroupShipInfoOutMap;
+//            }
 
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
             String stautsId = (String) orderHeader.get("statusId");

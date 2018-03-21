@@ -1490,6 +1490,8 @@ public class PersonManagerQueryServices {
         fieldSet.add("partyId");
         fieldSet.add("address1");
         fieldSet.add("postalCode");
+        fieldSet.add("toName");
+        fieldSet.add("comments");
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("partyId", partyId));
 
@@ -1501,13 +1503,13 @@ public class PersonManagerQueryServices {
         resultMap.put("postalAddress", queryAddressList);
 
         //查询卖家提供的联系电话
-        GenericValue telecomNumber = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
-        if (UtilValidate.isNotEmpty(telecomNumber)) {
-            resultMap.put("teleNumber",telecomNumber.get("contactNumber") );
-        }else{
-            resultMap.put("teleNumber", "");
-        }
+//        GenericValue telecomNumber = EntityUtil.getFirst(
+//                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+//        if (UtilValidate.isNotEmpty(telecomNumber)) {
+//            resultMap.put("teleNumber",telecomNumber.get("contactNumber") );
+//        }else{
+//            resultMap.put("teleNumber", "");
+//        }
 
         return resultMap;
     }

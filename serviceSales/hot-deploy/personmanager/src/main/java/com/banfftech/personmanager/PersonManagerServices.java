@@ -2870,7 +2870,7 @@ public class PersonManagerServices {
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
-                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId,"comments",telNumber));
             contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                 return createPartyPostalAddressOutMap;
@@ -2889,22 +2889,22 @@ public class PersonManagerServices {
             return updateShipGroupShipInfoOutMap;
         }
 
-        if(null!=telNumber && !telNumber.trim().equals("")){
-            // 创建联系
-            Map<String, Object> inputTelecom = UtilMisc.toMap();
-            inputTelecom.put("partyId", partyId);
-            inputTelecom.put("contactNumber", telNumber);
-            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
-            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-            inputTelecom.put("userLogin", admin);
-            Map<String, Object> createTelecom = null;
-            try {
-                createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-            } catch (GenericServiceException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+//        if(null!=telNumber && !telNumber.trim().equals("")){
+//            // 创建联系
+//            Map<String, Object> inputTelecom = UtilMisc.toMap();
+//            inputTelecom.put("partyId", partyId);
+//            inputTelecom.put("contactNumber", telNumber);
+//            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+//            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+//            inputTelecom.put("userLogin", admin);
+//            Map<String, Object> createTelecom = null;
+//            try {
+//                createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+//            } catch (GenericServiceException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
 
         return resultMap;
     }

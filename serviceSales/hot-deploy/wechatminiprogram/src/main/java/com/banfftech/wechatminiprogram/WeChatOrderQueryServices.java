@@ -90,45 +90,51 @@ public class WeChatOrderQueryServices {
         EntityCondition partyRelationshipTypeConditions = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
         EntityCondition roleTypeConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
 
-        EntityCondition listConditions1 = EntityCondition
-                .makeCondition(salesDiscontinuationDateConditions, partyIdToConditions);
+//        EntityCondition listConditions1 = EntityCondition
+//                .makeCondition(salesDiscontinuationDateConditions,EntityOperator.AND, partyIdToConditions);
+//
+//       EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(partyRelationshipTypeConditions,EntityOperator.AND, roleTypeConditions);
+//
+//       EntityCondition listConditions3 = EntityCondition
+//                .makeCondition(listConditions1,EntityOperator.AND,listConditions2);
 
-       EntityCondition listConditions2 = EntityCondition
-                .makeCondition(partyRelationshipTypeConditions, roleTypeConditions);
-
-       EntityCondition listConditions3 = EntityCondition
-                .makeCondition(listConditions1,EntityOperator.AND,listConditions2);
-
-
+        EntityConditionList<EntityCondition> bigListConditions = EntityCondition
+                .makeCondition(salesDiscontinuationDateConditions, partyIdToConditions,partyRelationshipTypeConditions,roleTypeConditions);
 
 
         //查询联系人列表
         List<String> orderBy = UtilMisc.toList("-createdDate");
-        PagedList<GenericValue> myContactListPage = null;
-        myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","").orderBy(orderBy)
-                .distinct()
-                .queryPagedList(viewIndex, viewSize);
+//        PagedList<GenericValue> myContactListPage = null;
+//        myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
+//                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","").orderBy(orderBy)
+//                .distinct()
+//                .queryPagedList(viewIndex, viewSize);
 
    //     List<GenericValue> myContactList = myContactListPage.getData();
-        List<GenericValue> myContactList = delegator.findList("PartyContactResources", listConditions3, null,
+        List<GenericValue> myContactList = delegator.findList("PartyContactResources", bigListConditions, null,
                 UtilMisc.toList("-createdDate"), null, false);
 
 
-                List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
-                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","")
-                .orderBy(orderBy)
-                .distinct()
-                .queryList();
-        resourceCount = myContactListCountList.size();
+//                List<GenericValue> myContactListCountList   = EntityQuery.use(delegator).from("PartyContactResources").
+//                where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN","salesDiscontinuationDate","")
+//                .orderBy(orderBy)
+//                .distinct()
+//                .queryList();
+        resourceCount = myContactList.size();
 
-        lowIndex = myContactListPage.getStartIndex();
-        highIndex = myContactListPage.getEndIndex();
+//        lowIndex = myContactListPage.getStartIndex();
+//        highIndex = myContactListPage.getEndIndex();
 
         if(null != myContactList){
 
 
         for(GenericValue gv : myContactList){
+
+            if(gv.get("salesDiscontinuationDate")!=null){
+                continue;
+            }
+
 
             Map<String,Object> rowMap = new HashMap<String, Object>();
 

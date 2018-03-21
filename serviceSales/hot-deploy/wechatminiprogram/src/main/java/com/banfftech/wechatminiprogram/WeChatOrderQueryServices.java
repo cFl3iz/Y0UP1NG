@@ -90,13 +90,13 @@ public class WeChatOrderQueryServices {
         EntityCondition partyRelationshipTypeConditions = EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, PeConstant.CONTACT);
         EntityCondition roleTypeConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ADMIN");
 
-        EntityConditionList<EntityCondition> listConditions1 = EntityCondition
+        EntityCondition listConditions1 = EntityCondition
                 .makeCondition(salesDiscontinuationDateConditions, partyIdToConditions);
 
-        EntityConditionList<EntityCondition> listConditions2 = EntityCondition
+       EntityCondition listConditions2 = EntityCondition
                 .makeCondition(partyRelationshipTypeConditions, roleTypeConditions);
 
-        EntityConditionList<EntityCondition> listConditions3 = EntityCondition
+       EntityCondition listConditions3 = EntityCondition
                 .makeCondition(listConditions1,EntityOperator.AND,listConditions2);
 
 

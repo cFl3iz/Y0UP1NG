@@ -3204,7 +3204,7 @@ public class PersonManagerQueryServices {
         GenericValue product = null;
         List<GenericValue> products = delegator.findList("ProductAndCategoryMember",
                 findConditions, fieldSet,
-                null, null, false).get(0);
+                null, null, false);
 
         if(products==null || products.size()==0){
             return resultMap;

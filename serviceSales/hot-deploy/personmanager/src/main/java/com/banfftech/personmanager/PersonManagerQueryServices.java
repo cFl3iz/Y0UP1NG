@@ -2003,7 +2003,6 @@ public class PersonManagerQueryServices {
         GenericValue custOrderRole  = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId","SHIP_TO_CUSTOMER").queryFirst();
 
         String custPartyId = (String) custOrderRole.get("partyId");
-        Debug.logInfo("===================================> orderHeaderItemAndRoles="+orderHeaderItemAndRoles,module);
 
         if (null != orderHeaderItemAndRoles) {
 
@@ -2059,11 +2058,13 @@ public class PersonManagerQueryServices {
 
             personAddressInfoMap = queryPersonAddressInfoFromOrder(delegator, partyId, orderId);
 
-            rowMap.put("personInfoMap", personInfoMap);
+            rowMap.put("custPersonInfoMap", personInfoMap);
 
             rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
+            rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
         }
+
 
         GenericValue order = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
         String stuatusId = (String)order.get("statusId");
@@ -2243,24 +2244,39 @@ public class PersonManagerQueryServices {
                 Map<String, String> personAddressInfoMap = null;
 
                 //说明这笔订单我是卖家,查买家头像信息
+                //2018-03-21 老金需要不管是销单还是采单  都要双方信息
+//                if (payToPartyId.equals(partyId)) {
+//
+//                    personInfoMap = queryPersonBaseInfo(delegator, payFromPartyId);
+//
+//                    personAddressInfoMap = queryPersonAddressInfo(delegator, payFromPartyId);
+//
+//                    rowMap.put("realPartyId", payFromPartyId);
+//
+//                }
+//                //说明这笔单我是买家,查卖家头像信息
+//                if (!payToPartyId.equals(partyId)) {
+//
+//                    personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
+//
+//                    personAddressInfoMap = queryPersonAddressInfo(delegator, payToPartyId);
+//
+//                    rowMap.put("realPartyId", payToPartyId);
+//                }
+
+
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
+                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator,payFromPartyId));
                 if (payToPartyId.equals(partyId)) {
-
-                    personInfoMap = queryPersonBaseInfo(delegator, payFromPartyId);
-
                     personAddressInfoMap = queryPersonAddressInfo(delegator, payFromPartyId);
-
-                    rowMap.put("realPartyId", payFromPartyId);
-
                 }
-                //说明这笔单我是买家,查卖家头像信息
                 if (!payToPartyId.equals(partyId)) {
-
-                    personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
-
                     personAddressInfoMap = queryPersonAddressInfo(delegator, payToPartyId);
-
-                    rowMap.put("realPartyId", payToPartyId);
                 }
+
+
+                rowMap.put("custPartyId", payFromPartyId);
+                rowMap.put("salesPartyId", payToPartyId);
 
                 rowMap.put("userPartyId", partyId);
 
@@ -2532,7 +2548,9 @@ public class PersonManagerQueryServices {
 //                }
                 rowMap.put("userPartyId", partyId);
 
-                rowMap.put("personInfoMap", personInfoMap);
+                rowMap.put("custPersonInfoMap", personInfoMap);
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
+
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
 

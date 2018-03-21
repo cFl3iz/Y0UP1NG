@@ -299,7 +299,7 @@
     <view-entity entity-name="PartyContactResources" package-name="com.banfftech.personerp">
         <member-entity entity-name="PartyRelationship" entity-alias="PartyRelationship" />
         <member-entity entity-name="ProductRole" entity-alias="ProductRole" />
-        <member-entity entity-name="Product" entity-alias="Product" />
+        <member-entity entity-name="ProductAndCategoryMember" entity-alias="Product" />
         <member-entity entity-alias="PP" entity-name="ProductPrice"/>
 
         <alias field="price" name="price" entity-alias="PP"/>

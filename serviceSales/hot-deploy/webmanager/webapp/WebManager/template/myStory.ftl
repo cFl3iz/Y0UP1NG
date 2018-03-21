@@ -344,8 +344,8 @@
     }
 
     function contactMe() {
-        var flag = checkSubscribe();
-        if (flag == true) {
+//        var flag = checkSubscribe();
+        if (1==1) {
 
             var payToPartyId = $("#payToPartyId").val();
             var partyId      = $("#partyId").val();

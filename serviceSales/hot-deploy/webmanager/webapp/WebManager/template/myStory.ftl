@@ -260,6 +260,13 @@
 
     function selectAddress(productId){
 
+        var payToPartyId = $("#payToPartyId").val();
+        var partyId      = $("#partyId").val();
+        if(payToPartyId === partyId){
+            alert("您的身份就是卖家。请勿刷单，否则平台将封杀您的账户。");
+
+            return false;
+        }
 
         var J_Input = $("#J_Input").val();
         var availableToPromiseTotal = $("#availableToPromiseTotal").val();

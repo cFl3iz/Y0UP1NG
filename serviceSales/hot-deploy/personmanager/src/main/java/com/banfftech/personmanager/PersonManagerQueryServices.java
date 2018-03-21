@@ -3201,10 +3201,15 @@ public class PersonManagerQueryServices {
 
         EntityCondition findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("productId", productId));
-
-        GenericValue product = delegator.findList("ProductAndCategoryMember",
+        GenericValue product = null;
+        List<GenericValue> products = delegator.findList("ProductAndCategoryMember",
                 findConditions, fieldSet,
                 null, null, false).get(0);
+
+        if(products==null || products.size()==0){
+            return resultMap;
+        }
+        product = products.get(0);
         Map<String, Object> resourceDetail = product.getAllFields();
         String payToId = (String) product.get("payToPartyId");
         String detailImageUrl = "";

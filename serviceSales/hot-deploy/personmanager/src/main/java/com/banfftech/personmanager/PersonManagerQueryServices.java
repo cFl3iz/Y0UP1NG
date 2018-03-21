@@ -2060,7 +2060,10 @@ public class PersonManagerQueryServices {
 
             rowMap.put("custPersonInfoMap", personInfoMap);
 
-            rowMap.put("personAddressInfoMap", personAddressInfoMap);
+
+            GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
+                    where("orderId", orderId).queryFirst();
+            rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
 
             rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
         }

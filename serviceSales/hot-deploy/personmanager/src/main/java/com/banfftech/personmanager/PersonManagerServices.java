@@ -5272,7 +5272,9 @@ public class PersonManagerServices {
 //        } else {
 //            dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "您的订单收货地址:" + address1 + ",无误请点击→", "objectId", productId));
 //        }
-        dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
+
+        // 去除下单成功资源主会联系您 2018.3.22
+        //dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
 
 
 

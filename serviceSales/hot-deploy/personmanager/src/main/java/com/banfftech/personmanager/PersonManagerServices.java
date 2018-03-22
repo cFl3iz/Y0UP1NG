@@ -845,7 +845,7 @@ public class PersonManagerServices {
         BigDecimal price = new BigDecimal(productPriceStr);
 
         //1.Update Product
-        Map<String, Object> serviceResultMap = dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", userLogin
+        Map<String, Object> serviceResultMap = dispatcher.runSync("updateProduct", UtilMisc.toMap("userLogin", admin
                 , "productId", productId, "productName", productName, "description", description));
 
         if (!ServiceUtil.isSuccess(serviceResultMap)) {

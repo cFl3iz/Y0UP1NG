@@ -113,7 +113,7 @@ public class WeChatMiniProgramServices {
             quantityTotal = new BigDecimal(kuCun);
         }
         String productName = (String) context.get("productName");
-        String filePaths = (String) context.get("filePath");
+
         String description = (String) context.get("description");
         //默认的价格是0
 
@@ -149,11 +149,10 @@ public class WeChatMiniProgramServices {
 
         }
         }
-
-        System.out.println("->File filePaths = " + filePaths);
-
+        //图片
+        String filePaths = (String) context.get("filePath");
         String [] filePathsArray = filePaths.split(",");
-
+        System.out.println("->File filePaths = " + filePaths);
         System.out.println("->File filePathsArray = " + filePathsArray);
 
         //创建产品

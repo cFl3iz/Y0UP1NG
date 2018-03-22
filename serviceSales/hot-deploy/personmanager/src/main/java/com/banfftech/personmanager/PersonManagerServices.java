@@ -832,9 +832,9 @@ public class PersonManagerServices {
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
+        String tel = (String) request.getParameter("tel");
 
-
-         String partyId = (String) partyIdentification.get("partyId");
+        String partyId = (String) partyIdentification.get("partyId");
         String productId = (String) request.getParameter("productId");
         String description = (String) request.getParameter("description");
         String productName = (String) request.getParameter("productName");
@@ -2611,7 +2611,10 @@ public class PersonManagerServices {
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
         // Scope Param
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
         // contentId
         String contentId = (String) context.get("contentId");
         String productId = (String) context.get("productId");
@@ -2632,7 +2635,7 @@ public class PersonManagerServices {
 
             // Update Content
             try {
-                Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", userLogin, "contentId", contentId,
+                Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", admin, "contentId", contentId,
                         "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", "ADDITIONAL_OTHER",
                         "productId", productId);
 

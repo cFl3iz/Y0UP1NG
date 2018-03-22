@@ -349,6 +349,7 @@ public class WeChatOrderQueryServices {
                     fieldSet = new HashSet<String>();
                     fieldSet.add("drObjectInfo");
                     fieldSet.add("productId");
+                    fieldSet.add("contentId");
                     EntityCondition findConditions3 = EntityCondition
                             .makeCondition("productId", EntityOperator.EQUALS,(String)gv.get("productId") );
                     List<GenericValue> pictures =  delegator.findList("ProductContentAndInfo",

@@ -716,7 +716,7 @@
                    optional="true"/>
     </service>
 
-
+    <!-- removeResourcePicture -->
     <service name="removeResourcePicture" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="removeResourcePicture" auth="false">

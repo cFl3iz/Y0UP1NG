@@ -38,7 +38,7 @@
     <!-- 更新资源信息 -->
     <request-map uri="updateWeChatResource">
         <security https="false" auth="false"/>
-        <event type="service" invoke="queryMyResourceOrderFromWeChat"  />
+        <event type="service" invoke="updateWeChatResource"  />
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

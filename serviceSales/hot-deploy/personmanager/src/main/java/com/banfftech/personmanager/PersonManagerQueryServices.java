@@ -1492,12 +1492,17 @@ public class PersonManagerQueryServices {
         fieldSet.add("postalCode");
         fieldSet.add("toName");
         fieldSet.add("comments");
-        EntityCondition findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+        EntityCondition findConditions = EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId));
+
+        EntityCondition  findConditions2 = EntityCondition.makeCondition("thruDate", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
+
+
+    EntityConditionList<EntityCondition> listConditions = EntityCondition
+            .makeCondition(findConditions, findConditions2);
 
         //Query My Resource
         List<GenericValue> queryAddressList = delegator.findList("PartyAndPostalAddress",
-                findConditions, fieldSet,
+                listConditions, fieldSet,
                 UtilMisc.toList("-fromDate"), null, false);
 
         resultMap.put("postalAddress", queryAddressList);

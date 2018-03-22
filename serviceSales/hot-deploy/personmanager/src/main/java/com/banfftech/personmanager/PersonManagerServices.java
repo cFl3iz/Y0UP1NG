@@ -2870,7 +2870,7 @@ public class PersonManagerServices {
         String nationalCode = (String) context.get("nationalCode");
         String telNumber = (String) context.get("telNumber");
         //没有给订单号的情况下只是增加地址
-        if(null==orderId){
+        if(null==orderId || orderId.trim().equals("")){
             // 货运目的地址
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",

@@ -935,8 +935,8 @@ public class PersonManagerServices {
             for (int i = 0; i < filePathsArray.length; i++) {
                 System.out.println("->File Path = " + filePathsArray[i]);
                     //说明首图被删除了
-                    if(findProduct.get("detailImageUrl") == null || (findProduct.get("detailImageUrl")+"").trim().equals("") || findProduct.get("detailImageUrl")+"".length() < 40 ){
-                    System.out.println("detaillength = " + findProduct.get("detailImageUrl")+"".length());
+                    if(findProduct.get("detailImageUrl") == null || (findProduct.get("detailImageUrl")+"").trim().equals("") || (findProduct.get("detailImageUrl")+"").length() < 40 ){
+                    System.out.println("detaillength = " + (findProduct.get("detailImageUrl")+"").length());
                     if (i == 0) {
                         updateProduct.put("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
                         updateProduct.put("detailImageUrl", "http://" + filePathsArray[i]);

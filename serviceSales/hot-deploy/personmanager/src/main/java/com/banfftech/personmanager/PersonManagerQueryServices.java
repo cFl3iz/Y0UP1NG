@@ -1494,7 +1494,7 @@ public class PersonManagerQueryServices {
         fieldSet.add("comments");
         EntityCondition findConditions = EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId));
 
-        EntityCondition  findConditions2 = EntityCondition.makeCondition("thruDate", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
+        EntityCondition  findConditions2 = EntityCondition.makeCondition("thruDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
 
 
     EntityConditionList<EntityCondition> listConditions = EntityCondition

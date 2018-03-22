@@ -2726,6 +2726,9 @@ public class PersonManagerServices {
         //推送给微信用户
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+        String productId = (String) orderItem.get("productId");
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
 
         if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
@@ -2753,8 +2756,14 @@ public class PersonManagerServices {
             pushWeChatMessageInfoMap.put("openId", openId);
 
             pushWeChatMessageInfoMap.put("orderId", orderId);
+            if (null != sinceTheSend && sinceTheSend.equals("1")) {
+                //自配送
+                pushWeChatMessageInfoMap.put("messageInfo","您购买的"+ product.get("productName")+"我发货了," + "由我亲自给您配送!");
 
-            pushWeChatMessageInfoMap.put("messageInfo", "物流公司:" + name + "物流单号:" + code);
+            }else{
+                pushWeChatMessageInfoMap.put("messageInfo", "您购买的"+ product.get("productName")+",我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+            }
+
 
 
             GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", orderCust.get("partyId"), "enabled", "Y").queryFirst();
@@ -2785,14 +2794,20 @@ public class PersonManagerServices {
         }
 
 
-        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
 
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
-        createMessageLogMap.put("message", "hi~ 我发货了" + ",物流公司是" + name + "!物流单号:" + code);
 
+
+        if (null != sinceTheSend && sinceTheSend.equals("1")) {
+            //自配送
+            createMessageLogMap.put("message","您购买的"+ product.get("productName")+"我发货了," + "由我亲自给您配送!");
+
+        }else{
+            createMessageLogMap.put("message", "您购买的"+ product.get("productName")+",我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+        }
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
         createMessageLogMap.put("partyIdTo", orderCust.get("partyId"));

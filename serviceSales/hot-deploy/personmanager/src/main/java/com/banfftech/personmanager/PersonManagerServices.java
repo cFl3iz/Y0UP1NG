@@ -2758,10 +2758,10 @@ public class PersonManagerServices {
             pushWeChatMessageInfoMap.put("orderId", orderId);
             if (null != sinceTheSend && sinceTheSend.equals("1")) {
                 //自配送
-                pushWeChatMessageInfoMap.put("messageInfo","您购买的"+ product.get("productName")+"我发货了," + "由我亲自给您配送!");
+                pushWeChatMessageInfoMap.put("messageInfo","您购买的("+ product.get("productName")+")我发货了," + "由我亲自给您配送!");
 
             }else{
-                pushWeChatMessageInfoMap.put("messageInfo", "您购买的"+ product.get("productName")+",我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+                pushWeChatMessageInfoMap.put("messageInfo", "您购买的("+ product.get("productName")+")我已发货" + ",物流公司是" + name + "。物流单号:" + code);
             }
 
 
@@ -2803,10 +2803,10 @@ public class PersonManagerServices {
 
         if (null != sinceTheSend && sinceTheSend.equals("1")) {
             //自配送
-            createMessageLogMap.put("message","您购买的"+ product.get("productName")+"我发货了," + "由我亲自给您配送!");
+            createMessageLogMap.put("message","您购买的("+ product.get("productName")+")我发货了," + "由我亲自给您配送!");
 
         }else{
-            createMessageLogMap.put("message", "您购买的"+ product.get("productName")+",我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+            createMessageLogMap.put("message", "您购买的("+ product.get("productName")+")我已发货" + ",物流公司是" + name + "。物流单号:" + code);
         }
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
@@ -5246,6 +5246,7 @@ public class PersonManagerServices {
             dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
         }
 
+        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         //TODO 这个推送买家的逻辑先不用了 Query   Address
 //        Set<String> fieldSet = new HashSet<String>();
@@ -5285,7 +5286,7 @@ public class PersonManagerServices {
                 type = "JPUSH_ANDROID";
             }
             try {
-                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", maiJiaName + "购买了您的产品!点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", orderId));
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", maiJiaName + "购买"+amount.toString()+"件("+sQueryProduct.get("productName")+")点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", orderId));
             } catch (GenericServiceException e1) {
                 Debug.logError(e1.getMessage(), module);
 //                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
@@ -5294,13 +5295,12 @@ public class PersonManagerServices {
         }
 
 
-        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
         createMessageLogMap.put("partyIdFrom", partyId);
 
-        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件" + sQueryProduct.get("productName"));
+        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件(" + sQueryProduct.get("productName")+")。");
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 

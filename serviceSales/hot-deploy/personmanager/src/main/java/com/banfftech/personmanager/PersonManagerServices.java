@@ -935,7 +935,7 @@ public class PersonManagerServices {
             for (int i = 0; i < filePathsArray.length; i++) {
                 System.out.println("->File Path = " + filePathsArray[i]);
                     //说明首图被删除了
-                    if(findProduct.get("smallImageUrl")==null ||findProduct.get("smallImageUrl")+"".trim().equals("")){
+                    if(findProduct.get("smallImageUrl") == null || (findProduct.get("smallImageUrl")+"").trim().equals("")){
 
 
                     if (i == 0) {

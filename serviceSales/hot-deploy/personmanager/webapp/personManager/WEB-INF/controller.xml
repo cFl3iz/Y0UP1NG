@@ -383,6 +383,13 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <!-- 删除一个联系方式 -->
+    <request-map uri="doDeleteContactMech">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="deletePartyContactMech"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- add Product Content -->

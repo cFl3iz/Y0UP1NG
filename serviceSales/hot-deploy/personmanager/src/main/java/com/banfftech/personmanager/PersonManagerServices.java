@@ -828,7 +828,7 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
 
-        String unioId = (String) request.getParameter.get("unioId");
+        String unioId = (String) request.getParameter("unioId");
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 
@@ -925,7 +925,7 @@ public class PersonManagerServices {
         if (!ServiceUtil.isSuccess(createInventoryItemDetailOutMap)) {
             return "error";
         }
- 
+
 
         return "success";
     }

@@ -5275,24 +5275,7 @@ public class PersonManagerServices {
         dispatcher.runSync("pushMessage", UtilMisc.toMap("userLogin", admin, "partyIdTo", partyId, "partyIdFrom", payToPartyId, "text", "下单成功,资源主会联系您!", "objectId", productId));
 
 
-        //推卖家
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
 
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            String type = "JPUSH_IOS";
-            if (partyIdentificationTypeId != null && partyIdentificationTypeId.toLowerCase().indexOf("android") > 0) {
-                type = "JPUSH_ANDROID";
-            }
-            try {
-                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", maiJiaName + "购买"+amount.toString()+"件("+sQueryProduct.get("productName")+")点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", orderId));
-            } catch (GenericServiceException e1) {
-                Debug.logError(e1.getMessage(), module);
-//                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "JPushError", locale));
-            }
-
-        }
 
 
 
@@ -5326,6 +5309,40 @@ public class PersonManagerServices {
                 UtilMisc.toMap("userLogin", admin,
                         "orderId", orderId,
                         "statusId", PeConstant.ORDER_APPROVED_STATUS_ID));
+
+
+        // check inventory quantity
+        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                "facilityId", originFacilityId, "productId", productId));
+        if (!ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            return getInventoryAvailableByFacilityMap;
+        }
+        BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+        BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+        //推卖家
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            String type = "JPUSH_IOS";
+            if (partyIdentificationTypeId != null && partyIdentificationTypeId.toLowerCase().indexOf("android") > 0) {
+                type = "JPUSH_ANDROID";
+            }
+            try {
+                dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content", maiJiaName + "购买"+amount.toString()+"件("+sQueryProduct.get("productName")+")点我查看!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", orderId));
+                if (availableToPromiseTotal.compareTo(BigDecimal.ZERO) ==  0) {
+                    // 没库存了
+                    dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "productId", productId, "message", "order", "content",  "库存清空提醒:资源("+sQueryProduct.get("productName")+"),您承诺的库存"+quantityOnHandTotal+"件已售空。", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", type, "objectId", orderId));
+                }
+            } catch (GenericServiceException e1) {
+                Debug.logError(e1.getMessage(), module);
+            }
+
+        }
+
 
         return resultMap;
     }

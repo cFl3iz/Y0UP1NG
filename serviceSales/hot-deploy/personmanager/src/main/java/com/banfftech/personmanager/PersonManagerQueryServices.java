@@ -3730,7 +3730,7 @@ public class PersonManagerQueryServices {
      * @return
      * @throws GenericEntityException
      */
-    public static Map<String, Object> queryPersonInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
+    public static Map<String, Object> queryPersonInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException,GenericServiceException {
 
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -3766,8 +3766,11 @@ public class PersonManagerQueryServices {
         Map<String,Object> postalInfo = dispatcher.runSync("queryPostalAddress",UtilMisc.toMap(
                 "userLogin",userLogin
         ));
-        inputMap.put("postalInfo", postalInfo.get("postalAddress"));
-        
+        if(null!=postalInfo.get("postalAddress")){
+            inputMap.put("postalInfo", postalInfo.get("postalAddress"));
+        }
+
+
 
         //获取电话号码
 //        GenericValue telecomNumber = EntityUtil.getFirst(

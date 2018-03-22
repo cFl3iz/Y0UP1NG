@@ -838,10 +838,8 @@ public class PersonManagerServices {
         String productId = (String) request.getParameter("productId");
         String description = (String) request.getParameter("description");
         String productName = (String) request.getParameter("productName");
-        String productPriceStr = (String) request.getParameter("productPrice");
-
-
-        String quantityTotaStr = (String) request.getParameter("quantityTotal");
+        String productPriceStr = (String) request.getParameter("price");
+        String quantityTotaStr = (String) request.getParameter("kuCun");
 
         BigDecimal quantity = new BigDecimal(quantityTotaStr);
         BigDecimal price = new BigDecimal(productPriceStr);

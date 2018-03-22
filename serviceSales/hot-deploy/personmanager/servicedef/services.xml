@@ -362,7 +362,7 @@
                    optional="true"/>
     </service>
 
-    
+
 
     <!-- 更新资源 -->
     <service name="updateResourceInfo" engine="java"

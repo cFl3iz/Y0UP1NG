@@ -38,7 +38,7 @@
     <!-- 更新资源信息 -->
     <request-map uri="updateWeChatResource">
         <security https="false" auth="false"/>
-        <event type="service" invoke="updateWeChatResource"  />
+        <event type="java" path="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updateWeChatResource"></event>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

@@ -362,20 +362,7 @@
                    optional="true"/>
     </service>
 
-    <service name="updateWeChatResource" engine="java"
-             location="main.java.com.banfftech.personmanager.PersonManagerServices"
-             invoke="updateWeChatResource" auth="false">
-        <description>updateWeChatResource</description>
-        <attribute name="productId" type="String" mode="IN" optional="false"/>
-        <attribute name="unioId" type="String" mode="IN" optional="false"/>
-        <attribute name="description" type="String" mode="IN" optional="true"/>
-        <attribute name="productName" type="String" mode="IN" optional="true"/>
-        <attribute name="productPrice" type="String" mode="IN" optional="true"/>
-        <attribute name="quantityTotal" type="String" mode="IN" optional="true"/>
-        <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true"/>
-    </service>
-
+    
 
     <!-- 更新资源 -->
     <service name="updateResourceInfo" engine="java"

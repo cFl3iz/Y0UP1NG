@@ -2858,6 +2858,9 @@ public class PersonManagerServices {
 
         String tarjeta = (String) context.get("tarjeta");
         String orderId = (String) context.get("orderId");
+
+        String partyId = (String) userLogin.get("partyId");
+
         String userName = (String) context.get("userName");
         String postalCode = (String) context.get("postalCode");
         String provinceName = (String) context.get("provinceName");
@@ -2866,11 +2869,21 @@ public class PersonManagerServices {
         String detailInfo = (String) context.get("detailInfo");
         String nationalCode = (String) context.get("nationalCode");
         String telNumber = (String) context.get("telNumber");
+        //没有给订单号的情况下只是增加地址
+        if(null==orderId){
+            // 货运目的地址
+            String contactMechPurposeTypeId = "SHIPPING_LOCATION";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
+            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                return createPartyPostalAddressOutMap;
+            }
+            return resultMap;
+        }
 
         resultMap.put("orderId", orderId);
-
-        String partyId = (String) userLogin.get("partyId");
-
         resultMap.put("tarjeta", tarjeta);
 
 

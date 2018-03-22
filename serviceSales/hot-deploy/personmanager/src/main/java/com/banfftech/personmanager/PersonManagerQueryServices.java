@@ -3763,23 +3763,32 @@ public class PersonManagerQueryServices {
         } else {
             inputMap.put("gender", "NA");
         }
+        Map<String,Object> postalInfo = dispatcher.runSync("queryPostalAddress",UtilMisc.toMap(
+                "userLogin",userLogin
+        ));
+        inputMap.put("postalInfo", postalInfo.get("postalAddress"));
+        
 
         //获取电话号码
-        GenericValue telecomNumber = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
-        if (UtilValidate.isNotEmpty(telecomNumber)) {
-            inputMap.put("contactNumber", telecomNumber.getString("contactNumber"));
-        }
-        //获取email
-        GenericValue emailAddress = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("EmailAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS")).queryList());
-        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
-        //获取地址
-        GenericValue postalAddress = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
-        if (UtilValidate.isNotEmpty(postalAddress))
-            inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address1"));
-        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
+//        GenericValue telecomNumber = EntityUtil.getFirst(
+//                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+//        if (UtilValidate.isNotEmpty(telecomNumber)) {
+//            inputMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+//        }
+
+
+
+
+//        //获取email
+//        GenericValue emailAddress = EntityUtil.getFirst(
+//                EntityQuery.use(delegator).from("EmailAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS")).queryList());
+//        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
+//        //获取地址
+//        GenericValue postalAddress = EntityUtil.getFirst(
+//                EntityQuery.use(delegator).from("PostalAddressAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "SHIPPING_LOCATION", "contactMechTypeId", "POSTAL_ADDRESS")).queryList());
+//        if (UtilValidate.isNotEmpty(postalAddress))
+//            inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " " + postalAddress.get("address1"));
+//        if (UtilValidate.isNotEmpty(emailAddress)) inputMap.put("email", emailAddress.getString("infoString"));
 
 
         List<GenericValue> contentsList =

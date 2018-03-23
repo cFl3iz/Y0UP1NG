@@ -368,6 +368,30 @@ public class WeChatOrderQueryServices {
 
 
         resultMap.put("productList", resourceMapList);
+
+        resultMap.put("nowPartyId", partyId);
+
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+        //有效时间
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", userLogin.get("userLoginId"));
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        String token = signer.sign(claims);
+        resultMap.put("tarjeta", token);
+        
+
 //        resultMap.put("productCategoryId", productCategoryId);
 
 

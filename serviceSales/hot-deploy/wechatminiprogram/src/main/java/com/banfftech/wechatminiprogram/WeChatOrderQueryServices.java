@@ -4,6 +4,10 @@ import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.collections.PagedList;
+import com.auth0.jwt.JWTExpiredException;
+import com.auth0.jwt.JWTSigner;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifyException;
 import org.apache.ofbiz.base.util.Debug;
 import java.sql.Timestamp;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -19,6 +23,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
 import org.apache.ofbiz.entity.condition.EntityConditionList;
@@ -390,7 +395,7 @@ public class WeChatOrderQueryServices {
         claims.put("iat", iat);
         String token = signer.sign(claims);
         resultMap.put("tarjeta", token);
-        
+
 
 //        resultMap.put("productCategoryId", productCategoryId);
 

@@ -2912,9 +2912,16 @@ public class PersonManagerQueryServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
 
+
+
+
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
+
+
+        System.out.println("openId="+openId);
+        System.out.println("partyId="+partyId);
 
         resultMap.put("nowPartyId",partyId);
 

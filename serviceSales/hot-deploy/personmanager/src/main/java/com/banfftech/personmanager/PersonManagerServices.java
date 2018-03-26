@@ -2519,10 +2519,7 @@ public class PersonManagerServices {
         Locale locale = (Locale) context.get("locale");
 
 
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        // Admin Do Run Service
-        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 

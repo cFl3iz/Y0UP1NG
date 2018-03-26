@@ -2288,7 +2288,8 @@ public class PersonManagerServices {
                         return "error";
                     }
                 }
-                OrderChangeHelper.approveOrder(dispatcher, userLogin, orderId);
+                //不用你再批准了谢谢
+//                OrderChangeHelper.approveOrder(dispatcher, userLogin, orderId);
 
                 //谁让你返回的
                 //return "success";

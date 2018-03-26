@@ -2350,6 +2350,10 @@ public class PersonManagerServices {
                     // create a payment record
                     Map<String, Object> results = null;
                     try {
+                        System.out.println("paymentRefNum="+paymentReference);
+                        System.out.println("paymentPreference.orderPaymentPreferenceId="+paymentPreference.get("orderPaymentPreferenceId"));
+                        System.out.println("paymentPreference.orderPaymentPreferenceId="+paymentPreference.get("orderPaymentPreferenceId"));
+                        System.out.println("paymentFromId="+placingCustomer.getString("partyId"));
                         results = dispatcher.runSync("createPaymentFromPreference", UtilMisc.toMap("userLogin", userLogin,
                                 "orderPaymentPreferenceId", paymentPreference.get("orderPaymentPreferenceId"), "paymentRefNum", paymentReference,
                                 "paymentFromId", placingCustomer.getString("partyId"), "comments", "Payment received offline and manually entered."));

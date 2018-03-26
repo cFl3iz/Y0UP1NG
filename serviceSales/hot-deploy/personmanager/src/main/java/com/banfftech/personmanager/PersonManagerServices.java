@@ -2163,11 +2163,11 @@ public class PersonManagerServices {
         //应用收款支付.....
         receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
-        Map<String, Object> updateOrderStatusInMap = new HashMap<String, Object>();
-        updateOrderStatusInMap.put("userLogin", admin);
-        updateOrderStatusInMap.put("orderId", orderId);
-        updateOrderStatusInMap.put("statusId", PeConstant.ORDER_APPROVED_STATUS_ID);
-        Map<String, Object> updateOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", updateOrderStatusInMap);
+//        Map<String, Object> updateOrderStatusInMap = new HashMap<String, Object>();
+//        updateOrderStatusInMap.put("userLogin", admin);
+//        updateOrderStatusInMap.put("orderId", orderId);
+//        updateOrderStatusInMap.put("statusId", PeConstant.ORDER_APPROVED_STATUS_ID);
+//        Map<String, Object> updateOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", updateOrderStatusInMap);
 
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         //推送告知买家

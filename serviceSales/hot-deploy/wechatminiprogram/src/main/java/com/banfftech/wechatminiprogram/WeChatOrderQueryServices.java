@@ -278,6 +278,12 @@ public class WeChatOrderQueryServices {
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
         String unioId = (String) context.get("partyId");
+        String isDiscontinuation   = (String) context.get("isDiscontinuation");
+        // 0:查询未下架的正常资源。   1:查已下架的资源  (默认0)
+        if (UtilValidate.isEmpty(isDiscontinuation)) {
+            isDiscontinuation = "0";
+        }
+
 
 //        System.out.println("*OPENID = " + openId);
 //
@@ -323,9 +329,13 @@ public class WeChatOrderQueryServices {
             //findConditions
             EntityCondition findConditions = EntityCondition
                     .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
-            EntityCondition findConditions2 = EntityCondition
-                    .makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+            EntityCondition findConditions2 =null;
 
+            if(isDiscontinuation.equals("0")){
+                findConditions2 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+            }else{
+                findConditions2 = EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
+            }
 
 
             EntityConditionList<EntityCondition> listConditions = EntityCondition

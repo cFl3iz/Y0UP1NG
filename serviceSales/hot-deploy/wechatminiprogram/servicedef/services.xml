@@ -98,8 +98,8 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryMyProduct" auth="false">
         <description>queryMyProduct</description>
-        <attribute name="partyId" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="isDiscontinuation" type="String" mode="IN"  optional="true"/>
         <attribute name="nowPartyId" type="String" mode="OUT"   optional="true"/>
         <attribute name="tarjeta" type="String" mode="OUT"   optional="true"/>
         <attribute name="productList" type="List" mode="OUT"

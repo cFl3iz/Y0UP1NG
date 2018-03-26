@@ -2037,8 +2037,15 @@ public class PersonManagerServices {
 
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) context.get("partyId");
+        if(null != partyId ){
+            //小程序确认收款
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+        }else{
+            partyId = (String) userLogin.get("partyId");
+        }
 
-        String partyId = (String) userLogin.get("partyId");
+
 
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));

@@ -688,8 +688,9 @@
              invoke="orderPaymentReceived" auth="false">
         <description>orderPaymentReceived</description>
 
-        <attribute name="orderId" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN"   optional="true"/>
+        <!-- 如果传过来partyId,说明是小程序调用的收款 -->
+        <attribute name="partyId" type="String" mode="IN"   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

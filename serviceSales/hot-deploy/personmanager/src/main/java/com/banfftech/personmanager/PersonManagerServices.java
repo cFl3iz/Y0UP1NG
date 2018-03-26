@@ -5311,8 +5311,8 @@ public class PersonManagerServices {
 
 
         //最关键的意向客户的角色
-        GenericValue placRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER", "productId", productId).queryFirst();
-        if (null == placRole) {
+        //GenericValue placRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER", "productId", productId).queryFirst();
+
 
             Map<String, Object> addPLACING_CUSTOMERInMap = new HashMap<String, Object>();
             addPLACING_CUSTOMERInMap.put("userLogin", userLogin);
@@ -5324,8 +5324,6 @@ public class PersonManagerServices {
                 return addPLACING_CUSTOMEROutMap;
             }
 
-
-        }
 
         GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();

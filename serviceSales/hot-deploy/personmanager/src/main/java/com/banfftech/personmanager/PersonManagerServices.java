@@ -2422,8 +2422,8 @@ public class PersonManagerServices {
         }
 
         if (okayToApprove) {
-            // update the status of the order and items
-            OrderChangeHelper.approveOrder(dispatcher, userLogin, orderId);
+            // update the status of the order and items 不用再批准了谢谢
+           // OrderChangeHelper.approveOrder(dispatcher, userLogin, orderId);
         }
 
         return "success";

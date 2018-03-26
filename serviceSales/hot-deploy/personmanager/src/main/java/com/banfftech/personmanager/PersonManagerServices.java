@@ -2734,7 +2734,14 @@ public class PersonManagerServices {
 
         String orderId = (String) context.get("orderId");
 
-        String partyId = (String) userLogin.get("partyId");
+        String partyId = (String) context.get("partyId");
+        if(null != partyId ){
+            //小程序确认收款
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+        }else{
+            partyId = (String) userLogin.get("partyId");
+        }
+
 
         String carrierCode = (String) context.get("carrierCode");
 
@@ -2781,7 +2788,7 @@ public class PersonManagerServices {
 
             if (stautsId.equals("ORDER_APPROVED")) {
                 Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "userLogin", admin, "orderId", orderId, "statusId", "ORDER_SENT",
                         "changeReason", "订单发送", "setItemStatus", "Y"));
 
                 if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
@@ -2789,14 +2796,14 @@ public class PersonManagerServices {
                 }
             } else {
                 Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_APPROVED",
+                        "userLogin", admin, "orderId", orderId, "statusId", "ORDER_APPROVED",
                         "changeReason", "订单批准", "setItemStatus", "Y"));
 
                 if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {
                     return changeOrderStatusOutMap;
                 }
                 changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus", UtilMisc.toMap(
-                        "userLogin", userLogin, "orderId", orderId, "statusId", "ORDER_SENT",
+                        "userLogin", admin, "orderId", orderId, "statusId", "ORDER_SENT",
                         "changeReason", "订单发送", "setItemStatus", "Y"));
 
                 if (!ServiceUtil.isSuccess(changeOrderStatusOutMap)) {

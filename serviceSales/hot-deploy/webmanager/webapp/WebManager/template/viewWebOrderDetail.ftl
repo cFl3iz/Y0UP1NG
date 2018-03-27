@@ -318,6 +318,7 @@
                     if (flag) {
                         dialog.notify('${uiLabel.SettingSuccess}', 2000, function () {
                             $("#J_Notify").attr({"disabled": "disabled"});
+                            $("#J_Notify_other").attr({"disabled": "disabled"});
                             $("#createPersonPartyPostalAddressForm").submit();
                         });
                     } else {

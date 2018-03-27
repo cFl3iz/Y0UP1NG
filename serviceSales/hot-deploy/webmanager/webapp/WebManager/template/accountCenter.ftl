@@ -1,14 +1,16 @@
 <!-- 此后所有验证授权因用Tarjeta保存 -->
 <style>
-    p a.fuckSelect{
+    p a.fuckSelect {
         border: 1px solid #f23030;
         color: #232326;
     }
-    .pro-buy-style p a.selected,.pro-color p a.selected,.pro-size p a.selected,.pro-spec p a.selected {
+
+    .pro-buy-style p a.selected, .pro-color p a.selected, .pro-size p a.selected, .pro-spec p a.selected {
         border: 1px solid #bfbfbf;
         color: #232326;
     }
-    .pro-buy-style p a:active,.pro-color p a:active,.pro-size p a:active,.pro-spec p a:active {
+
+    .pro-buy-style p a:active, .pro-color p a:active, .pro-size p a:active, .pro-spec p a:active {
 
     }
 </style>
@@ -21,66 +23,67 @@
 
 <script>
 
-function selectFeature(e){
-    var  selectObj = e;
-    var featureValue = $(selectObj).html();
-    var title = $(selectObj).attr("title");
-    var featureId = $(selectObj).attr("id");
-    console.log(e);
-    $('a').each(
-            function(index,element){
-                console.log(index);
-                var rowId  = $(element).attr("id");
-                var rowValue = $(element).html();
-                if(rowId != null && rowId!='undefined'&& rowId != undefined ){
-                    if(featureId == rowId && featureValue!=rowValue){
-                        $(element).attr("class","a-item J_ping");
-                        $(element).attr("title","noselected");
+    function selectFeature(e) {
+        var selectObj = e;
+        var featureValue = $(selectObj).html();
+        var title = $(selectObj).attr("title");
+        var featureId = $(selectObj).attr("id");
+        console.log(e);
+        $('a').each(
+                function (index, element) {
+                    console.log(index);
+                    var rowId = $(element).attr("id");
+                    var rowValue = $(element).html();
+                    if (rowId != null && rowId != 'undefined' && rowId != undefined) {
+                        if (featureId == rowId && featureValue != rowValue) {
+                            $(element).attr("class", "a-item J_ping");
+                            $(element).attr("title", "noselected");
+                        }
+                        if (featureId == rowId && featureValue == rowValue) {
+                            $(element).attr("title", "selected");
+                            $(element).attr("class", "fuckSelect");
+                            $(element).addClass("fuckSelect");
+                        }
                     }
-                    if(featureId == rowId && featureValue==rowValue){
-                        $(element).attr("title","selected");
-                        $(element).attr("class","fuckSelect");
-                        $(element).addClass("fuckSelect");
-                    }
+
                 }
+        );
 
-            }
-    );
-
-}
+    }
     //弹出隐藏层
-    function ShowDiv(show_div,bg_div){
-        document.getElementById(show_div).style.display='block';
-        document.getElementById(bg_div).style.display='block' ;
+    function ShowDiv(show_div, bg_div) {
+        document.getElementById(show_div).style.display = 'block';
+        document.getElementById(bg_div).style.display = 'block';
         var bgdiv = document.getElementById(bg_div);
         bgdiv.style.width = document.body.scrollWidth;
         // bgdiv.style.height = $(document).height();
-        $("#"+bg_div).height($(document).height());
-    };
+        $("#" + bg_div).height($(document).height());
+    }
+    ;
     //关闭弹出层
-    function CloseDiv(show_div,bg_div)
-    {
-        document.getElementById(show_div).style.display='none';
-        document.getElementById(bg_div).style.display='none';
-    };
-function viewQrCode(path) {
-    var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
-    location.href = jumpurl;
-}
+    function CloseDiv(show_div, bg_div) {
+        document.getElementById(show_div).style.display = 'none';
+        document.getElementById(bg_div).style.display = 'none';
+    }
+    ;
+    function viewQrCode(path) {
+        var jumpurl = "viewContactQrCode?qrCodePath=" + path + "&title=卖家的收款码";
+        location.href = jumpurl;
+    }
 
 
-function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
+    function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
 
-    if (orderStatusCode === "0") {
-        var flag = confirm("是否立即推送提醒?");
-        if (flag) {
-            alert("已为您提醒卖家!");
+        if (orderStatusCode === "0") {
+            var flag = confirm("是否立即推送提醒?");
+            if (flag) {
+                alert("已为您提醒卖家!");
+            }
+        }
+        if (orderStatusCode === "1") {
+            location.href = 'myOrderDetail?orderId=' + orderId + '&tarjeta=' + tarjeta;
         }
     }
-    if (orderStatusCode === "1") {
-        location.href = 'myOrderDetail?orderId=' + orderId + '&tarjeta=' + tarjeta;
-    }
-}
     function checkSubscribe() {
         var flag = false;
         var subscribe = getCookie("subscribe");
@@ -136,8 +139,8 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
             async: false,
             success: function (data) {
                 var validate = data.validate;
-                var partyId  = data.partyId;
-                var nowPersonName  = data.nowPersonName;
+                var partyId = data.partyId;
+                var nowPersonName = data.nowPersonName;
                 if (validate === "true") {
                     var newTarjeta = data.tarjeta;
                     $("#tarjeta").val(tarjeta);
@@ -232,7 +235,6 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
     }
 
 
-
     $(
             function () {
 
@@ -249,7 +251,6 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
                 if (!validateTarjeta(tarjeta)) {
                     weChatOauthLogin(fromurl);
                 }
-
 
 
                 //如果Cookie里没有Tarjeta 且PageContext里也没。
@@ -312,55 +313,59 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
 //                    });
 
 
-
                     var partyId = $("#partyId").val();
-                    if (partyId == null || partyId == undefined || partyId == '' || partyId ==='' || partyId =='undefined') {
+                    if (partyId == null || partyId == undefined || partyId == '' || partyId === '' || partyId == 'undefined') {
                         location.reload();
                     }
                     var productId = $("#productId").val();
                     //记录访客
                     var spm = $("#spm").val();
-                    doAddProductRole(partyId,productId,"VISITOR");
+                    doAddProductRole(partyId, productId, "VISITOR");
                     //记录资源主与当前访问人的联系关系
-                    var payToParty = ${(resourceDetail.payToPartyId)!};
-
-                    doAddContactRelation(partyId,payToParty);
-                    if(spm != null && spm != ""){
-                        doAddPartyRelation(partyId,spm);
-                       // addDistributingLeaflets(productId,partyId,spm,payToParty);
-                    }
-
-                    receivedInformation(partyId,spm,productId,payToParty);
-
-                    var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/"+ partyId +"/${(payToPartyId)!}";
-                    var title = $("#productName").val();
-                    var imgUrl = $("#imgUrl").val();
-
-                    var nowPersonName = $("#nowPersonName").val();
-
-                    nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
+                    if (${(resourceDetail.payToPartyId)!} !=
+                    null && ${(resourceDetail.payToPartyId)!}!= ""
+                    )
+                    {
 
 
+                        var payToParty = ${(resourceDetail.payToPartyId)!};
 
-                    wx.onMenuShareAppMessage({
-                        title:title, // 分享标题
-                        desc: nowPersonName, // 分享描述
-                        link: linkUrl, // 分享链接
-                        imgUrl:imgUrl, // 分享图标
-                        type: '', // 分享类型,music、video或link，不填默认为link
-                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                        success: function () {
-                            //alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
-                            doAddProductRole(partyId,productId,"PARTNER");
-                            shareInformation(partyId,productId,payToParty);
-// 用户确认分享后执行的回调函数
-                        },
-                        cancel: function () {
-                            alert("万万没想到,你居然取消了分享! 是不好意思了吗??");
-// 用户取消分享后执行的回调函数
+                        doAddContactRelation(partyId, payToParty);
+                        if (spm != null && spm != "") {
+                            doAddPartyRelation(partyId, spm);
+                            // addDistributingLeaflets(productId,partyId,spm,payToParty);
                         }
-                    });
 
+                        receivedInformation(partyId, spm, productId, payToParty);
+
+                        var linkUrl = "https://www.yo-pe.com/productjump/${(productId)!}/" + partyId + "/${(payToPartyId)!}";
+                        var title = $("#productName").val();
+                        var imgUrl = $("#imgUrl").val();
+
+                        var nowPersonName = $("#nowPersonName").val();
+
+                        nowPersonName = "此物绝非寻常!,来自" + nowPersonName + "的吐血推荐... ";
+
+
+                        wx.onMenuShareAppMessage({
+                            title: title, // 分享标题
+                            desc: nowPersonName, // 分享描述
+                            link: linkUrl, // 分享链接
+                            imgUrl: imgUrl, // 分享图标
+                            type: '', // 分享类型,music、video或link，不填默认为link
+                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                            success: function () {
+                                //alert("我们知道你分享给了谁,卖家也会知道新客户是通过 '你的分享' 联系他的。");
+                                doAddProductRole(partyId, productId, "PARTNER");
+                                shareInformation(partyId, productId, payToParty);
+// 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                alert("万万没想到,你居然取消了分享! 是不好意思了吗??");
+// 用户取消分享后执行的回调函数
+                            }
+                        });
+                    }
 
                     // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
                 });
@@ -372,49 +377,46 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
 //                });
 
 
-
-
             }
     );
 </script>
 
 
-
 <!-- Buy Product Model -->
 <script>
-    function buyProductModel(){
+    function buyProductModel() {
         $("#showboxmenu2").show();
         $("#showboxmenuspec2").show();
     }
 
 
-    function addDistributingLeaflets (productId,partyId,spm,payToParty){
+    function addDistributingLeaflets(productId, partyId, spm, payToParty) {
 
         var l = partyId.length;
         var blen = 0;
-        for(var i=0; i<l; i++) {
+        for (var i = 0; i < l; i++) {
             if ((partyId.charCodeAt(i) & 0xff00) != 0) {
-                blen ++;
+                blen++;
             }
-            blen ++;
+            blen++;
         }
 
         if (blen == 0) {
-         //   alert("partyId="+partyId+",blen="+blen+",spm="+spm+"重定向");
-            location.href = 'myStory?productId='+productId+"&spm="+spm;
+            //   alert("partyId="+partyId+",blen="+blen+",spm="+spm+"重定向");
+            location.href = 'myStory?productId=' + productId + "&spm=" + spm;
         }
         var url = "addDistributingLeaflets";
         var param = {
-            sellerPartyId:payToParty,
-            buyerPartyId:partyId,
-            workerPartyId:spm,
-            productId:productId
+            sellerPartyId: payToParty,
+            buyerPartyId: partyId,
+            workerPartyId: spm,
+            productId: productId
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -423,19 +425,19 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
             }
         });
     }
-    function doAddContactRelation (p,toP){
+    function doAddContactRelation(p, toP) {
         var url = "createPartyToPartyRelation";
 
         var param = {
-            partyIdFrom:p,
-            partyIdTo:toP,
-            relationShipType:'CONTACT_REL'
+            partyIdFrom: p,
+            partyIdTo: toP,
+            relationShipType: 'CONTACT_REL'
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -447,20 +449,20 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
     }
 
     //记录当前用户成为收信人
-    function receivedInformation(partyId,spm,productId,payToPartyId){
+    function receivedInformation(partyId, spm, productId, payToPartyId) {
         var url = "receivedInformation";
 
         var param = {
-            partyId:partyId,
-            spm:spm,
-            productId:productId,
-            payToPartyId:payToPartyId
+            partyId: partyId,
+            spm: spm,
+            productId: productId,
+            payToPartyId: payToPartyId
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -472,18 +474,18 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
     }
 
 
-    function shareInformation(partyId,productId,payToPartyId){
+    function shareInformation(partyId, productId, payToPartyId) {
         var url = "shareInformation";
         var param = {
-            partyId:partyId,
-            productId:productId,
-            payToPartyId:payToPartyId
+            partyId: partyId,
+            productId: productId,
+            payToPartyId: payToPartyId
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -495,20 +497,18 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
     }
 
 
-
-
-    function doAddPartyRelation(partyId,spm){
+    function doAddPartyRelation(partyId, spm) {
         var url = "doAddPartyRelation";
 
         var param = {
-            partyId:partyId,
-            spm:spm
+            partyId: partyId,
+            spm: spm
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -519,19 +519,19 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
 
     }
 
-    function doAddProductRole(partyId,productId,roleTypeId){
+    function doAddProductRole(partyId, productId, roleTypeId) {
         var url = "addProductRole";
 
         var param = {
-            partyId:partyId,
-            productId:productId,
-            roleTypeId:roleTypeId
+            partyId: partyId,
+            productId: productId,
+            roleTypeId: roleTypeId
         };
         $.ajax({
             type: 'POST',
             url: url,
             data: param,
-            async:false,
+            async: false,
             success: function (data) {
 
             },
@@ -543,18 +543,16 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
     }
 
 
-    function buyProduct(){
-
+    function buyProduct() {
 
 
         var amount = $("#cool").val();
 
         var confirmMessage = $("#confirmMessage").val();
 
-        var a=confirm(confirmMessage);
+        var a = confirm(confirmMessage);
 
-        if(a == true)
-        {
+        if (a == true && ${(resourceDetail.payToPartyId)!}!=null && ${(resourceDetail.payToPartyId)!}!="") {
             var tarjeta = $("#tarjeta").val();
             var payToParty = ${(resourceDetail.payToPartyId)!};
             var productId = ${(productId)!};
@@ -563,25 +561,25 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
             var url = "placeResourceOrder";
 
             var param = {
-                payToPartyId:payToParty,
-                productId:productId,
-                prodCatalogId:prodCatalogId,
-                productStoreId:productStoreId,
-                tarjeta:tarjeta,
-                amount:amount
+                payToPartyId: payToParty,
+                productId: productId,
+                prodCatalogId: prodCatalogId,
+                productStoreId: productStoreId,
+                tarjeta: tarjeta,
+                amount: amount
             };
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: param,
-                async:false,
+                async: false,
                 success: function (data) {
                     //   alert("code="+data.code);
-                    if(data.code === "200"){
+                    if (data.code === "200") {
                         var orderId = data.orderId;
-                        location.href = "viewWebOrderDetail?orderId="+orderId+"&tarjeta="+tarjeta;
+                        location.href = "viewWebOrderDetail?orderId=" + orderId + "&tarjeta=" + tarjeta;
                     }
-                    if(data.code === "500"){
+                    if (data.code === "500") {
                         alert("CODE-403:网络出现问题请刷新页面重试");
                     }
 
@@ -592,8 +590,7 @@ function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
             });
 
         }
-        else
-        {
+        else {
             return false;
         }
     }

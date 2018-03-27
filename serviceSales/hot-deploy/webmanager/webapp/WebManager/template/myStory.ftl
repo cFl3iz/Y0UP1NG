@@ -261,8 +261,11 @@
     }
 
     function selectAddress(productId){
-        var flag = checkSubscribe();
-        if (flag == true) {
+        //不关注也能买
+//        var flag = checkSubscribe();
+//        if (flag == true) { }else{
+//            ShowDiv('MyDiv','fade');
+//        }
         var payToPartyId = $("#payToPartyId").val();
         var partyId      = $("#partyId").val();
         if(payToPartyId === partyId){
@@ -327,9 +330,7 @@
         });
 
 
-        }else{
-            ShowDiv('MyDiv','fade');
-        }
+
     }
 
 
@@ -346,6 +347,7 @@
     }
 
     function contactMe() {
+        //不关注也能联系。
 //        var flag = checkSubscribe();
         if (1==1) {
 
@@ -371,6 +373,11 @@
             var jumpurl = "https://www.yo-pe.com/pejump/"+partyId+"/"+partyId+"111"+"/"+payToPartyId+"/"+productId+"/"+spm;
 
             var weChatContactQrCode = $("#weChatContactQrCode").val();
+
+            if(weChatContactQrCode==null || weChatContactQrCode ==""){
+                alert("卖家还未提供联系方式");
+                return false;
+            }
 
             //更换跳转地址到二维码
             jumpurl = "viewContactQrCode?qrCodePath="+weChatContactQrCode+"&title=加我微信吧";

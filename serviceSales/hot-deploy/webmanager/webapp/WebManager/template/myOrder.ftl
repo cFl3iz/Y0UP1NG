@@ -26,6 +26,17 @@
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <#if orderList?has_content>
 <script>
+    $(
+            function(){
+                var flag = checkSubscribe();
+                  if (flag == true) {
+
+                  }else{
+                      alert("关注公众号可以获得订单推送。");
+                    ShowDiv('MyDiv','fade');
+                }
+            }
+    );
     function viewQrCode(path) {
         var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
         location.href = jumpurl;
@@ -48,7 +59,6 @@
 <section class="g-flexview">
 
 
-    subscribe=${(subscribe)!}
 
     <section class="g-scrollview">
 

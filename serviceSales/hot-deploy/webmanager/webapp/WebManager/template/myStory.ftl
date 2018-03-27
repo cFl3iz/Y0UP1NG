@@ -262,7 +262,7 @@
 
     function selectAddress(productId){
         var subscribe = $("#subscribe").val();
-        alert("subscribe="+subscribe);
+//        alert("subscribe="+subscribe);
         //不关注也能买
 //        var flag = checkSubscribe();
 //        if (flag == true) { }else{

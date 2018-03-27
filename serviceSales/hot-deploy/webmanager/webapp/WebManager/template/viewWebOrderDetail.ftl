@@ -131,6 +131,7 @@
 
        <form id="selectPartyPostalAddress2OrderForm" action="selectPartyPostalAddress2Order">
         <input name="tarjeta" id="tarjeta" value="${(tarjeta)!}" type="hidden"/>
+        <input name="subscribe" id="subscribe" value="${(subscribe)!}" type="hidden"/>
         <input name="orderId" id="orderId" value="${(orderId)!}" type="hidden"/>
         <div class="m-cell">
             <#list addressInfo as list>

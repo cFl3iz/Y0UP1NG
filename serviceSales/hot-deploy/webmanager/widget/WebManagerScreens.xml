@@ -202,6 +202,8 @@
                 <!-- 微信授权登录后的回调地址 -->
 
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
+
+
                 <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
                 <set field="productId" value="${parameters.productId}"/>
 
@@ -327,6 +329,9 @@
         <section>
             <actions>
                 <set field="orderId" value="${parameters.orderId}"/>
+
+                <set field="subscribe" value="${parameters.subscribe}"/>
+
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
                 <service service-name="queryPostalAddress" result-map="resultMap">

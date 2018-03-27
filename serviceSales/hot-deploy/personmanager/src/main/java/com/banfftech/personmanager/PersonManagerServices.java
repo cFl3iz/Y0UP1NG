@@ -2617,6 +2617,9 @@ public class PersonManagerServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
         String orderId = (String) context.get("orderId");
+        String subscribe = (String) context.get("subscribe");
+
+        resultMap.put("subscribe",subscribe);
 
         String contactMechId = (String) context.get("contactMechId");
 

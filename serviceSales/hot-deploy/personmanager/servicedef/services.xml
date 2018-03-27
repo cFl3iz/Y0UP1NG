@@ -742,7 +742,8 @@
 
         <attribute name="orderId" type="String" mode="IN"
                    optional="true"/>
-
+        <attribute name="subscribe" type="String" mode="INOUT"
+                   optional="true"/>
         <attribute name="contactMechId" type="String" mode="IN"
                    optional="true"/>
 

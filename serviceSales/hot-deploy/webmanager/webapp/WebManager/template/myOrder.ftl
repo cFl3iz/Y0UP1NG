@@ -48,7 +48,7 @@
 <section class="g-flexview">
 
 
-
+    subscribe=${(subscribe)!}
 
     <section class="g-scrollview">
 

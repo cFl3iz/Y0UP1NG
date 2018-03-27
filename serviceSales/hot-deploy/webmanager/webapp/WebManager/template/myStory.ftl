@@ -171,7 +171,7 @@
         <!-- 如果还有库存才可以购买 -->
 <#if resourceDetail.availableToPromiseTotal  gt 0>
     <#if !resourceDetail.salesDiscontinuationDate?has_content>
-        <button type="button" onclick="selectAddress('${productId}');" class="btn-block btn-primary">
+        <button type="button" onclick="selectAddress('${productId}','${subscribe}');" class="btn-block btn-primary">
         ${uiLabel.GoToPay}
         </button>
     </#if>
@@ -260,7 +260,7 @@
           location.href = 'ViewSelectProductFeature?productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
     }
 
-    function selectAddress(productId){
+    function selectAddress(productId,subscribe){
         //不关注也能买
 //        var flag = checkSubscribe();
 //        if (flag == true) { }else{
@@ -317,7 +317,7 @@
                 //   alert("code="+data.code);
                 if(data.code === "200"){
                     var orderId = data.orderId;
-                    location.href = 'SelectAddress?orderId='+orderId+'&productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta;
+                    location.href = 'SelectAddress?orderId='+orderId+'&productId='+productId+"&payToPartyId="+payToPartyId+"&partyId="+partyId+"&spm="+spm+"&tarjeta="+tarjeta+"&subscribe="+subscribe;
                 }
                 if(data.code === "500"){
                     alert("CODE-403:网络出现问题请刷新页面重试");

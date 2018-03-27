@@ -178,7 +178,8 @@
         <security https="false" auth="false"/>
         <event type="service" invoke="selectPartyPostalAddress2Order"/>
         <response name="success" type="request-redirect" value="myOrder">
-            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
         </response>
         <response name="error" type="request" value="result_json"/>
     </request-map>

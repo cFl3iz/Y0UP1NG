@@ -2124,7 +2124,7 @@ ${uiLabel.shipmentAddress}${(orderInfo.personAddressInfoMap.contactAddress)!}
 <#--</section>-->
 </#if>
 <br/>
-
+subscribe = ${(subscribe)!}
 
 
 <!-- 快递信息 -->

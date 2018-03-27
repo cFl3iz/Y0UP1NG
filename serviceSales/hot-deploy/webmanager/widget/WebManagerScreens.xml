@@ -301,7 +301,6 @@
 
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
                 <set field="subscribe" value="${parameters.subscribe}"/>
-
                 <service service-name="queryMyOrders" result-map="resultMap">
                 <field-map field-name="tarjeta"/>
                 </service>

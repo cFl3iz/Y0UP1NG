@@ -27,7 +27,6 @@
 <#if orderList?has_content>
 <script>
     function viewQrCode(path) {
-
         var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
         location.href = jumpurl;
     }

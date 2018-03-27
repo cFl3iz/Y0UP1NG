@@ -63,6 +63,24 @@ function selectFeature(e){
         document.getElementById(show_div).style.display='none';
         document.getElementById(bg_div).style.display='none';
     };
+function viewQrCode(path) {
+    var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
+    location.href = jumpurl;
+}
+
+
+function goMyOrderDetail(orderId, tarjeta, orderStatusCode) {
+
+    if (orderStatusCode === "0") {
+        var flag = confirm("是否立即推送提醒?");
+        if (flag) {
+            alert("已为您提醒卖家!");
+        }
+    }
+    if (orderStatusCode === "1") {
+        location.href = 'myOrderDetail?orderId=' + orderId + '&tarjeta=' + tarjeta;
+    }
+}
     function checkSubscribe() {
         var flag = false;
         var subscribe = getCookie("subscribe");

@@ -322,8 +322,8 @@
                     var spm = $("#spm").val();
                     doAddProductRole(partyId, productId, "VISITOR");
                     //记录资源主与当前访问人的联系关系
-                    if (${(resourceDetail.payToPartyId)!} !=
-                    null && ${(resourceDetail.payToPartyId)!}!= ""
+                    if (${(resourceDetail.payToPartyId)!}+"" !=
+                    null && ${(resourceDetail.payToPartyId)!}+"" != ""
                     )
                     {
 
@@ -552,7 +552,7 @@
 
         var a = confirm(confirmMessage);
 
-        if (a == true && ${(resourceDetail.payToPartyId)!}!=null && ${(resourceDetail.payToPartyId)!}!="") {
+        if (a == true && ${(resourceDetail.payToPartyId)!}+"" !=null && ${(resourceDetail.payToPartyId)!}+"" !="") {
             var tarjeta = $("#tarjeta").val();
             var payToParty = ${(resourceDetail.payToPartyId)!};
             var productId = ${(productId)!};

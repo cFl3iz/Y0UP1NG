@@ -157,7 +157,20 @@
         document.getElementById(show_div).style.display='none';
         document.getElementById(bg_div).style.display='none';
     };
-
+    function checkSubscribe() {
+        var flag = false;
+        var subscribe = getCookie("subscribe");
+//        alert("IN COOKIE subscribe = " + subscribe);
+        if (subscribe === "1") {
+            flag = true;
+        } else {
+//           $("#showboxmenu1").show();
+            //清Cookie中的登录数据,以便用户再次访问时刷新是否订阅。
+            clearCookie("tarjeta");
+            flag = false;
+        }
+        return flag;
+    }
     !function () {
         var flag = checkSubscribe();
         if (flag == true) {

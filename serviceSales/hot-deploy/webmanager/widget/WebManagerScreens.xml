@@ -290,12 +290,18 @@
         </section>
     </screen>
 
-    <!-- Web页面查询我的订单 -->
+    <!-- Web页面查询我的订单 该页面需要再次鉴权 -->
     <screen name="myOrder">
         <section>
             <actions>
                 <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+                <!-- 微信授权登录后的回调地址 -->
+                <set field="fromurl" value="http://www.yo-pe.com/access_order.php"/>
+
                 <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="subscribe" value="${parameters.subscribe}"/>
+
                 <service service-name="queryMyOrders" result-map="resultMap">
                 <field-map field-name="tarjeta"/>
                 </service>

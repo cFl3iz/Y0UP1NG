@@ -178,7 +178,7 @@
         <security https="false" auth="false"/>
         <event type="service" invoke="selectPartyPostalAddress2Order"/>
         <response name="success" type="request-redirect" value="myOrder">
-            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
         </response>
         <response name="error" type="request" value="result_json"/>
     </request-map>
@@ -336,6 +336,25 @@
         </response>
 
         <response name="error" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+    </request-map>
+
+
+
+    <request-map uri="accessOrderList">
+        <security auth="false" https="false"/>
+        <event type="java" path="main.java.com.banfftech.webmanager.WebServices"
+               invoke="accessOrderList"/>
+
+        <response name="success" type="request-redirect" value="myOrder">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="payToPartyId" from="spm"/>
+            <redirect-parameter name="partyId" from="partyId"/>
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+        <response name="error" type="request-redirect" value="myOrder">
             <redirect-parameter name="productId" from="productId"/>
         </response>
     </request-map>

@@ -73,6 +73,48 @@ public class WebServices {
     public static WeChatUtil wu = new WeChatUtil();
 
 
+
+
+    public static String accessOrderList(HttpServletRequest request, HttpServletResponse response)
+            throws GenericServiceException,GenericEntityException {
+
+        // Servlet Head
+
+        Locale locale = UtilHttp.getLocale(request);
+
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        HttpSession session = request.getSession();
+
+
+        String code = (String) request.getParameter("code");
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String,Object> loginServiceResultMap = dispatcher.runSync("weChatAppWebLogin",
+                UtilMisc.toMap("userLogin",admin,"code",code));
+
+        String tarjeta = (String) loginServiceResultMap.get("tarjeta");
+
+        String subscribe = (String) loginServiceResultMap.get("subscribe");
+
+        String partyId   = (String) loginServiceResultMap.get("partyId");
+
+
+        request.setAttribute("partyId",partyId);
+
+        request.setAttribute("tarjeta",tarjeta);
+
+
+        request.setAttribute("subscribe", subscribe);
+
+        return "success";
+    }
+
+
+
     /**
      * accessWeChatFromBuyStory
      * @param request

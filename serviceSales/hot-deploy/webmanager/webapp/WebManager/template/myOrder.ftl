@@ -1,3 +1,4 @@
+<#include "component://webmanager/webapp/WebManager/template/accountCenter.ftl" />
 <style>
     .bac {
         display: inline-block;
@@ -21,7 +22,8 @@
         float: right;
     }
 </style>
-
+<input id="subscribe" name="subscribe" value="${(subscribe)!}" type="hidden"/>
+<input id="fromurl" type="hidden" value="${fromurl}"/>
 <#if orderList?has_content>
 <script>
     function viewQrCode(path) {

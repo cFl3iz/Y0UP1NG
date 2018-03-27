@@ -144,9 +144,9 @@
 <script>
 
 
-    !function () {
-        $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});
-    }();
+//    !function () {
+//        $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});
+//    }();
 
 </script>
 </#if>

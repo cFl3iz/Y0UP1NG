@@ -162,6 +162,7 @@ public class WebServices {
         request.setAttribute("spm",spm);
 
         System.out.println("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]spm="+spm);
+        System.out.println("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]subscribe="+subscribe);
 
         request.setAttribute("subscribe", subscribe);
 

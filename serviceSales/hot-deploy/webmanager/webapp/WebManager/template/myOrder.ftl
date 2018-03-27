@@ -26,17 +26,7 @@
 <input id="fromurl" type="hidden" value="${fromurl}"/>
 <#if orderList?has_content>
 <script>
-    $(
-            function(){
-                var flag = checkSubscribe();
-                  if (flag == true) {
 
-                  }else{
-                      alert("关注公众号可以获得订单推送。");
-                    ShowDiv('MyDiv','fade');
-                }
-            }
-    );
     function viewQrCode(path) {
         var   jumpurl = "viewContactQrCode?qrCodePath="+path+"&title=卖家的收款码";
         location.href = jumpurl;
@@ -152,11 +142,31 @@
 </section>
 
 <script>
+    //弹出隐藏层
+    function ShowDiv(show_div,bg_div){
+        document.getElementById(show_div).style.display='block';
+        document.getElementById(bg_div).style.display='block' ;
+        var bgdiv = document.getElementById(bg_div);
+        bgdiv.style.width = document.body.scrollWidth;
+        // bgdiv.style.height = $(document).height();
+        $("#"+bg_div).height($(document).height());
+    };
+    //关闭弹出层
+    function CloseDiv(show_div,bg_div)
+    {
+        document.getElementById(show_div).style.display='none';
+        document.getElementById(bg_div).style.display='none';
+    };
 
+    !function () {
+        var flag = checkSubscribe();
+        if (flag == true) {
 
-//    !function () {
-//        $('.m-list').find('img').lazyLoad({binder: '.g-scrollview'});
-//    }();
+        }else{
+            alert("关注公众号可以获得订单推送。");
+            ShowDiv('MyDiv','fade');
+        }
+    }();
 
 </script>
 </#if>

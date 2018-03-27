@@ -276,7 +276,7 @@ public class WeChatOrderQueryServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
-
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String unioId = (String) context.get("partyId");
         String isDiscontinuation   = (String) context.get("isDiscontinuation");
         // 0:查询未下架的正常资源。   1:查已下架的资源  (默认0)
@@ -372,6 +372,14 @@ public class WeChatOrderQueryServices {
                             null, null, false);
                     rowMap.put("morePicture",pictures);
 
+                    //获得库存信息 getInventoryAvailableByFacility
+                    Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                            "facilityId",gv.get("productStoreId"),"productId",gv.get("productId")));
+                    if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                        rowMap.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                        rowMap.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+                    }
+                    
                     resourceMapList.add(rowMap);
                 }
             }

@@ -2371,7 +2371,7 @@ public class PersonManagerQueryServices {
 
 
     /**
-     * Query MyResource Order
+     * Query MyResource Order 销售单
      *
      * @param dctx
      * @param context
@@ -2418,43 +2418,6 @@ public class PersonManagerQueryServices {
         fieldSet.add("productStoreId");
         fieldSet.add("payToPartyId");
 
-
-//        EntityCondition roleTypeCustomer  = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
-//
-//        //只查询发货完的订单
-//
-//        if(null != orderStatus && orderStatus.equals("SHIPMENT")){
-//
-//            EntityCondition orderStatusCondition = EntityCondition
-//                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
-//
-//            EntityCondition roleTypeCustomer2 = EntityCondition
-//                    .makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
-//
-//            roleTypeCustomer = EntityCondition
-//                    .makeCondition(roleTypeCustomer2,EntityOperator.AND,orderStatusCondition);
-//
-//
-//        }
-//
-//        if(null != orderStatus && orderStatus.equals("ALL")){
-//
-//
-//        }
-//
-//
-//        EntityCondition partyIdCondition = EntityCondition
-//                .makeCondition(UtilMisc.toMap("partyId", partyId));
-//
-//                EntityCondition payToPartyIdCondition = EntityCondition
-//                .makeCondition(UtilMisc.toMap("payToPartyId",partyId));
-//
-//        EntityCondition guestAndPayToPartyConditionList = EntityCondition
-//                .makeCondition(partyIdCondition,EntityOperator.OR,payToPartyIdCondition);
-//
-//        EntityCondition listConditions2 = EntityCondition
-//                .makeCondition(roleTypeCustomer,EntityOperator.AND,guestAndPayToPartyConditionList);
 
 
         EntityCondition roleTypeCondition = EntityCondition

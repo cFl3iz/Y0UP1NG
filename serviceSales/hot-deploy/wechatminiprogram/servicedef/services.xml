@@ -11,6 +11,7 @@
         <description>queryMyResourceOrderFromWeChat</description>
         <attribute name="openId" type="String" mode="IN"
                    optional="true" />
+        <attribute name="orderStatus" type="String" mode="IN"  optional="true" />
         <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
@@ -34,8 +35,8 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryOrderListFromWeChat" auth="false">
         <description>query Order FromWeChatList</description>
-        <attribute name="openId" type="String" mode="IN"
-                   optional="true" />
+        <attribute name="openId" type="String" mode="IN"  optional="true" />
+        <attribute name="orderStatus" type="String" mode="IN"  optional="true" />
         <attribute name="orderList" type="List" mode="OUT"
                    optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

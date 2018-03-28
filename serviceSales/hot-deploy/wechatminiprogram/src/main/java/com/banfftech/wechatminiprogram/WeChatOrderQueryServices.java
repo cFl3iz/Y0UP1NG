@@ -711,7 +711,14 @@ public class WeChatOrderQueryServices {
     }
 
 
-
+    /**
+     * 小程序查销售单
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> queryMyResourceOrderFromWeChat(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -732,13 +739,11 @@ public class WeChatOrderQueryServices {
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
-        System.out.println("*partyId = " + partyId);
-
         List<Map<String, Object>> myResourceOrderList = new ArrayList<Map<String, Object>>();
 
 
         //是否是从App端的查询
-        String area =null;
+        String area = (String) context.get("area");
 
 
         String orderStatus = (String) context.get("orderStatus");
@@ -761,6 +766,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("payToPartyId");
 
 
+
         EntityCondition roleTypeCondition = EntityCondition
                 .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
 
@@ -769,9 +775,22 @@ public class WeChatOrderQueryServices {
 
 
 
-        EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+        EntityCondition listConditions2 = null;
 
+        String isCancelled = (String) context.get("isCancelled");
+        //如果isCancelled 为1  则查询取消的订单。
+        if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        }else{
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        }
 
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
 
 
         List<GenericValue> queryMyResourceOrderList = null;
@@ -781,7 +800,7 @@ public class WeChatOrderQueryServices {
             EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
 
             EntityCondition listConditions3 = EntityCondition
-                    .makeCondition(genericCondition, EntityOperator.AND, orderStatusCondition);
+                    .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
 
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions3, fieldSet,
@@ -789,13 +808,11 @@ public class WeChatOrderQueryServices {
 
         } else {
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                    genericCondition, fieldSet,
+                    listConditions2, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
 
         }
 
-        System.out.println("-----------------------------------------------------------------------------------> queryMyResourceOrderList = " + queryMyResourceOrderList);
-        System.out.println("-----------------------------------------------------------------------------------> queryMyResourceOrderList");
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
@@ -826,6 +843,16 @@ public class WeChatOrderQueryServices {
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
 
 
+
+                //有物流信息
+//                if(statusId.equals("ORDER_COMPLETED")){
+//                    Map<String,Object> queryExpressInfoMap = dispatcher.runSync("queryExpressInfo",UtilMisc.toMap("userLogin",userLogin,"code",rowMap.get("internalCode")));
+//                    List<JSONObject> expressInfos = null;
+//                    if (ServiceUtil.isSuccess(queryExpressInfoMap)) {
+//                        expressInfos = (List<JSONObject>) queryExpressInfoMap.get("expressInfos");
+//                        rowMap.put("expressInfos",expressInfos);
+//                    }
+//                }
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String, String> personInfoMap = null;
@@ -839,10 +866,20 @@ public class WeChatOrderQueryServices {
                 personAddressInfoMap = queryPersonAddressInfo(delegator, (String) custOrderInfo.get("partyId"));
                 rowMap.put("realPartyId", custOrderInfo.get("partyId"));
 
+                //说明这笔单我是买家,查卖家头像信息
+//                if(!payToPartyId.equals(partyId)){
+//                    personInfoMap = queryPersonBaseInfo(delegator,payToPartyId);
+//                    personAddressInfoMap = queryPersonAddressInfo(delegator,payToPartyId);
+//                    rowMap.put("realPartyId",payToPartyId);
+//                }
                 rowMap.put("userPartyId", partyId);
 
-                rowMap.put("personInfoMap", personInfoMap);
+                rowMap.put("custPersonInfoMap", personInfoMap);
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
+
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
+
+
 
 
                 System.out.println("orderId=" + gv.get("orderId"));
@@ -904,16 +941,12 @@ public class WeChatOrderQueryServices {
                         myResourceOrderList.add(rowMap);
                     }
                 }
-                if(null==orderStatus){
-                    myResourceOrderList.add(rowMap);
-                }
             }
         }
 
-//        resultMap.put("orderStatus", orderStatus);
+      //  resultMap.put("orderStatus", orderStatus);
 
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
-
         return resultMap;
     }
 
@@ -936,7 +969,7 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-
+        String orderStatusId =  (String) context.get("orderStatus");
         String openId = (String) context.get("openId");
 
         System.out.println("*OPENID = " + openId);
@@ -948,7 +981,11 @@ public class WeChatOrderQueryServices {
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
-        System.out.println("*partyId = " + partyId);
+        List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
+
+        System.out.println("partyId ==  "+partyId);
+
+
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
         fieldSet.add("partyId");
@@ -963,109 +1000,195 @@ public class WeChatOrderQueryServices {
         fieldSet.add("productStoreId");
         fieldSet.add("payToPartyId");
 
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
 
-//        EntityCondition findConditions3 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
-//
-//        EntityCondition findConditions = EntityCondition
-//                .makeCondition(UtilMisc.toMap("partyId", partyId));
-//
-//
-//        EntityCondition findConditions2 = EntityCondition
-//                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
-//
-//        EntityCondition listConditions = EntityCondition
-//                .makeCondition(findConditions, EntityOperator.OR, findConditions2);
-//
-//        EntityCondition listConditions2 = EntityCondition
-//                .makeCondition(findConditions3, EntityOperator.AND, listConditions);
-
-        //只查我的采购订单
-
-        EntityCondition roleTypeCondition  = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"));
-
-        EntityCondition payToPartyIdCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId",partyId));
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 
 
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(roleTypeCondition,EntityOperator.AND,payToPartyIdCondition);
-        List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
-                listConditions2, fieldSet,
-                UtilMisc.toList("-orderDate"), null, false);
-        System.out.println("*queryMyResourceOrderList = " + queryMyResourceOrderList);
+        System.out.println("orderStatusId  ==   ? " +orderStatusId);
+        EntityCondition listConditions2 = null;
+        EntityCondition listConditions3 = null;
+        String isCancelled = (String) context.get("isCancelled");
+
+        //如果isCancelled 为1  则查询取消的订单。
+        if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
+            EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        }else{
+            if (null != orderStatusId && orderStatusId.equals("SHIPMENT")) {
+                EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+                listConditions3 = EntityCondition
+                        .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
+            }else{
+                listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+            }
+
+        }
+
+
+
+        List<GenericValue> queryMyResourceOrderList = null;
+
+        System.out.println("list condition3 == null ? " + (listConditions3!=null));
+
+        if(listConditions3!=null){
+            //说明查已发货的
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions3, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
+        }else{
+            System.out.println("in else ==  ");
+            queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                    listConditions2, fieldSet,
+                    UtilMisc.toList("-orderDate"), null, false);
+        }
+        System.out.println("queryMyResourceOrderList ==  " + queryMyResourceOrderList);
+
+
+
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
+
             for (GenericValue gv : queryMyResourceOrderList) {
+
                 Map<String, Object> rowMap = new HashMap<String, Object>();
+
                 rowMap = gv.getAllFields();
+
+
                 String productStoreId = (String) gv.get("productStoreId");
+
                 String productId = (String) gv.get("productId");
-                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
                 GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
+
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
                 rowMap.put("productName", "" + product.get("productName"));
+
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+
                 String payToPartyId = (String) productStore.get("payToPartyId");
+
                 rowMap.put("payToPartyId", payToPartyId);
 
+                // 查询卖家付款二维码。
+                GenericValue wxPayQrCodes =
+                        EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                                where("partyId", payToPartyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
 
+                if(null != wxPayQrCodes ){
+                    rowMap.put("weChatPayQrCode",wxPayQrCodes.getString("objectInfo"));
+                }
 
-
-
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", rowMap.get("orderId")).queryFirst();
 
 
                 String statusId = (String) gv.get("statusId");
 
-                if (null != orderPaymentPrefAndPayment) {
-
-                    rowMap.put("orderPayStatus", "已收款");
-                    rowMap.put("payStatusCode", "1");
-
+                //区分订单状态
+                if (statusId.toLowerCase().indexOf("comp") > 0) {
+                    rowMap.put("orderStatusCode", "1");
                 } else {
-                    rowMap.put("orderPayStatus", "未付款");
+                    rowMap.put("orderStatusCode", "0");
                 }
+                System.out.println("orderStatusCode = " + rowMap.get("orderStatusCode"));
 
-                if(statusId.equals("ORDER_SENT")){
-                    rowMap.put("orderShipment","已发货");
-                    if(null!=rowMap.get("orderPayStatus")&&rowMap.get("orderPayStatus").equals("已收款")){
-                        rowMap.put("orderCompleted","已完成");
-                    }
-                }else{
-                    rowMap.put("orderShipment","未发货");
-                }
+                rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
 
 
-
-
-                //String statusId = (String) gv.get("statusId");
-//                rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
                 String payFromPartyId = (String) rowMap.get("partyId");
 
                 Map<String, String> personInfoMap = null;
 
                 Map<String, String> personAddressInfoMap = null;
 
-                //说明这笔订单我是卖家,查买家头像信息
+
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
+                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator,payFromPartyId));
                 if (payToPartyId.equals(partyId)) {
-                    personInfoMap = queryPersonBaseInfo(delegator, payFromPartyId);
                     personAddressInfoMap = queryPersonAddressInfo(delegator, payFromPartyId);
                 }
-                //说明这笔单我是买家,查卖家头像信息
                 if (!payToPartyId.equals(partyId)) {
-                    personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
                     personAddressInfoMap = queryPersonAddressInfo(delegator, payToPartyId);
                 }
+
+
+                rowMap.put("custPartyId", payFromPartyId);
+                rowMap.put("salesPartyId", payToPartyId);
+
                 rowMap.put("userPartyId", partyId);
+
                 rowMap.put("personInfoMap", personInfoMap);
+
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
-                returnList.add(rowMap);
+
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
+
+                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
+
+                if (null != orderPaymentPrefAndPayment) {
+
+                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                    if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
+
+                        rowMap.put("orderPayStatus", "已收款");
+                        rowMap.put("payStatusCode", "1");
+                    } else {
+                        rowMap.put("payStatusCode", "0");
+                        rowMap.put("orderPayStatus", "买家已付款");
+                    }
+                } else {
+                    rowMap.put("payStatusCode", "0");
+                    rowMap.put("orderPayStatus", "未付款");
+                    if (null != payment) {
+                        String paymentStatusId = (String) payment.get("statusId");
+                        if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
+                            rowMap.put("orderPayStatus", "已收款");
+                            rowMap.put("payStatusCode", "1");
+                        }
+                        if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {
+                            rowMap.put("orderPayStatus", "买家已付款");
+                            rowMap.put("payStatusCode", "1");
+                        }
+
+                    } else {
+                        rowMap.put("payStatusCode", "0");
+                        rowMap.put("orderPayStatus", "未付款");
+                    }
+
+                }
+
+                if(!statusId.equals("ORDER_SENT")){
+                    rowMap.put("orderShipment","未发货");
+                }else{
+                    rowMap.put("orderShipment","已发货");
+                    if(rowMap.get("orderPayStatus").equals("已收款")){
+                        rowMap.put("orderCompleted","已完成");
+                    }
+                }
+
+                //不查询已收款的订单时,直接放入
+                if (null != orderStatusId && !orderStatusId.equals("PAYMENT")) {
+                    orderList.add(rowMap);
+                }
+                if (null != orderStatusId && orderStatusId.equals("PAYMENT")) {
+                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
+                        orderList.add(rowMap);
+                    }
+                }
+                if(UtilValidate.isEmpty(orderStatusId)){
+                    orderList.add(rowMap);
+                }
+
             }
         }
 
 
-        resultMap.put("orderList", returnList);
+        resultMap.put("orderList", orderList);
 
         return resultMap;
     }

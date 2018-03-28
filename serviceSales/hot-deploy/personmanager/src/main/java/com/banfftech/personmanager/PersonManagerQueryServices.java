@@ -2068,13 +2068,20 @@ public class PersonManagerQueryServices {
 
             GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                     where("orderId", orderId).queryFirst();
+            if(null!=orderHeaderAndShipGroups && orderHeaderAndShipGroups.get("internalCode") ){
+
+
             String internalCode = (String)orderHeaderAndShipGroups.get("internalCode");
-            if(internalCode.equals("卖家自配送")){
+               if(internalCode.equals("卖家自配送")){
                 rowMap.put("internalCode", internalCode);
-            }else{
+               }else{
                 rowMap.put("internalCode", "快递:"+internalCode);
+                }
+                rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
+            }else{
+                rowMap.put("internalCode", "未发货");
             }
-            rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
+
 
             rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));
         }

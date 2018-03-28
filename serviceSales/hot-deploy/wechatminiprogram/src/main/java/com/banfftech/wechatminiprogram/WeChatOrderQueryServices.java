@@ -689,8 +689,8 @@ public class WeChatOrderQueryServices {
         rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
 
 
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createdDate = sdf.format(order.get("createdStamp"));
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String createdDate = sdf.format(order.get("orderDate"));
         rowMap.put("createdDate",createdDate);
         resultMap.put("orderDetail",rowMap);
 

@@ -379,7 +379,7 @@ public class WeChatOrderQueryServices {
                         rowMap.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
                         rowMap.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
                     }
-                    
+
                     resourceMapList.add(rowMap);
                 }
             }
@@ -682,6 +682,9 @@ public class WeChatOrderQueryServices {
 //        rowMap.put("orderExpressInfo",expressInfos);
 //        rowMap.put("orderExpressName",queryExpressInfoMap.get("name"));
 //        }
+        GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
+                where("orderId", orderId).queryFirst();
+        rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
         resultMap.put("orderDetail",rowMap);
 
 

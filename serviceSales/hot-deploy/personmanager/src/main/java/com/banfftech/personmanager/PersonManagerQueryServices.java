@@ -2985,6 +2985,7 @@ public class PersonManagerQueryServices {
         resourceDetail.put("title", (String) product.get("productName"));
         resourceDetail.put("desc", (String) product.get("description"));
         resourceDetail.put("source", "龙熙的转发");
+        resourceDetail.put("salesDiscontinuationDate", product.get("salesDiscontinuationDate"));
         resourceDetail.put("cover_url", (String) product.get("detailImageUrl"));
         String payToId = (String) product.get("payToPartyId");
         Map<String, String> userInfoMap = queryPersonBaseInfo(delegator, payToId);

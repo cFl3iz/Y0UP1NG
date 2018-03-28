@@ -778,7 +778,13 @@ public class WeChatOrderQueryServices {
 
         EntityCondition listConditions2 = null;
 
+        //这种情况就是要查取消的订单
         String isCancelled = (String) context.get("isCancelled");
+        if(null!= orderStatus && orderStatus.equals("CANCEL")){
+            isCancelled="1";
+        }
+
+
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
             EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
@@ -956,7 +962,7 @@ public class WeChatOrderQueryServices {
 
 
     /**
-     * query Order FromWeChat
+     * query Order FromWeChat 采购单
      *
      * @param dctx
      * @param context
@@ -1014,7 +1020,12 @@ public class WeChatOrderQueryServices {
         System.out.println("orderStatusId  ==   ? " +orderStatusId);
         EntityCondition listConditions2 = null;
         EntityCondition listConditions3 = null;
+
+
         String isCancelled = (String) context.get("isCancelled");
+        if(null!= orderStatusId && orderStatusId.equals("CANCEL")){
+            isCancelled="1";
+        }
 
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {

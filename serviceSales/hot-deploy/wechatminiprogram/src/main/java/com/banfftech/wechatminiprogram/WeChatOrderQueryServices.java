@@ -949,7 +949,7 @@ public class WeChatOrderQueryServices {
         }
 
       //  resultMap.put("orderStatus", orderStatus);
-
+        Debug.logInfo("销售订单返回:myResourceOrderList="+myResourceOrderList,module);
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
         return resultMap;
     }

@@ -692,6 +692,16 @@ public class WeChatOrderQueryServices {
         DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String createdDate = sdf.format(order.get("orderDate"));
         rowMap.put("createdDate",createdDate);
+
+        //查询卖家提供的联系电话
+        GenericValue telecomNumber = EntityUtil.getFirst(
+                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId",rowMap.get("payToPartyId") , "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+        if (UtilValidate.isNotEmpty(telecomNumber)) {
+            rowMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+        }
+        
+
+
         resultMap.put("orderDetail",rowMap);
 
 

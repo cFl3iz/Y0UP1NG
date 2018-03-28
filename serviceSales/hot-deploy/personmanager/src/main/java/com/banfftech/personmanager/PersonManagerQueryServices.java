@@ -2068,6 +2068,12 @@ public class PersonManagerQueryServices {
 
             GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                     where("orderId", orderId).queryFirst();
+            String internalCode = (String)orderHeaderAndShipGroups.get("internalCode");
+            if(internalCode.equals("卖家自配送")){
+                rowMap.put("internalCode", internalCode);
+            }else{
+                rowMap.put("internalCode", "快递:"+internalCode);
+            }
             rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
 
             rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,payToPartyId));

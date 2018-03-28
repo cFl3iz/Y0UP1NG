@@ -2068,7 +2068,7 @@ public class PersonManagerQueryServices {
 
             GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                     where("orderId", orderId).queryFirst();
-            if(null!=orderHeaderAndShipGroups && orderHeaderAndShipGroups.get("internalCode") ){
+            if(null!=orderHeaderAndShipGroups && orderHeaderAndShipGroups.get("internalCode")!=null ){
 
 
             String internalCode = (String)orderHeaderAndShipGroups.get("internalCode");

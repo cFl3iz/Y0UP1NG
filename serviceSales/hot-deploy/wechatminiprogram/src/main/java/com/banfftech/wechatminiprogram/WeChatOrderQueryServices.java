@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonAddressInfo;
@@ -685,6 +687,11 @@ public class WeChatOrderQueryServices {
         GenericValue orderHeaderAndShipGroups =EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                 where("orderId", orderId).queryFirst();
         rowMap.put("personAddressInfoMap", orderHeaderAndShipGroups);
+
+
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createdDate = sdf.format(order.get("createdStamp")+"");
+        rowMap.put("createdDate",createdDate);
         resultMap.put("orderDetail",rowMap);
 
 

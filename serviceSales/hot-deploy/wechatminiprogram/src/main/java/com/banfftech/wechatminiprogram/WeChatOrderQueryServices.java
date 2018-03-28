@@ -690,7 +690,7 @@ public class WeChatOrderQueryServices {
 
 
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createdDate = sdf.format(order.get("createdStamp")+"");
+        String createdDate = sdf.format(order.get("createdStamp"));
         rowMap.put("createdDate",createdDate);
         resultMap.put("orderDetail",rowMap);
 

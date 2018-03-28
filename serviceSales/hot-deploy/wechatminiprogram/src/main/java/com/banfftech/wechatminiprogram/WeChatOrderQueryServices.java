@@ -698,8 +698,10 @@ public class WeChatOrderQueryServices {
                 EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId",rowMap.get("payToPartyId") , "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
         if (UtilValidate.isNotEmpty(telecomNumber)) {
             rowMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+        }else{
+            rowMap.put("contactNumber", null);
         }
-        
+
 
 
         resultMap.put("orderDetail",rowMap);

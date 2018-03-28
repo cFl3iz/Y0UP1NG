@@ -834,7 +834,7 @@ public class WeChatOrderQueryServices {
                 rowMap.put("productName", "" + product.get("productName"));
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
                 String payToPartyId = (String) productStore.get("payToPartyId");
-                if (payToPartyId.equals(partyId)) {
+                if (!payToPartyId.equals(partyId)) {
                     continue;
                 }
 

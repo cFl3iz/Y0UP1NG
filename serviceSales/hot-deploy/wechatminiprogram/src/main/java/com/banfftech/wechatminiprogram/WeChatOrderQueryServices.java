@@ -37,6 +37,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonAddressInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
@@ -813,6 +814,9 @@ public class WeChatOrderQueryServices {
 
         }
 
+        Debug.logInfo("查销售订单queryMyResourceOrderList="+queryMyResourceOrderList,module);
+        Debug.logInfo("orderStatus="+orderStatus,module);
+        Debug.logInfo("partyId="+partyId,module);
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
@@ -830,7 +834,7 @@ public class WeChatOrderQueryServices {
                 rowMap.put("productName", "" + product.get("productName"));
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
                 String payToPartyId = (String) productStore.get("payToPartyId");
-                if (null != area && area.equals("app") && !payToPartyId.equals(partyId)) {
+                if (payToPartyId.equals(partyId)) {
                     continue;
                 }
 

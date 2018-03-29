@@ -2035,8 +2035,39 @@ public class PersonManagerServices {
 
         //推送微信
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-        pushMsgBase(orderId,payFromPartyId , payToPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+       // pushMsgBase(orderId,payToPartyId ,payFromPartyId , delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
 
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", payFromPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+
+
+        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+            String openId = (String) partyIdentificationList.get(0).get("idValue");
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("orderId", orderId);
+
+            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
+
+            //推微信
+            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+
+        }
 
         return resultMap;
     }

@@ -347,6 +347,8 @@ public class PlatformLoginWorker {
         GenericValue userLogin = null;
 
         String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
         String nickName = (String) context.get("nickName");
         String gender = (String) context.get("gender");
         String language = (String) context.get("language");
@@ -356,10 +358,21 @@ public class PlatformLoginWorker {
 
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryList();
+       GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
 
+        //没有unioId 需要注册
         if(partyIdentificationList!=null & partyIdentificationList.size()>0){
+
+            //判断啊有没有小程序id 如果没有也需要注册
+            if(miniProgramIdentification==null){
+                Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                        partyIdentificationList.get(0).get("partyId"), "idValue",openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+                dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+            }
+
             return result;
         }
+
 
 
         String   partyId, token ="";
@@ -396,7 +409,12 @@ public class PlatformLoginWorker {
                 partyId = (String)userLogin.get("partyId");
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson(admin,partyId,delegator,unioId,userInfoMap,userLogin,dispatcher);
 
-
+//判断啊有没有小程序id 如果没有也需要注册
+                if(miniProgramIdentification==null){
+                    Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                            partyId, "idValue",openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+                    dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+                }
             }
         }
 

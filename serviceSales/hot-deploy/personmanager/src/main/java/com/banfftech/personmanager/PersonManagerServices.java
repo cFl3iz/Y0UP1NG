@@ -2019,7 +2019,7 @@ public class PersonManagerServices {
 
         String payFromPartyId = (String) orderCust.get("partyId");
         String payToPartyId = (String) orderSales.get("partyId");
-        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",payToPartyId).queryFirst();
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",payFromPartyId).queryFirst();
 
         EntityCondition pConditions = EntityCondition.makeCondition("partyId", payFromPartyId);
 

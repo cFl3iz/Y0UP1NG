@@ -368,6 +368,82 @@ public class PlatformManagerServices {
 
 
     /**
+     * pushMiniProgramMessageInfo 推送小程序信息
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> pushMiniProgramMessageInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        System.out.println("*pushMiniProgramMessageInfo============================================================");
+
+        String openId        = (String) context.get("openId");
+
+
+        // 发送模版消息
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_MINI_PROGRAM_APP_ID,PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID);
+        String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+        String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
+
+        JSONObject jsobj1 = new JSONObject();
+        JSONObject jsobj2 = new JSONObject();
+        JSONObject jsobj3 = new JSONObject();
+        JSONObject jsobj4 = new JSONObject();
+        JSONObject jsobj5 = new JSONObject();
+        JSONObject jsobj6 = new JSONObject();
+        JSONObject jsobj7 = new JSONObject();
+        JSONObject bigJson = new JSONObject();
+
+//        订单号
+//        {{keyword1.DATA}}
+//        金额
+//        {{keyword2.DATA}}
+//        商品名称
+//        {{keyword3.DATA}}
+//        订单内容
+//        {{keyword4.DATA}}
+//        用户姓名
+//        {{keyword5.DATA}}
+//        订单状态
+//        {{keyword6.DATA}}
+
+        jsobj1.put("value","123456");
+        jsobj3.put("value","123456");
+        jsobj4.put("value","123456");
+        jsobj5.put("value","123456");
+        jsobj6.put("value","123456");
+        jsobj7.put("value","123456");
+
+
+
+        jsobj2.put("keyword1", jsobj1);
+        jsobj2.put("keyword2", jsobj3);
+        jsobj2.put("keyword3", jsobj4);
+        jsobj2.put("keyword4", jsobj5);
+        jsobj2.put("keyword5", jsobj6);
+        jsobj2.put("keyword6", jsobj7);
+
+
+        bigJson.put("data",jsobj2);
+        bigJson.put("touser",openId);
+        bigJson.put("template_id","cRmXGHl1f0BHKn8KPe62Y7XQmP5QM3cxQLP6B9HgzRI");
+        bigJson.put("page","pages/order/order");
+        bigJson.put("from_id","955");
+        bigJson.put("emphasis_keyword","keyword1.DATA");
+
+        WeChatUtil.PostSendMsg(bigJson, url);
+
+        return result;
+    }
+    /**
      * Push WeChat MessageInfo
      * @param dctx
      * @param context

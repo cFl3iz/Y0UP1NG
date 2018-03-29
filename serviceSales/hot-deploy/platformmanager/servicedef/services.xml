@@ -197,8 +197,25 @@
         <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
         <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
-
         <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 推送小程序 -->
+    <service name="pushMiniProgramMessageInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushMiniProgramMessageInfo" auth="false">
+        <description>pushMiniProgramMessageInfo</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+
+        <!--<attribute name="url" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="firstName" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="message" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="productId" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="payToPartyId" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="tarjeta" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="date" type="String" mode="IN" optional="true"/>-->
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

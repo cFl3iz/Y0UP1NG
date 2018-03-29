@@ -207,6 +207,7 @@
         <description>pushMiniProgramMessageInfo</description>
 
         <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="formId" type="String" mode="IN" optional="true"/>
 
         <!--<attribute name="url" type="String" mode="IN" optional="true"/>-->
         <!--<attribute name="firstName" type="String" mode="IN" optional="true"/>-->

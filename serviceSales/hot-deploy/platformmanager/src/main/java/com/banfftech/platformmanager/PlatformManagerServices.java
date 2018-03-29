@@ -386,6 +386,7 @@ public class PlatformManagerServices {
         System.out.println("*pushMiniProgramMessageInfo============================================================");
 
         String openId        = (String) context.get("openId");
+        String formid        = (String) context.get("formId");
 
 
         // 发送模版消息
@@ -436,8 +437,8 @@ public class PlatformManagerServices {
         bigJson.put("touser",openId);
         bigJson.put("template_id","cRmXGHl1f0BHKn8KPe62Y7XQmP5QM3cxQLP6B9HgzRI");
         bigJson.put("page","pages/order/order");
-        bigJson.put("from_id","955");
-        bigJson.put("emphasis_keyword","keyword1.DATA");
+        bigJson.put("form_id",formid);
+      //  bigJson.put("emphasis_keyword","keyword1.DATA");
 
         WeChatUtil.PostSendMsg(bigJson, url);
 

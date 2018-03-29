@@ -234,7 +234,7 @@ public class WeChatUtil {
     public static String PostSendMsg(JSONObject json, String url) {
         HttpPost post = new HttpPost(url);
         post.setHeader("Content-Type", "application/json");
-        post.addHeader("Authorization", "Basic YWRtaW46");
+//        post.addHeader("Authorization", "Basic YWRtaW46");
         String result = "";
         try {
             StringEntity s = new StringEntity(json.toString(), "utf-8");

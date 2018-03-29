@@ -390,7 +390,7 @@ public class PlatformManagerServices {
 
 
         // 发送模版消息
-        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_MINI_PROGRAM_APP_ID,PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID);
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID,PeConstant.ACCESS_KEY_SECRET);
         String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
         System.out.println("token = " + accessToken.getToken());

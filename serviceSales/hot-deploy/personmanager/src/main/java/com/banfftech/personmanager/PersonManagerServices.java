@@ -2035,7 +2035,7 @@ public class PersonManagerServices {
 
         //推送微信
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-       // pushMsgBase(orderId,payToPartyId ,payFromPartyId , delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+     //   pushMsgBase(orderId,payToPartyId ,payFromPartyId , delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
 
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", payFromPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
@@ -2061,6 +2061,8 @@ public class PersonManagerServices {
             pushWeChatMessageInfoMap.put("openId", openId);
 
             pushWeChatMessageInfoMap.put("productId", productId);
+            pushWeChatMessageInfoMap.put("firstName", "友评");
+            pushWeChatMessageInfoMap.put("message","订单:"+orderId+"["+product.get("productName")+"]"+"已被卖家取消。");
 
             pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
 

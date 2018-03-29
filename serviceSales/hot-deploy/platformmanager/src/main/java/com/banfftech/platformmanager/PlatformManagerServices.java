@@ -392,7 +392,7 @@ public class PlatformManagerServices {
         AccessToken accessToken = getAccessToken(PeConstant.WECHAT_MINI_PROGRAM_APP_ID,PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID);
         String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
-
+        System.out.println("token = " + accessToken.getToken());
         JSONObject jsobj1 = new JSONObject();
         JSONObject jsobj2 = new JSONObject();
         JSONObject jsobj3 = new JSONObject();

@@ -2010,6 +2010,33 @@ public class PersonManagerServices {
             return changeOrderStatusMap;
         }
 
+        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+        String productId = (String) orderItem.get("productId");
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        GenericValue orderSales = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+
+        String payFromPartyId = (String) orderCust.get("partyId");
+        String payToPartyId = (String) orderSales.get("partyId");
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId",payToPartyId).queryFirst();
+
+        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payFromPartyId);
+
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+
+
+        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+            String jpushId = (String) partyIdentification.getString("idValue");
+            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:"+orderId+"["+product.get("productName")+"]"+"已被卖家取消。", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+        }
+
+        //推送微信
+        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+        pushMsgBase(orderId,payFromPartyId , payToPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+
 
         return resultMap;
     }
@@ -2187,7 +2214,7 @@ public class PersonManagerServices {
 
         //推送微信
 
-        pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId + "的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+        pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId + "|"+product.get("productName")+"的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
 
 
         return resultMap;

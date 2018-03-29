@@ -60,7 +60,7 @@
     };
 </script>
 
-
+<a href="https://yo-pe.com/mp/">LINK JUMP TO MINI PROGRAM</a>
 <#if resourceDetail?has_content>
 <section class="g-flexview" style="margin-left: 15px;margin-right: 15px;margin-top: 15px;margin-bottom: 15px;">
     <span style="font-size:10px;">shares:${(spm)!}</span>

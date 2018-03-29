@@ -2060,7 +2060,7 @@ public class PersonManagerServices {
 
             pushWeChatMessageInfoMap.put("openId", openId);
 
-            pushWeChatMessageInfoMap.put("objectId", orderId);
+            pushWeChatMessageInfoMap.put("productId", productId);
 
             pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
 

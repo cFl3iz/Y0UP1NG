@@ -5478,7 +5478,7 @@ public class PersonManagerServices {
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }
-        GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+        GenericValue queryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         //推送给微信用户(卖家)
 
@@ -5516,7 +5516,7 @@ public class PersonManagerServices {
 
             Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
 
-            pushWeChatMessageInfoMap.put("messageInfo", personInfoMap.get("firstName") + "购买了"+amount_str+"件"+sQueryProduct.get("productName"));
+            pushWeChatMessageInfoMap.put("messageInfo", personInfoMap.get("firstName") + "购买了"+amount_str+"件"+queryProduct.get("productName"));
             //推微信订单状态
             dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
         }

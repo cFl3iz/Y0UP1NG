@@ -1019,7 +1019,11 @@ public class WeChatOrderQueryServices {
 
         System.out.println("orderStatusId  ==   ? " +orderStatusId);
         EntityCondition listConditions2 = null;
-        EntityCondition listConditions3 = null;
+
+        String findShipment = null;
+
+
+
 
 
         String isCancelled = (String) context.get("isCancelled");
@@ -1034,9 +1038,8 @@ public class WeChatOrderQueryServices {
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         }else{
             if (null != orderStatusId && orderStatusId.equals("SHIPMENT")) {
-                EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
-                listConditions3 = EntityCondition
-                        .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
+                findShipment = "SHIPMENT";
+
             }else{
                 listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
             }
@@ -1049,7 +1052,10 @@ public class WeChatOrderQueryServices {
 
         System.out.println("list condition3 == null ? " + (listConditions3!=null));
 
-        if(listConditions3!=null){
+        if(findShipment!=null){
+            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+            EntityCondition listConditions3 = EntityCondition
+                    .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
             //说明查已发货的
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions3, fieldSet,

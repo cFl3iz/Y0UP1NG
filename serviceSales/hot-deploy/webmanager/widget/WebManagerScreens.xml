@@ -314,7 +314,8 @@
                     <decorator-section name="body">
                         <platform-specific>
                             <html>
-                                <html-template location="component://webmanager/webapp/WebManager/template/myOrder.ftl"></html-template>
+                                <html-template location="component://webmanager/webapp/WebManager/template/viewOrderQrCode.ftl"></html-template>
+                                <!--<html-template location="component://webmanager/webapp/WebManager/template/myOrder.ftl"></html-template>-->
                             </html>
                         </platform-specific>
                     </decorator-section>

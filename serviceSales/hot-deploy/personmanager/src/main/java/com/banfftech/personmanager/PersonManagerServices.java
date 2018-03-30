@@ -3004,7 +3004,7 @@ public class PersonManagerServices {
                 pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我发货了," + "由我亲自给您配送!");
 
             } else {
-                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + (code == null ? "暂无详细":code));
             }
 
 
@@ -3046,7 +3046,7 @@ public class PersonManagerServices {
             createMessageLogMap.put("message", "您购买的(" + product.get("productName") + ")我发货了," + "由我亲自给您配送!");
 
         } else {
-            createMessageLogMap.put("message", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + code);
+            createMessageLogMap.put("message", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + (code == null ? "暂无详细":code));
         }
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 

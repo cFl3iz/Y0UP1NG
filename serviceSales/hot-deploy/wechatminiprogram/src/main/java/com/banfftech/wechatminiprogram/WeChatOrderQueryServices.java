@@ -1050,7 +1050,7 @@ public class WeChatOrderQueryServices {
 
         List<GenericValue> queryMyResourceOrderList = null;
 
-        System.out.println("list condition3 == null ? " + (listConditions3!=null));
+
 
         if(findShipment!=null){
             EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));

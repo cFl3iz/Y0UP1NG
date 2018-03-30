@@ -1054,8 +1054,9 @@ public class WeChatOrderQueryServices {
 
         if(findShipment!=null){
             EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+            EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
             EntityCondition listConditions3 = EntityCondition
-                    .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
+                    .makeCondition(genericCondition, EntityOperator.AND, orderStatusCondition);
             //说明查已发货的
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions3, fieldSet,

@@ -2890,27 +2890,20 @@ public class PersonManagerServices {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
-
         Delegator delegator = dispatcher.getDelegator();
-
         Locale locale = (Locale) context.get("locale");
-
-
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        // Admin Do Run Service
+        // Sudo
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
         String code = (String) context.get("code");
-
         String orderId = (String) context.get("orderId");
-
         String partyId = (String) context.get("partyId");
+        //小程序确认收款
         if(null != partyId ){
-            //小程序确认收款
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
         }else{
             partyId = (String) userLogin.get("partyId");
@@ -2918,13 +2911,9 @@ public class PersonManagerServices {
 
 
         String carrierCode = (String) context.get("carrierCode");
-
         String name = (String) context.get("name");
-
         String shipmentMethodId = "";
-
         String contactMechId = "";
-
         String sinceTheSend = (String) context.get("sinceTheSend");
 
 
@@ -2935,9 +2924,7 @@ public class PersonManagerServices {
                 EntityQuery.use(delegator).from("PartyContactMechPurpose").where(UtilMisc.toMap("partyId", orderCust.get("partyId"), "contactMechPurposeTypeId", "SHIPPING_LOCATION")).queryList());
 
         if (null == postalAddress) {
-
         } else {
-
             contactMechId = (String) postalAddress.get("contactMechId");
         }
 
@@ -2946,16 +2933,6 @@ public class PersonManagerServices {
         String productStoreId = (String) store.get("productStoreId");
         if (null != sinceTheSend && sinceTheSend.equals("1")) {
             //卖家自发货,不用物流单位
-
-
-            //将买家信息更新到订单货运 出现地址改错的问题， 暂时注释。
-//            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
-//                    "userLogin", userLogin, "orderId", orderId,
-//                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + partyId, "shipGroupSeqId", "00001"));
-//
-//            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
-//                return updateShipGroupShipInfoOutMap;
-//            }
 
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
             String stautsId = (String) orderHeader.get("statusId");
@@ -2994,7 +2971,6 @@ public class PersonManagerServices {
 
 
             //查询店铺是否拥有该货运方式
-            //GenericValue productStoreShipmentMeth =  EntityQuery.use(delegator).from("ProductStoreShipmentMeth").where(UtilMisc.toMap("partyId", productStoreId)).queryFirst();
 
             EntityCondition findConditions = EntityCondition
                     .makeCondition("partyId", EntityOperator.LIKE, "%" + name + "%");
@@ -3032,15 +3008,6 @@ public class PersonManagerServices {
                 shipmentMethodId = carrierCode;
             }
 
-
-            //将买家信息更新到订单货运 出现地址改错的问题,先注释
-//            Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
-//                    "userLogin", userLogin, "orderId", orderId,
-//                    "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + shipmentMethodId, "shipGroupSeqId", "00001"));
-//
-//            if (!ServiceUtil.isSuccess(updateShipGroupShipInfoOutMap)) {
-//                return updateShipGroupShipInfoOutMap;
-//            }
 
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
             String stautsId = (String) orderHeader.get("statusId");
@@ -5328,6 +5295,49 @@ public class PersonManagerServices {
 
 
     /**
+     * peSentOrder
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> peSentOrder(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Sudo
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String orderId =  (String) context.get("orderId");
+        String payToPartyId =  (String) context.get("payToPartyId");
+
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+
+
+        Map<String, Object> createOrderItemShipGroupInMap = new HashMap<String, Object>();
+        createOrderItemShipGroupInMap.put("userLogin", admin);
+        createOrderItemShipGroupInMap.put("orderId", orderId);
+        createOrderItemShipGroupInMap.put("facilityId", (String) facility.get("facilityId"));
+        createOrderItemShipGroupInMap.put("carrierPartyId", "SHUNFENG_EXPRESS");
+        createOrderItemShipGroupInMap.put("shipmentMethodTypeId", "EXPRESS");
+        Map<String, Object> createOrderItemShipGroupOut = dispatcher.runSync("createOrderItemShipGroup", createOrderItemShipGroupInMap);
+        if (ServiceUtil.isError(createOrderItemShipGroupOut)) {
+            return createOrderItemShipGroupOut;
+        }
+
+
+        return resultMap;
+    }
+
+
+
+    /**
      * 资源下单
      * @param dctx
      * @param context
@@ -5343,7 +5353,7 @@ public class PersonManagerServices {
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) userLogin.get("partyId");
-
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
         // Sudo
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
@@ -5434,7 +5444,7 @@ public class PersonManagerServices {
 
 
         GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
         if (null != teleContact) {
             String contactNumber = (String) teleContact.get("contactNumber");
             resultMap.put("contactTel", contactNumber);

@@ -29,6 +29,20 @@
 
 
 
+    <service name="peSentOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="peSentOrder" auth="false">
+        <description>peSentOrder</description>
+
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
     <!-- orderCancel -->
     <service name="orderCancel" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

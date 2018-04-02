@@ -2009,7 +2009,7 @@ public class PersonManagerServices {
         //Order Items
         List<GenericValue> orderItemList = new ArrayList<GenericValue>();
 
-        GenericValue  itemProduct = GenericValue.makeValue("OrderItem");
+        GenericValue  itemProduct = delegator.makeValue("OrderPaymentPreference", UtilMisc.toMap());
 
         itemProduct.set("productId",productId);
         itemProduct.set("isModifiedPrice","N");

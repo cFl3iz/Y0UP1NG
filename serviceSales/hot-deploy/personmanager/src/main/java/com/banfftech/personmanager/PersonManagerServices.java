@@ -2045,7 +2045,7 @@ public class PersonManagerServices {
         orderItemList.add(itemProduct);
 
         createOrderServiceIn.put("currencyUom",PeConstant.DEFAULT_CURRENCY_UOM_ID);
-        createOrderServiceIn.put("orderName",partyId+"_BUY_"+productId+"_FROM_"+billFromVendorPartyId);
+        createOrderServiceIn.put("orderName","_FROM_"+partyId+"_TO_"+billFromVendorPartyId+"_BUY_"+productId);
         createOrderServiceIn.put("orderItems",orderItemList);
         createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
         createOrderServiceIn.put("partyId",partyId);

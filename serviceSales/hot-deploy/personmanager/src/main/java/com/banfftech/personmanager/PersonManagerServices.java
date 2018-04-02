@@ -2002,6 +2002,8 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
         String productCategoryId = (String) context.get("productCategoryId");
         String prodCatalogId = (String) context.get("prodCatalogId");
+        String partyId = (String) context.get("partyId");
+        String productStoreId = (String) context.get("productStoreId");
 
         //StoreOrderMap
         Map<String,Object> createOrderServiceIn = new HashMap<String, Object>();
@@ -2035,7 +2037,8 @@ public class PersonManagerServices {
         createOrderServiceIn.put("currencyUom",PeConstant.DEFAULT_CURRENCY_UOM_ID);
         createOrderServiceIn.put("orderItems",orderItemList);
         createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
-        createOrderServiceIn.put("partyId","10000");
+        createOrderServiceIn.put("partyId",partyId);
+        createOrderServiceIn.put("productStoreId",productStoreId);
         createOrderServiceIn.put("userLogin",admin);
 
         Map<String,Object> createOrderOut =  dispatcher.runSync("storeOrder",createOrderServiceIn);

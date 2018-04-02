@@ -14,6 +14,8 @@
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
         <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
 
         <attribute name="orderId" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

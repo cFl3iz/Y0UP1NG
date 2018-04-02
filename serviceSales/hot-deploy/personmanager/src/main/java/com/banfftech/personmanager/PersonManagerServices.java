@@ -2036,6 +2036,7 @@ public class PersonManagerServices {
         createOrderServiceIn.put("orderItems",orderItemList);
         createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
         createOrderServiceIn.put("partyId","10000");
+        createOrderServiceIn.put("userLogin",admin);
 
         Map<String,Object> createOrderOut =  dispatcher.runSync("storeOrder",createOrderServiceIn);
 

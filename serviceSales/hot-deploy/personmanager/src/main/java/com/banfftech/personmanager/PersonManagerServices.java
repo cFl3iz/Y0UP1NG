@@ -1990,21 +1990,29 @@ public class PersonManagerServices {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
-
         Delegator delegator = dispatcher.getDelegator();
-
-
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
+        //产品Id
         String productId = (String) context.get("productId");
+        //产品的分类ID
         String productCategoryId = (String) context.get("productCategoryId");
         String prodCatalogId = (String) context.get("prodCatalogId");
+        //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) context.get("partyId");
+        //产品仓库Id
+        String originFacilityId = (String) context.get("originFacilityId");
+        //产品店铺Id
         String productStoreId = (String) context.get("productStoreId");
+        //供应商
         String billFromVendorPartyId = (String) context.get("billFromVendorPartyId");
+
+        //最终客户、收货客户、意向客户等客户当事人
+        String billToCustomerPartyId,endUserCustomerPartyId,placingCustomerPartyId,shipToCustomerPartyId = partyId;
+        //发货人就是供应商
+        String supplierPartyId,shipFromVendorPartyId = billFromVendorPartyId;
 
         //StoreOrderMap
         Map<String,Object> createOrderServiceIn = new HashMap<String, Object>();
@@ -2037,13 +2045,24 @@ public class PersonManagerServices {
         orderItemList.add(itemProduct);
 
         createOrderServiceIn.put("currencyUom",PeConstant.DEFAULT_CURRENCY_UOM_ID);
+        createOrderServiceIn.put("orderName",partyId+"_BUY_"+productId+"_FROM_"+billFromVendorPartyId);
         createOrderServiceIn.put("orderItems",orderItemList);
         createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
         createOrderServiceIn.put("partyId",partyId);
         createOrderServiceIn.put("billFromVendorPartyId",billFromVendorPartyId);
         createOrderServiceIn.put("productStoreId",productStoreId);
-        createOrderServiceIn.put("userLogin",admin);
+        createOrderServiceIn.put("originFacilityId",originFacilityId);
 
+        createOrderServiceIn.put("billToCustomerPartyId",partyId);
+        createOrderServiceIn.put("endUserCustomerPartyId",partyId);
+        createOrderServiceIn.put("placingCustomerPartyId",partyId);
+        createOrderServiceIn.put("shipToCustomerPartyId",partyId);
+
+        createOrderServiceIn.put("supplierPartyId",billFromVendorPartyId);
+        createOrderServiceIn.put("shipFromVendorPartyId",billFromVendorPartyId);
+
+
+        //Do Run Service
         Map<String,Object> createOrderOut =  dispatcher.runSync("storeOrder",createOrderServiceIn);
 
         if (!ServiceUtil.isSuccess(createOrderOut)) {

@@ -5,6 +5,22 @@
     <vendor></vendor>
     <version>1.0</version>
 
+    <!--testCreatePeOrder-->
+    <service name="testCreatePeOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="testCreatePeOrder" auth="false">
+        <description>testCreatePeOrder</description>
+
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="orderId" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
 
     <!-- orderCancel -->
     <service name="orderCancel" engine="java"

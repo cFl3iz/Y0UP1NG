@@ -1977,6 +1977,83 @@ public class PersonManagerServices {
 
 
     /**
+     * TestCreatePeOrder(Demo)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> testCreatePeOrder(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String productId = (String) context.get("productId");
+        String productCategoryId = (String) context.get("productCategoryId");
+        String prodCatalogId = (String) context.get("prodCatalogId");
+
+        //StoreOrderMap
+        Map<String,Object> createOrderServiceIn = new HashMap<String, Object>();
+
+        //Order Items
+        List<GenericValue> orderItemList = new ArrayList<GenericValue>();
+
+        GenericValue  itemProduct = GenericValue.makeValue("OrderItem");
+
+        itemProduct.set("productId",productId);
+        itemProduct.set("isModifiedPrice","N");
+        itemProduct.set("shipBeforeDate",null);
+        itemProduct.set("productCategoryId",productCategoryId);
+        itemProduct.set("unitListPrice",new BigDecimal("65"));
+        itemProduct.set("shoppingListId",null);
+        itemProduct.set("cancelBackOrderDate",null);
+        itemProduct.set("itemDescription","Micro Chrome Widget");
+        itemProduct.set("selectedAmount",BigDecimal.ZERO);
+        itemProduct.set("orderItemTypeId",PeConstant.ORDER_ITEM_TYPE);
+        itemProduct.set("orderItemSeqId","00001");
+        itemProduct.set("unitPrice",new BigDecimal("59.99"));
+        itemProduct.set("quantity",new BigDecimal("1"));
+        itemProduct.set("comments",null);
+        itemProduct.set("quoteItemSeqId",null);
+        itemProduct.set("externalId",null);
+        itemProduct.set("supplierProductId",null);
+        itemProduct.set("prodCatalogId",prodCatalogId);
+
+        orderItemList.add(itemProduct);
+
+        createOrderServiceIn.put("currencyUom",PeConstant.DEFAULT_CURRENCY_UOM_ID);
+        createOrderServiceIn.put("orderItems",orderItemList);
+        createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
+        createOrderServiceIn.put("partyId","10000");
+
+        Map<String,Object> createOrderOut =  dispatcher.runSync("storeOrder",createOrderServiceIn);
+
+        if (!ServiceUtil.isSuccess(createOrderOut)) {
+            return createOrderOut;
+        }
+
+        String orderId = (String) createOrderOut.get("orderId");
+
+        resultMap.put("orderId",orderId);
+
+        return resultMap;
+    }
+
+
+
+
+    /**
      * Order Cancel
      *
      * @param dctx

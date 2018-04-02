@@ -93,6 +93,12 @@ public class PeConstant {
 
 
     /**
+     * 订单项类型
+     */
+    public static final String ORDER_ITEM_TYPE = "PRODUCT_ORDER_ITEM";
+
+
+    /**
      * 订单'创建'状态
      */
     public static final String ORDER_CREATED_STATUS_ID = "ORDER_CREATED";

@@ -115,7 +115,7 @@ under the License.
         <attribute name="orderTerms" type="List" mode="IN" optional="true"/>
         <!-- workeffort contains the rental start/enddate, nbr of persons. WorkEfforts is mandatory for ordertype = RENTAL_ORDER_ITEM-->
         <attribute name="workEfforts" type="List" mode="IN" optional="true"/>
-        <attribute name="orderAdjustments" type="List" mode="IN" optional="false"/>
+        <attribute name="orderAdjustments" type="List" mode="IN" optional="true"/>
         <attribute name="billingAccountId" type="String" mode="IN" optional="true"/>
         <attribute name="shippingAmount" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="firstAttemptOrderId" type="String" mode="IN" optional="true"/>

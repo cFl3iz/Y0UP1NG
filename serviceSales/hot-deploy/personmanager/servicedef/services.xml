@@ -5,11 +5,11 @@
     <vendor></vendor>
     <version>1.0</version>
 
-    <!--testCreatePeOrder-->
-    <service name="testCreatePeOrder" engine="java"
+    <!--createPeOrder-->
+    <service name="createPeOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
-             invoke="testCreatePeOrder" auth="false">
-        <description>testCreatePeOrder</description>
+             invoke="createPeOrder" auth="false">
+        <description>createPeOrder</description>
 
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
@@ -18,6 +18,9 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="billFromVendorPartyId" type="String" mode="IN" optional="false"/>
         <attribute name="originFacilityId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="grandTotal" type="BigDecimal" mode="IN" optional="false"/>
 
         <attribute name="orderId" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

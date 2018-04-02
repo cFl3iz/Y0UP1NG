@@ -2004,6 +2004,7 @@ public class PersonManagerServices {
         String prodCatalogId = (String) context.get("prodCatalogId");
         String partyId = (String) context.get("partyId");
         String productStoreId = (String) context.get("productStoreId");
+        String billFromVendorPartyId = (String) context.get("billFromVendorPartyId");
 
         //StoreOrderMap
         Map<String,Object> createOrderServiceIn = new HashMap<String, Object>();
@@ -2027,6 +2028,7 @@ public class PersonManagerServices {
         itemProduct.set("unitPrice",new BigDecimal("59.99"));
         itemProduct.set("quantity",new BigDecimal("1"));
         itemProduct.set("comments",null);
+        itemProduct.set("statusId",PeConstant.ORDER_APPROVED_STATUS_ID);
         itemProduct.set("quoteItemSeqId",null);
         itemProduct.set("externalId",null);
         itemProduct.set("supplierProductId",null);
@@ -2038,6 +2040,7 @@ public class PersonManagerServices {
         createOrderServiceIn.put("orderItems",orderItemList);
         createOrderServiceIn.put("orderTypeId",PeConstant.SALES_ORDER);
         createOrderServiceIn.put("partyId",partyId);
+        createOrderServiceIn.put("billFromVendorPartyId",billFromVendorPartyId);
         createOrderServiceIn.put("productStoreId",productStoreId);
         createOrderServiceIn.put("userLogin",admin);
 

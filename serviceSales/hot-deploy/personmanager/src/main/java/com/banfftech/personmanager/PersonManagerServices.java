@@ -5341,7 +5341,7 @@ public class PersonManagerServices {
 
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryFirst();
         GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
         String productId = (String) orderItem.get("productId");
         GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();

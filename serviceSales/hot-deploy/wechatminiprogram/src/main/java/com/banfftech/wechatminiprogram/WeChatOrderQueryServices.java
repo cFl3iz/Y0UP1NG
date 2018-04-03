@@ -939,11 +939,12 @@ public class WeChatOrderQueryServices {
 //                        rowMap.put("orderCompleted","已完成");
 //                    }
 //                }
-                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", gv.get("orderId")).queryFirst();
+                GenericValue orderShipment = EntityQuery.use(delegator).from("OrderShipment").where("orderId",  gv.get("orderId")).queryFirst();
+                GenericValue orderItemShip = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId",  gv.get("orderId")).queryFirst();
                 //理论上有这行数据,就肯定货运了
-                if(null != orderItemShipGroup){
+                if(null != orderShipment){
                     rowMap.put("orderShipment", "已发货");
-                    String trackingNumber = (String) orderItemShipGroup.get("trackingNumber");
+                    String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if(null!= trackingNumber){
                         rowMap.put("internalCode", "快递单号:"+trackingNumber);
@@ -1209,11 +1210,12 @@ public class WeChatOrderQueryServices {
 //                        rowMap.put("orderCompleted","已完成");
 //                    }
 //                }
-                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", gv.get("orderId")).queryFirst();
+                GenericValue orderShipment = EntityQuery.use(delegator).from("OrderShipment").where("orderId",  gv.get("orderId")).queryFirst();
+                GenericValue orderItemShip = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId",  gv.get("orderId")).queryFirst();
                 //理论上有这行数据,就肯定货运了
-                if(null != orderItemShipGroup){
+                if(null != orderShipment){
                     rowMap.put("orderShipment", "已发货");
-                    String trackingNumber = (String) orderItemShipGroup.get("trackingNumber");
+                    String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if(null!= trackingNumber){
                         rowMap.put("internalCode", "快递单号:"+trackingNumber);

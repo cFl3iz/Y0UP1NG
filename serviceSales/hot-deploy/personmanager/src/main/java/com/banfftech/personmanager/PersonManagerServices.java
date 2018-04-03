@@ -5345,7 +5345,7 @@ public class PersonManagerServices {
         // 暂不适用服务更新 dispatcher.runSync("updateShipmentRouteSegment","");
 
         GenericValue orderShipment = EntityQuery.use(delegator).from("OrderShipment").where("orderId", orderId).queryFirst();
-        String shipmentId = orderShipment.get("shipmentId");
+        String shipmentId =(String) orderShipment.get("shipmentId");
         GenericValue shipmentRouteSegment = EntityQuery.use(delegator).from("ShipmentRouteSegment").where("shipmentId", shipmentId).queryFirst();
         shipmentRouteSegment.set("carrierPartyId",orderSales.get("partyId"));
         shipmentRouteSegment.store();

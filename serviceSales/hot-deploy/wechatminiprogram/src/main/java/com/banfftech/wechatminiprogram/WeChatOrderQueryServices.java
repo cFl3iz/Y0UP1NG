@@ -804,7 +804,7 @@ public class WeChatOrderQueryServices {
 
         if (null != orderStatus && orderStatus.equals("SHIPMENT")) {
 
-            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
 
             EntityCondition listConditions3 = EntityCondition
                     .makeCondition(listConditions2, EntityOperator.AND, orderStatusCondition);
@@ -931,13 +931,30 @@ public class WeChatOrderQueryServices {
                     }
 
                 }
-                if(!statusId.equals("ORDER_SENT")){
-                    rowMap.put("orderShipment","未发货");
-                }else{
-                    rowMap.put("orderShipment","已发货");
+//                if(!statusId.equals("ORDER_SENT")){
+//                    rowMap.put("orderShipment","未发货");
+//                }else{
+//                    rowMap.put("orderShipment","已发货");
+//                    if(rowMap.get("orderPayStatus").equals("已收款")){
+//                        rowMap.put("orderCompleted","已完成");
+//                    }
+//                }
+                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", gv.get("orderId")).queryFirst();
+                //理论上有这行数据,就肯定货运了
+                if(null != orderItemShipGroup){
+                    rowMap.put("orderShipment", "已发货");
+                    String trackingNumber = (String) orderItemShipGroup.get("trackingNumber");
+                    //说明是快递发货
+                    if(null!= trackingNumber){
+                        rowMap.put("internalCode", "快递单号:"+trackingNumber);
+                    }else{
+                        rowMap.put("internalCode", "商家自配送");
+                    }
                     if(rowMap.get("orderPayStatus").equals("已收款")){
                         rowMap.put("orderCompleted","已完成");
                     }
+                }else{
+                    rowMap.put("orderShipment", "未发货");
                 }
 
 
@@ -1053,7 +1070,7 @@ public class WeChatOrderQueryServices {
 
 
         if(findShipment!=null){
-            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_SENT"));
+            EntityCondition orderStatusCondition = EntityCondition.makeCondition(UtilMisc.toMap("statusId", "ORDER_COMPLETED"));
             EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
             EntityCondition listConditions3 = EntityCondition
                     .makeCondition(genericCondition, EntityOperator.AND, orderStatusCondition);
@@ -1184,15 +1201,31 @@ public class WeChatOrderQueryServices {
 
                 }
 
-                if(!statusId.equals("ORDER_SENT")){
-                    rowMap.put("orderShipment","未发货");
-                }else{
-                    rowMap.put("orderShipment","已发货");
+//                if(!statusId.equals("ORDER_SENT")){
+//                    rowMap.put("orderShipment","未发货");
+//                }else{
+//                    rowMap.put("orderShipment","已发货");
+//                    if(rowMap.get("orderPayStatus").equals("已收款")){
+//                        rowMap.put("orderCompleted","已完成");
+//                    }
+//                }
+                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", gv.get("orderId")).queryFirst();
+                //理论上有这行数据,就肯定货运了
+                if(null != orderItemShipGroup){
+                    rowMap.put("orderShipment", "已发货");
+                    String trackingNumber = (String) orderItemShipGroup.get("trackingNumber");
+                    //说明是快递发货
+                    if(null!= trackingNumber){
+                        rowMap.put("internalCode", "快递单号:"+trackingNumber);
+                    }else{
+                        rowMap.put("internalCode", "商家自配送");
+                    }
                     if(rowMap.get("orderPayStatus").equals("已收款")){
                         rowMap.put("orderCompleted","已完成");
                     }
+                }else{
+                    rowMap.put("orderShipment", "未发货");
                 }
-
                 //不查询已收款的订单时,直接放入
                 if (null != orderStatusId && !orderStatusId.equals("PAYMENT")) {
                     orderList.add(rowMap);

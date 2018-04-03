@@ -5339,6 +5339,26 @@ public class PersonManagerServices {
             return quickShipmentOut;
         }
 
+        //更新货运信息。不管是不是卖家自配送。承运人都是卖家。只不过如果是快递发货，会增加tc
+
+        //Update ShipmentRouteSegment
+        // 暂不适用服务更新 dispatcher.runSync("updateShipmentRouteSegment","");
+
+        GenericValue orderShipment = EntityQuery.use(delegator).from("OrderShipment").where("orderId", orderId).queryFirst();
+        String shipmentId = orderShipment.get("shipmentId");
+        GenericValue shipmentRouteSegment = EntityQuery.use(delegator).from("ShipmentRouteSegment").where("shipmentId", shipmentId).queryFirst();
+        shipmentRouteSegment.set("carrierPartyId",orderSales.get("partyId"));
+        shipmentRouteSegment.store();
+        //Update OrderItemShipGroup
+        // 暂不适用服务更新 dispatcher.runSync("updateOrderItemShipGroup","");
+        GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", orderId).queryFirst();
+        orderItemShipGroup.set("carrierPartyId",orderSales.get("partyId"));
+        if(sinceTheSend!=null && sinceTheSend.equals("1")){
+            orderItemShipGroup.set("trackingNumber",code);
+        }
+        orderItemShipGroup.store();
+
+
 
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryFirst();

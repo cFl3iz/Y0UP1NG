@@ -28,17 +28,29 @@
     </service>
 
 
-
+    <!-- 订单发货 -->
     <service name="peSentOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="peSentOrder" auth="false">
         <description>peSentOrder</description>
 
-        <attribute name="orderId" type="String" mode="IN" optional="false"/>
-        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="sinceTheSend" type="String" mode="IN" optional="true"/>
 
-        <attribute name="resultMap" type="java.util.Map" mode="OUT"
-                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <!-- 物流单位名称 -->
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
+
+        <attribute name="name" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="shipmentMethodId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
 
@@ -800,16 +812,14 @@
         <attribute name="sinceTheSend" type="String" mode="IN" optional="true"/>
 
         <attribute name="orderId" type="String" mode="IN" optional="true"/>
+
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
 
-        <attribute name="code" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="code" type="String" mode="IN" optional="true"/>
         <!-- 物流单位名称 -->
-        <attribute name="carrierCode" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
 
-        <attribute name="name" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="name" type="String" mode="IN"  optional="true"/>
 
         <attribute name="contactMechId" type="String" mode="IN"
                    optional="true"/>

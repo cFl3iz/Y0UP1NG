@@ -2908,8 +2908,6 @@ public class PersonManagerServices {
         }else{
             partyId = (String) userLogin.get("partyId");
         }
-
-
         String carrierCode = (String) context.get("carrierCode");
         String name = (String) context.get("name");
         String shipmentMethodId = "";
@@ -5312,24 +5310,103 @@ public class PersonManagerServices {
 
         // Sudo
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-
-        String orderId =  (String) context.get("orderId");
-        String payToPartyId =  (String) context.get("payToPartyId");
-
-        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
-
-
-
-        Map<String, Object> createOrderItemShipGroupInMap = new HashMap<String, Object>();
-        createOrderItemShipGroupInMap.put("userLogin", admin);
-        createOrderItemShipGroupInMap.put("orderId", orderId);
-        createOrderItemShipGroupInMap.put("facilityId", (String) facility.get("facilityId"));
-        createOrderItemShipGroupInMap.put("carrierPartyId", "SHUNFENG_EXPRESS");
-        createOrderItemShipGroupInMap.put("shipmentMethodTypeId", "EXPRESS");
-        Map<String, Object> createOrderItemShipGroupOut = dispatcher.runSync("createOrderItemShipGroup", createOrderItemShipGroupInMap);
-        if (ServiceUtil.isError(createOrderItemShipGroupOut)) {
-            return createOrderItemShipGroupOut;
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String code = (String) context.get("code");
+        String orderId = (String) context.get("orderId");
+        String partyId = (String) context.get("partyId");
+        //小程序确认收款
+        if(null != partyId ){
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+        }else{
+            partyId = (String) userLogin.get("partyId");
         }
+        String carrierCode = (String) context.get("carrierCode");
+        String name = (String) context.get("name");
+        String shipmentMethodId = "";
+        String contactMechId = "";
+        String sinceTheSend = (String) context.get("sinceTheSend");
+
+        GenericValue orderSales = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", orderSales.get("partyId")).queryFirst();
+
+        Map<String,Object> quickShipmentOut =  dispatcher.runSync("quickShipEntireOrder",UtilMisc.toMap(
+                "userLogin",admin,
+                "orderId",orderId,
+                "originFacilityId",facility.get("facilityId")));
+
+        if (!ServiceUtil.isSuccess(quickShipmentOut)) {
+            return quickShipmentOut;
+        }
+
+
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", orderCust.get("partyId"), "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+        String productId = (String) orderItem.get("productId");
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+
+        //推送买家
+        if (null != partyIdentification) {
+
+            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+
+
+            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+
+            pushWeChatMessageInfoMap.put("payToPartyId", partyId);
+
+            Date date = new Date();
+
+            SimpleDateFormat formatter;
+
+            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String pushDate = "" + formatter.format(date);
+
+            pushWeChatMessageInfoMap.put("date", pushDate);
+
+
+            String openId = (String) partyIdentification.get("idValue");
+
+            pushWeChatMessageInfoMap.put("openId", openId);
+
+            pushWeChatMessageInfoMap.put("orderId", orderId);
+            if (null != sinceTheSend && sinceTheSend.equals("1")) {
+                //自配送
+                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我发货了," + "由我亲自给您配送!");
+
+            } else {
+                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + (code == null ? "暂无详细" : code));
+            }
+
+
+            GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", orderCust.get("partyId"), "enabled", "Y").queryFirst();
+
+            String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+
+
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", toPartyUserLoginId);
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.yo-pe.com:3400/WebManager/control/myOrderDetail?orderId=" + orderId + "&tarjeta=" + signer.sign(claims));
+            //推微信订单状态
+            dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
+        }
+
+
 
 
         return resultMap;

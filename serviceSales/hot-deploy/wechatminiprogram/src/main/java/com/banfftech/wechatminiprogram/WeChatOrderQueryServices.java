@@ -1183,21 +1183,21 @@ public class WeChatOrderQueryServices {
                     }
                 } else {
                     rowMap.put("payStatusCode", "0");
-                    rowMap.put("orderPayStatus", "未付款");
+                    rowMap.put("orderPayStatus", "未收款");
                     if (null != payment) {
                         String paymentStatusId = (String) payment.get("statusId");
                         if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
                             rowMap.put("orderPayStatus", "已收款");
                             rowMap.put("payStatusCode", "1");
                         }
-                        if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {
-                            rowMap.put("orderPayStatus", "买家已付款");
-                            rowMap.put("payStatusCode", "1");
-                        }
+//                        if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {
+//                            rowMap.put("orderPayStatus", "买家已付款");
+//                            rowMap.put("payStatusCode", "1");
+//                        }
 
                     } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未付款");
+                        rowMap.put("orderPayStatus", "未收款");
                     }
 
                 }
@@ -1233,7 +1233,7 @@ public class WeChatOrderQueryServices {
                     orderList.add(rowMap);
                 }
                 if (null != orderStatusId && orderStatusId.equals("PAYMENT")) {
-                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
+                    if (!rowMap.get("orderPayStatus").equals("未收款")) {
                         orderList.add(rowMap);
                     }
                 }

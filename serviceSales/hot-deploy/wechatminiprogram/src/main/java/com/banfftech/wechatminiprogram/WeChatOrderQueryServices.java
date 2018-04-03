@@ -913,23 +913,8 @@ public class WeChatOrderQueryServices {
                     rowMap.put("payStatusCode", "1");
 
                 } else {
-
-
-                    if (null != payment) {
-                        String paymentStatusId = (String) payment.get("statusId");
-                        if (paymentStatusId != null) {
-
-                            rowMap.put("orderPayStatus", "已收款");
-
-                            rowMap.put("payStatusCode", "1");
-
-                        }
-                    } else {
-
                         rowMap.put("payStatusCode", "0");
                         rowMap.put("orderPayStatus", "未收款");
-                    }
-
                 }
 //                if(!statusId.equals("ORDER_SENT")){
 //                    rowMap.put("orderShipment","未发货");
@@ -1171,34 +1156,12 @@ public class WeChatOrderQueryServices {
 
                 if (null != orderPaymentPrefAndPayment) {
 
-                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
-
-                    if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
-
                         rowMap.put("orderPayStatus", "已收款");
                         rowMap.put("payStatusCode", "1");
-                    } else {
-                        rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "买家已付款");
-                    }
+
                 } else {
                     rowMap.put("payStatusCode", "0");
                     rowMap.put("orderPayStatus", "未收款");
-                    if (null != payment) {
-                        String paymentStatusId = (String) payment.get("statusId");
-                        if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
-                            rowMap.put("orderPayStatus", "已收款");
-                            rowMap.put("payStatusCode", "1");
-                        }
-//                        if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {
-//                            rowMap.put("orderPayStatus", "买家已付款");
-//                            rowMap.put("payStatusCode", "1");
-//                        }
-
-                    } else {
-                        rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未收款");
-                    }
 
                 }
 

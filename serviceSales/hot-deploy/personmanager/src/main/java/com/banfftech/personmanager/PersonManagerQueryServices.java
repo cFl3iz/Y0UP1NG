@@ -2020,20 +2020,17 @@ public class PersonManagerQueryServices {
 
             if (null != orderPaymentPrefAndPayment) {
 
-                String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
-                Debug.logInfo("===================================> PayStatus="+statusId,module);
-                if (statusId.equals("PAYMENT_RECEIVED")) {
 
-                    rowMap.put("orderPayStatus", "已付款");
 
-                } else {
+                    rowMap.put("orderPayStatus", "已收款");
 
-                    rowMap.put("orderPayStatus", "未付款");
 
-                }
+
+
             } else {
 
-                rowMap.put("orderPayStatus", "未付款");
+                rowMap.put("orderPayStatus", "未收款");
+
 
             }
 
@@ -2588,22 +2585,8 @@ public class PersonManagerQueryServices {
                     rowMap.put("payStatusCode", "1");
 
                 } else {
-
-
-                    if (null != payment) {
-                        String paymentStatusId = (String) payment.get("statusId");
-                        if (paymentStatusId != null) {
-
-                            rowMap.put("orderPayStatus", "已收款");
-
-                            rowMap.put("payStatusCode", "1");
-
-                        }
-                    } else {
-
-                        rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未收款");
-                    }
+                    rowMap.put("orderPayStatus", "未收款");
+                    rowMap.put("payStatusCode", "1");
 
                 }
 //                if(!statusId.equals("ORDER_SENT")){

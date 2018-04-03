@@ -1403,7 +1403,7 @@ under the License.
             <field-map field-name="orderId" from-field="orderHeader.orderId"/>
             <field-map field-name="statusId" value="ITEM_APPROVED"/>
         </entity-and>
-
+        <log level="info" message=" >> IN orderItemAndShipGroupAssocList orderHeader.orderId= ${orderHeader.orderId} = ${orderItemAndShipGroupAssocList} "/>
         <!-- make sure we have something to ship -->
         <if-empty field="orderItemAndShipGroupAssocList">
             <add-error>

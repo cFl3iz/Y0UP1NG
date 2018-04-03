@@ -33,7 +33,8 @@ under the License.
         <condition field-name="inventoryItemId" operator="is-not-empty"/>
         <!-- Ignore the inventory shipment if affectAccounting set as false -->
         <condition field-name="affectAccounting" operator="equals" value="true" type="Boolean"/>
-        <action service="createAcctgTransForSalesShipmentIssuance" mode="sync"/>
+        <!-- 不计算成本 -->
+        <!--<action service="createAcctgTransForSalesShipmentIssuance" mode="sync"/>-->
     </eca>
 
     <!-- create an accounting transactions every time an issuance to sales shipment is canceled -->

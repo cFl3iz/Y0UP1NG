@@ -2041,7 +2041,7 @@ public class PersonManagerServices {
         itemProduct.set("unitPrice",product.get("price"));
         itemProduct.set("quantity",quantity);
         itemProduct.set("comments",null);
-        itemProduct.set("statusId",PeConstant.ORDER_APPROVED_STATUS_ID);
+        itemProduct.set("statusId",PeConstant.ORDER_ITEM_APPROVED_STATUS_ID);
         itemProduct.set("quoteItemSeqId",null);
         itemProduct.set("externalId",null);
         itemProduct.set("supplierProductId",null);

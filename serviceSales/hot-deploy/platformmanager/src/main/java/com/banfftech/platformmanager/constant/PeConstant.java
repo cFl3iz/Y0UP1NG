@@ -107,6 +107,7 @@ public class PeConstant {
      * 订单'批准'状态
      */
     public static final String ORDER_APPROVED_STATUS_ID = "ORDER_APPROVED";
+    public static final String ORDER_ITEM_APPROVED_STATUS_ID = "ITEM_APPROVED";
     /**
      * 是一个客户关系
      */

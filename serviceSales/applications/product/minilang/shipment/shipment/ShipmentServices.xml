@@ -1767,7 +1767,7 @@ under the License.
                 <check-errors/>
             </if-not-empty>
         </if-empty>
-
+        <log level="info" message=" >> IN quickShipOrderByItem  parameters.itemShipList = ${parameters} "/>
         <!-- make sure we have items to issue -->
         <if-empty field="parameters.itemShipList">
             <add-error>

@@ -913,12 +913,12 @@ public class WeChatOrderQueryServices {
                         rowMap.put("payStatusCode", "1");
                     } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未付款");
+                        rowMap.put("orderPayStatus", "未收款");
                     }
 
                 } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未付款");
+                        rowMap.put("orderPayStatus", "未收款");
                 }
 //                if(!statusId.equals("ORDER_SENT")){
 //                    rowMap.put("orderShipment","未发货");

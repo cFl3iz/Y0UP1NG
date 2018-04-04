@@ -911,7 +911,7 @@ public class WeChatOrderQueryServices {
 
                 } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未收款");
+                        rowMap.put("orderPayStatus", "未付款");
                 }
 //                if(!statusId.equals("ORDER_SENT")){
 //                    rowMap.put("orderShipment","未发货");
@@ -947,7 +947,7 @@ public class WeChatOrderQueryServices {
                     myResourceOrderList.add(rowMap);
                 }
                 if (null != orderStatus && orderStatus.equals("PAYMENT")) {
-                    if (!rowMap.get("orderPayStatus").equals("未收款")) {
+                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
                         myResourceOrderList.add(rowMap);
                     }
                 }
@@ -1158,7 +1158,7 @@ public class WeChatOrderQueryServices {
 
                 } else {
                     rowMap.put("payStatusCode", "0");
-                    rowMap.put("orderPayStatus", "未收款");
+                    rowMap.put("orderPayStatus", "未付款");
 
                 }
 
@@ -1193,7 +1193,7 @@ public class WeChatOrderQueryServices {
                     orderList.add(rowMap);
                 }
                 if (null != orderStatusId && orderStatusId.equals("PAYMENT")) {
-                    if (!rowMap.get("orderPayStatus").equals("未收款")) {
+                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
                         orderList.add(rowMap);
                     }
                 }

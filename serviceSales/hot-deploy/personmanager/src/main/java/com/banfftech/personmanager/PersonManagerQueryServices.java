@@ -2029,7 +2029,7 @@ public class PersonManagerQueryServices {
 
             } else {
 
-                rowMap.put("orderPayStatus", "未收款");
+                rowMap.put("orderPayStatus", "未付款");
 
 
             }
@@ -2569,7 +2569,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("payStatusCode", "1");
 
                 } else {
-                    rowMap.put("orderPayStatus", "未收款");
+                    rowMap.put("orderPayStatus", "未付款");
                     rowMap.put("payStatusCode", "1");
 
                 }
@@ -2607,7 +2607,7 @@ public class PersonManagerQueryServices {
                     myResourceOrderList.add(rowMap);
                 }
                 if (null != orderStatus && orderStatus.equals("PAYMENT")) {
-                    if (!rowMap.get("orderPayStatus").equals("未收款")) {
+                    if (!rowMap.get("orderPayStatus").equals("未付款")) {
                         myResourceOrderList.add(rowMap);
                     }
                 }

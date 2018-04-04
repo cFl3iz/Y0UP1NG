@@ -2315,38 +2315,22 @@ public class PersonManagerQueryServices {
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
 
-                GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
+           //     GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
 
                 if (null != orderPaymentPrefAndPayment) {
 
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
                     if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
-
                         rowMap.put("orderPayStatus", "已收款");
                         rowMap.put("payStatusCode", "1");
                     } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "买家已付款");
+                        rowMap.put("orderPayStatus", "未付款");
                     }
                 } else {
                     rowMap.put("payStatusCode", "0");
                     rowMap.put("orderPayStatus", "未付款");
-                    if (null != payment) {
-                        String paymentStatusId = (String) payment.get("statusId");
-                        if (paymentStatusId.equals("PAYMENT_RECEIVED")) {
-                            rowMap.put("orderPayStatus", "已收款");
-                            rowMap.put("payStatusCode", "1");
-                        }
-                        if (paymentStatusId.toUpperCase().indexOf("NOT_PAID") > 0) {
-                            rowMap.put("orderPayStatus", "买家已付款");
-                            rowMap.put("payStatusCode", "1");
-                        }
-
-                    } else {
-                        rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未付款");
-                    }
 
                 }
                 GenericValue orderShipment = EntityQuery.use(delegator).from("OrderShipment").where("orderId", gv.get("orderId")).queryFirst();

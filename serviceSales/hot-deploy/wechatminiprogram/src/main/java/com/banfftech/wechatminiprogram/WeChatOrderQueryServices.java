@@ -615,18 +615,15 @@ public class WeChatOrderQueryServices {
             GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId",orderId).queryFirst();
 
             if(null != orderPaymentPrefAndPayment){
-                rowMap.put("orderPayStatus","已付款");
-//                String statusId = (String) orderPaymentPrefAndPayment.get("statusId");
-//
-//                if(statusId.toUpperCase().indexOf("RECEIVED")>0){
-//
-//
-//
-//                }else{
-//
-//                    rowMap.put("orderPayStatus","未付款");
-//
-//                }
+                String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
+                    rowMap.put("orderPayStatus", "已收款");
+                    rowMap.put("payStatusCode", "1");
+                } else {
+                    rowMap.put("payStatusCode", "0");
+                    rowMap.put("orderPayStatus", "未付款");
+                }
             }else{
 
                 rowMap.put("orderPayStatus","未付款");

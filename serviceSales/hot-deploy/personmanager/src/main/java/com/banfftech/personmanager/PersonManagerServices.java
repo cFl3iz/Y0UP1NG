@@ -2229,23 +2229,23 @@ public class PersonManagerServices {
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
 
-        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
-        createOrderPaymentPreferenceMap.put("userLogin", admin);
-        createOrderPaymentPreferenceMap.put("orderId", orderId);
-        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
-        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
-        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
-        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
-        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
-        createOrderPaymentPreferenceMap.put("presentFlag", "N");
-        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
-        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
+//        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
+//        createOrderPaymentPreferenceMap.put("userLogin", admin);
+//        createOrderPaymentPreferenceMap.put("orderId", orderId);
+//        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
+//        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
+//        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
+//        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
+//        createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+//        createOrderPaymentPreferenceMap.put("presentFlag", "N");
+//        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
+//        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
 
-        Map<String, Object> createOrderPaymentPreferenceOutMap =
-                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
-        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
-            return createOrderPaymentPreferenceOutMap;
-        }
+//        Map<String, Object> createOrderPaymentPreferenceOutMap =
+//                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
+//        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
+//            return createOrderPaymentPreferenceOutMap;
+//        }
 
 //        //找到买家
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
@@ -2315,12 +2315,12 @@ public class PersonManagerServices {
 //
 //
 //            //更新订单支付信息
-////        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
-////                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
-////
-////        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
-////            return updateOrderPaymentPreferenceOutMap;
-////        }
+        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+
+        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+            return updateOrderPaymentPreferenceOutMap;
+        }
 //
 //            //暂时使用卑劣方式
 //            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
@@ -2330,7 +2330,7 @@ public class PersonManagerServices {
 //        }
 
         //应用收款支付.....
-        receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
+   //     receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
 //        Map<String, Object> updateOrderStatusInMap = new HashMap<String, Object>();
 //        updateOrderStatusInMap.put("userLogin", admin);

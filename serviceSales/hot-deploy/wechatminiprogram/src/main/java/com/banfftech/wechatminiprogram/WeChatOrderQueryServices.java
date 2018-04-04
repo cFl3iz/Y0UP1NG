@@ -906,8 +906,15 @@ public class WeChatOrderQueryServices {
 
                 if (null != orderPaymentPrefAndPayment) {
 
-                    rowMap.put("orderPayStatus", "已收款");
-                    rowMap.put("payStatusCode", "1");
+                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+
+                    if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
+                        rowMap.put("orderPayStatus", "已收款");
+                        rowMap.put("payStatusCode", "1");
+                    } else {
+                        rowMap.put("payStatusCode", "0");
+                        rowMap.put("orderPayStatus", "未付款");
+                    }
 
                 } else {
                         rowMap.put("payStatusCode", "0");
@@ -1150,11 +1157,16 @@ public class WeChatOrderQueryServices {
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
-
+                String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
                 if (null != orderPaymentPrefAndPayment) {
 
+                    if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
                         rowMap.put("orderPayStatus", "已收款");
                         rowMap.put("payStatusCode", "1");
+                    } else {
+                        rowMap.put("payStatusCode", "0");
+                        rowMap.put("orderPayStatus", "未付款");
+                    }
 
                 } else {
                     rowMap.put("payStatusCode", "0");

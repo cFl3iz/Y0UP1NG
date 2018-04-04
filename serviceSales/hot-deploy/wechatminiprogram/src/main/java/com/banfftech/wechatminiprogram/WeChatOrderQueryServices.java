@@ -1157,8 +1157,8 @@ public class WeChatOrderQueryServices {
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
-                String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
                 if (null != orderPaymentPrefAndPayment) {
+                    String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
                     if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
                         rowMap.put("orderPayStatus", "已收款");

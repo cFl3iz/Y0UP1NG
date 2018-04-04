@@ -2315,12 +2315,12 @@ public class PersonManagerServices {
 //
 //
 //            //更新订单支付信息
-        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
-                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
-
-        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
-            return updateOrderPaymentPreferenceOutMap;
-        }
+//        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+//                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+//
+//        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+//            return updateOrderPaymentPreferenceOutMap;
+//        }
 //
 //            //暂时使用卑劣方式
 //            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");
@@ -2330,7 +2330,7 @@ public class PersonManagerServices {
 //        }
 
         //应用收款支付.....
-   //     receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
+        receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
 //        Map<String, Object> updateOrderStatusInMap = new HashMap<String, Object>();
 //        updateOrderStatusInMap.put("userLogin", admin);

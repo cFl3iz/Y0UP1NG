@@ -2261,7 +2261,7 @@ public class PersonManagerServices {
 //
 
         //查找订单支付Id
-        // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+         GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
         //这种情况下说明是先付钱,后发货的。
 
@@ -2286,7 +2286,7 @@ public class PersonManagerServices {
 //        } else {
 //
 //
-//            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
+            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
 //
 //            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 //

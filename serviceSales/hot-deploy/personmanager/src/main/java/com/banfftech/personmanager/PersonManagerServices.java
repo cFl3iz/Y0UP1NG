@@ -2236,7 +2236,7 @@ public class PersonManagerServices {
         createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
         createOrderPaymentPreferenceMap.put("overflowFlag", "N");
         createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
-        createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
         createOrderPaymentPreferenceMap.put("presentFlag", "N");
         createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
         createOrderPaymentPreferenceMap.put("swipedFlag", "N");
@@ -2261,7 +2261,7 @@ public class PersonManagerServices {
 //
 
         //查找订单支付Id
-   //      GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
+        // GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPrefAndPayment").where("orderId", orderId).queryFirst();
 
         //这种情况下说明是先付钱,后发货的。
 
@@ -2286,7 +2286,7 @@ public class PersonManagerServices {
 //        } else {
 //
 //
-      //      String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
+//            String orderPaymentPreferenceId = (String) orderPaymentPrefAndPayment.get("orderPaymentPreferenceId");
 //
 //            GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 //
@@ -2315,12 +2315,12 @@ public class PersonManagerServices {
 //
 //
 //            //更新订单支付信息
-//        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
-//                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
-//
-//        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
-//            return updateOrderPaymentPreferenceOutMap;
-//        }
+////        Map<String, Object> updateOrderPaymentPreferenceOutMap = dispatcher.runSync("updateOrderPaymentPreference", UtilMisc.toMap(
+////                "userLogin", userLogin, "orderPaymentPreferenceId",orderPaymentPreferenceId,"statusId","PMNT_RECEIVED"));
+////
+////        if (!ServiceUtil.isSuccess(updateOrderPaymentPreferenceOutMap)) {
+////            return updateOrderPaymentPreferenceOutMap;
+////        }
 //
 //            //暂时使用卑劣方式
 //            orderPaymentPrefAndPayment.set("statusId", "PMNT_RECEIVED");

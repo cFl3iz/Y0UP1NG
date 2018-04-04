@@ -2313,7 +2313,7 @@ public class PersonManagerQueryServices {
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
 
-                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();
+                GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).orderBy("-createdStamp").queryFirst();
 
            //     GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", payFromPartyId, "comments", rowMap.get("orderId")).queryFirst();
 

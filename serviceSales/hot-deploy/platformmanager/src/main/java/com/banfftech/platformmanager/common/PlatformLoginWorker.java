@@ -687,7 +687,9 @@ public class PlatformLoginWorker {
         String accessToken = (String) jsonMap.get("access_token");
 
         String openId = (String) jsonMap.get("unionid");
+        String returnOpenId = (String) jsonMap.get("openid");
 
+        result.put("openid",returnOpenId);
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryList();
 

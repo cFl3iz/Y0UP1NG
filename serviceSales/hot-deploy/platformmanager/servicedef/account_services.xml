@@ -40,6 +40,7 @@
         <attribute name="uuid" type="String" mode="IN" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="openid" type="String" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
         <attribute name="newUser" type="String" mode="OUT" optional="true"/>
 

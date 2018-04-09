@@ -328,8 +328,8 @@
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
                 jdbc-uri="jdbc:mysql://127.0.0.1/personerp?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="pe"
-                jdbc-password="pe"
+                jdbc-username="root"
+                jdbc-password="root"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"
@@ -361,8 +361,8 @@
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
                 jdbc-uri="jdbc:mysql://127.0.0.1/personERPolap?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="pe"
-                jdbc-password="pe"
+                jdbc-username="root"
+                jdbc-password="root"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"
@@ -394,8 +394,8 @@
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
                 jdbc-uri="jdbc:mysql://127.0.0.1/personERPtenant?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="pe"
-                jdbc-password="pe"
+                jdbc-username="root"
+                jdbc-password="root"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"

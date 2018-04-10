@@ -13,7 +13,10 @@
 
 
 
-
+    <service name="importProductToComp" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="importProductToComp" auth="false">
+        <description>importProductToComp</description>
+    </service>
 
 
 

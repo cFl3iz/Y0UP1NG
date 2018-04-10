@@ -2,12 +2,32 @@
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
 
+
+
+
+
     <!-- Every Request Do Check -->
     <preprocessor>
         <event name="checkTarjetaLogin" type="java"
                path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
                invoke="checkTarjetaLogin"/>
     </preprocessor>
+
+
+
+
+    <!-- 商品导入 Copy By ZucZug Moka -->
+    <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
+
+    <request-map uri="ProductUploadImportEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="ProductUploadImport"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+
+
+
 
     <!-- Query Express Info -->
     <request-map uri="queryExpressInfo">
@@ -140,5 +160,10 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
+
+
+    <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
 
 </site-conf>

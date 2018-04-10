@@ -16,4 +16,20 @@
         </section>
     </screen>
 
+    <screen name="ProductUploadImport">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
+                        <screenlet title="导入">
+                            <include-form name="ProductUploadImportForm" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 </screens>

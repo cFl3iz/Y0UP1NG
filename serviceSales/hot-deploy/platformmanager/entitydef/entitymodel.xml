@@ -9,6 +9,17 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+
+    <view-entity entity-name="FacilityPartyAndFacility" package-name="org.ofbiz.product.facility">
+        <member-entity entity-alias="FP" entity-name="FacilityParty"></member-entity>
+        <member-entity entity-alias="F" entity-name="Facility"></member-entity>
+        <alias-all entity-alias="FP" />
+        <alias-all entity-alias="F" />
+        <view-link entity-alias="FP" rel-entity-alias="F">
+            <key-map field-name="facilityId" />
+        </view-link>
+    </view-entity>
+
     <!-- Tele & Party View -->
     <view-entity entity-name="TelecomNumberAndPartyView" package-name="com.banfftech.personerp">
         <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>

@@ -5852,6 +5852,15 @@ public class PersonManagerServices {
             dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
         }
 
+        // 销售代表角色
+        partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartySALES_REPRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "SALES_REP");
+            dispatcher.runSync("createPartyRole", createPartySALES_REPRoleMap);
+        }
+
+
         // 创建当事人
 
 

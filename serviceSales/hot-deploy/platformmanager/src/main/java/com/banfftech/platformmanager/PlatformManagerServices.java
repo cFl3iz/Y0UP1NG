@@ -1,6 +1,8 @@
 package main.java.com.banfftech.platformmanager;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -8,6 +10,7 @@ import java.util.*;
 
 import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
+import main.java.com.banfftech.platformmanager.util.TestExcel;
 import net.sf.json.JSONObject;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.EmojiHandler;
@@ -15,6 +18,7 @@ import main.java.com.banfftech.platformmanager.util.UtilTools;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -42,6 +46,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 
+
+import org.apache.ofbiz.entity.transaction.GenericTransactionException;
+import org.apache.ofbiz.entity.transaction.TransactionUtil;
+
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.GenericEntity;
 
@@ -55,6 +63,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.ofbiz.base.util.UtilHttp;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
 import javax.servlet.http.HttpSession;
@@ -75,6 +90,153 @@ public class PlatformManagerServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+
+
+
+
+
+
+
+
+
+    // 导入exlSKU
+    public static String ProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException,InvalidFormatException {
+
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
+            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+            HttpSession session = request.getSession();
+            GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+            FileItem fileItem = getFileItem(request);
+            String fileName = fileItem.getName();
+            List<String[]> excelList = excelToList(fileItem);
+//            TransactionUtil.setTransactionTimeout(10000);
+//            TransactionUtil.begin();
+
+            for (int i = 0; i < excelList.size(); i++) {
+                //货号	SKU	货品名称	颜色编号	颜色说明	尺码	条形码	吊牌价	系列	系列	款型	性别	季
+
+                //品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU-特别提醒-洗涤方式-上市年份+季节-组别-备注
+
+                String[] excelRow = excelList.get(i);
+                String productVirtualId = excelRow[0];
+                String productId = excelRow[1];
+//                String productName = excelRow[2];
+//                String colorId = excelRow[3];
+//                String sizeId = excelRow[5];
+//                String ean = excelRow[6];
+//                String listPrice = excelRow[7];
+//                String seriesId = excelRow[9];
+//                String styleId = excelRow[10];
+//                String seasonId = excelRow[12];
+                System.out.println("productVirtualId="+productVirtualId);
+                System.out.println("productId="+productId);
+        }
+        return "success";
+    }
+
+
+    //得到fileItem
+    public static FileItem getFileItem(HttpServletRequest request) throws FileUploadException, IOException {
+        FileItem fileItem = null;
+        DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
+        diskFileItemFactory.setSizeThreshold(4096);
+        ServletFileUpload uploadFileServlet = new ServletFileUpload(diskFileItemFactory);
+        // -1代表无限制
+        uploadFileServlet.setSizeMax(-1);
+        uploadFileServlet.setHeaderEncoding("utf-8");
+        List<FileItem> fileItems = uploadFileServlet.parseRequest(request);
+        for (FileItem fi : fileItems) {
+            if (!fi.isFormField()) {
+                fileItem = fi;
+            }
+        }
+        return fileItem;
+    }
+
+
+    @SuppressWarnings("unused")
+    //将Excel转换成List
+    public static List<String[]> excelToList(FileItem fileItem) throws IOException, InvalidFormatException {
+        InputStream is = new ByteArrayInputStream(fileItem.get());
+
+        //XSSFWorkbook workbook = new XSSFWorkbook(is);
+        Workbook wb  = WorkbookFactory.create(is);
+        // 得到exl表对象
+        //XSSFSheet sheet = wb.getSheetAt(0);
+
+        Sheet sheet = wb.getSheetAt(0);
+
+        List<String[]> excelList = new ArrayList<String[]>();
+        // 初始值
+        int firstRowIndex = sheet.getFirstRowNum();
+        // 最大值
+        int lastRowNum = sheet.getLastRowNum();
+        // 从1开始去掉表头
+        for (int i = 1; i <= lastRowNum; i++) {
+            // 获得一列
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                //
+                int tdLength = row.getLastCellNum();
+                String[] excelRow = new String[tdLength];
+
+                for (int j = 0; j <= tdLength; j++) {
+                    // 当前列值
+                    Cell cell = row.getCell(j);
+                    if (cell == null) {
+                        break;
+                    }
+                    if ("".equals(cell.toString().trim())) {
+                        break;
+                    }
+                    excelRow[j] = cell.toString().trim();
+                }
+                excelList.add(excelRow);
+            }
+        }
+        return excelList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * importProductToComp(商户导入产品)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> importProductToComp(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        TestExcel.showExcel();
+
+        return result;
+    }
 
     /**
      * cleanSessionMessage

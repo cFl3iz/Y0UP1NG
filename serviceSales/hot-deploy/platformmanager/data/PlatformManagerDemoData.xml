@@ -1,33 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
+    <!--<Party partyId="Company" partyTypeId="PARTY_GROUP"/>-->
+    <!--<PartyGroup partyId="Company" groupName="An Ko Rau"/>-->
+    <!--<PartyRole partyId="Company" roleTypeId="BILL_FROM_VENDOR"/>-->
+    <!--<PartyRole partyId="Company" roleTypeId="BILL_TO_CUSTOMER"/>-->
+    <!--<PartyRole partyId="Company" roleTypeId="INTERNAL_ORGANIZATIO"/>-->
+    <!--<PartyRole partyId="Company" roleTypeId="_NA_"/>-->
+    <!--<PartyRole partyId="Company" roleTypeId="ACCOUNT"/>-->
+
+    <!-- 素然组织机构 -->
+    <Party partyId="ZUCZUG" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="ZUCZUG" groupName="素然"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="SUPPLIER"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="SUPPLIER_AGENT"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="_NA_"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="ACCOUNT"/>
+    <!-- 默认联系方式 -->
+    <ContactMech contactMechId="9001" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PartyContactMech partyId="ZUCZUG" contactMechId="9001" fromDate="2001-05-13 00:00:00.000" allowSolicitation="Y"/>
+    <PostalAddress contactMechId="9001" toName="ZUCZUG" address1="2004 Factory Blvd" city="City of Industry"
+                   postalCode="90000" countryGeoId="CHN"/>
+    <PartyContactMechPurpose partyId="ZUCZUG" contactMechId="9001" contactMechPurposeTypeId="BILLING_LOCATION"
+                             fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="ZUCZUG" contactMechId="9001" contactMechPurposeTypeId="GENERAL_LOCATION"
+                             fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="ZUCZUG" contactMechId="9001" contactMechPurposeTypeId="PAYMENT_LOCATION"
+                             fromDate="2001-05-13 00:00:00.000"/>
+
+    <!-- 素然店铺 -->
+
+    <Facility facilityId="ZUCZUG" ownerPartyId="ZUCZUG" facilityTypeId="WAREHOUSE" facilityName="ZUCZUG仓库"
+              description="ZUCZUG仓库"/>
+    <ContactMech contactMechId="9200" contactMechTypeId="POSTAL_ADDRESS"/>
+    <ContactMech contactMechId="9201" contactMechTypeId="TELECOM_NUMBER"/>
+    <ContactMech contactMechId="9202" contactMechTypeId="EMAIL_ADDRESS" infoString="yuqing@zuczug.com"/>
+    <PostalAddress contactMechId="9200" toName="An Ko Rau" attnName="ZJAA" address1="2003 Open Blvd" city="Shanghai"
+                   countryGeoId="CHN"/>
+    <TelecomNumber contactMechId="9201" areaCode="21" contactNumber="55555555"/>
+    <FacilityContactMech facilityId="ZUCZUG" contactMechId="9200" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="ZUCZUG" contactMechId="9201" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="ZUCZUG" contactMechId="9202" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="ZUCZUG" contactMechId="9200" contactMechPurposeTypeId="SHIPPING_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="ZUCZUG" contactMechId="9200" contactMechPurposeTypeId="SHIP_ORIG_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="ZUCZUG" contactMechId="9201" contactMechPurposeTypeId="PHONE_SHIPPING"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="ZUCZUG" contactMechId="9201" contactMechPurposeTypeId="PHONE_SHIP_ORIG"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="ZUCZUG" contactMechId="9202" contactMechPurposeTypeId="PRIMARY_EMAIL"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <ProductStore productStoreId="ZUCZUGSTORE" storeName="素然店铺" companyName="zuczugStore" title="素然店铺"
+                  payToPartyId="ZUCZUG" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+                  inventoryFacilityId="ZUCZUG" oneInventoryFacility="Y" checkInventory="Y"
+                  splitPayPrefPerShpGrp="N" reserveInventory="Y"
+                  reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="Y" isImmediatelyFulfilled="Y"
+                  defaultLocaleString="zh_CN" defaultCurrencyUomId="CNY" allowPassword="Y" explodeOrderItems="N"
+                  retryFailedAuths="N" manualAuthIsCapture="Y"
+                  headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
+                  digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+                  itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="RS"
+                  visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+
+    <ProductStoreFacility createdStamp="2018-04-10 18:42:27.0" createdTxStamp="2018-04-10 18:42:27.0" facilityId="ZUCZUG" fromDate="2018-04-10 18:42:26.0" lastUpdatedStamp="2018-04-10 18:42:27.0" lastUpdatedTxStamp="2018-04-10 18:42:27.0" productStoreId="ZUCZUGSTORE"/>
+
+    <PaymentMethodType paymentMethodTypeId="EXT_UNIONPAY" description="银联" defaultGlAccountId="122000"/>
+    <PaymentMethodType paymentMethodTypeId="EXT_ALIPAY" description="支付宝" defaultGlAccountId="122000"/>
+    <PaymentMethodType paymentMethodTypeId="EXT_WECHAT_PAY" description="微信" defaultGlAccountId="122000"/>
+
+    <ProductStorePaymentSetting productStoreId="ZUCZUGSTORE" paymentMethodTypeId="EXT_UNIONPAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="ZUCZUGSTORE" paymentMethodTypeId="EXT_ALIPAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="ZUCZUGSTORE" paymentMethodTypeId="EXT_WECHAT_PAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="ZUCZUGSTORE" paymentMethodTypeId="CASH"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+
+
+    <ProdCatalog prodCatalogId="ANKORAU_RETAIL" catalogName="AnKoRau零售总目录"/>
+    <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="ANKORAU_RETAIL" fromDate="2016-09-07 12:00:00" />
+
+
+
+    <ProdCatalog prodCatalogId="ANKORAU_RETAIL" catalogName="AnKoRau零售总目录"/>
+    <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="ANKORAU_RETAIL" fromDate="2016-09-07 12:00:00" />
+
+    <ProductCategory productCategoryId="ANKORAU_RETAIL_ROOT" productCategoryTypeId="CATALOG_CATEGORY" categoryName="所有分类"/>
+    <ProductCategory productCategoryId="SEASON_NEW" productCategoryTypeId="CATALOG_CATEGORY" categoryName="当季新款"/>
+
+    <ProdCatalogCategory prodCatalogId="ANKORAU_RETAIL" productCategoryId="ANKORAU_RETAIL_ROOT" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT" fromDate="2016-09-07 12:00:00"/>
+
+    <ProductCategoryRollup productCategoryId="SEASON_NEW" parentProductCategoryId="ANKORAU_RETAIL_ROOT" fromDate="2016-09-07 12:00:00" />
+
+
+    
+    
+    <!--<ProductStoreRole productStoreId="ZUCZUGSTORE" partyId="SALESRP001" roleTypeId="SALES_REP"-->
+    <!--fromDate="2017-01-01 12:00:00.0"/>-->
+    <!--<ProductStoreRole productStoreId="ZUCZUGSTORE" partyId="SALESRP002" roleTypeId="SALES_REP"-->
+    <!--fromDate="2017-01-01 12:00:00.0"/>-->
     <!-- 一些快递Party -->
 
-    <Party partyId="SHUNFENG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="SHENTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="YUNDA_EXPRESS"    partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="YUANTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="EMS_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="ZTO_EXPRESS"      partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <Party partyId="QuanFeng_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+    <Party partyId="SHUNFENG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"
+           createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0"
+           lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0"
+           lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+           createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="SHENTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"
+           createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0"
+           lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0"
+           lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+           createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="YUNDA_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"
+           createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0"
+           lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0"
+           lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+           createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="YUANTONG_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"
+           createdDate="2013-06-08 15:22:36.0" createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0"
+           lastModifiedByUserLogin="admin" lastUpdatedStamp="2013-06-08 15:22:36.0"
+           lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+           createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="EMS_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0"
+           createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin"
+           lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0"
+           createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="ZTO_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" createdDate="2013-06-08 15:22:36.0"
+           createdByUserLogin="admin" lastModifiedDate="2013-06-08 15:22:36.0" lastModifiedByUserLogin="admin"
+           lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0"
+           createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
+    <Party partyId="QuanFeng_EXPRESS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>
 
 
-    <PartyGroup partyId="SHUNFENG_EXPRESS" groupName="顺丰速递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="SHENTONG_EXPRESS" groupName="申通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="YUNDA_EXPRESS"    groupName="韵达快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="YUANTONG_EXPRESS" groupName="圆通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="ZTO_EXPRESS"      groupName="中通快递" lastUpdatedStamp="2013-06-08 15:22:36.0" lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0" createdTxStamp="2013-06-08 15:22:36.0"/>
-    <PartyGroup partyId="QuanFeng_EXPRESS" groupName="全峰快递" />
+    <PartyGroup partyId="SHUNFENG_EXPRESS" groupName="顺丰速递" lastUpdatedStamp="2013-06-08 15:22:36.0"
+                lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+                createdTxStamp="2013-06-08 15:22:36.0"/>
+    <PartyGroup partyId="SHENTONG_EXPRESS" groupName="申通快递" lastUpdatedStamp="2013-06-08 15:22:36.0"
+                lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+                createdTxStamp="2013-06-08 15:22:36.0"/>
+    <PartyGroup partyId="YUNDA_EXPRESS" groupName="韵达快递" lastUpdatedStamp="2013-06-08 15:22:36.0"
+                lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+                createdTxStamp="2013-06-08 15:22:36.0"/>
+    <PartyGroup partyId="YUANTONG_EXPRESS" groupName="圆通快递" lastUpdatedStamp="2013-06-08 15:22:36.0"
+                lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+                createdTxStamp="2013-06-08 15:22:36.0"/>
+    <PartyGroup partyId="ZTO_EXPRESS" groupName="中通快递" lastUpdatedStamp="2013-06-08 15:22:36.0"
+                lastUpdatedTxStamp="2013-06-08 15:22:36.0" createdStamp="2013-06-08 15:22:36.0"
+                createdTxStamp="2013-06-08 15:22:36.0"/>
+    <PartyGroup partyId="QuanFeng_EXPRESS" groupName="全峰快递"/>
 
 
     <!--给快递加角色-->
-    <PartyRole partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>
-    <PartyRole partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="YUNDA_EXPRESS"    roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0" lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0" createdTxStamp="2013-06-05 11:44:18.0"/>
-    <PartyRole partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="EMS_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="ZTO_EXPRESS"      roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0" lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0" createdTxStamp="2013-05-30 16:40:26.0"/>
-    <PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" />
+    <PartyRole partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0"
+               lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0"
+               createdTxStamp="2013-06-05 11:44:18.0"/>
+    <PartyRole partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0"
+               lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0"
+               createdTxStamp="2013-05-30 16:40:26.0"/>
+    <PartyRole partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-06-05 11:44:18.0"
+               lastUpdatedTxStamp="2013-06-05 11:44:18.0" createdStamp="2013-06-05 11:44:18.0"
+               createdTxStamp="2013-06-05 11:44:18.0"/>
+    <PartyRole partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0"
+               lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0"
+               createdTxStamp="2013-05-30 16:40:26.0"/>
+    <PartyRole partyId="EMS_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0"
+               lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0"
+               createdTxStamp="2013-05-30 16:40:26.0"/>
+    <PartyRole partyId="ZTO_EXPRESS" roleTypeId="CARRIER" lastUpdatedStamp="2013-05-30 16:40:26.0"
+               lastUpdatedTxStamp="2013-05-30 16:40:26.0" createdStamp="2013-05-30 16:40:26.0"
+               createdTxStamp="2013-05-30 16:40:26.0"/>
+    <PartyRole partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER"/>
 
     <!--  新增类型 -->
 
@@ -40,12 +188,18 @@
     <!--<ShipmentMethodType description="全峰" shipmentMethodTypeId="QUANFENG"/>-->
     <!--新增一个货运方式-->
     <!--新增一个货运方式-->
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="EMS_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
-    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="ZTO_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUNDA_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="YUANTONG_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="EMS_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
+    <CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="ZTO_EXPRESS" roleTypeId="CARRIER"
+                           SEQUENCE_NUMBER="9"/>
 
     <!--<CarrierShipmentMethod shipmentMethodTypeId="SHUNFENG" partyId="SHUNFENG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
     <!--<CarrierShipmentMethod shipmentMethodTypeId="SHENGTONG" partyId="SHENTONG_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->

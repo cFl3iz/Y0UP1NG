@@ -284,7 +284,7 @@ public class PlatformManagerServices {
             GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
            String productStoreId = request.getParameter("productStoreId");
-           GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//           GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
             FileItem fileItem = getFileItem(request);
             String fileName = fileItem.getName();
             List<String[]> excelList = excelToList(fileItem);

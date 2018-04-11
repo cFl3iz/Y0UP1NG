@@ -1133,6 +1133,60 @@ public class PersonManagerServices {
         return "success";
     }
 
+
+    /**
+     * recruitingPartyToParty
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> recruitingPartyToParty(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String unioId = (String) context.get("unioId");
+        String storeId = (String) context.get("storeId");
+        String captcha = (String) context.get("captcha");
+        String teleNumber = (String) context.get("teleNumber");
+
+        GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber,"isValid","N").queryFirst();
+        if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
+            smsValidateCode.set("isValid", "Y");
+            smsValidateCode.store();
+        }else{
+            resultMap.put("message","验证码错误!");
+            return resultMap;
+        }
+
+
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryFirst();
+        GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();
+
+        if(null == storeRole){
+            Map<String,Object> createProductStoreRoleOut = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin, "partyId", partyIdentification.get("partyId"), "productStoreId", storeId, "roleTypeId", "SALES_REP"));
+            if (!ServiceUtil.isSuccess(createProductStoreRoleOut)) {
+                return createProductStoreRoleOut;
+            }
+            resultMap.put("message","加入成功!");
+        }else{
+            resultMap.put("message","已经是该店铺销售代表!");
+        }
+
+
+        return resultMap;
+    }
+
+
+
+
+
     /**
      * 用户的联系信息
      *

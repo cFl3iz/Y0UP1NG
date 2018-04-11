@@ -14,6 +14,8 @@
 
         <attribute name="unioId" type="String" mode="IN" optional="false"/>
         <attribute name="storeId" type="String" mode="IN" optional="false"/>
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
 
         <attribute name="message" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

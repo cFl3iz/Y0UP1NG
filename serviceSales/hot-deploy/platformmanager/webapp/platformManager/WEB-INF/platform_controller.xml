@@ -151,10 +151,16 @@
     </request-map>
 
 
-
+    <!-- 新 -->
+    <request-map uri="getCaptcha">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getLoginCaptcha"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- Get Login/Regist Captcha -->
-    <request-map uri="getCaptcha">
+    <request-map uri="getTelCaptcha">
         <security https="false" auth="false"/>
         <event type="service" invoke="getTelCaptcha"/>
         <response name="success" type="request" value="result_json"/>

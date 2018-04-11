@@ -169,7 +169,7 @@ public class SmsServices {
 
             resultMap.put("captcha",captcha);
             //暂时不发
-//            sendMessage(dctx, context);
+             sendMessage(dctx, context);
         }
 
         return resultMap;

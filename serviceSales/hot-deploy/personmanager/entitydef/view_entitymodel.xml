@@ -158,11 +158,11 @@
 
 
 
-        <view-link entity-alias="ProductStoreRole" rel-entity-alias="ProductStore">
+        <view-link entity-alias="ProductStore" rel-entity-alias="ProductStoreRole">
             <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
         </view-link>
 
-        <view-link entity-alias="ProductStoreCatalog" rel-entity-alias="ProductStore">
+        <view-link entity-alias="ProductStore" rel-entity-alias="ProductStoreCatalog">
             <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
         </view-link>
     </view-entity>

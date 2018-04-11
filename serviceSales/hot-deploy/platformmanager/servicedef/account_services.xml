@@ -61,9 +61,9 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-    <!-- 小程序登录 -->
+    <!-- 小程序登录 TODO 因为只能openId 所以用2 -->
     <service name="weChatMiniAppLogin" engine="java"
-             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatMiniAppLogin" auth="false">
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatMiniAppLogin2" auth="false">
         <description>weChatMiniAppLogin</description>
         <attribute name="unioId" type="String" mode="INOUT" optional="true"/>
         <attribute name="openId" type="String" mode="INOUT" optional="true"/>

@@ -1151,7 +1151,7 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-        String unioId = (String) context.get("unioId");
+        String openId = (String) context.get("openId");
         String storeId = (String) context.get("storeId");
         String captcha = (String) context.get("captcha");
         String teleNumber = (String) context.get("teleNumber");
@@ -1166,7 +1166,12 @@ public class PersonManagerServices {
         }
 
 
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId).queryFirst();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryFirst();
+        if(partyIdentification == null){
+            resultMap.put("message","用户不合法!");
+            return resultMap;
+        }
+
         GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();
 
         if(null == storeRole){

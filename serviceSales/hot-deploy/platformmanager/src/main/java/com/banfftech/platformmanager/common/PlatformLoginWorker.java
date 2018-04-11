@@ -302,6 +302,33 @@ public class PlatformLoginWorker {
         }
     }
 
+
+
+    public static  void createNewWeChatPerson2(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
+
+        //头像数据
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"),null);
+        //将微信名称更新过来
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+        person.set("firstName", weChatUserInfo.get("nickname"));
+        //微信中的用户性别,如果真的什么都没默认男。
+        String gender = "M";
+        if(null != weChatUserInfo.get("sex") && (weChatUserInfo.get("sex").equals("2"))){
+            gender ="F";
+        }
+        person.set("gender", gender);
+        person.store();
+        String language = (String) weChatUserInfo.get("language");
+        //配置用户本地语言环境
+        Debug.logInfo("PE-LOG====================userLoginId = " + userLogin.get("userLoginId"), module);
+        Debug.logInfo("PE-LOG====================language = " + language, module);
+        if (language != null) {
+            GenericValue userPreference = delegator.createOrStore(delegator.makeValue("UserPreference",
+                    UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "local", "userPrefValue", language
+                    )));
+        }
+    }
+
     public static String getEncoding(String str) {
         String encode[] = new String[]{
                 "UTF-8",
@@ -324,6 +351,11 @@ public class PlatformLoginWorker {
 
         return "";
     }
+
+
+
+
+
     /**
      * weChatMiniAppLogin 小程序登录
      * @param dctx
@@ -490,6 +522,90 @@ public class PlatformLoginWorker {
 
 
         result.put("tarjeta", token);
+
+        return result;
+    }
+
+
+
+    public static Map<String, Object> weChatMiniAppLogin2(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = null;
+
+        String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+
+        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryList();
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
+
+        //没有openId 需要注册
+        if(miniProgramIdentification!=null){
+            List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", miniProgramIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
+            result.put("storeList",storeList);
+            result.put("unioId",unioId);
+            result.put("openId",openId);
+            return result;
+        }
+        //判断啊有没有小程序id 如果没有也需要注册
+        if(miniProgramIdentification==null){
+            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyIdentificationList.get(0).get("partyId"), "idValue",openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        }
+
+
+        String   partyId, token ="";
+
+
+        Map<String,String> userInfoMap = new HashMap<String, String>();
+
+        userInfoMap.put("nickname",nickName);
+        userInfoMap.put("sex",gender);
+        userInfoMap.put("language",language);
+        userInfoMap.put("headimgurl",avatarUrl);
+
+        if(null != miniProgramIdentification ){
+            partyId =(String) miniProgramIdentification.get(0).get("partyId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+
+        }else{
+
+            Debug.logInfo("*CREATE NEW USER", module);
+            //立即注册
+            Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+            createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
+            createPeUserMap.put("userLogin", admin);
+            createPeUserMap.put("uuid", "");
+            Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
+            String newUserLoginId = (String) serviceResultMap.get("userLoginId");
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+            partyId = (String)userLogin.get("partyId");
+            main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin,partyId,delegator,"NA",userInfoMap,userLogin,dispatcher);
+
+        }
+
+
+
+
+        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
+        result.put("storeList",storeList);
+        result.put("unioId",unioId);
+        result.put("openId",openId);
+
+        result.put("partyId", partyId);
 
         return result;
     }

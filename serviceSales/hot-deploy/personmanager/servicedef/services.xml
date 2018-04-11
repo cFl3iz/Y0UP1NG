@@ -12,7 +12,7 @@
              invoke="recruitingPartyToParty" auth="false">
         <description>recruitingPartyToParty</description>
 
-        <attribute name="unioId" type="String" mode="IN" optional="false"/>
+        <attribute name="openId" type="String" mode="IN" optional="false"/>
         <attribute name="storeId" type="String" mode="IN" optional="false"/>
         <attribute name="captcha" type="String" mode="IN" optional="false"/>
         <attribute name="teleNumber" type="String" mode="IN" optional="false"/>

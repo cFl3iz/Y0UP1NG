@@ -313,8 +313,8 @@ public class PlatformManagerServices {
 //                String seriesId = excelRow[9];
 //                String styleId = excelRow[10];
 //                String seasonId = excelRow[12];
-                System.out.println("productVirtualId="+productVirtualId);
-                System.out.println("productId="+productId);
+//                System.out.println("productVirtualId="+productVirtualId);
+//                System.out.println("productId="+productId);
         }
         return "success";
     }

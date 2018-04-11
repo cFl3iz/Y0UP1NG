@@ -370,6 +370,12 @@ public class PlatformLoginWorker {
                 dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
             }
 
+
+
+            List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentificationList.get(0).get("partyId"),"roleTypeId","SALES_REP").queryList();
+            result.put("storeList",storeList);
+            result.put("unioId",unioId);
+            result.put("openId",openId);
             return result;
         }
 
@@ -475,12 +481,13 @@ public class PlatformLoginWorker {
 
 
         List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
-
-        result.put("partyId", partyId);
         result.put("storeList",storeList);
-
         result.put("unioId",unioId);
         result.put("openId",openId);
+
+
+        result.put("partyId", partyId);
+
 
         result.put("tarjeta", token);
 

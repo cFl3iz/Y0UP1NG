@@ -13,6 +13,7 @@
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/PlatformManagerTypeData.xml"/>
+
     <entity-resource type="data" reader-name="seed" loader="main" location="data/PlatformManagerSecurityPermissionSeedData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PlatformManagerSecurityGroupDemoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PlatformManagerGeoData.xml"/>

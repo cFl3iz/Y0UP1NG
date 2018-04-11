@@ -11,6 +11,16 @@
         </description>
     </service>
 
+    <!-- Get Captcha To Login -->
+    <service name="getLoginCaptcha" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="getLoginCaptcha" auth="false">
+        <description>Get Captcha To Login</description>
+        <attribute name="teleNumber" type="String" mode="IN"  optional="false" />
+        <attribute name="smsType" type="String" mode="IN" optional="false" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
 
     <service name="importProductToComp" engine="java"

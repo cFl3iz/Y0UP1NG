@@ -5,6 +5,22 @@
     <vendor></vendor>
     <version>1.0</version>
 
+
+    <!-- 加入商店招募 -->
+    <service name="recruitingPartyToParty" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="recruitingPartyToParty" auth="false">
+        <description>recruitingPartyToParty</description>
+
+        <attribute name="unioId" type="String" mode="IN" optional="false"/>
+        <attribute name="storeId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="message" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!--createPeOrder-->
     <service name="createPeOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

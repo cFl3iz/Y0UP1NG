@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
+    <!-- PartyIdentification -->
+    <PartyIdentificationType createdStamp="2018-04-11 12:02:23.0" createdTxStamp="2018-04-11 12:02:23.0" description="授权验证的手机号码" hasTable="Y" lastUpdatedStamp="2018-04-11 12:02:23.0" lastUpdatedTxStamp="2018-04-11 12:02:23.0" partyIdentificationTypeId="AUTHORIZATION_TEL"/>
+
+
+
     <!-- Tarjeta Property-->
     <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.expirationTime" systemPropertyValue="1296000" description="tarjeta的有效时间"/>
     <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.issuer" systemPropertyValue="pe" description="tarjeta的issuer"/>
     <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.secret" systemPropertyValue="{{secret used for signing}}" description="tarjeta的secret"/>
 
     <!-- SSMS Property -->
-    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="23691976" description="短信平台appkey"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="24620277" description="短信平台appkey"/>
     <SystemProperty systemResourceId="pe" systemPropertyId="sms.intervalTime" systemPropertyValue="20" description="第二次与第一次短信发送间隔时间"/>
     <SystemProperty systemResourceId="pe" systemPropertyId="sms.secret" systemPropertyValue="6d86dc0f2c5b3eb893142db3bbcaf2d2" description="短信平台secret"/>
     <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="友评" description="短信平台配置签名"/>

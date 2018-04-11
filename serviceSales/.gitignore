@@ -20,7 +20,6 @@ runtime/tempfiles/*
 runtime/indexes/products/
 !runtime/tempfiles/README
 applications/content/index/
-framework/entity/config
 changelog
 .classpath
 .project

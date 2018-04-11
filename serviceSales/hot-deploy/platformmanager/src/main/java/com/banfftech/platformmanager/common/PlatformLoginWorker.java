@@ -305,7 +305,9 @@ public class PlatformLoginWorker {
 
 
     public static  void createNewWeChatPerson2(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
-
+        Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                partyId, "idValue",unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+        dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
         //头像数据
         main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"),null);
         //将微信名称更新过来
@@ -551,7 +553,7 @@ public class PlatformLoginWorker {
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryList();
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
 
-        //没有openId 需要注册
+
         if(miniProgramIdentification!=null){
             List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", miniProgramIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
             result.put("storeList",storeList);
@@ -559,12 +561,7 @@ public class PlatformLoginWorker {
             result.put("openId",openId);
             return result;
         }
-        //判断啊有没有小程序id 如果没有也需要注册
-        if(miniProgramIdentification==null){
-            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                    partyIdentificationList.get(0).get("partyId"), "idValue",openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
-            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
-        }
+
 
 
         String   partyId, token ="";
@@ -593,7 +590,7 @@ public class PlatformLoginWorker {
             String newUserLoginId = (String) serviceResultMap.get("userLoginId");
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
             partyId = (String)userLogin.get("partyId");
-            main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin,partyId,delegator,"NA",userInfoMap,userLogin,dispatcher);
+            main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
         }
 

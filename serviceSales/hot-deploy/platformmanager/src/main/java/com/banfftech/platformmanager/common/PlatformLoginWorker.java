@@ -478,6 +478,10 @@ public class PlatformLoginWorker {
 
         result.put("partyId", partyId);
         result.put("storeList",storeList);
+
+        result.put("unioId",unioId);
+        result.put("openId",openId);
+
         result.put("tarjeta", token);
 
         return result;

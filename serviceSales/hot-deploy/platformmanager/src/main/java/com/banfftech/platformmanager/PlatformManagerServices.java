@@ -301,44 +301,44 @@ public class PlatformManagerServices {
                 String listPrice =  excelRow[6];
                 String productId = excelRow[8];
                 String ean = excelRow[10];
-                GenericValue product = EntityUtil.getFirst(delegator.findByAnd("Product", UtilMisc.toMap("productId",productId)));
-                if(null == product){
-                    //创建产品
-                    Map<String, Object> createProductInMap = new HashMap<String, Object>();
-                    createProductInMap.put("userLogin", admin);
-                    long ctm = System.currentTimeMillis();
-                    createProductInMap.put("internalName", internalName );
-                    createProductInMap.put("productId", productId );
-                    createProductInMap.put("productName", internalName);
-                    createProductInMap.put("brandName", brandName);
-                    createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
-                    //调用服务创建产品(资源)
-                    Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
-
-                    if (!ServiceUtil.isSuccess(createProductOutMap)) {
-                        Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
-                        //   return createProductOutMap;
-                        return "error";
-                    }
-                }
-
-
-                //创建条形码
-                if(UtilValidate.isNotEmpty(ean)){
-                    GenericValue goodIdentification = EntityUtil.getFirst(delegator.findByAnd("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN")));
-                    if(UtilValidate.isEmpty(goodIdentification)){
-                        GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN"));
-                        newGoodIdentification.set("idValue", ean);
-                        newGoodIdentification.create();
-                    }
-                }
-
-                //创建吊牌价
-                if(UtilValidate.isNotEmpty(listPrice)){
-                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
-                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
-                        newProductVariantPrice.create();
-                }
+//                GenericValue product = EntityUtil.getFirst(delegator.findByAnd("Product", UtilMisc.toMap("productId",productId)));
+//                if(null == product){
+//                    //创建产品
+//                    Map<String, Object> createProductInMap = new HashMap<String, Object>();
+//                    createProductInMap.put("userLogin", admin);
+//                    long ctm = System.currentTimeMillis();
+//                    createProductInMap.put("internalName", internalName );
+//                    createProductInMap.put("productId", productId );
+//                    createProductInMap.put("productName", internalName);
+//                    createProductInMap.put("brandName", brandName);
+//                    createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
+//                    //调用服务创建产品(资源)
+//                    Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+//
+//                    if (!ServiceUtil.isSuccess(createProductOutMap)) {
+//                        Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
+//                        //   return createProductOutMap;
+//                        return "error";
+//                    }
+//                }
+//
+//
+//                //创建条形码
+//                if(UtilValidate.isNotEmpty(ean)){
+//                    GenericValue goodIdentification = EntityUtil.getFirst(delegator.findByAnd("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN")));
+//                    if(UtilValidate.isEmpty(goodIdentification)){
+//                        GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN"));
+//                        newGoodIdentification.set("idValue", ean);
+//                        newGoodIdentification.create();
+//                    }
+//                }
+//
+//                //创建吊牌价
+//                if(UtilValidate.isNotEmpty(listPrice)){
+//                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+//                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
+//                        newProductVariantPrice.create();
+//                }
         }
         return "success";
     }

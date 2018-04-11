@@ -578,7 +578,7 @@ public class PlatformLoginWorker {
         userInfoMap.put("headimgurl",avatarUrl);
 
         if(null != miniProgramIdentification ){
-            partyId =(String) miniProgramIdentification.get(0).get("partyId");
+            partyId =(String) miniProgramIdentification.get("partyId");
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
 
         }else{

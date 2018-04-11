@@ -472,8 +472,12 @@ public class PlatformLoginWorker {
 //
 //        System.out.println("*response = " + response);
 
-        result.put("partyId", partyId);
 
+
+        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
+
+        result.put("partyId", partyId);
+        result.put("storeList",storeList);
         result.put("tarjeta", token);
 
         return result;

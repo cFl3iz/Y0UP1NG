@@ -147,6 +147,26 @@
 
 
 
+    <view-entity entity-name="ProductStoreRoleAndStoreDetail" package-name="com.banfftech.personerp">
+        <member-entity entity-name="ProductStoreRole" entity-alias="ProductStoreRole" />
+        <member-entity entity-name="ProductStore" entity-alias="ProductStore" />
+        <member-entity entity-name="ProductStoreCatalog" entity-alias="ProductStoreCatalog" />
+
+        <alias-all entity-alias="ProductStoreRole"/>
+        <alias entity-alias="ProductStoreCatalog" field="prodCatalogId" name="prodCatalogId"/>
+        <alias entity-alias="ProductStore" field="storeName" name="storeName"/>
+
+
+
+        <view-link entity-alias="ProductStoreRole" rel-entity-alias="ProductStore">
+            <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
+        </view-link>
+
+        <view-link entity-alias="ProductStoreCatalog" rel-entity-alias="ProductStore">
+            <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
+        </view-link>
+    </view-entity>
+
 
     <!-- 查询 消息列表的视图 , 非常痛苦  -->
     <view-entity entity-name="MessageLogView" package-name="com.banfftech.personerp">

@@ -295,8 +295,16 @@ public class PlatformManagerServices {
                 //品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU-特别提醒-洗涤方式-上市年份+季节-组别-备注
 
                 String[] excelRow = excelList.get(i);
-                String productVirtualId = excelRow[0];
-                String productId = excelRow[1];
+//                String brandName = excelRow[0];
+//                String brandName = excelRow[0];
+//                String brandName = excelRow[0];
+//                String brandName = excelRow[0];
+//                String brandName = excelRow[0];
+//                String brandName = excelRow[0];
+
+
+//                String productVirtualId = excelRow[0];
+//                String productId = excelRow[1];
 //                String productName = excelRow[2];
 //                String colorId = excelRow[3];
 //                String sizeId = excelRow[5];

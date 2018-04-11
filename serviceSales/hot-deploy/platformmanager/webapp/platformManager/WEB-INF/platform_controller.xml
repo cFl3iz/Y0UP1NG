@@ -154,7 +154,7 @@
 
 
     <!-- Get Login/Regist Captcha -->
-    <request-map uri="getTelCaptcha">
+    <request-map uri="getCaptcha">
         <security https="false" auth="false"/>
         <event type="service" invoke="getTelCaptcha"/>
         <response name="success" type="request" value="result_json"/>

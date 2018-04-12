@@ -4,10 +4,10 @@
 
         <form name="ProductUploadImportForm" type="upload" target="ProductUploadImportEvent"
               odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
-            <field name="facilityId" title="选择组织机构店铺" widget-style="selectBox">
+            <field name="prodCatalogId" title="选择目录导入" widget-style="selectBox"  >
                 <drop-down>
-                    <entity-options entity-name="FacilityPartyAndFacility" description="${facilityName}">
-                        <entity-constraint name="roleTypeId" value="ADMIN"/>
+                    <entity-options entity-name="ProdCatalog" description="${catalogName}">
+                        <!--<entity-constraint name="roleTypeId" value="ADMIN"/>-->
                     </entity-options>
                 </drop-down>
             </field>

@@ -129,8 +129,7 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
              invoke="wechatReleaseResource" auth="false">
         <description>wechatReleaseResource</description>
-        <attribute name="unioId" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="unioId" type="String" mode="IN" optional="true"/>
         <!-- 可能出现的库存量 -->
         <attribute name="kuCun" type="String" mode="IN" optional="true"/>
         <attribute name="price" type="String" mode="IN" optional="true"/>

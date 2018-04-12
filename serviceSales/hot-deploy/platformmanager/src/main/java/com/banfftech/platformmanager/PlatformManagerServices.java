@@ -8,12 +8,14 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.ofbiz.base.util.HttpRequestFileUpload;
+import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
-
+import org.apache.ofbiz.base.util.UtilDateTime;
 
 import org.apache.ofbiz.entity.model.ModelEntity;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
@@ -54,9 +56,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.service.GenericServiceException;
 
 import org.apache.ofbiz.entity.transaction.GenericTransactionException;
-import org.apache.ofbiz.entity.transaction.TransactionUtil;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.GenericEntity;
@@ -173,7 +176,7 @@ public class PlatformManagerServices {
             smsValidateCodeMap.put("isValid", "N");
             smsValidateCodeMap.put("fromDate", nowTimestamp);
             smsValidateCodeMap.put("thruDate",
-            org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));
+                    org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));
             try {
                 GenericValue smstGV = delegator.makeValue("SmsValidateCode", smsValidateCodeMap);
                 smstGV.create();
@@ -229,7 +232,7 @@ public class PlatformManagerServices {
         String product = (String) context.get("product");
         String smsTemplateCode = (String) context.get("smsTemplateCode");
 
-        if(null == smsTemplateCode || smsTemplateCode.trim().equals("")){
+        if (null == smsTemplateCode || smsTemplateCode.trim().equals("")) {
             smsTemplateCode = "SMS_53800008";
         }
 
@@ -248,8 +251,8 @@ public class PlatformManagerServices {
         //req.setSmsFreeSignName(smsFreeSignName);
         req.setSmsFreeSignName("友评");
 
-        String json = "{\"code\":\"" + code + "\",\"product\":\"" + "友评" + "\""+"}";
-        org.apache.ofbiz.base.util.Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON="+json, module);
+        String json = "{\"code\":\"" + code + "\",\"product\":\"" + "友评" + "\"" + "}";
+        org.apache.ofbiz.base.util.Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON=" + json, module);
         req.setSmsParamString(json);
         req.setRecNum(phone);
         //req.setSmsTemplateCode(smsTemplateCode);
@@ -276,69 +279,265 @@ public class PlatformManagerServices {
 
 
     // 导入exlSKU
-    public static String ProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException,InvalidFormatException {
+    public static String ProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
-            Delegator delegator = (Delegator) request.getAttribute("delegator");
-            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-            HttpSession session = request.getSession();
-            GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
-           String productStoreId = request.getParameter("productStoreId");
-//           GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-            FileItem fileItem = getFileItem(request);
-            String fileName = fileItem.getName();
-            List<String[]> excelList = excelToList(fileItem);
-//            TransactionUtil.setTransactionTimeout(10000);
-//            TransactionUtil.begin();
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+        try {
+
+            String prodCatalogId = "ANKORAU_RETAIL";
+            GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
+            String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+            GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();
+            String productStoreId = (String) productStoreCatalog.get("productStoreId");
+            GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
 
             for (int i = 0; i < excelList.size(); i++) {
-
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
                 //品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU-特别提醒-洗涤方式-上市年份+季节-组别-备注
 
                 String[] excelRow = excelList.get(i);
-                String brandName = excelRow[0];
+
+                String payToPartyId = (String) productStore.get("payToPartyId");
+                String brandName = excelRow[1];
+                String productVirtualId = excelRow[2];
                 String internalName = excelRow[1];
-                String listPrice =  excelRow[6];
+                String colorId = excelRow[3];
+                String colorDesc = excelRow[4];
+
+                String sizeId = excelRow[5];
+                String sizeDesc = excelRow[7];
+                String listPrice = excelRow[6];
                 String productId = excelRow[8];
                 String ean = excelRow[10];
-//                GenericValue product = EntityUtil.getFirst(delegator.findByAnd("Product", UtilMisc.toMap("productId",productId)));
-//                if(null == product){
-//                    //创建产品
-//                    Map<String, Object> createProductInMap = new HashMap<String, Object>();
-//                    createProductInMap.put("userLogin", admin);
-//                    long ctm = System.currentTimeMillis();
-//                    createProductInMap.put("internalName", internalName );
-//                    createProductInMap.put("productId", productId );
-//                    createProductInMap.put("productName", internalName);
-//                    createProductInMap.put("brandName", brandName);
-//                    createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
-//                    //调用服务创建产品(资源)
-//                    Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
-//
-//                    if (!ServiceUtil.isSuccess(createProductOutMap)) {
-//                        Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
-//                        //   return createProductOutMap;
-//                        return "error";
-//                    }
-//                }
-//
-//
-//                //创建条形码
-//                if(UtilValidate.isNotEmpty(ean)){
-//                    GenericValue goodIdentification = EntityUtil.getFirst(delegator.findByAnd("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN")));
-//                    if(UtilValidate.isEmpty(goodIdentification)){
-//                        GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId",productId,"goodIdentificationTypeId","EAN"));
-//                        newGoodIdentification.set("idValue", ean);
-//                        newGoodIdentification.create();
-//                    }
-//                }
-//
-//                //创建吊牌价
-//                if(UtilValidate.isNotEmpty(listPrice)){
-//                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
-//                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
-//                        newProductVariantPrice.create();
-//                }
+
+                String otherDesc = excelRow[12];
+                String keyword = excelRow[14];
+
+
+                //导入的表存在虚拟产品Id
+                if (UtilValidate.isNotEmpty(productVirtualId)) {
+                    GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
+                    if (UtilValidate.isEmpty(productVirtual)) {
+                        GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
+                        newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
+                        newVirtualProduct.set("description", otherDesc);
+                        newVirtualProduct.set("comments", keyword);
+                        if (UtilValidate.isNotEmpty(internalName)) {
+                            newVirtualProduct.set("internalName", internalName);
+                            newVirtualProduct.set("productName", internalName);
+                        }
+                        newVirtualProduct.set("isVirtual", "Y");
+                        newVirtualProduct.set("isVariant", "N");
+                        newVirtualProduct.create();
+                    }
+                    //创建变形产品
+                    GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                    if (UtilValidate.isEmpty(productVariant)) {
+                        GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                        newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                        newVariantProduct.set("description", otherDesc);
+                        newVariantProduct.set("comments", keyword);
+                        if (UtilValidate.isNotEmpty(internalName)) {
+                            newVariantProduct.set("internalName", internalName);
+                            newVariantProduct.set("productName", internalName);
+                        }
+                        newVariantProduct.set("isVirtual", "N");
+                        newVariantProduct.set("isVariant", "Y");
+                        newVariantProduct.create();
+                    }
+                    //创建产品关联
+                    GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
+                    if (UtilValidate.isEmpty(productAssoc)) {
+                        GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
+                        newAssoc.create();
+                    }
+
+                    //创建吊牌价
+                    if (UtilValidate.isNotEmpty(listPrice)) {
+                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                        newProductVariantPrice.create();
+                    }
+
+                    //创建条形码
+                    if (UtilValidate.isNotEmpty(ean)) {
+                        GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+                        if (UtilValidate.isEmpty(goodIdentification)) {
+                            GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+                            newGoodIdentification.set("idValue", ean);
+                            newGoodIdentification.create();
+                        }
+                    }
+
+
+                    //dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"productId",productId,"keywordTypeId","KWT_KEYWORD","keyword",keyword));
+
+
+                    //找到仓库
+                    GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                    //为产品创建库存量
+                    Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                            "facilityId", (String) facility.get("facilityId"),
+                            "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                            "productId", productId,
+                            "description ", "卖家发布产品时的录入库存",
+                            "quantityAccepted", new BigDecimal("15"),
+                            "quantityRejected", BigDecimal.ZERO,
+                            "unitCost", new BigDecimal(listPrice),
+                            "ownerPartyId", payToPartyId,
+                            "partyId", payToPartyId,
+                            "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                            "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                    Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                    );
+                    if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                        Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                        //return receiveInventoryProductOut;
+                        return "error";
+                    }
+
+                    //产品关联分类
+                    Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                    addProductToCategoryInMap.put("userLogin", admin);
+                    addProductToCategoryInMap.put("productId", productId);
+                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                    Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                        // return addProductToCategoryServiceResultMap;
+                        return "error";
+                    }
+
+
+//TODO 开始搞特征 -------------------------------------------------------------------------------------------------------------------------
+
+
+                    //创建颜色特征
+                    if (UtilValidate.isNotEmpty(colorId)) {
+                        //先看有没有这个特征组
+                        GenericValue productFeatureCategory = EntityQuery.use(delegator).from("ProductFeatureCategory").where("productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        String productFeatureCategoryId = "";
+                        //没找到这个特征组
+                        if (!UtilValidate.isNotEmpty(productFeatureCategory)) {
+                            Map<String, Object> createProductFeatureCategoryResultMap = dispatcher.runSync("createProductFeatureCategory", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "description", "COLOR_CATEGORY"));
+                            if (!ServiceUtil.isSuccess(createProductFeatureCategoryResultMap)) {
+                                Debug.logError("*Mother Fuck createProductFeatureCategory  Error:" + createProductFeatureCategoryResultMap, module);
+                                //  return updateProductServiceResultMap;
+                                return "error";
+                            }
+                            productFeatureCategoryId = (String) createProductFeatureCategoryResultMap.get("productFeatureCategoryId");
+                        } else {
+                            productFeatureCategoryId = (String) productFeatureCategory.get("productFeatureCategory");
+                        }
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode", colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        String featureId = "";
+                        //没找到这个特征
+                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                            //创建该特征
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            featureId = (String) createProductFetureMap.get("productFeatureId");
+                        } else {
+                            featureId = (String) productColorFeature.get("featureId");
+                        }
+
+
+                        //创建 虚拟 颜色特征
+                        GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+
+                        if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
+                            GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                            newVirtualProductColorFeatureAppl.create();
+                        }
+                        //创建 变形 颜色特征
+                        GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                        if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+                            GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                            newVariantProductColorFeatureAppl.create();
+                        }
+                        //颜色特征模块结束
+                    }
+
+
+                    //创建尺码特征
+                    if (UtilValidate.isNotEmpty(sizeId)) {
+                        //先看有没有这个特征组
+                        GenericValue productFeatureCategory = EntityQuery.use(delegator).from("ProductFeatureCategory").where("productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        String productFeatureCategoryId = "";
+                        //没找到这个特征组
+                        if (!UtilValidate.isNotEmpty(productFeatureCategory)) {
+                            Map<String, Object> createProductFeatureCategoryResultMap = dispatcher.runSync("createProductFeatureCategory", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", "PRODUCT_SIZE", "description", "SIZE_CATEGORY"));
+                            if (!ServiceUtil.isSuccess(createProductFeatureCategoryResultMap)) {
+                                Debug.logError("*Mother Fuck createProductFeatureCategory  Error:" + createProductFeatureCategoryResultMap, module);
+                                //  return updateProductServiceResultMap;
+                                return "error";
+                            }
+                            productFeatureCategoryId = (String) createProductFeatureCategoryResultMap.get("productFeatureCategoryId");
+                        } else {
+                            productFeatureCategoryId = (String) productFeatureCategory.get("productFeatureCategory");
+                        }
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode", colorId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        String featureId = "";
+                        //没找到这个特征
+                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                            //创建该特征
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", "SIZE", "description", sizeDesc));
+                            featureId = (String) createProductFetureMap.get("productFeatureId");
+                        } else {
+                            featureId = (String) productColorFeature.get("featureId");
+                        }
+
+
+                        //创建 虚拟 尺码特征
+                        GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+                        if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
+                            GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                            newVirtualProductSizeFeatureAppl.create();
+                        }
+                        //创建 变形 尺码特征
+                        GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+
+                        if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
+                            GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                            newVariantProductSizeFeatureAppl.create();
+                        }
+
+
+                        //尺码特征结束
+                    }
+
+
+                    //判断是否存在导入的虚拟产品ID结构结束
+
+                }
+                TransactionUtil.commit();
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
         }
         return "success";
     }
@@ -369,7 +568,7 @@ public class PlatformManagerServices {
         InputStream is = new ByteArrayInputStream(fileItem.get());
 
         //XSSFWorkbook workbook = new XSSFWorkbook(is);
-        Workbook wb  = WorkbookFactory.create(is);
+        Workbook wb = WorkbookFactory.create(is);
         // 得到exl表对象
         //XSSFSheet sheet = wb.getSheetAt(0);
 
@@ -407,22 +606,9 @@ public class PlatformManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * importProductToComp(商户导入产品)
+     *
      * @param dctx
      * @param context
      * @return
@@ -448,6 +634,7 @@ public class PlatformManagerServices {
 
     /**
      * cleanSessionMessage
+     *
      * @param dctx
      * @param context
      * @return
@@ -513,21 +700,20 @@ public class PlatformManagerServices {
                 listBigConditions, fieldSet,
                 null, null, false);
 
-            for (GenericValue gv : queryMessageList) {
-                gv.set("badge", "false");
-                gv.store();
+        for (GenericValue gv : queryMessageList) {
+            gv.set("badge", "false");
+            gv.store();
 
-            }
+        }
 
 
         return result;
     }
 
 
-
-
     /**
      * 推送 服务类型
+     *
      * @param dctx
      * @param context
      * @return
@@ -552,7 +738,7 @@ public class PlatformManagerServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String   text = (String) context.get("text");
+        String text = (String) context.get("text");
 
 
         String tarjeta = (String) context.get("tarjeta");
@@ -566,7 +752,7 @@ public class PlatformManagerServices {
         Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
         Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
-            //推送的不是图片,只要普通推送
+        //推送的不是图片,只要普通推送
         PersonManagerServices.pushMsgBase(objectId, partyIdFrom, partyIdTo, delegator, dispatcher, userLogin, text, pushWeChatMessageInfoMap, admin, createMessageLogMap, "TEXT");
 
 
@@ -575,6 +761,7 @@ public class PlatformManagerServices {
 
     /**
      * createSimpleCarrierShipmentMethod(单独创建系统货运方式)
+     *
      * @param dctx
      * @param context
      * @return
@@ -603,7 +790,7 @@ public class PlatformManagerServices {
         String code = (String) context.get("code");
 
         //Create PartyGroup
-        dispatcher.runSync("createPartyGroup",UtilMisc.toMap("userLogin",admin,"partyId",carrierCode,"groupName",name ));
+        dispatcher.runSync("createPartyGroup", UtilMisc.toMap("userLogin", admin, "partyId", carrierCode, "groupName", name));
         //Create Role
         Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", carrierCode,
                 "roleTypeId", "CARRIER");
@@ -611,16 +798,15 @@ public class PlatformManagerServices {
         dispatcher.runSync("createPartyRole", createPartyRoleMap);
 
         //Create CarrierShipmentMethod
-        dispatcher.runSync("createCarrierShipmentMethod",UtilMisc.toMap("userLogin",admin,"carrierServiceCode",code,"partyId",carrierCode,"roleTypeId","CARRIER","shipmentMethodTypeId","EXPRESS","sequenceNumber",new Long("10")));
+        dispatcher.runSync("createCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "carrierServiceCode", code, "partyId", carrierCode, "roleTypeId", "CARRIER", "shipmentMethodTypeId", "EXPRESS", "sequenceNumber", new Long("10")));
 
         return result;
     }
 
 
-
-
     /**
      * 订单状态变更推送
+     *
      * @param dctx
      * @param context
      * @return
@@ -637,22 +823,20 @@ public class PlatformManagerServices {
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
 
-        String openId        = (String) context.get("openId");
-        String orderId     = (String) context.get("orderId");
-        String date     = (String) context.get("date");
+        String openId = (String) context.get("openId");
+        String orderId = (String) context.get("orderId");
+        String date = (String) context.get("date");
 
-        String payToPartyId  = (String) context.get("payToPartyId");
-        String tarjeta       = (String) context.get("tarjeta");
+        String payToPartyId = (String) context.get("payToPartyId");
+        String tarjeta = (String) context.get("tarjeta");
         String messageInfo = (String) context.get("messageInfo");
 
-        String jumpUrl       = (String) context.get("jumpUrl");
+        String jumpUrl = (String) context.get("jumpUrl");
 
-        GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
-
-
+        GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
 
 
-        String orderStatus =  UtilProperties.getMessage(resourceUiLabels,orderHeader.get("statusId")+"", locale);
+        String orderStatus = UtilProperties.getMessage(resourceUiLabels, orderHeader.get("statusId") + "", locale);
 
 
         // 发送模版消息
@@ -678,16 +862,14 @@ public class PlatformManagerServices {
 //        System.out.println("*============================================================URL = " + url2);
 
 
-
-
         jsobj1.put("touser", openId);
-        jsobj1.put("template_id","akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
-        jsobj1.put("url",jumpUrl);
+        jsobj1.put("template_id", "akqWpgJdI14Hm6vaisBd_-UfkzIInu_P-8l4FaNCHkU");
+        jsobj1.put("url", jumpUrl);
 
 
-        jsobjminipro.put("appid","wx299644ef4c9afbde");
-        jsobjminipro.put("pagepath","pages/orderDetail/orderDetail?unioId="+openId+"&orderId="+orderId);
-        jsobj1.put("miniprogram",jsobjminipro);
+        jsobjminipro.put("appid", "wx299644ef4c9afbde");
+        jsobjminipro.put("pagepath", "pages/orderDetail/orderDetail?unioId=" + openId + "&orderId=" + orderId);
+        jsobj1.put("miniprogram", jsobjminipro);
 
         jsobj3.put("value", "订单状态更新啦!");
         jsobj3.put("color", "#173177");
@@ -698,14 +880,12 @@ public class PlatformManagerServices {
         jsobj2.put("keyword1", jsobj4);
 
 
-
-
-        if(orderStatus.toLowerCase().equals("created")){
-            orderStatus  = "订单已创建";
-           // messageInfo= personInfoMap.get("firstName")+"正在处理您的订单";
-        }else{
-            orderStatus  = "订单已发货";
-           // messageInfo= "物流公司:"+"物流单号:";
+        if (orderStatus.toLowerCase().equals("created")) {
+            orderStatus = "订单已创建";
+            // messageInfo= personInfoMap.get("firstName")+"正在处理您的订单";
+        } else {
+            orderStatus = "订单已发货";
+            // messageInfo= "物流公司:"+"物流单号:";
         }
 
 
@@ -728,9 +908,6 @@ public class PlatformManagerServices {
         jsobj1.put("data", jsobj2);
 
 
-
-
-
         WeChatUtil.PostSendMsg(jsobj1, url);
 
         return result;
@@ -739,6 +916,7 @@ public class PlatformManagerServices {
 
     /**
      * pushMiniProgramMessageInfo 推送小程序信息
+     *
      * @param dctx
      * @param context
      * @return
@@ -755,12 +933,12 @@ public class PlatformManagerServices {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         System.out.println("*pushMiniProgramMessageInfo============================================================");
 
-        String openId        = (String) context.get("openId");
-        String formid        = (String) context.get("formId");
+        String openId = (String) context.get("openId");
+        String formid = (String) context.get("formId");
 
 
         // 发送模版消息
-        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_MINI_PROGRAM_APP_ID,PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID);
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_MINI_PROGRAM_APP_ID, PeConstant.WECHAT_MINI_PROGRAM_APP_SECRET_ID);
         String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
         System.out.println("token = " + accessToken.getToken());
@@ -787,13 +965,12 @@ public class PlatformManagerServices {
 //        订单状态
 //        {{keyword6.DATA}}
 
-        jsobj1.put("value","123456");
-        jsobj3.put("value","123456");
-        jsobj4.put("value","123456");
-        jsobj5.put("value","123456");
-        jsobj6.put("value","123456");
-        jsobj7.put("value","123456");
-
+        jsobj1.put("value", "123456");
+        jsobj3.put("value", "123456");
+        jsobj4.put("value", "123456");
+        jsobj5.put("value", "123456");
+        jsobj6.put("value", "123456");
+        jsobj7.put("value", "123456");
 
 
         jsobj2.put("keyword1", jsobj1);
@@ -804,19 +981,21 @@ public class PlatformManagerServices {
         jsobj2.put("keyword6", jsobj7);
 
 
-        bigJson.put("data",jsobj2);
-        bigJson.put("touser",openId);
-        bigJson.put("template_id","cRmXGHl1f0BHKn8KPe62Y7XQmP5QM3cxQLP6B9HgzRI");
-        bigJson.put("page","pages/order/order");
-        bigJson.put("form_id",formid);
-      //  bigJson.put("emphasis_keyword","keyword1.DATA");
+        bigJson.put("data", jsobj2);
+        bigJson.put("touser", openId);
+        bigJson.put("template_id", "cRmXGHl1f0BHKn8KPe62Y7XQmP5QM3cxQLP6B9HgzRI");
+        bigJson.put("page", "pages/order/order");
+        bigJson.put("form_id", formid);
+        //  bigJson.put("emphasis_keyword","keyword1.DATA");
 
         WeChatUtil.PostSendMsg(bigJson, url);
 
         return result;
     }
+
     /**
      * Push WeChat MessageInfo
+     *
      * @param dctx
      * @param context
      * @return
@@ -832,24 +1011,22 @@ public class PlatformManagerServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> result = ServiceUtil.returnSuccess();
         System.out.println("*pushWeChatMessageInfo============================================================");
-        String partyIdFrom   = (String) context.get("partyIdFrom");
-        String openId        = (String) context.get("openId");
-        String productId     = (String) context.get("productId");
-        String date     = (String) context.get("date");
-        String message     = (String) context.get("message");
-        String firstName     = (String) context.get("firstName");
-        String payToPartyId  = (String) context.get("payToPartyId");
-        String tarjeta       = (String) context.get("tarjeta");
-        String jumpUrl   = (String) context.get("url");
+        String partyIdFrom = (String) context.get("partyIdFrom");
+        String openId = (String) context.get("openId");
+        String productId = (String) context.get("productId");
+        String date = (String) context.get("date");
+        String message = (String) context.get("message");
+        String firstName = (String) context.get("firstName");
+        String payToPartyId = (String) context.get("payToPartyId");
+        String tarjeta = (String) context.get("tarjeta");
+        String jumpUrl = (String) context.get("url");
 
 
-
-
-        Map<String,String> personInfoMap =  queryPersonBaseInfo(delegator,payToPartyId);
+        Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, payToPartyId);
 
 
         // 发送模版消息
-        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID,PeConstant.ACCESS_KEY_SECRET);
+        AccessToken accessToken = getAccessToken(PeConstant.WECHAT_GZ_APP_ID, PeConstant.ACCESS_KEY_SECRET);
         String URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String url = URL.replace("ACCESS_TOKEN", accessToken.getToken());
 
@@ -859,30 +1036,30 @@ public class PlatformManagerServices {
         JSONObject jsobj4 = new JSONObject();
         JSONObject jsobj5 = new JSONObject();
         String url2 = "";
-        if(jumpUrl!=null && !jumpUrl.trim().equals("")){
+        if (jumpUrl != null && !jumpUrl.trim().equals("")) {
             url2 = jumpUrl;
-        }else{
-             url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
-                    "productId="+productId+"&payToPartyId=" +
-                    ""+payToPartyId+"&tarjeta="+tarjeta+"&payToPartyHead="+personInfoMap.get("headPortrait")+"&payToPartyFirstName="+personInfoMap.get("firstName");
+        } else {
+            url2 = "http://www.yo-pe.com:3400/WebManager/control/miniChat?" +
+                    "productId=" + productId + "&payToPartyId=" +
+                    "" + payToPartyId + "&tarjeta=" + tarjeta + "&payToPartyHead=" + personInfoMap.get("headPortrait") + "&payToPartyFirstName=" + personInfoMap.get("firstName");
             System.out.println("*============================================================URL = " + url2);
         }
 
 
-        jsobj1.put("touser",openId);
-        jsobj1.put("template_id","aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
+        jsobj1.put("touser", openId);
+        jsobj1.put("template_id", "aFCzhfNrWb0GsEr0ZCVuijLPAQ6cPzPedORxyKHBzbs");
         //增加SPM逻辑
-        jsobj1.put("url","https://www.yo-pe.com/pejump/"+partyIdFrom+"/"+partyIdFrom+"111"+"/"+payToPartyId+"/"+productId+"/NA");
+        jsobj1.put("url", "https://www.yo-pe.com/pejump/" + partyIdFrom + "/" + partyIdFrom + "111" + "/" + payToPartyId + "/" + productId + "/NA");
 
         JSONObject jsobjminipro = new JSONObject();
-        jsobjminipro.put("appid","wx299644ef4c9afbde");
-        jsobjminipro.put("pagepath","pages/chatView/chatView?username="+payToPartyId+"&password="+payToPartyId+"111&payToPartyId="+partyIdFrom+"&productId="+productId);
-        jsobj1.put("miniprogram",jsobjminipro);
+        jsobjminipro.put("appid", "wx299644ef4c9afbde");
+        jsobjminipro.put("pagepath", "pages/chatView/chatView?username=" + payToPartyId + "&password=" + payToPartyId + "111&payToPartyId=" + partyIdFrom + "&productId=" + productId);
+        jsobj1.put("miniprogram", jsobjminipro);
 
-        System.out.println("pages/chatView/chatView?username="+payToPartyId+"&password="+payToPartyId+"111&payToPartyId="+partyIdFrom+"&productId="+productId);
+        System.out.println("pages/chatView/chatView?username=" + payToPartyId + "&password=" + payToPartyId + "111&payToPartyId=" + partyIdFrom + "&productId=" + productId);
 
 
-        jsobj3.put("value", firstName+"给您发了一条消息");
+        jsobj3.put("value", firstName + "给您发了一条消息");
         jsobj3.put("color", "#173177");
         jsobj2.put("first", jsobj3);
 
@@ -914,11 +1091,9 @@ public class PlatformManagerServices {
     }
 
 
-
-
-
     /**
      * send Message
+     *
      * @param dctx
      * @param context
      * @return
@@ -939,25 +1114,23 @@ public class PlatformManagerServices {
         String message = (String) context.get("message");
         String orderId = (String) context.get("orderId");
 
-        if(partyIdFrom.equals(partyIdTo)){
+        if (partyIdFrom.equals(partyIdTo)) {
             //TODO IF EQUALS , PARTY ID TO  = CUSTOMER
-            GenericValue orderMap = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId",orderId).queryFirst();
+            GenericValue orderMap = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId", orderId).queryFirst();
             partyIdTo = (String) orderMap.get("partyId");
         }
 
 
-        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
-        createMessageLogMap.put("partyIdFrom",partyIdFrom);
+        createMessageLogMap.put("partyIdFrom", partyIdFrom);
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-        createMessageLogMap.put("partyIdTo",partyIdTo);
-        createMessageLogMap.put("message",message);
-        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+        createMessageLogMap.put("partyIdTo", partyIdTo);
+        createMessageLogMap.put("message", message);
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
         createMessageLogMap.put("messageLogTypeId", "TEXT");
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
         msg.create();
-
-
 
 
         // 查询registrationID
@@ -968,37 +1141,28 @@ public class PlatformManagerServices {
         EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
-        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
 
-
-        GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+        GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
         String regId = (String) partyIdentification.getString("idValue");
         String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
         Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("regId", regId);
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
-        result.put("partyIdFrom",person.get("firstName") + ":"+message);
-        result.put("partyIdTo",partyIdFrom);
-        result.put("deviceType",partyIdentificationTypeId);
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyIdFrom), false);
+        result.put("partyIdFrom", person.get("firstName") + ":" + message);
+        result.put("partyIdTo", partyIdFrom);
+        result.put("deviceType", partyIdentificationTypeId);
 
-        result.put("message","message:" + partyIdTo + ":" + partyIdFrom+":"+orderId+"");
+        result.put("message", "message:" + partyIdTo + ":" + partyIdFrom + ":" + orderId + "");
 
         return result;
     }
 
 
-
-
-
-
-
-
-
-
-
     /**
      * sendAppAnd WeChatMessage
+     *
      * @param dctx
      * @param context
      * @return
@@ -1020,10 +1184,7 @@ public class PlatformManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-
-
-
-        if(partyIdFrom.equals(partyIdTo)){
+        if (partyIdFrom.equals(partyIdTo)) {
 //            //TODO IF EQUALS , PARTY ID TO  = CUSTOMER
 //            GenericValue orderMap = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("orderId",orderId).queryFirst();
 //            partyIdTo = (String) orderMap.get("partyId");
@@ -1031,20 +1192,18 @@ public class PlatformManagerServices {
         }
 
 
-        Map<String,Object> createMessageLogMap = new HashMap<String, Object>();
+        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
 
-        createMessageLogMap.put("partyIdFrom",partyIdFrom);
+        createMessageLogMap.put("partyIdFrom", partyIdFrom);
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-        createMessageLogMap.put("partyIdTo",partyIdTo);
-        createMessageLogMap.put("message",message);
-        createMessageLogMap.put("fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+        createMessageLogMap.put("partyIdTo", partyIdTo);
+        createMessageLogMap.put("message", message);
+        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
         createMessageLogMap.put("messageLogTypeId", "TEXT");
 
         GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
         msg.create();
-
-
 
 
         // 查询registrationID
@@ -1055,29 +1214,23 @@ public class PlatformManagerServices {
         EntityCondition devCondition = EntityCondition.makeCondition(devTypeExprs, EntityOperator.OR);
         pConditions = EntityCondition.makeCondition(pConditions, devCondition);
 
-        List<GenericValue> partyIdentifications =  delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
 
 
-
-        GenericValue  partyIdentification = (GenericValue) partyIdentifications.get(0);
+        GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
         String regId = (String) partyIdentification.getString("idValue");
         String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
 
         result.put("regId", regId);
-        GenericValue person = delegator.findOne("Person",UtilMisc.toMap("partyId",partyIdFrom),false);
-        result.put("partyIdFrom",person.get("firstName") + ":"+message);
-        result.put("partyIdTo",partyIdFrom);
-        result.put("deviceType",partyIdentificationTypeId);
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyIdFrom), false);
+        result.put("partyIdFrom", person.get("firstName") + ":" + message);
+        result.put("partyIdTo", partyIdFrom);
+        result.put("deviceType", partyIdentificationTypeId);
 
-        result.put("message","message:" + partyIdTo + ":" + partyIdFrom+":"+orderId+"");
-
-
-
-
+        result.put("message", "message:" + partyIdTo + ":" + partyIdFrom + ":" + orderId + "");
 
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-
 
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", partyIdTo, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
@@ -1119,28 +1272,26 @@ public class PlatformManagerServices {
         }
 
 
-
         // 不用Ecs 推送App
         Map<String, Object> pushNotifOrMessageInfoMap = new HashMap<String, Object>();
-        pushNotifOrMessageInfoMap.put("message",message);
-        pushNotifOrMessageInfoMap.put("productId","10000");
-        pushNotifOrMessageInfoMap.put("content","");
-        pushNotifOrMessageInfoMap.put("deviceType",partyIdentificationTypeId);
-        pushNotifOrMessageInfoMap.put("objectId","10000");
-        pushNotifOrMessageInfoMap.put("regId",regId);
-         pushNotifOrMessageInfoMap.put("sendType","one");
+        pushNotifOrMessageInfoMap.put("message", message);
+        pushNotifOrMessageInfoMap.put("productId", "10000");
+        pushNotifOrMessageInfoMap.put("content", "");
+        pushNotifOrMessageInfoMap.put("deviceType", partyIdentificationTypeId);
+        pushNotifOrMessageInfoMap.put("objectId", "10000");
+        pushNotifOrMessageInfoMap.put("regId", regId);
+        pushNotifOrMessageInfoMap.put("sendType", "one");
 
 
-        GenericValue userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId",partyIdFrom,"enabled","Y").queryFirst();
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyIdFrom, "enabled", "Y").queryFirst();
 
-        pushNotifOrMessageInfoMap.put("userLogin",userLogin);
+        pushNotifOrMessageInfoMap.put("userLogin", userLogin);
 
-        dispatcher.runSync("pushNotifOrMessage",pushNotifOrMessageInfoMap);
+        dispatcher.runSync("pushNotifOrMessage", pushNotifOrMessageInfoMap);
 
 
         return result;
     }
-
 
 
 }

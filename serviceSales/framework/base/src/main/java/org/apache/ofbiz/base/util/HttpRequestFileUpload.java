@@ -259,6 +259,10 @@ public class HttpRequestFileUpload {
         } // end while
     }
 
+
+
+
+
     // reads a line, waiting if there is nothing available and reqLen > 0
     private int waitingReadLine(ServletInputStream in, byte[] buf, int off, int len, int reqLen) throws IOException {
         int i = -1;

@@ -69,14 +69,14 @@ public class WeChatOrderQueryServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productId = (String) context.get("productId");
         GenericValue product = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
 
         Map<String, Object> allField = product.getAllFields();
 
         //查询 ProductVirtualAndVariantInfo  查看这个产品是否是虚拟产品 有没有变形产品
-        Map<String, Object> queryProductFeature = dispatcher.runSync("ProductVirtualAndVariantInfo", UtilMisc.toMap("userLogin", userLogin, "productId", productId));
+        Map<String, Object> queryProductFeature = dispatcher.runSync("ProductVirtualAndVariantInfo", UtilMisc.toMap("userLogin", admin, "productId", productId));
 
 //         List<GenericValue> productVirtualAndVariantInfoList = EntityQuery.use(delegator).from("ProductVirtualAndVariantInfo").where("productId",productId).queryList();
 //        List<GenericValue> productFeatureAndApplList = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();

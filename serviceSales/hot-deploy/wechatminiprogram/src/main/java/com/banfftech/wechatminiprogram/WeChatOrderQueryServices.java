@@ -201,7 +201,7 @@ public class WeChatOrderQueryServices {
 
         resultMap.put("from",viewIndex);
         resultMap.put("current_page",viewIndex+1);
-        resultMap.put("last_page",resourceCount);
+        resultMap.put("last_page" ,Integer.parseInt( resourceCount+""));
 
         return  resultMap;
     }

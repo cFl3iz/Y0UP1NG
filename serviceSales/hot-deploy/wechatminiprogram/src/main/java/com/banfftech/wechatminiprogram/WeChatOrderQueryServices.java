@@ -103,34 +103,33 @@ public class WeChatOrderQueryServices {
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
 
-        //查询 ProductVirtualAndVariantInfo  查看这个产品是否是虚拟产品 有没有变形产品
-//        Map<String, Object> queryProductFeature = dispatcher.runSync("ProductVirtualAndVariantInfo", UtilMisc.toMap("userLogin", admin, "productId", productId));
-//
-//        List<Map<String, Object>> productFeaturesList = (List<Map<String, Object>>) queryProductFeature.get("productFeaturesList");
-//        String strProductFeaturesList = "<div class=\"pro-color\">";
-//
-//        if (null != productFeaturesList && productFeaturesList.size() > 0) {
-//            for (Map<String, Object> mp : productFeaturesList) {
-//                Set set = mp.keySet();//得到所有map里面key的集合\
-//                for (Iterator iter = set.iterator(); iter.hasNext(); )//遍历
-//                {
-//                    String key = (String) iter.next();
-//                    strProductFeaturesList += "<span class=\"part-note-msg\">";
-//                    strProductFeaturesList = strProductFeaturesList + key + "</span>";
-//                    List<String> innerList = (List<String>) mp.get(key);
-//                    strProductFeaturesList += "<p id=\"color\"><a  href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" style=\"display:none;\">" + "</a></p>";
-//                    for (int i = 0; i < innerList.size(); i++) {
-//                        String rowKey = innerList.get(i);
-//                        strProductFeaturesList = strProductFeaturesList + "<p id=\"color\">";
-//                        strProductFeaturesList += "<a id=\"" + key + "\" href=\"javaScript:selectFeature(this);\" onclick=\"selectFeature(this);\" title=\"noselected\" class=\"a-item J_ping\"   report-eventparam=\"   " + rowKey + "  \" > " + rowKey + "</a>";
-//                        strProductFeaturesList += "</p>";
-//                    }
-//                }
-//            }
-//        }
+        List<GenericValue> gvs =  EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
+        List<Map<String,Object>> productFeatureList = new ArrayList<Map<String, Object>>();
+        for (GenericValue gv : gvs) {
+            String attr = gv.getString("productFeatureTypeId");
+            Map<String,Object> map = new HashMap<String, Object>();
+            switch (attr) {
+                case "COLOR": {
+                    map.put("COLOR_DESC", gv.getString("description"));
+                    productFeatureList.add(map);
+                    break;
+                }
+                case "SIZE": {
+                    map.put("SIZE", gv.getString("description"));
+                    productFeatureList.add(map);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
 
-     //   allField.put("strProductFeaturesList", strProductFeaturesList);
+
+
+    //   allField.put("strProductFeaturesList", strProductFeaturesList);
         allField.put("imgArray",imgAttr);
+        allField.put("features",productFeatureList);
         resultMap.put("productDetail", allField);
         return resultMap;
     }

@@ -189,7 +189,7 @@ public class WeChatOrderQueryServices {
 
 
         if(resourceCount!=0 && resourceCount>viewSize){
-            resultMap.put("total",resourceCount%viewSize == 0 ? resourceCount / viewSize : resourceCount / viewSize+1 );
+            resultMap.put("total",Integer.parseInt(resourceCount+"")%viewSize == 0 ? Integer.parseInt(resourceCount+"") / viewSize : Integer.parseInt(resourceCount+"") / viewSize+1 );
         }else{
             if(null == resourceCount || resourceCount == 0){
                 resultMap.put("total",-1);

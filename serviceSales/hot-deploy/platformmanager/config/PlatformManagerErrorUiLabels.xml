@@ -5,6 +5,10 @@
         <value xml:lang="en">captcha not exist</value>
         <value xml:lang="zh">验证码不存在</value>
     </property>
+    <property key="NotFoundOpenId">
+        <value xml:lang="en">NotFoundOpenId</value>
+        <value xml:lang="zh">当前OpenID在数据库中不存在用户!</value>
+    </property>
 
     <property key="AccountingGiftCerticateNumberCannotStoreFulfillmentInfo">
         <value xml:lang="de">Kann Ausführungsinformation nicht speichern:  ${errorString}</value>

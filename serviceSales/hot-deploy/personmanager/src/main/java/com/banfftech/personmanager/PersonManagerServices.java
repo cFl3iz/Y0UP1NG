@@ -1147,6 +1147,7 @@ public class PersonManagerServices {
             throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head
+        Locale locale = (Locale) context.get("locale");
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -1168,9 +1169,7 @@ public class PersonManagerServices {
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryFirst();
         if(partyIdentification == null){
-            resultMap = ServiceUtil.returnError();
-            resultMap.put("message","用户不合法!");
-            return resultMap;
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "NotFoundOpenId", locale));
         }
 
         GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();

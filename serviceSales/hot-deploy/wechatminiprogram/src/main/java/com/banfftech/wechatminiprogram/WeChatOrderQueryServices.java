@@ -52,6 +52,30 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * queryCatalogProductDetail
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryCatalogProductDetail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String productId = (String) context.get("productId");
+        GenericValue product = delegator.findOne("ProductAndPriceView", UtilMisc.toMap("productId", productId), false);
+        Map<String,Object> allField = product.getAllFields();
+
+        resultMap.put("productDetail",allField);
+        return resultMap;
+    }
+
+
+    /**
      * queryCatalogProduct
      * @param dctx
      * @param context

@@ -76,6 +76,21 @@
                    optional="true" />
     </service>
 
+    <service name="queryCatalogProductDetail" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryCatalogProductDetail" auth="false">
+        <description>queryCatalogProductDetail</description>
+        <attribute name="openId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="productDetail" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
     <!-- 查询联系圈的资源 -->
     <service name="queryContactResourceList" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"

@@ -555,8 +555,8 @@ public class PlatformLoginWorker {
 
 
         if(miniProgramIdentification!=null){
-            List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", miniProgramIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
-            result.put("storeList",storeList);
+//            List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", miniProgramIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
+//            result.put("storeList",storeList);
             result.put("unioId",unioId);
             result.put("openId",openId);
             return result;
@@ -597,8 +597,8 @@ public class PlatformLoginWorker {
 
 
 
-        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
-        result.put("storeList",storeList);
+//        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
+//        result.put("storeList",storeList);
         result.put("unioId",unioId);
         result.put("openId",openId);
 

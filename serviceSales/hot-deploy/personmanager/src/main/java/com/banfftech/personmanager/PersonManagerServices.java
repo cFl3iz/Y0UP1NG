@@ -1168,6 +1168,7 @@ public class PersonManagerServices {
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryFirst();
         if(partyIdentification == null){
+            resultMap = ServiceUtil.returnError();
             resultMap.put("message","用户不合法!");
             return resultMap;
         }

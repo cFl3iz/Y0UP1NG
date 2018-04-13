@@ -380,7 +380,7 @@
         <view-link entity-alias="Product" rel-entity-alias="PP">
             <key-map field-name="productId" rel-field-name="productId"/>
             <entity-condition>
-                <condition-expr entity-alias="PP" field-name="productPriceTypeId" operator="equals" value="DEFAULT_PRICE"/>
+                <condition-expr entity-alias="PP" field-name="productPriceTypeId" operator="equals" value="LIST_PRICE"/>
             </entity-condition>
         </view-link>
 

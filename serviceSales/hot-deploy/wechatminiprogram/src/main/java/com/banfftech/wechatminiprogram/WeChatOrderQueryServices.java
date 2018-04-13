@@ -92,7 +92,7 @@ public class WeChatOrderQueryServices {
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
-        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",prodCatalogId,"isVirtual","N").queryFirst();
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",prodCatalogId).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
 
@@ -106,7 +106,7 @@ public class WeChatOrderQueryServices {
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMember").where("productCategoryId",productCategoryId).queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId",productCategoryId,"isVirtual","N").queryCount();
 
 
 

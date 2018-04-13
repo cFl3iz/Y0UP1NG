@@ -360,4 +360,29 @@
 
     </view-entity>
 
+
+
+
+
+    <view-entity entity-name="ProductCategoryMemberAndProdDetail" package-name="com.banfftech.personerp">
+        <member-entity entity-name="ProductCategoryMember" entity-alias="ProductCategoryMember" />
+        <member-entity entity-name="Product" entity-alias="PP" />
+        <member-entity entity-name="ProductPrice" entity-alias="ProductPrice" />
+
+        <alias-all entity-alias="Product" />
+        <alias entity-alias="PP" field="price" name="price"/>
+        <alias entity-alias="ProductCategoryMember" field="productCategoryId" name="productCategoryId"/>
+
+        <view-link entity-alias="Product" rel-entity-alias="ProductCategoryMember">
+            <key-map field-name="productId" />
+        </view-link>
+
+        <view-link entity-alias="Product" rel-entity-alias="PP">
+            <key-map field-name="productId" rel-field-name="productId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PP" field-name="productPriceTypeId" operator="equals" value="DEFAULT_PRICE"/>
+            </entity-condition>
+        </view-link>
+
+    </view-entity>
 </entitymodel>

@@ -35,6 +35,7 @@
     </request-map>
 
 
+
     <!-- 更新资源信息 -->
     <request-map uri="updateWeChatResource">
         <security https="false" auth="false"/>
@@ -120,6 +121,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryCatalogProduct">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryCatalogProduct"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

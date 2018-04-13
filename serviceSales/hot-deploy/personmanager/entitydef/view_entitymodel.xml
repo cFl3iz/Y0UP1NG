@@ -366,8 +366,8 @@
 
     <view-entity entity-name="ProductCategoryMemberAndProdDetail" package-name="com.banfftech.personerp">
         <member-entity entity-name="ProductCategoryMember" entity-alias="ProductCategoryMember" />
-        <member-entity entity-name="Product" entity-alias="PP" />
-        <member-entity entity-name="ProductPrice" entity-alias="ProductPrice" />
+        <member-entity entity-name="Product" entity-alias="Product" />
+        <member-entity entity-name="ProductPrice" entity-alias="PP" />
 
         <alias-all entity-alias="Product" />
         <alias entity-alias="PP" field="price" name="price"/>

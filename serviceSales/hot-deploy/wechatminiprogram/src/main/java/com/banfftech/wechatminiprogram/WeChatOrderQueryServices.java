@@ -106,7 +106,7 @@ public class WeChatOrderQueryServices {
 //        }
 
      //   allField.put("strProductFeaturesList", strProductFeaturesList);
-        allField.put("imgArrayFuckBallShit",imgAttr);
+        allField.put("imgArray",imgAttr);
         resultMap.put("productDetail", allField);
         return resultMap;
     }

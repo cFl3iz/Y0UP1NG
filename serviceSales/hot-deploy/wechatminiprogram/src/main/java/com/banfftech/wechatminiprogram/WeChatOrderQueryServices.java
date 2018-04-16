@@ -180,11 +180,11 @@ public class WeChatOrderQueryServices {
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
 
-        //查询联系人列表
+
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy)
+                where("productCategoryId", productCategoryId, "isVirtual", "Y").orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 

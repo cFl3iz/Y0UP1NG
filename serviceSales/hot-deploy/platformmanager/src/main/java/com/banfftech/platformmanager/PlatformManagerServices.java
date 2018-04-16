@@ -333,6 +333,8 @@ public class PlatformManagerServices {
                         newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
                         newVirtualProduct.set("description", otherDesc);
                         newVirtualProduct.set("comments", keyword);
+                        //默认图片
+                        newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
                         if (UtilValidate.isNotEmpty(internalName)) {
                             newVirtualProduct.set("internalName", internalName);
                             newVirtualProduct.set("productName", internalName);
@@ -348,6 +350,8 @@ public class PlatformManagerServices {
                         newVariantProduct.set("productTypeId", "FINISHED_GOOD");
                         newVariantProduct.set("description", otherDesc);
                         newVariantProduct.set("comments", keyword);
+                        //默认图片
+                        newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
                         if (UtilValidate.isNotEmpty(internalName)) {
                             newVariantProduct.set("internalName", internalName);
                             newVariantProduct.set("productName", internalName);
@@ -421,19 +425,13 @@ public class PlatformManagerServices {
                         // return addProductToCategoryServiceResultMap;
                         return "error";
                     }
-                    Debug.logInfo("sku="+productId,module);
-                    Debug.logInfo("productVirtualId="+productVirtualId,module);
+
 //                    //虚拟产品关联分类
-//                    Map<String, Object> addVirtualToCategoryInMap  = new HashMap<String, Object>();
-//                    addVirtualToCategoryInMap.put("userLogin", admin);
-//                    addVirtualToCategoryInMap.put("productId", productVirtualId);
-//                    addVirtualToCategoryInMap.put("productCategoryId", productCategoryId);
-//                     addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addVirtualToCategoryInMap);
-//                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
-//                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
-//                        // return addProductToCategoryServiceResultMap;
-//                        return "error";
-//                    }
+                    GenericValue productCategoryMember = delegator.findOne("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId), false);
+                    if (UtilValidate.isEmpty(productCategoryMember)) {
+                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId));
+                        newProductCategoryMember.create();
+                    }
 
 
 //TODO 开始搞特征 -------------------------------------------------------------------------------------------------------------------------

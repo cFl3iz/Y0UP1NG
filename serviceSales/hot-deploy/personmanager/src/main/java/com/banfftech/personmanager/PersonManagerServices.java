@@ -4773,8 +4773,7 @@ public class PersonManagerServices {
 
                 String optionTitle = (String) feature.get("optionTitle");
 
-                Debug.logInfo("* >>> feature =" + feature, module);
-                Debug.logInfo("* >>> feature.get(\"productFeatureTypeId\") =" + feature.get("productFeatureTypeId"), module);
+
                 String productFeatureTypeId = (String) feature.get("productFeatureTypeId");
 
 

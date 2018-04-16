@@ -64,4 +64,9 @@
 
     <ProductContentType createdStamp="2018-02-12 14:33:59.0" createdTxStamp="2018-02-12 14:33:59.0" description="吐槽" lastUpdatedStamp="2018-02-12 14:33:59.0" lastUpdatedTxStamp="2018-02-12 14:33:59.0" productContentTypeId="TUCAO"/>
 
+
+
+    <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="颜色" lastUpdatedStamp="2016-05-04 09:53:21.0" lastUpdatedTxStamp="2016-05-04 09:53:21.0" productFeatureCategoryId="PRODUCT_COLOR"/>
+    <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="尺码" lastUpdatedStamp="2017-10-17 17:07:00.0" lastUpdatedTxStamp="2017-10-17 17:07:00.0" productFeatureCategoryId="PRODUCT_SIZE"/>
+
 </entity-engine-xml>

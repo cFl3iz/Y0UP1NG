@@ -64,6 +64,8 @@
 
 
 
+
+
     <service name="createProductFeatureInertPk" engine="java" require-new-transaction="true" use-transaction="true"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
              invoke="createProductFeatureInertPk" auth="false">

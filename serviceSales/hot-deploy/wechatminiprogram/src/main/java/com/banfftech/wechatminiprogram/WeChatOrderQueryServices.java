@@ -55,6 +55,34 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * getSkuFromProductFeatureDesc
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> getSkuFromProductFeatureDesc(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String productFeatureSelect = (String) context.get("productFeatureSelect");
+
+        String color = productFeatureSelect.substring(productFeatureSelect.indexOf("COLOR_DESC=")+1,productFeatureSelect.indexOf(","));
+        String size = productFeatureSelect.substring(productFeatureSelect.indexOf("SIZE=")+1);
+
+        Debug.logInfo("color="+color+"|size="+size , module);
+
+
+        return resultMap;
+    }
+
+
+
+    /**
      * queryProductStoreList
      * @param dctx
      * @param context

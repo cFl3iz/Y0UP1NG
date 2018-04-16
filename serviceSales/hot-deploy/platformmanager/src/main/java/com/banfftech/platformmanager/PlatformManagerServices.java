@@ -111,7 +111,7 @@ public class PlatformManagerServices {
 
 
 
-    public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) {
+    public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException{
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

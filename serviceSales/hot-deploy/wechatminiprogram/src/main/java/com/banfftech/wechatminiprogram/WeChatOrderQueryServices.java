@@ -101,22 +101,29 @@ public class WeChatOrderQueryServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
         //,"roleTypeId","SALES_REP"
+        EntityCondition findConditionsParty = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyIdentification.get("partyId")));
 
-        EntityCondition findConditions3 = EntityCondition
+        EntityCondition findConditionsSrp = EntityCondition
                 .makeCondition(UtilMisc.toMap("roleTypeId","SALES_REP"));
 
+        EntityCondition listConditions1 = EntityCondition
+                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsSrp);
 
-        EntityCondition findConditions4 = EntityCondition
+        EntityCondition findConditionsCus = EntityCondition
                 .makeCondition(UtilMisc.toMap("roleTypeId","PLACING_CUSTOMER"));
 
         EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsCus);
+
+        EntityCondition listConditions3 = EntityCondition
+                .makeCondition(listConditions1, EntityOperator.OR, listConditions2);
 
 
 
        // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
         List<GenericValue> storeList =     delegator.findList("ProductStoreRoleAndStoreDetail",
-                listConditions2, null,
+                listConditions3, null,
                         UtilMisc.toList("-fromDate"), null, false);
                 resultMap.put("storeList",storeList);
 

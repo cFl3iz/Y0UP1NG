@@ -72,7 +72,8 @@ public class WeChatOrderQueryServices {
         String openId = (String) context.get("openId");
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
-        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
+        //,"roleTypeId","SALES_REP"
+        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
         resultMap.put("storeList",storeList);
 
         return resultMap;

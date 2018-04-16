@@ -73,8 +73,24 @@ public class WeChatOrderQueryServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
         //,"roleTypeId","SALES_REP"
-        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
-        resultMap.put("storeList",storeList);
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId","SALES_REP"));
+
+
+        EntityCondition findConditions4 = EntityCondition
+                .makeCondition(UtilMisc.toMap("roleTypeId","PLACING_CUSTOMER"));
+
+        EntityCondition listConditions2 = EntityCondition
+                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+
+
+
+       // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
+        List<GenericValue> storeList =     delegator.findList("ProductStoreRoleAndStoreDetail",
+                listConditions2, null,
+                        UtilMisc.toList("-fromDate"), null, false);
+                resultMap.put("storeList",storeList);
 
         return resultMap;
     }

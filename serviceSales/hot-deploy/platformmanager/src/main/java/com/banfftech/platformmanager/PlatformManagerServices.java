@@ -478,7 +478,7 @@ public class PlatformManagerServices {
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
                         } else {
-                            featureId = (String) productColorFeature.get("featureId");
+                            featureId = (String) productColorFeature.get("productFeatureId");
                         }
 
 
@@ -514,7 +514,7 @@ public class PlatformManagerServices {
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
 //                            newProductFeture.create();
                         } else {
-                            featureId = (String) productColorFeature.get("featureId");
+                            featureId = (String) productColorFeature.get("productFeatureId");
                         }
 
 

@@ -126,7 +126,9 @@ public class PlatformManagerServices {
         GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId",productFeatureId,"productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", productFeatureTypeId, "description", description));
         newProductFeture.create();
 
-        return ServiceUtil.returnSuccess();
+        Map<String,Object> result =ServiceUtil.returnSuccess();
+        result.put("productFeatureId",productFeatureId);
+        return result;
     }
 
 

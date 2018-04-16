@@ -427,7 +427,9 @@ public class PlatformManagerServices {
                     }
 
 //                    //虚拟产品关联分类
-                    GenericValue productCategoryMember = delegator.findOne("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId), false);
+
+                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId,"productCategoryId",productCategoryId).queryFirst();
+
                     if (UtilValidate.isEmpty(productCategoryMember)) {
                         GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId));
                         newProductCategoryMember.create();

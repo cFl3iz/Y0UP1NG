@@ -98,6 +98,9 @@
 
 
 
+
+
+
     <!-- 查询联系圈的资源 -->
     <service name="queryContactResourceList" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
@@ -165,6 +168,18 @@
     </service>
 
 
+    <!-- addRoleToStore -->
+    <service name="addRoleToStore" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="addRoleToStore" auth="false">
+        <description>addRoleToStore</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="wechatReleaseResource" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"

@@ -142,6 +142,7 @@
 
 
 
+
     <!-- 我收藏的产品 -->
     <request-map uri="queryMyCollectProduct">
         <security https="false" auth="false"/>
@@ -150,6 +151,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <!-- 给店铺添加角色 -->
+    <request-map uri="addRoleToStore">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addRoleToStore"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="queryMyPostalAddress">

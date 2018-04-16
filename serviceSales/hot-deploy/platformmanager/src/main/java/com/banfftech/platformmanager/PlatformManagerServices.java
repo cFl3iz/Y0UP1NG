@@ -360,6 +360,7 @@ public class PlatformManagerServices {
                         newVariantProduct.set("isVariant", "Y");
                         newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
                         newVariantProduct.create();
+
                     }
                     //创建产品关联
                     GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
@@ -444,12 +445,12 @@ public class PlatformManagerServices {
 
 
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode", colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
                         } else {
                             featureId = (String) productColorFeature.get("featureId");
@@ -478,12 +479,12 @@ public class PlatformManagerServices {
                     //创建尺码特征
                     if (UtilValidate.isNotEmpty(sizeId)) {
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode", colorId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("userLogin", admin, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
                         } else {
                             featureId = (String) productColorFeature.get("featureId");

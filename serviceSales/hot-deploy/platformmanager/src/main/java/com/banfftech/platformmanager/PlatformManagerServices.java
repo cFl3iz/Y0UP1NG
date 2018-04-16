@@ -353,6 +353,7 @@ public class PlatformManagerServices {
                         }
                         newVariantProduct.set("isVirtual", "N");
                         newVariantProduct.set("isVariant", "Y");
+                        newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
                         newVariantProduct.create();
                     }
                     //创建产品关联
@@ -408,12 +409,24 @@ public class PlatformManagerServices {
                         return "error";
                     }
 
-                    //产品关联分类
+                    //SKU关联分类
                     Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
                     addProductToCategoryInMap.put("userLogin", admin);
                     addProductToCategoryInMap.put("productId", productId);
                     addProductToCategoryInMap.put("productCategoryId", productCategoryId);
                     Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                        // return addProductToCategoryServiceResultMap;
+                        return "error";
+                    }
+
+                    //SKU关联分类
+                     addProductToCategoryInMap = new HashMap<String, Object>();
+                    addProductToCategoryInMap.put("userLogin", admin);
+                    addProductToCategoryInMap.put("productId", productVirtualId);
+                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                     addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
                     if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
                         Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
                         // return addProductToCategoryServiceResultMap;

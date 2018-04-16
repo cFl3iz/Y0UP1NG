@@ -62,6 +62,25 @@
     </service>
 
 
+
+
+    <service name="createProductFeatureInertPk" engine="java" require-new-transaction="true" use-transaction="true"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="createProductFeatureInertPk" auth="false">
+        <description>createProductFeatureInertPk</description>
+
+        <attribute name="productFeatureId" type="String" mode="INOUT" optional="true" />
+        <attribute name="idCode" type="String" mode="IN" optional="true" />
+        <attribute name="productFeatureCategoryId" type="String" mode="IN" optional="true" />
+        <attribute name="productFeatureTypeId" type="String" mode="IN" optional="true" />
+        <attribute name="description" type="String" mode="IN" optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
     <service name="sendAppAndWeChatMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
              invoke="sendAppAndWeChatMessage" auth="false">

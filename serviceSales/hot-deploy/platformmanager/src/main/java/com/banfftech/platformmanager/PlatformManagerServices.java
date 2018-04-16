@@ -109,6 +109,28 @@ public class PlatformManagerServices {
     private static String smsFreeSignName = null;
     private static String smsTemplateCode = null;
 
+
+
+    public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        String productFeatureId = (String) context.get("productFeatureId");
+        String productFeatureCategoryId = (String) context.get("productFeatureCategoryId");
+        String productFeatureTypeId = (String) context.get("productFeatureTypeId");
+        String description = (String) context.get("description");
+
+        GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId",productFeatureId,"productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", productFeatureTypeId, "description", description));
+        newProductFeture.create();
+
+        return ServiceUtil.returnSuccess();
+    }
+
+
+
     /**
      * Get Login Captcha
      *
@@ -444,13 +466,12 @@ public class PlatformManagerServices {
                     if (UtilValidate.isNotEmpty(colorId)) {
 
 
-
                         GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode",colorDesc, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("idCode",colorDesc,"productFeatureId","COLOR_" + colorId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode",colorDesc,"productFeatureId","COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
@@ -486,7 +507,7 @@ public class PlatformManagerServices {
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
 //                            newProductFeture.create();

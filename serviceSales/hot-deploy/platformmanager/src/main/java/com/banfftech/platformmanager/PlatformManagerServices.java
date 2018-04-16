@@ -445,12 +445,12 @@ public class PlatformManagerServices {
 
 
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode",colorDesc, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeature", UtilMisc.toMap("idCode",colorDesc,"productFeatureId","COLOR_" + colorId,"userLogin", admin, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
@@ -481,7 +481,7 @@ public class PlatformManagerServices {
                     //创建尺码特征
                     if (UtilValidate.isNotEmpty(sizeId)) {
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode",sizeDesc, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {

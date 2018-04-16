@@ -466,7 +466,7 @@ public class PlatformManagerServices {
                     if (UtilValidate.isNotEmpty(colorId)) {
 
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode",colorDesc, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
@@ -502,7 +502,7 @@ public class PlatformManagerServices {
                     //创建尺码特征
                     if (UtilValidate.isNotEmpty(sizeId)) {
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("idCode",sizeDesc, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {

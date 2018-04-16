@@ -195,6 +195,15 @@ public class WeChatOrderQueryServices {
 
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
+        List<Map<String,Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        if(null!=myContactListPage ){
+            for(GenericValue gv : myContactListPage){
+                Map<String,Object> rowMap = gv.getAllFields();
+                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", gv.get("productId")).queryFirst();
+                rowMap.put("price",productPrice.get("price"));
+                returnProductList.add(rowMap);
+            }
+        }
 
 //        if(null != myContactList){
 //
@@ -264,7 +273,7 @@ public class WeChatOrderQueryServices {
 //
 //
 //        }
-        resultMap.put("productList", productList);
+        resultMap.put("productList", returnProductList);
 
         //总共有多少页码
         int countIndex = (Integer.parseInt(resourceCount + "") % viewSize);

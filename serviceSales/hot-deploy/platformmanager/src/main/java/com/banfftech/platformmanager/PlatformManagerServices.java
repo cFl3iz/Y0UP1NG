@@ -431,7 +431,7 @@ public class PlatformManagerServices {
                     GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId,"productCategoryId",productCategoryId).queryFirst();
 
                     if (UtilValidate.isEmpty(productCategoryMember)) {
-                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId));
+                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId,"fromDate", UtilDateTime.nowTimestamp()));
                         newProductCategoryMember.create();
                     }
 

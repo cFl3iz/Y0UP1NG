@@ -199,7 +199,9 @@ public class WeChatOrderQueryServices {
         if(null!=myContactListPage ){
             for(GenericValue gv : myContactListPage){
                 Map<String,Object> rowMap = gv.getAllFields();
-                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", gv.get("productId")).queryFirst();
+                String vir_productId = (String) rowMap.get("productId");
+                GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();
+                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", sku_product.get("productIdTo")).queryFirst();
                 rowMap.put("price",productPrice.get("price"));
                 returnProductList.add(rowMap);
             }

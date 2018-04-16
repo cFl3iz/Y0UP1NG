@@ -88,6 +88,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -420,13 +421,14 @@ public class PlatformManagerServices {
                         // return addProductToCategoryServiceResultMap;
                         return "error";
                     }
-
-                    //SKU关联分类
-                     addProductToCategoryInMap = new HashMap<String, Object>();
-                    addProductToCategoryInMap.put("userLogin", admin);
-                    addProductToCategoryInMap.put("productId", productVirtualId);
-                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
-                     addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                    Debug.logInfo("sku="+productId,module);
+                    Debug.logInfo("productVirtualId="+productVirtualId,module);
+                    //虚拟产品关联分类
+                    Map<String, Object> addVirtualToCategoryInMap  = new HashMap<String, Object>();
+                    addVirtualToCategoryInMap.put("userLogin", admin);
+                    addVirtualToCategoryInMap.put("productId", productVirtualId);
+                    addVirtualToCategoryInMap.put("productCategoryId", productCategoryId);
+                     addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addVirtualToCategoryInMap);
                     if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
                         Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
                         // return addProductToCategoryServiceResultMap;

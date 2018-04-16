@@ -42,8 +42,10 @@ under the License.
 
     <service name="createProductFeature" engine="entity-auto" invoke="create" default-entity-name="ProductFeature" auth="true">
         <description>Create a ProductFeature record</description>
-        <auto-attributes include="all" mode="IN" optional="true"/>
-        <attribute name="productFeatureId" type="String" mode="OUT" optional="false"/>
+        <!--<auto-attributes include="all" mode="IN" optional="true"/>-->
+        <!--<attribute name="productFeatureId" type="String" mode="OUT" optional="false"/>-->
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <override name="productFeatureTypeId" mode="IN" optional="false"/>
         <override name="description" mode="IN" optional="false"/>
     </service>

@@ -107,11 +107,12 @@ public class WeChatOrderQueryServices {
                 Debug.logInfo("productFeatureTypeId="+productFeatureTypeId , module);
                 Debug.logInfo("description="+description , module);
                 Debug.logInfo("color="+color , module);
-                if(productFeatureTypeId.equals("COLOR") && description.equals(color)){
+                Debug.logInfo("description.equals(color.trim())="+description.equals(color.trim()) , module);
+                if(productFeatureTypeId.equals("COLOR") && description.equals(color.trim())){
                     String variantProductId = (String) gv.get("variantProductId");
                     Debug.logInfo("variantProductId="+variantProductId , module);
                     for(GenericValue gv2 :productVirtualAndVariantInfo){
-                        if(variantProductId.equals((String)gv2.get("variantProductId")) && ((String) gv.get("productFeatureTypeId")).equals("SIZE") && ((String) gv.get("description")).equals(size)) {
+                        if(variantProductId.equals((String)gv2.get("variantProductId")) && ((String) gv.get("productFeatureTypeId")).equals("SIZE") && ((String) gv.get("description")).equals(size.trim())) {
                             variantId = (String)gv2.get("variantProductId");
                         }
                     }

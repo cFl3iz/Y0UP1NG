@@ -557,7 +557,26 @@ public class PlatformLoginWorker {
         if(miniProgramIdentification!=null){
 //            List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", miniProgramIdentification.get("partyId"),"roleTypeId","SALES_REP").queryList();
 //            result.put("storeList",storeList);
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
+            //有效时间
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", userLogin.get("userLoginId"));
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+            String tarjeta = signer.sign(claims);
             result.put("unioId",unioId);
+            result.put("tarjeta",tarjeta);
             result.put("openId",openId);
             return result;
         }
@@ -595,6 +614,11 @@ public class PlatformLoginWorker {
         }
 
 
+
+//        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
+//        result.put("storeList",storeList);
+        result.put("unioId",unioId);
+        result.put("openId",openId);
         userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
         //有效时间
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
@@ -612,12 +636,8 @@ public class PlatformLoginWorker {
         claims.put("delegatorName", delegator.getDelegatorName());
         claims.put("exp", exp);
         claims.put("iat", iat);
-
-//        List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyId,"roleTypeId","SALES_REP").queryList();
-//        result.put("storeList",storeList);
-        result.put("unioId",unioId);
-        result.put("openId",openId);
-        result.put("tarjeta",signer.sign(claims));
+        String tarjeta = signer.sign(claims);
+        result.put("tarjeta",tarjeta);
 
         result.put("partyId", partyId);
 

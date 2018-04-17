@@ -1124,8 +1124,9 @@ public class WeChatOrderQueryServices {
       //  EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
         EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "SALES_REP"));
 
-        EntityCondition payToPartyIdCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("payToPartyId", partyId));
+        //EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", partyId));
+        //定死素然
+        EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", "ZUCZUG"));
 
 
         EntityCondition listConditions2 = null;

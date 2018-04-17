@@ -103,10 +103,10 @@ public class WeChatOrderQueryServices {
             for(GenericValue gv :productVirtualAndVariantInfo){
                 String productFeatureTypeId = (String) gv.get("productFeatureTypeId");
                 String description  = (String) gv.get("description");
-                if(productFeatureTypeId.equals("COLOR") && description.equals(color)){
+                if(productFeatureTypeId.equals("PRODUCT_COLOR") && description.equals(color)){
                     String variantProductId = (String) gv.get("variantProductId");
                     for(GenericValue gv2 :productVirtualAndVariantInfo){
-                        if(variantProductId.equals((String)gv2.get("variantProductId")) && productFeatureTypeId.equals("SIZE") && description.equals(size)) {
+                        if(variantProductId.equals((String)gv2.get("variantProductId")) && productFeatureTypeId.equals("PRODUCT_SIZE") && description.equals(size)) {
                             variantId = (String)gv2.get("variantProductId");
                         }
                     }

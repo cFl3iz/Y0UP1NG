@@ -13,6 +13,7 @@ import org.apache.ofbiz.base.util.Debug;
 
 import java.sql.Timestamp;
 
+import org.apache.ofbiz.product.product.ProductWorker;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
@@ -54,6 +55,25 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
+
+
+//    public static String getVariantProductIdFromFeatureTree(Delegator delegator,String productId,List selectedFeatures) throws GenericEntityException {
+//        GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),true);
+//        if(UtilValidate.isEmpty(product)){
+//            return null;
+//        }
+//        String virtualProductId = null;
+//        if("Y".equals(product.getString("isVariant"))){
+//            virtualProductId = ProductWorker.getVariantVirtualId(product);
+//        }else if("Y".equals(product.getString("isVirtual"))){
+//            virtualProductId = productId;
+//        }else{
+//            return productId;
+//        }
+//        String variantProductId = ProductWorker.getVariantFromFeatureTree(virtualProductId, selectedFeatures, delegator);
+//        return variantProductId;
+//    }
+
     /**
      * getSkuFromProductFeatureDesc
      * @param dctx
@@ -72,15 +92,37 @@ public class WeChatOrderQueryServices {
         String productFeatureSelect = (String) context.get("productFeatureSelect");
         String virtualId = (String) context.get("virtualId");
 
-        //ProductVirtualAndVariantInfo
-
         String color = productFeatureSelect.substring(productFeatureSelect.indexOf("=")+1,productFeatureSelect.indexOf(","));
         String size = productFeatureSelect.substring(productFeatureSelect.lastIndexOf("=")+1);
+        //ProductVirtualAndVariantInfo
+        List<GenericValue> productVirtualAndVariantInfo =
+                EntityQuery.use(delegator).from("ProductVirtualAndVariantInfo")
+                        .where("productId",virtualId).queryList();
+        String variantId = "";
+        if(null!=productVirtualAndVariantInfo){
+            for(GenericValue gv :productVirtualAndVariantInfo){
+                String productFeatureTypeId = (String) gv.get("productFeatureTypeId");
+                String description  = (String) gv.get("description");
+                if(productFeatureTypeId.equals("COLOR") && description.equals(color)){
+                    String variantProductId = (String) gv.get("variantProductId");
+                    for(GenericValue gv2 :productVirtualAndVariantInfo){
+                        if(variantProductId.equals((String)gv2.get("variantProductId")) && productFeatureTypeId.equals("SIZE") && description.equals(size)) {
+                            variantId = (String)gv2.get("variantProductId");
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+
 
 
 
         Debug.logInfo("color="+color+"|size="+size , module);
 
+        resultMap.put("productId",variantId);
 
         return resultMap;
     }

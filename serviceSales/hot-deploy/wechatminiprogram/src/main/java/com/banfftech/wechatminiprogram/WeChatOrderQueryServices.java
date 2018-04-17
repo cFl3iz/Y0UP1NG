@@ -1370,16 +1370,10 @@ public class WeChatOrderQueryServices {
         fieldSet.add("productStoreId");
         fieldSet.add("payToPartyId");
 
-       // EntityCondition findConditions3 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
+        EntityCondition findConditions3 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
 
-//        EntityCondition findConditions = EntityCondition
-//                .makeCondition("partyId", EntityOperator.EQUALS, partyId);
-
-        EntityCondition findConditions3 = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "SALES_REP"));
-
-        //EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", partyId));
-        //定死素然
-        EntityCondition findConditions = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", "ZUCZUG"));
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 
 
         System.out.println("orderStatusId  ==   ? " + orderStatusId);

@@ -101,6 +101,7 @@ public class WeChatMiniProgramServices {
 
         Map<String,Object> createProductStoreRoleMap = new HashMap<String, Object>();
         createProductStoreRoleMap.put("partyId",partyId);
+        createProductStoreRoleMap.put("userLogin",admin);
         createProductStoreRoleMap.put("productStoreId",productStoreId);
         createProductStoreRoleMap.put("roleTypeId",roleTypeId);
         Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", createProductStoreRoleMap);

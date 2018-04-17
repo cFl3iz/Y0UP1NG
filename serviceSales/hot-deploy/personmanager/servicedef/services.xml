@@ -30,6 +30,7 @@
         <description>createPeOrder</description>
 
         <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="salesRepPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
         <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
@@ -1035,8 +1036,9 @@
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="placeResourceOrder" auth="false">
         <description>Place Resource Order</description>
-        <attribute name="productId" type="String" mode="IN"
-                   optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <!-- 销售代表的Id -->
+        <attribute name="salesRepId" type="String" mode="IN" optional="true"/>
         <attribute name="price" type="String" mode="IN"
                    optional="true"/>
         <!-- 订单备注 -->

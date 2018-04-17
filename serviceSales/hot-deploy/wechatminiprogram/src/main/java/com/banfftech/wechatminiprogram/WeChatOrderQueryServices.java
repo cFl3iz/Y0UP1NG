@@ -1121,8 +1121,8 @@ public class WeChatOrderQueryServices {
         fieldSet.add("payToPartyId");
 
 
-        EntityCondition roleTypeCondition = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+      //  EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+        EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "SALES_REP"));
 
         EntityCondition payToPartyIdCondition = EntityCondition
                 .makeCondition(UtilMisc.toMap("payToPartyId", partyId));

@@ -2065,6 +2065,8 @@ public class PersonManagerServices {
         String originFacilityId = (String) context.get("originFacilityId");
         //产品店铺
         String productStoreId = (String) context.get("productStoreId");
+        //销售代表PartyId
+        String salesRepPartyId = (String) context.get("salesRepPartyId");
         //供应商
         String billFromVendorPartyId = (String) context.get("billFromVendorPartyId");
         // Quantity  Amount
@@ -2135,6 +2137,12 @@ public class PersonManagerServices {
         }
 
         String orderId = (String) createOrderOut.get("orderId");
+
+
+        //销售代表角色
+        if(null!= salesRepPartyId){
+            dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"roleTypeId","SALES_REP","partyId",salesRepPartyId));
+        }
 
         resultMap.put("orderId",orderId);
 
@@ -5514,6 +5522,8 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         // StoreId
         String productStoreId = (String) context.get("productStoreId");
+        // 销售代表
+        String salesRepId = (String) context.get("salesRepId");
         // Amount
         String amount_str = (String) context.get("amount");
         // PayTo
@@ -5527,6 +5537,12 @@ public class PersonManagerServices {
         // 订单备注
         String orderReMark = (String) context.get("orderReMark");
 
+        String salesRepPartyId = null;
+
+        if(null!=salesRepId){
+            GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", salesRepId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+            salesRepPartyId = (String) partyIdentification.get("partyId");
+        }
 
         Debug.logInfo("*PlaceResourceOrder|productStoreId=" + productStoreId, module);
         Debug.logInfo("*PlaceResourceOrder|amount_str=" + amount_str, module);
@@ -5558,6 +5574,7 @@ public class PersonManagerServices {
         Map<String,Object> doCreateOrderIn = new HashMap<String, Object>();
         doCreateOrderIn.put("userLogin",admin);
         doCreateOrderIn.put("productId",productId);
+        doCreateOrderIn.put("salesRepPartyId",salesRepPartyId);
         doCreateOrderIn.put("productCategoryId",category.get("productCategoryId"));
         doCreateOrderIn.put("prodCatalogId",prodCatalogId);
         doCreateOrderIn.put("productStoreId",productStoreId);
@@ -5721,6 +5738,9 @@ public class PersonManagerServices {
         if (null == productRoleCust) {
             dispatcher.runSync("addPartyToProduct", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "productId", context.get("productId"), "roleTypeId", PeConstant.PRODUCT_CUSTOMER));
         }
+
+
+
 
         GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 

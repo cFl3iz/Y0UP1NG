@@ -393,12 +393,13 @@ public class PlatformManagerServices {
                         newAssoc.create();
                     }
 
-                    //创建吊牌价
+                    //创建缺省价格
                     if (UtilValidate.isNotEmpty(listPrice)) {
-                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
                         newProductVariantPrice.set("price", new BigDecimal(listPrice));
                         newProductVariantPrice.create();
                     }
+
 
                     //创建条形码
                     if (UtilValidate.isNotEmpty(ean)) {

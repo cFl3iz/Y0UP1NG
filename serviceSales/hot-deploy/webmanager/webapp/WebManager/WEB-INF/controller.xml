@@ -192,7 +192,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <!-- 返回sku -->
+    <request-map uri="productFeatureSelect">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getSkuFromProductFeatureDesc"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="shareInformation">
         <security https="false" auth="false"/>

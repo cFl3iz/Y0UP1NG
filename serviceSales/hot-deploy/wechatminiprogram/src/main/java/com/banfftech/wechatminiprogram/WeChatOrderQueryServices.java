@@ -99,12 +99,17 @@ public class WeChatOrderQueryServices {
                 EntityQuery.use(delegator).from("ProductVirtualAndVariantInfo")
                         .where("productId",virtualId).queryList();
         String variantId = "";
+        Debug.logInfo("productVirtualAndVariantInfo="+productVirtualAndVariantInfo , module);
         if(null!=productVirtualAndVariantInfo){
             for(GenericValue gv :productVirtualAndVariantInfo){
                 String productFeatureTypeId = (String) gv.get("productFeatureTypeId");
                 String description  = (String) gv.get("description");
+                Debug.logInfo("productFeatureTypeId="+productFeatureTypeId , module);
+                Debug.logInfo("description="+description , module);
+                Debug.logInfo("color="+color , module);
                 if(productFeatureTypeId.equals("PRODUCT_COLOR") && description.equals(color)){
                     String variantProductId = (String) gv.get("variantProductId");
+                    Debug.logInfo("variantProductId="+variantProductId , module);
                     for(GenericValue gv2 :productVirtualAndVariantInfo){
                         if(variantProductId.equals((String)gv2.get("variantProductId")) && productFeatureTypeId.equals("PRODUCT_SIZE") && description.equals(size)) {
                             variantId = (String)gv2.get("variantProductId");

@@ -70,9 +70,14 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productFeatureSelect = (String) context.get("productFeatureSelect");
+        String virtualId = (String) context.get("virtualId");
+
+        //ProductVirtualAndVariantInfo
 
         String color = productFeatureSelect.substring(productFeatureSelect.indexOf("COLOR_DESC=")+1,productFeatureSelect.indexOf(","));
         String size = productFeatureSelect.substring(productFeatureSelect.indexOf("SIZE=")+1);
+
+
 
         Debug.logInfo("color="+color+"|size="+size , module);
 

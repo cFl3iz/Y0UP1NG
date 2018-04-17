@@ -31,7 +31,13 @@
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
 
 
-
+    <!-- 给店铺添加角色 -->
+    <request-map uri="addRoleToStore">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addRoleToStore"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 招募人员 -->
     <request-map uri="recruitingPartyToParty">

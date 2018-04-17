@@ -74,8 +74,8 @@ public class WeChatOrderQueryServices {
 
         //ProductVirtualAndVariantInfo
 
-        String color = productFeatureSelect.substring(productFeatureSelect.indexOf("COLOR_DESC=")+1,productFeatureSelect.indexOf(","));
-        String size = productFeatureSelect.substring(productFeatureSelect.indexOf("SIZE=")+1);
+        String color = productFeatureSelect.substring(productFeatureSelect.indexOf("=")+1,productFeatureSelect.indexOf(","));
+        String size = productFeatureSelect.substring(productFeatureSelect.lastIndexOf("=")+1);
 
 
 

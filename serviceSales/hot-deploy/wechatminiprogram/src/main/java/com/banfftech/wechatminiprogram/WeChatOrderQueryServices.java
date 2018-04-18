@@ -1491,7 +1491,7 @@ public class WeChatOrderQueryServices {
                 String payToPartyId = (String) productStore.get("payToPartyId");
 
 
-                GenericValue salesRep =  EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,"roleTypeId","SALES_REP").queryList();
+                GenericValue salesRep =  EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,"roleTypeId","SALES_REP").queryFrist();
                 String salesRepId = (String) salesRep.get("partyId");
 
                 rowMap.put("payToPartyId", payToPartyId);

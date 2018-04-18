@@ -1188,7 +1188,7 @@ public class WeChatOrderQueryServices {
 
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
-                List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryFirst();
+                List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
                 List<String> featuresList = new ArrayList<String>();
                 if(null != productFeatureAndAppls){
                     for(GenericValue gv2 : productFeatureAndAppls){

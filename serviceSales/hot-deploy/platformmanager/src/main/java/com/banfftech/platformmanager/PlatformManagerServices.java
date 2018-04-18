@@ -511,7 +511,7 @@ public class PlatformManagerServices {
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description",sizeDesc ,"idCode",sizeId));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
 //                            newProductFeture.create();

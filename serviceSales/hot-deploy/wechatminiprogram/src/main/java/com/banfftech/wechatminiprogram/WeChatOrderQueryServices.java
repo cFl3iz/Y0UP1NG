@@ -1195,10 +1195,7 @@ public class WeChatOrderQueryServices {
                       String description = (String) gv2.get("description");
                         String compDesc = "";
                         if(productFeatureTypeId.equals("SIZE")){
-                            if(description.equals("2")){ compDesc = "尺寸:S";}
-                            if(description.equals("4")){ compDesc = "尺寸:M";}
-                            if(description.equals("6")){ compDesc = "尺寸:L";}
-                            if(description.equals("F")){ compDesc = "尺寸:均码";}
+                            compDesc = "尺寸:"+description;
                         }
                         if(productFeatureTypeId.equals("COLOR")){
                             compDesc = "颜色:"+description;
@@ -1466,10 +1463,7 @@ public class WeChatOrderQueryServices {
                         String description = (String) gv2.get("description");
                         String compDesc = "";
                         if(productFeatureTypeId.equals("SIZE")){
-                            if(description.equals("2")){ compDesc = "尺寸:S";}
-                            if(description.equals("4")){ compDesc = "尺寸:M";}
-                            if(description.equals("6")){ compDesc = "尺寸:L";}
-                            if(description.equals("F")){ compDesc = "尺寸:均码";}
+                            compDesc = "尺寸:"+description;
                         }
                         if(productFeatureTypeId.equals("COLOR")){
                             compDesc = "颜色:"+description;

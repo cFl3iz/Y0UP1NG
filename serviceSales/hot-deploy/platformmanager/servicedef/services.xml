@@ -65,6 +65,14 @@
 
 
 
+    <service name="deleteMessage" engine="java" require-new-transaction="true" use-transaction="true"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="deleteMessage" auth="false">
+    <description>deleteMessage</description>
+    <attribute name="msgId" type="String" mode="INOUT" optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
     <service name="createProductFeatureInertPk" engine="java" require-new-transaction="true" use-transaction="true"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"

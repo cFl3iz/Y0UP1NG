@@ -111,6 +111,25 @@ public class PlatformManagerServices {
 
 
 
+    public static Map<String, Object> deleteMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException{
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        String msgId = (String) context.get("msgId");
+
+
+        GenericValue messageLog = EntityQuery.use(delegator).from("MessageLog").where("messageId",msgId).queryFirst();
+
+        messageLog.remove();
+
+        Map<String,Object> result =ServiceUtil.returnSuccess();
+
+        return result;
+    }
+
     public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException{
 
         // Service Head

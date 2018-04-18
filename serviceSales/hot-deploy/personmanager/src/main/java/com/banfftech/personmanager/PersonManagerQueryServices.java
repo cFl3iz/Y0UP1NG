@@ -818,6 +818,7 @@ public class PersonManagerQueryServices {
 
 
             rowMap.put("time", tsStr);
+            rowMap.put("messageLogTypeId", messageLogTypeId);
 
 
             Map<String, String> user = null;

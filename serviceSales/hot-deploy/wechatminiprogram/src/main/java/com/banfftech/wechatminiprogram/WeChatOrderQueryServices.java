@@ -1195,13 +1195,13 @@ public class WeChatOrderQueryServices {
                       String productFeatureTypeId = (String) gv2.get("productFeatureTypeId");
                       String description = (String) gv2.get("description");
                         String compDesc = "";
-                        if(productFeatureAndAppls.equals("SIZE")){
+                        if(productFeatureTypeId.equals("SIZE")){
                             if(description.equals("2")){ compDesc = "尺寸:S";}
                             if(description.equals("4")){ compDesc = "尺寸:M";}
                             if(description.equals("6")){ compDesc = "尺寸:L";}
                             if(description.equals("F")){ compDesc = "尺寸:均码";}
                         }
-                        if(productFeatureAndAppls.equals("COLOR")){
+                        if(productFeatureTypeId.equals("COLOR")){
                             compDesc = "颜色:"+description;
                         }
                         featuresList.add(compDesc);

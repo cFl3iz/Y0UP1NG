@@ -5690,8 +5690,9 @@ public class PersonManagerServices {
 
             Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
 
-
-            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
+            //销售代表的
+            pushWeChatMessageInfoMap.put("payToPartyId", salesRepPartyId);
+//            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
 
             Date date = new Date();
 
@@ -5753,11 +5754,12 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
 
-        createMessageLogMap.put("partyIdTo", payToPartyId);
+//        createMessageLogMap.put("partyIdTo", payToPartyId);
+        createMessageLogMap.put("partyIdTo", salesRepPartyId);
 
         createMessageLogMap.put("badge", "CHECK");
 
-        createMessageLogMap.put("messageLogTypeId", "SYSTEM");
+        createMessageLogMap.put("messageLogTypeId", "ORDER");
 
         createMessageLogMap.put("objectId", productId);
 

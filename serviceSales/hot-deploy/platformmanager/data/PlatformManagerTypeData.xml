@@ -60,6 +60,10 @@
     <MessageLogType messageLogTypeId="SYSTEM" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
 
 
+    <MessageLogType messageLogTypeId="SHARE" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+    <MessageLogType messageLogTypeId="ORDER" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
     <!-- 对产品的吐槽 -->
 
     <ProductContentType createdStamp="2018-02-12 14:33:59.0" createdTxStamp="2018-02-12 14:33:59.0" description="吐槽" lastUpdatedStamp="2018-02-12 14:33:59.0" lastUpdatedTxStamp="2018-02-12 14:33:59.0" productContentTypeId="TUCAO"/>

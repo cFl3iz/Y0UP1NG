@@ -345,6 +345,7 @@ public class PlatformManagerServices {
                 String productId = excelRow[8];
                 String ean = excelRow[10];
 
+                String desc = excelRow[9];
                 String otherDesc = excelRow[12];
                 String keyword = excelRow[14];
 
@@ -355,7 +356,7 @@ public class PlatformManagerServices {
                     if (UtilValidate.isEmpty(productVirtual)) {
                         GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
                         newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
-                        newVirtualProduct.set("description", otherDesc);
+                        newVirtualProduct.set("description", desc);
                         newVirtualProduct.set("comments", keyword);
                         //默认图片
                         newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");

@@ -1490,6 +1490,10 @@ public class WeChatOrderQueryServices {
 
                 String payToPartyId = (String) productStore.get("payToPartyId");
 
+
+                GenericValue salesRep =  EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,"roleTypeId","SALES_REP").queryList();
+                String salesRepId = (String) salesRep.get("partyId");
+
                 rowMap.put("payToPartyId", payToPartyId);
 
                 // 查询卖家付款二维码。
@@ -1521,8 +1525,9 @@ public class WeChatOrderQueryServices {
 
                 Map<String, String> personAddressInfoMap = null;
 
-
-                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
+                //查询的是销售代表
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, salesRepId));
+//                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
                 rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, payFromPartyId));
                 if (payToPartyId.equals(partyId)) {
                     personAddressInfoMap = queryPersonAddressInfo(delegator, payFromPartyId);

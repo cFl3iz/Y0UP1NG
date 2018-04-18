@@ -734,49 +734,51 @@ public class PersonManagerQueryServices {
         fieldSet.add("fromDate");
         fieldSet.add("messageLogTypeId");
 
-        EntityCondition findConditions3 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+//        EntityCondition findConditions3 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyIdTo", partyIdTo));
+//
+//
+//        EntityCondition findConditions4 = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
+//
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
+//
+//
+//        EntityConditionList<EntityCondition> listBigConditions = null;
+//
+//        if (UtilValidate.isNotEmpty(partyIdFrom)) {
+//            EntityCondition findConditions = EntityCondition
+//                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
+//
+//
+//            EntityCondition findConditions2 = EntityCondition
+//                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
+//
+//            EntityCondition listConditions = EntityCondition
+//                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
+//            listBigConditions = EntityCondition
+//                    .makeCondition(listConditions, listConditions2);
+//        } else {
+//            listBigConditions = EntityCondition
+//                    .makeCondition(listConditions2);
+//        }
+//
+//
+//        List<GenericValue> queryMessageLogList = null;
+//
+//        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
+//            queryMessageLogList = delegator.findList("MessageLog",
+//                    listBigConditions, fieldSet,
+//                    UtilMisc.toList("fromDate"), null, false);
+//        } else {
+//            queryMessageLogList = delegator.findList("MessageLogView",
+//                    listBigConditions, fieldSet,
+//                    UtilMisc.toList("-fromDate"), null, false);
+//        }
 
 
-        EntityCondition findConditions4 = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdTo));
-
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditions3, EntityOperator.OR, findConditions4);
-
-
-        EntityConditionList<EntityCondition> listBigConditions = null;
-
-        if (UtilValidate.isNotEmpty(partyIdFrom)) {
-            EntityCondition findConditions = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdTo", partyIdFrom));
-
-
-            EntityCondition findConditions2 = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyIdFrom", partyIdFrom));
-
-            EntityCondition listConditions = EntityCondition
-                    .makeCondition(findConditions, EntityOperator.OR, findConditions2);
-            listBigConditions = EntityCondition
-                    .makeCondition(listConditions, listConditions2);
-        } else {
-            listBigConditions = EntityCondition
-                    .makeCondition(listConditions2);
-        }
-
-
-        List<GenericValue> queryMessageLogList = null;
-
-        if (UtilValidate.isNotEmpty(bizType) && bizType.equals("webChat")) {
-            queryMessageLogList = delegator.findList("MessageLog",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("fromDate"), null, false);
-        } else {
-            queryMessageLogList = delegator.findList("MessageLogView",
-                    listBigConditions, fieldSet,
-                    UtilMisc.toList("-fromDate"), null, false);
-        }
-
+        List<GenericValue> queryMessageLogList =  EntityQuery.use(delegator).from("MessageLog").where("partyIdTo", partyIdTo).queryList();
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 

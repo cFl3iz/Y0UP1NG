@@ -812,7 +812,8 @@ public class PersonManagerQueryServices {
 //                rowMap.put("longitude", message.substring(message.indexOf("longitude\":") + 11, message.lastIndexOf("}")));
 //            }
             String messageId = (String) gv.get("messageId");
-            rowMap.put("messageId", "checkAddress/" + messageId);
+//            rowMap.put("messageId", "checkAddress/" + messageId);
+            rowMap.put("messageId",   messageId);
 
             rowMap.put("content", message);
 

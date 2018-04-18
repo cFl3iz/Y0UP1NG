@@ -1183,7 +1183,6 @@ public class WeChatOrderQueryServices {
                 rowMap = gv.getAllFields();
                 Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
 
-//                rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
                 rowMap.put("orderDate",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
 
                 String productStoreId = (String) gv.get("productStoreId");
@@ -1207,12 +1206,12 @@ public class WeChatOrderQueryServices {
                         featuresList.add(compDesc);
                     }
                 }
+                rowMap.put("featuresList",featuresList);
 
                 GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
                 GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
                 rowMap.put("productName", "" + product.get("productName"));
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
-                rowMap.put("featuresList",featuresList);
                 String payToPartyId = (String) productStore.get("payToPartyId");
 
 //                if (!payToPartyId.equals(partyId)) {
@@ -1449,10 +1448,37 @@ public class WeChatOrderQueryServices {
 
                 rowMap = gv.getAllFields();
 
+                Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
+
+                rowMap.put("orderDate",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
+
+
 
                 String productStoreId = (String) gv.get("productStoreId");
 
                 String productId = (String) gv.get("productId");
+
+                List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
+                List<String> featuresList = new ArrayList<String>();
+                if(null != productFeatureAndAppls){
+                    for(GenericValue gv2 : productFeatureAndAppls){
+                        String productFeatureTypeId = (String) gv2.get("productFeatureTypeId");
+                        String description = (String) gv2.get("description");
+                        String compDesc = "";
+                        if(productFeatureTypeId.equals("SIZE")){
+                            if(description.equals("2")){ compDesc = "尺寸:S";}
+                            if(description.equals("4")){ compDesc = "尺寸:M";}
+                            if(description.equals("6")){ compDesc = "尺寸:L";}
+                            if(description.equals("F")){ compDesc = "尺寸:均码";}
+                        }
+                        if(productFeatureTypeId.equals("COLOR")){
+                            compDesc = "颜色:"+description;
+                        }
+                        featuresList.add(compDesc);
+                    }
+                }
+                rowMap.put("featuresList",featuresList);
+
 
                 GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
 

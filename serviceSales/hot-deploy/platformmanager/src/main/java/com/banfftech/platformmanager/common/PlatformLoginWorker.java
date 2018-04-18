@@ -578,6 +578,7 @@ public class PlatformLoginWorker {
             result.put("unioId",unioId);
             result.put("tarjeta",tarjeta);
             result.put("openId",openId);
+            result.put("partyId",miniProgramIdentification.get("partyId"));
             return result;
         }
 

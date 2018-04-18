@@ -1173,9 +1173,7 @@ public class WeChatOrderQueryServices {
 
         }
 
-        Debug.logInfo("查销售订单queryMyResourceOrderList=" + queryMyResourceOrderList, module);
-        Debug.logInfo("orderStatus=" + orderStatus, module);
-        Debug.logInfo("partyId=" + partyId, module);
+
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
@@ -1183,16 +1181,40 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
+                Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
 
+//                rowMap.put("created",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
+                rowMap.put("orderDate",dateToStr(createdDateTp,"yyyy-MM-dd HH:mm:ss"));
 
                 String productStoreId = (String) gv.get("productStoreId");
                 String productId = (String) gv.get("productId");
+                List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryFirst();
+                List<String> featuresList = new ArrayList<String>();
+                if(null != productFeatureAndAppls){
+                    for(GenericValue gv2 : productFeatureAndAppls){
+                      String productFeatureTypeId = (String) gv2.get("productFeatureTypeId");
+                      String description = (String) gv2.get("description");
+                        String compDesc = "";
+                        if(productFeatureAndAppls.equals("SIZE")){
+                            if(description.equals("2")){ compDesc = "尺寸:S";}
+                            if(description.equals("4")){ compDesc = "尺寸:M";}
+                            if(description.equals("6")){ compDesc = "尺寸:L";}
+                            if(description.equals("F")){ compDesc = "尺寸:均码";}
+                        }
+                        if(productFeatureAndAppls.equals("COLOR")){
+                            compDesc = "颜色:"+description;
+                        }
+                        featuresList.add(compDesc);
+                    }
+                }
 
                 GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
                 GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
                 rowMap.put("productName", "" + product.get("productName"));
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+                rowMap.put("featuresList",featuresList);
                 String payToPartyId = (String) productStore.get("payToPartyId");
+
 //                if (!payToPartyId.equals(partyId)) {
 //                    continue;
 //                }
@@ -1240,19 +1262,14 @@ public class WeChatOrderQueryServices {
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
 
 
-                System.out.println("orderId=" + gv.get("orderId"));
-                System.out.println("payToPartyId=" + payToPartyId);
-                System.out.println("payFromPartyId=" + (String) custOrderInfo.get("partyId"));
+
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).orderBy("-createdStamp").queryFirst();
 //	2018-04-04 14:27:49.0
 
                 GenericValue payment = EntityQuery.use(delegator).from("Payment").where("partyIdTo", payToPartyId, "partyIdFrom", (String) custOrderInfo.get("partyId"), "comments", gv.get("orderId")).queryFirst();
 
-                System.out.println("=============================================================");
-                System.out.println("orderPaymentPrefAndPayme=" + orderPaymentPrefAndPayment);
-                System.out.println("payment=" + payment);
-                System.out.println("=============================================================");
+
 
 
                 if (null != orderPaymentPrefAndPayment) {
@@ -1313,7 +1330,7 @@ public class WeChatOrderQueryServices {
         }
 
         //  resultMap.put("orderStatus", orderStatus);
-        Debug.logInfo("销售订单返回:myResourceOrderList=" + myResourceOrderList, module);
+
         resultMap.put("queryMyResourceOrderList", myResourceOrderList);
         return resultMap;
     }

@@ -180,6 +180,13 @@ public class WeChatOrderQueryServices {
                         UtilMisc.toList("-fromDate"), null, false);
                 resultMap.put("storeList",storeList);
 
+        GenericValue  role =  EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();
+        if(null ==role){
+            resultMap.put("isSalesRep","false");
+        }else{
+            resultMap.put("isSalesRep","true");
+        }
+
         return resultMap;
     }
 

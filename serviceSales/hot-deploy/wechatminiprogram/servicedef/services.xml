@@ -82,6 +82,7 @@
         <description>queryProductStoreList</description>
         <attribute name="openId" type="String" mode="IN"  optional="true"/>
         <attribute name="storeList" type="List" mode="OUT" optional="true"/>
+        <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 

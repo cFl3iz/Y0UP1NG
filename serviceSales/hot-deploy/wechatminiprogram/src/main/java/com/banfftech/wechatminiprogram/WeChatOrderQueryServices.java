@@ -1126,7 +1126,7 @@ public class WeChatOrderQueryServices {
 
         //EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", partyId));
         //定死素然
-        EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", "ZUCZUG"));
+        EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId));
 
 
         EntityCondition listConditions2 = null;

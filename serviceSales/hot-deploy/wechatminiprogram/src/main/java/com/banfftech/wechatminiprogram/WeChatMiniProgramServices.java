@@ -98,7 +98,10 @@ public class WeChatMiniProgramServices {
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
+        // is Exsits Role ?
+        GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyId,"roleTypeId",roleTypeId,"productStoreId",productStoreId).queryFirst();
 
+        if(null == productStoreRole){
         Map<String,Object> createProductStoreRoleMap = new HashMap<String, Object>();
         createProductStoreRoleMap.put("partyId",partyId);
         createProductStoreRoleMap.put("userLogin",admin);
@@ -109,7 +112,7 @@ public class WeChatMiniProgramServices {
             Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductStoreRoleOutMap, module);
             return createProductStoreRoleOutMap;
         }
-
+        }
 
         return resultMap;
     }

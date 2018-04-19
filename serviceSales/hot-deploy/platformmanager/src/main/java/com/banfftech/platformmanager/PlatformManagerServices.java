@@ -367,11 +367,17 @@ public class PlatformManagerServices {
 
                         InputStream in = item.getInputStream();
                         String fileName = item.getName();
+
+                        TransactionUtil.setTransactionTimeout(100000);
+                        TransactionUtil.begin();
+
                         //确保有文件的情况下
 
                         if (fileName != null && !fileName.trim().equals("")) {
 
-                            String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
+                            Debug.logInfo("*fileName:" + fileName, module);
+
+                            String sku = fileName.substring(fileName.indexOf("/")+1,fileName.lastIndexOf("/"));
 
                             //其实这是虚拟产品的id
                             sku = sku.substring(0,sku.indexOf("-"));
@@ -393,7 +399,33 @@ public class PlatformManagerServices {
                                         "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
                                 if (pictureKey != null && !pictureKey.equals("")) {
                                     //创建产品内容和数据资源附图
-                                    createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                                  //  createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                                    String contentTypeId = "ADDITIONAL_OTHER";
+                                    //Create Content
+                                    GenericValue newContent =  delegator.makeValue("Content");
+                                    String contentId =delegator.getNextSeqId("Content");
+                                    newContent.set("contentId",contentId);
+                                    newContent.create();
+                                    //Create ProductContent
+                                    GenericValue newProductContent =  delegator.makeValue("ProductContent");
+                                    newProductContent.set("contentId",contentId);
+                                    newProductContent.set("productContentTypeId", contentTypeId);
+                                    newProductContent.set( "productId", sku);
+                                    newProductContent.set( "fromDate", UtilDateTime.nowTimestamp());
+                                    newProductContent.create();
+
+                                    // Create DataResource
+                                    GenericValue newDataResource =  delegator.makeValue("DataResource");
+                                    String dataResourceId = delegator.getNextSeqId("DataResource");
+                                    newDataResource.set("dataResourceId",dataResourceId);
+                                    newDataResource.set("objectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    newDataResource.set("dataResourceName", "PRODUCT_IMAGE");
+                                    newDataResource.set("dataResourceTypeId", "SHORT_TEXT");
+                                    newDataResource.set("mimeTypeId", "text/html");
+
+                                    newContent.set("dataResourceId",dataResourceId);
+                                    newContent.sotre();
+
                                     Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
                                 }
                             }
@@ -414,14 +446,10 @@ public class PlatformManagerServices {
                                 String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
                                         "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
                                 if (pictureKey != null && !pictureKey.equals("")) {
-//                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-//                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-//                                    skuIsExsits.store();
-                                    Map<String, Object> updateProductInMap = new HashMap<String, Object>();
-                                    updateProductInMap.put("userLogin", admin);
-                                    updateProductInMap.put("productId", sku);
-                                    updateProductInMap.put("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    Map<String, Object> updateProductOutMap = dispatcher.runSync("updateProduct", updateProductInMap);
+                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    skuIsExsits.store();
+
                                     Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
                                 }
 
@@ -434,6 +462,7 @@ public class PlatformManagerServices {
                         }
                         index++;
 
+                        TransactionUtil.commit();
                     }
 
                 }

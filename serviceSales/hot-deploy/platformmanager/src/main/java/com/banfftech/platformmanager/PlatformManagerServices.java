@@ -335,7 +335,7 @@ public class PlatformManagerServices {
      */
     public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
         try {
-            TransactionUtil.setTransactionTimeout(99999999);
+
 
             Delegator delegator = (Delegator) request.getAttribute("delegator");
             LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -362,9 +362,11 @@ public class PlatformManagerServices {
                 if (null != items) {
 
                     itemSize = items.size();
-                    TransactionUtil.begin();
+
                     //循环上传请求中的所有文件
                     for (FileItem item : items) {
+                        TransactionUtil.setTransactionTimeout(9999999);
+                        TransactionUtil.begin();
                         InputStream in = item.getInputStream();
                         String fileName = item.getName();
                         //确保有文件的情况下
@@ -423,10 +425,10 @@ public class PlatformManagerServices {
                             beforeSkuId = sku;
 
                         }
-
                         index++;
+                        TransactionUtil.commit();
                     }
-                    TransactionUtil.commit();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();

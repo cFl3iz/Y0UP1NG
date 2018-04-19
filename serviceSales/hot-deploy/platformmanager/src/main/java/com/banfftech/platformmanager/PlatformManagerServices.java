@@ -335,7 +335,7 @@ public class PlatformManagerServices {
      */
     public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
         try {
-//            TransactionUtil.setTransactionTimeout(99999999);
+            TransactionUtil.setTransactionTimeout(99999999);
 
             Delegator delegator = (Delegator) request.getAttribute("delegator");
             LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -362,7 +362,7 @@ public class PlatformManagerServices {
                 if (null != items) {
 
                     itemSize = items.size();
-
+                    TransactionUtil.begin();
                     //循环上传请求中的所有文件
                     for (FileItem item : items) {
                         InputStream in = item.getInputStream();
@@ -397,7 +397,7 @@ public class PlatformManagerServices {
 
                             //这种情况说明当前产品和上一个产品'不是'同一个Sku
                             if (!beforeSkuId.equals(sku)) {
-                                TransactionUtil.begin();
+
                                 //去查到底有没有
                                 GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
                                 if (null == skuIsExsits) {
@@ -415,7 +415,7 @@ public class PlatformManagerServices {
                                     skuIsExsits.store();
                                     Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
                                 }
-                                TransactionUtil.commit();
+
                             }
 
                             //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
@@ -426,6 +426,7 @@ public class PlatformManagerServices {
 
                         index++;
                     }
+                    TransactionUtil.commit();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

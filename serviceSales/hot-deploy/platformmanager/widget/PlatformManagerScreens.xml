@@ -38,12 +38,15 @@
     <!-- 产品图片导入 -->
     <screen name="ProductImageUpload">
         <section>
+            <actions>
+            </actions>
             <widgets>
-                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
                         <platform-specific>
                             <html>
-                                <html-template location="component://platformmanager/webapp/Platformmanager/template/uploadImg.ftl"></html-template>
+                                <html-template location="component://platformmanager/webapp/PlatformManager/template/uploadImg.ftl"></html-template>
                             </html>
                         </platform-specific>
                     </decorator-section>

@@ -223,6 +223,29 @@ public class WeChatOrderQueryServices {
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
 
+        Set<String> fieldSet = new HashSet<String>();
+
+        fieldSet.add("drObjectInfo");
+
+        fieldSet.add("productId");
+
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition("productId", EntityOperator.EQUALS, productId);
+
+        List<GenericValue> pictures = delegator.findList("ProductContentAndInfo",
+                findConditions3, fieldSet,
+                null, null, false);
+
+        if(pictures!= null && pictures.size()>0){
+            imgAttr = new String[pictures.size()];
+            int index = 0;
+            for(GenericValue productContent : pictures){
+                String drObjectInfo = (String) productContent.get("drObjectInfo");
+                imgAttr[index] = drObjectInfo;
+                index++;
+            }
+        }
+
         List<GenericValue> gvs =  EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
         List<Map<String,Object>> productFeatureList = new ArrayList<Map<String, Object>>();
         for (GenericValue gv : gvs) {

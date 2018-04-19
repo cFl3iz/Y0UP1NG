@@ -365,8 +365,8 @@ public class PlatformManagerServices {
 
                     //循环上传请求中的所有文件
                     for (FileItem item : items) {
-                        TransactionUtil.setTransactionTimeout(9999999);
-                        TransactionUtil.begin();
+                        boolean transBegin = TransactionUtil.begin();
+                        TransactionUtil.setTransactionTimeout(999999);
                         InputStream in = item.getInputStream();
                         String fileName = item.getName();
                         //确保有文件的情况下

@@ -46,7 +46,7 @@
                         <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
                         <platform-specific>
                             <html>
-                                <html-template location="component://platformManager/webapp/platformManager/template/uploadImg.ftl"></html-template>
+                                <html-template location="component://platformmanager/webapp/platformManager/template/uploadImg.ftl"></html-template>
                             </html>
                         </platform-specific>
                     </decorator-section>

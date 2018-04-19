@@ -365,55 +365,71 @@ public class PlatformManagerServices {
                     InputStream in = item.getInputStream();
                     String fileName = item.getName();
                     //确保有文件的情况下
-                    if(fileName!=null && !fileName.trim().equals("")){
-                        String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
-                        Debug.logInfo("*upload_sky_product。Find sku:"+sku+"|sku file name = "+fileName,module);
-                        //这种情况说明当前产品和上一个产品是同一个Sku
-                        if(beforeSkuId.equals(sku)){
-                            //上个产品就没查到的情况下，就忽略了
-                            if(!beforeSkuIsExsites){
-                                Debug.logInfo("UPLOAD_IMG:"+sku+" DATA NOT FOUND!",module);
-                                beforeSkuIsExsites = false;
-                                continue;
+                    try {
+                        if (fileName != null && !fileName.trim().equals("")) {
+
+                            TransactionUtil.setTransactionTimeout(100000);
+                            TransactionUtil.begin();
+
+                            String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
+                            Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
+                            //这种情况说明当前产品和上一个产品是同一个Sku
+                            if (beforeSkuId.equals(sku)) {
+                                //上个产品就没查到的情况下，就忽略了
+                                if (!beforeSkuIsExsites) {
+                                    Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
+                                    beforeSkuIsExsites = false;
+                                    continue;
+                                }
+
+                                //既然上个产品已经查到,那肯定上传过首图了,增加附图即可
+
+                                long tm = System.currentTimeMillis();
+                                String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                        "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                                if (pictureKey != null && !pictureKey.equals("")) {
+                                    //创建产品内容和数据资源附图
+                                    createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                                    Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
+                                }
                             }
 
-                            //既然上个产品已经查到,那肯定上传过首图了,增加附图即可
 
-                            long tm = System.currentTimeMillis();
-                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
-                            if (pictureKey != null && !pictureKey.equals("")) {
-                                //创建产品内容和数据资源附图
-                                createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
-                                Debug.logInfo("*createProductContentAndDataResource Success!  sku:"+sku,module);
+                            //这种情况说明当前产品和上一个产品'不是'同一个Sku
+                            if (!beforeSkuId.equals(sku)) {
+                                //去查到底有没有
+                                GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
+                                if (null == skuIsExsits) {
+                                    Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
+                                    beforeSkuIsExsites = false;
+                                    continue;
+                                }
+                                //既然和上一张不是同一个产品,且查到了的情况下。默认增加首图
+                                long tm = System.currentTimeMillis();
+                                String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                        "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                                if (pictureKey != null && !pictureKey.equals("")) {
+                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    skuIsExsits.store();
+                                    Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
+                                }
                             }
+
+                            //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
+                            beforeSkuIsExsites = true;
+                            beforeSkuId = sku;
+                            TransactionUtil.commit();
                         }
-
-
-                        //这种情况说明当前产品和上一个产品'不是'同一个Sku
-                        if(!beforeSkuId.equals(sku)){
-                            //去查到底有没有
-                            GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
-                            if(null == skuIsExsits){
-                                Debug.logInfo("UPLOAD_IMG:"+sku+" DATA NOT FOUND!",module);
-                                beforeSkuIsExsites = false;
-                                continue;
-                            }
-                            //既然和上一张不是同一个产品,且查到了的情况下。默认增加首图
-                            long tm = System.currentTimeMillis();
-                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
-                            if (pictureKey != null && !pictureKey.equals("")) {
-                                skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                skuIsExsits.store();
-                                Debug.logInfo("*update sku detail Image Url Success!  sku:"+sku,module);
-                            }
+                    } catch (Exception e) {
+                        try {
+                            TransactionUtil.rollback();
+                        } catch (GenericTransactionException e1) {
+                            e1.printStackTrace();
                         }
-
-                        //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
-                        beforeSkuIsExsites = true;
-                        beforeSkuId = sku;
+                        Debug.logError(e, e.getMessage(), module);
+                        request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+                        return "error";
                     }
 
 

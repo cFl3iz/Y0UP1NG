@@ -111,8 +111,7 @@ public class PlatformManagerServices {
     private static String smsTemplateCode = null;
 
 
-
-    public static Map<String, Object> deleteMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException{
+    public static Map<String, Object> deleteMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -122,16 +121,16 @@ public class PlatformManagerServices {
         String msgId = (String) context.get("msgId");
 
 
-        GenericValue messageLog = EntityQuery.use(delegator).from("MessageLog").where("messageId",msgId).queryFirst();
+        GenericValue messageLog = EntityQuery.use(delegator).from("MessageLog").where("messageId", msgId).queryFirst();
 
         messageLog.remove();
 
-        Map<String,Object> result =ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         return result;
     }
 
-    public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException{
+    public static Map<String, Object> createProductFeatureInertPk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -143,14 +142,13 @@ public class PlatformManagerServices {
         String productFeatureTypeId = (String) context.get("productFeatureTypeId");
         String description = (String) context.get("description");
 
-        GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId",productFeatureId,"productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", productFeatureTypeId, "description", description));
+        GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId", productFeatureId, "productFeatureCategoryId", productFeatureCategoryId, "productFeatureTypeId", productFeatureTypeId, "description", description));
         newProductFeture.create();
 
-        Map<String,Object> result =ServiceUtil.returnSuccess();
-        result.put("productFeatureId",productFeatureId);
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("productFeatureId", productFeatureId);
         return result;
     }
-
 
 
     /**
@@ -325,6 +323,7 @@ public class PlatformManagerServices {
 
     /**
      * productImageUploadFormEvent
+     *
      * @param request
      * @param response
      * @return
@@ -335,41 +334,42 @@ public class PlatformManagerServices {
      * @throws GenericServiceException
      */
     public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
-
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        HttpSession session = request.getSession();
-        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
-        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
-
         try {
-            //上传图片到Oss
-            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
-            List<FileItem> items = dfu.parseRequest(request);
-            int itemSize = 0;
-            //下标
-            int index = 0;
+            TransactionUtil.setTransactionTimeout(99999999);
+            TransactionUtil.begin();
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
+            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+            HttpSession session = request.getSession();
+            GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+            GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
 
-            //上个文件的skuID
-            String beforeSkuId = "NA";
+            try {
 
-            //上个sku是否真实存在
-            boolean beforeSkuIsExsites = false;
 
-            if (null != items) {
+                //上传图片到Oss
+                ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+                List<FileItem> items = dfu.parseRequest(request);
+                int itemSize = 0;
+                //下标
+                int index = 0;
 
-                itemSize = items.size();
+                //上个文件的skuID
+                String beforeSkuId = "NA";
 
-                //循环上传请求中的所有文件
-                for (FileItem item : items) {
-                    InputStream in = item.getInputStream();
-                    String fileName = item.getName();
-                    //确保有文件的情况下
-                    try {
+                //上个sku是否真实存在
+                boolean beforeSkuIsExsites = false;
+
+                if (null != items) {
+
+                    itemSize = items.size();
+
+                    //循环上传请求中的所有文件
+                    for (FileItem item : items) {
+                        InputStream in = item.getInputStream();
+                        String fileName = item.getName();
+                        //确保有文件的情况下
+
                         if (fileName != null && !fileName.trim().equals("")) {
-
-                            TransactionUtil.setTransactionTimeout(100000);
-                            TransactionUtil.begin();
 
                             String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
                             Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
@@ -421,31 +421,27 @@ public class PlatformManagerServices {
                             beforeSkuId = sku;
                             TransactionUtil.commit();
                         }
-                    } catch (Exception e) {
-                        try {
-                            TransactionUtil.rollback();
-                        } catch (GenericTransactionException e1) {
-                            e1.printStackTrace();
-                        }
-                        Debug.logError(e, e.getMessage(), module);
-                        request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
-                        return "error";
+
+                        index++;
                     }
-
-
-                    index++;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
         }
-
 
 
         return "success";
     }
-
-
 
 
     // 导入exlSKU
@@ -600,10 +596,10 @@ public class PlatformManagerServices {
 
 //                    //虚拟产品关联分类
 
-                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId,"productCategoryId",productCategoryId).queryFirst();
+                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
 
                     if (UtilValidate.isEmpty(productCategoryMember)) {
-                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId,"productCategoryId",productCategoryId,"fromDate", UtilDateTime.nowTimestamp()));
+                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
                         newProductCategoryMember.create();
                     }
 
@@ -615,12 +611,12 @@ public class PlatformManagerServices {
                     if (UtilValidate.isNotEmpty(colorId)) {
 
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode",colorDesc,"productFeatureId","COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
@@ -651,12 +647,12 @@ public class PlatformManagerServices {
                     //创建尺码特征
                     if (UtilValidate.isNotEmpty(sizeId)) {
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId","SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
                         String featureId = "";
                         //没找到这个特征
                         if (!UtilValidate.isNotEmpty(productColorFeature)) {
                             //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description",sizeDesc ,"idCode",sizeId));
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
                             featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
 //                            newProductFeture.create();

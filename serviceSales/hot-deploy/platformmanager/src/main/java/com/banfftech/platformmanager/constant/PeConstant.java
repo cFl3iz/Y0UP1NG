@@ -45,6 +45,11 @@ public class PeConstant {
     public static final String PRODUCT_OSS_PATH = "datas/product_img/";
 
 
+    /**
+     * ZUCZUG_OSS_PATH
+     */
+    public static final String ZUCZUG_OSS_PATH = "datas/zuczug/";
+
     public static final String CHAT_IMAGE_OSS_PATH = "datas/chat_img/";
 
     /**

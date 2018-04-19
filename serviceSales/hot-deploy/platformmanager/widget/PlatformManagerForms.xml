@@ -11,8 +11,6 @@
                     </entity-options>
                 </drop-down>
             </field>
-
-
                 <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
                         <file></file>
                 </field>
@@ -20,4 +18,16 @@
                         <submit button-type="button"/>
                 </field>
         </form>
+    <form name="ProductImageUploadForm" type="upload" target="ProductImageUploadFormEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+
+        <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
 </forms>

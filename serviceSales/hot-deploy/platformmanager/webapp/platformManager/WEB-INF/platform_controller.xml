@@ -18,11 +18,18 @@
 
     <!-- 商品导入 Copy By ZucZug Moka -->
     <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
+    <request-map uri="ProductImageUpload"><security https="true" auth="true"/><response name="success" type="view" value="ProductImageUpload"/></request-map>
 
     <request-map uri="ProductUploadImportEvent">
         <security https="true" auth="true"/>
-        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="ProductUploadImport"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImport"/>
         <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+    <request-map uri="ProductImageUploadFormEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productImageUploadFormEvent"/>
+        <response name="success" type="view" value="ProductImageUpload"/>
     </request-map>
 
 
@@ -179,5 +186,6 @@
 
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
+    <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>
 
 </site-conf>

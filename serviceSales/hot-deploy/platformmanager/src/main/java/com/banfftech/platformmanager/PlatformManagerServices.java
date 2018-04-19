@@ -90,6 +90,7 @@ import java.sql.Timestamp;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 
@@ -322,8 +323,117 @@ public class PlatformManagerServices {
     }
 
 
+    /**
+     * productImageUploadFormEvent
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
+        try {
+            //上传图片到Oss
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+            List<FileItem> items = dfu.parseRequest(request);
+            int itemSize = 0;
+            //下标
+            int index = 0;
+
+            //上个文件的skuID
+            String beforeSkuId = "NA";
+
+            //上个sku是否真实存在
+            boolean beforeSkuIsExsites = false;
+
+            if (null != items) {
+
+                itemSize = items.size();
+
+                //循环上传请求中的所有文件
+                for (FileItem item : items) {
+                    InputStream in = item.getInputStream();
+                    String fileName = item.getName();
+                    //确保有文件的情况下
+                    if(fileName!=null && !fileName.trim().equals("")){
+                        String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
+                        Debug.logInfo("*upload_sky_product。Find sku:"+sku+"|sku file name = "+fileName,module);
+                        //这种情况说明当前产品和上一个产品是同一个Sku
+                        if(beforeSkuId.equals(sku)){
+                            //上个产品就没查到的情况下，就忽略了
+                            if(!beforeSkuIsExsites){
+                                Debug.logInfo("UPLOAD_IMG:"+sku+" DATA NOT FOUND!",module);
+                                beforeSkuIsExsites = false;
+                                continue;
+                            }
+
+                            //既然上个产品已经查到,那肯定上传过首图了,增加附图即可
+
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                            if (pictureKey != null && !pictureKey.equals("")) {
+                                //创建产品内容和数据资源附图
+                                createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                                Debug.logInfo("*createProductContentAndDataResource Success!  sku:"+sku,module);
+                            }
+                        }
+
+
+                        //这种情况说明当前产品和上一个产品'不是'同一个Sku
+                        if(!beforeSkuId.equals(sku)){
+                            //去查到底有没有
+                            GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
+                            if(null == skuIsExsits){
+                                Debug.logInfo("UPLOAD_IMG:"+sku+" DATA NOT FOUND!",module);
+                                beforeSkuIsExsites = false;
+                                continue;
+                            }
+                            //既然和上一张不是同一个产品,且查到了的情况下。默认增加首图
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                            if (pictureKey != null && !pictureKey.equals("")) {
+                                skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                skuIsExsits.store();
+                                Debug.logInfo("*update sku detail Image Url Success!  sku:"+sku,module);
+                            }
+                        }
+
+                        //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
+                        beforeSkuIsExsites = true;
+                        beforeSkuId = sku;
+                    }
+
+
+                    index++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        return "success";
+    }
+
+
+
+
     // 导入exlSKU
-    public static String ProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+    public static String productUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");

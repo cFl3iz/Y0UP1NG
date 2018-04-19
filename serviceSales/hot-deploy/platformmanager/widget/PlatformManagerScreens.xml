@@ -16,6 +16,7 @@
         </section>
     </screen>
 
+    <!-- 产品导入 -->
     <screen name="ProductUploadImport">
         <section>
             <actions>
@@ -24,9 +25,30 @@
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
-                        <screenlet title="导入">
+                        <screenlet title="产品导入">
                             <include-form name="ProductUploadImportForm" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 产品图片导入 -->
+    <screen name="ProductImageUpload">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://platformmanager/webapp/platformmanager/template/uploadImg.ftl"></html-template>
+                            </html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

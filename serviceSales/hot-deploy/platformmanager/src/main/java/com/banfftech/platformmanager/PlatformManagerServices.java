@@ -334,7 +334,6 @@ public class PlatformManagerServices {
      * @throws GenericServiceException
      */
     public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
-        try {
 
 
             Delegator delegator = (Delegator) request.getAttribute("delegator");
@@ -365,8 +364,7 @@ public class PlatformManagerServices {
 
                     //循环上传请求中的所有文件
                     for (FileItem item : items) {
-                        boolean transBegin = TransactionUtil.begin();
-                        TransactionUtil.setTransactionTimeout(999999);
+
                         InputStream in = item.getInputStream();
                         String fileName = item.getName();
                         //确保有文件的情况下
@@ -374,6 +372,10 @@ public class PlatformManagerServices {
                         if (fileName != null && !fileName.trim().equals("")) {
 
                             String sku = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf("/"));
+
+                            //其实这是虚拟产品的id
+                            sku = sku.substring(0,sku.indexOf("-"));
+
                             Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
                             //这种情况说明当前产品和上一个产品是同一个Sku
                             if (beforeSkuId.equals(sku)) {
@@ -412,9 +414,14 @@ public class PlatformManagerServices {
                                 String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
                                         "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
                                 if (pictureKey != null && !pictureKey.equals("")) {
-                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    skuIsExsits.store();
+//                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+//                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+//                                    skuIsExsits.store();
+                                    Map<String, Object> updateProductInMap = new HashMap<String, Object>();
+                                    updateProductInMap.put("userLogin", admin);
+                                    updateProductInMap.put("productId", sku);
+                                    updateProductInMap.put("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                    Map<String, Object> updateProductOutMap = dispatcher.runSync("updateProduct", updateProductInMap);
                                     Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
                                 }
 
@@ -426,24 +433,13 @@ public class PlatformManagerServices {
 
                         }
                         index++;
-                        TransactionUtil.commit();
+
                     }
 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } catch (Exception e) {
-            try {
-                TransactionUtil.rollback();
-            } catch (GenericTransactionException e1) {
-                e1.printStackTrace();
-            }
-            Debug.logError(e, e.getMessage(), module);
-            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
-            return "error";
-        }
-
 
         return "success";
     }

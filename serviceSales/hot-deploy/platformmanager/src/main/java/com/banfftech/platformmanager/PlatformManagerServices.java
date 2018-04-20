@@ -363,8 +363,8 @@ public class PlatformManagerServices {
                     itemSize = items.size();
 
                     //循环上传请求中的所有文件
-                    TransactionUtil.begin();
-                    TransactionUtil.setTransactionTimeout(100000);
+                    boolean beganTransaction =  TransactionUtil.begin();
+                    TransactionUtil.setTransactionTimeout(990000);
                     for (FileItem item : items) {
 
                         InputStream in = item.getInputStream();
@@ -472,7 +472,7 @@ public class PlatformManagerServices {
 
 
                     }
-                    TransactionUtil.commit();
+                    TransactionUtil.commit(beganTransaction);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

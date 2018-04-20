@@ -1086,6 +1086,23 @@ public class WeChatOrderQueryServices {
             rowMap.put("contactNumber", null);
         }
 
+        List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowMap.get("productId")).queryList();
+        List<String> featuresList = new ArrayList<String>();
+        if(null != productFeatureAndAppls){
+            for(GenericValue gv2 : productFeatureAndAppls){
+                String productFeatureTypeId = (String) gv2.get("productFeatureTypeId");
+                String description = (String) gv2.get("description");
+                String compDesc = "";
+                if(productFeatureTypeId.equals("SIZE")){
+                    compDesc = "尺寸:"+description;
+                }
+                if(productFeatureTypeId.equals("COLOR")){
+                    compDesc = "颜色:"+description;
+                }
+                featuresList.add(compDesc);
+            }
+        }
+        rowMap.put("featuresList",featuresList);
 
         resultMap.put("orderDetail", rowMap);
 

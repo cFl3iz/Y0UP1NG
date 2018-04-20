@@ -367,9 +367,9 @@ public class PlatformManagerServices {
 
                         InputStream in = item.getInputStream();
                         String fileName = item.getName();
+//                        TransactionUtil.begin();
+//                        TransactionUtil.setTransactionTimeout(100000);
 
-                        TransactionUtil.setTransactionTimeout(100000);
-                        TransactionUtil.begin();
 
                         //确保有文件的情况下
 
@@ -377,10 +377,10 @@ public class PlatformManagerServices {
 
                             Debug.logInfo("*fileName:" + fileName, module);
 
-                            String sku = fileName.substring(fileName.indexOf("/")+1,fileName.lastIndexOf("/"));
+                            String sku = fileName.substring(fileName.lastIndexOf("/")+1,fileName.lastIndexOf("_"));
 
-                            //其实这是虚拟产品的id
-                            sku = sku.substring(0,sku.indexOf("-"));
+                            //sku_id
+               //             sku = sku.substring(0,sku.indexOf("-"));
 
                             Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
                             //这种情况说明当前产品和上一个产品是同一个Sku
@@ -402,11 +402,14 @@ public class PlatformManagerServices {
                                   //  createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
                                     String contentTypeId = "ADDITIONAL_OTHER";
                                     //Create Content
+                                    boolean beganTransaction = TransactionUtil.begin();
                                     GenericValue newContent =  delegator.makeValue("Content");
                                     String contentId =delegator.getNextSeqId("Content");
                                     newContent.set("contentId",contentId);
                                     newContent.create();
+                                    TransactionUtil.commit(beganTransaction);
                                     //Create ProductContent
+                                    beganTransaction = TransactionUtil.begin();
                                     GenericValue newProductContent =  delegator.makeValue("ProductContent");
                                     newProductContent.set("contentId",contentId);
                                     newProductContent.set("productContentTypeId", contentTypeId);
@@ -422,10 +425,13 @@ public class PlatformManagerServices {
                                     newDataResource.set("dataResourceName", "PRODUCT_IMAGE");
                                     newDataResource.set("dataResourceTypeId", "SHORT_TEXT");
                                     newDataResource.set("mimeTypeId", "text/html");
-
-                                    newContent.set("dataResourceId",dataResourceId);
-                                    newContent.store();
-
+                                    newDataResource.create();
+                                    TransactionUtil.commit(beganTransaction);
+                                    beganTransaction = TransactionUtil.begin();
+                                    GenericValue content = delegator.findOne("Content",UtilMisc.toMap("contentId",contentId),false);
+                                    content.set("dataResourceId",dataResourceId);
+                                    content.store();
+                                    TransactionUtil.commit(beganTransaction);
                                     Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
                                 }
                             }
@@ -433,7 +439,7 @@ public class PlatformManagerServices {
 
                             //这种情况说明当前产品和上一个产品'不是'同一个Sku
                             if (!beforeSkuId.equals(sku)) {
-
+                                boolean beganTransaction = TransactionUtil.begin();
                                 //去查到底有没有
                                 GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
                                 if (null == skuIsExsits) {
@@ -449,7 +455,7 @@ public class PlatformManagerServices {
                                     skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
                                     skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
                                     skuIsExsits.store();
-
+                                    TransactionUtil.commit(beganTransaction);
                                     Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
                                 }
 
@@ -462,7 +468,7 @@ public class PlatformManagerServices {
                         }
                         index++;
 
-                        TransactionUtil.commit();
+                       // TransactionUtil.commit();
                     }
 
                 }

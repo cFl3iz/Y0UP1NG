@@ -212,10 +212,10 @@ public class WeChatOrderQueryServices {
 
 
         Map<String, Object> allField = product.getAllFields();
-        //用虚拟产品随便找一个sku变形去拿价格
+        //用虚拟产品随便找一个sku变形去拿价格 , fix 其实自己就是sku
         String vir_productId = (String) product.get("productId");
-        GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();
-        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", sku_product.get("productIdTo")).queryFirst();
+       // GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();
+        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId",vir_productId).queryFirst();
         allField.put("price",productPrice.get("price"));
 
         String[] imgAttr = new String[]{

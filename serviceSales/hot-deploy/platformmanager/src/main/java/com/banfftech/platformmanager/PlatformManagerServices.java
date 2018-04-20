@@ -424,7 +424,7 @@ public class PlatformManagerServices {
                                     newDataResource.set("mimeTypeId", "text/html");
 
                                     newContent.set("dataResourceId",dataResourceId);
-                                    newContent.sotre();
+                                    newContent.store();
 
                                     Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
                                 }

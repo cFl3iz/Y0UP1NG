@@ -76,12 +76,14 @@
                    optional="true" />
     </service>
 
-    <service name="queryProductStoreList" engine="java"
+    <service name="queryProductStoreAndRole" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
-             invoke="queryProductStoreList" auth="false">
-        <description>queryProductStoreList</description>
+             invoke="queryProductStoreAndRole" auth="false">
+        <description>queryProductStoreAndRole</description>
         <attribute name="openId" type="String" mode="IN"  optional="true"/>
-        <attribute name="storeList" type="List" mode="OUT" optional="true"/>
+        <attribute name="appId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
         <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>

@@ -136,14 +136,14 @@ public class WeChatOrderQueryServices {
 
 
     /**
-     * queryProductStoreList
+     * queryProductStoreAndRole
      * @param dctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> queryProductStoreList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> queryProductStoreAndRole(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -151,41 +151,58 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String openId = (String) context.get("openId");
+        String appId = (String) context.get("appId");
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
         //,"roleTypeId","SALES_REP"
-        EntityCondition findConditionsParty = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyIdentification.get("partyId")));
+//        EntityCondition findConditionsParty = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyIdentification.get("partyId")));
+//
+//        EntityCondition findConditionsSrp = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId","SALES_REP"));
+//
+//        EntityCondition listConditions1 = EntityCondition
+//                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsSrp);
+//
+//        EntityCondition findConditionsCus = EntityCondition
+//                .makeCondition(UtilMisc.toMap("roleTypeId","PLACING_CUSTOMER"));
+//
+//        EntityCondition listConditions2 = EntityCondition
+//                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsCus);
+//
+//        EntityCondition listConditions3 = EntityCondition
+//                .makeCondition(listConditions1, EntityOperator.OR, listConditions2);
 
-        EntityCondition findConditionsSrp = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId","SALES_REP"));
-
-        EntityCondition listConditions1 = EntityCondition
-                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsSrp);
-
-        EntityCondition findConditionsCus = EntityCondition
-                .makeCondition(UtilMisc.toMap("roleTypeId","PLACING_CUSTOMER"));
-
-        EntityCondition listConditions2 = EntityCondition
-                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsCus);
-
-        EntityCondition listConditions3 = EntityCondition
-                .makeCondition(listConditions1, EntityOperator.OR, listConditions2);
 
 
+
+        String productStoreId = "";
+
+        if(appId!=null){
+            //素然小程序
+            if(PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId)){
+                productStoreId="ZUCZUGSTORE";
+            }
+        }
+        EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 
        // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
         List<GenericValue> storeList =     delegator.findList("ProductStoreRoleAndStoreDetail",
-                listConditions3, null,
+                findConditionsStore, null,
                         UtilMisc.toList("-fromDate"), null, false);
-                resultMap.put("storeList",storeList);
 
-        GenericValue  role =  EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();
+
+        GenericValue  role =  EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId",productStoreId,"partyId", partyIdentification.get("partyId"),"roleTypeId","SALES_REP").queryFirst();
+
         if(null ==role){
             resultMap.put("isSalesRep","false");
         }else{
             resultMap.put("isSalesRep","true");
         }
+
+
+        resultMap.put("productStoreId",productStoreId);
+        resultMap.put("prodCatalogId",storeList==null?"":storeList.get(0).get("storeList"));
 
         return resultMap;
     }

@@ -121,9 +121,9 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-    <request-map uri="queryProductStoreList">
+    <request-map uri="queryProductStoreAndRole">
         <security https="false" auth="false"/>
-        <event type="service" invoke="queryProductStoreList"/>
+        <event type="service" invoke="queryProductStoreAndRole"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

@@ -179,6 +179,11 @@ public class PeConstant {
      */
     public static final String WECHAT_MINI_PROGRAM_APP_ID = "wx299644ef4c9afbde";
 
+    /**
+     * 素然小程序APPid
+     */
+    public static final String ZUCZUG_MINI_PROGRAM_APP_ID = "wx299644ef4c9afbde";
+
 
     /**
      * 小程序获取AccessToken地址

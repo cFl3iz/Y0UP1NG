@@ -545,6 +545,7 @@ public class PlatformLoginWorker {
         String unioId = (String) context.get("unioId");
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
+        String appId = (String) context.get("appId");
         String nickName = (String) context.get("nickName");
         String gender = (String) context.get("gender");
         String language = (String) context.get("language");
@@ -639,8 +640,8 @@ public class PlatformLoginWorker {
         claims.put("iat", iat);
         String tarjeta = signer.sign(claims);
         result.put("tarjeta",tarjeta);
-
         result.put("partyId", partyId);
+
 
         return result;
     }

@@ -202,7 +202,7 @@ public class WeChatOrderQueryServices {
 
 
         resultMap.put("productStoreId",productStoreId);
-        resultMap.put("prodCatalogId",storeList==null?"":storeList.get(0).get("storeList"));
+        resultMap.put("prodCatalogId",storeList==null?"":storeList.get(0).get("prodCatalogId"));
 
         return resultMap;
     }

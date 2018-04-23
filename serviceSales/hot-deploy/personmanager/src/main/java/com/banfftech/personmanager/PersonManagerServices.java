@@ -1153,9 +1153,12 @@ public class PersonManagerServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String openId = (String) context.get("openId");
+        String userName = (String) context.get("userName");
         String storeId = (String) context.get("storeId");
         String captcha = (String) context.get("captcha");
         String teleNumber = (String) context.get("teleNumber");
+
+
 
         GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber,"isValid","N").queryFirst();
         if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
@@ -1184,6 +1187,12 @@ public class PersonManagerServices {
             resultMap.put("message","已经是该店铺销售代表!");
         }
 
+
+        GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", partyIdentification.get("partyId")).queryFirst();
+
+        person.set("nickname",userName);
+
+        person.store();
 
         return resultMap;
     }

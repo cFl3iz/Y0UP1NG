@@ -26,6 +26,13 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <!-- 查产品Sku -->
+    <request-map uri="querySku">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="querySku"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="queryMyResourceOrderFromWeChat">
         <security https="false" auth="false"/>

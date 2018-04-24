@@ -99,6 +99,17 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 
+    <service name="querySku" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="querySku" auth="false">
+        <description>querySku</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="color" type="String" mode="IN"  optional="true"/>
+        <attribute name="size" type="String" mode="IN"  optional="true"/>
+        <attribute name="sku" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
 
 
 

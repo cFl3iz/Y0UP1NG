@@ -72,6 +72,49 @@ public class WeChatOrderQueryServices {
 //        return variantProductId;
 //    }
 
+
+    /**
+     * querySku
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> querySku(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String productId = (String) context.get("productId");
+        String color = (String) context.get("color");
+        String size = (String) context.get("size");
+
+        String virId = productId.substring(0,productId.indexOf("-"));
+        //0181BA04-44-F
+        List<GenericValue> skus   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",virId).queryList();
+        String skuId = "";
+        if(skus!=null && skus.size()>0){
+            for(GenericValue sku :skus){
+                  skuId = sku.getString("productId");
+                GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", skuId, "productFeatureTypeId", "COLOR", "description", color).queryFirst();
+                GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", skuId, "productFeatureTypeId", "SIZE", "description", size).queryFirst();
+
+                if(isExsitsColor!=null && isExsitsSize!=null ){
+
+                }
+            }
+        }
+
+        resultMap.put("sku",skuId);
+        return resultMap;
+    }
+
+
     /**
      * getSkuFromProductFeatureDesc
      *
@@ -322,9 +365,6 @@ public class WeChatOrderQueryServices {
 
 
 //        List<GenericValue> skuGvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
-
-
-
 
         //   allField.put("strProductFeaturesList", strProductFeaturesList);
         allField.put("imgArray", imgAttr);

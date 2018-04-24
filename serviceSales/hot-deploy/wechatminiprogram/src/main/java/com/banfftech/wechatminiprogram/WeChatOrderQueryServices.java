@@ -243,6 +243,7 @@ public class WeChatOrderQueryServices {
         List<Map<String,Object>> pictures = new ArrayList<Map<String, Object>>();
 
 
+        Map<String,Map<String,Object>> featureMap = new HashMap<String, Map<String, Object>>();
 
         for(GenericValue rowSku :skus){
             String rowSkuId = rowSku.getString("productIdTo");
@@ -251,12 +252,22 @@ public class WeChatOrderQueryServices {
             List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
                     findConditions3, fieldSet,
                     null, null, false);
+            int index = 0;
+
+            Map<String,Object> rowFeature = new HashMap<String, Object>();
             for(GenericValue pict : rowPictures){
+                if(index==0){
+                    rowFeature.put("drObjectInfo",(String) pict.get("drObjectInfo"));
+                }
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String drObjectInfo = (String) pict.get("drObjectInfo");
                 rowMap.put("drObjectInfo",drObjectInfo);
                 pictures.add(rowMap);
+                index++;
             }
+            GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+            featureMap.put(rowColor.get("description")+"",rowFeature);
+
         }
 
 
@@ -264,13 +275,6 @@ public class WeChatOrderQueryServices {
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-1.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
-
-
-
-
-
-
-
 
         if (pictures != null && pictures.size() > 0) {
             imgAttr = new String[pictures.size()];
@@ -281,9 +285,6 @@ public class WeChatOrderQueryServices {
                 index++;
             }
         }
-
-
-
 
         List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
         List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
@@ -328,6 +329,7 @@ public class WeChatOrderQueryServices {
         //   allField.put("strProductFeaturesList", strProductFeaturesList);
         allField.put("imgArray", imgAttr);
         allField.put("features", productFeatureList);
+        allField.put("featureMap", featureMap);
         resultMap.put("productDetail", allField);
         return resultMap;
     }

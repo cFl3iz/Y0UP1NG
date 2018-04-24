@@ -356,15 +356,24 @@ public class WeChatOrderQueryServices {
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
         List<Map<String,Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        String beforeVir = "NA";
         if(null!=myContactListPage ){
             for(GenericValue gv : myContactListPage){
                 Map<String,Object> rowMap = gv.getAllFields();
                 //自己就是sku
-                String vir_productId = (String) rowMap.get("productId");
-                //GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();
-                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId).queryFirst();
-                rowMap.put("price",productPrice.get("price"));
-                returnProductList.add(rowMap);
+                String skuId = (String) rowMap.get("productId");
+                GenericValue vir_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo",skuId).queryFirst();
+                String rowVirId = (String) vir_product.get("productId");
+                //别展示相同产品了
+                if(rowVirId.equals(beforeVir)){
+
+                }else{
+                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                    rowMap.put("price",productPrice.get("price"));
+                    returnProductList.add(rowMap);
+                    beforeVir = rowVirId;
+                }
+
             }
         }
 

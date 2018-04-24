@@ -268,8 +268,7 @@ public class WeChatOrderQueryServices {
             String innerDesc = gv.getString("description");
             switch (innerAttr) {
                 case "COLOR": {
-                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl")
-                            .where("productId", product, "productFeatureTypeId", "COLOR", "description",innerDesc).queryFirst();
+                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", product, "productFeatureTypeId", "COLOR", "description",innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("COLOR_DESC",innerDesc+"_SELECT");
                     }else{
@@ -278,8 +277,7 @@ public class WeChatOrderQueryServices {
                     break;
                 }
                 case "SIZE": {
-                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl")
-                            .where("productId", product, "productFeatureTypeId", "SIZE", "description",innerDesc).queryFirst();
+                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", product, "productFeatureTypeId", "SIZE", "description",innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("SIZE", innerDesc+"_SELECT");
                     }else{

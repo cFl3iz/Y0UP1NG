@@ -101,11 +101,11 @@ public class WeChatOrderQueryServices {
         if(skus!=null && skus.size()>0){
             for(GenericValue sku :skus){
 
-                GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productId"), "productFeatureTypeId", "COLOR", "description", color).queryFirst();
-                GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productId"), "productFeatureTypeId", "SIZE", "description", size).queryFirst();
+                GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "COLOR", "description", color).queryFirst();
+                GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "SIZE", "description", size).queryFirst();
 
                 if(isExsitsColor!=null && isExsitsSize!=null ){
-                    skuId = sku.getString("productId");
+                    skuId = sku.getString("productIdTo");
                 }
             }
         }
@@ -309,7 +309,12 @@ public class WeChatOrderQueryServices {
                 index++;
             }
             GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-            featureMap.put(rowColor.get("description")+"",rowFeature);
+            if(rowFeature==null){
+
+            }else{
+                featureMap.put(rowColor.get("description")+"",rowFeature);
+            }
+
 
         }
 

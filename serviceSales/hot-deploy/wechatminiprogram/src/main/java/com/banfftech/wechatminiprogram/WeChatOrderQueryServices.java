@@ -100,12 +100,12 @@ public class WeChatOrderQueryServices {
         String skuId = "";
         if(skus!=null && skus.size()>0){
             for(GenericValue sku :skus){
-                  skuId = sku.getString("productId");
-                GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", skuId, "productFeatureTypeId", "COLOR", "description", color).queryFirst();
-                GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", skuId, "productFeatureTypeId", "SIZE", "description", size).queryFirst();
+
+                GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productId"), "productFeatureTypeId", "COLOR", "description", color).queryFirst();
+                GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productId"), "productFeatureTypeId", "SIZE", "description", size).queryFirst();
 
                 if(isExsitsColor!=null && isExsitsSize!=null ){
-
+                    skuId = sku.getString("productId");
                 }
             }
         }

@@ -310,7 +310,7 @@ public class WeChatOrderQueryServices {
             }
             GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
             if(rowFeature==null){
-
+                featureMap.put(rowColor.get("description")+"","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg");
             }else{
                 featureMap.put(rowColor.get("description")+"",rowFeature);
             }

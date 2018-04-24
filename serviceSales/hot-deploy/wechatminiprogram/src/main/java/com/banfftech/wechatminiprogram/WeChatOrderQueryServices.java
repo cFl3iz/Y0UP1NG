@@ -269,7 +269,7 @@ public class WeChatOrderQueryServices {
             switch (innerAttr) {
                 case "COLOR": {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl")
-                            .where("productId", product, "productFeatureTypeId", "COLOR", "description",innerDesc).queryList();
+                            .where("productId", product, "productFeatureTypeId", "COLOR", "description",innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("COLOR_DESC",innerDesc+"_SELECT");
                     }else{
@@ -279,7 +279,7 @@ public class WeChatOrderQueryServices {
                 }
                 case "SIZE": {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl")
-                            .where("productId", product, "productFeatureTypeId", "SIZE", "description",innerDesc).queryList();
+                            .where("productId", product, "productFeatureTypeId", "SIZE", "description",innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("SIZE", innerDesc+"_SELECT");
                     }else{

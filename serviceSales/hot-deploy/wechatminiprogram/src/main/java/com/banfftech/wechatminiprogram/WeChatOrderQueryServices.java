@@ -288,7 +288,7 @@ public class WeChatOrderQueryServices {
         List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
         List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
         for (GenericValue gv : gvs) {
-            Map<String,Object> rowMap = new HashMap<String, Object>();
+
             Map<String,Object> innerMap = new HashMap<String, Object>();
 
             String innerAttr = gv.getString("productFeatureTypeId");
@@ -298,11 +298,8 @@ public class WeChatOrderQueryServices {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("COLOR_DESC",innerDesc);
-                        innerMap.put("selected", true);
-                        rowMap.put("COLOR",innerMap);
                     }else{
                         innerMap.put("COLOR_DESC",innerDesc);
-                        rowMap.put("COLOR",innerMap);
                     }
                     break;
                 }
@@ -310,11 +307,8 @@ public class WeChatOrderQueryServices {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
                     if(isSelect!=null){
                         innerMap.put("SIZE_DESC", innerDesc);
-                        innerMap.put("selected", true);
-                        rowMap.put("SIZE",innerMap);
                     }else{
                         innerMap.put("SIZE_DESC", innerDesc);
-                        rowMap.put("SIZE",innerMap);
                     }
                     break;
                 }
@@ -322,7 +316,7 @@ public class WeChatOrderQueryServices {
                     break;
                 }
             }
-            productFeatureList.add(rowMap);
+            productFeatureList.add(innerMap);
         }
 
 

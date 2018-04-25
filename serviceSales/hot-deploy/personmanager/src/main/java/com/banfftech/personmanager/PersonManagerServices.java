@@ -5750,11 +5750,11 @@ public class PersonManagerServices {
         String orderReMark = (String) context.get("orderReMark");
 
         String salesRepPartyId = null;
-
-        if(null!=salesRepId){
-            GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", salesRepId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
-            salesRepPartyId = (String) partyIdentification.get("partyId");
-        }
+        salesRepPartyId = salesRepId;
+//        if(null!=salesRepId){
+//            GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", salesRepId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+//            salesRepPartyId = (String) partyIdentification.get("partyId");
+//        }
 
         Debug.logInfo("*PlaceResourceOrder|productStoreId=" + productStoreId, module);
         Debug.logInfo("*PlaceResourceOrder|amount_str=" + amount_str, module);

@@ -724,7 +724,10 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue userLogin = null;
+        //当事人Id
         String partyId = (String) context.get("partyId");
+        //销售代表Id
+        String partyIdFrom = (String) context.get("partyIdFrom");
         if (!UtilValidate.isEmpty(partyId)) {
             userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
         } else {
@@ -736,20 +739,34 @@ public class PersonManagerServices {
 
         // 当前引用当事人
         String sharePartyIdFrom = (String) userLogin.get("partyId");
-        // 资源主
+        // 资源主 不存在这个概念
         String payToPartyId = (String) context.get("payToPartyId");
         // 资源ID
         String productId = (String) context.get("productId");
 
-        // 资源主不是个人,是素然
-        // 以资源主的角度去看有没有发布过这个分享数据
-//        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId)).queryFirst();
-//
-//        // 已分享过,则不再记录了
-//        if (null != workEffortAndProductAndParty && sharePartyIdFrom.equals(payToPartyId)) {
-//            Debug.logInfo("->Work Effort AndProductAndParty Is Exsits!<-", module);
-//            return resultMap;
-//        }
+        // 当前用户是否是销售代表
+        boolean isSalesRep = false;
+        // 当前用户是否创建过这个记录,这个条件基于是销售代表
+        boolean isCreated  = true;
+
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+
+        if(role!=null){
+            isSalesRep=!isSalesRep;
+        }
+
+        if(isSalesRep){
+            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP","partyId",sharePartyIdFrom).queryFirst();
+            if(null == isExsits){
+                isCreated = false;
+
+            }else{
+                // 销售代表id和当前登录用户是一个人
+                if(sharePartyIdFrom.equals(partyIdFrom)){
+                    return resultMap;
+                }
+            }
+        }
 
         // 以转发人的角度去看有没有转发过这个分享数据?
         GenericValue workEffortAndProductAndPartyReFerrer =
@@ -761,10 +778,8 @@ public class PersonManagerServices {
             if (workEffortAndProductAndPartyReFerrer.get("percentComplete") != null) {
                 percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
             }
-
             String updateWorkEffortId = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
             dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
-
         }
 
 
@@ -812,6 +827,9 @@ public class PersonManagerServices {
             return createReferrerResultMap;
         }
 
+
+
+
         // 把引用转发关联上产品
         Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
                 "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
@@ -821,6 +839,16 @@ public class PersonManagerServices {
             return createWorkEffortGoodStandardResultMap;
         }
 
+        if(!isCreated){
+               //增加销售代表
+               createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+                createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                    return createReferrerResultMap;
+                }
+        }
 
         return resultMap;
     }

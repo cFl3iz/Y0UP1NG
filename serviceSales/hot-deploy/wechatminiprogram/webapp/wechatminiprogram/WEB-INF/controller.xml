@@ -41,7 +41,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <!-- 查询分享报表 -->
+    <request-map uri="queryShareCpsReport">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryShareCpsReport"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 更新资源信息 -->
     <request-map uri="updateWeChatResource">
@@ -50,7 +56,6 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
-
 
     <!-- 查询销售订单 -->
     <request-map uri="queryOrderDetailFromWeChat">

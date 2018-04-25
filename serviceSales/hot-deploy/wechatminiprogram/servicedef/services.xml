@@ -30,7 +30,18 @@
                    optional="true" />
     </service>
 
-    <!--queryOrderFromWeChatList-->
+    <!-- 小程序查询分享报表 -->
+    <service name="queryShareCpsReport" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryShareCpsReport" auth="false">
+        <description>queryShareCpsReport</description>
+
+        <attribute name="shareInfoList" type="List" mode="OUT" optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!--QueryOrderFromWeChatList-->
     <service name="queryOrderListFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryOrderListFromWeChat" auth="false">

@@ -111,6 +111,8 @@
 
 
 
+
+    <!-- 查询首行 -->
     <request-map uri="queryProductShareFirstLines">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryProductShareFirstLines"/>

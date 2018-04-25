@@ -116,6 +116,59 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * Query Share CpsReport
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryShareCpsReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin =  (GenericValue) context.get("userLogin");
+
+        //销售代表的PartyId
+        String partyId = userLogin.getString("partyId");
+
+        List<GenericValue> productShareList = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER","partyId",partyId).queryList();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        if(productShareList!=null && productShareList.size()>0){
+            for(GenericValue gv : productShareList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String workEffortId = gv.getString("workEffortId");
+                GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
+                String productId = workEffortProduct.getString("productId");
+                GenericValue productAndPriceView = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
+                rowMap.put("productInfo",productAndPriceView);
+                //浏览量
+                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE").queryCount();
+                //转发量
+                //Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE").queryCount();
+
+                rowMap.put("addressCount",addressCount+"");
+
+
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("shareInfoList",returnList);
+
+        return resultMap;
+    }
+
+
+
+
+    /**
      * getSkuFromProductFeatureDesc
      *
      * @param dctx

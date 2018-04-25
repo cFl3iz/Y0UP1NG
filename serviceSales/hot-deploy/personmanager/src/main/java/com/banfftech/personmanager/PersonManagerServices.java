@@ -829,7 +829,11 @@ public class PersonManagerServices {
 
             }
         }else{
-            //当事人不是销售代表
+
+            Debug.logInfo("->当事人不是销售代表",module);
+            Debug.logInfo("->以转发人的角度去看有没有转发过这个分享数据:"+"productId"+productId+ "partyId"+ sharePartyIdFrom+ "description:", productId + sharePartyIdFrom,module);
+
+            // 当事人不是销售代表
             // 以转发人的角度去看有没有转发过这个分享数据?
             GenericValue workEffortAndProductAndPartyReFerrer =
                     EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
@@ -844,7 +848,7 @@ public class PersonManagerServices {
                 dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
             }else{
                 //还没转发过,先找销售代表的那行记录拿workEffortId
-                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP","description", productId + sharePartyIdFrom).queryFirst();
+                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP","description", productId + partyIdFrom).queryFirst();
                 Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
                         "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", salesRepWorkEffort.getString("workEffortId"));
                 Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);

@@ -82,9 +82,9 @@
     </request-map>
 
     <!-- 分享B的Product-->
-    <request-map uri="shareInformation2B">
+    <request-map uri="shareBProductInformation">
         <security https="false" auth="false"/>
-        <event type="service" invoke="shareInformation2B"/>
+        <event type="service" invoke="shareBProductInformation"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

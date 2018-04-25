@@ -152,9 +152,9 @@
     </service>
 
     <!-- 2b转发发起-->
-    <service name="shareInformation2B" engine="java"
+    <service name="shareBProductInformation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
-             invoke="shareInformation2B" auth="false">
+             invoke="shareBProductInformation" auth="false">
         <description>shareInformation</description>
         <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>

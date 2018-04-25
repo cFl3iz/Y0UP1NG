@@ -634,7 +634,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws Exception
      */
-    public static Map<String, Object> shareInformation2B(DispatchContext dctx, Map<String, Object> context)
+    public static Map<String, Object> shareBProductInformation(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head

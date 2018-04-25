@@ -149,11 +149,13 @@ public class WeChatOrderQueryServices {
                 GenericValue productAndPriceView = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
                 rowMap.put("productInfo",productAndPriceView);
                 //浏览量
-                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE").queryCount();
+                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
                 //转发量
-                //Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE").queryCount();
+                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
 
                 rowMap.put("addressCount",addressCount+"");
+
+                rowMap.put("refreCount",refreCount+"");
 
                 Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,"productId",productId).queryCount();
 

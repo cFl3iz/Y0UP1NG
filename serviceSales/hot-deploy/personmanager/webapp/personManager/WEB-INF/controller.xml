@@ -110,7 +110,13 @@
     </request-map>
 
 
-
+    <!-- 查询分享报表 -->
+    <request-map uri="queryShareCpsReport">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryShareCpsReport"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 查询首行 -->
     <request-map uri="queryProductShareFirstLines">

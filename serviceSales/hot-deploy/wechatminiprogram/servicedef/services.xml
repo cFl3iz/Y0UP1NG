@@ -35,7 +35,6 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryShareCpsReport" auth="false">
         <description>queryShareCpsReport</description>
-
         <attribute name="shareInfoList" type="List" mode="OUT" optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />

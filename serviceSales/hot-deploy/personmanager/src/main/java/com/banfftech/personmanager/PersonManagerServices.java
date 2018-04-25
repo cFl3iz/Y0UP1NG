@@ -765,6 +765,7 @@ public class PersonManagerServices {
         if(isSalesRep){
             GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP","partyId",sharePartyIdFrom).queryFirst();
             if(null == isExsits){
+                String workEffortId = "";
                 isCreated = false;
                 //注意这个desc 很重要,起到了真正意义上的标识作用
                 // 创建转发引用WorkEffort
@@ -773,11 +774,12 @@ public class PersonManagerServices {
                         "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
                 Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                         createWorkEffortMap);
-
                 if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
                     Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
                     return serviceResultByCreateWorkEffortMap;
                 }
+                workEffortId = (String)serviceResultByCreateWorkEffortMap.get("workEffortId");
+
 
                 //SHIP_FROM_VENDOR
                 // 增加资源主角色对于引用

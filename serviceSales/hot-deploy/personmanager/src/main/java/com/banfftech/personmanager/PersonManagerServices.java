@@ -733,12 +733,7 @@ public class PersonManagerServices {
         } else {
             userLogin = (GenericValue) context.get("userLogin");
         }
-        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-        if (null == product) {
-            ServiceUtil.returnError("*Product Not Found");
-        }
-        // 资源名称
-        String productName = (String) product.get("productName");
+
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         Map<String, Object> createWorkEffortMap = new HashMap<String, Object>();
@@ -749,6 +744,14 @@ public class PersonManagerServices {
         String payToPartyId = (String) context.get("payToPartyId");
         // 资源ID
         String productId = (String) context.get("productId");
+
+
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+        if (null == product) {
+            ServiceUtil.returnError("*Product Not Found");
+        }
+        // 资源名称
+        String productName = (String) product.get("productName");
 
         // 当前用户是否是销售代表
         boolean isSalesRep = false;

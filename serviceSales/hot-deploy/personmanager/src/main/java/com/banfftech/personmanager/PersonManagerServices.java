@@ -844,7 +844,7 @@ public class PersonManagerServices {
                 dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
             }else{
                 //还没转发过,先找销售代表的那行记录拿workEffortId
-                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP").queryFirst();
+                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId,"roleTypeId", "SALES_REP","description", productId + partyIdFrom).queryFirst();
                 Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
                         "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", salesRepWorkEffort.getString("workEffortId"));
                 Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);

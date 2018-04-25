@@ -541,6 +541,88 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+    /**
+     * receivedBProductInformation
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> receivedBProductInformation(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = null;
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String partyId = (String) context.get("partyId");
+        if (!UtilValidate.isEmpty(partyId)) {
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+        } else {
+            userLogin = (GenericValue) context.get("userLogin");
+        }
+        // 当前收到引用的当事人
+        String receivePartyId = (String) userLogin.get("partyId");
+        // 来自引用当事人
+        String spm = (String) context.get("partyIdFrom");
+        // 资源主
+        String payToPartyId = (String) context.get("payToPartyId");
+        // 资源ID
+        String productId = (String) context.get("productId");
+
+        GenericValue workEffortAndProductAndParty = null;
+
+
+        // 发起转发者打开了分享,无意义。
+        if (spm.equals(receivePartyId)) {
+            return resultMap;
+        }
+
+        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("spm=" + spm);
+        System.out.println("receivePartyId=" + receivePartyId);
+        System.out.println("payToPartyId=" + payToPartyId);
+        System.out.println("partyId=" + partyId);
+
+        // 说明上层引用就是资源主
+//        if (UtilValidate.isEmpty(spm)) {
+//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId)).queryFirst();
+//        } else {
+//            // 说明上层引用不是资源主
+//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
+//        }
+
+        workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
+
+        if (null == workEffortAndProductAndParty) {
+            return resultMap;
+        }
+
+        String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+        System.out.println("workEffortId=" + workEffortId);
+
+        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
+        //已经记录过了
+        if (workEffortAndProductAndPartyAddressee != null) {
+            return resultMap;
+        }
+
+        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
+                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
+            return createAddresseeResultMap;
+        }
+
+        return resultMap;
+    }
 
     /**
      * 收到资源引用

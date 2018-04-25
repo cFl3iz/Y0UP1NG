@@ -89,6 +89,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- receivedBProductInformation -->
+    <request-map uri="receivedBProductInformation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="receivedBProductInformation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
 
     <!-- 分享转发记录 -->

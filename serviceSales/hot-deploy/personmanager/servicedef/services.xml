@@ -150,7 +150,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
-
+    <!-- 2b转发收到-->
+    <service name="receivedBProductInformation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="receivedBProductInformation" auth="false">
+        <description>receivedBProductInformation</description>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
     <!-- 2b转发发起-->
     <service name="shareBProductInformation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

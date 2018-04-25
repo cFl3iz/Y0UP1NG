@@ -157,9 +157,23 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("refreCount",refreCount+"");
 
-                Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,"productId",productId.substring(0,productId.indexOf("-"))).queryCount();
+                EntityCondition findConditions = EntityCondition
+                        .makeCondition("productId", EntityOperator.LIKE, productId.substring(0,productId.indexOf("-")));
 
-                rowMap.put("salesOrderCount",salesOrderCount+"");
+                EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
+                EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
+                EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+                EntityCondition findConditions4= EntityCondition.makeCondition(genericCondition, EntityOperator.AND,findConditions3);
+
+
+                List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                        findConditions4, null,
+                        null, null, false);
+
+//EntityOperator.LIKE
+             //   Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,).queryCount();
+
+                rowMap.put("salesOrderCount",queryMyResourceOrderList==null?"0":queryMyResourceOrderList.size()+"");
 
                 returnList.add(rowMap);
             }

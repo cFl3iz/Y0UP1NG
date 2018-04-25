@@ -155,6 +155,9 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("addressCount",addressCount+"");
 
+                Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,"productId",productId).queryCount();
+
+                rowMap.put("salesOrderCount",salesOrderCount+"");
 
                 returnList.add(rowMap);
             }

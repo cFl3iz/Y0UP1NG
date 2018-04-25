@@ -810,7 +810,7 @@ public class PersonManagerServices {
                     return createWorkEffortGoodStandardResultMap;
                 }
 
-                String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+                  workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
 
                 //增加销售代表

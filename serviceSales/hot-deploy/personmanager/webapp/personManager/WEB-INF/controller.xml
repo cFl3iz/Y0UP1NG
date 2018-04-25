@@ -81,6 +81,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 分享B的Product-->
+    <request-map uri="shareInformation2B">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="shareInformation2B"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
 
     <!-- 分享转发记录 -->

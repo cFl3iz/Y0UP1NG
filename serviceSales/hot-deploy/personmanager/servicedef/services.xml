@@ -151,6 +151,19 @@
                    optional="true"/>
     </service>
 
+    <!-- 2b转发发起-->
+    <service name="shareInformation2B" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="shareInformation2B" auth="false">
+        <description>shareInformation</description>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
     <!-- 分享转发信息 -->
     <service name="shareInformation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

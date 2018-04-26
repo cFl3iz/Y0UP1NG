@@ -165,7 +165,7 @@ public class PersonManagerQueryServices {
            List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryList();
             for(GenericValue workEffortRow : workEfforts){
                 String workEffortRowId = workEffortRow.getString("workEffortId");
-                GenericValue notSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap( "partyId",sharePartyId,"workEffortId",workEffortRowId)).queryFirst();
+                GenericValue notSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap( "partyId",payToPartyId,"workEffortId",workEffortRowId)).queryFirst();
                 if(notSalesRep==null){
                     workEffort=workEffortRow;
                 }

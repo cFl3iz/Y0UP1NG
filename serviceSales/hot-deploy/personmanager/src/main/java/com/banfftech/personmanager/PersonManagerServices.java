@@ -576,6 +576,9 @@ public class PersonManagerServices {
         // 资源ID
         String productId = (String) context.get("productId");
 
+        // 来自上层
+        String beforePartyId = (String) context.get("beforePartyId");
+
         GenericValue workEffortAndProductAndParty = null;
 
 
@@ -597,16 +600,22 @@ public class PersonManagerServices {
 //            // 说明上层引用不是资源主
 //            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
 //        }
+        // 就是第一层
+        if(beforePartyId.equals(spm)){
+
 
         workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
-
+//        GenericValue isExsitsReferrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", , "description", productId + spm)).queryFirst();
         if (null == workEffortAndProductAndParty) {
             return resultMap;
         }
 
         String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
         System.out.println("workEffortId=" + workEffortId);
-
+        }else{
+            //不是第一层的人,以现在这曾为准
+            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", beforePartyId, "description", productId + beforePartyId)).queryFirst();
+        }
         GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
         //已经记录过了
         if (workEffortAndProductAndPartyAddressee != null) {

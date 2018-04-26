@@ -869,9 +869,13 @@ public class PersonManagerServices {
             }
 
             //没有自己的转发链条? 一次转发链条拥有 当前转发人、销售代表、 产品等主要特征
-            String exsitWorkEffortId = isExsits.getString("workEffortId");
-            GenericValue isExsitsSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
-            if (null == isExsits && null == isExsitsSalesRep) {
+            GenericValue isExsitsSalesRep = null;
+            if(null!= isExsits){
+                String exsitWorkEffortId = isExsits.getString("workEffortId");
+              isExsitsSalesRep =   EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
+
+            }
+         if (null == isExsits && null == isExsitsSalesRep) {
                 createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                         "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
                         "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));

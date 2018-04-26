@@ -605,7 +605,6 @@ public class PersonManagerServices {
         String workEffortId = "";
         if (beforePartyId.equals(spm)) {
 
-
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
 //        GenericValue isExsitsReferrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", , "description", productId + spm)).queryFirst();
             if (null == workEffortAndProductAndParty) {

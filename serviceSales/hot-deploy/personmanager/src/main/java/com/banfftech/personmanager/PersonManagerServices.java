@@ -601,6 +601,7 @@ public class PersonManagerServices {
 //            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
 //        }
         // 就是第一层
+        String workEffortId = "";
         if(beforePartyId.equals(spm)){
 
 
@@ -610,11 +611,12 @@ public class PersonManagerServices {
             return resultMap;
         }
 
-        String workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+        workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
         System.out.println("workEffortId=" + workEffortId);
         }else{
             //不是第一层的人,以现在这曾为准
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", beforePartyId, "description", productId + beforePartyId)).queryFirst();
+            workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
         }
         GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
         //已经记录过了

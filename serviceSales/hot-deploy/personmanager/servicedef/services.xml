@@ -248,7 +248,18 @@
         <attribute name="payToPartyId" type="String" mode="IN"  optional="true"/>
         <attribute name="sharePartyId" type="String" mode="IN"  optional="true"/>
         <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
+    <!-- 查询当前产品的转发链条FROM B -->
+    <service name="queryBProductShareFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryBProductShareFirstLines" auth="false">
+        <description>queryBProductShareFirstLines</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <!--<attribute name="salesPartyId" type="String" mode="IN"  optional="true"/>-->
+        <attribute name="sharePartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

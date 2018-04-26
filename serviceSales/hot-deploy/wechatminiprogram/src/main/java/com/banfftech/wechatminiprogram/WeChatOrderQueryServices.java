@@ -161,7 +161,7 @@ public class WeChatOrderQueryServices {
 
                 EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
 
-                
+
                 EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
                 EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
                 EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);

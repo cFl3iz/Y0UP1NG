@@ -160,11 +160,13 @@ public class PersonManagerQueryServices {
         // 以资源主的角度去找他对于这个产品作为引用人的数据。
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
-        if(null != sharePartyId && !sharePartyId.trim().equals("")){
+        if(null != sharePartyId){
             workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
         }else{
             //查首行数据
-            workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId,"description",productId+payToPartyId)).queryFirst();
+            Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId);
+            Debug.logInfo("查首行数据queryMap="+queryMap ,module);
+            workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
         }
 
         Debug.logInfo("payToPartyId="+payToPartyId,module);

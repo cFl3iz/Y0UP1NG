@@ -559,15 +559,17 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue userLogin = null;
-
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-
         String partyId = (String) context.get("partyId");
         if (!UtilValidate.isEmpty(partyId)) {
             userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
         } else {
             userLogin = (GenericValue) context.get("userLogin");
         }
+
+
+
+
         // 当前收到引用的当事人
         String receivePartyId = (String) userLogin.get("partyId");
         // 来自引用当事人
@@ -576,7 +578,6 @@ public class PersonManagerServices {
         String payToPartyId = (String) context.get("payToPartyId");
         // 资源ID
         String productId = (String) context.get("productId");
-
         // 来自上层
         String beforePartyId = (String) context.get("beforePartyId");
 
@@ -594,16 +595,9 @@ public class PersonManagerServices {
         System.out.println("payToPartyId=" + payToPartyId);
         System.out.println("partyId=" + partyId);
 
-        // 说明上层引用就是资源主
-//        if (UtilValidate.isEmpty(spm)) {
-//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndParty").where(UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId)).queryFirst();
-//        } else {
-//            // 说明上层引用不是资源主
-//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
-//        }
         // 就是第一层
         String workEffortId = "";
-        Debug.logInfo("beforePartyId="+beforePartyId+"|spm="+spm,module);
+        Debug.logInfo("beforePartyId=" + beforePartyId + "|spm=" + spm, module);
         if (beforePartyId.trim().equals(spm.trim())) {
 
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
@@ -874,8 +868,10 @@ public class PersonManagerServices {
 
             }
 
-            //没有自己的转发链条?
-            if (null == isExsits) {
+            //没有自己的转发链条? 一次转发链条拥有 当前转发人、销售代表、 产品等主要特征
+            String exsitWorkEffortId = isExsits.getString("workEffortId");
+            GenericValue isExsitsSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
+            if (null == isExsits && null == isExsitsSalesRep) {
                 createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                         "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
                         "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));

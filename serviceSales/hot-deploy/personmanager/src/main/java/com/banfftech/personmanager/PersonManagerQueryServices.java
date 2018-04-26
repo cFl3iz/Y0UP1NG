@@ -162,6 +162,9 @@ public class PersonManagerQueryServices {
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
         if(null != sharePartyId  && !UtilValidate.isEmpty(sharePartyId)){
+            Debug.logInfo("null != sharePartyId="+(null != sharePartyId) ,module);
+            Debug.logInfo("null != sharePartyId="+ sharePartyId  ,module);
+            Debug.logInfo("!UtilValidate.isEmpty(sharePartyId)="+(!UtilValidate.isEmpty(sharePartyId)) ,module);
             workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
         }else{
             //查首行数据

@@ -568,8 +568,6 @@ public class PersonManagerServices {
         }
 
 
-
-
         // 当前收到引用的当事人
         String receivePartyId = (String) userLogin.get("partyId");
         // 来自引用当事人
@@ -631,14 +629,14 @@ public class PersonManagerServices {
             return createAddresseeResultMap;
         }
 
-        GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
+        GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
         String addressCount = updateWorkEffort.getString("addressCount");
-        int count = 0 ;
-        if(!UtilValidate.isEmpty(addressCount)){
+        int count = 0;
+        if (!UtilValidate.isEmpty(addressCount)) {
             count = Integer.parseInt(addressCount);
-        }else{
+        } else {
         }
-        updateWorkEffort.set("addressCount",(count+=1)+"");
+        updateWorkEffort.set("addressCount", (count += 1) + "");
         updateWorkEffort.store();
 
         return resultMap;
@@ -884,12 +882,12 @@ public class PersonManagerServices {
 
             //没有自己的转发链条? 一次转发链条拥有 当前转发人、销售代表、 产品等主要特征
             GenericValue isExsitsSalesRep = null;
-            if(null!= isExsits){
+            if (null != isExsits) {
                 String exsitWorkEffortId = isExsits.getString("workEffortId");
-              isExsitsSalesRep =   EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
+                isExsitsSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId", exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
 
             }
-         if (null == isExsits && null == isExsitsSalesRep) {
+            if (null == isExsits && null == isExsitsSalesRep) {
                 createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                         "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
                         "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
@@ -929,15 +927,15 @@ public class PersonManagerServices {
                 }
 
 
-             GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
-             String shareCount = updateWorkEffort.getString("shareCount");
-             int count = 0 ;
-             if(!UtilValidate.isEmpty(shareCount)){
-                 count = Integer.parseInt(shareCount);
-             }else{
-             }
-             updateWorkEffort.set("shareCount",(count+=1)+"");
-             updateWorkEffort.store();
+                GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
+                String shareCount = updateWorkEffort.getString("shareCount");
+                int count = 0;
+                if (!UtilValidate.isEmpty(shareCount)) {
+                    count = Integer.parseInt(shareCount);
+                } else {
+                }
+                updateWorkEffort.set("shareCount", (count += 1) + "");
+                updateWorkEffort.store();
 
 
             }
@@ -5864,8 +5862,8 @@ public class PersonManagerServices {
 
         String salesRepPartyId = null;
 
-        if(salesRepId==null || UtilValidate.isEmpty(salesRepId)){
-            salesRepId="ZUCZUG";
+        if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+            salesRepId = "ZUCZUG";
         }
 
         salesRepPartyId = salesRepId;

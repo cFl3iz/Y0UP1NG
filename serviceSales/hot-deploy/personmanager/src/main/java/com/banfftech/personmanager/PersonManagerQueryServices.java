@@ -201,7 +201,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("workEffortId",workEffortId);
 
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
-                    GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
+                    GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
                     String shareCount    =  updateWorkEffort.getString("shareCount");
                     String addressCount  =  updateWorkEffort.getString("addressCount");
 

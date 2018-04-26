@@ -225,6 +225,33 @@ public class PersonManagerQueryServices {
             // 还没转发出去过
         }
 
+        for(GenericValue gv : returnList){
+
+        }
+
+
+        for(int i=0;i<returnList.length;i++){
+            Map<String,Object> gvMap  = returnList.get(i);
+            int gvXiaJiRenShu = Integer.parseInt(gvMap.get("xiaJiRenShu")+"");
+            // 从第i+1为开始循环数组
+            for(int j=i+1;j<returnList.length;j++){
+                Map<String,Object> gvMap2  = returnList.get(j);
+                int gv2XiaJiRenShu = Integer.parseInt(gvMap2.get("xiaJiRenShu")+"");
+                // 如果前一位比后一位小，那么就将两个数字调换
+                // 这里是按降序排列
+                // 如果你想按升序排列只要改变符号即可
+                if(gvXiaJiRenShu < gv2XiaJiRenShu){
+                    Map<String,Object> r=returnList.get(i);
+                    returnList.set(i, returnList.get(j));
+                    returnList.set(j, r);
+//                    int tem = nums[i];
+//                    nums[i] = nums[j];
+//                    nums[j] = tem;
+                }
+            }
+        }
+
+
         resultMap.put("firstShareLines",returnList);
 
         return resultMap;

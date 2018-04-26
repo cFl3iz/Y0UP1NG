@@ -205,6 +205,16 @@ public class PersonManagerQueryServices {
 
                     rowMap.put("shareCount",shareCount);
 
+                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+
+                    String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
+
+                    Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();
+                    rowMap.put("xiaJiRenShu",xiaJiRenShu);
+
+
+                    rowMap.put("shareCount",shareCount);
+
 
                     returnList.add(rowMap);
                 }

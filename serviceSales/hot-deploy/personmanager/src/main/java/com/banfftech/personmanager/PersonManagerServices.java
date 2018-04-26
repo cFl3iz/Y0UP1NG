@@ -834,9 +834,11 @@ public class PersonManagerServices {
             Debug.logInfo("->以转发人的角度去看有没有转发过这个分享数据:"+"productId"+productId+ "partyId"+ sharePartyIdFrom+ "description:", productId + sharePartyIdFrom,module);
 
             // 当事人不是销售代表
+            // TODO FIXME 当事人不是销售代表也要创建自己的转发链条的
             // 以转发人的角度去看有没有转发过这个分享数据?
-            GenericValue workEffortAndProductAndPartyReFerrer =
-                    EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
+            GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
+            // 是否存在自己的转发链条
+            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
 
             // 已转发过,则增加转发次数,否则正常转发。
             if (null != workEffortAndProductAndPartyReFerrer) {
@@ -856,6 +858,49 @@ public class PersonManagerServices {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                     return createReferrerResultMap;
                 }
+
+            }
+
+            //没有自己的转发链条?
+            if(null==isExsits){
+                createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+                        "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
+                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                        createWorkEffortMap);
+                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+                    return serviceResultByCreateWorkEffortMap;
+                }
+                String workEffortId = (String)serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+                //增加销售代表
+                Map<String,Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyIdFrom,
+                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+                Map<String,Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                    return createReferrerResultMap;
+                }
+
+                // 把引用转发关联上产品
+                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
+                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+                    return createWorkEffortGoodStandardResultMap;
+                }
+
+                //增加当前转发者对于转发引用的关联角色
+                  createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+                 createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                    return createReferrerResultMap;
+                }
+
 
             }
 

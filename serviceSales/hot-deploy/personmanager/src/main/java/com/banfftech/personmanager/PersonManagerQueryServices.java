@@ -166,12 +166,20 @@ public class PersonManagerQueryServices {
             //查首行数据
             workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(UtilMisc.toMap("productId", productId,"partyId",payToPartyId,"description",productId+payToPartyId)).queryFirst();
         }
+
+        Debug.logInfo("payToPartyId="+payToPartyId,module);
+        Debug.logInfo("sharePartyId="+sharePartyId,module);
+        Debug.logInfo("productId="+productId,module);
+        Debug.logInfo("workEffort="+workEffort,module);
+
         if(null!=workEffort){
 
 
             String workEffortId = (String) workEffort.get("workEffortId");
             // 找作为addressee的人的列表。
             List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",workEffortId)).queryList();
+            Debug.logInfo("firstShareLines="+firstShareLines,module);
+
             // 有人点开过
             if(null!= firstShareLines && firstShareLines.size()>0){
                 for(GenericValue gv : firstShareLines){

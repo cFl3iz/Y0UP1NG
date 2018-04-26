@@ -162,7 +162,7 @@ public class PersonManagerQueryServices {
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
         if(sharePartyId != null && !UtilValidate.isEmpty(sharePartyId) && !sharePartyId.equals("null")){
-           List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
+           List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryList();
             for(GenericValue workEffortRow : workEfforts){
                 String workEffortRowId = workEffortRow.getString("workEffortId");
                 GenericValue notSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap( "partyId",sharePartyId,"workEffortId",workEffortRowId)).queryFirst();

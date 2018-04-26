@@ -162,7 +162,8 @@ public class PersonManagerQueryServices {
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
         if(sharePartyId != null && !UtilValidate.isEmpty(sharePartyId) && !sharePartyId.equals("null")){
-            workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
+           workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
+
         }else{
             //查首行数据
             Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", payToPartyId, "description", productId + payToPartyId);
@@ -191,6 +192,7 @@ public class PersonManagerQueryServices {
                     String rowPartyId = (String) gv.get("partyId");
 
                     rowMap.put("rowParty",rowPartyId);
+                    rowMap.put("workEffortId",workEffortId);
 
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
 

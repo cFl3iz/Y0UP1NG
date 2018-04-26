@@ -5834,6 +5834,11 @@ public class PersonManagerServices {
         String orderReMark = (String) context.get("orderReMark");
 
         String salesRepPartyId = null;
+
+        if(salesRepId==null || UtilValidate.isEmpty(salesRepId)){
+            salesRepId="ZUCZUG";
+        }
+
         salesRepPartyId = salesRepId;
 //        if(null!=salesRepId){
 //            GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", salesRepId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();

@@ -18,6 +18,7 @@
     <PartyRole partyId="ZUCZUG" roleTypeId="INTERNAL_ORGANIZATIO"/>
     <PartyRole partyId="ZUCZUG" roleTypeId="SUPPLIER"/>
     <PartyRole partyId="ZUCZUG" roleTypeId="SUPPLIER_AGENT"/>
+    <PartyRole partyId="ZUCZUG" roleTypeId="SALES_REP"/>
     <PartyRole partyId="ZUCZUG" roleTypeId="_NA_"/>
     <PartyRole partyId="ZUCZUG" roleTypeId="ACCOUNT"/>
     <!-- 默认联系方式 -->

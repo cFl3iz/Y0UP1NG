@@ -583,6 +583,10 @@ public class PersonManagerServices {
 
         GenericValue workEffortAndProductAndParty = null;
 
+        // 自己不用记录自己打开了自己转发给别人的链接
+        if (beforePartyId.equals(receivePartyId)) {
+            return resultMap;
+        }
 
         // 发起转发者打开了分享,无意义。
         if (spm.equals(receivePartyId)) {

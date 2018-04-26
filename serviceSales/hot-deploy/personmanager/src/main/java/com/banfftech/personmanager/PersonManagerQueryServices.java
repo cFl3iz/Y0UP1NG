@@ -161,7 +161,7 @@ public class PersonManagerQueryServices {
         // 以资源主的角度去找他对于这个产品作为引用人的数据。
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
-        if(null != sharePartyId  && !UtilValidate.isEmpty(sharePartyId)){
+        if(sharePartyId != null && !UtilValidate.isEmpty(sharePartyId) && sharePartyId.length()>0 && sharePartyId.indexOf("1")>-1){
             Debug.logInfo("null != sharePartyId="+(null != sharePartyId) ,module);
             Debug.logInfo("null != sharePartyId="+ sharePartyId  ,module);
             Debug.logInfo("!UtilValidate.isEmpty(sharePartyId)="+(!UtilValidate.isEmpty(sharePartyId)) ,module);

@@ -245,11 +245,11 @@ public class PersonManagerQueryServices {
         //集合冒泡,数据量如果大了再封装出去做插入排
         for(int i=0;i<returnList.size();i++){
             Map<String,Object> gvMap  = returnList.get(i);
-            int gvXiaJiRenShu = Integer.parseInt(gvMap.get("xiaJiRenShu")+"");
+            int gvXiaJiRenShu = Integer.parseInt(gvMap.get("addressCount")+"");
             // 从第i+1为开始循环数组
             for(int j=i+1;j<returnList.size();j++){
                 Map<String,Object> gvMap2  = returnList.get(j);
-                int gv2XiaJiRenShu = Integer.parseInt(gvMap2.get("xiaJiRenShu")+"");
+                int gv2XiaJiRenShu = Integer.parseInt(gvMap2.get("addressCount")+"");
                 // 如果前一位比后一位小，那么就将两个数字调换
                 // 这里是按降序排列
                 // 如果你想按升序排列只要改变符号即可

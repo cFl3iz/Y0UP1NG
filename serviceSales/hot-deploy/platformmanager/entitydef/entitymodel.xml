@@ -9,6 +9,11 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+    <!-- 动态记录 浏览量和 转发数量 -->
+    <extend-entity entity-name="WorkEffort">
+        <field name="shareCount" type="value"><description>转发量</description></field>
+        <field name="addressCount" type="value"><description>浏览量</description></field>
+    </extend-entity>
 
     <view-entity entity-name="FacilityPartyAndFacility" package-name="org.ofbiz.product.facility">
         <member-entity entity-alias="FP" entity-name="FacilityParty"></member-entity>

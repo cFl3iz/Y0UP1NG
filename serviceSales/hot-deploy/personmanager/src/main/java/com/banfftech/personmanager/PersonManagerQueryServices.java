@@ -201,28 +201,34 @@ public class PersonManagerQueryServices {
                     rowMap.put("workEffortId",workEffortId);
 
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
+                    GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
+                    String shareCount    =  updateWorkEffort.getString("shareCount");
+                    String addressCount  =  updateWorkEffort.getString("addressCount");
+
+                    rowMap.put("shareCount",shareCount);
+                    rowMap.put("addressCount",addressCount);
 
                     // 查询此人分享了多少次
-                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
-
-                    String shareCount = "0";
-
-                    if(null!= shareCountWorker && null !=shareCountWorker.get("percentComplete")){
-                        shareCount = shareCountWorker.get("percentComplete") + "";
-                    }
-
-                    rowMap.put("shareCount",shareCount);
-
-                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
-                    if(nowShareWorkEffort != null){
-                    String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
-                    Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();
-                    rowMap.put("xiaJiRenShu",xiaJiRenShu);
-                    }else{
-                        rowMap.put("xiaJiRenShu","0");
-                    }
-
-                    rowMap.put("shareCount",shareCount);
+//                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+//
+//                    String shareCount = "0";
+//
+//                    if(null!= shareCountWorker && null !=shareCountWorker.get("percentComplete")){
+//                        shareCount = shareCountWorker.get("percentComplete") + "";
+//                    }
+//
+//                    rowMap.put("shareCount",shareCount);
+//
+//                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+//                    if(nowShareWorkEffort != null){
+//                    String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
+//                    Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();
+//                    rowMap.put("xiaJiRenShu",xiaJiRenShu);
+//                    }else{
+//                        rowMap.put("xiaJiRenShu","0");
+//                    }
+//
+//                    rowMap.put("shareCount",shareCount);
 
 
                     returnList.add(rowMap);

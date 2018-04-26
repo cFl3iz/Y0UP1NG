@@ -631,6 +631,16 @@ public class PersonManagerServices {
             return createAddresseeResultMap;
         }
 
+        GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
+        String addressCount = updateWorkEffort.getString("addressCount");
+        int count = 0 ;
+        if(!UtilValidate.isEmpty(addressCount)){
+            count = Integer.parseInt(addressCount);
+        }else{
+        }
+        updateWorkEffort.set("addressCount",(count+=1)+"");
+        updateWorkEffort.store();
+
         return resultMap;
     }
 
@@ -917,6 +927,17 @@ public class PersonManagerServices {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                     return createReferrerResultMap;
                 }
+
+
+             GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId));
+             String shareCount = updateWorkEffort.getString("shareCount");
+             int count = 0 ;
+             if(!UtilValidate.isEmpty(shareCount)){
+                 count = Integer.parseInt(shareCount);
+             }else{
+             }
+             updateWorkEffort.set("shareCount",(count+=1)+"");
+             updateWorkEffort.store();
 
 
             }

@@ -603,7 +603,8 @@ public class PersonManagerServices {
 //        }
         // 就是第一层
         String workEffortId = "";
-        if (beforePartyId.equals(spm)) {
+        Debug.logInfo("beforePartyId="+beforePartyId+"|spm="+spm,module);
+        if (beforePartyId.trim().equals(spm.trim())) {
 
             workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
 //        GenericValue isExsitsReferrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", , "description", productId + spm)).queryFirst();

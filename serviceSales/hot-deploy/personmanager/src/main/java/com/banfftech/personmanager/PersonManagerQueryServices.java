@@ -157,10 +157,11 @@ public class PersonManagerQueryServices {
 
         String sharePartyId = (String) context.get("sharePartyId");
 
+
         // 以资源主的角度去找他对于这个产品作为引用人的数据。
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
-        if(null != sharePartyId){
+        if(null != sharePartyId  && !UtilValidate.isEmpty(sharePartyId)){
             workEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryFirst();
         }else{
             //查首行数据

@@ -225,9 +225,7 @@ public class PersonManagerQueryServices {
             // 还没转发出去过
         }
 
-        for(GenericValue gv : returnList){
 
-        }
 
         // TODO FIX ME .  FUCK METHOD NO NO NO
         //集合冒泡,数据量如果大了再封装出去做插入排

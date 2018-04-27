@@ -153,10 +153,8 @@ public class WeChatOrderQueryServices {
 //                //转发量
 //                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
                 GenericValue workEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
-                rowMap.put("addressCount",workEffort.get("addressCount"));
-
-                rowMap.put("refreCount",workEffort.get("shareCount"));
-
+                rowMap.put("addressCount",workEffort.get("addressCount")==null?"0":workEffort.get("addressCount"));
+                rowMap.put("refreCount",workEffort.get("shareCount")==null?"0":workEffort.get("shareCount"));
 
                 EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
                 EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");

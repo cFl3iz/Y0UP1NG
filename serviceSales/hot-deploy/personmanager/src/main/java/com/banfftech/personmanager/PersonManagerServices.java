@@ -584,12 +584,12 @@ public class PersonManagerServices {
         // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
         if(!shareFromId.equals(salesRepId)){
             workEffortId = queryShareWorkEffortId(delegator, productId,shareFromId,salesRepId);
-            addAddressRoleToWorkeffort(dispatcher,admin, partyId, workEffortId);
+            addAddressRoleToWorkeffort( dispatcher,delegator,admin, partyId, workEffortId);
         }
         // 如果上层就是根销售代表,那就记在初始化链上
         if(shareFromId.equals(salesRepId)){
             String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
-            addAddressRoleToWorkeffort(dispatcher, admin, partyId, initWorkEffortId);
+            addAddressRoleToWorkeffort(dispatcher,delegator, admin, partyId, initWorkEffortId);
             workEffortId = initWorkEffortId;
         }
 
@@ -809,7 +809,11 @@ public class PersonManagerServices {
      * @param nowPartyId
      * @return
      */
-    public static boolean addRefreRoleToWorkeffort(LocalDispatcher dispatcher,GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
+    public static boolean addRefreRoleToWorkeffort(LocalDispatcher dispatcher,Delegator delegator ,GenericValue admin,String nowPartyId,String workEffortId)throws GenericEntityException,  GenericServiceException{
+
+        GenericValue roleIsExsits = delegator.findOne("WorkEffortPartyAssignAndRoleType",UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","REFERRER","partyId",nowPartyId),false);
+        if(null == roleIsExsits){
+
         //                //REFERRER
         //增加当前转发者对于转发引用的关联角色
         Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
@@ -818,6 +822,7 @@ public class PersonManagerServices {
         if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                     return false;
+        }
         }
         return true;
     }
@@ -831,14 +836,22 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    public static boolean addAddressRoleToWorkeffort(LocalDispatcher dispatcher, GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
-        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
-                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
-        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
-            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
-            return false;
+    public static boolean addAddressRoleToWorkeffort(LocalDispatcher dispatcher,Delegator delegator, GenericValue admin,String nowPartyId,String workEffortId)throws GenericEntityException, GenericServiceException{
+
+        //增加前,先检查是否存在此角色。
+        GenericValue roleIsExsits = delegator.findOne("WorkEffortPartyAssignAndRoleType",UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","ADDRESSEE","partyId",nowPartyId),false);
+
+        if(null == roleIsExsits){
+            Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
+                    "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+            Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+            if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+                Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
+                return false;
+            }
         }
+
+
         return true;
     }
 
@@ -933,7 +946,7 @@ public class PersonManagerServices {
                 if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                 }
-        //                //REFERRER
+        //REFERRER
         //增加当前转发者对于转发引用的关联角色
         createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
                 "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
@@ -1041,7 +1054,7 @@ public class PersonManagerServices {
                 String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
                 if(initWorkEffortId.equals("NA")){ Debug.logInfo("*InitialWorkEffortIDNotFound:"+productId+"|"+salesRepId,module); return resultMap;}
                     //开始增加
-                    addRefreRoleToWorkeffort(dispatcher, admin,partyId,initWorkEffortId);
+                    addRefreRoleToWorkeffort(dispatcher,delegator, admin,partyId,initWorkEffortId);
 
                 //2.创建转发'引用链'。[产品ID + 销售代表ID + 当事人ID]
                     String newWorkEffortId = createShareWorkEffort(dispatcher,delegator, userLogin,productId,partyId,salesRepId);

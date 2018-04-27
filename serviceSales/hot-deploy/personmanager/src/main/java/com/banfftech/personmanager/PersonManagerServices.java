@@ -569,7 +569,7 @@ public class PersonManagerServices {
         // 产品ID
         String productId = (String) context.get("productId");
         // 销售代表ID
-        String salesRepId = (String) context.get("salesRpeId");
+        String salesRepId = (String) context.get("salesRepId");
 
         // 自己不用记录自己打开了自己转发给别人的链接
         if (partyId.equals(shareFromId)) {

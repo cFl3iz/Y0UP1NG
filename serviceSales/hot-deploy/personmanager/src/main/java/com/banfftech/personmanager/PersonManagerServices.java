@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
+import org.apache.batik.dom.GenericEntity;
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.ObjectType;
@@ -788,7 +789,7 @@ public class PersonManagerServices {
      * DefaultStore ZUCZUG
      * @return boolean
      */
-    public static boolean iamSalesRep(Delegator delegator, String partyId){
+    public static boolean iamSalesRep(Delegator delegator, String partyId)throws GenericEntityException{
 
         boolean isRight = false;
 
@@ -833,7 +834,7 @@ public class PersonManagerServices {
      * 销售代表初始链只会存在二者
      * @return
      */
-    public static String isSharesWorkEffortExsits(Delegator delegator, String productId,String salesRepId,String sharePartyId){
+    public static String isSharesWorkEffortExsits(Delegator delegator, String productId,String salesRepId,String sharePartyId)throws GenericEntityException{
             String isExsits = "NA";
 
         //查询这个转发链是否存在过

@@ -944,7 +944,7 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    public static String createShareWorkEffort(LocalDispatcher dispatcher, GenericValue userLogin,String productId,String nowPartyId,String salesRepId)throws  GenericServiceException,GenericEntityException{
+    public static String createShareWorkEffort(LocalDispatcher dispatcher,Delegator delegator, GenericValue userLogin,String productId,String nowPartyId,String salesRepId)throws  GenericServiceException,GenericEntityException{
         String newWorkEffortId ="NA";
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
@@ -1016,7 +1016,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws GenericEntityException
      */
-    public static void updateInitWorkEffortCount(String countType ,String workEffortId)throws  GenericServiceException,GenericEntityException{
+    public static void updateInitWorkEffortCount(Delegator delegator, String countType ,String workEffortId)throws  GenericServiceException,GenericEntityException{
 
          GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
 
@@ -1102,10 +1102,10 @@ public class PersonManagerServices {
                     addRefreRoleToWorkeffort(admin,partyId,initWorkEffortId);
 
                 //2.创建转发'引用链'。[产品ID + 销售代表ID + 当事人ID]
-                    String newWorkEffortId = createShareWorkEffort(dispatcher, userLogin,productId,partyId,salesRepId);
+                    String newWorkEffortId = createShareWorkEffort(dispatcher,delegator, userLogin,productId,partyId,salesRepId);
 
                 //3.更新初始转发链的引用计数
-                    updateInitWorkEffortCount("share",initWorkEffortId);
+                    updateInitWorkEffortCount(delegator, "share",initWorkEffortId);
             }
             //存在转发数据
             if(!"NA".equals(shareedWorkEffortId)){

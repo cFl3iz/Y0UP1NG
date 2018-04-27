@@ -939,8 +939,10 @@ public class PersonManagerServices {
                     return createReferrerResultMap;
                 }
 
+                Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", partyIdFrom, "description", productId + partyIdFrom);
+                GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
+                GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
 
-                GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
                 String shareCount = updateWorkEffort.getString("shareCount");
                 int count = 0;
                 if (!UtilValidate.isEmpty(shareCount)) {

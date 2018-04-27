@@ -162,7 +162,7 @@ public class PersonManagerQueryServices {
         GenericValue workEffort = null;
         // 在第一行的基础上找下一行数据。
         if(sharePartyId != null && !UtilValidate.isEmpty(sharePartyId) && !sharePartyId.equals("null")){
-           List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+sharePartyId)).queryList();
+           List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",sharePartyId,"description",productId+payToPartyId+sharePartyId)).queryList();
             for(GenericValue workEffortRow : workEfforts){
                 String workEffortRowId = workEffortRow.getString("workEffortId");
                 GenericValue notSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap( "partyId",payToPartyId,"workEffortId",workEffortRowId)).queryFirst();
@@ -209,7 +209,7 @@ public class PersonManagerQueryServices {
 //                    rowMap.put("addressCount",addressCount);
 
                     // 查询此人分享了多少次
-                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+payToPartyId+rowPartyId)).queryFirst();
 
                     String shareCount = "0";
 
@@ -219,7 +219,7 @@ public class PersonManagerQueryServices {
 
                     rowMap.put("shareCount",shareCount);
 
-                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+payToPartyId+rowPartyId)).queryFirst();
                     if(nowShareWorkEffort != null){
                     String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
                     Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();

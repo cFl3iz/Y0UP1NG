@@ -933,7 +933,14 @@ public class PersonManagerServices {
                 if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                 }
-
+        //                //REFERRER
+        //增加当前转发者对于转发引用的关联角色
+        createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
+                "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+        createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+            Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+        }
 
 
 

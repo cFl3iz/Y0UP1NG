@@ -743,10 +743,16 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue userLogin = null;
+
+
+
         //当事人Id
         String partyId = (String) context.get("partyId");
         //销售代表Id
         String partyIdFrom = (String) context.get("partyIdFrom");
+
+
+
         if (!UtilValidate.isEmpty(partyId)) {
             userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
         } else {
@@ -856,11 +862,14 @@ public class PersonManagerServices {
             // TODO FIXME 当事人不是销售代表也要创建自己的转发链条的
             // 以转发人的角度去看有没有转发过这个分享数据?
             GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
+            String workEffortRefrerId = workEffortAndProductAndPartyReFerrer.getString("workEffortId");
+            GenericValue isRightSales = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",workEffortRefrerId,"partyId",partyIdFrom).queryFirst();
+
             // 是否存在自己的转发链条
             GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
 
             // 已转发过,则增加转发次数,否则正常转发。
-            if (null != workEffortAndProductAndPartyReFerrer) {
+            if (null != workEffortAndProductAndPartyReFerrer && null !=isRightSales) {
                 long percentComplete = new Long(0);
                 if (workEffortAndProductAndPartyReFerrer.get("percentComplete") != null) {
                     percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");

@@ -149,15 +149,14 @@ public class WeChatOrderQueryServices {
                 GenericValue productAndPriceView = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
                 rowMap.put("productInfo",productAndPriceView);
                 //浏览量
-                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
-                //转发量
-                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
+//                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
+//                //转发量
+//                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
+                GenericValue workEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
+                rowMap.put("addressCount",workEffort.get("addressCount"));
 
-                rowMap.put("addressCount",addressCount+"");
+                rowMap.put("refreCount",workEffort.get("shareCount"));
 
-                rowMap.put("refreCount",refreCount+"");
-
-                Debug.logInfo("ProductSales="+productId.substring(0, productId.indexOf("-")),module);
 
                 EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
 
@@ -171,8 +170,7 @@ public class WeChatOrderQueryServices {
                 List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                         findConditions4, null,
                         null, null, false);
-
-//EntityOperator.LIKE
+             //   EntityOperator.LIKE
              //   Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,).queryCount();
 
                 rowMap.put("salesOrderCount",queryMyResourceOrderList==null?"0":queryMyResourceOrderList.size()+"");

@@ -581,16 +581,24 @@ public class PersonManagerServices {
             return resultMap;
         }
         String workEffortId = "";
+
+        boolean isAddRoleSuccess = false;
+
         // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
         if(!shareFromId.equals(salesRepId)){
             workEffortId = queryShareWorkEffortId(delegator, productId,shareFromId,salesRepId);
-            addAddressRoleToWorkeffort( dispatcher,delegator,admin, partyId, workEffortId);
+            isAddRoleSuccess = addAddressRoleToWorkeffort( dispatcher,delegator,admin, partyId, workEffortId);
         }
         // 如果上层就是根销售代表,那就记在初始化链上
         if(shareFromId.equals(salesRepId)){
             String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
-            addAddressRoleToWorkeffort(dispatcher,delegator, admin, partyId, initWorkEffortId);
+            isAddRoleSuccess =  addAddressRoleToWorkeffort(dispatcher,delegator, admin, partyId, initWorkEffortId);
             workEffortId = initWorkEffortId;
+        }
+        // 如果成功记录了,那我就记录一次成功的转发
+        if(isAddRoleSuccess){
+            String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
+            updateInitWorkEffortCount(delegator, "share", initWorkEffortId);
         }
 
         // 增加浏览计数
@@ -851,10 +859,12 @@ public class PersonManagerServices {
                 Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
                 return false;
             }
+            return true;
         }
 
 
-        return true;
+
+        return false;
     }
 
     /**
@@ -1062,7 +1072,8 @@ public class PersonManagerServices {
                     String newWorkEffortId = createShareWorkEffort(dispatcher,delegator, userLogin,productId,partyId,salesRepId);
 
                 //3.更新初始转发链的引用计数
-                    updateInitWorkEffortCount(delegator, "share",initWorkEffortId);
+                    // 不在此处更新,而在打开的地方增加 2018-4-27 REMARK
+                    // updateInitWorkEffortCount(delegator, "share",initWorkEffortId);
             }
             //存在转发数据
             if(!"NA".equals(shareedWorkEffortId)){

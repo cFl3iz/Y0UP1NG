@@ -600,10 +600,10 @@ public class PersonManagerServices {
         if(isAddRoleSuccess){
             updateInitWorkEffortCount(delegator, "share", initWorkEffortId);
             // 增加浏览计数
-            updateInitWorkEffortCount(delegator, "address", workEffortId);
+            updateInitWorkEffortCount(delegator, "address", initWorkEffortId);
         }else{
             // 增加浏览计数
-            updateInitWorkEffortCount(delegator, "address", workEffortId);
+            updateInitWorkEffortCount(delegator, "address", initWorkEffortId);
         }
 
 

@@ -594,7 +594,7 @@ public class PersonManagerServices {
         }
 
         // 增加浏览计数
-        addAddressRoleToWorkeffort(dispatcher,admin,partyId,workEffortId);
+        updateInitWorkEffortCount(delegator,"address",workEffortId);
 
 
         return resultMap;

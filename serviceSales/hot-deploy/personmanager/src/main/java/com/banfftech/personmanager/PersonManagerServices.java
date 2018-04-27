@@ -594,7 +594,7 @@ public class PersonManagerServices {
         }
 
         // 增加浏览计数
-        updateInitWorkEffortCount(delegator,"address",workEffortId);
+        updateInitWorkEffortCount(delegator, "address", workEffortId);
 
 
         return resultMap;
@@ -864,6 +864,32 @@ public class PersonManagerServices {
                 }
         newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
+
+        // 把转发关联上产品
+        Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", userLogin, "statusId", "WEGS_CREATED",
+                "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", productId);
+        Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+        if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+            Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+
+        }
+
+        //增加销售代表
+        Map<String,Object> createReferrerMap = UtilMisc.toMap("userLogin", userLogin, "partyId", salesRepId,
+                "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+        Map<String,Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+            Debug.logInfo("*create SALES_REP Map Fail:" + createReferrerMap, module);
+        }
+
+        //                //REFERRER
+        //增加当前转发者对于转发引用的关联角色
+        createReferrerMap = UtilMisc.toMap("userLogin", userLogin, "partyId", nowPartyId,
+                "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+         createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+            Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+        }
         return newWorkEffortId;
     }
 
@@ -907,6 +933,9 @@ public class PersonManagerServices {
                 if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
                     Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
                 }
+
+
+
 
         return newWorkEffortId;
     }

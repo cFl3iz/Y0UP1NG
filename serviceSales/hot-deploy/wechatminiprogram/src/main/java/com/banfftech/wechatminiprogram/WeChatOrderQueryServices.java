@@ -511,6 +511,7 @@ public class WeChatOrderQueryServices {
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
         List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        int count  = 0;
         String beforeVir = "NA";
         if (null != myContactListPage) {
             for (GenericValue gv : myContactListPage) {
@@ -523,6 +524,7 @@ public class WeChatOrderQueryServices {
                 if (rowVirId.equals(beforeVir)) {
 
                 } else {
+                    count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
                     returnProductList.add(rowMap);
@@ -607,16 +609,18 @@ public class WeChatOrderQueryServices {
         //viewIndex 当前页码
 
 
-        if (resourceCount != 0 && resourceCount > viewSize) {
-            resultMap.put("total", Integer.parseInt(resourceCount + "") % viewSize == 0 ? Integer.parseInt(resourceCount + "") / viewSize : Integer.parseInt(resourceCount + "") / viewSize + 1);
-        } else {
-            if (null == resourceCount || resourceCount == 0) {
-                resultMap.put("total", -1);
-            } else {
-                resultMap.put("total", 1);
-            }
+//        if (resourceCount != 0 && resourceCount > viewSize) {
+//            resultMap.put("total", Integer.parseInt(resourceCount + "") % viewSize == 0 ? Integer.parseInt(resourceCount + "") / viewSize : Integer.parseInt(resourceCount + "") / viewSize + 1);
+//        } else {
+//            if (null == resourceCount || resourceCount == 0) {
+//                resultMap.put("total", -1);
+//            } else {
+//                resultMap.put("total", 1);
+//            }
+//
+//        }
 
-        }
+        resultMap.put("total",count);
 
         resultMap.put("from", viewIndex);
         resultMap.put("current_page", viewIndex + 1);

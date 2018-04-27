@@ -811,7 +811,9 @@ public class PersonManagerServices {
      */
     public static boolean addRefreRoleToWorkeffort(LocalDispatcher dispatcher,Delegator delegator ,GenericValue admin,String nowPartyId,String workEffortId)throws GenericEntityException,  GenericServiceException{
 
-        GenericValue roleIsExsits = delegator.findOne("WorkEffortPartyAssignAndRoleType",UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","REFERRER","partyId",nowPartyId),false);
+        GenericValue roleIsExsits = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where(UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","REFERRER","partyId",nowPartyId)).queryFirst();
+
+
         if(null == roleIsExsits){
 
         //                //REFERRER
@@ -839,8 +841,8 @@ public class PersonManagerServices {
     public static boolean addAddressRoleToWorkeffort(LocalDispatcher dispatcher,Delegator delegator, GenericValue admin,String nowPartyId,String workEffortId)throws GenericEntityException, GenericServiceException{
 
         //增加前,先检查是否存在此角色。
-        GenericValue roleIsExsits = delegator.findOne("WorkEffortPartyAssignAndRoleType",UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","ADDRESSEE","partyId",nowPartyId),false);
 
+        GenericValue roleIsExsits = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where(UtilMisc.toMap("workEffortId",workEffortId,"roleTypeId","ADDRESSEE","partyId",nowPartyId)).queryFirst();
         if(null == roleIsExsits){
             Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
                     "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);

@@ -82,6 +82,7 @@ import main.java.com.banfftech.platformmanager.oss.OSSUnit;
 
 import net.sf.json.JSONArray;
 import org.json.JSONObject;
+import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
@@ -582,7 +583,7 @@ public class PersonManagerServices {
         String workEffortId = "";
         // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
         if(!shareFromId.equals(salesRepId)){
-            workEffortId = queryShareWorkEffortId(productId,shareFromId,salesRepId);
+            workEffortId = queryShareWorkEffortId(delegator, productId,shareFromId,salesRepId);
             addAddressRoleToWorkeffort(dispatcher,admin, partyId, workEffortId);
         }
         // 如果上层就是根销售代表,那就记在初始化链上
@@ -787,7 +788,7 @@ public class PersonManagerServices {
      * DefaultStore ZUCZUG
      * @return boolean
      */
-    public static boolean iamSalesRep(String partyId){
+    public static boolean iamSalesRep(Delegator delegator, String partyId){
 
         boolean isRight = false;
 
@@ -878,7 +879,7 @@ public class PersonManagerServices {
      * @param salesRepId
      * @return
      */
-    public static String queryShareWorkEffortId(String productId,String sharePartyId,String salesRepId)throws GenericEntityException{
+    public static String queryShareWorkEffortId(Delegator delegator, String productId,String sharePartyId,String salesRepId)throws GenericEntityException{
 
         Debug.logInfo("*queryShareWorkEffortId:",module);
 
@@ -1077,7 +1078,7 @@ public class PersonManagerServices {
         String shareFromId = (String) context.get("shareFromId");
 
         //如果我是销售代表
-        boolean iamSalesRep = iamSalesRep(partyId);
+        boolean iamSalesRep = iamSalesRep(delegator, partyId);
 
         //我是一个销售代表。当事人是销售代表的时候,必然创建一条新的初始链。
         if(iamSalesRep){

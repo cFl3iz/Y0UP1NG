@@ -596,13 +596,17 @@ public class PersonManagerServices {
             workEffortId = initWorkEffortId;
         }
         // 如果成功记录了,那我就记录一次成功的转发
+        String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
         if(isAddRoleSuccess){
-            String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
             updateInitWorkEffortCount(delegator, "share", initWorkEffortId);
+            // 增加浏览计数
+            updateInitWorkEffortCount(delegator, "address", workEffortId);
+        }else{
+            // 增加浏览计数
+            updateInitWorkEffortCount(delegator, "address", workEffortId);
         }
 
-        // 增加浏览计数
-        updateInitWorkEffortCount(delegator, "address", workEffortId);
+
 
 
         return resultMap;

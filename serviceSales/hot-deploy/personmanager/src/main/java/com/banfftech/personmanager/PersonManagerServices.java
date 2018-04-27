@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.batik.dom.GenericEntity;
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.ObjectType;
@@ -543,7 +544,6 @@ public class PersonManagerServices {
 
     /**
      * receivedBProductInformation
-     *
      * @param dctx
      * @param context
      * @return
@@ -551,100 +551,153 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws Exception
      */
-    public static Map<String, Object> receivedBProductInformation(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException, GenericServiceException, Exception {
+    public static Map<String, Object> receivedBProductInformation(DispatchContext dctx, Map<String, Object> context)throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin = null;
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-        String partyId = (String) context.get("partyId");
-        if (!UtilValidate.isEmpty(partyId)) {
-            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
-        } else {
-            userLogin = (GenericValue) context.get("userLogin");
-        }
 
 
-        // 当前收到引用的当事人
-        String receivePartyId = (String) userLogin.get("partyId");
-        // 来自引用当事人
-        String spm = (String) context.get("partyIdFrom");
-        // 资源主
-        String payToPartyId = (String) context.get("payToPartyId");
-        // 资源ID
+        // 当前登录用户
+        String partyId = (String) userLogin.get("partyId");
+        // 谁分享来的,上层PartyId
+        String shareFromId  = (String) context.get("shareFromId");
+        // 产品ID
         String productId = (String) context.get("productId");
-        // 来自上层
-        String beforePartyId = (String) context.get("beforePartyId");
-
-        GenericValue workEffortAndProductAndParty = null;
+        // 销售代表ID
+        String salesRepId = (String) context.get("salesRpeId");
 
         // 自己不用记录自己打开了自己转发给别人的链接
-        if (beforePartyId.equals(receivePartyId)) {
+        if (partyId.equals(shareFromId)) {
             return resultMap;
         }
 
         // 发起转发者打开了分享,无意义。
-        if (spm.equals(receivePartyId)) {
+        if (partyId.equals(salesRepId)) {
             return resultMap;
         }
-
-        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("spm=" + spm);
-        System.out.println("receivePartyId=" + receivePartyId);
-        System.out.println("payToPartyId=" + payToPartyId);
-        System.out.println("partyId=" + partyId);
-
-        // 就是第一层
         String workEffortId = "";
-        Debug.logInfo("beforePartyId=" + beforePartyId + "|spm=" + spm, module);
-        if (beforePartyId.trim().equals(spm.trim())) {
-
-            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
-//        GenericValue isExsitsReferrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", , "description", productId + spm)).queryFirst();
-            if (null == workEffortAndProductAndParty) {
-                return resultMap;
-            }
-
-            workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
-            System.out.println("workEffortId=" + workEffortId);
-        } else {
-            //不是第一层的人,以现在这曾为准
-            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", beforePartyId, "description", productId + beforePartyId)).queryFirst();
-            workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+        // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
+        if(!shareFromId.equals(salesRepId)){
+            workEffortId = queryShareWorkEffortId(productId,shareFromId,salesRepId);
+            addAddressRoleToWorkeffort(admin, partyId, workEffortId);
         }
-        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
-        //已经记录过了
-        if (workEffortAndProductAndPartyAddressee != null) {
-            return resultMap;
+        // 如果上层就是根销售代表,那就记在初始化链上
+        if(shareFromId.equals(salesRepId)){
+            String initWorkEffortId = queryInititalWorkEffortId(productId,salesRepId);
+            addAddressRoleToWorkeffort(admin, partyId, initWorkEffortId);
+            workEffortId = initWorkEffortId;
         }
 
-        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
-                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
-        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
-            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
-            return createAddresseeResultMap;
-        }
+        // 增加浏览计数
+        addAddressRoleToWorkeffort(admin,partyId,workEffortId);
 
-
-        //这个数值应该记到RootWorkEffort
-        Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm);
-        GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
-        GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
-        String addressCount = updateWorkEffort.getString("addressCount");
-        int count = 0;
-        if (!UtilValidate.isEmpty(addressCount)) {
-            count = Integer.parseInt(addressCount);
-        } else {
-        }
-        updateWorkEffort.set("addressCount", (count += 1) + "");
-        updateWorkEffort.store();
 
         return resultMap;
     }
+
+
+
+
+
+
+//    public static Map<String, Object> receivedBProductInformation(DispatchContext dctx, Map<String, Object> context)
+//            throws GenericEntityException, GenericServiceException, Exception {
+//
+//        // Service Head
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        GenericValue userLogin = null;
+//        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//        String partyId = (String) context.get("partyId");
+//        if (!UtilValidate.isEmpty(partyId)) {
+//            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+//        } else {
+//            userLogin = (GenericValue) context.get("userLogin");
+//        }
+//
+//
+//        // 当前收到引用的当事人
+//        String receivePartyId = (String) userLogin.get("partyId");
+//        // 来自引用当事人
+//        String spm = (String) context.get("partyIdFrom");
+//        // 资源主
+//        String payToPartyId = (String) context.get("payToPartyId");
+//        // 资源ID
+//        String productId = (String) context.get("productId");
+//        // 来自上层
+//        String beforePartyId = (String) context.get("beforePartyId");
+//
+//        GenericValue workEffortAndProductAndParty = null;
+//
+//        // 自己不用记录自己打开了自己转发给别人的链接
+//        if (beforePartyId.equals(receivePartyId)) {
+//            return resultMap;
+//        }
+//
+//        // 发起转发者打开了分享,无意义。
+//        if (spm.equals(receivePartyId)) {
+//            return resultMap;
+//        }
+//
+//        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println("spm=" + spm);
+//        System.out.println("receivePartyId=" + receivePartyId);
+//        System.out.println("payToPartyId=" + payToPartyId);
+//        System.out.println("partyId=" + partyId);
+//
+//        // 就是第一层
+//        String workEffortId = "";
+//        Debug.logInfo("beforePartyId=" + beforePartyId + "|spm=" + spm, module);
+//        if (beforePartyId.trim().equals(spm.trim())) {
+//
+//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm)).queryFirst();
+////        GenericValue isExsitsReferrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", , "description", productId + spm)).queryFirst();
+//            if (null == workEffortAndProductAndParty) {
+//                return resultMap;
+//            }
+//
+//            workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+//            System.out.println("workEffortId=" + workEffortId);
+//        } else {
+//            //不是第一层的人,以现在这曾为准
+//            workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", beforePartyId, "description", productId + beforePartyId)).queryFirst();
+//            workEffortId = (String) workEffortAndProductAndParty.get("workEffortId");
+//        }
+//        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId, "partyId", receivePartyId, "workEffortId", workEffortId)).queryFirst();
+//        //已经记录过了
+//        if (workEffortAndProductAndPartyAddressee != null) {
+//            return resultMap;
+//        }
+//
+//        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", receivePartyId,
+//                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+//        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+//            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
+//            return createAddresseeResultMap;
+//        }
+//
+//
+//        //这个数值应该记到RootWorkEffort
+//        Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm);
+//        GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
+//        GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
+//        String addressCount = updateWorkEffort.getString("addressCount");
+//        int count = 0;
+//        if (!UtilValidate.isEmpty(addressCount)) {
+//            count = Integer.parseInt(addressCount);
+//        } else {
+//        }
+//        updateWorkEffort.set("addressCount", (count += 1) + "");
+//        updateWorkEffort.store();
+//
+//        return resultMap;
+//    }
 
     /**
      * 收到资源引用
@@ -730,8 +783,272 @@ public class PersonManagerServices {
 
 
     /**
-     * 新转发发起
-     *
+     * 我是某店铺的销售代表吗?
+     * DefaultStore ZUCZUG
+     * @return boolean
+     */
+    public static boolean iamSalesRep(String partyId){
+
+        boolean isRight = false;
+
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+
+        if(null!=role){
+            isRight = true;
+        }
+
+        return isRight;
+    }
+
+    /**
+     * 我是第一层转发吗?还是说是别人转给我的!
+     * @param partyId
+     * @return
+     */
+    public static boolean iamFirstShareLine(String partyIdFrom,String nowPartyId){
+        //默认不是第一层
+        boolean isRight = false;
+
+        //都没有上层转发人ID,铁定第一层
+        if(partyIdFrom==null || partyIdFrom.trim().equals("")){
+            return true;
+        }
+        //上层转发人就是自己,那这就是第一层
+        if(partyIdFrom.equals(nowPartyId)){
+            isRight=true;
+        }
+        Debug.logInfo("*iamFirstShareLine?partyIdFrom="+partyIdFrom+"nowPartyId="+nowPartyId,module);
+        return isRight;
+    }
+
+
+    /**
+     * 我是否已经创建过帮某销售代表转发某产品的引用链了?
+     * 判断依据全局唯一,不可重复添加。但次数累计。
+     * ProductID  == ProductID
+     * ShareParty == UserLoginParty
+     * SalesRepID == SalesRepID
+     * desc = 三者组合
+     * 销售代表初始链只会存在二者
+     * @return
+     */
+    public static String isSharesWorkEffortExsits(String productId,String salesRepId,String sharePartyId){
+            String isExsits = "NA";
+
+        //查询这个转发链是否存在过
+        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(
+                "productId", productId, "roleTypeId", "SALES_REP", "partyId", salesRepId,"description",productId+salesRepId+sharePartyId).queryFirst();
+
+        if(salesWorkEffort!=null){
+            isExsits = salesWorkEffort.getString("workEffortId");
+        }
+        Debug.logInfo("*IsSharesWorkEffortExsits:salesWorkEffort="+salesWorkEffort,module);
+        return isExsits;
+    }
+
+    /**
+     * 找到初始链,并返回ID
+     * @param productId
+     * @param salesRepId
+     * @param sharePartyId
+     * @return
+     */
+    public static String queryInititalWorkEffortId(String productId,String salesRepId){
+
+        Debug.logInfo("*QueryInititalWorkEffort:",module);
+
+        String initialWorkEffortId = "NA";
+
+        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(
+                "productId", productId, "roleTypeId", "SALES_REP", "partyId", salesRepId,"description",productId+salesRepId).queryFirst();
+
+        if(null!=salesWorkEffort){
+            initialWorkEffortId = salesWorkEffort.getString("workEffortId");
+        }
+
+        Debug.logInfo("*QueryInititalWorkEffort:salesWorkEffort="+salesWorkEffort,module);
+
+        return initialWorkEffortId;
+    }
+
+
+    /**
+     * 找到引用链的ID
+     * @param productId
+     * @param salesRepId
+     * @return
+     */
+    public static String queryShareWorkEffortId(String productId,String sharePartyId,String salesRepId){
+
+        Debug.logInfo("*queryShareWorkEffortId:",module);
+
+        String shareWorkEffortId = "NA";
+
+        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer")
+                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId + salesRepId + sharePartyId)).queryFirst();
+        if(null!=workEffortAndProductAndParty){
+            shareWorkEffortId = workEffortAndProductAndParty.getString("workEffortId");
+        }
+
+        Debug.logInfo("*QueryShareWorkEffortId="+workEffortAndProductAndParty,module);
+
+        return shareWorkEffortId;
+    }
+
+
+
+    /**
+     * 在指定转发链中增加引用者角色
+     * @param admin
+     * @param nowPartyId
+     * @return
+     */
+    public static boolean addRefreRoleToWorkeffort(GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
+        //                //REFERRER
+        //增加当前转发者对于转发引用的关联角色
+        Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
+                "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                    return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * addAddressRoleToWorkeffort
+     * @param admin
+     * @param nowPartyId
+     * @param workEffortId
+     * @return
+     * @throws GenericServiceException
+     */
+    public static boolean addAddressRoleToWorkeffort(GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
+        Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
+                "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+        if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+            Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 创建分享链开端
+     * @param admin
+     * @param nowPartyId
+     * @param workEffortId
+     * @return
+     * @throws GenericServiceException
+     */
+    public static String createShareWorkEffort(GenericValue userLogin,String productId,String nowPartyId,String salesRepId)throws  GenericServiceException,GenericEntityException{
+        String newWorkEffortId ="NA";
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+        Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+                        "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId + salesRepId + nowPartyId,
+                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                        createWorkEffortMap);
+                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+                    return "NA";
+                }
+        newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+        return newWorkEffortId;
+    }
+
+
+    /**
+     * 创建初始链开端
+     * @param userLogin
+     * @param productId
+     * @param nowPartyId
+     * @param salesRepId
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static String createInitWorkEffort(GenericValue admin,String productId,String nowPartyId)throws  GenericServiceException,GenericEntityException{
+        String newWorkEffortId ="NA";
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+        Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin, "currentStatusId", "CAL_IN_PLANNING",
+                "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId + nowPartyId,
+                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+        Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                createWorkEffortMap);
+        if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+            Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+            return "NA";
+        }
+        newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+                // 把 转发关联上产品
+                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", productId);
+                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+
+                }
+
+                //增加销售代表
+                Map<String,Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
+                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+                Map<String,Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                }
+
+        return newWorkEffortId;
+    }
+
+
+    /**
+     * 更新初始链上的转发、浏览计数
+     * @param userLogin
+     * @param productId
+     * @param nowPartyId
+     * @param salesRepId
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public static void updateInitWorkEffortCount(String countType ,String workEffortId)throws  GenericServiceException,GenericEntityException{
+
+         GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
+
+
+         //更新分享数
+         if(countType.equals("share")){
+             String shareCount = updateWorkEffort.getString("shareCount");
+             int count = 0;
+
+             if (!UtilValidate.isEmpty(shareCount)) {
+                 count = Integer.parseInt(shareCount);
+             }
+
+             updateWorkEffort.set("shareCount", (count += 1) + "");
+         }else{
+             String addressCount = updateWorkEffort.getString("addressCount");
+             int count = 0;
+
+             if (!UtilValidate.isEmpty(addressCount)) {
+                 count = Integer.parseInt(addressCount);
+             }
+
+             updateWorkEffort.set("addressCount", (count += 1) + "");
+         }
+
+
+         updateWorkEffort.store();
+
+    }
+
+    /**
+     * 转发发起(TO B Product)
      * @param dctx
      * @param context
      * @return
@@ -739,227 +1056,291 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws Exception
      */
-    public static Map<String, Object> shareBProductInformation(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException, GenericServiceException, Exception {
+    public static Map<String, Object> shareBProductInformation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericValue userLogin = null;
-
-
-
-        //当事人Id
-        String partyId = (String) context.get("partyId");
-        //销售代表Id
-        String partyIdFrom = (String) context.get("partyIdFrom");
-
-
-
-        if (!UtilValidate.isEmpty(partyId)) {
-            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
-        } else {
-            userLogin = (GenericValue) context.get("userLogin");
-        }
-
-
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-        Map<String, Object> createWorkEffortMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        //当前登录用户
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        // 当前引用当事人
-        String sharePartyIdFrom = (String) userLogin.get("partyId");
-        // 资源主 不存在这个概念
-        String payToPartyId = (String) context.get("payToPartyId");
-        // 资源ID
+
+        //当前转发当事人ID
+        String partyId = (String) context.get("partyId");
+        //销售代表ID
+        String salesRepId = (String) context.get("salesRepId");
+        //产品ID
         String productId = (String) context.get("productId");
+        //转发来自谁
+        String shareFromId = (String) context.get("shareFromId");
 
+        //如果我是销售代表
+        boolean iamSalesRep = iamSalesRep(partyId);
 
-        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-        if (null == product) {
-            ServiceUtil.returnError("*Product Not Found");
-        }
-        // 资源名称
-        String productName = (String) product.get("productName");
-
-        // 当前用户是否是销售代表
-        boolean isSalesRep = false;
-        // 当前用户是否创建过这个记录,这个条件基于是销售代表
-        boolean isCreated = true;
-
-        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
-
-        if (role != null) {
-            isSalesRep = !isSalesRep;
+        //我是一个销售代表。当事人是销售代表的时候,必然创建一条新的初始链。
+        if(iamSalesRep){
+            String initWorkEffortId = queryInititalWorkEffortId(productId,partyId);
+            //如果还没创建初始链,则创建一个,有了就不创建了
+            if("NA".equals(initWorkEffortId)){
+                createInitWorkEffort(admin,productId,partyId);
+            }
         }
 
-        //当事人是销售代表
-        if (isSalesRep) {
-            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId, "roleTypeId", "SALES_REP", "partyId", sharePartyIdFrom).queryFirst();
-            if (null == isExsits) {
-                String workEffortId = "";
-                isCreated = false;
-                //注意这个desc 很重要,起到了真正意义上的标识作用
-                // 创建转发引用WorkEffort
-                createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                        "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
-                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
-                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
-                        createWorkEffortMap);
-                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
-                    return serviceResultByCreateWorkEffortMap;
-                }
-                workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
+        //我不是一个销售代表
+        if(!iamSalesRep){
+            //我帮这个销售代表转发过这个产品了吗?
+            String shareedWorkEffortId = isSharesWorkEffortExsits(productId,salesRepId,partyId);
+            //不存在转发数据
+            if("NA".equals(shareedWorkEffortId)){
+                //1.在销售代表初始转发连中增加引用角色
+                String initWorkEffortId = queryInititalWorkEffortId(productId,salesRepId);
+                if(initWorkEffortId.equals("NA")){ Debug.logInfo("*InitialWorkEffortIDNotFound:"+productId+"|"+salesRepId,module); return resultMap;}
+                    //开始增加
+                    addRefreRoleToWorkeffort(admin,partyId,initWorkEffortId);
 
-                //SHIP_FROM_VENDOR
-                // 增加资源主角色对于引用
-                Map<String, Object> createShipFromVendorMap = UtilMisc.toMap("userLogin", admin, "partyId", payToPartyId,
-                        "roleTypeId", "SHIP_FROM_VENDOR", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-                Map<String, Object> createAdminAssignPartyResultMap = dispatcher.runSync("assignPartyToWorkEffort", createShipFromVendorMap);
-                if (!ServiceUtil.isSuccess(createAdminAssignPartyResultMap)) {
-                    Debug.logInfo("*assignPartyToWorkEffort Fail:" + createShipFromVendorMap, module);
-                    return createAdminAssignPartyResultMap;
-                }
+                //2.创建转发'引用链'。[产品ID + 销售代表ID + 当事人ID]
+                    String newWorkEffortId = createShareWorkEffort(userLogin,productId,partyId,salesRepId);
 
-                //REFERRER
-                //增加当前转发者对于转发引用的关联角色
-                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
-                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                    return createReferrerResultMap;
-                }
-
-                // 把引用转发关联上产品
-                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
-                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
-                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
-                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
-                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
-                    return createWorkEffortGoodStandardResultMap;
-                }
-
-                workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
-
-
-                //增加销售代表
-                createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
-                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-                createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                    return createReferrerResultMap;
-                }
-
-            } else {
-
+                //3.更新初始转发链的引用计数
+                    updateInitWorkEffortCount("share",initWorkEffortId);
             }
-        } else {
-
-            Debug.logInfo("->当事人不是销售代表", module);
-            Debug.logInfo("->以转发人的角度去看有没有转发过这个分享数据:" + "productId" + productId + "partyId" + sharePartyIdFrom + "description:", productId + sharePartyIdFrom, module);
-
-            // 当事人不是销售代表
-            // TODO FIXME 当事人不是销售代表也要创建自己的转发链条的
-            // 以转发人的角度去看有没有转发过这个分享数据?
-            GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
-            String workEffortRefrerId = workEffortAndProductAndPartyReFerrer.getString("workEffortId");
-            GenericValue isRightSales = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",workEffortRefrerId,"partyId",partyIdFrom).queryFirst();
-
-            // 是否存在自己的转发链条
-            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
-
-            // 已转发过,则增加转发次数,否则正常转发。
-            if (null != workEffortAndProductAndPartyReFerrer && null !=isRightSales) {
-                long percentComplete = new Long(0);
-                if (workEffortAndProductAndPartyReFerrer.get("percentComplete") != null) {
-                    percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
-                }
-                String updateWorkEffortId = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
-                dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
-            } else {
-                //还没转发过,先找销售代表的那行记录拿workEffortId
-                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId, "roleTypeId", "SALES_REP", "description", productId + partyIdFrom).queryFirst();
-                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
-                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", salesRepWorkEffort.getString("workEffortId"));
-                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                    return createReferrerResultMap;
-                }
-
-            }
-
-            //没有自己的转发链条? 一次转发链条拥有 当前转发人、销售代表、 产品等主要特征
-            GenericValue isExsitsSalesRep = null;
-            if (null != isExsits) {
-                String exsitWorkEffortId = isExsits.getString("workEffortId");
-                isExsitsSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId", exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
-
-            }
-            if (null == isExsits && null == isExsitsSalesRep) {
-                createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                        "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
-                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
-                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
-                        createWorkEffortMap);
-                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
-                    return serviceResultByCreateWorkEffortMap;
-                }
-                String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
-
-                //增加销售代表
-                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyIdFrom,
-                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                    return createReferrerResultMap;
-                }
-
-                // 把引用转发关联上产品
-                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
-                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
-                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
-                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
-                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
-                    return createWorkEffortGoodStandardResultMap;
-                }
-
-                //增加当前转发者对于转发引用的关联角色
-                createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
-                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-                createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                    return createReferrerResultMap;
-                }
-
-                Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", partyIdFrom, "description", productId + partyIdFrom);
-                GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
-                GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
-
-                String shareCount = updateWorkEffort.getString("shareCount");
-                int count = 0;
-                if (!UtilValidate.isEmpty(shareCount)) {
-                    count = Integer.parseInt(shareCount);
-                } else {
-                }
-                updateWorkEffort.set("shareCount", (count += 1) + "");
-                updateWorkEffort.store();
-
-
+            //存在转发数据
+            if(!"NA".equals(shareedWorkEffortId)){
+                //增加当事人转发计数(暂无记录需求)
+                return resultMap;
             }
 
         }
+
 
 
         return resultMap;
     }
+
+
+//    public static Map<String, Object> shareBProductInformation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+//
+//        // Service Head
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        GenericValue userLogin = null;
+//
+//
+//
+//        //当事人Id
+//        String partyId = (String) context.get("partyId");
+//        //销售代表Id
+//        String partyIdFrom = (String) context.get("partyIdFrom");
+//
+//
+//
+//        if (!UtilValidate.isEmpty(partyId)) {
+//            userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+//        } else {
+//            userLogin = (GenericValue) context.get("userLogin");
+//        }
+//
+//
+//        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//        Map<String, Object> createWorkEffortMap = new HashMap<String, Object>();
+//
+//        // 当前引用当事人
+//        String sharePartyIdFrom = (String) userLogin.get("partyId");
+//        // 资源主 不存在这个概念
+//        String payToPartyId = (String) context.get("payToPartyId");
+//        // 资源ID
+//        String productId = (String) context.get("productId");
+//
+//
+//        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+//        if (null == product) {
+//            ServiceUtil.returnError("*Product Not Found");
+//        }
+//        // 资源名称
+//        String productName = (String) product.get("productName");
+//
+//        // 当前用户是否是销售代表
+//        boolean isSalesRep = false;
+//        // 当前用户是否创建过这个记录,这个条件基于是销售代表
+//        boolean isCreated = true;
+//
+//        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+//
+//        if (role != null) {
+//            isSalesRep = !isSalesRep;
+//        }
+//
+//        //当事人是销售代表
+//        if (isSalesRep) {
+//            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId, "roleTypeId", "SALES_REP", "partyId", sharePartyIdFrom).queryFirst();
+//            if (null == isExsits) {
+//                String workEffortId = "";
+//                isCreated = false;
+//                //注意这个desc 很重要,起到了真正意义上的标识作用
+//                // 创建转发引用WorkEffort
+//                createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+//                        "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
+//                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+//                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+//                        createWorkEffortMap);
+//                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+//                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+//                    return serviceResultByCreateWorkEffortMap;
+//                }
+//                workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+//
+//
+//                //SHIP_FROM_VENDOR
+//                // 增加资源主角色对于引用
+//                Map<String, Object> createShipFromVendorMap = UtilMisc.toMap("userLogin", admin, "partyId", payToPartyId,
+//                        "roleTypeId", "SHIP_FROM_VENDOR", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//                Map<String, Object> createAdminAssignPartyResultMap = dispatcher.runSync("assignPartyToWorkEffort", createShipFromVendorMap);
+//                if (!ServiceUtil.isSuccess(createAdminAssignPartyResultMap)) {
+//                    Debug.logInfo("*assignPartyToWorkEffort Fail:" + createShipFromVendorMap, module);
+//                    return createAdminAssignPartyResultMap;
+//                }
+//
+//                //REFERRER
+//                //增加当前转发者对于转发引用的关联角色
+//                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+//                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+//                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+//                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+//                    return createReferrerResultMap;
+//                }
+//
+//                // 把引用转发关联上产品
+//                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+//                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
+//                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+//                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+//                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+//                    return createWorkEffortGoodStandardResultMap;
+//                }
+//
+//                workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+//
+//
+//                //增加销售代表
+//                createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+//                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//                createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+//                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+//                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+//                    return createReferrerResultMap;
+//                }
+//
+//            } else {
+//
+//            }
+//        } else {
+//
+//            Debug.logInfo("->当事人不是销售代表", module);
+//            Debug.logInfo("->以转发人的角度去看有没有转发过这个分享数据:" + "productId" + productId + "partyId" + sharePartyIdFrom + "description:", productId + sharePartyIdFrom, module);
+//
+//            // 当事人不是销售代表
+//            // TODO FIXME 当事人不是销售代表也要创建自己的转发链条的
+//            // 以转发人的角度去看有没有转发过这个分享数据?
+//            GenericValue workEffortAndProductAndPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom)).queryFirst();
+//            String workEffortRefrerId = workEffortAndProductAndPartyReFerrer.getString("workEffortId");
+//            GenericValue isRightSales = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId",workEffortRefrerId,"partyId",partyIdFrom).queryFirst();
+//
+//            // 是否存在自己的转发链条
+//            GenericValue isExsits = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId, "partyId", sharePartyIdFrom, "description", productId + sharePartyIdFrom)).queryFirst();
+//
+//            // 已转发过,则增加转发次数,否则正常转发。
+//            if (null != workEffortAndProductAndPartyReFerrer && null !=isRightSales) {
+//                long percentComplete = new Long(0);
+//                if (workEffortAndProductAndPartyReFerrer.get("percentComplete") != null) {
+//                    percentComplete = (long) workEffortAndProductAndPartyReFerrer.get("percentComplete");
+//                }
+//                String updateWorkEffortId = (String) workEffortAndProductAndPartyReFerrer.get("workEffortId");
+//                dispatcher.runAsync("updateWorkEffort", UtilMisc.toMap("userLogin", admin, "workEffortId", updateWorkEffortId, "percentComplete", percentComplete + 1));
+//            } else {
+//                //还没转发过,先找销售代表的那行记录拿workEffortId
+//                GenericValue salesRepWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("productId", productId, "roleTypeId", "SALES_REP", "description", productId + partyIdFrom).queryFirst();
+//                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+//                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", salesRepWorkEffort.getString("workEffortId"));
+//                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+//                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+//                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+//                    return createReferrerResultMap;
+//                }
+//
+//            }
+//
+//            //没有自己的转发链条? 一次转发链条拥有 当前转发人、销售代表、 产品等主要特征
+//            GenericValue isExsitsSalesRep = null;
+//            if (null != isExsits) {
+//                String exsitWorkEffortId = isExsits.getString("workEffortId");
+//                isExsitsSalesRep = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("workEffortId", exsitWorkEffortId, "roleTypeId", "SALES_REP", "partyId", partyIdFrom).queryFirst();
+//
+//            }
+//            if (null == isExsits && null == isExsitsSalesRep) {
+//                createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+//                        "workEffortName", "引用:" + productName, "workEffortTypeId", "EVENT", "description", productId + sharePartyIdFrom,
+//                        "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+//                Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+//                        createWorkEffortMap);
+//                if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+//                    Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+//                    return serviceResultByCreateWorkEffortMap;
+//                }
+//                String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+//
+//                //增加销售代表
+//                Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyIdFrom,
+//                        "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//                Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+//                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+//                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+//                    return createReferrerResultMap;
+//                }
+//
+//                // 把引用转发关联上产品
+//                Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+//                        "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", workEffortId, "productId", productId);
+//                Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+//                if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+//                    Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+//                    return createWorkEffortGoodStandardResultMap;
+//                }
+//
+//                //增加当前转发者对于转发引用的关联角色
+//                createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", sharePartyIdFrom,
+//                        "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//                createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+//                if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+//                    Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+//                    return createReferrerResultMap;
+//                }
+//
+//                Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", partyIdFrom, "description", productId + partyIdFrom);
+//                GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
+//                GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
+//
+//                String shareCount = updateWorkEffort.getString("shareCount");
+//                int count = 0;
+//                if (!UtilValidate.isEmpty(shareCount)) {
+//                    count = Integer.parseInt(shareCount);
+//                } else {
+//                }
+//                updateWorkEffort.set("shareCount", (count += 1) + "");
+//                updateWorkEffort.store();
+//
+//
+//            }
+//
+//        }
+//
+//
+//        return resultMap;
+//    }
 
 
     /**

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.batik.dom.GenericEntity;
+
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.ObjectType;

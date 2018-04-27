@@ -201,35 +201,44 @@ public class PersonManagerQueryServices {
                     rowMap.put("workEffortId",workEffortId);
 
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
-                    GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
-                    String shareCount    =  updateWorkEffort.getString("shareCount");
-                    String addressCount  =  updateWorkEffort.getString("addressCount");
+//                    GenericValue updateWorkEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
+//                    String shareCount    =  updateWorkEffort.getString("shareCount");
+//                    String addressCount  =  updateWorkEffort.getString("addressCount");
 
-                    rowMap.put("shareCount",shareCount);
-                    rowMap.put("addressCount",addressCount);
+//                    rowMap.put("shareCount",shareCount);
+//                    rowMap.put("addressCount",addressCount);
 
                     // 查询此人分享了多少次
-//                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
-//
-//                    String shareCount = "0";
-//
-//                    if(null!= shareCountWorker && null !=shareCountWorker.get("percentComplete")){
-//                        shareCount = shareCountWorker.get("percentComplete") + "";
-//                    }
-//
-//                    rowMap.put("shareCount",shareCount);
-//
-//                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
-//                    if(nowShareWorkEffort != null){
-//                    String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
-//                    Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();
-//                    rowMap.put("xiaJiRenShu",xiaJiRenShu);
-//                    }else{
-//                        rowMap.put("xiaJiRenShu","0");
-//                    }
-//
-//                    rowMap.put("shareCount",shareCount);
+                    GenericValue shareCountWorker = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
 
+                    String shareCount = "0";
+
+                    if(null!= shareCountWorker && null !=shareCountWorker.get("percentComplete")){
+                        shareCount = shareCountWorker.get("percentComplete") + "";
+                    }
+
+                    rowMap.put("shareCount",shareCount);
+
+                    GenericValue nowShareWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer").where(UtilMisc.toMap("productId", productId,"partyId",rowPartyId,"description",productId+rowPartyId)).queryFirst();
+                    if(nowShareWorkEffort != null){
+                    String  nowShareWorkEffortId = nowShareWorkEffort.getString("workEffortId");
+                    Long xiaJiRenShu =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyAddressee").where(UtilMisc.toMap("productId", productId,"workEffortId",nowShareWorkEffortId)).queryCount();
+                    rowMap.put("addressCount",xiaJiRenShu);
+                    }else{
+                        rowMap.put("addressCount","0");
+                    }
+
+                    rowMap.put("shareCount",shareCount);
+
+                    EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
+                    EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "END_USER_CUSTOMER");
+                    EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,rowPartyId);
+                    EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+                    EntityCondition findConditions4= EntityCondition.makeCondition(genericCondition, EntityOperator.AND,findConditions3);
+                    List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                            findConditions4, null,
+                            null, null, false);
+                    rowMap.put("buyCount",queryMyResourceOrderList.size());
 
                     returnList.add(rowMap);
                 }

@@ -629,7 +629,11 @@ public class PersonManagerServices {
             return createAddresseeResultMap;
         }
 
-        GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId), false);
+
+        //这个数值应该记到RootWorkEffort
+        Map<String,Object> queryMap = UtilMisc.toMap("productId", productId, "partyId", spm, "description", productId + spm);
+        GenericValue findRootWorkEffort =  EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(queryMap).queryFirst();
+        GenericValue updateWorkEffort = delegator.findOne("WorkEffort", UtilMisc.toMap("workEffortId", findRootWorkEffort.getString("workEffortId")), false);
         String addressCount = updateWorkEffort.getString("addressCount");
         int count = 0;
         if (!UtilValidate.isEmpty(addressCount)) {

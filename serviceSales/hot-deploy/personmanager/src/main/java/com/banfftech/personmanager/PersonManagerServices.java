@@ -587,7 +587,7 @@ public class PersonManagerServices {
         }
         // 如果上层就是根销售代表,那就记在初始化链上
         if(shareFromId.equals(salesRepId)){
-            String initWorkEffortId = queryInititalWorkEffortId(productId,salesRepId);
+            String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
             addAddressRoleToWorkeffort(dispatcher, admin, partyId, initWorkEffortId);
             workEffortId = initWorkEffortId;
         }
@@ -832,7 +832,7 @@ public class PersonManagerServices {
      * 销售代表初始链只会存在二者
      * @return
      */
-    public static String isSharesWorkEffortExsits(String productId,String salesRepId,String sharePartyId){
+    public static String isSharesWorkEffortExsits(Delegator delegator, String productId,String salesRepId,String sharePartyId){
             String isExsits = "NA";
 
         //查询这个转发链是否存在过
@@ -853,7 +853,7 @@ public class PersonManagerServices {
      * @param sharePartyId
      * @return
      */
-    public static String queryInititalWorkEffortId(String productId,String salesRepId)throws GenericEntityException{
+    public static String queryInititalWorkEffortId(Delegator delegator, String productId,String salesRepId)throws GenericEntityException{
 
         Debug.logInfo("*QueryInititalWorkEffort:",module);
 
@@ -878,7 +878,7 @@ public class PersonManagerServices {
      * @param salesRepId
      * @return
      */
-    public static String queryShareWorkEffortId(String productId,String sharePartyId,String salesRepId){
+    public static String queryShareWorkEffortId(String productId,String sharePartyId,String salesRepId)throws GenericEntityException{
 
         Debug.logInfo("*queryShareWorkEffortId:",module);
 
@@ -903,7 +903,7 @@ public class PersonManagerServices {
      * @param nowPartyId
      * @return
      */
-    public static boolean addRefreRoleToWorkeffort(GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
+    public static boolean addRefreRoleToWorkeffort(LocalDispatcher dispatcher,GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
         //                //REFERRER
         //增加当前转发者对于转发引用的关联角色
         Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
@@ -1081,7 +1081,7 @@ public class PersonManagerServices {
 
         //我是一个销售代表。当事人是销售代表的时候,必然创建一条新的初始链。
         if(iamSalesRep){
-            String initWorkEffortId = queryInititalWorkEffortId(productId,partyId);
+            String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,partyId);
             //如果还没创建初始链,则创建一个,有了就不创建了
             if("NA".equals(initWorkEffortId)){
                 createInitWorkEffort(dispatcher, delegator, admin,productId,partyId);
@@ -1092,14 +1092,14 @@ public class PersonManagerServices {
         //我不是一个销售代表
         if(!iamSalesRep){
             //我帮这个销售代表转发过这个产品了吗?
-            String shareedWorkEffortId = isSharesWorkEffortExsits(productId,salesRepId,partyId);
+            String shareedWorkEffortId = isSharesWorkEffortExsits(delegator, productId,salesRepId,partyId);
             //不存在转发数据
             if("NA".equals(shareedWorkEffortId)){
                 //1.在销售代表初始转发连中增加引用角色
-                String initWorkEffortId = queryInititalWorkEffortId(productId,salesRepId);
+                String initWorkEffortId = queryInititalWorkEffortId(delegator, productId,salesRepId);
                 if(initWorkEffortId.equals("NA")){ Debug.logInfo("*InitialWorkEffortIDNotFound:"+productId+"|"+salesRepId,module); return resultMap;}
                     //开始增加
-                    addRefreRoleToWorkeffort(admin,partyId,initWorkEffortId);
+                    addRefreRoleToWorkeffort(dispatcher, admin,partyId,initWorkEffortId);
 
                 //2.创建转发'引用链'。[产品ID + 销售代表ID + 当事人ID]
                     String newWorkEffortId = createShareWorkEffort(dispatcher,delegator, userLogin,productId,partyId,salesRepId);

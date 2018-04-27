@@ -583,17 +583,17 @@ public class PersonManagerServices {
         // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
         if(!shareFromId.equals(salesRepId)){
             workEffortId = queryShareWorkEffortId(productId,shareFromId,salesRepId);
-            addAddressRoleToWorkeffort(admin, partyId, workEffortId);
+            addAddressRoleToWorkeffort(dispatcher,admin, partyId, workEffortId);
         }
         // 如果上层就是根销售代表,那就记在初始化链上
         if(shareFromId.equals(salesRepId)){
             String initWorkEffortId = queryInititalWorkEffortId(productId,salesRepId);
-            addAddressRoleToWorkeffort(admin, partyId, initWorkEffortId);
+            addAddressRoleToWorkeffort(dispatcher, admin, partyId, initWorkEffortId);
             workEffortId = initWorkEffortId;
         }
 
         // 增加浏览计数
-        addAddressRoleToWorkeffort(admin,partyId,workEffortId);
+        addAddressRoleToWorkeffort(dispatcher,admin,partyId,workEffortId);
 
 
         return resultMap;
@@ -925,7 +925,7 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    public static boolean addAddressRoleToWorkeffort(GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
+    public static boolean addAddressRoleToWorkeffort(LocalDispatcher dispatcher, GenericValue admin,String nowPartyId,String workEffortId)throws  GenericServiceException{
         Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", nowPartyId,
                 "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
         Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);

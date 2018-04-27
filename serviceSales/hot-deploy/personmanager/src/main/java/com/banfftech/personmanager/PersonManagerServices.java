@@ -853,7 +853,7 @@ public class PersonManagerServices {
      * @param sharePartyId
      * @return
      */
-    public static String queryInititalWorkEffortId(String productId,String salesRepId){
+    public static String queryInititalWorkEffortId(String productId,String salesRepId)throws GenericEntityException{
 
         Debug.logInfo("*QueryInititalWorkEffort:",module);
 
@@ -944,7 +944,7 @@ public class PersonManagerServices {
      * @return
      * @throws GenericServiceException
      */
-    public static String createShareWorkEffort(GenericValue userLogin,String productId,String nowPartyId,String salesRepId)throws  GenericServiceException,GenericEntityException{
+    public static String createShareWorkEffort(LocalDispatcher dispatcher, GenericValue userLogin,String productId,String nowPartyId,String salesRepId)throws  GenericServiceException,GenericEntityException{
         String newWorkEffortId ="NA";
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
@@ -972,7 +972,7 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws GenericEntityException
      */
-    public static String createInitWorkEffort(GenericValue admin,String productId,String nowPartyId)throws  GenericServiceException,GenericEntityException{
+    public static String createInitWorkEffort(LocalDispatcher dispatcher, Delegator delegator, GenericValue admin,String productId,String nowPartyId)throws  GenericServiceException,GenericEntityException{
         String newWorkEffortId ="NA";
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin, "currentStatusId", "CAL_IN_PLANNING",
@@ -1084,7 +1084,7 @@ public class PersonManagerServices {
             String initWorkEffortId = queryInititalWorkEffortId(productId,partyId);
             //如果还没创建初始链,则创建一个,有了就不创建了
             if("NA".equals(initWorkEffortId)){
-                createInitWorkEffort(admin,productId,partyId);
+                createInitWorkEffort(dispatcher, delegator, admin,productId,partyId);
             }
         }
 
@@ -1102,7 +1102,7 @@ public class PersonManagerServices {
                     addRefreRoleToWorkeffort(admin,partyId,initWorkEffortId);
 
                 //2.创建转发'引用链'。[产品ID + 销售代表ID + 当事人ID]
-                    String newWorkEffortId = createShareWorkEffort(userLogin,productId,partyId,salesRepId);
+                    String newWorkEffortId = createShareWorkEffort(dispatcher, userLogin,productId,partyId,salesRepId);
 
                 //3.更新初始转发链的引用计数
                     updateInitWorkEffortCount("share",initWorkEffortId);

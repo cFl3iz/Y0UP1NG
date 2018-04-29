@@ -139,20 +139,35 @@ public class WeChatOrderQueryServices {
         List<GenericValue> productShareList = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER","partyId",partyId).queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-
+        //分享总计
+        int shareCount = 0;
+        //总销售
+        int salesRepCount = 0;
         if(productShareList!=null && productShareList.size()>0){
             for(GenericValue gv : productShareList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String workEffortId = gv.getString("workEffortId");
                 GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
+                GenericValue workEffort  = EntityQuery.use(delegator).from("WorkEffort").where("workEffortId", workEffortId).queryFirst();
+
+                String rowShareCount = workEffort.getString("shareCount");
+                int rowShare  = Integer.parseInt(rowShareCount==null?"0":rowShareCount);
+                shareCount += rowShare;
                 String productId = workEffortProduct.getString("productId");
                 GenericValue productAndPriceView = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
                 rowMap.put("productInfo",productAndPriceView);
-                //浏览量
+
+                //产品分享者列表
+                List<Map<String,Object>> productPartys = new ArrayList<Map<String, Object>>();
+                List<GenericValue> workEffortPartyAssignAndRoleType =
+                        EntityQuery.use(delegator).from("WorkEffortPartyRoleAndProduct").
+                                where("productId", productId, "roleTypeId", "SALES_REP","partyId",partyId).orderBy("-fromDate").queryPagedList(0, 5).getData();
+
+                  //浏览量
 //                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
 //                //转发量
 //                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
-                GenericValue workEffort = delegator.findOne("WorkEffort",UtilMisc.toMap("workEffortId",workEffortId),false);
+
                 rowMap.put("addressCount",workEffort.get("addressCount")==null?"0":workEffort.get("addressCount"));
                 rowMap.put("refreCount",workEffort.get("shareCount")==null?"0":workEffort.get("shareCount"));
 
@@ -167,15 +182,23 @@ public class WeChatOrderQueryServices {
                         findConditions4, null,
                         null, null, false);
              //   EntityOperator.LIKE
-             //   Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId,).queryCount();
-
-                rowMap.put("salesOrderCount",queryMyResourceOrderList==null?"0":queryMyResourceOrderList.size()+"");
+                Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId).queryCount();
+                salesRepCount += Integer.parseInt(salesOrderCount + "");
+                rowMap.put("salesRepOrderCount",queryMyResourceOrderList==null?"0":queryMyResourceOrderList.size()+"");
 
                 returnList.add(rowMap);
             }
         }
 
+
+
+
+
         resultMap.put("shareInfoList",returnList);
+        resultMap.put("total",returnList.size()+"");
+
+        resultMap.put("shareCount",shareCount+"");
+        resultMap.put("salesRepCount",salesRepCount+"");
 
         return resultMap;
     }

@@ -41,6 +41,22 @@
             <order-by field-name="-fromDate"/>
         </entity-condition>
     </view-entity>
+
+
+
+    <view-entity entity-name="WorkEffortPartyRoleAndProduct" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="WPAR" entity-name="WorkEffortPartyAssignAndRoleType"/>
+        <member-entity entity-alias="WEPG" entity-name="WorkEffortProductGoods"/>
+
+        <alias-all entity-alias="WPAR" />
+        <alias entity-alias="WEPG" field="productId" name="productId"/>
+
+        <view-link entity-alias="WPAR" rel-entity-alias="WEPG">
+            <key-map field-name="workEffortId" rel-field-name="workEffortId"/>
+        </view-link>
+    </view-entity>
+
+
     <!-- Email & Party -->
     <view-entity entity-name="EmailAndPartyView" package-name="com.banfftech.personerp">
         <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>

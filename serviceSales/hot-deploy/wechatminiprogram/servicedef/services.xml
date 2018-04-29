@@ -36,6 +36,9 @@
              invoke="queryShareCpsReport" auth="false">
         <description>queryShareCpsReport</description>
         <attribute name="shareInfoList" type="List" mode="OUT" optional="true" />
+        <attribute name="shareCount" type="String" mode="OUT" optional="true" />
+        <attribute name="salesRepCount" type="String" mode="OUT" optional="true" />
+        <attribute name="total" type="String" mode="OUT" optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>

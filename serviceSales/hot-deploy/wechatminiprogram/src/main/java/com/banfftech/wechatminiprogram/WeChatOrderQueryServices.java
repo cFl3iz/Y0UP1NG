@@ -159,10 +159,19 @@ public class WeChatOrderQueryServices {
 
                 //产品分享者列表
                 List<Map<String,Object>> productPartys = new ArrayList<Map<String, Object>>();
-                List<GenericValue> workEffortPartyAssignAndRoleType =
+                List<GenericValue> workEffortPartyRoleAndProduct =
                         EntityQuery.use(delegator).from("WorkEffortPartyRoleAndProduct").
-                                where("productId", productId, "roleTypeId", "SALES_REP","partyId",partyId).orderBy("-fromDate").queryPagedList(0, 5).getData();
+                                where("productId", productId, "roleTypeId", "SALES_REP", "partyId", partyId).queryList();
+                if(null!= workEffortPartyRoleAndProduct){
+                    for(GenericValue rowGeneric : workEffortPartyRoleAndProduct){
+                        Map<String,Object> rowParty = new HashMap<String, Object>();
+                        String innerWorkEffort =  rowGeneric.getString("workEffortId");
+                        GenericValue referrerRole = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
 
+
+
+                    }
+                }
                   //浏览量
 //                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
 //                //转发量

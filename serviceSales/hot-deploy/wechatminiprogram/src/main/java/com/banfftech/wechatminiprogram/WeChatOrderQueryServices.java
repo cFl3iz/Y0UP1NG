@@ -166,8 +166,7 @@ public class WeChatOrderQueryServices {
                     for(GenericValue rowGeneric : workEffortPartyRoleAndProduct){
                         Map<String,Object> rowParty = new HashMap<String, Object>();
                         String innerWorkEffort =  rowGeneric.getString("workEffortId");
-                        GenericValue referrerRole = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
-
+                    //    GenericValue referrerRole = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
 
 
                     }

@@ -144,6 +144,7 @@ public class WeChatOrderQueryServices {
         //总销售
         int salesRepCount = 0;
         if(productShareList!=null && productShareList.size()>0){
+
             for(GenericValue gv : productShareList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String workEffortId = gv.getString("workEffortId");
@@ -161,16 +162,37 @@ public class WeChatOrderQueryServices {
                 List<Map<String,Object>> productPartys = new ArrayList<Map<String, Object>>();
                 List<GenericValue> workEffortPartyRoleAndProduct =
                         EntityQuery.use(delegator).from("WorkEffortPartyRoleAndProduct").
-                                where("productId", productId, "roleTypeId", "SALES_REP", "partyId", partyId).queryList();
+                                where("productId", productId, "roleTypeId", "SALES_REP", "partyId", partyId,"description",productId+partyId).queryList();
                 if(null!= workEffortPartyRoleAndProduct){
-                    for(GenericValue rowGeneric : workEffortPartyRoleAndProduct){
-                        Map<String,Object> rowParty = new HashMap<String, Object>();
+                    for(GenericValue rowGeneric :workEffortPartyRoleAndProduct ){
+
                         String innerWorkEffort =  rowGeneric.getString("workEffortId");
-                    //    GenericValue referrerRole = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
+                        List<GenericValue> referrerRoles = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
+                        for( int i = 0 ; i <  referrerRoles.size(); i++){
+
+                            GenericValue referrer = (GenericValue) referrerRoles.get(i);
+
+                            Map<String,Object> rowParty = new HashMap<String, Object>();
+                            String rolePartyId = referrer.getString("partyId");
+                            Map<String,String> rowPerson = new HashMap<String, String>();
+                            if(!rolePartyId.equals(partyId)){
+                                rowPerson = queryPersonBaseInfo(delegator,partyId);
+                                rowParty.put("shareParty",rowPerson);
+                                productPartys.add(rowParty);
+                            }
+                            //最近的一个人
+                            if(i+1 == workEffortPartyRoleAndProduct.size()){
+                                rowMap.put("lastShareDesc","刚刚"+rowPerson.get("firstName")+"帮你转发了");
+                                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                String fromDate = sdf.format(referrer.get("fromDate"));
+                                rowMap.put("repotDeta",fromDate);
+                            }
+                        }
 
 
                     }
                 }
+                rowMap.put("productSharePartys",productPartys);
                   //浏览量
 //                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
 //                //转发量

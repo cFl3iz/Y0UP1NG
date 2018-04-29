@@ -56,7 +56,7 @@
         <view-link entity-alias="WPAR" rel-entity-alias="WEPG">
             <key-map field-name="workEffortId" rel-field-name="workEffortId"/>
         </view-link>
-        <view-link entity-alias="W" rel-entity-alias="WPAR">
+        <view-link entity-alias="WPAR" rel-entity-alias="W">
             <key-map field-name="workEffortId" rel-field-name="workEffortId"/>
         </view-link>
     </view-entity>

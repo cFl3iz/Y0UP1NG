@@ -2577,7 +2577,7 @@ public class PersonManagerServices {
         itemProduct.set("itemDescription", product.get("productName"));
         itemProduct.set("selectedAmount", BigDecimal.ZERO);
         itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
-        itemProduct.set("orderItemSeqId", "00001");
+        itemProduct.set("orderItemSeqId", "0001");
         itemProduct.set("unitPrice", product.get("price"));
         itemProduct.set("quantity", quantity);
         itemProduct.set("comments", null);

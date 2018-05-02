@@ -778,8 +778,7 @@ public class PersonManagerServices {
         String initialWorkEffortId = "NA";
         Debug.logInfo("*QueryInititalWorkEffort-productId:"+productId,module);
         Debug.logInfo("*QueryInititalWorkEffort-salesRepId:"+salesRepId,module);
-        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(
-                "productId", productId, "roleTypeId", "SALES_REP", "partyId", salesRepId,"description",productId+salesRepId).queryFirst();
+        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("description",productId+salesRepId).queryFirst();
 
         if(null!=salesWorkEffort){
             initialWorkEffortId = salesWorkEffort.getString("workEffortId");

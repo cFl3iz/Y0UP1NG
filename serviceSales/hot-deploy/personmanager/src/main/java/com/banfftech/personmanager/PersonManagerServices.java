@@ -778,7 +778,8 @@ public class PersonManagerServices {
         String initialWorkEffortId = "NA";
         Debug.logInfo("*QueryInititalWorkEffort-productId:"+productId,module);
         Debug.logInfo("*QueryInititalWorkEffort-salesRepId:"+salesRepId,module);
-        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where("description",productId+salesRepId).queryFirst();
+        GenericValue salesWorkEffort = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartySalesRep").where(
+                "productId", productId, "roleTypeId", "SALES_REP", "partyId", salesRepId,"description",productId+salesRepId).queryFirst();
 
         if(null!=salesWorkEffort){
             initialWorkEffortId = salesWorkEffort.getString("workEffortId");
@@ -803,7 +804,7 @@ public class PersonManagerServices {
         String shareWorkEffortId = "NA";
 
         GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer")
-                .where(UtilMisc.toMap("description", productId + salesRepId + sharePartyId)).queryFirst();
+                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId + salesRepId + sharePartyId)).queryFirst();
         if(null!=workEffortAndProductAndParty){
             shareWorkEffortId = workEffortAndProductAndParty.getString("workEffortId");
         }

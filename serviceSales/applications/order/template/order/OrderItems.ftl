@@ -124,6 +124,7 @@ under the License.
                                             <#assign inProductionQuantity = productionProductQuantityMap.get(productId)?default(0)>
                                             <#assign unplannedQuantity = requiredQuantity - qohQuantity - inProductionQuantity - onOrderQuantity - mktgPkgQOH>
                                             <#if unplannedQuantity < 0><#assign unplannedQuantity = 0></#if>
+                                            requiredProductQuantityMap = ${(requiredProductQuantityMap)!}
                                             <div class="screenlet order-item-inventory">
                                                 <div class="screenlet-body">
                                                     <table cellspacing="0" cellpadding="0" border="0">

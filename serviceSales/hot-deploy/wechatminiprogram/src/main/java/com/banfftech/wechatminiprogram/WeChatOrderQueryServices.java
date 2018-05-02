@@ -181,7 +181,7 @@ public class WeChatOrderQueryServices {
                                 productPartys.add(rowParty);
                             }
                             //最近的一个人
-                            if(i+1 == workEffortPartyRoleAndProduct.size()){
+                            if(i+1 == workEffortPartyRoleAndProduct.size() && rowPerson!=null && rowPerson.get("firstName")!=null ){
                                 rowMap.put("lastShareDesc","刚刚"+rowPerson.get("firstName")+"帮你转发了");
                                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                 String fromDate = sdf.format(referrer.get("fromDate"));

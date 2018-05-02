@@ -936,7 +936,7 @@ public class PersonManagerQueryServices {
 //        }
 
 
-        List<GenericValue> queryMessageLogList =  EntityQuery.use(delegator).from("MessageLog").where("partyIdTo", partyIdTo).queryList();
+        List<GenericValue> queryMessageLogList =  EntityQuery.use(delegator).from("MessageLog").where("partyIdTo", partyIdTo).orderBy("-fromDate").queryList();
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 

@@ -1296,6 +1296,7 @@ under the License.
                 <condition-expr field-name="statusId" value="ITEM_APPROVED"/>
             </condition-list>
         </entity-condition>
+        <log level="info" message="orderItemAndShipGrpInvResAndItemList = ${orderItemAndShipGrpInvResAndItemList}"/>
         <iterate list="orderItemAndShipGrpInvResAndItemList" entry="orderItemAndShipGrpInvResAndItem">
             <if>
                 <condition><not><if-compare-field field="orderItemShipGrpInvResFacilityIds" to-field="orderItemAndShipGrpInvResAndItem.facilityId" operator="contains"/></not></condition>
@@ -1304,7 +1305,7 @@ under the License.
         </iterate>
 
         <call-simple-method method-name="getOrderItemShipGroupLists"/>
-
+        <log level="info" message="orderItemShipGrpInvResFacilityId = ${orderItemShipGrpInvResFacilityId.setPackedOnly}"/>
         <!-- traverse facilities, instantiate shipment for each -->
         <iterate list="orderItemShipGrpInvResFacilityIds" entry="orderItemShipGrpInvResFacilityId">
             <!-- sanity check for valid facility -->
@@ -1315,6 +1316,7 @@ under the License.
 
             <set field="eventDate" from-field="parameters.eventDate"/>
             <set field="setPackedOnly" from-field="parameters.setPackedOnly"/>
+            <log level="info" message="setPackedOnly = ${parameters.setPackedOnly}"/>
             <call-simple-method method-name="createShipmentForFacilityAndShipGroup"/>
         </iterate>
 

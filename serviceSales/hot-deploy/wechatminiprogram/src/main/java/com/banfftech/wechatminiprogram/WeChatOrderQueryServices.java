@@ -177,8 +177,8 @@ public class WeChatOrderQueryServices {
                             Map<String,String> rowPerson = new HashMap<String, String>();
 
                             if(!rolePartyId.equals(partyId)){
-                                Debug.logInfo("roleParty="+rolePartyId+"|partyId="+partyId+"="+(rolePartyId.equals(partyId)),module);
-                                rowPerson = queryPersonBaseInfo(delegator,partyId);
+//                                Debug.logInfo("roleParty="+rolePartyId+"|partyId="+partyId+"="+(rolePartyId.equals(partyId)),module);
+                                rowPerson = queryPersonBaseInfo(delegator,rolePartyId);
                                 rowParty.put("shareParty",rowPerson);
                                 productPartys.add(rowParty);
                             }

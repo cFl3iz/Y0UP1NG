@@ -803,7 +803,7 @@ public class PersonManagerServices {
         String shareWorkEffortId = "NA";
 
         GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer")
-                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId + salesRepId + sharePartyId)).queryFirst();
+                .where(UtilMisc.toMap("description", productId + salesRepId + sharePartyId)).queryFirst();
         if(null!=workEffortAndProductAndParty){
             shareWorkEffortId = workEffortAndProductAndParty.getString("workEffortId");
         }

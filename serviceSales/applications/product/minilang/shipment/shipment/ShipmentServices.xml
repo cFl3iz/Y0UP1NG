@@ -1305,7 +1305,7 @@ under the License.
         </iterate>
 
         <call-simple-method method-name="getOrderItemShipGroupLists"/>
-        <log level="info" message="orderItemShipGrpInvResFacilityId = ${orderItemShipGrpInvResFacilityId.setPackedOnly}"/>
+        <log level="info" message="orderItemShipGrpInvResFacilityIds = ${orderItemShipGrpInvResFacilityIds}"/>
         <!-- traverse facilities, instantiate shipment for each -->
         <iterate list="orderItemShipGrpInvResFacilityIds" entry="orderItemShipGrpInvResFacilityId">
             <!-- sanity check for valid facility -->

@@ -5823,12 +5823,12 @@ public class PersonManagerServices {
 
         GenericValue orderSales = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
 
-        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", orderSales.get("partyId")).queryFirst();
-
+      //  GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", orderSales.get("partyId")).queryFirst();
+     //facility.get("facilityId")
         Map<String, Object> quickShipmentOut = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap(
                 "userLogin", admin,
                 "orderId", orderId,
-                "originFacilityId", facility.get("facilityId")));
+                "originFacilityId", "ZUCZUGSTORE"));
 
         if (!ServiceUtil.isSuccess(quickShipmentOut)) {
             return quickShipmentOut;
@@ -5860,65 +5860,65 @@ public class PersonManagerServices {
         String productId = (String) orderItem.get("productId");
         GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-        //推送买家
-        if (null != partyIdentification) {
-
-            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-
-
-            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
-
-            pushWeChatMessageInfoMap.put("payToPartyId", partyId);
-
-            Date date = new Date();
-
-            SimpleDateFormat formatter;
-
-            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            String pushDate = "" + formatter.format(date);
-
-            pushWeChatMessageInfoMap.put("date", pushDate);
-
-
-            String openId = (String) partyIdentification.get("idValue");
-
-            pushWeChatMessageInfoMap.put("openId", openId);
-
-            pushWeChatMessageInfoMap.put("orderId", orderId);
-            if (null != sinceTheSend && sinceTheSend.equals("1")) {
-                //自配送
-                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我发货了," + "由我亲自给您配送!");
-
-            } else {
-                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + (code == null ? "暂无详细" : code));
-            }
-
-
-            GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", orderCust.get("partyId"), "enabled", "Y").queryFirst();
-
-            String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
-
-
-            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
-            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
-            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
-            //开始时间
-            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-            //到期时间
-            final long exp = iat + expirationTime;
-            //生成
-            final JWTSigner signer = new JWTSigner(tokenSecret);
-            final HashMap<String, Object> claims = new HashMap<String, Object>();
-            claims.put("iss", iss);
-            claims.put("user", toPartyUserLoginId);
-            claims.put("delegatorName", delegator.getDelegatorName());
-            claims.put("exp", exp);
-            claims.put("iat", iat);
-            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.yo-pe.com:3400/WebManager/control/myOrderDetail?orderId=" + orderId + "&tarjeta=" + signer.sign(claims));
-            //推微信订单状态
-            dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
-        }
+        //推送买家(该逻辑块暂不适用)
+//        if (null != partyIdentification) {
+//
+//            Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+//
+//
+//            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+//
+//            pushWeChatMessageInfoMap.put("payToPartyId", partyId);
+//
+//            Date date = new Date();
+//
+//            SimpleDateFormat formatter;
+//
+//            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//            String pushDate = "" + formatter.format(date);
+//
+//            pushWeChatMessageInfoMap.put("date", pushDate);
+//
+//
+//            String openId = (String) partyIdentification.get("idValue");
+//
+//            pushWeChatMessageInfoMap.put("openId", openId);
+//
+//            pushWeChatMessageInfoMap.put("orderId", orderId);
+//            if (null != sinceTheSend && sinceTheSend.equals("1")) {
+//                //自配送
+//                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我发货了," + "由我亲自给您配送!");
+//
+//            } else {
+//                pushWeChatMessageInfoMap.put("messageInfo", "您购买的(" + product.get("productName") + ")我已发货" + ",物流公司是" + name + "。物流单号:" + (code == null ? "暂无详细" : code));
+//            }
+//
+//
+//            GenericValue toPartyUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", orderCust.get("partyId"), "enabled", "Y").queryFirst();
+//
+//            String toPartyUserLoginId = (String) toPartyUserLogin.get("userLoginId");
+//
+//
+//            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+//            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+//            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+//            //开始时间
+//            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+//            //到期时间
+//            final long exp = iat + expirationTime;
+//            //生成
+//            final JWTSigner signer = new JWTSigner(tokenSecret);
+//            final HashMap<String, Object> claims = new HashMap<String, Object>();
+//            claims.put("iss", iss);
+//            claims.put("user", toPartyUserLoginId);
+//            claims.put("delegatorName", delegator.getDelegatorName());
+//            claims.put("exp", exp);
+//            claims.put("iat", iat);
+//            pushWeChatMessageInfoMap.put("jumpUrl", "http://www.yo-pe.com:3400/WebManager/control/myOrderDetail?orderId=" + orderId + "&tarjeta=" + signer.sign(claims));
+//            //推微信订单状态
+//            dispatcher.runSync("pushOrderStatusInfo", pushWeChatMessageInfoMap);
+//        }
 
 
         return resultMap;

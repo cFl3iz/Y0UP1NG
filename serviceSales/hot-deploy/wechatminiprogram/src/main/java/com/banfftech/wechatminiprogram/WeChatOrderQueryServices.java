@@ -1552,16 +1552,16 @@ public class WeChatOrderQueryServices {
                     String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
 
                     if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
-                        rowMap.put("orderPayStatus", "已收款");
+                        rowMap.put("orderPayStatus", "已付款");
                         rowMap.put("payStatusCode", "1");
                     } else {
                         rowMap.put("payStatusCode", "0");
-                        rowMap.put("orderPayStatus", "未收款");
+                        rowMap.put("orderPayStatus", "代付款");
                     }
 
                 } else {
                     rowMap.put("payStatusCode", "0");
-                    rowMap.put("orderPayStatus", "未收款");
+                    rowMap.put("orderPayStatus", "待付款");
                 }
 //                if(!statusId.equals("ORDER_SENT")){
 //                    rowMap.put("orderShipment","未发货");

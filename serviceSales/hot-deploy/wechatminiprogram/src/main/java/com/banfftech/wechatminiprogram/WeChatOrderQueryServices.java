@@ -1577,7 +1577,7 @@ public class WeChatOrderQueryServices {
                 GenericValue orderItemShip = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", gv.get("orderId")).queryFirst();
                 //理论上有这行数据,就肯定货运了
                 if (null != orderShipment) {
-                    rowMap.put("orderShipment", "已发货");
+                    rowMap.put("orderShipment", "待收货");
                     String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if (null != trackingNumber) {
@@ -1585,11 +1585,11 @@ public class WeChatOrderQueryServices {
                     } else {
                         rowMap.put("internalCode", "商家自配送");
                     }
-                    if (rowMap.get("orderPayStatus").equals("已收款")) {
+                    if (rowMap.get("orderPayStatus").equals("已付款")) {
                         rowMap.put("orderCompleted", "已完成");
                     }
                 } else {
-                    rowMap.put("orderShipment", "未发货");
+                    rowMap.put("orderShipment", "待发货");
                 }
 
 

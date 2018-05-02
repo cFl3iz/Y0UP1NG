@@ -61,7 +61,12 @@
 
 
     <MessageLogType messageLogTypeId="SHARE" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
     <MessageLogType messageLogTypeId="ORDER" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
+    <MessageLogType messageLogTypeId="PAYMENT" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示支付状态" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
 
 
     <!-- 对产品的吐槽 -->

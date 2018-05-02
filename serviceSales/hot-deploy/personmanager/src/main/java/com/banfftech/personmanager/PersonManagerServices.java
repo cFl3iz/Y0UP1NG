@@ -2844,7 +2844,7 @@ public class PersonManagerServices {
 
         createMessageLogMap.put("badge", "CHECK");
 
-        createMessageLogMap.put("messageLogTypeId", "ORDER");
+        createMessageLogMap.put("messageLogTypeId", "PAYMENT");
 
         createMessageLogMap.put("objectId", productId);
 

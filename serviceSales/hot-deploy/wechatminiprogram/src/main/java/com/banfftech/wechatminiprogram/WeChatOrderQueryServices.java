@@ -175,7 +175,9 @@ public class WeChatOrderQueryServices {
                             Map<String,Object> rowParty = new HashMap<String, Object>();
                             String rolePartyId = referrer.getString("partyId");
                             Map<String,String> rowPerson = new HashMap<String, String>();
+
                             if(!rolePartyId.equals(partyId)){
+                                Debug.logInfo("roleParty="+rolePartyId+"|partyId="+partyId+"="+(rolePartyId.equals(partyId)),module);
                                 rowPerson = queryPersonBaseInfo(delegator,partyId);
                                 rowParty.put("shareParty",rowPerson);
                                 productPartys.add(rowParty);

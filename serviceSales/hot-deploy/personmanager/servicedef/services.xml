@@ -787,15 +787,15 @@
 
 
 
-    <!-- 买家确认收到了 -->
+    <!-- 确认货款到账 -->
     <service name="orderPaymentReceived" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="orderPaymentReceived" auth="false">
         <description>orderPaymentReceived</description>
 
         <attribute name="orderId" type="String" mode="IN"   optional="true"/>
-        <!-- 如果传过来partyId,说明是小程序调用的收款 -->
-        <attribute name="partyId" type="String" mode="IN"   optional="true"/>
+        <!-- 如果传过来openid,说明是小程序调用的收款 -->
+        <attribute name="openId" type="String" mode="IN"   optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

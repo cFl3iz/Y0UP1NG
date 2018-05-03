@@ -206,9 +206,9 @@ public class WeChatOrderQueryServices {
                     allOrderGrandTotal = allOrderGrandTotal + (grandTotal.doubleValue());
                     orderCount+=1;
                 }
-                mothMap.put(m+"月",rowList);
+                mothMap.put("data",rowList);
             }else{
-                mothMap.put(m+"月",null);
+                mothMap.put("data",null);
             }
 
             returnOrderList.add(mothMap);

@@ -159,7 +159,7 @@ public class WeChatOrderQueryServices {
             Map<String,Object> mothMap = new HashMap<String, Object>();
 
             String greaterStr = year+"-"+ (m==1?"01":m) +"-01";
-            String lessStr = year+"-"+ (m+=1) +"-01";
+            String lessStr = year+"-"+ (m+1) +"-01";
             SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
             long tsg = 0;
             long tsl = 0;

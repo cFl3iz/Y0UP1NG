@@ -166,14 +166,14 @@ public class WeChatOrderQueryServices {
             try {
                 Date dateGreater = simpleDateFormat.parse(greaterStr);
                 Date dateLess = simpleDateFormat.parse(lessStr);
-                 tsg = dateGreater.getTime();
-                 tsl = dateLess.getTime();
+                 tsg = (long) dateGreater.getTime();
+                 tsl = (long) dateLess.getTime();
             } catch(ParseException px) {
                 px.printStackTrace();
             }
 
-            EntityCondition findConditionsDateGreater = EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN,tsg);
-            EntityCondition findConditionsDateLess = EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN ,tsl);
+            EntityCondition findConditionsDateGreater = EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN,org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsg));
+            EntityCondition findConditionsDateLess = EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN ,org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsl));
             EntityCondition findConditions5= EntityCondition.makeCondition(findConditionsDateGreater, EntityOperator.AND,findConditionsDateLess);
             EntityCondition findConditions6= EntityCondition.makeCondition(findConditions5, EntityOperator.AND,findConditions4);
 

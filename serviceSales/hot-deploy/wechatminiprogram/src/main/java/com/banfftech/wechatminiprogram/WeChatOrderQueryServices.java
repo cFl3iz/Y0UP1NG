@@ -148,6 +148,9 @@ public class WeChatOrderQueryServices {
         //年度订单总量
         int orderCount = 0;
 
+        //月销售总额
+        Double moGrandTotal = 0.0;
+
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
@@ -181,7 +184,7 @@ public class WeChatOrderQueryServices {
             EntityCondition findConditions6= EntityCondition.makeCondition(findConditions5, EntityOperator.AND,findConditions4);
 
             List<GenericValue> orderList = delegator.findList("OrderHeaderAndRoles",findConditions6, null,UtilMisc.toList("-orderDate"), null, false);
-
+            moGrandTotal = 0.0;
             if(null!=orderList&&orderList.size()>0){
                 List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
                 for(GenericValue gv:orderList){
@@ -204,9 +207,11 @@ public class WeChatOrderQueryServices {
                     rowList.add(rowMap);
                     //总数增加
                     allOrderGrandTotal = allOrderGrandTotal + (grandTotal.doubleValue());
+                    moGrandTotal = moGrandTotal + (grandTotal.doubleValue());
                     orderCount+=1;
                 }
                 mothMap.put("data",rowList);
+                mothMap.put("monthGrandTotal",moGrandTotal);
             }else{
                 mothMap.put("data",null);
             }

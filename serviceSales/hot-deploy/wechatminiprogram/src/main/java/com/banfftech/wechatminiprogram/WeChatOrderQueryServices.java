@@ -143,7 +143,10 @@ public class WeChatOrderQueryServices {
         String year     = (String) context.get("year");
         List<Map<String,Object>> returnOrderList = new ArrayList<Map<String, Object>>();
 
-
+        //年度销售总额
+        Double allOrderGrandTotal = 0.0;
+        //年度订单总量
+        int orderCount = 0;
 
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
@@ -199,6 +202,9 @@ public class WeChatOrderQueryServices {
                     rowMap.put("price",grandTotal);
                     rowMap.put("orderDate",orderDateStr);
                     rowList.add(rowMap);
+                    //总数增加
+                    allOrderGrandTotal = allOrderGrandTotal + (grandTotal.doubleValue());
+                    orderCount+=1;
                 }
                 mothMap.put(m+"月",rowList);
             }else{
@@ -209,6 +215,8 @@ public class WeChatOrderQueryServices {
         }
 
         resultMap.put("orderList",returnOrderList);
+        resultMap.put("allOrderGrandTotal",allOrderGrandTotal+"");
+        resultMap.put("orderCount",orderCount+"");
         return resultMap;
     }
 

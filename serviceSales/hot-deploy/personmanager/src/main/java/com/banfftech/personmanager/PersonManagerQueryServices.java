@@ -2237,7 +2237,7 @@ public class PersonManagerQueryServices {
                 String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if(null!= trackingNumber){
-                        rowMap.put("internalCode", "快递单号:"+trackingNumber);
+                        rowMap.put("internalCode", trackingNumber);
                     }else{
                         rowMap.put("internalCode", "商家自配送");
                     }
@@ -2503,7 +2503,7 @@ public class PersonManagerQueryServices {
                     String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if(null!= trackingNumber){
-                        rowMap.put("internalCode", "快递单号:"+trackingNumber);
+                        rowMap.put("internalCode", ""+trackingNumber);
                     }else{
                         rowMap.put("internalCode", "商家自配送");
                     }
@@ -2752,7 +2752,7 @@ public class PersonManagerQueryServices {
                     String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if(null!= trackingNumber){
-                        rowMap.put("internalCode", "快递单号:"+trackingNumber);
+                        rowMap.put("internalCode", trackingNumber);
                     }else{
                         rowMap.put("internalCode", "商家自配送");
                     }

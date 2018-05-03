@@ -11,6 +11,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import org.apache.ofbiz.base.util.Debug;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import org.apache.ofbiz.product.product.ProductWorker;
@@ -38,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -112,6 +114,112 @@ public class WeChatOrderQueryServices {
 
         resultMap.put("sku",skuId);
         return resultMap;
+    }
+
+
+
+
+    /**
+     * Query OrderCpsReport
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryOrderCpsReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        //销售代表的PartyId
+        String partyId = userLogin.getString("partyId");
+        String statusId = (String) context.get("statusId");
+        String year     = (String) context.get("year");
+        List<Map<String,Object>> returnOrderList = new ArrayList<Map<String, Object>>();
+
+
+
+        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+        EntityCondition findConditions3 = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS,statusId);
+        EntityCondition findConditions4= EntityCondition.makeCondition(genericCondition, EntityOperator.AND,findConditions3);
+
+
+
+        //以月份查询
+        for(int m = 1 ; m <=12 ; m ++){
+
+            Map<String,Object> mothMap = new HashMap<String, Object>();
+
+            String greaterStr = year+"-"+ (m==1?"01":m) +"-01";
+            String lessStr = year+"-"+ (m+=1) +"-01";
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+            long tsg = 0;
+            long tsl = 0;
+            try {
+                Date dateGreater = simpleDateFormat.parse(greaterStr);
+                Date dateLess = simpleDateFormat.parse(lessStr);
+                 tsg = dateGreater.getTime();
+                 tsl = dateLess.getTime();
+            } catch(ParseException px) {
+                px.printStackTrace();
+            }
+
+            EntityCondition findConditionsDateGreater = EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN,tsg);
+            EntityCondition findConditionsDateLess = EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN ,tsl);
+            EntityCondition findConditions5= EntityCondition.makeCondition(findConditionsDateGreater, EntityOperator.AND,findConditionsDateLess);
+            EntityCondition findConditions6= EntityCondition.makeCondition(findConditions5, EntityOperator.AND,findConditions4);
+
+            List<GenericValue> orderList = delegator.findList("OrderRoleAndOrder",findConditions6, null,UtilMisc.toList("-orderDate"), null, false);
+
+            if(null!=orderList&&orderList.size()>0){
+                List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
+                for(GenericValue gv:orderList){
+                    Map<String,Object> rowMap =new HashMap<String, Object>();
+                    String orderId = gv.getString("orderId");
+                    GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+                    GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
+                    String productName = (String) orderItem.get("productName");
+                    BigDecimal grandTotal = orderHeader.get("grandTotal");
+                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String orderDateStr = "";
+                    try {
+                        orderDateStr = sdf.format(orderHeader.get("orderDate"));
+                    } catch (Exception e) {  }
+                    rowMap.put("productName",productName);
+                    rowMap.put("price",grandTotal);
+                    rowMap.put("orderDate",orderDateStr);
+                    rowList.add(rowMap);
+                }
+                mothMap.put(m+"月",rowList);
+            }else{
+                mothMap.put(m+"月",null);
+            }
+        }
+
+
+        return resultMap;
+    }
+
+    /**
+     * 返回今年的月份列表
+     * @param year
+     * @return
+     */
+    private static List<String> getMList(String year) {
+
+        List<String> mList = new ArrayList<String>();
+
+
+
+        return mList;
     }
 
 
@@ -1581,7 +1689,7 @@ public class WeChatOrderQueryServices {
                     String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if (null != trackingNumber) {
-                        rowMap.put("internalCode", "快递单号:" + trackingNumber);
+                        rowMap.put("internalCode", "" + trackingNumber);
                     } else {
                         rowMap.put("internalCode", "商家自配送");
                     }
@@ -1857,7 +1965,7 @@ public class WeChatOrderQueryServices {
                     String trackingNumber = (String) orderItemShip.get("trackingNumber");
                     //说明是快递发货
                     if (null != trackingNumber) {
-                        rowMap.put("internalCode", "快递单号:" + trackingNumber);
+                        rowMap.put("internalCode", "" + trackingNumber);
                     } else {
                         rowMap.put("internalCode", "商家自配送");
                     }

@@ -42,6 +42,19 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
+    <!-- 小程序查询订单分成表-->
+    <service name="queryOrderCpsReport" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderCpsReport" auth="false">
+        <description>queryOrderCpsReport</description>
+        <attribute name="statusId" type="String" mode="IN"  optional="true" />
+        <attribute name="year" type="String" mode="IN"  optional="true" />
+        <attribute name="orderList" type="List" mode="OUT" optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
 
     <!--QueryOrderFromWeChatList-->
     <service name="queryOrderListFromWeChat" engine="java"

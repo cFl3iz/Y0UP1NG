@@ -15,6 +15,19 @@
         <field name="addressCount" type="value"><description>浏览量</description></field>
     </extend-entity>
 
+    <view-entity entity-name="OrderRoleAndOrder" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="OR" entity-name="OrderRole"></member-entity>
+        <member-entity entity-alias="OH" entity-name="OrderHeader"></member-entity>
+
+        <alias-all entity-alias="OR" />
+        <alias name="statusId" field="statusId" entity-alias="OH"/>
+        <alias name="orderDate" field="orderDate" entity-alias="OH"/>
+        <view-link entity-alias="OR" rel-entity-alias="OH">
+            <key-map field-name="orderId" />
+        </view-link>
+    </view-entity>
+
+
     <view-entity entity-name="FacilityPartyAndFacility" package-name="org.ofbiz.product.facility">
         <member-entity entity-alias="FP" entity-name="FacilityParty"></member-entity>
         <member-entity entity-alias="F" entity-name="Facility"></member-entity>

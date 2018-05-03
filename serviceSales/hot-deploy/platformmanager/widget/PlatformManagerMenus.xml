@@ -4,5 +4,6 @@
         <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
         <menu-item name="productUpload" title="productUpload"><link target="ProductUploadImport"/></menu-item>
         <menu-item name="productImageUpload" title="productImageUpload"><link target="ProductImageUpload"/></menu-item>
+        <menu-item name="QuickShipOrder" title="QuickShipOrder"><link target="QuickShipOrder"/></menu-item>
     </menu>
 </menus>

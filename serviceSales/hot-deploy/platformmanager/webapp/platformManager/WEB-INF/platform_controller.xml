@@ -19,6 +19,16 @@
     <!-- 商品导入 Copy By ZucZug Moka -->
     <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
     <request-map uri="ProductImageUpload"><security https="true" auth="true"/><response name="success" type="view" value="ProductImageUpload"/></request-map>
+    <!-- 快速运送整个订单-->
+    <request-map uri="QuickShipOrder"><security https="true" auth="true"/><response name="success" type="view" value="QuickShipOrder"/></request-map>
+
+    <request-map uri="QuickShipOrderFormEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="quickShipOrder"/>
+        <response name="success" type="view" value="QuickShipOrder"/>
+    </request-map>
+
+
 
     <request-map uri="ProductUploadImportEvent">
         <security https="true" auth="true"/>
@@ -187,5 +197,6 @@
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
     <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>
+    <view-map name="QuickShipOrder" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickShipOrder"/>
 
 </site-conf>

@@ -34,6 +34,24 @@
         </section>
     </screen>
 
+    <!-- 快速运送整个订单,这种做法不对... -->
+    <screen name="QuickShipOrder">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
+                        <screenlet title="产品导入">
+                            <include-form name="QuickShipOrderForm" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
 
     <!-- 产品图片导入 -->
     <screen name="ProductImageUpload">

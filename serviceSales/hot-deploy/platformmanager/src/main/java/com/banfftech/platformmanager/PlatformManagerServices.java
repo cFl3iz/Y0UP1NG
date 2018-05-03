@@ -481,6 +481,46 @@ public class PlatformManagerServices {
         return "success";
     }
 
+    /**
+     * 快速装运发货
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String quickShipOrder(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        String orderId = request.getParameter("orderId");
+        String trackingNumber = request.getParameter("trackingNumber");
+
+        Map<String,Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId));
+
+        GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", orderId).queryFirst();
+
+        //TODO RETURN I18N MSG
+
+        if(!ServiceUtil.isSuccess(quickResult)){
+            request.setAttribute("_ERROR_MESSAGE_", "QUICK SHIP ORDER FAIL!");
+        }
+
+        Map<String,Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId ,"shipGroupSeqId",orderItemShipGroup.getString("shipGroupSeqId")));
+        if(!ServiceUtil.isSuccess(updateResult)){
+            request.setAttribute("_ERROR_MESSAGE_", "UPDATE ItemShipGroup FAIL!");
+        }
+
+
+        request.setAttribute("_EVENT_MESSAGE_", "QUICK SHIP SUCCESS");
+        return "success";
+    }
+
 
     // 导入exlSKU
     public static String productUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {

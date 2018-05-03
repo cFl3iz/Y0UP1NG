@@ -30,4 +30,20 @@
             <submit button-type="button"/>
         </field>
     </form>
+
+
+
+    <!-- 快速货运 -->
+    <form name="QuickShipOrderForm" type="upload" target="QuickShipOrderFormEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+
+        <field name="orderId" required-field="true"><lookup target-form-name="LookupOrderHeader" size="15"/></field>
+        <field name="trackingNumber" required-field="true">
+            <text></text>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
 </forms>

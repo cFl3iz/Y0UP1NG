@@ -204,9 +204,11 @@ public class WeChatOrderQueryServices {
             }else{
                 mothMap.put(m+"月",null);
             }
+
+            returnOrderList.add(mothMap);
         }
 
-
+        resultMap.put("orderList",returnOrderList);
         return resultMap;
     }
 

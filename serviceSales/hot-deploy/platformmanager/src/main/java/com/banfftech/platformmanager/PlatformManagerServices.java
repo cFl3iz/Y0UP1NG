@@ -498,8 +498,8 @@ public class PlatformManagerServices {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         HttpSession session = request.getSession();
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
-        String orderId = request.getParameter("orderId");
-        String trackingNumber = request.getParameter("trackingNumber");
+        String orderId = (String) request.getParameter("orderId");
+        String trackingNumber = (String) request.getParameter("trackingNumber");
 
         Map<String,Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId));
 
@@ -511,7 +511,7 @@ public class PlatformManagerServices {
             request.setAttribute("_ERROR_MESSAGE_", "QUICK SHIP ORDER FAIL!");
         }
 
-        Map<String,Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId ,"shipGroupSeqId",orderItemShipGroup.getString("shipGroupSeqId")));
+        Map<String,Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId ,"shipGroupSeqId",orderItemShipGroup.getString("shipGroupSeqId"),"trackingNumber",trackingNumber));
         if(!ServiceUtil.isSuccess(updateResult)){
             request.setAttribute("_ERROR_MESSAGE_", "UPDATE ItemShipGroup FAIL!");
         }

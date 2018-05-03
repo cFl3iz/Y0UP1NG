@@ -34,7 +34,7 @@
 
 
     <!-- 快速货运 -->
-    <form name="QuickShipOrderForm" type="upload" target="QuickShipOrderFormEvent"
+    <form name="QuickShipOrderForm" type="single" target="QuickShipOrderFormEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
 
         <field name="orderId" required-field="true"><lookup target-form-name="LookupOrderHeader" size="15"/></field>

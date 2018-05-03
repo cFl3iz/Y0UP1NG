@@ -177,7 +177,7 @@ public class WeChatOrderQueryServices {
             EntityCondition findConditions5= EntityCondition.makeCondition(findConditionsDateGreater, EntityOperator.AND,findConditionsDateLess);
             EntityCondition findConditions6= EntityCondition.makeCondition(findConditions5, EntityOperator.AND,findConditions4);
 
-            List<GenericValue> orderList = delegator.findList("OrderRoleAndOrder",findConditions6, null,UtilMisc.toList("-orderDate"), null, false);
+            List<GenericValue> orderList = delegator.findList("OrderHeaderAndRoles",findConditions6, null,UtilMisc.toList("-orderDate"), null, false);
 
             if(null!=orderList&&orderList.size()>0){
                 List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();

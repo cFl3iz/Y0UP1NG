@@ -2841,28 +2841,28 @@ public class PersonManagerServices {
         //pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId + "|" + product.get("productName") + "的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
 
 
-        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
-
-        createMessageLogMap.put("partyIdFrom", partyId);
-
-        createMessageLogMap.put("message", "微信付款成功!");
-
-        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-
-        createMessageLogMap.put("partyIdTo", partyId);
-
-        createMessageLogMap.put("badge", "CHECK");
-
-        createMessageLogMap.put("messageLogTypeId", "PAYMENT");
-
-        createMessageLogMap.put("objectId", productId);
-
-
-        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-
-        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-
-        msg.create();
+//        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+//
+//        createMessageLogMap.put("partyIdFrom", partyId);
+//
+//        createMessageLogMap.put("message", "微信付款成功!");
+//
+//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+//
+//        createMessageLogMap.put("partyIdTo", partyId);
+//
+//        createMessageLogMap.put("badge", "CHECK");
+//
+//        createMessageLogMap.put("messageLogTypeId", "PAYMENT");
+//
+//        createMessageLogMap.put("objectId", productId);
+//
+//
+//        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+//
+//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+//
+//        msg.create();
 
         return resultMap;
     }

@@ -186,7 +186,9 @@ public class WeChatOrderQueryServices {
                     String orderId = gv.getString("orderId");
                     GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
                     GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
-                    String productName = (String) orderItem.get("productName");
+                    String productId =  orderItem.getString("productId");
+                    GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+                    String productName = (String) product.get("productName");
                     BigDecimal grandTotal = (BigDecimal)orderHeader.get("grandTotal");
                     DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String orderDateStr = "";

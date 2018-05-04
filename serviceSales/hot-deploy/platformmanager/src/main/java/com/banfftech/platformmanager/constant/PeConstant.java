@@ -186,6 +186,12 @@ public class PeConstant {
 
 
     /**
+     * 不分梨-白酒
+     */
+    public static final String BUFENLI_MINI_PROGRAM_APP_ID = "wx119831dae45a3f3f";
+
+
+    /**
      * 小程序获取AccessToken地址
      */
     public static final String WECHAT_MINI_PROGRAM_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";

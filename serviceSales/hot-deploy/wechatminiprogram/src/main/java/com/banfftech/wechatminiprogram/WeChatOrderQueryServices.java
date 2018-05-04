@@ -468,6 +468,11 @@ public class WeChatOrderQueryServices {
             if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId)) {
                 productStoreId = "ZUCZUGSTORE";
             }
+
+            //不分梨白酒
+            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId)) {
+                productStoreId = "KANGCHENGSTORE";
+            }
         }
         EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 

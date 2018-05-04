@@ -476,7 +476,7 @@ public class WeChatOrderQueryServices {
         EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 
         // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
-        List<GenericValue> storeList = delegator.findList("ProductStoreRoleAndStoreDetail",
+        List<GenericValue> storeList = delegator.findList("ProductStoreCatalog",
                 findConditionsStore, null,
                 UtilMisc.toList("-fromDate"), null, false);
         Debug.logInfo("-> storeList: " + storeList, module);

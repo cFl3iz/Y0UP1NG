@@ -486,20 +486,18 @@ public class WeChatOrderQueryServices {
                 UtilMisc.toList("-fromDate"), null, false);
         Debug.logInfo("-> storeList: " + storeList, module);
 
-            GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
 
-            if (null == role) {
-                resultMap.put("isSalesRep", "false");
-            } else {
-                resultMap.put("isSalesRep", "true");
-            }
+        if (null == role) {
+            resultMap.put("isSalesRep", "false");
+        } else {
+            resultMap.put("isSalesRep", "true");
+        }
 
 
         resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
         resultMap.put("productStoreId", productStoreId);
-
-
 
 
         return resultMap;
@@ -710,18 +708,22 @@ public class WeChatOrderQueryServices {
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
                 GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
-                String rowVirId = (String) vir_product.get("productId");
-                //别展示相同产品了
-                if (rowVirId.equals(beforeVir)) {
+                if (vir_product != null) {
+                    String rowVirId = (String) vir_product.get("productId");
+                    //别展示相同产品了
+                    if (rowVirId.equals(beforeVir)) {
 
-                } else {
-                    count++;
+                    } else {
+                        count++;
+                        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                        rowMap.put("price", productPrice.get("price"));
+                        returnProductList.add(rowMap);
+                        beforeVir = rowVirId;
+                    }
+                }else{
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
-                    returnProductList.add(rowMap);
-                    beforeVir = rowVirId;
                 }
-
             }
         }
 

@@ -531,109 +531,116 @@ public class WeChatOrderQueryServices {
         allField.put("price", productPrice.get("price"));
 
         GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryFirst();
-        String rowVirId = (String) vir_product.get("productId");
-
-        List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
-
-        Set<String> fieldSet = new HashSet<String>();
-
-        fieldSet.add("drObjectInfo");
-
-        fieldSet.add("productId");
-
-
-        List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
-
-
-        Map<String, Map<String, Object>> featureMap = new HashMap<String, Map<String, Object>>();
-
-        for (GenericValue rowSku : skus) {
-            String rowSkuId = rowSku.getString("productIdTo");
-            EntityCondition findConditions3 = EntityCondition
-                    .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
-            List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
-                    findConditions3, fieldSet,
-                    null, null, false);
-            int index = 0;
-
-            Map<String, Object> rowFeature = new HashMap<String, Object>();
-            for (GenericValue pict : rowPictures) {
-                if (index == 0) {
-                    rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
-                }
-                Map<String, Object> rowMap = new HashMap<String, Object>();
-                String drObjectInfo = (String) pict.get("drObjectInfo");
-                rowMap.put("drObjectInfo", drObjectInfo);
-                pictures.add(rowMap);
-                index++;
-            }
-            GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-            if (rowFeature == null) {
-                featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
-            } else {
-                featureMap.put(rowColor.get("description") + "", rowFeature);
-            }
-
-
-        }
-
-
         String[] imgAttr = new String[]{
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-1.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
+        if (vir_product != null) {
 
-        if (pictures != null && pictures.size() > 0) {
-            imgAttr = new String[pictures.size()];
-            int index = 0;
-            for (Map<String, Object> productContent : pictures) {
-                String drObjectInfo = (String) productContent.get("drObjectInfo");
-                imgAttr[index] = drObjectInfo;
-                index++;
+
+            String rowVirId = (String) vir_product.get("productId");
+
+
+            List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
+
+            Set<String> fieldSet = new HashSet<String>();
+
+            fieldSet.add("drObjectInfo");
+
+            fieldSet.add("productId");
+
+
+            List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
+
+
+            Map<String, Map<String, Object>> featureMap = new HashMap<String, Map<String, Object>>();
+
+            for (GenericValue rowSku : skus) {
+                String rowSkuId = rowSku.getString("productIdTo");
+                EntityCondition findConditions3 = EntityCondition
+                        .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
+                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
+                        findConditions3, fieldSet,
+                        null, null, false);
+                int index = 0;
+
+                Map<String, Object> rowFeature = new HashMap<String, Object>();
+                for (GenericValue pict : rowPictures) {
+                    if (index == 0) {
+                        rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
+                    }
+                    Map<String, Object> rowMap = new HashMap<String, Object>();
+                    String drObjectInfo = (String) pict.get("drObjectInfo");
+                    rowMap.put("drObjectInfo", drObjectInfo);
+                    pictures.add(rowMap);
+                    index++;
+                }
+                GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+                if (rowFeature == null) {
+                    featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+                } else {
+                    featureMap.put(rowColor.get("description") + "", rowFeature);
+                }
+
+
             }
+
+
+            if (pictures != null && pictures.size() > 0) {
+                imgAttr = new String[pictures.size()];
+                int index = 0;
+                for (Map<String, Object> productContent : pictures) {
+                    String drObjectInfo = (String) productContent.get("drObjectInfo");
+                    imgAttr[index] = drObjectInfo;
+                    index++;
+                }
+            }
+
+            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
+            List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
+            for (GenericValue gv : gvs) {
+
+                Map<String, Object> innerMap = new HashMap<String, Object>();
+
+                String innerAttr = gv.getString("productFeatureTypeId");
+                String innerDesc = gv.getString("description");
+                switch (innerAttr) {
+                    case "COLOR": {
+                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
+                        if (isSelect != null) {
+                            innerMap.put("COLOR_DESC", innerDesc);
+                        } else {
+                            innerMap.put("COLOR_DESC", innerDesc);
+                        }
+                        break;
+                    }
+                    case "SIZE": {
+                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
+                        if (isSelect != null) {
+                            innerMap.put("SIZE_DESC", innerDesc);
+                        } else {
+                            innerMap.put("SIZE_DESC", innerDesc);
+                        }
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                productFeatureList.add(innerMap);
+            }
+            allField.put("imgArray", imgAttr);
+            allField.put("features", productFeatureList);
+            allField.put("featureMap", featureMap);
+        }else{
+            //白酒写死
+            if(productId.equals("KC2018050401")){
+                imgAttr = new String[]{
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/DETAIL_PICTURE%403x.png"};
+            }
+            allField.put("imgArray", imgAttr);
         }
 
-        List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
-        List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
-        for (GenericValue gv : gvs) {
-
-            Map<String, Object> innerMap = new HashMap<String, Object>();
-
-            String innerAttr = gv.getString("productFeatureTypeId");
-            String innerDesc = gv.getString("description");
-            switch (innerAttr) {
-                case "COLOR": {
-                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
-                    if (isSelect != null) {
-                        innerMap.put("COLOR_DESC", innerDesc);
-                    } else {
-                        innerMap.put("COLOR_DESC", innerDesc);
-                    }
-                    break;
-                }
-                case "SIZE": {
-                    GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
-                    if (isSelect != null) {
-                        innerMap.put("SIZE_DESC", innerDesc);
-                    } else {
-                        innerMap.put("SIZE_DESC", innerDesc);
-                    }
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-            productFeatureList.add(innerMap);
-        }
-
-
-//        List<GenericValue> skuGvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
-
-        //   allField.put("strProductFeaturesList", strProductFeaturesList);
-        allField.put("imgArray", imgAttr);
-        allField.put("features", productFeatureList);
-        allField.put("featureMap", featureMap);
         resultMap.put("productDetail", allField);
         return resultMap;
     }
@@ -720,7 +727,7 @@ public class WeChatOrderQueryServices {
                         returnProductList.add(rowMap);
                         beforeVir = rowVirId;
                     }
-                }else{
+                } else {
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
                     returnProductList.add(rowMap);

@@ -336,118 +336,117 @@ public class PlatformManagerServices {
     public static String productImageUploadFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
 
-            Delegator delegator = (Delegator) request.getAttribute("delegator");
-            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-            HttpSession session = request.getSession();
-            GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
-            GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
 
-            try {
-
-
-                //上传图片到Oss
-                ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
-                List<FileItem> items = dfu.parseRequest(request);
-                int itemSize = 0;
-                //下标
-                int index = 0;
-
-                //上个文件的skuID
-                String beforeSkuId = "NA";
-
-                //上个sku是否真实存在
-                boolean beforeSkuIsExsites = false;
-
-                if (null != items) {
-
-                    itemSize = items.size();
-
-                    //循环上传请求中的所有文件
-                    boolean beganTransaction =  TransactionUtil.begin();
-                    TransactionUtil.setTransactionTimeout(990000);
-                    for (FileItem item : items) {
-
-                        InputStream in = item.getInputStream();
-                        String fileName = item.getName();
+        try {
 
 
+            //上传图片到Oss
+            ServletFileUpload dfu = new ServletFileUpload(new DiskFileItemFactory(10240, null));
+            List<FileItem> items = dfu.parseRequest(request);
+            int itemSize = 0;
+            //下标
+            int index = 0;
 
-                        //确保有文件的情况下
+            //上个文件的skuID
+            String beforeSkuId = "NA";
 
-                        if (fileName != null && !fileName.trim().equals("")) {
+            //上个sku是否真实存在
+            boolean beforeSkuIsExsites = false;
 
-                            Debug.logInfo("*fileName:" + fileName, module);
+            if (null != items) {
 
-                            String sku = fileName.substring(fileName.lastIndexOf("/")+1,fileName.lastIndexOf("_"));
+                itemSize = items.size();
 
-                            //sku_id
-               //             sku = sku.substring(0,sku.indexOf("-"));
+                //循环上传请求中的所有文件
+                boolean beganTransaction = TransactionUtil.begin();
+                TransactionUtil.setTransactionTimeout(990000);
+                for (FileItem item : items) {
 
-                            Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
-                            //这种情况说明当前产品和上一个产品是同一个Sku
-                            if (beforeSkuId.equals(sku)) {
-                                //上个产品就没查到的情况下，就忽略了
-                                if (!beforeSkuIsExsites) {
-                                    Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
-                                    beforeSkuIsExsites = false;
-                                    continue;
-                                }
+                    InputStream in = item.getInputStream();
+                    String fileName = item.getName();
 
-                                //既然上个产品已经查到,那肯定上传过首图了,增加附图即可
 
-                                long tm = System.currentTimeMillis();
-                                String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                        "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
-                                if (pictureKey != null && !pictureKey.equals("")) {
-                                    //创建产品内容和数据资源附图
-                                    //   createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
-                                    String contentTypeId = "ADDITIONAL_OTHER";
-                                    //Create Content
-                                    GenericValue newContent =  delegator.makeValue("Content");
-                                    String contentId =delegator.getNextSeqId("Content");
-                                    newContent.set("contentId",contentId);
-                                    newContent.create();
-                                    //Create ProductContent
-                                    GenericValue newProductContent =  delegator.makeValue("ProductContent");
-                                    newProductContent.set("contentId",contentId);
-                                    newProductContent.set("productContentTypeId", contentTypeId);
-                                    newProductContent.set( "productId", sku);
-                                    newProductContent.set( "fromDate", UtilDateTime.nowTimestamp());
-                                    newProductContent.create();
+                    //确保有文件的情况下
 
-                                    // Create DataResource
-                                    GenericValue newDataResource =  delegator.makeValue("DataResource");
-                                    String dataResourceId = delegator.getNextSeqId("DataResource");
-                                    newDataResource.set("dataResourceId",dataResourceId);
-                                    newDataResource.set("objectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    newDataResource.set("dataResourceName", "PRODUCT_IMAGE");
-                                    newDataResource.set("dataResourceTypeId", "SHORT_TEXT");
-                                    newDataResource.set("mimeTypeId", "text/html");
-                                    newDataResource.create();
+                    if (fileName != null && !fileName.trim().equals("")) {
 
-                                    GenericValue content = delegator.findOne("Content",UtilMisc.toMap("contentId",contentId),false);
-                                    content.set("dataResourceId",dataResourceId);
-                                    content.store();
-                                    Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
-                                }
+                        Debug.logInfo("*fileName:" + fileName, module);
+
+                        String sku = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("_"));
+
+                        //sku_id
+                        //             sku = sku.substring(0,sku.indexOf("-"));
+
+                        Debug.logInfo("*upload_sky_product。Find sku:" + sku + "|sku file name = " + fileName, module);
+                        //这种情况说明当前产品和上一个产品是同一个Sku
+                        if (beforeSkuId.equals(sku)) {
+                            //上个产品就没查到的情况下，就忽略了
+                            if (!beforeSkuIsExsites) {
+                                Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
+                                beforeSkuIsExsites = false;
+                                continue;
                             }
 
+                            //既然上个产品已经查到,那肯定上传过首图了,增加附图即可
 
-                            //这种情况说明当前产品和上一个产品'不是'同一个Sku
-                            if (!beforeSkuId.equals(sku)) {
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                            if (pictureKey != null && !pictureKey.equals("")) {
+                                //创建产品内容和数据资源附图
+                                //   createProductContentAndDataResource(delegator, dispatcher, admin, sku, "", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")), index);
+                                String contentTypeId = "ADDITIONAL_OTHER";
+                                //Create Content
+                                GenericValue newContent = delegator.makeValue("Content");
+                                String contentId = delegator.getNextSeqId("Content");
+                                newContent.set("contentId", contentId);
+                                newContent.create();
+                                //Create ProductContent
+                                GenericValue newProductContent = delegator.makeValue("ProductContent");
+                                newProductContent.set("contentId", contentId);
+                                newProductContent.set("productContentTypeId", contentTypeId);
+                                newProductContent.set("productId", sku);
+                                newProductContent.set("fromDate", UtilDateTime.nowTimestamp());
+                                newProductContent.create();
 
-                                //去查到底有没有
-                                GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
-                                if (null == skuIsExsits) {
-                                    Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
-                                    beforeSkuIsExsites = false;
-                                    continue;
-                                }
-                                //既然和上一张不是同一个产品,且查到了的情况下。默认增加首图
-                                long tm = System.currentTimeMillis();
-                                String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
-                                        "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
-                                if (pictureKey != null && !pictureKey.equals("")) {
+                                // Create DataResource
+                                GenericValue newDataResource = delegator.makeValue("DataResource");
+                                String dataResourceId = delegator.getNextSeqId("DataResource");
+                                newDataResource.set("dataResourceId", dataResourceId);
+                                newDataResource.set("objectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/" + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                newDataResource.set("dataResourceName", "PRODUCT_IMAGE");
+                                newDataResource.set("dataResourceTypeId", "SHORT_TEXT");
+                                newDataResource.set("mimeTypeId", "text/html");
+                                newDataResource.create();
+
+                                GenericValue content = delegator.findOne("Content", UtilMisc.toMap("contentId", contentId), false);
+                                content.set("dataResourceId", dataResourceId);
+                                content.store();
+                                Debug.logInfo("*createProductContentAndDataResource Success!  sku:" + sku, module);
+                            }
+                        }
+
+
+                        //这种情况说明当前产品和上一个产品'不是'同一个Sku
+                        if (!beforeSkuId.equals(sku)) {
+
+                            //去查到底有没有
+                            GenericValue skuIsExsits = EntityQuery.use(delegator).from("Product").where(UtilMisc.toMap("productId", sku)).queryFirst();
+                            if (null == skuIsExsits) {
+                                Debug.logInfo("UPLOAD_IMG:" + sku + " DATA NOT FOUND!", module);
+                                beforeSkuIsExsites = false;
+                                continue;
+                            }
+                            //既然和上一张不是同一个产品,且查到了的情况下。默认增加首图
+                            long tm = System.currentTimeMillis();
+                            String pictureKey = OSSUnit.uploadObject2OSS(in, item.getName(), OSSUnit.getOSSClient(), null,
+                                    "personerp", PeConstant.ZUCZUG_OSS_PATH, tm);
+                            if (pictureKey != null && !pictureKey.equals("")) {
 //                                    Map<String, Object> updateProductInMap = new HashMap<String, Object>();
 //                                    updateProductInMap.put("userLogin", admin);
 //                                    updateProductInMap.put("productId", sku);
@@ -455,34 +454,35 @@ public class PlatformManagerServices {
 //                                    updateProductInMap.put("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
 
 //                                     dispatcher.runSync("updateProduct", updateProductInMap);
-                                    skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
-                                    skuIsExsits.store();
-                                    Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
-                                }
-
+                                skuIsExsits.set("smallImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                skuIsExsits.set("detailImageUrl", PeConstant.OSS_PATH + PeConstant.ZUCZUG_OSS_PATH + tm + fileName.substring(fileName.indexOf(".")));
+                                skuIsExsits.store();
+                                Debug.logInfo("*update sku detail Image Url Success!  sku:" + sku, module);
                             }
 
-                            //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
-                            beforeSkuIsExsites = true;
-                            beforeSkuId = sku;
-
                         }
-                        index++;
 
+                        //既然走到这,就说明上一个上传的图片在数据库中是真实有图片
+                        beforeSkuIsExsites = true;
+                        beforeSkuId = sku;
 
                     }
-                    TransactionUtil.commit(beganTransaction);
+                    index++;
+
+
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                TransactionUtil.commit(beganTransaction);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return "success";
     }
 
     /**
      * 快速装运发货
+     *
      * @param request
      * @param response
      * @return
@@ -501,18 +501,18 @@ public class PlatformManagerServices {
         String orderId = (String) request.getParameter("orderId");
         String trackingNumber = (String) request.getParameter("trackingNumber");
 
-        Map<String,Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId));
+        Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId));
 
         GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", orderId).queryFirst();
 
         //TODO RETURN I18N MSG
 
-        if(!ServiceUtil.isSuccess(quickResult)){
+        if (!ServiceUtil.isSuccess(quickResult)) {
             request.setAttribute("_ERROR_MESSAGE_", "QUICK SHIP ORDER FAIL!");
         }
 
-        Map<String,Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId ,"shipGroupSeqId",orderItemShipGroup.getString("shipGroupSeqId"),"trackingNumber",trackingNumber));
-        if(!ServiceUtil.isSuccess(updateResult)){
+        Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", userLogin, "orderId", orderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingNumber));
+        if (!ServiceUtil.isSuccess(updateResult)) {
             request.setAttribute("_ERROR_MESSAGE_", "UPDATE ItemShipGroup FAIL!");
         }
 
@@ -568,28 +568,362 @@ public class PlatformManagerServices {
                 String otherDesc = excelRow[12];
                 String keyword = excelRow[14];
 
+                // 没有虚拟产品编号的。 那就是纯SKU的导入
+                if (UtilValidate.isEmpty(productVirtualId)) {
+                    GenericValue productIsExsits = delegator.findOne("Product",UtilMisc.toMap("productId", productId),false);
+                    if(null == productIsExsits){
 
-                //导入的表存在虚拟产品Id
-                if (UtilValidate.isNotEmpty(productVirtualId)) {
-                    GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
-                    if (UtilValidate.isEmpty(productVirtual)) {
-                        GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
-                        newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
-                        newVirtualProduct.set("description", desc);
-                        newVirtualProduct.set("comments", keyword);
-                        //默认图片
-                        newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
-                        if (UtilValidate.isNotEmpty(internalName)) {
-                            newVirtualProduct.set("internalName", internalName);
-                            newVirtualProduct.set("productName", internalName);
-                        }
-                        newVirtualProduct.set("isVirtual", "Y");
-                        newVirtualProduct.set("isVariant", "N");
-                        newVirtualProduct.create();
+
+                    GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                    newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                    newVariantProduct.set("description", otherDesc);
+                    newVariantProduct.set("comments", keyword);
+                    //默认图片
+                    newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                    if (UtilValidate.isNotEmpty(internalName)) {
+                        newVariantProduct.set("internalName", internalName);
+                        newVariantProduct.set("productName", internalName);
                     }
-                    //创建变形产品
-                    GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-                    if (UtilValidate.isEmpty(productVariant)) {
+                    newVariantProduct.set("isVirtual", "N");
+                    newVariantProduct.set("isVariant", "Y");
+                    newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
+                    newVariantProduct.create();
+                        //创建缺省价格
+                        if (UtilValidate.isNotEmpty(listPrice)) {
+                            GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                            newProductVariantPrice.create();
+                        }
+                        //创建条形码
+                        if (UtilValidate.isNotEmpty(ean)) {
+                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+                            if (UtilValidate.isEmpty(goodIdentification)) {
+                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+                                newGoodIdentification.set("idValue", ean);
+                                newGoodIdentification.create();
+                            }
+                        }
+
+//找到仓库
+                        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                        //为产品创建库存量
+                        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                                "facilityId", (String) facility.get("facilityId"),
+                                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                                "productId", productId,
+                                "description ", "卖家发布产品时的录入库存",
+                                "quantityAccepted", new BigDecimal("900"),
+                                "quantityRejected", BigDecimal.ZERO,
+                                "unitCost", new BigDecimal(listPrice),
+                                "ownerPartyId", payToPartyId,
+                                "partyId", payToPartyId,
+                                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                        );
+                        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                            Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                            //return receiveInventoryProductOut;
+                            return "error";
+                        }
+
+                        //SKU关联分类
+                        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                        addProductToCategoryInMap.put("userLogin", admin);
+                        addProductToCategoryInMap.put("productId", productId);
+                        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                        Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                            Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                            // return addProductToCategoryServiceResultMap;
+                            return "error";
+                        }
+
+
+                    }
+
+                } else {
+
+
+                    //导入的表存在虚拟产品Id
+                    if (UtilValidate.isNotEmpty(productVirtualId)) {
+                        GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
+                        if (UtilValidate.isEmpty(productVirtual)) {
+                            GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
+                            newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
+                            newVirtualProduct.set("description", desc);
+                            newVirtualProduct.set("comments", keyword);
+                            //默认图片
+                            newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                            if (UtilValidate.isNotEmpty(internalName)) {
+                                newVirtualProduct.set("internalName", internalName);
+                                newVirtualProduct.set("productName", internalName);
+                            }
+                            newVirtualProduct.set("isVirtual", "Y");
+                            newVirtualProduct.set("isVariant", "N");
+                            newVirtualProduct.create();
+                        }
+                        //创建变形产品
+                        GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                        if (UtilValidate.isEmpty(productVariant)) {
+                            GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                            newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                            newVariantProduct.set("description", otherDesc);
+                            newVariantProduct.set("comments", keyword);
+                            //默认图片
+                            newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                            if (UtilValidate.isNotEmpty(internalName)) {
+                                newVariantProduct.set("internalName", internalName);
+                                newVariantProduct.set("productName", internalName);
+                            }
+                            newVariantProduct.set("isVirtual", "N");
+                            newVariantProduct.set("isVariant", "Y");
+                            newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
+                            newVariantProduct.create();
+
+                        }
+                        //创建产品关联
+                        GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
+                        if (UtilValidate.isEmpty(productAssoc)) {
+                            GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
+                            newAssoc.create();
+                        }
+
+                        //创建缺省价格
+                        if (UtilValidate.isNotEmpty(listPrice)) {
+                            GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                            newProductVariantPrice.create();
+                        }
+
+
+                        //创建条形码
+                        if (UtilValidate.isNotEmpty(ean)) {
+                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+                            if (UtilValidate.isEmpty(goodIdentification)) {
+                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+                                newGoodIdentification.set("idValue", ean);
+                                newGoodIdentification.create();
+                            }
+                        }
+
+
+                        //dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"productId",productId,"keywordTypeId","KWT_KEYWORD","keyword",keyword));
+
+
+                        //找到仓库
+                        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                        //为产品创建库存量
+                        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                                "facilityId", (String) facility.get("facilityId"),
+                                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                                "productId", productId,
+                                "description ", "卖家发布产品时的录入库存",
+                                "quantityAccepted", new BigDecimal("15"),
+                                "quantityRejected", BigDecimal.ZERO,
+                                "unitCost", new BigDecimal(listPrice),
+                                "ownerPartyId", payToPartyId,
+                                "partyId", payToPartyId,
+                                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                        );
+                        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                            Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                            //return receiveInventoryProductOut;
+                            return "error";
+                        }
+
+                        //SKU关联分类
+                        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                        addProductToCategoryInMap.put("userLogin", admin);
+                        addProductToCategoryInMap.put("productId", productId);
+                        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                        Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                            Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                            // return addProductToCategoryServiceResultMap;
+                            return "error";
+                        }
+
+//                    //虚拟产品关联分类
+
+                        GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
+
+                        if (UtilValidate.isEmpty(productCategoryMember)) {
+                            GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductCategoryMember.create();
+                        }
+
+
+//TODO 开始搞特征 -------------------------------------------------------------------------------------------------------------------------
+
+
+                        //创建颜色特征
+                        if (UtilValidate.isNotEmpty(colorId)) {
+
+
+                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                            String featureId = "";
+                            //没找到这个特征
+                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                                //创建该特征
+                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                                featureId = (String) createProductFetureMap.get("productFeatureId");
+//                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+//                            newProductFeture.create();
+                            } else {
+                                featureId = (String) productColorFeature.get("productFeatureId");
+                            }
+
+
+                            //创建 虚拟 颜色特征
+                            GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+
+                            if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
+                                GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                                newVirtualProductColorFeatureAppl.create();
+                            }
+                            //创建 变形 颜色特征
+                            GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                            if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+                                GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                                newVariantProductColorFeatureAppl.create();
+                            }
+                            //颜色特征模块结束
+                        }
+
+
+                        //创建尺码特征
+                        if (UtilValidate.isNotEmpty(sizeId)) {
+
+                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                            String featureId = "";
+                            //没找到这个特征
+                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                                //创建该特征
+                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
+                                featureId = (String) createProductFetureMap.get("productFeatureId");
+//                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
+//                            newProductFeture.create();
+                            } else {
+                                featureId = (String) productColorFeature.get("productFeatureId");
+                            }
+
+
+                            //创建 虚拟 尺码特征
+                            GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+                            if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
+                                GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                                newVirtualProductSizeFeatureAppl.create();
+                            }
+                            //创建 变形 尺码特征
+                            GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+
+                            if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
+                                GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                                newVariantProductSizeFeatureAppl.create();
+                            }
+
+
+                            //尺码特征结束
+                        }
+
+
+                        //判断是否存在导入的虚拟产品ID结构结束
+
+                    }
+                }
+
+
+                TransactionUtil.commit();
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static String kangChengProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+        try {
+
+            String prodCatalogId = "KANGCHENG_RETAIL";
+            GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
+            String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+            GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();
+            String productStoreId = (String) productStoreCatalog.get("productStoreId");
+            GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                //品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU-特别提醒-洗涤方式-上市年份+季节-组别-备注
+
+                String[] excelRow = excelList.get(i);
+
+                String payToPartyId = (String) productStore.get("payToPartyId");
+                String brandName = excelRow[1];
+                String productVirtualId = excelRow[2];
+                String internalName = excelRow[1];
+                String colorId = excelRow[3];
+                String colorDesc = excelRow[4];
+
+                String sizeId = excelRow[5];
+                String sizeDesc = excelRow[7];
+                String listPrice = excelRow[6];
+                String productId = excelRow[8];
+                String ean = excelRow[10];
+
+                String desc = excelRow[9];
+                String otherDesc = excelRow[12];
+                String keyword = excelRow[14];
+
+                // 没有虚拟产品编号的。 那就是纯SKU的导入
+                if (UtilValidate.isEmpty(productVirtualId)) {
+                    GenericValue productIsExsits = delegator.findOne("Product",UtilMisc.toMap("productId", productId),false);
+                    if(null == productIsExsits){
+
+
                         GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                         newVariantProduct.set("productTypeId", "FINISHED_GOOD");
                         newVariantProduct.set("description", otherDesc);
@@ -604,165 +938,262 @@ public class PlatformManagerServices {
                         newVariantProduct.set("isVariant", "Y");
                         newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
                         newVariantProduct.create();
-
-                    }
-                    //创建产品关联
-                    GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
-                    if (UtilValidate.isEmpty(productAssoc)) {
-                        GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
-                        newAssoc.create();
-                    }
-
-                    //创建缺省价格
-                    if (UtilValidate.isNotEmpty(listPrice)) {
-                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
-                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
-                        newProductVariantPrice.create();
-                    }
-
-
-                    //创建条形码
-                    if (UtilValidate.isNotEmpty(ean)) {
-                        GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
-                        if (UtilValidate.isEmpty(goodIdentification)) {
-                            GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
-                            newGoodIdentification.set("idValue", ean);
-                            newGoodIdentification.create();
+                        //创建缺省价格
+                        if (UtilValidate.isNotEmpty(listPrice)) {
+                            GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                            newProductVariantPrice.create();
                         }
+                        //创建条形码
+                        if (UtilValidate.isNotEmpty(ean)) {
+                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+                            if (UtilValidate.isEmpty(goodIdentification)) {
+                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+                                newGoodIdentification.set("idValue", ean);
+                                newGoodIdentification.create();
+                            }
+                        }
+
+//找到仓库
+                        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                        //为产品创建库存量
+                        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                                "facilityId", (String) facility.get("facilityId"),
+                                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                                "productId", productId,
+                                "description ", "卖家发布产品时的录入库存",
+                                "quantityAccepted", new BigDecimal("900"),
+                                "quantityRejected", BigDecimal.ZERO,
+                                "unitCost", new BigDecimal(listPrice),
+                                "ownerPartyId", payToPartyId,
+                                "partyId", payToPartyId,
+                                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                        );
+                        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                            Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                            //return receiveInventoryProductOut;
+                            return "error";
+                        }
+
+                        //SKU关联分类
+                        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                        addProductToCategoryInMap.put("userLogin", admin);
+                        addProductToCategoryInMap.put("productId", productId);
+                        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                        Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                            Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                            // return addProductToCategoryServiceResultMap;
+                            return "error";
+                        }
+
+
                     }
 
+                } else {
 
-                    //dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"productId",productId,"keywordTypeId","KWT_KEYWORD","keyword",keyword));
+
+                    //导入的表存在虚拟产品Id
+                    if (UtilValidate.isNotEmpty(productVirtualId)) {
+                        GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
+                        if (UtilValidate.isEmpty(productVirtual)) {
+                            GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
+                            newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
+                            newVirtualProduct.set("description", desc);
+                            newVirtualProduct.set("comments", keyword);
+                            //默认图片
+                            newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                            if (UtilValidate.isNotEmpty(internalName)) {
+                                newVirtualProduct.set("internalName", internalName);
+                                newVirtualProduct.set("productName", internalName);
+                            }
+                            newVirtualProduct.set("isVirtual", "Y");
+                            newVirtualProduct.set("isVariant", "N");
+                            newVirtualProduct.create();
+                        }
+                        //创建变形产品
+                        GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                        if (UtilValidate.isEmpty(productVariant)) {
+                            GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                            newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                            newVariantProduct.set("description", otherDesc);
+                            newVariantProduct.set("comments", keyword);
+                            //默认图片
+                            newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                            if (UtilValidate.isNotEmpty(internalName)) {
+                                newVariantProduct.set("internalName", internalName);
+                                newVariantProduct.set("productName", internalName);
+                            }
+                            newVariantProduct.set("isVirtual", "N");
+                            newVariantProduct.set("isVariant", "Y");
+                            newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
+                            newVariantProduct.create();
+
+                        }
+                        //创建产品关联
+                        GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
+                        if (UtilValidate.isEmpty(productAssoc)) {
+                            GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
+                            newAssoc.create();
+                        }
+
+                        //创建缺省价格
+                        if (UtilValidate.isNotEmpty(listPrice)) {
+                            GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                            newProductVariantPrice.create();
+                        }
 
 
-                    //找到仓库
-                    GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+                        //创建条形码
+                        if (UtilValidate.isNotEmpty(ean)) {
+                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+                            if (UtilValidate.isEmpty(goodIdentification)) {
+                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+                                newGoodIdentification.set("idValue", ean);
+                                newGoodIdentification.create();
+                            }
+                        }
 
-                    //为产品创建库存量
-                    Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
-                            "facilityId", (String) facility.get("facilityId"),
-                            "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
-                            "productId", productId,
-                            "description ", "卖家发布产品时的录入库存",
-                            "quantityAccepted", new BigDecimal("15"),
-                            "quantityRejected", BigDecimal.ZERO,
-                            "unitCost", new BigDecimal(listPrice),
-                            "ownerPartyId", payToPartyId,
-                            "partyId", payToPartyId,
-                            "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
-                            "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
 
-                    Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
-                    );
-                    if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
-                        Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
-                        //return receiveInventoryProductOut;
-                        return "error";
-                    }
+                        //dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"productId",productId,"keywordTypeId","KWT_KEYWORD","keyword",keyword));
 
-                    //SKU关联分类
-                    Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
-                    addProductToCategoryInMap.put("userLogin", admin);
-                    addProductToCategoryInMap.put("productId", productId);
-                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
-                    Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
-                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
-                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
-                        // return addProductToCategoryServiceResultMap;
-                        return "error";
-                    }
+
+                        //找到仓库
+                        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                        //为产品创建库存量
+                        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                                "facilityId", (String) facility.get("facilityId"),
+                                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                                "productId", productId,
+                                "description ", "卖家发布产品时的录入库存",
+                                "quantityAccepted", new BigDecimal("15"),
+                                "quantityRejected", BigDecimal.ZERO,
+                                "unitCost", new BigDecimal(listPrice),
+                                "ownerPartyId", payToPartyId,
+                                "partyId", payToPartyId,
+                                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                        );
+                        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                            Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                            //return receiveInventoryProductOut;
+                            return "error";
+                        }
+
+                        //SKU关联分类
+                        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                        addProductToCategoryInMap.put("userLogin", admin);
+                        addProductToCategoryInMap.put("productId", productId);
+                        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                        Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                            Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                            // return addProductToCategoryServiceResultMap;
+                            return "error";
+                        }
 
 //                    //虚拟产品关联分类
 
-                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
+                        GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
 
-                    if (UtilValidate.isEmpty(productCategoryMember)) {
-                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
-                        newProductCategoryMember.create();
-                    }
+                        if (UtilValidate.isEmpty(productCategoryMember)) {
+                            GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newProductCategoryMember.create();
+                        }
 
 
 //TODO 开始搞特征 -------------------------------------------------------------------------------------------------------------------------
 
 
-                    //创建颜色特征
-                    if (UtilValidate.isNotEmpty(colorId)) {
+                        //创建颜色特征
+                        if (UtilValidate.isNotEmpty(colorId)) {
 
 
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
-                        String featureId = "";
-                        //没找到这个特征
-                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
-                            //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
-                            featureId = (String) createProductFetureMap.get("productFeatureId");
+                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                            String featureId = "";
+                            //没找到这个特征
+                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                                //创建该特征
+                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                                featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
-                        } else {
-                            featureId = (String) productColorFeature.get("productFeatureId");
+                            } else {
+                                featureId = (String) productColorFeature.get("productFeatureId");
+                            }
+
+
+                            //创建 虚拟 颜色特征
+                            GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+
+                            if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
+                                GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                                newVirtualProductColorFeatureAppl.create();
+                            }
+                            //创建 变形 颜色特征
+                            GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                            if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+                                GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                                newVariantProductColorFeatureAppl.create();
+                            }
+                            //颜色特征模块结束
                         }
 
 
-                        //创建 虚拟 颜色特征
-                        GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+                        //创建尺码特征
+                        if (UtilValidate.isNotEmpty(sizeId)) {
 
-                        if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
-                            GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                            newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
-                            newVirtualProductColorFeatureAppl.create();
-                        }
-                        //创建 变形 颜色特征
-                        GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
-                        if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
-                            GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                            newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
-                            newVariantProductColorFeatureAppl.create();
-                        }
-                        //颜色特征模块结束
-                    }
-
-
-                    //创建尺码特征
-                    if (UtilValidate.isNotEmpty(sizeId)) {
-
-                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
-                        String featureId = "";
-                        //没找到这个特征
-                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
-                            //创建该特征
-                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
-                            featureId = (String) createProductFetureMap.get("productFeatureId");
+                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                            String featureId = "";
+                            //没找到这个特征
+                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                                //创建该特征
+                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
+                                featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
 //                            newProductFeture.create();
-                        } else {
-                            featureId = (String) productColorFeature.get("productFeatureId");
+                            } else {
+                                featureId = (String) productColorFeature.get("productFeatureId");
+                            }
+
+
+                            //创建 虚拟 尺码特征
+                            GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+                            if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
+                                GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                                newVirtualProductSizeFeatureAppl.create();
+                            }
+                            //创建 变形 尺码特征
+                            GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+
+                            if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
+                                GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                                newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                                newVariantProductSizeFeatureAppl.create();
+                            }
+
+
+                            //尺码特征结束
                         }
 
 
-                        //创建 虚拟 尺码特征
-                        GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
-                        if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
-                            GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                            newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
-                            newVirtualProductSizeFeatureAppl.create();
-                        }
-                        //创建 变形 尺码特征
-                        GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                        //判断是否存在导入的虚拟产品ID结构结束
 
-                        if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
-                            GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                            newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
-                            newVariantProductSizeFeatureAppl.create();
-                        }
-
-
-                        //尺码特征结束
                     }
-
-
-                    //判断是否存在导入的虚拟产品ID结构结束
-
                 }
+
+
                 TransactionUtil.commit();
                 //循环结束
             }

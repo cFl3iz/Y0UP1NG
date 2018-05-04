@@ -36,6 +36,14 @@
         <response name="success" type="view" value="ProductUploadImport"/>
     </request-map>
 
+    <request-map uri="kangChengProductUploadImport">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="kangChengProductUploadImport"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+
+
     <request-map uri="ProductImageUploadFormEvent">
         <security https="true" auth="true"/>
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productImageUploadFormEvent"/>

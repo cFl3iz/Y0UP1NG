@@ -25,8 +25,11 @@
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
-                        <screenlet title="产品导入">
+                        <screenlet title="素然产品导入">
                             <include-form name="ProductUploadImportForm" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="康橙产品导入">
+                            <include-form name="KangChengProductUploadImportForm" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
                     </decorator-section>
                 </decorator-screen>

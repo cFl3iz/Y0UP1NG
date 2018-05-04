@@ -176,6 +176,7 @@
         <alias-all entity-alias="ProductStoreRole"/>
         <alias entity-alias="ProductStoreCatalog" field="prodCatalogId" name="prodCatalogId"/>
         <alias entity-alias="ProductStore" field="storeName" name="storeName"/>
+        <alias entity-alias="ProductStore" field="productStoreId" name="productStoreId"/>
 
 
 

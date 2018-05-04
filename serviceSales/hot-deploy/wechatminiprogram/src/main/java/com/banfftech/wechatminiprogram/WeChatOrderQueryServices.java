@@ -480,7 +480,7 @@ public class WeChatOrderQueryServices {
                 findConditionsStore, null,
                 UtilMisc.toList("-fromDate"), null, false);
         Debug.logInfo("-> storeList: " + storeList, module);
-        if (storeList != null && storeList.size() > 0) {
+
             GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
 
@@ -489,10 +489,10 @@ public class WeChatOrderQueryServices {
             } else {
                 resultMap.put("isSalesRep", "true");
             }
-            resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
-            resultMap.put("productStoreId", productStoreId);
-        }
 
+
+        resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
+        resultMap.put("productStoreId", productStoreId);
 
 
 

@@ -3704,8 +3704,9 @@ public class PersonManagerServices {
         resultMap.put("orderId", orderId);
         resultMap.put("tarjeta", tarjeta);
 
+        Debug.logInfo("->partyAndPostalAddress:"+"partyId"+partyId+"|address1"+ provinceName + " " + cityName + " " + countyName + " " + detailInfo,module);
 
-        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId",partyId,"address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
 
         String contactMechId = "";
 

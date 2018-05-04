@@ -238,7 +238,20 @@ public class PersonManagerQueryServices {
                     List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                             findConditions4, null,
                             null, null, false);
-                    rowMap.put("buyCount",queryMyResourceOrderList.size());
+                    //只有真的付过钱,才算订单
+                    if(queryMyResourceOrderList!=null && queryMyResourceOrderList.size()>0){
+                        for(GenericValue gvOrder :queryMyResourceOrderList ){
+                            GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gvOrder.get("orderId")).orderBy("-createdStamp").queryFirst();
+                            if (null != orderPaymentPrefAndPayment) {
+                                String orderPaymentPrefAndPaymentstatusId = (String) orderPaymentPrefAndPayment.get("statusId");
+                                if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
+                                    rowMap.put("buyCount","1");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
 
                     returnList.add(rowMap);
                 }

@@ -8,6 +8,11 @@
     <!--<PartyRole partyId="Company" roleTypeId="INTERNAL_ORGANIZATIO"/>-->
     <!--<PartyRole partyId="Company" roleTypeId="_NA_"/>-->
     <!--<PartyRole partyId="Company" roleTypeId="ACCOUNT"/>-->
+    <PaymentMethodType paymentMethodTypeId="EXT_UNIONPAY" description="银联" defaultGlAccountId="122000"/>
+    <PaymentMethodType paymentMethodTypeId="EXT_ALIPAY" description="支付宝" defaultGlAccountId="122000"/>
+    <PaymentMethodType paymentMethodTypeId="EXT_WECHAT_PAY" description="微信" defaultGlAccountId="122000"/>
+
+
 
     <!-- 素然组织机构 -->
     <Party partyId="ZUCZUG" partyTypeId="PARTY_GROUP"/>
@@ -71,9 +76,7 @@
 
     <ProductStoreFacility createdStamp="2018-04-10 18:42:27.0" createdTxStamp="2018-04-10 18:42:27.0" facilityId="ZUCZUG" fromDate="2018-04-10 18:42:26.0" lastUpdatedStamp="2018-04-10 18:42:27.0" lastUpdatedTxStamp="2018-04-10 18:42:27.0" productStoreId="ZUCZUGSTORE"/>
 
-    <PaymentMethodType paymentMethodTypeId="EXT_UNIONPAY" description="银联" defaultGlAccountId="122000"/>
-    <PaymentMethodType paymentMethodTypeId="EXT_ALIPAY" description="支付宝" defaultGlAccountId="122000"/>
-    <PaymentMethodType paymentMethodTypeId="EXT_WECHAT_PAY" description="微信" defaultGlAccountId="122000"/>
+
 
     <ProductStorePaymentSetting productStoreId="ZUCZUGSTORE" paymentMethodTypeId="EXT_UNIONPAY"
                                 paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
@@ -85,13 +88,13 @@
                                 paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
 
 
-    <ProdCatalog prodCatalogId="ANKORAU_RETAIL" catalogName="AnKoRau零售总目录"/>
-    <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="ANKORAU_RETAIL" fromDate="2016-09-07 12:00:00" />
+    <!-- 产品目录 -->
 
 
 
     <ProdCatalog prodCatalogId="ANKORAU_RETAIL" catalogName="AnKoRau零售总目录"/>
     <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="ANKORAU_RETAIL" fromDate="2016-09-07 12:00:00" />
+
 
     <ProductCategory productCategoryId="ANKORAU_RETAIL_ROOT" productCategoryTypeId="CATALOG_CATEGORY" categoryName="所有分类"/>
     <ProductCategory productCategoryId="SEASON_NEW" productCategoryTypeId="CATALOG_CATEGORY" categoryName="当季新款"/>
@@ -214,6 +217,101 @@
     <!--<CarrierShipmentMethod shipmentMethodTypeId="QUANFENG" partyId="QuanFeng_EXPRESS" roleTypeId="CARRIER" SEQUENCE_NUMBER="9"/>-->
 
 
-
+    <!-- 店铺的货运 -->
     <ProductStoreShipmentMeth allowCompanyAddr="Y" allowUspsAddr="Y" createdStamp="2018-04-17 15:16:33.0" createdTxStamp="2018-04-17 15:16:33.0" includeNoChargeItems="Y" lastUpdatedStamp="2018-04-17 15:16:38.0" lastUpdatedTxStamp="2018-04-17 15:16:38.0" partyId="SHUNFENG_EXPRESS" productStoreId="ZUCZUGSTORE" productStoreShipMethId="10040" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
+
+
+
+
+
+    <!-- 康橙酒业 -->
+    <Party partyId="KANGCHENG" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="KANGCHENG" groupName="康橙"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="SUPPLIER"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="SUPPLIER_AGENT"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="SALES_REP"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="_NA_"/>
+    <PartyRole partyId="KANGCHENG" roleTypeId="ACCOUNT"/>
+
+
+    <!-- 默认联系方式 -->
+    <ContactMech contactMechId="8001" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PartyContactMech partyId="KANGCHENG" contactMechId="8001" fromDate="2001-05-13 00:00:00.000" allowSolicitation="Y"/>
+    <PostalAddress contactMechId="8001" toName="KANGCHENG" address1="2018 Factory Blvd" city="City of Industry"
+                   postalCode="90000" countryGeoId="CHN"/>
+    <PartyContactMechPurpose partyId="KANGCHENG" contactMechId="8001" contactMechPurposeTypeId="BILLING_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="KANGCHENG" contactMechId="8001" contactMechPurposeTypeId="GENERAL_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="KANGCHENG" contactMechId="8001" contactMechPurposeTypeId="PAYMENT_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+
+    <!-- 康橙店铺 -->
+
+    <Facility facilityId="KANGCHENG" ownerPartyId="KANGCHENG" facilityTypeId="WAREHOUSE" facilityName="康橙仓库"
+              description="康橙仓库"/>
+    <ContactMech contactMechId="8200" contactMechTypeId="POSTAL_ADDRESS"/>
+    <ContactMech contactMechId="8201" contactMechTypeId="TELECOM_NUMBER"/>
+    <ContactMech contactMechId="8202" contactMechTypeId="EMAIL_ADDRESS" infoString="kangcheng@kangcheng.com"/>
+    <PostalAddress contactMechId="8200" toName="康 橙" attnName="KangCheng" address1="2018 Open Blvd" city="Shanghai"
+                   countryGeoId="CHN"/>
+    <TelecomNumber contactMechId="8201" areaCode="21" contactNumber="55555555"/>
+    <FacilityContactMech facilityId="KANGCHENG" contactMechId="8200" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="KANGCHENG" contactMechId="8201" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="KANGCHENG" contactMechId="8202" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="KANGCHENG" contactMechId="8200" contactMechPurposeTypeId="SHIPPING_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="KANGCHENG" contactMechId="8200" contactMechPurposeTypeId="SHIP_ORIG_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="KANGCHENG" contactMechId="8201" contactMechPurposeTypeId="PHONE_SHIPPING"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="KANGCHENG" contactMechId="8201" contactMechPurposeTypeId="PHONE_SHIP_ORIG"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="KANGCHENG" contactMechId="8202" contactMechPurposeTypeId="PRIMARY_EMAIL"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <ProductStore productStoreId="KANGCHENGSTORE" storeName="康橙店铺" companyName="kangchengStore" title="康橙店铺"
+                  payToPartyId="KANGCHENG" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+                  inventoryFacilityId="KANGCHENG" oneInventoryFacility="Y" checkInventory="Y"
+                  splitPayPrefPerShpGrp="N" reserveInventory="Y"
+                  reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="Y" isImmediatelyFulfilled="Y"
+                  defaultLocaleString="zh_CN" defaultCurrencyUomId="CNY" allowPassword="Y" explodeOrderItems="N"
+                  retryFailedAuths="N" manualAuthIsCapture="Y"
+                  headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
+                  digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+                  itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="RS"
+                  visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+
+    <ProductStoreFacility createdStamp="2018-04-10 18:42:27.0" createdTxStamp="2018-04-10 18:42:27.0" facilityId="KANGCHENG" fromDate="2018-04-10 18:42:26.0" lastUpdatedStamp="2018-04-10 18:42:27.0" lastUpdatedTxStamp="2018-04-10 18:42:27.0" productStoreId="KANGCHENGSTORE"/>
+
+
+
+    <ProductStorePaymentSetting productStoreId="KANGCHENGSTORE" paymentMethodTypeId="EXT_UNIONPAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="KANGCHENGSTORE" paymentMethodTypeId="EXT_ALIPAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="KANGCHENGSTORE" paymentMethodTypeId="EXT_WECHAT_PAY"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+    <ProductStorePaymentSetting productStoreId="KANGCHENGSTORE" paymentMethodTypeId="CASH"
+                                paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+
+
+    <!-- 产品目录 -->
+
+
+
+    <ProdCatalog catalogName="康橙零售总目录" createdStamp="2018-05-04 11:04:56.0" createdTxStamp="2018-05-04 11:04:56.0" lastUpdatedStamp="2018-05-04 11:04:56.0" lastUpdatedTxStamp="2018-05-04 11:04:56.0" prodCatalogId="KANGCHENG_RETAIL"/>
+    <ProductStoreCatalog createdStamp="2018-05-04 11:05:36.0" createdTxStamp="2018-05-04 11:05:36.0" fromDate="2018-05-04 11:05:39.0" lastUpdatedStamp="2018-05-04 11:05:36.0" lastUpdatedTxStamp="2018-05-04 11:05:36.0" prodCatalogId="KANGCHENG_RETAIL" productStoreId="KANGCHENGSTORE"/>
+    <ProductCategory createdStamp="2018-05-04 11:06:23.0" createdTxStamp="2018-05-04 11:06:23.0" lastUpdatedStamp="2018-05-04 11:06:23.0" lastUpdatedTxStamp="2018-05-04 11:06:23.0" productCategoryId="KANGCHENG_RETAIL_ROO" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProdCatalogCategory createdStamp="2018-05-04 11:07:40.0" createdTxStamp="2018-05-04 11:07:40.0" fromDate="2018-05-04 11:07:43.0" lastUpdatedStamp="2018-05-04 11:07:40.0" lastUpdatedTxStamp="2018-05-04 11:07:40.0" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT" prodCatalogId="KANGCHENG_RETAIL" productCategoryId="KANGCHENG_RETAIL_ROO"/>
+
+
+    <!-- 店铺的货运 -->
+    <ProductStoreShipmentMeth allowCompanyAddr="Y" allowUspsAddr="Y" createdStamp="2018-04-17 15:16:33.0" createdTxStamp="2018-04-17 15:16:33.0" includeNoChargeItems="Y" lastUpdatedStamp="2018-04-17 15:16:38.0" lastUpdatedTxStamp="2018-04-17 15:16:38.0" partyId="SHUNFENG_EXPRESS" productStoreId="KANGCHENGSTORE" productStoreShipMethId="10040" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
+
+
 </entity-engine-xml>

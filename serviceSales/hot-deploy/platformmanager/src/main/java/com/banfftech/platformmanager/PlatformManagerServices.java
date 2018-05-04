@@ -919,7 +919,7 @@ public class PlatformManagerServices {
                 String keyword = excelRow[14];
 
                 // 没有虚拟产品编号的。 那就是纯SKU的导入
-                if (UtilValidate.isEmpty(productVirtualId)) {
+                if (productVirtualId.equals("NA")) {
                     Debug.logInfo("upload productId="+productId,module);
                     GenericValue productIsExsits = delegator.findOne("Product",UtilMisc.toMap("productId", productId),false);
                     if(null == productIsExsits){

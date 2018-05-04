@@ -311,7 +311,8 @@
 
 
     <!-- 店铺的货运 -->
-    <ProductStoreShipmentMeth allowCompanyAddr="Y" allowUspsAddr="Y" createdStamp="2018-04-17 15:16:33.0" createdTxStamp="2018-04-17 15:16:33.0" includeNoChargeItems="Y" lastUpdatedStamp="2018-04-17 15:16:38.0" lastUpdatedTxStamp="2018-04-17 15:16:38.0" partyId="SHUNFENG_EXPRESS" productStoreId="KANGCHENGSTORE" productStoreShipMethId="10040" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
+    <ProductStoreShipmentMeth allowCompanyAddr="Y" allowUspsAddr="Y" createdStamp="2018-04-17 15:16:33.0" createdTxStamp="2018-04-17 15:16:33.0" includeNoChargeItems="Y" lastUpdatedStamp="2018-04-17 15:16:38.0" lastUpdatedTxStamp="2018-04-17 15:16:38.0" partyId="SHUNFENG_EXPRESS" productStoreId="KANGCHENGSTORE"
+                              productStoreShipMethId="10041" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
 
 
 </entity-engine-xml>

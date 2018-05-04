@@ -77,6 +77,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * querySku
+     *
      * @param dctx
      * @param context
      * @return
@@ -96,31 +97,30 @@ public class WeChatOrderQueryServices {
         String color = (String) context.get("color");
         String size = (String) context.get("size");
 
-        String virId = productId.substring(0,productId.indexOf("-"));
+        String virId = productId.substring(0, productId.indexOf("-"));
         //0181BA04-44-F
-        List<GenericValue> skus   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",virId).queryList();
+        List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", virId).queryList();
         String skuId = "";
-        if(skus!=null && skus.size()>0){
-            for(GenericValue sku :skus){
+        if (skus != null && skus.size() > 0) {
+            for (GenericValue sku : skus) {
 
                 GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "COLOR", "description", color).queryFirst();
                 GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "SIZE", "description", size).queryFirst();
 
-                if(isExsitsColor!=null && isExsitsSize!=null ){
+                if (isExsitsColor != null && isExsitsSize != null) {
                     skuId = sku.getString("productIdTo");
                 }
             }
         }
 
-        resultMap.put("sku",skuId);
+        resultMap.put("sku", skuId);
         return resultMap;
     }
 
 
-
-
     /**
      * Query OrderCpsReport
+     *
      * @param dctx
      * @param context
      * @return
@@ -140,8 +140,8 @@ public class WeChatOrderQueryServices {
         //销售代表的PartyId
         String partyId = userLogin.getString("partyId");
         String statusId = (String) context.get("statusId");
-        String year     = (String) context.get("year");
-        List<Map<String,Object>> returnOrderList = new ArrayList<Map<String, Object>>();
+        String year = (String) context.get("year");
+        List<Map<String, Object>> returnOrderList = new ArrayList<Map<String, Object>>();
 
         //年度销售总额
         Double allOrderGrandTotal = 0.0;
@@ -152,81 +152,82 @@ public class WeChatOrderQueryServices {
         Double moGrandTotal = 0.0;
 
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
-        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
-        EntityCondition findConditions3 = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS,statusId);
-        EntityCondition findConditions4= EntityCondition.makeCondition(genericCondition, EntityOperator.AND,findConditions3);
-
+        EntityCondition findConditions3 = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, statusId);
+        EntityCondition findConditions4 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, findConditions3);
 
 
         //以月份查询
-        for(int m = 1 ; m <=12 ; m ++){
+        for (int m = 1; m <= 12; m++) {
 
-            Map<String,Object> mothMap = new HashMap<String, Object>();
+            Map<String, Object> mothMap = new HashMap<String, Object>();
 
-            String greaterStr = year+"-"+ (m==1?"01":m) +"-01";
-            String lessStr = year+"-"+ (m+1) +"-01";
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+            String greaterStr = year + "-" + (m == 1 ? "01" : m) + "-01";
+            String lessStr = year + "-" + (m + 1) + "-01";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             long tsg = 0;
             long tsl = 0;
             try {
                 Date dateGreater = simpleDateFormat.parse(greaterStr);
                 Date dateLess = simpleDateFormat.parse(lessStr);
-                 tsg = (long) dateGreater.getTime();
-                 tsl = (long) dateLess.getTime();
-            } catch(ParseException px) {
+                tsg = (long) dateGreater.getTime();
+                tsl = (long) dateLess.getTime();
+            } catch (ParseException px) {
                 px.printStackTrace();
             }
 
-            EntityCondition findConditionsDateGreater = EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN,org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsg));
-            EntityCondition findConditionsDateLess = EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN ,org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsl));
-            EntityCondition findConditions5= EntityCondition.makeCondition(findConditionsDateGreater, EntityOperator.AND,findConditionsDateLess);
-            EntityCondition findConditions6= EntityCondition.makeCondition(findConditions5, EntityOperator.AND,findConditions4);
+            EntityCondition findConditionsDateGreater = EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN, org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsg));
+            EntityCondition findConditionsDateLess = EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN, org.apache.ofbiz.base.util.UtilDateTime.getTimestamp(tsl));
+            EntityCondition findConditions5 = EntityCondition.makeCondition(findConditionsDateGreater, EntityOperator.AND, findConditionsDateLess);
+            EntityCondition findConditions6 = EntityCondition.makeCondition(findConditions5, EntityOperator.AND, findConditions4);
 
-            List<GenericValue> orderList = delegator.findList("OrderHeaderAndRoles",findConditions6, null,UtilMisc.toList("-orderDate"), null, false);
+            List<GenericValue> orderList = delegator.findList("OrderHeaderAndRoles", findConditions6, null, UtilMisc.toList("-orderDate"), null, false);
             moGrandTotal = 0.0;
-            if(null!=orderList&&orderList.size()>0){
-                List<Map<String,Object>> rowList = new ArrayList<Map<String, Object>>();
-                for(GenericValue gv:orderList){
-                    Map<String,Object> rowMap =new HashMap<String, Object>();
+            if (null != orderList && orderList.size() > 0) {
+                List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
+                for (GenericValue gv : orderList) {
+                    Map<String, Object> rowMap = new HashMap<String, Object>();
                     String orderId = gv.getString("orderId");
                     GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
                     GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
-                    String productId =  orderItem.getString("productId");
+                    String productId = orderItem.getString("productId");
                     GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
                     String productName = (String) product.get("productName");
-                    BigDecimal grandTotal = (BigDecimal)orderHeader.get("grandTotal");
+                    BigDecimal grandTotal = (BigDecimal) orderHeader.get("grandTotal");
                     DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String orderDateStr = "";
                     try {
                         orderDateStr = sdf.format(orderHeader.get("orderDate"));
-                    } catch (Exception e) {  }
-                    rowMap.put("productName",productName);
-                    rowMap.put("price",grandTotal);
-                    rowMap.put("orderDate",orderDateStr);
+                    } catch (Exception e) {
+                    }
+                    rowMap.put("productName", productName);
+                    rowMap.put("price", grandTotal);
+                    rowMap.put("orderDate", orderDateStr);
                     rowList.add(rowMap);
                     //总数增加
                     allOrderGrandTotal = allOrderGrandTotal + (grandTotal.doubleValue());
                     moGrandTotal = moGrandTotal + (grandTotal.doubleValue());
-                    orderCount+=1;
+                    orderCount += 1;
                 }
-                mothMap.put("data",rowList);
-                mothMap.put("monthGrandTotal",moGrandTotal);
-            }else{
-                mothMap.put("data",null);
+                mothMap.put("data", rowList);
+                mothMap.put("monthGrandTotal", moGrandTotal);
+            } else {
+                mothMap.put("data", null);
             }
 
             returnOrderList.add(mothMap);
         }
 
-        resultMap.put("orderList",returnOrderList);
-        resultMap.put("allOrderGrandTotal",allOrderGrandTotal+"");
-        resultMap.put("orderCount",orderCount+"");
+        resultMap.put("orderList", returnOrderList);
+        resultMap.put("allOrderGrandTotal", allOrderGrandTotal + "");
+        resultMap.put("orderCount", orderCount + "");
         return resultMap;
     }
 
     /**
      * 返回今年的月份列表
+     *
      * @param year
      * @return
      */
@@ -235,13 +236,13 @@ public class WeChatOrderQueryServices {
         List<String> mList = new ArrayList<String>();
 
 
-
         return mList;
     }
 
 
     /**
      * Query Share CpsReport
+     *
      * @param dctx
      * @param context
      * @return
@@ -256,111 +257,106 @@ public class WeChatOrderQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        GenericValue userLogin =  (GenericValue) context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         //销售代表的PartyId
         String partyId = userLogin.getString("partyId");
 
-        List<GenericValue> productShareList = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER","partyId",partyId).queryList();
+        List<GenericValue> productShareList = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "partyId", partyId).queryList();
 
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
         //分享总计
         int shareCount = 0;
         //总销售
         int salesRepCount = 0;
-        if(productShareList!=null && productShareList.size()>0){
+        if (productShareList != null && productShareList.size() > 0) {
 
-            for(GenericValue gv : productShareList){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
+            for (GenericValue gv : productShareList) {
+                Map<String, Object> rowMap = new HashMap<String, Object>();
                 String workEffortId = gv.getString("workEffortId");
                 GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
-                GenericValue workEffort  = EntityQuery.use(delegator).from("WorkEffort").where("workEffortId", workEffortId).queryFirst();
+                GenericValue workEffort = EntityQuery.use(delegator).from("WorkEffort").where("workEffortId", workEffortId).queryFirst();
 
                 String rowShareCount = workEffort.getString("shareCount");
-                int rowShare  = Integer.parseInt(rowShareCount==null?"0":rowShareCount);
+                int rowShare = Integer.parseInt(rowShareCount == null ? "0" : rowShareCount);
                 shareCount += rowShare;
                 String productId = workEffortProduct.getString("productId");
                 GenericValue productAndPriceView = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
-                rowMap.put("productInfo",productAndPriceView);
+                rowMap.put("productInfo", productAndPriceView);
 
                 //产品分享者列表
-                List<Map<String,Object>> productPartys = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> productPartys = new ArrayList<Map<String, Object>>();
                 List<GenericValue> workEffortPartyRoleAndProduct =
                         EntityQuery.use(delegator).from("WorkEffortPartyRoleAndProduct").
-                                where("productId", productId, "roleTypeId", "SALES_REP", "partyId", partyId,"description",productId+partyId).queryList();
-                if(null!= workEffortPartyRoleAndProduct){
-                    for(GenericValue rowGeneric :workEffortPartyRoleAndProduct ){
+                                where("productId", productId, "roleTypeId", "SALES_REP", "partyId", partyId, "description", productId + partyId).queryList();
+                if (null != workEffortPartyRoleAndProduct) {
+                    for (GenericValue rowGeneric : workEffortPartyRoleAndProduct) {
 
-                        String innerWorkEffort =  rowGeneric.getString("workEffortId");
+                        String innerWorkEffort = rowGeneric.getString("workEffortId");
                         List<GenericValue> referrerRoles = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
-                        for( int i = 0 ; i <  referrerRoles.size(); i++){
+                        for (int i = 0; i < referrerRoles.size(); i++) {
 
                             GenericValue referrer = (GenericValue) referrerRoles.get(i);
 
-                            Map<String,Object> rowParty = new HashMap<String, Object>();
+                            Map<String, Object> rowParty = new HashMap<String, Object>();
                             String rolePartyId = referrer.getString("partyId");
-                            Map<String,String> rowPerson = new HashMap<String, String>();
+                            Map<String, String> rowPerson = new HashMap<String, String>();
 
-                            if(!rolePartyId.equals(partyId)){
+                            if (!rolePartyId.equals(partyId)) {
 //                                Debug.logInfo("roleParty="+rolePartyId+"|partyId="+partyId+"="+(rolePartyId.equals(partyId)),module);
-                                rowPerson = queryPersonBaseInfo(delegator,rolePartyId);
-                                rowParty.put("shareParty",rowPerson);
+                                rowPerson = queryPersonBaseInfo(delegator, rolePartyId);
+                                rowParty.put("shareParty", rowPerson);
                                 productPartys.add(rowParty);
                             }
                             //最近的一个人
-                            if(i+1 == workEffortPartyRoleAndProduct.size() && rowPerson!=null && rowPerson.get("firstName")!=null ){
-                                rowMap.put("lastShareDesc","刚刚"+rowPerson.get("firstName")+"帮你转发了");
+                            if (i + 1 == workEffortPartyRoleAndProduct.size() && rowPerson != null && rowPerson.get("firstName") != null) {
+                                rowMap.put("lastShareDesc", "刚刚" + rowPerson.get("firstName") + "帮你转发了");
                                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                 String fromDate = sdf.format(referrer.get("fromDate"));
-                                rowMap.put("repotDeta",fromDate);
+                                rowMap.put("repotDeta", fromDate);
                             }
                         }
 
 
                     }
                 }
-                rowMap.put("productSharePartys",productPartys);
-                  //浏览量
+                rowMap.put("productSharePartys", productPartys);
+                //浏览量
 //                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
 //                //转发量
 //                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
 
-                rowMap.put("addressCount",workEffort.get("addressCount")==null?"0":workEffort.get("addressCount"));
-                rowMap.put("refreCount",workEffort.get("shareCount")==null?"0":workEffort.get("shareCount"));
+                rowMap.put("addressCount", workEffort.get("addressCount") == null ? "0" : workEffort.get("addressCount"));
+                rowMap.put("refreCount", workEffort.get("shareCount") == null ? "0" : workEffort.get("shareCount"));
 
-                EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
+                EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%" + productId.substring(0, productId.indexOf("-")) + "%");
                 EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
-                EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
+                EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
                 EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
-                EntityCondition findConditions4= EntityCondition.makeCondition(genericCondition, EntityOperator.AND,findConditions3);
+                EntityCondition findConditions4 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, findConditions3);
 
 
                 List<GenericValue> queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                         findConditions4, null,
                         null, null, false);
-             //   EntityOperator.LIKE
-                Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP","partyId",partyId).queryCount();
+                //   EntityOperator.LIKE
+                Long salesOrderCount = EntityQuery.use(delegator).from("OrderHeaderItemAndRoles").where("roleTypeId", "SALES_REP", "partyId", partyId).queryCount();
                 salesRepCount += Integer.parseInt(salesOrderCount + "");
-                rowMap.put("salesRepOrderCount",queryMyResourceOrderList==null?"0":queryMyResourceOrderList.size()+"");
+                rowMap.put("salesRepOrderCount", queryMyResourceOrderList == null ? "0" : queryMyResourceOrderList.size() + "");
 
                 returnList.add(rowMap);
             }
         }
 
 
+        resultMap.put("shareInfoList", returnList);
+        resultMap.put("total", returnList.size() + "");
 
-
-
-        resultMap.put("shareInfoList",returnList);
-        resultMap.put("total",returnList.size()+"");
-
-        resultMap.put("shareCount",shareCount+"");
-        resultMap.put("salesRepCount",salesRepCount+"");
+        resultMap.put("shareCount", shareCount + "");
+        resultMap.put("salesRepCount", salesRepCount + "");
 
         return resultMap;
     }
-
-
 
 
     /**
@@ -463,36 +459,43 @@ public class WeChatOrderQueryServices {
 
         String productStoreId = "";
 
+        Debug.logInfo("-> APP_ID: " + appId, module);
+
         if (appId != null) {
             //素然小程序
-            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId)) {
+            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
                 productStoreId = "ZUCZUGSTORE";
             }
 
             //不分梨白酒
-            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId)) {
+            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
                 productStoreId = "KANGCHENGSTORE";
             }
         }
+
         EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 
         // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
         List<GenericValue> storeList = delegator.findList("ProductStoreRoleAndStoreDetail",
                 findConditionsStore, null,
                 UtilMisc.toList("-fromDate"), null, false);
+        Debug.logInfo("-> storeList: " + storeList, module);
+        if (storeList != null && storeList.size() > 0) {
+            GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
 
-        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
-
-        if (null == role) {
-            resultMap.put("isSalesRep", "false");
-        } else {
-            resultMap.put("isSalesRep", "true");
+            if (null == role) {
+                resultMap.put("isSalesRep", "false");
+            } else {
+                resultMap.put("isSalesRep", "true");
+            }
+            resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
+            resultMap.put("productStoreId", productStoreId);
         }
 
 
-        resultMap.put("productStoreId", productStoreId);
-        resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
+
+
 
         return resultMap;
     }
@@ -536,12 +539,12 @@ public class WeChatOrderQueryServices {
         fieldSet.add("productId");
 
 
-        List<Map<String,Object>> pictures = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
 
 
-        Map<String,Map<String,Object>> featureMap = new HashMap<String, Map<String, Object>>();
+        Map<String, Map<String, Object>> featureMap = new HashMap<String, Map<String, Object>>();
 
-        for(GenericValue rowSku :skus){
+        for (GenericValue rowSku : skus) {
             String rowSkuId = rowSku.getString("productIdTo");
             EntityCondition findConditions3 = EntityCondition
                     .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
@@ -550,22 +553,22 @@ public class WeChatOrderQueryServices {
                     null, null, false);
             int index = 0;
 
-            Map<String,Object> rowFeature = new HashMap<String, Object>();
-            for(GenericValue pict : rowPictures){
-                if(index==0){
-                    rowFeature.put("drObjectInfo",(String) pict.get("drObjectInfo"));
+            Map<String, Object> rowFeature = new HashMap<String, Object>();
+            for (GenericValue pict : rowPictures) {
+                if (index == 0) {
+                    rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
                 }
-                Map<String,Object> rowMap = new HashMap<String, Object>();
+                Map<String, Object> rowMap = new HashMap<String, Object>();
                 String drObjectInfo = (String) pict.get("drObjectInfo");
-                rowMap.put("drObjectInfo",drObjectInfo);
+                rowMap.put("drObjectInfo", drObjectInfo);
                 pictures.add(rowMap);
                 index++;
             }
             GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-            if(rowFeature==null){
-                featureMap.put(rowColor.get("description")+"",UtilMisc.toMap("drObjectInfo","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
-            }else{
-                featureMap.put(rowColor.get("description")+"",rowFeature);
+            if (rowFeature == null) {
+                featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+            } else {
+                featureMap.put(rowColor.get("description") + "", rowFeature);
             }
 
 
@@ -580,7 +583,7 @@ public class WeChatOrderQueryServices {
         if (pictures != null && pictures.size() > 0) {
             imgAttr = new String[pictures.size()];
             int index = 0;
-            for (Map<String,Object> productContent : pictures) {
+            for (Map<String, Object> productContent : pictures) {
                 String drObjectInfo = (String) productContent.get("drObjectInfo");
                 imgAttr[index] = drObjectInfo;
                 index++;
@@ -591,25 +594,25 @@ public class WeChatOrderQueryServices {
         List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
         for (GenericValue gv : gvs) {
 
-            Map<String,Object> innerMap = new HashMap<String, Object>();
+            Map<String, Object> innerMap = new HashMap<String, Object>();
 
             String innerAttr = gv.getString("productFeatureTypeId");
             String innerDesc = gv.getString("description");
             switch (innerAttr) {
                 case "COLOR": {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
-                    if(isSelect!=null){
-                        innerMap.put("COLOR_DESC",innerDesc);
-                    }else{
-                        innerMap.put("COLOR_DESC",innerDesc);
+                    if (isSelect != null) {
+                        innerMap.put("COLOR_DESC", innerDesc);
+                    } else {
+                        innerMap.put("COLOR_DESC", innerDesc);
                     }
                     break;
                 }
                 case "SIZE": {
                     GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
-                    if(isSelect!=null){
+                    if (isSelect != null) {
                         innerMap.put("SIZE_DESC", innerDesc);
-                    }else{
+                    } else {
                         innerMap.put("SIZE_DESC", innerDesc);
                     }
                     break;
@@ -694,7 +697,7 @@ public class WeChatOrderQueryServices {
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
         List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
-        int count  = 0;
+        int count = 0;
         String beforeVir = "NA";
         if (null != myContactListPage) {
             for (GenericValue gv : myContactListPage) {
@@ -803,7 +806,7 @@ public class WeChatOrderQueryServices {
 //
 //        }
 
-        resultMap.put("total",count);
+        resultMap.put("total", count);
 
         resultMap.put("from", viewIndex);
         resultMap.put("current_page", viewIndex + 1);

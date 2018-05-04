@@ -1647,7 +1647,7 @@ public class PersonManagerServices {
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "NotFoundOpenId", locale));
         }
 
-        GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
+        GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where( "productStoreId", storeId,"partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
         if (null == storeRole) {
             Map<String, Object> createProductStoreRoleOut = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin, "partyId", partyIdentification.get("partyId"), "productStoreId", storeId, "roleTypeId", "SALES_REP"));

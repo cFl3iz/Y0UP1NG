@@ -3704,11 +3704,12 @@ public class PersonManagerServices {
         resultMap.put("orderId", orderId);
         resultMap.put("tarjeta", tarjeta);
 
-        Debug.logInfo("->partyAndPostalAddress:"+"partyId"+partyId+"|address1"+ provinceName + " " + cityName + " " + countyName + " " + detailInfo,module);
 
         List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId",partyId,"address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
 
         String contactMechId = "";
+        Debug.logInfo("->partyAndPostalAddress:"+"partyId"+partyId+"|address1"+ provinceName + " " + cityName + " " + countyName + " " + detailInfo,module);
+        Debug.logInfo("->partyAndPostalAddress:"+partyAndPostalAddress,module);
 
         if (null == partyAndPostalAddress || partyAndPostalAddress.size() == 0) {
             // 货运目的地址

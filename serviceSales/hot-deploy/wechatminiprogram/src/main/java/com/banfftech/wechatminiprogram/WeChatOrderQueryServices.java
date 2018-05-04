@@ -462,10 +462,15 @@ public class WeChatOrderQueryServices {
         Debug.logInfo("-> APP_ID: " + appId, module);
 
         if (appId != null) {
-            //素然小程序
+            //素然小程序(友评)
             if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
                 productStoreId = "ZUCZUGSTORE";
             }
+            //素然小程序(素然)
+            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+                productStoreId = "ZUCZUGSTORE";
+            }
+
 
             //不分梨白酒
             if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {

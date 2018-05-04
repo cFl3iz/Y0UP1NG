@@ -184,6 +184,14 @@ public class PeConstant {
      */
     public static final String ZUCZUG_MINI_PROGRAM_APP_ID = "wx299644ef4c9afbde";
 
+    /**
+     * 素然0小程序 AppId
+     */
+    public static final String ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID = "wx1106576d138cd8e6";
+    /**
+     * 素然0小程序 SC
+     */
+    public static final String ZUCZUG_ANKORAU_MINI_PROGRAM_SC = "2bc06469373b6d6b5a5c92cea41ce9da";
 
     /**
      * 不分梨-白酒

@@ -523,6 +523,8 @@ public class WeChatOrderQueryServices {
         GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
 
+
+
         Map<String, Object> allField = product.getAllFields();
         //用虚拟产品随便找一个sku变形去拿价格 , fix 其实自己就是sku
         String vir_productId = (String) product.get("productId");
@@ -639,6 +641,21 @@ public class WeChatOrderQueryServices {
                         "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/product_img/DETAIL_PICTURE%403x.png"};
             }
             allField.put("imgArray", imgAttr);
+
+        }
+
+
+
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+        String productStoreId = category.getString("productStoreId");
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",inventoryFacilityId,"productId",productId));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            allField.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+            allField.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
 
         resultMap.put("productDetail", allField);

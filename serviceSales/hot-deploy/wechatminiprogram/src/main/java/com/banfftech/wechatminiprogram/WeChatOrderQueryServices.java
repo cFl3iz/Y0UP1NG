@@ -113,6 +113,19 @@ public class WeChatOrderQueryServices {
             }
         }
 
+
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", skuId).queryFirst();
+        String productStoreId = category.getString("productStoreId");
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",inventoryFacilityId,"productId",productId));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            resultMap.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal")+"");
+            resultMap.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal")+"");
+        }
+
         resultMap.put("sku", skuId);
         return resultMap;
     }

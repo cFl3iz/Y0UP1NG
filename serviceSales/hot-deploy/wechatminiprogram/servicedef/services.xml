@@ -136,6 +136,8 @@
         <attribute name="color" type="String" mode="IN"  optional="true"/>
         <attribute name="size" type="String" mode="IN"  optional="true"/>
         <attribute name="sku" type="String" mode="OUT" optional="true"/>
+        <attribute name="quantityOnHandTotal" type="String" mode="OUT" optional="true"/>
+        <attribute name="availableToPromiseTotal" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 

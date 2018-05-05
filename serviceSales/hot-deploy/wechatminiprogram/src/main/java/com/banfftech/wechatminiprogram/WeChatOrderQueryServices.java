@@ -1913,11 +1913,17 @@ public class WeChatOrderQueryServices {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(date1.getTime());
 //                    cal.add(Calendar.HOUR_OF_DAY, daysTillCancel);
+
+
                 cal.add(Calendar.HOUR_OF_DAY, 4);
                 Date cancelDate = cal.getTime();
                 Date nowDate = new Date();
 
                 long interval = (cancelDate.getTime() - nowDate.getTime())/1000;
+
+                rowMap.put("cancelDate",cancelDate);
+                rowMap.put("cancelDateStamp",cancelDate.getTime());
+                rowMap.put("nowDateStamp",nowDate.getTime());
 
                 rowMap.put("interval",interval);
 

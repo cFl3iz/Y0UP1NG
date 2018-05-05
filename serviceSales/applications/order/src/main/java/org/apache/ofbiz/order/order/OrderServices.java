@@ -3015,6 +3015,7 @@ public class OrderServices {
         }
 
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
+        Debug.logInfo("cancelFlaggedSalesOrders Size = :"+ordersToCheck.size(),module);
         for (GenericValue orderHeader : ordersToCheck) {
             String orderId = orderHeader.getString("orderId");
             String orderStatus = orderHeader.getString("statusId");

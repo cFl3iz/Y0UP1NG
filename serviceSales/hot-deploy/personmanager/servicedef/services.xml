@@ -6,6 +6,17 @@
     <version>1.0</version>
 
 
+    <!-- 初始化库存服务,只会执行一次 -->
+    <service name="initialAllSkuInventory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="initialAllSkuInventory" auth="false">
+        <description>initialAllSkuInventory</description>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- 加入商店招募 -->
     <service name="recruitingPartyToParty" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

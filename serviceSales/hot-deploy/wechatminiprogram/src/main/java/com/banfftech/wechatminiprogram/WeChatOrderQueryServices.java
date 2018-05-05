@@ -1931,11 +1931,11 @@ public class WeChatOrderQueryServices {
                     long seconds = interval % 60;
                     String dateTimes = "";
                     if(hours>0){
-                        dateTimes=hours + "小时" + minutes + "分钟"
-                                + seconds + "秒";
+                        dateTimes=hours + "小时" + minutes + "分钟";
+//                                + seconds + "秒";
                     }else if(minutes>0){
-                        dateTimes=minutes + "分钟"
-                                + seconds + "秒";
+                        dateTimes=minutes + "分钟";
+//                                + seconds + "秒";
                     }else{
                         dateTimes=seconds + "秒";
                     }

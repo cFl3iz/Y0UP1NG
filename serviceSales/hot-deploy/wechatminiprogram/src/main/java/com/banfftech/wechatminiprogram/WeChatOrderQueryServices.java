@@ -113,7 +113,7 @@ public class WeChatOrderQueryServices {
             }
         }
 
-
+        Debug.logInfo("Find SKU : " + skuId,module);
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", skuId).queryFirst();
         String productStoreId = category.getString("productStoreId");
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();

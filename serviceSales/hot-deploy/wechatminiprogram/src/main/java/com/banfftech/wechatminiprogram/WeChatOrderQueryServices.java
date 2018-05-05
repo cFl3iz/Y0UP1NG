@@ -120,7 +120,7 @@ public class WeChatOrderQueryServices {
         String inventoryFacilityId = store.getString("inventoryFacilityId");
         //获得库存信息 getInventoryAvailableByFacility
         Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                "facilityId",inventoryFacilityId,"productId",productId));
+                "facilityId",inventoryFacilityId,"productId",skuId));
         if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
             resultMap.put("quantityOnHandTotal",getInventoryAvailableByFacilityMap.get("quantityOnHandTotal")+"");
             resultMap.put("availableToPromiseTotal",getInventoryAvailableByFacilityMap.get("availableToPromiseTotal")+"");

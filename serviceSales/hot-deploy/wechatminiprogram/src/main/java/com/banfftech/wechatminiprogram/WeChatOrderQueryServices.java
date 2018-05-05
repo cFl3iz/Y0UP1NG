@@ -2041,6 +2041,7 @@ public class WeChatOrderQueryServices {
                     if (orderPaymentPrefAndPaymentstatusId.equals("PAYMENT_RECEIVED")) {
                         rowMap.put("orderPayStatus", "已付款");
                         rowMap.put("payStatusCode", "1");
+                        rowMap.put("interval",null);
                     } else {
                         rowMap.put("payStatusCode", "0");
                         rowMap.put("orderPayStatus", "待付款");

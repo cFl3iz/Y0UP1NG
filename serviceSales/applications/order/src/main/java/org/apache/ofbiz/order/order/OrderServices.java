@@ -3032,20 +3032,27 @@ public class OrderServices {
                 }
 
                 // default days to cancel
-                int daysTillCancel = 30;
+                //int daysTillCancel = 30;
+
+                // 默认4小时
+                int daysTillCancel = 4;
 
                 // get the value from the store
                 if (productStore != null && productStore.get("daysToCancelNonPay") != null) {
                     daysTillCancel = productStore.getLong("daysToCancelNonPay").intValue();
                 }
-
+                Debug.logInfo("days till cancel = "+daysTillCancel,module);
                 if (daysTillCancel > 0) {
                     // 0 days means do not auto-cancel
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(orderDate.getTime());
-                    cal.add(Calendar.DAY_OF_YEAR, daysTillCancel);
+//                    cal.add(Calendar.HOUR_OF_DAY, daysTillCancel);
+                    cal.add(Calendar.MINUTE, daysTillCancel);
                     Date cancelDate = cal.getTime();
                     Date nowDate = new Date();
+                    Debug.logInfo("cancelDate:"+cancelDate,module);
+                    Debug.logInfo("nowDate:"+nowDate,module);
+                    Debug.logInfo("nowDate.after(cancelDate)="+(nowDate.after(cancelDate)),module);
                     if (cancelDate.equals(nowDate) || nowDate.after(cancelDate)) {
                         // cancel the order item(s)
                         Map<String, Object> svcCtx = UtilMisc.<String, Object>toMap("orderId", orderId, "statusId", "ITEM_CANCELLED", "userLogin", userLogin);

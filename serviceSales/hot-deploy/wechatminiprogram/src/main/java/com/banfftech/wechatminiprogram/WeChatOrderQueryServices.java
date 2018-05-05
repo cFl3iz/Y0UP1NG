@@ -1845,7 +1845,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("payToPartyId");
 
         EntityCondition findConditions3 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
-
+        EntityCondition orderCancelCondition = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
         EntityCondition findConditions = EntityCondition
                 .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 
@@ -1871,7 +1871,8 @@ public class WeChatOrderQueryServices {
                 findShipment = "SHIPMENT";
 
             } else {
-                listConditions2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+                EntityCondition genericCondition2 = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
+                listConditions2 = EntityCondition.makeCondition(genericCondition2, EntityOperator.AND, orderCancelCondition);
             }
 
         }
@@ -1924,8 +1925,22 @@ public class WeChatOrderQueryServices {
                 rowMap.put("cancelDate",cancelDate);
                 rowMap.put("cancelDateStamp",cancelDate.getTime());
                 rowMap.put("nowDateStamp",nowDate.getTime());
-
-                rowMap.put("interval",interval);
+                if(interval>0){
+                    long hours = (interval % ( 60 * 60 * 24)) / (60 * 60);
+                    long minutes = (interval % ( 60 * 60)) /60;
+                    long seconds = interval % 60;
+                    String dateTimes = "";
+                    if(hours>0){
+                        dateTimes=hours + "小时" + minutes + "分钟"
+                                + seconds + "秒";
+                    }else if(minutes>0){
+                        dateTimes=minutes + "分钟"
+                                + seconds + "秒";
+                    }else{
+                        dateTimes=seconds + "秒";
+                    }
+                    rowMap.put("interval",dateTimes);
+                }
 
                 String productStoreId = (String) gv.get("productStoreId");
 

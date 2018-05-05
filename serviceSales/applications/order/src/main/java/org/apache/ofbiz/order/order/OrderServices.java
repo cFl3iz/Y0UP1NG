@@ -3047,8 +3047,8 @@ public class OrderServices {
                     // 0 days means do not auto-cancel
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(orderDate.getTime());
-//                    cal.add(Calendar.HOUR_OF_DAY, daysTillCancel);
-                    cal.add(Calendar.MINUTE, daysTillCancel);
+                    cal.add(Calendar.HOUR_OF_DAY, daysTillCancel);
+   //                 cal.add(Calendar.MINUTE, daysTillCancel);
                     Date cancelDate = cal.getTime();
                     Date nowDate = new Date();
                     Debug.logInfo("cancelDate:"+cancelDate,module);

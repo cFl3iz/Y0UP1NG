@@ -1909,7 +1909,17 @@ public class WeChatOrderQueryServices {
                 Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
 
                 rowMap.put("orderDate", dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));
+                Date date1 = createdDateTp;
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(date1.getTime());
+//                    cal.add(Calendar.HOUR_OF_DAY, daysTillCancel);
+                cal.add(Calendar.HOUR_OF_DAY, 4);
+                Date cancelDate = cal.getTime();
+                Date nowDate = new Date();
 
+                long interval = (cancelDate.getTime() - nowDate.getTime())/1000;
+
+                rowMap.put("interval",interval);
 
                 String productStoreId = (String) gv.get("productStoreId");
 

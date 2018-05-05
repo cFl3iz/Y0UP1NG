@@ -488,9 +488,9 @@ public class PersonManagerServices {
         quantity = quantity.add(BigDecimal.ONE);
 
         List<String> orderBy = UtilMisc.toList("-createdDate");
-        PagedList<GenericValue> myContactListPage = null;
+        List<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy);
+                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy).queryList();
 
         if (null != myContactListPage) {
             for (GenericValue gv : myContactListPage) {

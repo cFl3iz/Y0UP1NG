@@ -3020,7 +3020,7 @@ public class OrderServices {
             String orderId = orderHeader.getString("orderId");
             String orderStatus = orderHeader.getString("statusId");
 
-            if (orderStatus.equals("ORDER_CREATED")) {
+            if (orderStatus.equals("ORDER_CREATED")||orderStatus.equals("ORDER_APPROVED")) {
                 // first check for un-paid orders
                 Timestamp orderDate = orderHeader.getTimestamp("entryDate");
 

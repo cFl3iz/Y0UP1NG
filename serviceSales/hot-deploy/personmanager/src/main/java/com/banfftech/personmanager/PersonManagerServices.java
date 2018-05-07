@@ -1154,6 +1154,11 @@ public class PersonManagerServices {
         String partyId = (String) context.get("partyId");
         //销售代表ID
         String salesRepId = (String) context.get("salesRepId");
+
+        if(null == salesRepId || salesRepId.trim().equals("")){
+            salesRepId = "ZUCZUG";
+        }
+
         //产品ID
         String productId = (String) context.get("productId");
         //转发来自谁
@@ -2749,8 +2754,57 @@ public class PersonManagerServices {
 
 
     /**
+     * hidden Order
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> hiddenOrder(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+
+        GenericValue orderPref =  EntityQuery.use(delegator).from("UserPreference").where("userPrefLoginId",  userLogin.get("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+
+        // User Pref
+        String userPrefValue = "";
+
+        if(orderPref != null){
+            userPrefValue = orderPref.getString("userPrefValue")+","+orderId;
+        }else{
+            userPrefValue = orderId;
+        }
+
+        //把这个特征类型给到当前用户的偏好设置
+        Map<String, Object> setUserPreferenceResultMap = dispatcher.runSync("setUserPreference",
+                UtilMisc.toMap("userLogin", admin, "userPrefLoginId", userLogin.get("userLoginId"),
+                        "userPrefTypeId", "HIDDEN_ORDER", "userPrefValue", userPrefValue));
+        if (!ServiceUtil.isSuccess(setUserPreferenceResultMap)) {
+            Debug.logError("*Mother Fuck setUserPreferenceResultMap  Error:" + setUserPreferenceResultMap, module);
+            return resultMap;
+        }
+
+        return resultMap;
+    }
+    /**
      * Order Cancel
-     *
      * @param dctx
      * @param context
      * @return

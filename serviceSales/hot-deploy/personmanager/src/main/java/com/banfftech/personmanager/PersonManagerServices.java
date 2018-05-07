@@ -1747,14 +1747,18 @@ public class PersonManagerServices {
         String captcha = (String) context.get("captcha");
         String teleNumber = (String) context.get("teleNumber");
 
+        List<String> orderBy = UtilMisc.toList("-fromDate");
+        GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber, "isValid", "N").orderBy(orderBy).queryFirst();
 
-        GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber, "isValid", "N").queryFirst();
+
+
         if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
             smsValidateCode.set("isValid", "Y");
             smsValidateCode.store();
         } else {
             resultMap.put("message", "验证码错误!");
-            return resultMap;
+              
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
         }
 
 

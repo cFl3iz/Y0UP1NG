@@ -16,6 +16,23 @@
         </section>
     </screen>
 
+
+    <screen name="ExportShareCpsToExcel">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
+                        <screenlet title="导出分享报表Excel">
+                            <include-form name="ExportShareCpsToExcel" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
     <!-- 产品导入 -->
     <screen name="ProductUploadImport">
         <section>

@@ -30,6 +30,8 @@
 
 
 
+
+
     <!-- JPush -->
     <service name="pushNotifOrMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">

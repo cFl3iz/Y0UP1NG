@@ -18,6 +18,14 @@
                         <submit button-type="button"/>
                 </field>
         </form>
+    <!-- 导出分享数据报表Rxcel -->
+      <form name="ExportShareCpsToExcel" type="upload" target="ExportShareCpsToExcelEvent"
+              odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+
+                <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+                        <submit button-type="button"/>
+                </field>
+        </form>
 
     <form name="KangChengProductUploadImportForm" type="upload" target="kangChengProductUploadImport"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">

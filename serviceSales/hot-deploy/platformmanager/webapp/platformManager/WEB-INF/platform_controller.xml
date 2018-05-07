@@ -19,6 +19,7 @@
     <!-- 商品导入 Copy By ZucZug Moka -->
     <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
     <request-map uri="ProductImageUpload"><security https="true" auth="true"/><response name="success" type="view" value="ProductImageUpload"/></request-map>
+    <request-map uri="ExportShareCpsToExcel"><security https="true" auth="true"/><response name="success" type="view" value="ExportShareCpsToExcel"/></request-map>
     <!-- 快速运送整个订单-->
     <request-map uri="QuickShipOrder"><security https="true" auth="true"/><response name="success" type="view" value="QuickShipOrder"/></request-map>
 
@@ -26,6 +27,14 @@
         <security https="true" auth="true"/>
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="quickShipOrder"/>
         <response name="success" type="view" value="QuickShipOrder"/>
+    </request-map>
+
+
+    <!-- 导出Cps报表 -->
+    <request-map uri="ExportShareCpsToExcelEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="exportShareCpsToExcelEvent"/>
+        <response name="success" type="view" value="ExportShareCpsToExcel"/>
     </request-map>
 
 
@@ -206,5 +215,6 @@
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
     <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>
     <view-map name="QuickShipOrder" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickShipOrder"/>
+    <view-map name="ExportShareCpsToExcel" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ExportShareCpsToExcel"/>
 
 </site-conf>

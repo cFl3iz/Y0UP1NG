@@ -5,9 +5,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import main.java.com.banfftech.platformmanager.util.ExportExcelFile;
 import org.apache.ofbiz.base.util.HttpRequestFileUpload;
 import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import com.taobao.api.ApiException;
@@ -91,6 +93,7 @@ import java.sql.Timestamp;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
+import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 
@@ -109,6 +112,88 @@ public class PlatformManagerServices {
     private static String secret = null;
     private static String smsFreeSignName = null;
     private static String smsTemplateCode = null;
+
+    /**
+     * 导出分享报表至Excel
+     * @param request
+     * @param response
+     * @return
+     */
+    public static String exportShareCpsToExcelEvent(HttpServletRequest request,HttpServletResponse response) {
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        String[] excelTitle = new String[]{"链ID","转发者","名称","点开的人","销售代表","发生时间"};
+        String mapKeys = "workEffortId,sharePersonName,productName,addressPersonName,salesRepName,createdDate";
+        try {
+            List<Map<String,Object>> arrayList = new ArrayList<Map<String,Object>>();
+            List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffort").where().queryList();
+            for (GenericValue item : workEfforts) {
+                Map<String,Object> lineMap = new HashMap<String, Object>();
+
+                if(null==item.get("createdDate")){
+                    continue;
+                }
+
+                String workEffortId = item.getString("workEffortId");
+                lineMap.put("workEffortId",workEffortId);
+                GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
+                if(null == workEffortProduct){
+                    continue;
+                }
+                String productId = workEffortProduct.getString("productId");
+
+                GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+                String productName = product.getString("productName");
+                GenericValue salesRep = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "SALES_REP", "workEffortId", workEffortId).queryFirst();
+                List<GenericValue> addressees = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE", "workEffortId", workEffortId).queryList();
+                List<String> orderBy = UtilMisc.toList("fromDate");
+                GenericValue  shares = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", workEffortId).orderBy(orderBy).queryFirst();
+                if(shares!=null){
+                    String sharePartyId = shares.getString("partyId");
+                    GenericValue shareInfo  = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyId).queryFirst();
+                    String shareName = shareInfo.getString("firstName");
+                    lineMap.put("sharePersonName",shareName);
+                }else{
+                    lineMap.put("sharePersonName","NA");
+                }
+
+                lineMap.put("productName",productName);
+                if(null != addressees && addressees.size()>0){
+                    String addresseeNames = "";
+                    for(GenericValue addressee : addressees){
+                        String addresseePartyId = addressee.getString("partyId");
+                        GenericValue addresseeInfo  = EntityQuery.use(delegator).from("Person").where("partyId", addresseePartyId).queryFirst();
+                        String addresseeName = addresseeInfo.getString("firstName");
+                        addresseeNames = addresseeNames+addresseeName+"、";
+                    }
+                    lineMap.put("addressPersonName",addresseeNames);
+                }else{
+                    lineMap.put("addressPersonName","无");
+
+                }
+
+
+                String salesPartyId = salesRep==null?"ZUCZUG":salesRep.getString("partyId");
+                GenericValue personInfo  = EntityQuery.use(delegator).from("Person").where("partyId", salesPartyId).queryFirst();
+
+                String salesRepName = personInfo==null?"无":personInfo.getString("firstName");
+
+                lineMap.put("salesRepName",salesRepName);
+                Timestamp createdDateTp = (Timestamp)item.get("createdDate") ;
+                lineMap.put("createdDate",dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));
+
+                arrayList.add(lineMap);
+            }
+            String fileName = "分享数据导出";
+
+            ExportExcelFile.exportExcelMap(request, response, arrayList, excelTitle, mapKeys, fileName);
+        }  catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return "success";
+    }
 
 
     public static Map<String, Object> deleteMessage(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {

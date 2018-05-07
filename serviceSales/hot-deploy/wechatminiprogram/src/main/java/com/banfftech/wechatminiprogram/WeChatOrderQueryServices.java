@@ -757,15 +757,15 @@ public class WeChatOrderQueryServices {
                         findConditions3, fieldSet,
                         null, null, false);
                 int index = 0;
-                List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
-                Map<String, Object> rowFeature = new HashMap<String, Object>();
-                for (GenericValue pict : rowPictures) {
-                    Map<String, Object> innerRowMap = new HashMap<String, Object>();
-                    String drObjectInfo = (String) pict.get("drObjectInfo");
-                    innerRowMap.put("drObjectInfo", drObjectInfo);
-                    pictures.add(rowMap);
-                }
-                rowMap.put("pictures",pictures);
+//                List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
+//                Map<String, Object> rowFeature = new HashMap<String, Object>();
+//                for (GenericValue pict : rowPictures) {
+//                    Map<String, Object> innerRowMap = new HashMap<String, Object>();
+//                    String drObjectInfo = (String) pict.get("drObjectInfo");
+//                    innerRowMap.put("drObjectInfo", drObjectInfo);
+//                    pictures.add(rowMap);
+//                }
+//                rowMap.put("pictures",pictures);
 
                 GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
                 if (vir_product != null) {

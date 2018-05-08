@@ -35,15 +35,22 @@
                 <entity-one entity-name="PartyAndPerson" value-field="lookupPerson">
                     <field-map field-name="partyId" from-field="parameters.partyId"/><!-- is required -->
                 </entity-one>
-                <entity-and entity-name="PartyContent" list="partyContentList" filter-by-date="true">
+                <!--<entity-and entity-name="PartyContent" list="partyContentList" filter-by-date="true">-->
+                    <!--<field-map field-name="partyId" from-field="parameters.partyId"/>-->
+                    <!--<field-map field-name="partyContentTypeId" value="LGOIMGURL"/>-->
+                    <!--<order-by field-name="-fromDate"/>-->
+                <!--</entity-and>-->
+                <entity-and entity-name="PartyContentAndDataResource" list="partyContentList" filter-by-date="true">
                     <field-map field-name="partyId" from-field="parameters.partyId"/>
                     <field-map field-name="partyContentTypeId" value="LGOIMGURL"/>
                     <order-by field-name="-fromDate"/>
                 </entity-and>
                 <set field="partyContentId" from-field="partyContentList[0].contentId"/>
+                <set field="objectInfo" from-field="partyContentList[0].objectInfo"/>
                 <set field="partyContent" value="${groovy: partyContentId!=null?'/content/control/stream?contentId=' + partyContentId + externalKeyParam : ''}"/>
                 <set field="partyGroupLogoLinkUrl" from-field="partyContent" default-value="${lookupGroup.logoImageUrl}" global="true"/>
-                <set field="personalImage" from-field="partyContent"/>
+                <!--<set field="personalImage" from-field="partyContent"/>-->
+                <set field="personalImage" from-field="objectInfo"/>
             </actions>
             <widgets>
                 <section>

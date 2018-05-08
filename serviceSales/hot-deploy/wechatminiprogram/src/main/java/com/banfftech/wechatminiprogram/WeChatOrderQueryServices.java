@@ -203,6 +203,7 @@ public class WeChatOrderQueryServices {
                     Map<String, Object> rowMap = new HashMap<String, Object>();
                     String orderId = gv.getString("orderId");
                     GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+                    GenericValue orderHeaderAndRoles = EntityQuery.use(delegator).from("OrderHeaderAndRoles").where("orderId", orderId,"roleTypeId","BILL_TO_CUSTOMER").queryFirst();
                     GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
                     String productId = orderItem.getString("productId");
                     GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
@@ -217,6 +218,9 @@ public class WeChatOrderQueryServices {
                     rowMap.put("productName", productName);
                     rowMap.put("price", grandTotal);
                     rowMap.put("orderDate", orderDateStr);
+                    String orderCustPartyId = orderHeaderAndRoles.getString("partyId");
+                    Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, orderCustPartyId);
+                    rowMap.put("orderCustInfo",personInfoMap);
                     rowList.add(rowMap);
                     //总数增加
                     allOrderGrandTotal = allOrderGrandTotal + (grandTotal.doubleValue());

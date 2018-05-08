@@ -1593,7 +1593,7 @@ public class WeChatOrderQueryServices {
 
         }
 
-        GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("UserPreference").where("userPrefLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+        GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("UserPreference").where("userLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
         String [] hiddens = null;
         List<String> hiddenList=null;
         //说明该用户有需要隐藏的订单
@@ -1871,7 +1871,7 @@ public class WeChatOrderQueryServices {
                     UtilMisc.toList("-orderDate"), null, false);
         }
 
-       GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("UserPreference").where("userPrefLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+       GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("UserPreference").where("userLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
         String [] hiddens = null;
         List<String> hiddenList=null;
         //说明该用户有需要隐藏的订单

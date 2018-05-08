@@ -30,6 +30,14 @@
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
 
+    <!-- 效验订单状态 -->
+    <request-map uri="orderStatusValidation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="orderStatusValidation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <!-- 给店铺添加角色 -->
     <request-map uri="addRoleToStore">

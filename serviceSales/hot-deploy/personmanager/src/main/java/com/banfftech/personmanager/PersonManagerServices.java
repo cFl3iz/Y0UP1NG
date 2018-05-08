@@ -462,6 +462,47 @@ public class PersonManagerServices {
 
 
     /**
+     * validate OrderStatus
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> orderStatusValidation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String orderId = (String) context.get("orderId");
+
+        Map<String,Object> getOrderStatusMap = dispatcher.runSync("getOrderStatus",UtilMisc.toMap("orderId",orderId,"userLogin",admin));
+
+        if (!ServiceUtil.isSuccess(getOrderStatusMap)) {
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+        }
+
+        String status = (String) getOrderStatusMap.get("statusId");
+
+        resultMap.put("orderStatus",status);
+        if(status.equals("ORDER_CANCELLED")){
+            resultMap.put("paymentReady","false");
+        }else{
+            resultMap.put("paymentReady","true");
+        }
+
+
+        return resultMap;
+    }
+
+
+
+
+
+    /**
      * 初始化库存
      *
      * @param dctx
@@ -1785,6 +1826,22 @@ public class PersonManagerServices {
         person.set("nickname", userName);
 
         person.store();
+
+
+
+        if(null!=teleNumber && !teleNumber.trim().equals("")){
+            // 创建联系电话
+            Map<String, Object> inputTelecom = UtilMisc.toMap();
+            inputTelecom.put("partyId", partyIdentification.get("partyId"));
+            inputTelecom.put("contactNumber", teleNumber);
+            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+            inputTelecom.put("userLogin", admin);
+            Map<String, Object> createTelecom   = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+            if (!ServiceUtil.isSuccess(createTelecom)) {
+                return createTelecom;
+            }
+        }
 
         return resultMap;
     }
@@ -3904,22 +3961,19 @@ public class PersonManagerServices {
             return updateShipGroupShipInfoOutMap;
         }
 
-//        if(null!=telNumber && !telNumber.trim().equals("")){
-//            // 创建联系
-//            Map<String, Object> inputTelecom = UtilMisc.toMap();
-//            inputTelecom.put("partyId", partyId);
-//            inputTelecom.put("contactNumber", telNumber);
-//            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
-//            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-//            inputTelecom.put("userLogin", admin);
-//            Map<String, Object> createTelecom = null;
-//            try {
-//                createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-//            } catch (GenericServiceException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
+        if(null!=telNumber && !telNumber.trim().equals("")){
+            // 创建联系电话
+            Map<String, Object> inputTelecom = UtilMisc.toMap();
+            inputTelecom.put("partyId", partyId);
+            inputTelecom.put("contactNumber", telNumber);
+            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+            inputTelecom.put("userLogin", admin);
+            Map<String, Object> createTelecom   = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+            if (!ServiceUtil.isSuccess(createTelecom)) {
+                return createTelecom;
+            }
+        }
 
         return resultMap;
     }

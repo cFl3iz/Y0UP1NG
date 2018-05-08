@@ -1508,13 +1508,13 @@ public class WeChatOrderQueryServices {
 //
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
         // GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
-
         String partyId = "NA";
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
         List<Map<String, Object>> myResourceOrderList = new ArrayList<Map<String, Object>>();
+        GenericValue nowUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
 
         //是否是从App端的查询
@@ -1593,6 +1593,19 @@ public class WeChatOrderQueryServices {
 
         }
 
+        GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("PartyIdentification").where("userPrefLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+        String [] hiddens = null;
+        List<String> hiddenList=null;
+        //说明该用户有需要隐藏的订单
+        if(null!=hiddenOrderPref){
+            String userPrefValue = hiddenOrderPref.getString("userPrefValue");
+            if(userPrefValue.indexOf(",")>0){
+                hiddens = userPrefValue.split(",");
+            }else{
+                hiddens = new String[]{userPrefValue};
+            }
+            hiddenList= Arrays.asList(hiddens);
+        }
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
@@ -1600,6 +1613,12 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
+                //隐藏
+                if(null!=hiddenList){
+                    if(hiddenList.contains(rowMap.get("orderId"))){
+                        continue;
+                    }
+                }
                 Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
 
                 rowMap.put("orderDate", dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));
@@ -1783,7 +1802,7 @@ public class WeChatOrderQueryServices {
         List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
 
         System.out.println("partyId ==  " + partyId);
-
+        GenericValue nowUserLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
@@ -1846,13 +1865,25 @@ public class WeChatOrderQueryServices {
                     listConditions3, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
         } else {
-            System.out.println("in else ==  ");
+
             queryMyResourceOrderList = delegator.findList("OrderHeaderItemAndRoles",
                     listConditions2, fieldSet,
                     UtilMisc.toList("-orderDate"), null, false);
         }
-        System.out.println("queryMyResourceOrderList ==  " + queryMyResourceOrderList);
 
+       GenericValue hiddenOrderPref =  EntityQuery.use(delegator).from("PartyIdentification").where("userPrefLoginId", nowUserLogin.getString("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+        String [] hiddens = null;
+        List<String> hiddenList=null;
+        //说明该用户有需要隐藏的订单
+        if(null!=hiddenOrderPref){
+            String userPrefValue = hiddenOrderPref.getString("userPrefValue");
+            if(userPrefValue.indexOf(",")>0){
+                hiddens = userPrefValue.split(",");
+            }else{
+                hiddens = new String[]{userPrefValue};
+            }
+            hiddenList= Arrays.asList(hiddens);
+        }
 
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
@@ -1861,7 +1892,12 @@ public class WeChatOrderQueryServices {
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
                 rowMap = gv.getAllFields();
-
+                //隐藏
+                if(null!=hiddenList){
+                    if(hiddenList.contains(rowMap.get("orderId"))){
+                        continue;
+                    }
+                }
                 Timestamp createdDateTp = (Timestamp) gv.get("orderDate");
 
                 rowMap.put("orderDate", dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));

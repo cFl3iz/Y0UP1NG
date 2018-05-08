@@ -16,6 +16,18 @@
                    optional="true"/>
     </service>
 
+    <!-- validateOrderStatus 支付前效验订单状态 -->
+    <service name="orderStatusValidation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderStatusValidation" auth="false">
+        <description>orderStatusValidation</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderStatus" type="String" mode="OUT" optional="true"/>
+        <attribute name="paymentReady" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
     <!-- 加入商店招募 -->
     <service name="recruitingPartyToParty" engine="java"

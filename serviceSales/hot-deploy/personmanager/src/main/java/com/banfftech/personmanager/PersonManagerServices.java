@@ -2842,7 +2842,7 @@ public class PersonManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-        GenericValue orderPref =  EntityQuery.use(delegator).from("UserPreference").where("userPrefLoginId",  userLogin.get("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+        GenericValue orderPref =  EntityQuery.use(delegator).from("UserPreference").where("userLoginId",  userLogin.get("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
 
         // User Pref
         String userPrefValue = "";

@@ -1884,7 +1884,7 @@ public class WeChatOrderQueryServices {
             }
             hiddenList= Arrays.asList(hiddens);
         }
-
+        Debug.logInfo("->hiddenList:"+hiddenList,module);
         if (null != queryMyResourceOrderList && queryMyResourceOrderList.size() > 0) {
 
             for (GenericValue gv : queryMyResourceOrderList) {

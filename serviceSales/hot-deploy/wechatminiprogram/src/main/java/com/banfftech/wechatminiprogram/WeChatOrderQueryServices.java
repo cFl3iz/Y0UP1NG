@@ -345,8 +345,12 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("addressCount", workEffort.get("addressCount") == null ? "0" : workEffort.get("addressCount"));
                 rowMap.put("refreCount", workEffort.get("shareCount") == null ? "0" : workEffort.get("shareCount"));
-
-                EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%" + productId.substring(0, productId.indexOf("-")) + "%");
+                EntityCondition findConditions = null;
+                if(productId.indexOf("-")>0){
+                   findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%" + productId.substring(0, productId.indexOf("-")) + "%");
+                }else{
+                    findConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
+                }
                 EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SALES_REP");
                 EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
                 EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);

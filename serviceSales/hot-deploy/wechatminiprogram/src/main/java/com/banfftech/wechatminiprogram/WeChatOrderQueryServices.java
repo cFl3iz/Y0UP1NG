@@ -550,12 +550,12 @@ public class WeChatOrderQueryServices {
 
         Map<String, Object> allField = product.getAllFields();
 
-        String desc = (String) allField.get("descritpion");
+        String desc = (String) allField.get("description");
 
         if(null != desc && !desc.equals("")){
             desc = desc.replaceAll("/", "\n/");
         }
-        allField.put("descritpion",desc);
+        allField.put("description",desc);
 
         //用虚拟产品随便找一个sku变形去拿价格 , fix 其实自己就是sku
         String vir_productId = (String) product.get("productId");

@@ -549,6 +549,13 @@ public class WeChatOrderQueryServices {
 
 
         Map<String, Object> allField = product.getAllFields();
+
+        String desc = (String) allField.get("descritpion");
+
+        desc = desc.replaceAll("/", "\n/");
+
+        allField.put("descritpion",desc);
+
         //用虚拟产品随便找一个sku变形去拿价格 , fix 其实自己就是sku
         String vir_productId = (String) product.get("productId");
         // GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();

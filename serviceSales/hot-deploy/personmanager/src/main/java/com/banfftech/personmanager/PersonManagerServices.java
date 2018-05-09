@@ -854,7 +854,9 @@ public class PersonManagerServices {
 
         boolean isRight = false;
 
-        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        //GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        //暂时放开,不管你是什么店的销售代表,只要你是。
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where( "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
         if (null != role) {
             isRight = true;

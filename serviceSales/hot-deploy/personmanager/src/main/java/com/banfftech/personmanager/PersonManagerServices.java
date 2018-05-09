@@ -6200,9 +6200,21 @@ public class PersonManagerServices {
 
         String salesRepPartyId = null;
 
-        if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-            salesRepId = "ZUCZUG";
+        switch (productStoreId){
+            case "ZUCZUGSTORE":
+                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+                    salesRepId = "ZUCZUG";
+                }
+            break;
+            case "KANGCHENGSTORE":
+                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+                    salesRepId = "KANGCHENG";
+                }
+            break;
         }
+
+
+
 
         salesRepPartyId = salesRepId;
 

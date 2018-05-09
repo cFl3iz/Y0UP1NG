@@ -229,8 +229,13 @@ public class PersonManagerQueryServices {
                     }
 
                     rowMap.put("shareCount",shareCount);
+                    EntityCondition findConditions = null;
+                    if(productId.indexOf("-")>0){
+                        findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
+                    }else{
+                        findConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
 
-                    EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+productId.substring(0, productId.indexOf("-")) + "%");
+                    }
                     EntityCondition findConditions2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "END_USER_CUSTOMER");
                     EntityCondition findConditions3 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,rowPartyId);
                     EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);

@@ -293,7 +293,7 @@ public class WeChatOrderQueryServices {
                 String workEffortId = gv.getString("workEffortId");
                 GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
                 GenericValue workEffort = EntityQuery.use(delegator).from("WorkEffort").where("workEffortId", workEffortId).queryFirst();
-
+                rowMap.put("backWorkEffortId",workEffortId);
                 String rowShareCount = workEffort.getString("shareCount");
                 int rowShare = Integer.parseInt(rowShareCount == null ? "0" : rowShareCount);
                 shareCount += rowShare;
@@ -310,6 +310,7 @@ public class WeChatOrderQueryServices {
                     for (GenericValue rowGeneric : workEffortPartyRoleAndProduct) {
 
                         String innerWorkEffort = rowGeneric.getString("workEffortId");
+                        rowMap.put("innerWorkEffort",innerWorkEffort);
                         List<GenericValue> referrerRoles = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", innerWorkEffort).orderBy("-fromDate").queryPagedList(0, 5).getData();
                         for (int i = 0; i < referrerRoles.size(); i++) {
 

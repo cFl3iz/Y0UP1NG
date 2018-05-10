@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <!-- 产品内容始祖类型 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="素然图片类型列表" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" productContentTypeId="ZUCZUG_IMAGES_TYPE"/>
+
+    <!-- 产品细节图 -->
+    <ProductContentType createdStamp="2015-08-07 17:35:39.0" createdTxStamp="2015-08-07 17:35:39.0" description="细节图" hasTable="N" lastUpdatedStamp="2015-08-07 17:35:39.0" lastUpdatedTxStamp="2015-08-07 17:35:39.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="DETAIL_PRODUCT_IMAGE"/>
+    <!-- 产品搭配图 -->
+    <ProductContentType createdStamp="2015-08-07 17:35:39.0" createdTxStamp="2015-08-07 17:35:39.0" description="搭配图" hasTable="N" lastUpdatedStamp="2015-08-07 17:35:39.0" lastUpdatedTxStamp="2015-08-07 17:35:39.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MATCH_PRODUCT_IMAGE"/>
+
+    <!-- 款式图-底部 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（底部）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_BOTTOM_IMAGE"/>
+    <!-- 款式图-细节 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（细节）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_DETAIL_IMAGE"/>
+    <!-- 款式图-反面 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（反面）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_NEGAT_IMAGE"/>
+    <!-- 款式图-正面 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（正面）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_POSIT_IMAGE"/>
+    <!-- 款式图-侧面 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（侧面）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_SIDE_IMAGE"/>
+    <!-- 款式图-脱卸 -->
+    <ProductContentType createdStamp="2015-07-03 18:40:28.0" createdTxStamp="2015-07-03 18:40:28.0" description="款式图（脱卸部分）" hasTable="N" lastUpdatedStamp="2015-07-03 18:40:28.0" lastUpdatedTxStamp="2015-07-03 18:40:28.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="MODELS_UNLOAD_IMAGE"/>
+
+    <!-- 其他说明 -->
+    <ProductContentType createdStamp="2016-07-27 09:47:07.0" createdTxStamp="2016-07-27 09:47:07.0" description="其他说明" hasTable="N" lastUpdatedStamp="2016-07-27 09:47:07.0" lastUpdatedTxStamp="2016-07-27 09:47:07.0" productContentTypeId="OTHER_INSTRUCTIONS"/>
+    <!-- 正式商品描述 -->
+    <ProductContentType createdStamp="2015-12-04 11:21:38.0" createdTxStamp="2015-12-04 11:21:38.0" description="正式商品描述" hasTable="N" lastUpdatedStamp="2015-12-04 11:21:38.0" lastUpdatedTxStamp="2015-12-04 11:21:38.0" productContentTypeId="REAL_PRODUCT_DESC"/>
+    <!-- 正式商品特别提醒 -->
+    <ProductContentType createdStamp="2015-12-04 11:21:38.0" createdTxStamp="2015-12-04 11:21:38.0" description="正式商品特别提醒" hasTable="N" lastUpdatedStamp="2015-12-04 11:21:38.0" lastUpdatedTxStamp="2015-12-04 11:21:38.0" productContentTypeId="REAL_PRODUCT_ALERT"/>
+    <!-- 单品图 -->
+    <ProductContentType createdStamp="2015-08-07 17:35:39.0" createdTxStamp="2015-08-07 17:35:39.0" description="单品图" hasTable="N" lastUpdatedStamp="2015-08-07 17:35:39.0" lastUpdatedTxStamp="2015-08-07 17:35:39.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="SINGLE_PRODUCT_IMAGE"/>
+    <!-- SPU 尺码指南 -->
+    <ProductContentType createdStamp="2018-03-13 14:03:13.0" createdTxStamp="2018-03-13 14:03:13.0" description="SPU尺码指南" hasTable="N" lastUpdatedStamp="2018-03-13 14:03:13.0" lastUpdatedTxStamp="2018-03-13 14:03:13.0" productContentTypeId="SIZE_GUIDE_URL"/>
+    <!-- 特殊说明 -->
+    <ProductContentType createdStamp="2016-07-28 14:43:02.0" createdTxStamp="2016-07-28 14:43:02.0" description="特殊说明" hasTable="N" lastUpdatedStamp="2016-07-28 14:43:02.0" lastUpdatedTxStamp="2016-07-28 14:43:02.0" productContentTypeId="SPECIAL_INSTRUCTIONS"/>
+
+
+</entity-engine-xml>

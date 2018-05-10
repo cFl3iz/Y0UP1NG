@@ -210,6 +210,194 @@
     </request-map>
 
 
+    <request-map uri="FindRealProductList">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductList"/>
+    </request-map>
+
+    <request-map uri="FindRealProductContentList">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductContentList"/>
+    </request-map>
+    <request-map uri="FindRealProductContentListSimple">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductContentListSimple"/>
+    </request-map>
+
+    <request-map uri="RealProductImageAssoc">
+        <description>成衣图片管理</description>
+        <security https="true" auth="true"/>
+        <!--<event type="service" invoke="copyImageAndContentInfoFromMiddleSize"></event>-->
+        <!-- 把这个颜色的中码的图片，都复制到其他尺码上去 -->
+        <response name="success" type="view" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="LoadOSSResourceHtml">
+        <description>载入OSS的图片</description>
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.util.ImageManageService" invoke="loadOSSImageListWithProduct" />
+        <response name="success" type="view" value="LoadOSSResourceHtml"/>
+    </request-map>
+
+    <request-map uri="associateProductAndImage">
+        <description>提交图片的关联</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="associateProductAndImage"></event>
+        <response name="success" type="request-redirect" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="colorId"/>
+        </response>
+        <response name="error" type="view" value="RealProductImageAssoc"></response>
+    </request-map>
+
+    <request-map uri="removeProductContent">
+        <description>删除一个商品的图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductContent" />
+        <response name="success" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="EditProductMatch">
+        <description>编辑或添加商品搭配</description>
+        <security https="true" auth="true"/>
+        <!--<event type="service" invoke="removeProductContentMatchAndPutAgain"></event>-->
+        <!-- 为搭配下的主款设置ProductContent中的内容 -->
+        <response name="success" type="view" value="EditProductMatch">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="addProductToMatch">
+        <description>添加商品到搭配中去</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="addProductToMatch" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeProductFromMatch">
+        <description>把商品从搭配中删除</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductFromMatch" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="saveMatchImages">
+        <description>保存搭配的图片</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="saveMatchImages"></event>
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeProductCategoryContent">
+        <description>删除搭配中的一个图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductCategoryContent" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeMatchProductCategory">
+        <description>删除搭配中的一个图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeMatchProductCategory" />
+        <response name="success" type="request-redirect-noparam" value="EditProductMatch">
+        </response>
+    </request-map>
+
+    <request-map uri="setMatchIsIpadUse">
+        <description>设置是否ipad可以用这个搭配</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setMatchIsIpadUse" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="setMatchIsWebsiteUse">
+        <description>设置网站是否可以用这个搭配</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setMatchIsWebsiteUse" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="setProductMasterColor">
+        <description>为某个商品设置主色</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setProductMasterColor" />
+        <response name="success" type="request-redirect" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="colorId"/>
+        </response>
+        <response name="error" type="view" value="RealProductImageAssoc"></response>
+    </request-map>
+
+
+    <request-map uri="realProductContent">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="realProductContent">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="EditRealProductContent">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditRealProductContent"/>
+    </request-map>
+
+    <request-map uri="downloadExcel">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.zuczug.util.ExcelUtilService" invoke="downloadExcel"/>
+        <response name="success" type="request-redirect" value="FindRealProductContentList"/>
+        <response name="error" type="request-redirect" value="FindRealProductContentList"/>
+    </request-map>
+
+    <request-map uri="realProductDescriptionUpload">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.zuczug.util.ExcelUtilService" invoke="upLoadExcel"/>
+        <response name="success" type="request-redirect" value="FindRealProductContentList"/>
+        <response name="error" type="request-redirect" value="FindRealProductContentList"/>
+    </request-map>
+
+    <request-map uri="EditShopProductContent">
+        <description>为某个商品设置主色</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="editShopProductContent" />
+        <response name="success" type="request-redirect" value="EditRealProductContent">
+            <redirect-parameter name="productId"/>
+        </response>
+        <response name="error" type="view" value="EditRealProductContent"></response>
+    </request-map>
+
+    <request-map uri="loadProductInfo">
+        <security auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="loadProductInfo"/>
+        <response name="success" type="view" value="EditRealProductContent"/>
+        <response name="error" type="view" value="EditRealProductContent"/>
+    </request-map>
+
+    <request-map uri="realProductDescriptionExcelUpload">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="realProductDescriptionExcelUpload"/>
+    </request-map>
+
+
 
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
@@ -217,4 +405,14 @@
     <view-map name="QuickShipOrder" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickShipOrder"/>
     <view-map name="ExportShareCpsToExcel" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ExportShareCpsToExcel"/>
 
+<!-- 产品内容 -->
+    <view-map name="FindRealProductList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductList"/>
+    <view-map name="FindRealProductContentList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentList"/>
+    <view-map name="FindRealProductContentListSimple" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentListSimple"/>
+    <view-map name="RealProductImageAssoc" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#RealProductImageAssoc"/>
+    <view-map name="LoadOSSResourceHtml" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#LoadOSSResourceHtml"/>
+    <view-map name="EditProductMatch" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductMatch"/>
+    <view-map name="realProductContent" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#realProductContent"/>
+    <view-map name="EditRealProductContent" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditRealProductContent"/>
+    <view-map name="realProductDescriptionExcelUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#realProductDescriptionExcelUpload"/>
 </site-conf>

@@ -16,6 +16,24 @@
                    optional="true"/>
     </service>
 
+    <!-- 初始化所有Sku图片 -->
+    <service name="initialAllSkuPicture" engine="java"
+             location="main.java.com.banfftech.platformmanager.util.ImageManageService"
+             invoke="initialAllSkuPicture" auth="false">
+        <description>initialAllSkuPicture</description>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <service name="initialAllSkuPictureTemp" engine="java"
+             location="main.java.com.banfftech.platformmanager.util.ImageManageService"
+             invoke="initialAllSkuPictureTemp" auth="false">
+        <description>initialAllSkuPictureTemp</description>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <!-- validateOrderStatus 支付前效验订单状态 -->
     <service name="orderStatusValidation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

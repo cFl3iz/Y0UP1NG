@@ -607,6 +607,11 @@ public class PlatformManagerServices {
     }
 
 
+
+
+
+
+
     // 导入exlSKU
     public static String productUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
@@ -755,7 +760,7 @@ public class PlatformManagerServices {
                         if (UtilValidate.isEmpty(productVariant)) {
                             GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                             newVariantProduct.set("productTypeId", "FINISHED_GOOD");
-                            newVariantProduct.set("description", otherDesc);
+                            newVariantProduct.set("description", desc);
                             newVariantProduct.set("comments", keyword);
                             //默认图片
                             newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
@@ -1104,7 +1109,7 @@ public class PlatformManagerServices {
                         if (UtilValidate.isEmpty(productVariant)) {
                             GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                             newVariantProduct.set("productTypeId", "FINISHED_GOOD");
-                            newVariantProduct.set("description", otherDesc);
+                            newVariantProduct.set("description", desc);
                             newVariantProduct.set("comments", keyword);
                             //默认图片
                             newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");

@@ -8,7 +8,215 @@
     <description>PlatformModel</description>
     <copyright>CloudLake</copyright>
     <version>1.0</version>
+    <view-entity entity-name="ProductCategoryGroupSeriesView"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Group View">
+        <member-entity entity-alias="PC" entity-name="ProductCategory"></member-entity>
+        <member-entity entity-alias="PCR" entity-name="ProductCategoryRollup"></member-entity>
+        <member-entity entity-alias="PCSS" entity-name="ProductCategory"></member-entity>
+        <alias name="groupId" entity-alias="PC" field="productCategoryId"></alias>
+        <alias name="groupName" entity-alias="PC" field="categoryName"></alias>
+        <alias name="seriesId" entity-alias="PCSS" field="productCategoryId"></alias>
+        <alias name="seriesName" entity-alias="PCSS" field="categoryName"></alias>
+        <view-link entity-alias="PC" rel-entity-alias="PCR">
+            <key-map field-name="productCategoryId"/>
+        </view-link>
+        <view-link entity-alias="PCR" rel-entity-alias="PCSS">
+            <key-map field-name="parentProductCategoryId" rel-field-name="productCategoryId"/>
+        </view-link>
+        <entity-condition>
+            <condition-list combine="and">
+                <condition-expr entity-alias="PCSS" field-name="productCategoryTypeId" operator="equals" value="SERIES"/>
+                <condition-expr entity-alias="PC" field-name="productCategoryTypeId" operator="equals" value="GROUPNAME"/>
+            </condition-list>
+        </entity-condition>
+    </view-entity>
 
+    <view-entity entity-name="ProductGroupCategorySeasonView"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Group View">
+        <member-entity entity-alias="PC" entity-name="ProductCategory"></member-entity>
+        <member-entity entity-alias="PCR" entity-name="ProductCategoryRollup"></member-entity>
+        <member-entity entity-alias="PCSN" entity-name="ProductCategory"></member-entity>
+        <alias name="groupId" entity-alias="PC" field="productCategoryId"></alias>
+        <alias name="groupName" entity-alias="PC" field="categoryName"></alias>
+        <alias name="seasonId" entity-alias="PCSN" field="productCategoryId"></alias>
+        <alias name="seasonName" entity-alias="PCSN" field="categoryName"></alias>
+
+        <view-link entity-alias="PC" rel-entity-alias="PCR">
+            <key-map field-name="productCategoryId" rel-field-name="productCategoryId"/>
+        </view-link>
+        <view-link entity-alias="PCR" rel-entity-alias="PCSN">
+            <key-map field-name="parentProductCategoryId" rel-field-name="productCategoryId"/>
+        </view-link>
+        <entity-condition>
+            <condition-list combine="and">
+                <condition-expr entity-alias="PCSN" field-name="productCategoryTypeId" operator="equals" value="ZUCZUG_SEASON"/>
+            </condition-list>
+        </entity-condition>
+    </view-entity>
+
+    <view-entity entity-name="ProductCategoryGroupSubSeriesView"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Group View">
+        <member-entity entity-alias="PC" entity-name="ProductCategory"></member-entity>
+        <member-entity entity-alias="PCR" entity-name="ProductCategoryRollup"></member-entity>
+        <member-entity entity-alias="PCSS" entity-name="ProductCategory"></member-entity>
+        <alias name="groupId" entity-alias="PC" field="productCategoryId"></alias>
+        <alias name="groupName" entity-alias="PC" field="categoryName"></alias>
+        <alias name="subSeriesId" entity-alias="PCSS" field="productCategoryId"></alias>
+        <alias name="subSeriesName" entity-alias="PCSS" field="categoryName"></alias>
+        <view-link entity-alias="PC" rel-entity-alias="PCR">
+            <key-map field-name="productCategoryId"/>
+        </view-link>
+        <view-link entity-alias="PCR" rel-entity-alias="PCSS">
+            <key-map field-name="parentProductCategoryId" rel-field-name="productCategoryId"/>
+        </view-link>
+        <entity-condition>
+            <condition-list combine="and">
+                <condition-expr entity-alias="PCSS" field-name="productCategoryTypeId" operator="equals" value="SUBSERIES"/>
+            </condition-list>
+        </entity-condition>
+    </view-entity>
+    <view-entity entity-name="ProductCategoryGroupView"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Category Group View">
+        <member-entity entity-alias="PCSS" entity-name="ProductCategoryGroupSeriesView"></member-entity>
+        <member-entity entity-alias="PCSN" entity-name="ProductGroupCategorySeasonView"></member-entity>
+        <member-entity entity-alias="PGSSV" entity-name="ProductCategoryGroupSubSeriesView"></member-entity>
+        <alias name="groupId" entity-alias="PCSS"></alias>
+        <alias name="groupName" entity-alias="PCSS"></alias>
+        <alias name="seriesId" entity-alias="PCSS"></alias>
+        <alias name="seriesName" entity-alias="PCSS"></alias>
+        <alias name="seasonId" entity-alias="PCSN"></alias>
+        <alias name="seasonName" entity-alias="PCSN"></alias>
+        <alias name="subSeriesId" entity-alias="PGSSV"></alias>
+        <alias name="subSeriesName" entity-alias="PGSSV"></alias>
+        <view-link entity-alias="PCSS" rel-entity-alias="PCSN">
+            <key-map field-name="groupId"/>
+        </view-link>
+        <view-link entity-alias="PCSN" rel-entity-alias="PGSSV" rel-optional="true">
+            <key-map field-name="groupId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="AllProductGroupMember" package-name="">
+        <description>所有组别的分类的商品，提高view查询速度</description>
+        <member-entity entity-alias="PC" entity-name="ProductCategory"></member-entity>
+        <member-entity entity-alias="PCM" entity-name="ProductCategoryMember"></member-entity>
+        <alias name="productCategoryId" entity-alias="PC"></alias>
+        <alias name="categoryName" entity-alias="PC"></alias>
+        <alias name="productId" entity-alias="PCM"></alias>
+        <view-link entity-alias="PC" rel-entity-alias="PCM">
+            <key-map field-name="productCategoryId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr entity-alias="PC" field-name="productCategoryTypeId" operator="equals" value="GROUPNAME"/>
+        </entity-condition>
+    </view-entity>
+
+    <view-entity entity-name="AllProductWaveCategory" package-name="">
+        <description>所有波段的分类的商品，提高view查询速度</description>
+        <member-entity entity-alias="PC" entity-name="ProductCategory"></member-entity>
+        <member-entity entity-alias="PCM" entity-name="ProductCategoryMember"></member-entity>
+        <alias name="productCategoryId" entity-alias="PC"></alias>
+        <alias name="categoryName" entity-alias="PC"></alias>
+        <alias name="productId" entity-alias="PCM"></alias>
+        <view-link entity-alias="PC" rel-entity-alias="PCM">
+            <key-map field-name="productCategoryId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr entity-alias="PC" field-name="productCategoryTypeId" operator="equals" value="WAVE"/>
+        </entity-condition>
+    </view-entity>
+
+
+    <extend-entity entity-name="ProductCategoryContent">
+        <field name="sequenceNum" type="numeric"></field>
+    </extend-entity>
+
+    <view-entity entity-name="ProductAssocViewWithVariant"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Assoc BOM Feature View">
+        <member-entity entity-alias="PRD" entity-name="Product"></member-entity>
+        <member-entity entity-alias="PA" entity-name="ProductAssoc"></member-entity>
+        <alias-all entity-alias="PRD"></alias-all>
+
+        <alias entity-alias="PA" name="productId"></alias>
+        <alias entity-alias="PA" name="productIdTo"></alias>
+        <alias entity-alias="PA" name="quantity"></alias>
+        <alias entity-alias="PA" name="fromDate"></alias>
+        <alias entity-alias="PA" name="thruDate"></alias>
+        <alias entity-alias="PA" name="productAssocTypeId"></alias>
+        <view-link entity-alias="PRD" rel-entity-alias="PA">
+            <key-map field-name="productId" rel-field-name="productIdTo"/>
+        </view-link>
+
+        <entity-condition filter-by-date="true">
+            <!-- <condition-list combine="and"> -->
+            <condition-expr entity-alias="PA" field-name="productAssocTypeId" operator="equals" value="PRODUCT_VARIANT"/>
+            <!-- <condition-expr entity-alias="PRD" field-name="productTypeId" operator="equals" value="RAW_MATERIAL"/> -->
+            <!-- </condition-list> -->
+        </entity-condition>
+    </view-entity>
+
+    <view-entity entity-name="ProductRealView"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Design View">
+        <description>商品管理正式商品列表</description>
+        <member-entity entity-alias="P" entity-name="Product"></member-entity>
+        <member-entity entity-alias="PCG" entity-name="ProductCategoryGroupView"></member-entity>
+        <member-entity entity-alias="PCM" entity-name="AllProductGroupMember"></member-entity>
+        <member-entity entity-alias="PCM1" entity-name="AllProductWaveCategory"></member-entity>
+        <alias-all entity-alias="PCG">
+            <exclude field="productId"/>
+        </alias-all>
+        <alias name="productId" entity-alias="P"></alias>
+        <alias name="internalName" entity-alias="P"></alias>
+        <alias name="productName" entity-alias="P"></alias>
+        <alias name="quantityUomId" entity-alias="P"></alias>
+        <alias name="isVirtual" entity-alias="P"></alias>
+        <alias name="isVariant" entity-alias="P"></alias>
+        <alias name="releaseDate" entity-alias="P"></alias>
+        <alias name="waveId" entity-alias="PCM1" field="productCategoryId"></alias>
+        <alias name="waveName" entity-alias="PCM1" field="categoryName"></alias>
+        <view-link entity-alias="P" rel-entity-alias="PCM" rel-optional="true">
+            <key-map field-name="productId" rel-field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="PCG" rel-optional="true">
+            <key-map field-name="productCategoryId" rel-field-name="groupId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PCM1" rel-optional="true">
+            <key-map field-name="productId" rel-field-name="productId"/>
+            <!-- <entity-condition>
+                <condition-expr entity-alias="PCM1" field-name="productCategoryTypeId" operator="equals" value="WAVE"/>
+            </entity-condition> -->
+        </view-link>
+        <entity-condition>
+            <condition-list combine="and">
+                <condition-expr entity-alias="P" field-name="productTypeId" operator="equals" value="FINISHED_GOOD"/>
+            </condition-list>
+        </entity-condition>
+    </view-entity>
+
+
+    <!-- 用于查询某个product下有多少X类型的特征，比如某个product下有多个颜色或者多少尺码 -->
+    <view-entity entity-name="ProductDesignFeatureWithType"
+                 package-name="org.ofbiz.product.catalog"
+                 title="Product Design Feature With Type">
+        <member-entity entity-alias="MPFA" entity-name="ProductFeatureAppl"></member-entity>
+        <member-entity entity-alias="PF" entity-name="ProductFeature"></member-entity>
+        <alias name="productFeatureId" entity-alias="PF"></alias>
+        <alias name="productFeatureTypeId" entity-alias="PF"></alias>
+        <alias name="description" entity-alias="PF"></alias>
+        <alias name="idCode" entity-alias="PF"></alias>
+        <alias name="productId" entity-alias="MPFA"></alias>
+        <alias name="fromDate" entity-alias="MPFA"></alias>
+        <alias name="thruDate" entity-alias="MPFA"></alias>
+        <view-link entity-alias="PF" rel-entity-alias="MPFA">
+            <key-map field-name="productFeatureId"/>
+        </view-link>
+    </view-entity>
     <!-- 动态记录 浏览量和 转发数量 -->
     <extend-entity entity-name="WorkEffort">
         <field name="shareCount" type="value"><description>转发量</description></field>
@@ -71,6 +279,16 @@
         <prim-key field="teleNumber"/>
         <prim-key field="captcha"/>
         <prim-key field="fromDate"/>
+    </entity>
+
+
+    <entity entity-name="ProductImagesTemp" package-name="org.ofbiz.cloudLake.product" title="图片地址临表">
+        <description>图片地址临表</description>
+        <field name="skuId" type="value"></field>
+        <field name="contentType" type="value"></field>
+        <field name="path" type="value"></field>
+        <prim-key field="skuId"/>
+        <prim-key field="contentType"/>
     </entity>
 
     <!-- 转发信息 -->

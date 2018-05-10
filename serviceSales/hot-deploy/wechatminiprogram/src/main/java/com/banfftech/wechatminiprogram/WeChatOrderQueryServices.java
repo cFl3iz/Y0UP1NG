@@ -590,6 +590,7 @@ public class WeChatOrderQueryServices {
 
             for (GenericValue rowSku : skus) {
                 String rowSkuId = rowSku.getString("productIdTo");
+                //TODO FIX ME
                 EntityCondition findConditions3 = EntityCondition
                         .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
                 List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",

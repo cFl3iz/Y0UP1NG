@@ -606,7 +606,7 @@ public class WeChatOrderQueryServices {
                 }
                 //2 查询单品图
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
-                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, matchTypeConditions);
+                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
                 List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
                         null, null, false);
                 GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
@@ -632,7 +632,7 @@ public class WeChatOrderQueryServices {
 
                 //3 查询细节图
                 EntityCondition detailTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "DETAIL_PRODUCT_IMAGE");
-                EntityCondition detailCondition = EntityCondition.makeCondition(detailTypeConditions, EntityOperator.AND, matchTypeConditions);
+                EntityCondition detailCondition = EntityCondition.makeCondition(detailTypeConditions, EntityOperator.AND, genericProductConditions);
                 List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo",matchCondition, fieldSet,
                         null, null, false);
                 if(detailPictures!=null && detailPictures.size() > 0 ){
@@ -674,7 +674,7 @@ public class WeChatOrderQueryServices {
 
             }
 
-
+            Debug.logInfo("QUERY DETAIL pictures:"+pictures,module);
             if (pictures != null && pictures.size() > 0) {
                 imgAttr = new String[pictures.size()];
                 int index = 0;

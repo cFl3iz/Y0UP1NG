@@ -574,8 +574,9 @@ public class WeChatOrderQueryServices {
         if (vir_product != null) {
 
             //获取SPU的尺码规格
-            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", vir_product.getString("productId")).queryFirst();
-
+            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0,productId.indexOf("-"))).queryFirst();
+            Debug.logInfo("productId+:"+productId.substring(0,productId.indexOf("-")),module);
+            Debug.logInfo("productContentAndElectronicText:"+productContentAndElectronicText,module);
             List<String> spuSpecTitleList = new ArrayList<String>();
             List<Map<String,String>> spuSpecRowList = new ArrayList<Map<String, String>>();
             if(null != productContentAndElectronicText){

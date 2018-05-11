@@ -580,8 +580,8 @@ public class PlatformLoginWorker {
             result.put("unioId",unioId);
             result.put("tarjeta",tarjeta);
             result.put("openId",openId);
-            result.put("personInfo",miniProgramIdentification.get("partyId"));
-            result.put("partyId",PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")));
+            result.put("partyId",miniProgramIdentification.get("partyId"));
+            result.put("personInfo",PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")+""));
 
             return result;
         }
@@ -645,7 +645,7 @@ public class PlatformLoginWorker {
         result.put("tarjeta",tarjeta);
         result.put("partyId", partyId);
 
-
+        result.put("personInfo",PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));
         return result;
     }
 

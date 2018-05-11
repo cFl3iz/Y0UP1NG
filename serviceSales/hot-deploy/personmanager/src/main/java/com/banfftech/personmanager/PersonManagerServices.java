@@ -463,6 +463,7 @@ public class PersonManagerServices {
 
     /**
      * validate OrderStatus
+     *
      * @param dctx
      * @param context
      * @return
@@ -479,7 +480,7 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String orderId = (String) context.get("orderId");
 
-        Map<String,Object> getOrderStatusMap = dispatcher.runSync("getOrderStatus",UtilMisc.toMap("orderId",orderId,"userLogin",admin));
+        Map<String, Object> getOrderStatusMap = dispatcher.runSync("getOrderStatus", UtilMisc.toMap("orderId", orderId, "userLogin", admin));
 
         if (!ServiceUtil.isSuccess(getOrderStatusMap)) {
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
@@ -487,19 +488,16 @@ public class PersonManagerServices {
 
         String status = (String) getOrderStatusMap.get("statusId");
 
-        resultMap.put("orderStatus",status);
-        if(status.equals("ORDER_CANCELLED")){
-            resultMap.put("paymentReady","false");
-        }else{
-            resultMap.put("paymentReady","true");
+        resultMap.put("orderStatus", status);
+        if (status.equals("ORDER_CANCELLED")) {
+            resultMap.put("paymentReady", "false");
+        } else {
+            resultMap.put("paymentReady", "true");
         }
 
 
         return resultMap;
     }
-
-
-
 
 
     /**
@@ -538,15 +536,15 @@ public class PersonManagerServices {
                 //自己就是sku
                 String skuId = (String) gv.get("productId");
 
-                Debug.logInfo("Find SKU : " + skuId,module);
+                Debug.logInfo("Find SKU : " + skuId, module);
                 GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", skuId).queryFirst();
                 GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                 String productStoreId = category.getString("productStoreId");
                 GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
                 String inventoryFacilityId = store.getString("inventoryFacilityId");
                 //获得库存信息 getInventoryAvailableByFacility
-                Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                        "facilityId",inventoryFacilityId,"productId",skuId));
+                Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                        "facilityId", inventoryFacilityId, "productId", skuId));
                 BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
                 BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
 
@@ -592,15 +590,13 @@ public class PersonManagerServices {
                 //一模一样的库存我还差异个屁?
                 if (availableToPromiseTotal.compareTo(quantity) == 0) {
 
-                }else{
+                } else {
                     //3.2 Do create
                     Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
                     if (!ServiceUtil.isSuccess(createInventoryItemDetailOutMap)) {
                     }
                 }
-
-
 
 
             }
@@ -856,7 +852,7 @@ public class PersonManagerServices {
 
         //GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
         //暂时放开,不管你是什么店的销售代表,只要你是。
-        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where( "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
         if (null != role) {
             isRight = true;
@@ -1198,7 +1194,7 @@ public class PersonManagerServices {
         //销售代表ID
         String salesRepId = (String) context.get("salesRepId");
 
-        if(null == salesRepId || salesRepId.trim().equals("")){
+        if (null == salesRepId || salesRepId.trim().equals("")) {
             salesRepId = "ZUCZUG";
         }
 
@@ -1794,13 +1790,12 @@ public class PersonManagerServices {
         GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber, "isValid", "N").orderBy(orderBy).queryFirst();
 
 
-
         if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
             smsValidateCode.set("isValid", "Y");
             smsValidateCode.store();
         } else {
             resultMap.put("message", "验证码错误!");
-              
+
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
         }
 
@@ -1830,8 +1825,7 @@ public class PersonManagerServices {
         person.store();
 
 
-
-        if(null!=teleNumber && !teleNumber.trim().equals("")){
+        if (null != teleNumber && !teleNumber.trim().equals("")) {
             // 创建联系电话
             Map<String, Object> inputTelecom = UtilMisc.toMap();
             inputTelecom.put("partyId", partyIdentification.get("partyId"));
@@ -1839,7 +1833,7 @@ public class PersonManagerServices {
             inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
             inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
             inputTelecom.put("userLogin", admin);
-            Map<String, Object> createTelecom   = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+            Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
             if (!ServiceUtil.isSuccess(createTelecom)) {
                 return createTelecom;
             }
@@ -2818,6 +2812,7 @@ public class PersonManagerServices {
 
     /**
      * hidden Order
+     *
      * @param dctx
      * @param context
      * @return
@@ -2844,14 +2839,14 @@ public class PersonManagerServices {
         String orderId = (String) context.get("orderId");
 
 
-        GenericValue orderPref =  EntityQuery.use(delegator).from("UserPreference").where("userLoginId",  userLogin.get("userLoginId"),"userPrefTypeId","HIDDEN_ORDER").queryFirst();
+        GenericValue orderPref = EntityQuery.use(delegator).from("UserPreference").where("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "HIDDEN_ORDER").queryFirst();
 
         // User Pref
         String userPrefValue = "";
 
-        if(orderPref != null){
-            userPrefValue = orderPref.getString("userPrefValue")+","+orderId;
-        }else{
+        if (orderPref != null) {
+            userPrefValue = orderPref.getString("userPrefValue") + "," + orderId;
+        } else {
             userPrefValue = orderId;
         }
 
@@ -2866,8 +2861,10 @@ public class PersonManagerServices {
 
         return resultMap;
     }
+
     /**
      * Order Cancel
+     *
      * @param dctx
      * @param context
      * @return
@@ -3963,7 +3960,7 @@ public class PersonManagerServices {
             return updateShipGroupShipInfoOutMap;
         }
 
-        if(null!=telNumber && !telNumber.trim().equals("")){
+        if (null != telNumber && !telNumber.trim().equals("")) {
             // 创建联系电话
             Map<String, Object> inputTelecom = UtilMisc.toMap();
             inputTelecom.put("partyId", partyId);
@@ -3971,7 +3968,7 @@ public class PersonManagerServices {
             inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
             inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
             inputTelecom.put("userLogin", admin);
-            Map<String, Object> createTelecom   = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+            Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
             if (!ServiceUtil.isSuccess(createTelecom)) {
                 return createTelecom;
             }
@@ -5754,6 +5751,27 @@ public class PersonManagerServices {
         }
         return ServiceUtil.returnSuccess();
     }
+
+
+    /**
+     * updateGenericPersonInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+        public static Map<String, Object> updateGenericPersonInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+            Map<String, Object> result = ServiceUtil.returnSuccess();
+            return result;
+        }
 
     /**
      * Update PersonInfo

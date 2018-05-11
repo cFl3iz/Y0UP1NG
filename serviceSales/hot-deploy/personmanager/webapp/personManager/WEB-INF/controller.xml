@@ -38,6 +38,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 新增的更新用户基础信息 -->
+    <request-map uri="updateGenericPersonInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateGenericPersonInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <!-- 给店铺添加角色 -->
     <request-map uri="addRoleToStore">

@@ -664,7 +664,17 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <service name="updateGenericPersonInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updateGenericPersonInfo"
+             auth="false">
+        <description>updatePersonInfo</description>
 
+        <attribute name="name" type="String" mode="IN" optional="true"/>
+        <attribute name="imgPath" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <!-- createPartyToPartyRelation -->
     <service name="createPartyToPartyRelation" engine="java"

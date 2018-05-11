@@ -597,7 +597,7 @@ public class WeChatOrderQueryServices {
                         spuSpecRowList.add(rowDataMap);
                         rowDataMap = new HashMap<String, String>();
                     }else{
-                        rowDataMap.put(rowCount+"",strRow);
+                        rowDataMap.put("code"+rowCount,strRow);
                         rowCount ++;
                     }
                 }

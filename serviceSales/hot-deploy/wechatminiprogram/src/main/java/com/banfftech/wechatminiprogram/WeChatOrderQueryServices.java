@@ -633,7 +633,7 @@ public class WeChatOrderQueryServices {
                 //3 查询细节图
                 EntityCondition detailTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "DETAIL_PRODUCT_IMAGE");
                 EntityCondition detailCondition = EntityCondition.makeCondition(detailTypeConditions, EntityOperator.AND, genericProductConditions);
-                List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo",matchCondition, fieldSet,
+                List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo",detailCondition, fieldSet,
                         null, null, false);
                 if(detailPictures!=null && detailPictures.size() > 0 ){
                     for(GenericValue pict : detailPictures){

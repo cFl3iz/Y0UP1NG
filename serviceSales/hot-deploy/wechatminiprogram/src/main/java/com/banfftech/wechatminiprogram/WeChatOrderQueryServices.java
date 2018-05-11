@@ -579,8 +579,8 @@ public class WeChatOrderQueryServices {
             Set<String> fieldSet = new HashSet<String>();
 
             fieldSet.add("drObjectInfo");
-
             fieldSet.add("productId");
+            fieldSet.add("productContentTypeId");
 
 
             List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
@@ -590,31 +590,86 @@ public class WeChatOrderQueryServices {
 
             for (GenericValue rowSku : skus) {
                 String rowSkuId = rowSku.getString("productIdTo");
-                //TODO FIX ME
-                EntityCondition findConditions3 = EntityCondition
-                        .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
-                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
-                        findConditions3, fieldSet,
+                //1 查询搭配图
+                EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
+                EntityCondition matchTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "MATCH_PRODUCT_IMAGE");
+                EntityCondition matchCondition = EntityCondition.makeCondition(genericProductConditions, EntityOperator.AND, matchTypeConditions);
+                List<GenericValue> matchPictures = delegator.findList("ProductContentAndInfo",matchCondition, fieldSet,
                         null, null, false);
-                int index = 0;
-
-                Map<String, Object> rowFeature = new HashMap<String, Object>();
-                for (GenericValue pict : rowPictures) {
-                    if (index == 0) {
-                        rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
+                if(matchPictures!=null && matchPictures.size() > 0 ){
+                    for(GenericValue pict : matchPictures){
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        rowMap.put("drObjectInfo", drObjectInfo);
+                        pictures.add(rowMap);
                     }
-                    Map<String, Object> rowMap = new HashMap<String, Object>();
-                    String drObjectInfo = (String) pict.get("drObjectInfo");
-                    rowMap.put("drObjectInfo", drObjectInfo);
-                    pictures.add(rowMap);
-                    index++;
                 }
+                //2 查询单品图
+                EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, matchTypeConditions);
+                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
+                        null, null, false);
                 GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-                if (rowFeature == null) {
+
+                if(singlePictures!=null && singlePictures.size() > 0 ){
+                    int sigleIndex = 0 ;
+                    for(GenericValue pict : singlePictures){
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        rowMap.put("drObjectInfo", drObjectInfo);
+                        pictures.add(rowMap);
+                        if(sigleIndex == 0){
+                            featureMap.put(rowColor.get("description") + "", rowMap);
+                        }
+//                        if (rowFeature == null) {
+//                            featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+//                        } else {
+//                        }
+                    }
+                }else{
                     featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
-                } else {
-                    featureMap.put(rowColor.get("description") + "", rowFeature);
                 }
+
+                //3 查询细节图
+                EntityCondition detailTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "DETAIL_PRODUCT_IMAGE");
+                EntityCondition detailCondition = EntityCondition.makeCondition(detailTypeConditions, EntityOperator.AND, matchTypeConditions);
+                List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo",matchCondition, fieldSet,
+                        null, null, false);
+                if(detailPictures!=null && detailPictures.size() > 0 ){
+                    for(GenericValue pict : detailPictures){
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        rowMap.put("drObjectInfo", drObjectInfo);
+                        pictures.add(rowMap);
+                    }
+                }
+
+
+
+//                EntityCondition findConditions3 = EntityCondition
+//                        .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
+//                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
+//                        findConditions3, fieldSet,
+//                        null, null, false);
+//                int index = 0;
+//
+//                Map<String, Object> rowFeature = new HashMap<String, Object>();
+//                for (GenericValue pict : rowPictures) {
+//                    if (index == 0) {
+//                        rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
+//                    }
+//                    Map<String, Object> rowMap = new HashMap<String, Object>();
+//                    String drObjectInfo = (String) pict.get("drObjectInfo");
+//                    rowMap.put("drObjectInfo", drObjectInfo);
+//                    pictures.add(rowMap);
+//                    index++;
+//                }
+//                GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+//                if (rowFeature == null) {
+//                    featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+//                } else {
+//                    featureMap.put(rowColor.get("description") + "", rowFeature);
+//                }
 
 
             }
@@ -663,8 +718,11 @@ public class WeChatOrderQueryServices {
                 }
                 productFeatureList.add(innerMap);
             }
+            //图片数组
             allField.put("imgArray", imgAttr);
+            //所有特征
             allField.put("features", productFeatureList);
+            //特征切换图片
             allField.put("featureMap", featureMap);
         }else{
             //白酒写死

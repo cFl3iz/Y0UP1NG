@@ -581,8 +581,8 @@ public class WeChatOrderQueryServices {
             List<Map<String,String>> spuSpecRowList = new ArrayList<Map<String, String>>();
             if(null != productContentAndElectronicText){
                 String textData = productContentAndElectronicText.getString("textData");
-                String title = textData.substring(0, textData.indexOf("-") - 1);
-                String rowData = textData.substring(textData.indexOf("-")+1);
+                String title = textData.substring(0, textData.indexOf("-"));
+                String rowData = textData.substring(textData.indexOf("-"));
                 String [] titleArray = title.split(",");
                 String [] rowDataArray = rowData.split(",");
                 for(String strTitle : titleArray){

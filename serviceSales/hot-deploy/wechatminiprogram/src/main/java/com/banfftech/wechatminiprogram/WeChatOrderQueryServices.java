@@ -582,7 +582,7 @@ public class WeChatOrderQueryServices {
             if(null != productContentAndElectronicText){
                 String textData = productContentAndElectronicText.getString("textData");
                 String title = textData.substring(0, textData.indexOf("-"));
-                String rowData = textData.substring(textData.indexOf("-"));
+                String rowData = textData.substring(textData.indexOf("-")+1);
                 String [] titleArray = title.split(",");
                 String [] rowDataArray = rowData.split(",");
                 for(String strTitle : titleArray){
@@ -595,6 +595,7 @@ public class WeChatOrderQueryServices {
                     if(rowCount==titleLen){
                         rowDataMap.put("code"+rowCount,strRow);
                         spuSpecRowList.add(rowDataMap);
+                        //初始化
                         rowCount = 1;
                         rowDataMap = new HashMap<String, String>();
                     }else{

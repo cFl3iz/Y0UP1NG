@@ -5775,10 +5775,16 @@ public class PersonManagerServices {
         String gender = (String) context.get("gender");
         String name = (String) context.get("name");
         String imgPath = (String) context.get("imgPath");
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
+        String deft_gender = "M";
+        if(null != gender && gender.equals("2")){
+            gender ="F";
+        }
+        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",userLogin,
+                "partyId",partyId,"firstName",name,"lastName","NA","gender",gender));
 
-
-
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", imgPath,null);
         return result;
     }
 

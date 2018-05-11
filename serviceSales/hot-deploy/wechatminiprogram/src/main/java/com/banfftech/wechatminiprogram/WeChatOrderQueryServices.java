@@ -593,8 +593,9 @@ public class WeChatOrderQueryServices {
                 Map<String,String> rowDataMap = new HashMap<String, String>();
                 for(String strRow : rowDataArray){
                     if(rowCount==titleLen){
-                        rowCount = 1;
+                        rowDataMap.put("code"+rowCount,strRow);
                         spuSpecRowList.add(rowDataMap);
+                        rowCount = 1;
                         rowDataMap = new HashMap<String, String>();
                     }else{
                         rowDataMap.put("code"+rowCount,strRow);

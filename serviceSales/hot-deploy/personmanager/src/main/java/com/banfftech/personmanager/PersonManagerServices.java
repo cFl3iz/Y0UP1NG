@@ -5755,13 +5755,14 @@ public class PersonManagerServices {
 
     /**
      * updateGenericPersonInfo
+     *
      * @param dctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-        public static Map<String, Object> updateGenericPersonInfo(DispatchContext dctx, Map<String, Object> context)
+    public static Map<String, Object> updateGenericPersonInfo(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 
         // Service Head
@@ -5769,9 +5770,17 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-            Map<String, Object> result = ServiceUtil.returnSuccess();
-            return result;
-        }
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        String partyId = (String) userLogin.get("partyId");
+        String gender = (String) context.get("gender");
+        String name = (String) context.get("name");
+        String imgPath = (String) context.get("imgPath");
+
+
+
+
+        return result;
+    }
 
     /**
      * Update PersonInfo
@@ -6218,20 +6227,18 @@ public class PersonManagerServices {
 
         String salesRepPartyId = null;
 
-        switch (productStoreId){
+        switch (productStoreId) {
             case "ZUCZUGSTORE":
                 if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
                     salesRepId = "ZUCZUG";
                 }
-            break;
+                break;
             case "KANGCHENGSTORE":
                 if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
                     salesRepId = "KANGCHENG";
                 }
-            break;
+                break;
         }
-
-
 
 
         salesRepPartyId = salesRepId;

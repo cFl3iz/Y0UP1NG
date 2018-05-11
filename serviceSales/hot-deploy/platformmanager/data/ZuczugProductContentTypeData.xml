@@ -32,6 +32,7 @@
     <ProductContentType createdStamp="2015-08-07 17:35:39.0" createdTxStamp="2015-08-07 17:35:39.0" description="单品图" hasTable="N" lastUpdatedStamp="2015-08-07 17:35:39.0" lastUpdatedTxStamp="2015-08-07 17:35:39.0" parentTypeId="ZUCZUG_IMAGES_TYPE" productContentTypeId="SINGLE_PRODUCT_IMAGE"/>
     <!-- SPU 尺码指南 -->
     <ProductContentType createdStamp="2018-03-13 14:03:13.0" createdTxStamp="2018-03-13 14:03:13.0" description="SPU尺码指南" hasTable="N" lastUpdatedStamp="2018-03-13 14:03:13.0" lastUpdatedTxStamp="2018-03-13 14:03:13.0" productContentTypeId="SIZE_GUIDE_URL"/>
+    <ProductContentType createdStamp="2018-03-13 14:03:13.0" createdTxStamp="2018-03-13 14:03:13.0" description="SPU尺码数据" hasTable="N" lastUpdatedStamp="2018-03-13 14:03:13.0" lastUpdatedTxStamp="2018-03-13 14:03:13.0" productContentTypeId="PRODUCT_SIZE_DES"/>
     <!-- 特殊说明 -->
     <ProductContentType createdStamp="2016-07-28 14:43:02.0" createdTxStamp="2016-07-28 14:43:02.0" description="特殊说明" hasTable="N" lastUpdatedStamp="2016-07-28 14:43:02.0" lastUpdatedTxStamp="2016-07-28 14:43:02.0" productContentTypeId="SPECIAL_INSTRUCTIONS"/>
 

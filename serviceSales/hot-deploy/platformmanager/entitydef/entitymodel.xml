@@ -8,6 +8,27 @@
     <description>PlatformModel</description>
     <copyright>CloudLake</copyright>
     <version>1.0</version>
+
+    <view-entity entity-name="ProductContentAndElectronicText" package-name="org.ofbiz.product.product">
+        <member-entity entity-alias="PC" entity-name="ProductContent"/>
+        <member-entity entity-alias="CON" entity-name="Content"/>
+        <member-entity entity-alias="ET" entity-name="ElectronicText"/>
+        <alias-all entity-alias="PC">
+            <exclude field="contentId"/>
+        </alias-all>
+        <alias-all entity-alias="CON">
+            <exclude field="dataResourceId"/>
+        </alias-all>
+        <alias-all entity-alias="ET"/>
+
+        <view-link entity-alias="PC" rel-entity-alias="CON">
+            <key-map field-name="contentId" rel-field-name="contentId"/>
+        </view-link>
+        <view-link entity-alias="CON" rel-entity-alias="ET">
+            <key-map field-name="dataResourceId" rel-field-name="dataResourceId"/>
+        </view-link>
+    </view-entity>
+
     <view-entity entity-name="ProductCategoryGroupSeriesView"
                  package-name="org.ofbiz.product.catalog"
                  title="Product Group View">

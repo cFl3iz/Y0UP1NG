@@ -11,9 +11,13 @@
             <link target="FindRealProductContentList"/>
         </menu-item>
         <menu-item name="RealProductImageManage" title="成衣图片管理">
-
             <link target="FindRealProductList"/>
         </menu-item>
+        <menu-item name="FindProductSizeDescription" title="SPU尺码管理">
+            <link target="FindProductSizeDescription"/>
+        </menu-item>
+
+
     </menu>
 
 

@@ -4,6 +4,10 @@
         <value xml:lang="en">PlatformManager Application</value>
         <value xml:lang="zh">PlatformManager应用程序</value>
         <value xml:lang="zh-TW">PlatformManager應用程式</value>
+    </property> <property key="CreateProductSizeDes">
+        <value xml:lang="en">CreateProductSizeDes</value>
+        <value xml:lang="zh">给SPU创建尺码</value>
+        <value xml:lang="zh-TW">给SPU创建尺码</value>
     </property>
     <property key="PlatformManagerCompanyName">
         <value xml:lang="en">OFBiz: PlatformManager</value>

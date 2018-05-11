@@ -398,7 +398,24 @@
     </request-map>
 
 
+    <!-- SPU尺码编辑 -->
+    <request-map uri="FindProductSizeDescription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindProductSizeDescription"/>
+    </request-map>
+    <request-map uri="EditProductSizeDescription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductSizeDescription"/>
+    </request-map>
+    <request-map uri="createProductSizeContentAndInfo">
+        <security https="true" auth="true"/>
+        <event invoke="createProductSizeContentAndInfo" type="service"/>
+        <response name="success" type="view" value="FindProductSizeDescription"/>
+        <response name="error" type="view" value="FindProductSizeDescription"/>
+    </request-map>
 
+    <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
+    <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
     <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>

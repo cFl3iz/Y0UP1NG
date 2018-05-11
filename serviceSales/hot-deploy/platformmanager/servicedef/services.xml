@@ -10,7 +10,12 @@
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
     </service>
-
+    <service name="createProductSizeContentAndInfo" engine="simple" invoke="createProductSizeContentAndInfo"
+             location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
+        <description>create product size content and info</description>
+        <attribute name="productId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="textData" type="String" allow-html="safe" mode="IN" optional="false"/>
+    </service>
     <!-- Get Captcha To Login -->
     <service name="getLoginCaptcha" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"

@@ -1,7 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods-v2.xsd">
-    	
+				xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+	<simple-method method-name="createProductSizeContentAndInfo" short-description="create product size content and info">
+		<set field="productId" from-field="parameters.productId"/>
+		<set field="textData" from-field="parameters.textData"/>
+		<entity-one entity-name="Product" value-field="product"/>
+		<if-empty field="product">
+			<add-error>
+				<fail-message message="Product with id ${productId} not found."/>
+			</add-error>
+			<check-errors/>
+		</if-empty>
+		<if-compare field="product.isVariant" operator="equals" value="Y">
+			<entity-and entity-name="ProductAssoc" list="productAssocList" filter-by-date="true">
+				<field-map field-name="productIdTo" from-field="productId"/>
+				<field-map field-name="productAssocTypeId" value="PRODUCT_VARIANT"/>
+			</entity-and>
+			<if-not-empty field="productAssocList">
+				<first-from-list entry="productAssoc" list="productAssocList"/>
+				<set field="productId" from-field="productAssoc.productId"/>
+			</if-not-empty>
+		</if-compare>
+		<entity-and entity-name="ProductContentAndInfo" filter-by-date="true" list="productContentAndInfoList">
+			<field-map field-name="productId"></field-map>
+			<field-map field-name="productContentTypeId" value="PRODUCT_SIZE_DES"></field-map>
+		</entity-and>
+		<if-empty field="productContentAndInfoList">
+			<set field="textInMap.textData" from-field="textData"/>
+			<set field="textInMap.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+			<call-service service-name="createDataResourceAndText" in-map-name="textInMap">
+				<result-to-field field="dataResourceId" result-name="dataResourceId"/>
+			</call-service>
+			<if-empty field="dataResourceId">
+				<add-error>
+					<fail-message message="Create data resource error."/>
+				</add-error>
+				<check-errors/>
+			</if-empty>
+			<set field="contentInMap.dataResourceId" from-field="dataResourceId"/>
+			<call-service service-name="createContent" in-map-name="contentInMap">
+				<result-to-field field="contentId" result-name="contentId"/>
+			</call-service>
+			<if-empty field="contentId">
+				<add-error>
+					<fail-message message="Create content error."/>
+				</add-error>
+				<check-errors/>
+			</if-empty>
+			<set field="inMap.productContentTypeId" value="PRODUCT_SIZE_DES"/>
+			<set field="inMap.productId" from-field="productId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<call-service service-name="createProductContent" in-map-name="inMap"/>
+			<else>
+				<first-from-list entry="productContentAndInfo" list="productContentAndInfoList"/>
+				<set field="inMap.dataResourceId" from-field="productContentAndInfo.dataResourceId"/>
+				<set field="inMap.textData" from-field="textData"/>
+				<call-service service-name="updateElectronicText" in-map-name="inMap"/>
+			</else>
+		</if-empty>
+		<field-to-result field="productId" result-name="productId"/>
+	</simple-method>
    
 	<simple-method method-name="removeProductContent" short-description="remove Product Contents by sven">
 		<if-not-empty field="parameters.productId">

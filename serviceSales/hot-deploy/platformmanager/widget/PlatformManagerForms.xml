@@ -18,6 +18,50 @@
                         <submit button-type="button"/>
                 </field>
         </form>
+
+
+
+    <form name="FindProductSizeDescription" type="single"  target="FindProductSizeDescription" title=""
+          header-row-style="header-row" default-table-style="basic-table">
+        <field name="productId">
+            <lookup target-form-name="LookupProduct"/>
+        </field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="ListProductSizeDescription" type="list"  target="FindProductSizeDescription" title="" list-name="listIt"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="FindProductSizeDescription">
+        <field name="productId" title="${uiLabelMap.productId}">
+            <display/>
+        </field>
+        <field name="dataResourceId" widget-style="buttontext" title="点击下面↓按钮修改说明">
+            <hyperlink target="EditProductSizeDescription" description="${dataResourceId}">
+                <parameter param-name="dataResourceId" from-field="dataResourceId"/>
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
+        </field>
+        <field name="drLastModifiedDate" title="${uiLabelMap.LastUpdatedStamp}">
+            <display/>
+        </field>
+    </form>
+
+    <form name="EditProductSizeDescription" type="single" target="createProductSizeContentAndInfo"
+          header-row-style="header-row" default-table-style="basic-table" default-map-name="productContentAndElectronicText">
+        <field name="productId" use-when="productContentAndElectronicText==null">
+            <lookup target-form-name="LookupProduct"/>
+        </field>
+        <field name="productId" use-when="productContentAndElectronicText!=null">
+            <display></display>
+        </field>
+        <field name="textData" id-name="textData" encode-output="true">
+            <textarea cols="120" rows="20" visual-editor-enable="false" />
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
     <!-- 导出分享数据报表Rxcel -->
       <form name="ExportShareCpsToExcel" type="upload" target="ExportShareCpsToExcelEvent"
               odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">

@@ -573,6 +573,34 @@ public class WeChatOrderQueryServices {
 
         if (vir_product != null) {
 
+            //获取SPU的尺码规格
+            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", vir_product).queryFirst();
+
+            List<String> spuSpecTitleList = new ArrayList<String>();
+            List<Map<String,String>> spuSpecRowList = new ArrayList<Map<String, String>>();
+            if(null != productContentAndElectronicText){
+                String textData = productContentAndElectronicText.getString("textData");
+                String title = textData.substring(0, textData.indexOf("-") - 1);
+                String rowData = textData.substring(textData.indexOf("-")+1);
+                String [] titleArray = title.split(",");
+                String [] rowDataArray = rowData.split(",");
+                for(String strTitle : titleArray){
+                    spuSpecTitleList.add(strTitle);
+                }
+                int titleLen = spuSpecTitleList.size();
+                int rowCount = 1 ;
+                Map<String,String> rowDataMap = new HashMap<String, String>();
+                for(String strRow : rowDataArray){
+                    if(rowCount==titleLen){
+                        rowCount = 1;
+                        spuSpecRowList.add(rowDataMap);
+                        rowDataMap = new HashMap<String, String>();
+                    }else{
+                        rowDataMap.put(rowCount+"",strRow);
+                        rowCount ++;
+                    }
+                }
+            }
 
             String rowVirId = (String) vir_product.get("productId");
 
@@ -733,6 +761,10 @@ public class WeChatOrderQueryServices {
             allField.put("features", productFeatureList);
             //特征切换图片
             allField.put("featureMap", featureMap);
+
+
+            allField.put("spuSpecTitleList",spuSpecTitleList);
+            allField.put("spuSpecRowList",spuSpecRowList);
         }else{
             //白酒写死
             if(productId.equals("KC2018050401")){

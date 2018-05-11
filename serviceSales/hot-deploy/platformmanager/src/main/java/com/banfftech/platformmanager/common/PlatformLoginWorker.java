@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 
+import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
@@ -579,7 +580,9 @@ public class PlatformLoginWorker {
             result.put("unioId",unioId);
             result.put("tarjeta",tarjeta);
             result.put("openId",openId);
-            result.put("partyId",miniProgramIdentification.get("partyId"));
+            result.put("personInfo",miniProgramIdentification.get("partyId"));
+            result.put("partyId",PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")));
+
             return result;
         }
 

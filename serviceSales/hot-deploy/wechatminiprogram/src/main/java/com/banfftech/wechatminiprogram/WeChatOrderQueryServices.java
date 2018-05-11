@@ -568,6 +568,9 @@ public class WeChatOrderQueryServices {
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-1.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
                 "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
+
+        Map<String,String> isExsitsPath = new HashMap<String, String>();
+
         if (vir_product != null) {
 
 
@@ -600,8 +603,11 @@ public class WeChatOrderQueryServices {
                     for(GenericValue pict : matchPictures){
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-                        rowMap.put("drObjectInfo", drObjectInfo);
-                        pictures.add(rowMap);
+                        if(!isExsitsPath.containsKey(drObjectInfo)){
+                            isExsitsPath.put(drObjectInfo,"");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                        }
                     }
                 }
                 //2 查询单品图
@@ -616,15 +622,15 @@ public class WeChatOrderQueryServices {
                     for(GenericValue pict : singlePictures){
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-                        rowMap.put("drObjectInfo", drObjectInfo);
-                        pictures.add(rowMap);
-                        if(sigleIndex == 0){
-                            featureMap.put(rowColor.get("description") + "", rowMap);
+                        if(!isExsitsPath.containsKey(drObjectInfo)){
+                            isExsitsPath.put(drObjectInfo,"");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                            if(sigleIndex == 0){
+                                featureMap.put(rowColor.get("description") + "", rowMap);
+                            }
                         }
-//                        if (rowFeature == null) {
-//                            featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
-//                        } else {
-//                        }
+
                     }
                 }else{
                     featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
@@ -639,8 +645,11 @@ public class WeChatOrderQueryServices {
                     for(GenericValue pict : detailPictures){
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-                        rowMap.put("drObjectInfo", drObjectInfo);
-                        pictures.add(rowMap);
+                        if(!isExsitsPath.containsKey(drObjectInfo)) {
+                            isExsitsPath.put(drObjectInfo,"");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                        }
                     }
                 }
 

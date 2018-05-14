@@ -196,7 +196,7 @@ public class WeChatMiniProgramServices {
                 inputTelecom.put("contactNumber", tel);
                 inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
                 inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-                inputTelecom.put("userLogin", userLogin);
+                inputTelecom.put("userLogin", admin);
                 Map<String, Object> createTelecom = null;
                 createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
 

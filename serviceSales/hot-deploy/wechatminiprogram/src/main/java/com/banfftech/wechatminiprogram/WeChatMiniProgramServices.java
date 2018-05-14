@@ -264,11 +264,14 @@ public class WeChatMiniProgramServices {
 
         GenericValue prodCatalogRole =  EntityQuery.use(delegator).from("ProdCatalogRole").where("partyId", partyId,"roleTypeId","ADMIN").queryFirst();
 
+
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",  prodCatalogRole.get("prodCatalogId")).queryFirst();
         //产品关联分类
+        String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
         Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
         addProductToCategoryInMap.put("userLogin", admin);
         addProductToCategoryInMap.put("productId", productId);
-        addProductToCategoryInMap.put("productCategoryId", prodCatalogRole.get("prodCatalogId"));
+        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
         Map<String,Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
         if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
             Debug.logError("*Mother Fuck added Product To Category Error:"+addProductToCategoryServiceResultMap, module);

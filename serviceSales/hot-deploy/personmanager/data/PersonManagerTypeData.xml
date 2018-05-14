@@ -24,6 +24,6 @@
 
     <MessageLogType createdStamp="2018-03-19 15:17:48.0" createdTxStamp="2018-03-19 15:17:48.0" description="系统消息" lastUpdatedStamp="2018-03-19 15:17:48.0" lastUpdatedTxStamp="2018-03-19 15:17:48.0" messageLogTypeId="SYSTEM"/>
     <!-- 产品资源类型 -->
-    <InformationShareType createdStamp="2018-03-07 17:18:17.0" createdTxStamp="2018-03-07 17:18:17.0" description="产品资源分享类型" lastUpdatedStamp="2018-03-07 17:18:17.0" lastUpdatedTxStamp="2018-03-07 17:18:17.0" shareTypeId="PRODUCT"/>
+    <!--<InformationShareType createdStamp="2018-03-07 17:18:17.0" createdTxStamp="2018-03-07 17:18:17.0" description="产品资源分享类型" lastUpdatedStamp="2018-03-07 17:18:17.0" lastUpdatedTxStamp="2018-03-07 17:18:17.0" shareTypeId="PRODUCT"/>-->
 
 </entity-engine-xml>

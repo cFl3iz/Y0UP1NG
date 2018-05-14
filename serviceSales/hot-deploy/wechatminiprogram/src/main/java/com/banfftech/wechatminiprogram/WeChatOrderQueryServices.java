@@ -493,6 +493,10 @@ public class WeChatOrderQueryServices {
             if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
                 productStoreId = "ZUCZUGSTORE";
             }
+            //Demo小程序
+            if(PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())){
+                productStoreId = "ZUCZUGSTORE";
+            }
 
 
             //不分梨白酒

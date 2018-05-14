@@ -495,7 +495,8 @@ public class WeChatOrderQueryServices {
             }
             //Demo小程序
             if(PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())){
-                productStoreId = "ZUCZUGSTORE";
+                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
+                productStoreId = (String) store.get("productStoreId");
             }
 
 

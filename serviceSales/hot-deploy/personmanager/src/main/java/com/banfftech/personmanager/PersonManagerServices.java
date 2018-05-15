@@ -730,16 +730,18 @@ public class PersonManagerServices {
 
         boolean isAddRoleSuccess = false;
 
+        Debug.logInfo("*receivedBProductInformation:salesId="+salesRepId,module);
 
         //这里不管怎么样,都拿到了销售代表ID
         if(UtilValidate.isNotEmpty(salesRepId)){
+            Debug.logInfo("*UtilValidate.isNotEmpty(salesRepId)="+UtilValidate.isNotEmpty(salesRepId),module);
             GenericValue dataRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
                     "partyIdFrom", salesRepId,
                     "partyIdTo", partyId,
                     "partyRelationshipTypeId", "CUSTOMER_REL",
                     "roleTypeIdTo","PLACING_CUSTOMER",
                     "roleTypeIdFrom","SALES_REP").queryFirst();
-
+            Debug.logInfo("*dataRelation="+dataRelation,module);
             //Create
             if (null == dataRelation) {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();

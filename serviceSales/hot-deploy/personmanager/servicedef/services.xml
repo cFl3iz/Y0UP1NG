@@ -683,6 +683,7 @@
         <description>创建两个当事人的关系</description>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
         <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeIdTo" type="String" mode="IN" optional="true"/>
         <attribute name="relationShipType" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

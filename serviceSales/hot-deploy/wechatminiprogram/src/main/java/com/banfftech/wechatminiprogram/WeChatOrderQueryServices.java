@@ -495,8 +495,10 @@ public class WeChatOrderQueryServices {
             }
             //Demo小程序
             if(PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())){
-                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
-                productStoreId = (String) store.get("productStoreId");
+//                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
+//                productStoreId = (String) store.get("productStoreId");
+                //暂时先用素然的
+                productStoreId = "ZUCZUGSTORE";
             }
 
 

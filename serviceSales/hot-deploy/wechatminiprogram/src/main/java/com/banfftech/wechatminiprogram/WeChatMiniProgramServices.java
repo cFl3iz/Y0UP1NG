@@ -534,7 +534,6 @@ public class WeChatMiniProgramServices {
 
     /**
      * jscode2session
-     *
      * @param request
      * @param response
      * @return

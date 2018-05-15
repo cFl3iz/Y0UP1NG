@@ -730,6 +730,62 @@ public class PersonManagerServices {
 
         boolean isAddRoleSuccess = false;
 
+
+        //这里不管怎么样,都拿到了销售代表ID
+        if(UtilValidate.isNotEmpty(salesRepId)){
+            GenericValue dataRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                    "partyIdFrom", salesRepId,
+                    "partyIdTo", partyId,
+                    "partyRelationshipTypeId", "CUSTOMER_REL",
+                    "roleTypeIdTo","PLACING_CUSTOMER",
+                    "roleTypeIdFrom","SALES_REP").queryFirst();
+
+            //Create
+            if (0 == dataRelation) {
+                Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
+                createPartyRelationshipInMap.put("partyIdTo", partyId);
+                createPartyRelationshipInMap.put("relationShipType", "CUSTOMER_REL");
+                createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+                Map<String, Object> serviceResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                if (!ServiceUtil.isSuccess(serviceResultMap)) {
+                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceResultMap, module);
+                    return serviceResultMap;
+                }
+            }else{
+                //Delete
+                Map<String, Object> deletePartyRelationshipInMap = new HashMap<String, Object>();
+                deletePartyRelationshipInMap.put("userLogin", admin);
+                deletePartyRelationshipInMap.put("partyIdFrom", salesRepId);
+                deletePartyRelationshipInMap.put("fromDate", dataRelation.get("fromDate"));
+                deletePartyRelationshipInMap.put("partyIdTo", partyId);
+                deletePartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+                deletePartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+                Map<String, Object> serviceResultMap = dispatcher.runSync("deletePartyRelationship", deletePartyRelationshipInMap);
+                if (!ServiceUtil.isSuccess(serviceResultMap)) {
+                    Debug.logError("*Mother Fuck Delete PartyRealtion OutMap Error:" + serviceResultMap, module);
+                    return serviceResultMap;
+                }
+
+                //Create
+                Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
+                createPartyRelationshipInMap.put("partyIdTo", partyId);
+                createPartyRelationshipInMap.put("relationShipType", "CUSTOMER_REL");
+                createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+                Map<String, Object> serviceCreateResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                if (!ServiceUtil.isSuccess(serviceCreateResultMap)) {
+                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceCreateResultMap, module);
+                    return serviceCreateResultMap;
+                }
+            }
+        }
+
+
         // 如果上层并非根销售代表,则说明上层是转发引用,现在要记到那个workEffortId上。
         if (!shareFromId.equals(salesRepId)) {
             workEffortId = queryShareWorkEffortId(delegator, productId, shareFromId, salesRepId);
@@ -741,7 +797,7 @@ public class PersonManagerServices {
             isAddRoleSuccess = addAddressRoleToWorkeffort(dispatcher, delegator, admin, partyId, initWorkEffortId);
             workEffortId = initWorkEffortId;
         }
-        // 如果成功记录了,那我就记录一次成功的转发
+        // 如果成功记录了,那我就记录一次成功的转发(找到初始链)
         String initWorkEffortId = queryInititalWorkEffortId(delegator, productId, salesRepId);
         if (isAddRoleSuccess) {
             updateInitWorkEffortCount(delegator, "share", initWorkEffortId);
@@ -6231,8 +6287,28 @@ public class PersonManagerServices {
         // 订单备注
         String orderReMark = (String) context.get("orderReMark");
 
-        String salesRepPartyId = null;
+        /**
+         * 关于当事人的销售代表在订单中的取值逻辑:
+         * 打开来自销售代表转发的产品或目录或其他页面时。
+         * 如果我从未与该销售代表建立当事人关系，则创建关系。
+         * 如果已经存在当事人关系则更新fromDate。
+         * 任意产品下单时,这笔订单的销售代表取自当事人关系中倒序（-fromDate）排第一的销售代表作为本订单销售代表。
+         * >如不存在任何当事人关系(销售代表)时,销售代表仍记给ZUCZUG。
+         * >如下单时自身就是销售代表,则永远记录自己是本订单销售代表。
+         */
 
+        String salesRepPartyId = null;
+        List<String> orderBy = UtilMisc.toList("-fromDate");
+        GenericValue relationSalesRep = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdTo", partyId,
+                "partyRelationshipTypeId", "CUSTOMER_REL",
+                "roleTypeIdTo", "PLACING_CUSTOMER",
+                "roleTypeIdFrom", "SALES_REP").orderBy(orderBy).queryFirst();
+
+        if(null!=relationSalesRep){
+            salesRepId =  relationSalesRep.getString("partyIdFrom");
+        }
+        //判断无销售代表Id的情况
         switch (productStoreId) {
             case "ZUCZUGSTORE":
                 if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
@@ -6246,6 +6322,13 @@ public class PersonManagerServices {
                 break;
         }
 
+
+        //判断自身是销售代表的情况
+        GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+
+        if(iamSalesRep!=null){
+            salesRepId = partyId;
+        }
 
         salesRepPartyId = salesRepId;
 

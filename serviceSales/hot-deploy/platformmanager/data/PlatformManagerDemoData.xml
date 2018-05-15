@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
+    <ShipmentMethodType createdStamp="2018-05-14 11:28:37.0" createdTxStamp="2018-05-14 11:28:37.0" description="EXPRESS" lastUpdatedStamp="2018-05-14 11:28:37.0" lastUpdatedTxStamp="2018-05-14 11:28:37.0" shipmentMethodTypeId="EXPRESS"/>
 
     <!--<Party partyId="Company" partyTypeId="PARTY_GROUP"/>-->
     <!--<PartyGroup partyId="Company" groupName="An Ko Rau"/>-->

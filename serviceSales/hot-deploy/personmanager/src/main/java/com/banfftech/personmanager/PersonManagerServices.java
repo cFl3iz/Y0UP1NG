@@ -731,6 +731,7 @@ public class PersonManagerServices {
         boolean isAddRoleSuccess = false;
 
         Debug.logInfo("*receivedBProductInformation:salesId="+salesRepId,module);
+        Debug.logInfo("*receivedBProductInformation:partyId="+partyId,module);
 
         //这里不管怎么样,都拿到了销售代表ID
         if(UtilValidate.isNotEmpty(salesRepId)){
@@ -752,6 +753,7 @@ public class PersonManagerServices {
                 createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
                 Map<String, Object> serviceResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                Debug.logInfo("*receivedBProductInformation:createPartyRelationship="+serviceResultMap,module);
                 if (!ServiceUtil.isSuccess(serviceResultMap)) {
                     Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceResultMap, module);
                     return serviceResultMap;

@@ -748,7 +748,7 @@ public class PersonManagerServices {
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
                 createPartyRelationshipInMap.put("partyIdTo", partyId);
-                createPartyRelationshipInMap.put("relationShipType", "CUSTOMER_REL");
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
                 Map<String, Object> serviceResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
@@ -776,7 +776,7 @@ public class PersonManagerServices {
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
                 createPartyRelationshipInMap.put("partyIdTo", partyId);
-                createPartyRelationshipInMap.put("relationShipType", "CUSTOMER_REL");
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
                 Map<String, Object> serviceCreateResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);

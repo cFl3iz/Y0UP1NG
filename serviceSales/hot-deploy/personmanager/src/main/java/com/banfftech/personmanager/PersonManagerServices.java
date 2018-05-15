@@ -741,7 +741,7 @@ public class PersonManagerServices {
                     "roleTypeIdFrom","SALES_REP").queryFirst();
 
             //Create
-            if (0 == dataRelation) {
+            if (null == dataRelation) {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", salesRepId);

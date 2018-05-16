@@ -201,20 +201,21 @@
                 <set field="productId" from-field="parameters.productId"/>
                 <entity-one value-field="product" entity-name="Product"></entity-one>
                 <!-- 载入所有颜色 -->
-                <entity-condition entity-name="ProductDesignFeatureWithType" list="colorList" filter-by-date="true">
-                    <condition-list>
-                        <condition-expr field-name="productId" from-field="parameters.productId" operator="equals"/>
-                        <condition-expr field-name="productFeatureTypeId" value="%COLOR" operator="like"/>
-                    </condition-list>
-                </entity-condition>
+                <!--<entity-condition entity-name="ProductDesignFeatureWithType" list="colorList" filter-by-date="true">-->
+                    <!--<condition-list>-->
+                        <!--<condition-expr field-name="productId" from-field="parameters.productId" operator="equals"/>-->
+                        <!--<condition-expr field-name="productFeatureTypeId" value="%COLOR" operator="like"/>-->
+                    <!--</condition-list>-->
+                <!--</entity-condition>-->
 
-                <set field="variantProductId" value="${groovy:
-					if(parameters.colorId==null)return parameters.productId;
-					if(parameters.colorId!=null)return  main.java.com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher);
-				}"/>
+                <!--<set field="variantProductId" value="${groovy:-->
+					<!--if(parameters.colorId==null)return parameters.productId;-->
+					<!--if(parameters.colorId!=null)return  main.java.com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher);-->
+				<!--}"/>-->
 
                 <!-- 获取虚拟商品 4码的编号 -->
-                <set field="variantProductId" value="${groovy:main.java.com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher)}"/>
+                <!--<set field="variantProductId" value="${groovy:main.java.com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher)}"/>-->
+                <set field="variantProductId" value="${productId}"/>
                 <!-- 获取单品图 -->
                 <entity-condition entity-name="ProductContentAndInfo" list="singleProductImages">
                     <condition-list combine="and">

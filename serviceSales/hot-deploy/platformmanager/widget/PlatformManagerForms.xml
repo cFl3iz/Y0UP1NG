@@ -177,9 +177,9 @@
           paginate-target="FindRealProductList" paginate="true" paginate-style="nav-pager"
           odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <actions>
-            <set field="productType" from-field="parameters.productType" default-value="KH"/>
-            <set field="parameters.isVirtual" value="Y"/>
-            <set field="parameters.isVariant" value="N"/>
+            <!--<set field="productType" from-field="parameters.productType" default-value="KH"/>-->
+            <!--<set field="parameters.isVirtual" value="Y"/>-->
+            <set field="parameters.isVariant" value="Y"/>
             <set field="parameters.productTypeId" value="FINISHED_GOOD"/>
             <service service-name="performFind" result-map="result" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="parameters"/>

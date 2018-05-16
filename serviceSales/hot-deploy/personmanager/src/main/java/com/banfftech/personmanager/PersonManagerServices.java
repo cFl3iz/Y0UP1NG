@@ -733,6 +733,8 @@ public class PersonManagerServices {
         Debug.logInfo("*receivedBProductInformation:salesId="+salesRepId,module);
         Debug.logInfo("*receivedBProductInformation:partyId="+partyId,module);
 
+        //TODO FIX ME 无法通过服务的方式创建partyRelation 不知道为什么
+
         //这里不管怎么样,都拿到了销售代表ID
         if(UtilValidate.isNotEmpty(salesRepId)){
             Debug.logInfo("*UtilValidate.isNotEmpty(salesRepId)="+UtilValidate.isNotEmpty(salesRepId),module);
@@ -746,18 +748,22 @@ public class PersonManagerServices {
             //Create
             if (null == dataRelation) {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                createPartyRelationshipInMap.put("userLogin", admin);
+//                createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
+                createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
                 createPartyRelationshipInMap.put("partyIdTo", partyId);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
-                Map<String, Object> serviceResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-                Debug.logInfo("*receivedBProductInformation:createPartyRelationship="+serviceResultMap,module);
-                if (!ServiceUtil.isSuccess(serviceResultMap)) {
-                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceResultMap, module);
-                    return serviceResultMap;
-                }
+                GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+                pr.create();
+
+//                Map<String, Object> serviceResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//                Debug.logInfo("*receivedBProductInformation:createPartyRelationship="+serviceResultMap,module);
+//                if (!ServiceUtil.isSuccess(serviceResultMap)) {
+//                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceResultMap, module);
+//                    return serviceResultMap;
+//                }
             }else{
                 //Delete
                 Map<String, Object> deletePartyRelationshipInMap = new HashMap<String, Object>();
@@ -774,18 +780,21 @@ public class PersonManagerServices {
                 }
 
                 //Create
+
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
                 createPartyRelationshipInMap.put("partyIdFrom", salesRepId);
                 createPartyRelationshipInMap.put("partyIdTo", partyId);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
-                Map<String, Object> serviceCreateResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-                if (!ServiceUtil.isSuccess(serviceCreateResultMap)) {
-                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceCreateResultMap, module);
-                    return serviceCreateResultMap;
-                }
+                GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+                pr.create();
+//                Map<String, Object> serviceCreateResultMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//                if (!ServiceUtil.isSuccess(serviceCreateResultMap)) {
+//                    Debug.logError("*Mother Fuck Create PartyRealtion OutMap Error:" + serviceCreateResultMap, module);
+//                    return serviceCreateResultMap;
+//                }
             }
         }
 

@@ -48,6 +48,7 @@ public class ImageManageService {
     private static final String SECRET = UtilProperties.getPropertyValue("aliyunoss.properties", "SECRET");
     private static final String ENDPOINT = UtilProperties.getPropertyValue("aliyunoss.properties", "ENDPOINT"); //change it internal address on deploying
     private static final String BUCKET_NAME = UtilProperties.getPropertyValue("aliyunoss.properties", "BUCKET_NAME");
+    private static final String ANKORAU_ROOT = UtilProperties.getPropertyValue("aliyunoss.properties", "ANKORAU_ROOT");
     private static final String IMG_DOMAIN_PREFIX = UtilProperties.getPropertyValue("aliyunoss.properties", "IMG_DOMAIN_PREFIX");
     private static final String ANKORAU_SINGLE_PATH = UtilProperties.getPropertyValue("aliyunoss.properties", "ANKORAU_SINGLE_PATH");
     private static final String ANKORAU_DETAIL_PATH = UtilProperties.getPropertyValue("aliyunoss.properties", "ANKORAU_DETAIL_PATH");
@@ -511,8 +512,21 @@ public class ImageManageService {
         String virtualProductId = request.getParameter("productId");
         String colorId = request.getParameter("colorId");
         String imgType = request.getParameter("imgType");
+
+        String prefix = "";
+
+        if(imgType.equals("singleImages")){
+            prefix = ANKORAU_SINGLE_PATH;
+        }
+
+        if(imgType.equals("detailImages")){
+            prefix =   ANKORAU_DETAIL_PATH;
+        }
+
+
         //获取目录
-        String prefix = assemblingOSSPath(virtualProductId, colorId, imgType, delegator, dispatcher);
+
+                //assemblingOSSPath(virtualProductId, colorId, imgType, delegator, dispatcher);
 
         // 构造ListObjectsRequest请求
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest(BUCKET_NAME, prefix, null, "/", 999);
@@ -525,7 +539,7 @@ public class ImageManageService {
             if (objectSummary.getKey().indexOf(".") > -1) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("fileName", getFileName(prefix, objectSummary.getKey()));
-//                map.put("fileUrl", getFileUrl(objectSummary.getKey()));
+                 map.put("fileUrl", getFileUrl(objectSummary.getKey()));
                 imgList.add(map);
             }
         }

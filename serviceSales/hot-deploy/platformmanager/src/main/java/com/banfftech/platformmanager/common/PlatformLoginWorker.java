@@ -547,10 +547,10 @@ public class PlatformLoginWorker {
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
         String appId = (String) context.get("appId");
-        String nickName = (String) context.get("nickName");
-        String gender = (String) context.get("gender");
-        String language = (String) context.get("language");
-        String avatarUrl = (String) context.get("avatarUrl");
+//        String nickName = (String) context.get("nickName");
+//        String gender = (String) context.get("gender");
+//        String language = (String) context.get("language");
+//        String avatarUrl = (String) context.get("avatarUrl");
 
         List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryList();
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
@@ -593,10 +593,10 @@ public class PlatformLoginWorker {
 
         Map<String,String> userInfoMap = new HashMap<String, String>();
 
-        userInfoMap.put("nickname",nickName);
-        userInfoMap.put("sex",gender);
-        userInfoMap.put("language",language);
-        userInfoMap.put("headimgurl",avatarUrl);
+        userInfoMap.put("nickname","匿名");
+//        userInfoMap.put("sex",gender);
+//        userInfoMap.put("language",language);
+        userInfoMap.put("headimgurl","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/default_person.png");
 
         if(null != miniProgramIdentification ){
             partyId =(String) miniProgramIdentification.get("partyId");

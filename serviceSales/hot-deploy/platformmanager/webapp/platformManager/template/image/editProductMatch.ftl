@@ -77,7 +77,7 @@
     		<#list contents as content>
     			<li>
 					<#if contents[0].drObjectInfo?index_of("http") gt -1>
-						<img src="${(content.drObjectInfo)!}@120w"/>
+						<img src="${(content.drObjectInfo)!}"/>
 					<#else>
 						<img src="${(content.drObjectInfo)!}"/>
 					</#if>
@@ -246,7 +246,7 @@ function loadOSSResource(elementId,imageType){
 						var url = $(this).attr("url");
 						var cbId = $(this).attr("id");
 						var newEl = $('<li>'+
-										'<img src="' + url + '@110w"/>'+
+										'<img src="' + url +
 										'<a class="delete" href="javascript:;" onclick="$(this).parent().remove()">×</a>'+
 										'<input type="hidden" tag="contentId" name="" value=""/>'+
 										'<input type="hidden" tag="productCategoryId" name="" value="${(parameters.productCategoryId)!}"/>'+

@@ -3,7 +3,7 @@
 <#if imageList?has_content>
 	<#list imageList as img>
 		<div class="imageBlock" filename="cb_${(img.fileName)!}">
-			<img src="${(img.fileUrl)!}@120w" for="cb_${(img.fileName)!}"/>
+			<img src="${(img.fileUrl)!}?x-oss-process=image/resize,m_mfit,h_84,w_65" for="cb_${(img.fileName)!}"/>
 			<div class="imgLabel">
 				<input type="checkbox" class="imgCheckbox" id="cb_${(img.fileName)!}" url="${(img.fileUrl)!}"/>
 				<label for="cb_${(img.fileName)!}" style="word-break: break-all;">${(img.fileName)!}</label>

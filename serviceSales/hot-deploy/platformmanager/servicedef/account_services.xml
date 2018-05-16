@@ -69,10 +69,10 @@
         <attribute name="openId" type="String" mode="INOUT" optional="true"/>
         <attribute name="appId" type="String" mode="IN" optional="true"/>
 
-        <!--<attribute name="nickName" type="String" mode="IN" optional="true"/>-->
-        <!--<attribute name="gender" type="String" mode="IN" optional="true"/>-->
-        <!--<attribute name="language" type="String" mode="IN" optional="true"/>-->
-        <!--<attribute name="avatarUrl" type="String" mode="IN" optional="true"/>-->
+        <attribute name="nickName" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+        <attribute name="language" type="String" mode="IN" optional="true"/>
+        <attribute name="avatarUrl" type="String" mode="IN" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="personInfo" type="Map" mode="OUT" optional="true"/>

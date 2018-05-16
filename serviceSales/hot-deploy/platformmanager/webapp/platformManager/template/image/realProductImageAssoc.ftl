@@ -214,12 +214,12 @@ function loadOSSResource(elementId,imageType){
         width: 985,
         draggable: true,
         resizeable: true,
-        title:"请选择图片",
+        title:"SelectPicture",
         close:function(){
         	$("#ossResourceDiv").html("");	//关闭的时候清空
         },
         buttons:{
-			"添加": function() {
+			"add": function() {
 				//点击添加，把选择的图片加到当前的DIV中
 				imgs = $(".imgCheckbox");
 				var selectImages = [];

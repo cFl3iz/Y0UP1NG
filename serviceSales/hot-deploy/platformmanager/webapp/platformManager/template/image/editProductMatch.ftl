@@ -18,7 +18,7 @@
     		添加一个商品从而创建一个搭配：
     	</#if>
     	<@htmlTemplate.lookupField formName="addToMatch" name="productId" id="productId" fieldFormName="LookupProductMatch" value="" readonly="false" className="required"/>
-    	<a href="javascript:;" onclick="addProductToMatch()" class="buttontext">添加</a>
+    	<a href="javascript:;" onclick="addProductToMatch()" class="buttontext">added</a>
     	<span class="tooltip">您添加的第一个单品将作为搭配的主款并且不能修改</span>
     	<br/><br/>
     	
@@ -94,7 +94,7 @@
     </div>
 </div>
 <div style="text-align:right;padding-right:30px">
-<a href="javascript:;" onclick="submitMatchImages();" class="buttontext" >提交</a>
+<a href="javascript:;" onclick="submitMatchImages();" class="buttontext" >Add</a>
 </div>
 </form>
 

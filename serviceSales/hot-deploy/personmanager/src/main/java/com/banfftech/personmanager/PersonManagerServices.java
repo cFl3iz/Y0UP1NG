@@ -717,6 +717,18 @@ public class PersonManagerServices {
         // 销售代表ID
         String salesRepId = (String) context.get("salesRepId");
 
+        // 如果打开了一个没有销售代表的链接
+        if(salesRepId==null){
+            String workEffortId = queryShareFromWorkEffortId(delegator, productId, shareFromId, shareFromId);
+           boolean isAddRoleSuccess = addAddressRoleToWorkeffort(dispatcher, delegator, admin, partyId, workEffortId);
+            if(isAddRoleSuccess){
+                return resultMap;
+            }else{
+                Debug.logInfo("AddedAddressee Fail",module);
+            }
+        }
+
+
         // 自己不用记录自己打开了自己转发给别人的链接
         if (partyId.equals(shareFromId)) {
             return resultMap;
@@ -1029,7 +1041,23 @@ public class PersonManagerServices {
 
         return shareWorkEffortId;
     }
+    //上层转发连不是销售代表
+    public static String queryShareFromWorkEffortId(Delegator delegator, String productId, String sharePartyId, String shareFromId) throws GenericEntityException {
 
+        Debug.logInfo("*queryShareWorkEffortId:", module);
+
+        String shareWorkEffortId = "NA";
+
+        GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer")
+                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId +shareFromId)).queryFirst();
+        if (null != workEffortAndProductAndParty) {
+            shareWorkEffortId = workEffortAndProductAndParty.getString("workEffortId");
+        }
+
+        Debug.logInfo("*QueryShareWorkEffortId=" + workEffortAndProductAndParty, module);
+
+        return shareWorkEffortId;
+    }
 
     /**
      * 在指定转发链中增加引用者角色

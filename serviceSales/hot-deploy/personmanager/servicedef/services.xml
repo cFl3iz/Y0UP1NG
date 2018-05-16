@@ -212,7 +212,7 @@
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="shareFromId" type="String" mode="IN" optional="false"/>
-        <attribute name="salesRepId" type="String" mode="IN" optional="false"/>
+        <attribute name="salesRepId" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
     <!-- 2b转发发起-->

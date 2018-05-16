@@ -1890,6 +1890,7 @@ public class PersonManagerServices {
         GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", partyIdentification.get("partyId")).queryFirst();
 
         person.set("nickname", userName);
+        person.set("firstName", userName);
 
         person.store();
 

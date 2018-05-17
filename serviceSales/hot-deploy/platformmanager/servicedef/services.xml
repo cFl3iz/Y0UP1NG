@@ -16,6 +16,10 @@
         <attribute name="productId" type="String" mode="INOUT" optional="false"/>
         <attribute name="textData" type="String" allow-html="safe" mode="IN" optional="false"/>
     </service>
+
+
+
+
     <!-- Get Captcha To Login -->
     <service name="getLoginCaptcha" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"

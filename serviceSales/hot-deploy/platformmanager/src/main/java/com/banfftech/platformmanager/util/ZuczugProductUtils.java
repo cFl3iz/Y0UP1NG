@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.batik.dom.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.UtilDateTime;
@@ -78,57 +79,21 @@ public class ZuczugProductUtils {
 	 * @param dispatcher
 	 * @return
 	 */
-	public static String checkProductMiddleSize(String productId,String colorId,Delegator delegator,LocalDispatcher dispatcher){
+	public static String checkProductMiddleSize(String productId,String colorId,Delegator delegator,LocalDispatcher dispatcher)throws GenericEntityException{
 		String skuId = "";
-		try {
-			GenericValue pro = delegator.findOne("Product", false, UtilMisc.toMap("productId",productId));
-			if(UtilValidate.areEqual(pro.getString("isVirtual"), "N") && UtilValidate.areEqual(pro.getString("isVariant"), "N")){
-				return productId;
-			}
-			GenericValue colorFeature = delegator.findOne("ProductFeature", true, UtilMisc.toMap("productFeatureId",colorId));
-			if(UtilValidate.isEmpty(colorFeature)){
-				return skuId;
-			}
-			String size4Id = productId+"-"+colorFeature.getString("idCode")+"-4";
-			String size27Id = productId+"-"+colorFeature.getString("idCode")+"-27";
-			String sizeFId = productId+"-"+colorFeature.getString("idCode")+"-F";
-			String size37Id = productId+"-"+colorFeature.getString("idCode")+"-37";
-			GenericValue product = delegator.findOne("Product", true, UtilMisc.toMap("productId",size4Id));
-			GenericValue product27 = delegator.findOne("Product", true, UtilMisc.toMap("productId",size27Id));
-			GenericValue productF = delegator.findOne("Product", true, UtilMisc.toMap("productId",sizeFId));
-			GenericValue product37 = delegator.findOne("Product", true, UtilMisc.toMap("productId",size37Id));
-			if(UtilValidate.isNotEmpty(product)){
-				if(UtilValidate.isNotEmpty(EntityQuery.use(delegator).from("ProductAssoc").where("productId",productId,"productIdTo",size4Id,"productAssocTypeId","PRODUCT_VARIANT").queryList())){
-					return size4Id;
-				}
-				Debug.log("productId:"+productId+"--color:"+colorId+",中间码存在，但是没有Assoc关联");
-			}
+		String virId = productId;
+		//0181BA04-44-F
+		List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productId).queryList();
 
-			if(UtilValidate.isNotEmpty(product27)){
-				if(UtilValidate.isNotEmpty(EntityQuery.use(delegator).from("ProductAssoc").where("productId",productId,"productIdTo",size27Id,"productAssocTypeId","PRODUCT_VARIANT").queryList() )){
-					return size27Id;
-				}
-				Debug.log("productId:"+productId+"--color:"+colorId+",中间码存在，但是没有Assoc关联");
-			}
+		if (skus != null && skus.size() > 0) {
+			for (GenericValue sku : skus) {
+				GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "COLOR", "description", colorId).queryFirst();
 
-			if(UtilValidate.isNotEmpty(product37)){
-				if(UtilValidate.isNotEmpty(EntityQuery.use(delegator).from("ProductAssoc").where( "productId", productId,"productIdTo",size37Id,"productAssocTypeId","PRODUCT_VARIANT").queryList())){
-					return size37Id;
+				if (isExsitsColor != null ) {
+					skuId = sku.getString("productIdTo");
+					break;
 				}
-				Debug.log("productId:"+productId+"--color:"+colorId+",中间码存在，但是没有Assoc关联");
 			}
-
-			if(UtilValidate.isNotEmpty(productF)){
-				if(UtilValidate.isNotEmpty(EntityQuery.use(delegator).from("ProductAssoc").where("productId",productId,"productIdTo",sizeFId,"productAssocTypeId","PRODUCT_VARIANT").queryList())) {
-					return sizeFId;
-				}
-				Debug.log("productId:"+productId+"--color:"+colorId+",中间码存在，但是没有Assoc关联");
-			}
-			if(UtilValidate.isEmpty(skuId)){
-				Debug.log("productId:"+productId+"--color:"+colorId+",没有中间码");
-			}
-		} catch (GenericEntityException e) {
-			e.printStackTrace();
 		}
 		return skuId;
 	}

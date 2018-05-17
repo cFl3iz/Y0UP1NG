@@ -3,6 +3,9 @@
 <input type="hidden" name="colorId" value="${(parameters.colorId)!}"/>
 <input type="hidden" name="variantProductId" value="${(variantProductId)!}"/>
 <input name="_useRowSubmit" value="Y" type="hidden">
+
+    variantProductId = ${(variantProductId)!}
+    parameters.colorId = ${parameters.colorId}
 <div class="screenlet">
     <div class="screenlet-title-bar">
         <ul>
@@ -75,52 +78,7 @@
         <br class="clear"/>
     </div>
     <div class="screenlet-body">
-    	<#if minmatchList?has_content>
-    		<#list minmatchList as mm>
-    			<div class="mixMatch">
-    				<div class="mixMatchLeft">
-		    			<!-- 获取这个搭配的第一张图片 -->
-		    			<#assign contents = delegator.findByAnd("ProductCategoryContentAndInfo",Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId",mm.productCategoryId,'prodCatContentTypeId',"CATEGORY_IMAGE_URL"),Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))?if_exists/>
-						<#if contents?has_content>
-							<#if contents[0].drObjectInfo?index_of("http") gt -1>
-								<img src="${(contents[0].drObjectInfo)!}@150w"/>
-							<#else>
-								<img src="${(contents[0].drObjectInfo)!}"/>
-							</#if>
-						</#if>
-					</div>
-					<div class="mixMatchRight">
-						<!-- 获取这个搭配下的所有商品 -->
-		    			<#assign pcmList = delegator.findByAnd("ProductCategoryMember",Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId",mm.productCategoryId),Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))?if_exists/>
-		    			<#if pcmList?has_content>
-		    				<#assign masterProduct="N"/>
-		    				<#list pcmList as pcm>
-		    					<#assign product = delegator.findOne("Product",false,Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",pcm.productId))?if_exists/>
-		    					<#if pcm_index==0 && pcm.productId==variantProductId>
-		    						<#assign masterProduct="Y" />
-		    					</#if>
-		    					<div style="float: left;position: relative;margin-left: 30px;margin-bottom: 15px;text-align: center;">
-									<img src="${(product.smallImageUrl)!}"/><br/>
-									<span>${(pcm.productId?substring(0,pcm.productId?last_index_of('-')))!}</span>
-								</div>
-		    				</#list>
-		    			</#if>
-					</div>
-					<div style="text-align:right;padding-right:20px">
-						<#if masterProduct?has_content && masterProduct=="Y"><span style="color:red;font-style: italic;font-weight: bold;">Main Match</span> / </#if>
-						<#assign ipadUse = delegator.findOne("ProductCategoryAttribute",false,Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId",mm.productCategoryId,"attrName","ipadSeq"))?if_exists/>
-						<#assign webSiteUse = delegator.findOne("ProductCategoryAttribute",false,Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId",mm.productCategoryId,"attrName","WEBSITE_USE"))?if_exists/>					
-						<#if ipadUse?has_content>
-						iPad适用 / 
-						</#if>
-						<#if webSiteUse?has_content>
-						网站适用 / 
-						</#if>
-						搭配编号:${(mm.productCategoryId)!} / <a href="<@ofbizUrl>EditProductMatch?productCategoryId=${(mm.productCategoryId)!}</@ofbizUrl>" target="_blank" class="buttontext">编辑</a>
-					</div>
-				</div>
-    		</#list>
-    	</#if>
+        <a href="javascript:;" onclick="loadOSSResource('sortableDetail','matchImages')" class="buttontext">Add_Picture</a>
     </div>
 </div>
 <div style="text-align:right;padding-right:30px">

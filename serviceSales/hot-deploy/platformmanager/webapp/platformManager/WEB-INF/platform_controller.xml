@@ -231,6 +231,7 @@
         <description>成衣图片管理</description>
         <security https="true" auth="true"/>
         <!--<event type="service" invoke="copyImageAndContentInfoFromMiddleSize"></event>-->
+
         <!-- 把这个颜色的中码的图片，都复制到其他尺码上去 -->
         <response name="success" type="view" value="RealProductImageAssoc">
             <redirect-parameter name="productId"/>

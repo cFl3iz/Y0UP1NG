@@ -522,6 +522,9 @@ public class ImageManageService {
         if(imgType.equals("detailImages")){
             prefix =   ANKORAU_DETAIL_PATH;
         }
+        if(imgType.equals("matchImages")){
+            prefix =   ANKORAU_MATCH_PATH;
+        }
 
 
         //获取目录

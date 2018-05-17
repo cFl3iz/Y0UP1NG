@@ -2918,6 +2918,8 @@ public class PersonManagerServices {
 
         GenericValue invItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
 
+        Debug.logInfo("createOrderItemShipGrpInvRes:quantity:"+quantity);
+
 
         dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
                 "inventoryItemId", invItem.get("inventoryItemId")

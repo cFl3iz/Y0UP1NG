@@ -2921,9 +2921,9 @@ public class PersonManagerServices {
         Debug.logInfo("createOrderItemShipGrpInvRes:quantity:"+quantity,module);
 
 
-        dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
-                "inventoryItemId", invItem.get("inventoryItemId")
-                , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
+//        dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
+//                "inventoryItemId", invItem.get("inventoryItemId")
+//                , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
 
 
         return resultMap;

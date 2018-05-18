@@ -14,7 +14,21 @@
     </preprocessor>
 
 
+    <!-- 创建链 -->
+    <request-map uri="createForwardChain">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createForwardChain"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
+    <!-- 加入链 -->
+    <request-map uri="joinForwardChain">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="joinForwardChain"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <!-- 商品导入 Copy By ZucZug Moka -->
     <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>

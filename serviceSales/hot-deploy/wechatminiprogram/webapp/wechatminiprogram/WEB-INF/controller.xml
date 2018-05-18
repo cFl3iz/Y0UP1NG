@@ -27,21 +27,7 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-    <!-- 创建链 -->
-    <request-map uri="createForwardChain">
-        <security https="false" auth="false"/>
-        <event type="service" invoke="createForwardChain"  />
-        <response name="success" type="request" value="result_json"/>
-        <response name="error" type="request" value="result_json"/>
-    </request-map>
 
-    <!-- 加入链 -->
-    <request-map uri="joinForwardChain">
-        <security https="false" auth="false"/>
-        <event type="service" invoke="joinForwardChain"  />
-        <response name="success" type="request" value="result_json"/>
-        <response name="error" type="request" value="result_json"/>
-    </request-map>
 
     <!-- 查产品Sku -->
     <request-map uri="querySku">

@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.personmanager.PersonManagerServices.addAddressRoleToWorkeffort;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.module;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
@@ -76,6 +77,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * 加入转发链
+     *
      * @param dctx
      * @param context
      * @return
@@ -96,16 +98,159 @@ public class WeChatMiniProgramServices {
         String objectType = (String) context.get("objectType");
         String dateKey = (String) context.get("dateKey");
         String partyIdFrom = (String) context.get("partyIdFrom");
+        String partyId = userLogin.getString("partyId");
+        String appId   = (String) context.get("appId");
 
 
-        Debug.logInfo("*joinForwardChain",module);
-        Debug.logInfo("objectId:"+objectId,module);
-        Debug.logInfo("objectType:"+objectType,module);
-        Debug.logInfo("dateKey:"+dateKey,module);
-        Debug.logInfo("partyIdFrom:"+partyIdFrom,module);
+
+
+        Debug.logInfo("*joinForwardChain", module);
+        Debug.logInfo("objectId:" + objectId, module);
+        Debug.logInfo("appId:" + appId, module);
+        Debug.logInfo("objectType:" + objectType, module);
+        Debug.logInfo("dateKey:" + dateKey, module);
+        Debug.logInfo("partyIdFrom:" + partyIdFrom, module);
+
+        String productStoreId = "";
+
+        if (appId != null) {
+            //素然小程序(友评)
+            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+                productStoreId = "ZUCZUGSTORE";
+            }
+            //素然小程序(素然)
+            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+                productStoreId = "ZUCZUGSTORE";
+            }
+            //Demo小程序
+            if(PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())){
+//                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
+//                productStoreId = (String) store.get("productStoreId");
+                //暂时先用素然的
+                productStoreId = "ZUCZUGSTORE";
+            }
+
+
+            //不分梨白酒
+            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+                productStoreId = "KANGCHENGSTORE";
+            }
+        }
+
+
+
+
+        /**
+         * 1.LogicBlock
+         * 根据线索找到上层链,记录/更新到我Chain的临时表
+         */
+        GenericValue beforeForwardChain = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where(UtilMisc.toMap("partyId", partyIdFrom, "description", dateKey)).queryFirst();
+        if (null == beforeForwardChain) {
+            Debug.logError("*before ForwardChain Not Found! partyIdFrom:" + partyIdFrom + "|dateKey:" + dateKey, module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "FORWARDCHAIN_NOT_FOUND", locale));
+        }
+        String workEffortId = beforeForwardChain.getString("workEffortId");
+        GenericValue shareChain = delegator.makeValidValue("ShareChain", UtilMisc.toMap("partyId", partyId, "workEffortId", workEffortId));
+        delegator.createOrStore(shareChain);
+
+
+        /**
+         * 2.LogicBlock
+         * 将我点开的这个动作,记录到链条中
+         */
+        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("partyId",partyId, "workEffortId", workEffortId)).queryFirst();
+        //从未记录过
+        if (workEffortAndProductAndPartyAddressee == null) {
+            Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+            Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
+            if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
+                Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
+                return createAddresseeResultMap;
+            }
+        }
+        /**
+         * 3.LogicBlock
+         * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
+         */
+        GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId",productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+
+        if(null!=isSalesRep){
+            //建立我与他的partyRelationship
+            boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,partyIdFrom);
+            if(!isSuccess){
+                Debug.logInfo("*Assoc Cust To SalesRep Relationship Fail:" + isSuccess, module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ASSOC_PRELATION_ERROR", locale));
+            }
+        }
+
+        /**
+         * 4.LogicBlock
+         * 如果初始链中的是一个产品,则要增加浏览量。
+         */
 
 
         return resultMap;
+    }
+
+    /**
+     * 建立销售代表和客户的关系
+     * @param delegator
+     * @param dispatcher
+     * @param partyId
+     * @param partyIdFrom
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    private static boolean assocCustToSalesRep(GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId, String partyIdFrom)
+            throws GenericEntityException,GenericServiceException  {
+        GenericValue dataRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyIdFrom,
+                "partyIdTo", partyId,
+                "partyRelationshipTypeId", "CUSTOMER_REL",
+                "roleTypeIdTo", "PLACING_CUSTOMER",
+                "roleTypeIdFrom", "SALES_REP").queryFirst();
+        Debug.logInfo("*dataRelation=" + dataRelation, module);
+        //Create
+        if (null == dataRelation) {
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+            createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            createPartyRelationshipInMap.put("partyIdTo", partyId);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
+            createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+            createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+            GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+            pr.create();
+
+        } else {
+            //Delete
+            Map<String, Object> deletePartyRelationshipInMap = new HashMap<String, Object>();
+            deletePartyRelationshipInMap.put("userLogin", admin);
+            deletePartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+            deletePartyRelationshipInMap.put("fromDate", dataRelation.get("fromDate"));
+            deletePartyRelationshipInMap.put("partyIdTo", partyId);
+            deletePartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+            deletePartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+            Map<String, Object> serviceResultMap = dispatcher.runSync("deletePartyRelationship", deletePartyRelationshipInMap);
+            if (!ServiceUtil.isSuccess(serviceResultMap)) {
+                Debug.logError("*Mother Fuck Delete PartyRealtion OutMap Error:" + serviceResultMap, module);
+                return false;
+            }
+
+            //Create
+
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+            createPartyRelationshipInMap.put("partyIdTo", partyId);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", "CUSTOMER_REL");
+            createPartyRelationshipInMap.put("roleTypeIdTo", "PLACING_CUSTOMER");
+            createPartyRelationshipInMap.put("roleTypeIdFrom", "SALES_REP");
+            GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+            pr.create();
+        }
+        return true;
     }
 
     /**
@@ -129,7 +274,7 @@ public class WeChatMiniProgramServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String objectId = (String) context.get("objectId");
         String objectType = (String) context.get("objectType");
-        String dateKey    = (String) context.get("dateKey");
+        String dateKey = (String) context.get("dateKey");
         if (null == userLogin) {
             Debug.logError("*CreateShareChain-Access_Tarjeta:userLoginIS_NULL", module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "TARJETA_NOT_FOUND", locale));
@@ -142,7 +287,7 @@ public class WeChatMiniProgramServices {
          * PRODUCT、CATALOG、APP
          */
         GenericValue shareChain = EntityQuery.use(delegator).from("ShareChain").where("partyId", partyId).queryFirst();
-
+        String newWorkEffortId = "";
         if (null != shareChain) {
             //说明上层有链,这层需要创建子链
             String beforeChainId = shareChain.getString("workEffortId");
@@ -155,11 +300,11 @@ public class WeChatMiniProgramServices {
                 Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
             }
-            String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+              newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
             //关联父子链路
             Map<String, Object> createWorkEffortAssocMap = UtilMisc.toMap("userLogin", userLogin,
-            "workEffortIdFrom",beforeChainId,"workEffortIdTo",newWorkEffortId,"workEffortAssocTypeId","ROUTING_COMPONENT");
+                    "workEffortIdFrom", beforeChainId, "workEffortIdTo", newWorkEffortId, "workEffortAssocTypeId", "ROUTING_COMPONENT");
             Map<String, Object> createWorkEffortAssocResultMap = dispatcher.runSync("createWorkEffortAssoc",
                     createWorkEffortAssocMap);
             if (!ServiceUtil.isSuccess(createWorkEffortAssocResultMap)) {
@@ -178,7 +323,7 @@ public class WeChatMiniProgramServices {
                 Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
             }
-            String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+             newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
             switch (objectType) {
                 case "PRODUCT":
                     Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", userLogin, "statusId", "WEGS_CREATED",
@@ -197,16 +342,20 @@ public class WeChatMiniProgramServices {
                     }
                     break;
                 case "APP":
-                     createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
+                    createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
                             "workEffortId", newWorkEffortId, "noteName", objectType, "noteInfo", objectId);
-                      createWorkEffortNoteResultMap = dispatcher.runSync("createWorkEffortNote", createWorkEffortNoteMap);
+                    createWorkEffortNoteResultMap = dispatcher.runSync("createWorkEffortNote", createWorkEffortNoteMap);
                     if (!ServiceUtil.isSuccess(createWorkEffortNoteResultMap)) {
                         Debug.logInfo("*createWorkEffortNote(app)Fail:" + createWorkEffortNoteResultMap, module);
                     }
                     break;
             }
+
         }
 
+
+        //把自己加入到链中
+        addAddressRoleToWorkeffort(dispatcher,delegator,admin,partyId,newWorkEffortId);
 
         return resultMap;
     }

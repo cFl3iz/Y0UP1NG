@@ -156,14 +156,14 @@ public class WeChatMiniProgramServices {
          * 2.LogicBlock
          * 将我点开的这个动作,记录到链条中
          */
-        addRefreRoleToWorkeffort(dispatcher,delegator,admin,partyId,workEffortId);
+        addAddressRoleToWorkeffort(dispatcher,delegator,admin,partyId,workEffortId);
         /**
          * 3.LogicBlock
          * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
          */
         GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId",productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
-        
+
         if(null!=isSalesRep){
             //建立我与他的partyRelationship
             boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,partyIdFrom);
@@ -281,7 +281,7 @@ public class WeChatMiniProgramServices {
             //说明上层有链,这层需要创建子链
             String beforeChainId = shareChain.getString("workEffortId");
             Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", dateKey,
+                    "workEffortName", "子链路", "workEffortTypeId", "EVENT", "description", dateKey,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
             Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                     createWorkEffortMap);
@@ -304,7 +304,7 @@ public class WeChatMiniProgramServices {
         } else {
             //没有上层链路,单纯创建链
             Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", dateKey,
+                    "workEffortName", "根链路", "workEffortTypeId", "EVENT", "description", dateKey,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
             Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                     createWorkEffortMap);

@@ -156,23 +156,14 @@ public class WeChatMiniProgramServices {
          * 2.LogicBlock
          * 将我点开的这个动作,记录到链条中
          */
-        GenericValue workEffortAndProductAndPartyAddressee = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("partyId",partyId, "workEffortId", workEffortId)).queryFirst();
-        //从未记录过
-        if (workEffortAndProductAndPartyAddressee == null) {
-            Map<String, Object> createAddresseeMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
-                    "roleTypeId", "ADDRESSEE", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-            Map<String, Object> createAddresseeResultMap = dispatcher.runSync("assignPartyToWorkEffort", createAddresseeMap);
-            if (!ServiceUtil.isSuccess(createAddresseeResultMap)) {
-                Debug.logInfo("*createAddresseeMap Fail:" + createAddresseeMap, module);
-                return createAddresseeResultMap;
-            }
-        }
+        addRefreRoleToWorkeffort(dispatcher,delegator,admin,partyId,workEffortId);
         /**
          * 3.LogicBlock
          * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
          */
         GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId",productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
+        
         if(null!=isSalesRep){
             //建立我与他的partyRelationship
             boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,partyIdFrom);

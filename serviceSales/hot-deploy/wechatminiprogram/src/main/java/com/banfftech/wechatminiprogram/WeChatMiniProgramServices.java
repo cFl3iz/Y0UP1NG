@@ -74,15 +74,14 @@ public class WeChatMiniProgramServices {
 
 
     /**
-     * 创建链 、 或创建子链加入父链
-     *
+     * 加入转发链
      * @param dctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> createShareChain(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> joinForwardChain(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -95,6 +94,33 @@ public class WeChatMiniProgramServices {
         String objectId = (String) context.get("objectId");
         String objectType = (String) context.get("objectType");
 
+
+
+        return resultMap;
+    }
+
+    /**
+     * 创建链 、 或创建子链加入父链
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createForwardChain(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (String) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String objectId = (String) context.get("objectId");
+        String objectType = (String) context.get("objectType");
+        String dateKey    = (String) context.get("dateKey");
         if (null == userLogin) {
             Debug.logError("*CreateShareChain-Access_Tarjeta:userLoginIS_NULL", module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "TARJETA_NOT_FOUND", locale));
@@ -112,7 +138,7 @@ public class WeChatMiniProgramServices {
             //说明上层有链,这层需要创建子链
             String beforeChainId = shareChain.getString("workEffortId");
             Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", "",
+                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", dateKey,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
             Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                     createWorkEffortMap);
@@ -135,7 +161,7 @@ public class WeChatMiniProgramServices {
         } else {
             //没有上层链路,单纯创建链
             Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", "",
+                    "workEffortName", "新链路", "workEffortTypeId", "EVENT", "description", dateKey,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
             Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
                     createWorkEffortMap);

@@ -9,12 +9,13 @@
 
 
     <!-- 创建链/或创建子链 -->
-    <service name="createShareChain" engine="java"
+    <service name="createForwardChain" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
-             invoke="createShareChain" auth="false">
-        <description>createShareChain</description>
+             invoke="createForwardChain" auth="false">
+        <description>createForwardChain</description>
         <attribute name="objectId"   type="String"    mode="IN"  optional="true" />
         <attribute name="objectType" type="String"    mode="IN"  optional="true" />
+        <attribute name="dateKey"    type="String"    mode="IN"  optional="true" />
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>

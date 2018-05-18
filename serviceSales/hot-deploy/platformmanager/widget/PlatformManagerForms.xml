@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+        <form name="ProductUploadImportForm" type="upload" target="ProductUploadImportEvent"
+              odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+            <field name="prodCatalogId" title="选择目录导入" widget-style="selectBox"  >
+                <drop-down>
+                    <entity-options entity-name="ProdCatalog" description="${catalogName}">
+                        <!--<entity-constraint name="roleTypeId" value="ADMIN"/>-->
+                    </entity-options>
+                </drop-down>
+            </field>
+                <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
+                        <file></file>
+                </field>
+                <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+                        <submit button-type="button"/>
+                </field>
+        </form>
+
+
+
+    <form name="FindProductSizeDescription" type="single"  target="FindProductSizeDescription" title=""
+          header-row-style="header-row" default-table-style="basic-table">
+        <field name="productId">
+            <lookup target-form-name="LookupProduct"/>
+        </field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="ListProductSizeDescription" type="list"  target="FindProductSizeDescription" title="" list-name="listIt"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="FindProductSizeDescription">
+        <field name="productId" title="${uiLabelMap.productId}">
+            <display/>
+        </field>
+        <field name="dataResourceId" widget-style="buttontext" title="点击下面↓按钮修改说明">
+            <hyperlink target="EditProductSizeDescription" description="${dataResourceId}">
+                <parameter param-name="dataResourceId" from-field="dataResourceId"/>
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
+        </field>
+        <field name="drLastModifiedDate" title="${uiLabelMap.LastUpdatedStamp}">
+            <display/>
+        </field>
+    </form>
+
+    <form name="EditProductSizeDescription" type="single" target="createProductSizeContentAndInfo"
+          header-row-style="header-row" default-table-style="basic-table" default-map-name="productContentAndElectronicText">
+        <field name="productId" use-when="productContentAndElectronicText==null">
+            <lookup target-form-name="LookupProduct"/>
+        </field>
+        <field name="productId" use-when="productContentAndElectronicText!=null">
+            <display></display>
+        </field>
+        <field name="textData" id-name="textData" encode-output="true">
+            <textarea cols="120" rows="20" visual-editor-enable="false" />
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- 导出分享数据报表Rxcel -->
+      <form name="ExportShareCpsToExcel" type="upload" target="ExportShareCpsToExcelEvent"
+              odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+
+                <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+                        <submit button-type="button"/>
+                </field>
+        </form>
+
+    <form name="KangChengProductUploadImportForm" type="upload" target="kangChengProductUploadImport"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+        <field name="prodCatalogId" title="选择目录导入" widget-style="selectBox"  >
+            <drop-down>
+                <entity-options entity-name="ProdCatalog" description="${catalogName}">
+                    <!--<entity-constraint name="roleTypeId" value="ADMIN"/>-->
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+    <form name="ProductImageUploadForm" type="upload" target="ProductImageUploadFormEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+
+        <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
+    <!-- 快速货运 -->
+    <form name="QuickShipOrderForm" type="single" target="QuickShipOrderFormEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+
+        <field name="orderId" required-field="true"><lookup target-form-name="LookupOrderHeader" size="15"/></field>
+        <field name="trackingNumber" required-field="true">
+            <text></text>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <form name="FindProductVirtual" target="FindRealProductList" title="" type="single"
+          header-row-style="header-row" default-table-style="basic-table">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productId" title="款号商品编码"><text-find/></field>
+        <field name="productName" title="款号名称"><text-find/></field>
+        <field name="groupName" title="组别"><text-find/></field>
+        <field name="seasonId" title="季">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="ZUCZUG_SEASON"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="seriesId" title="系列" id-name="seriesId">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="SERIES"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="subSeriesId" title="子系列" id-name="subSeriesId">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="SUBSERIES"/>
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="waveId" title="波段">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="WAVE"/>
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}"><submit/></field>
+    </form>
+
+    <form name="ProductVirtualList" target="FindRealProductList" title="" type="list" list-name="listIt"
+          paginate-target="FindRealProductList" paginate="true" paginate-style="nav-pager"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <!--<set field="productType" from-field="parameters.productType" default-value="KH"/>-->
+            <set field="parameters.isVirtual" value="Y"/>
+            <set field="parameters.isVariant" value="N"/>
+            <set field="parameters.productTypeId" value="FINISHED_GOOD"/>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="entityName" value="ProductRealView"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <row-actions>
+            <set field="groupInfo" type="Object" value="${groovy:com.zuczug.product.ZuczugProductUtils.getVariantGroupCategorys(delegator,productId)}"/>
+
+            <!-- 吊牌价 -->
+            <entity-and entity-name="ProductPrice" list="priceList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <set field="listPrice" from-field="priceList[0].price"/>
+
+            <!-- 供货价 -->
+            <entity-and entity-name="ProductPrice" list="wholeSalesList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="WHOLESALE_PRICE"/>
+            </entity-and>
+            <set field="wholeSalesPrice" from-field="wholeSalesList[0].price"/>
+
+            <entity-and list="waves" entity-name="ProductCategoryAndMember">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productCategoryTypeId" value="WAVE"/>
+            </entity-and>
+            <set field="wave.waveId" from-field="waves[0].productCategoryId"/>
+
+        </row-actions>
+        <field name="productId" title="编号" sort-field="true">
+            <display></display>
+        </field>
+        <field name="productName" title="外部名称"><display/></field>
+        <field name="groupId" title="组别" map-name="groupInfo">
+            <display-entity entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId" cache="true"></display-entity>
+        </field>
+
+        <field name="listPrice" title="吊牌价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="wholeSalesPrice" title="供货价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="releaseDate" title="上市时间" >
+            <display type="date"></display>
+        </field>
+        <field name="waveId" title="上货波段" map-name="wave">
+            <display-entity entity-name="ProductCategory" cache="true" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+
+        <field name="infoProduct" title="操作" widget-style="buttontext">
+            <hyperlink target="RealProductImageAssoc" also-hidden="false" description="编辑" target-window="_blank">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
+        </field>
+    </form>
+
+    <form id="FindProductVirtualContent" name="FindProductVirtualContent" target="FindRealProductContentList" title="" type="single"
+          header-row-style="header-row" default-table-style="basic-table">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productId" title="款号商品编码"><text-find/></field>
+        <field name="productName" title="款号名称"><text-find/></field>
+        <field name="groupName" title="组别"><text-find/></field>
+        <field name="seasonId" title="季">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="ZUCZUG_SEASON"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="seriesId" title="系列" id-name="seriesId">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="SERIES"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="subSeriesId" title="子系列" id-name="subSeriesId">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="SUBSERIES"/>
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="waveId" title="波段">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <entity-options description="${categoryName}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-constraint name="productCategoryTypeId" operator="equals" value="WAVE"/>
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="isAll"><hidden/></field>
+        <field name="isdownLoadExcel" title="下载4码Excel" widget-style="buttontext">
+            <hyperlink target="javascript:downloadExcel('N')" target-type="plain" also-hidden="false" description="下载Excel" target-window="_blank"></hyperlink>
+        </field>
+        <field name="isdownLoadExcelAll" title="下载全码Excel" widget-style="buttontext">
+            <hyperlink target="javascript:downloadExcel('Y')" target-type="plain" also-hidden="false" description="下载Excel" target-window="_blank"></hyperlink>
+        </field>
+        <field name="findRealProduct" title="查询" widget-style="buttontext">
+            <hyperlink target="javascript:findRealProduct()" target-type="plain" also-hidden="false" description="查询" target-window="_blank"></hyperlink>
+        </field>
+    </form>
+
+    <form name="ProductVirtualContentList" target="FindRealProductContentList" title="" type="list" list-name="listIt"
+          paginate-target="FindRealProductContentList" paginate="true" paginate-style="nav-pager"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <set field="productType" from-field="parameters.productType" default-value="KH"/>
+            <set field="parameters.isVirtual" value="Y"/>
+            <set field="parameters.isVariant" value="N"/>
+            <set field="parameters.productTypeId" value="FINISHED_GOOD"/>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="entityName" value="ProductRealView"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <row-actions>
+            <set field="groupInfo" type="Object" value="${groovy:com.zuczug.product.ZuczugProductUtils.getVariantGroupCategorys(delegator,productId)}"/>
+
+            <!-- 吊牌价 -->
+            <entity-and entity-name="ProductPrice" list="priceList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <set field="listPrice" from-field="priceList[0].price"/>
+
+            <!-- 供货价 -->
+            <entity-and entity-name="ProductPrice" list="wholeSalesList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="WHOLESALE_PRICE"/>
+            </entity-and>
+            <set field="wholeSalesPrice" from-field="wholeSalesList[0].price"/>
+
+            <entity-and list="waves" entity-name="ProductCategoryAndMember">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productCategoryTypeId" value="WAVE"/>
+            </entity-and>
+            <set field="wave.waveId" from-field="waves[0].productCategoryId"/>
+
+            <entity-and list="styleList" entity-name="ProductDesignFeatureWithType">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productFeatureTypeId" value="STYLE"/>
+            </entity-and>
+            <set field="styleId" from-field="styleList[0].productFeatureId"/>
+        </row-actions>
+
+        <field name="productId" title="款号" sort-field="true">
+            <display></display>
+        </field>
+
+        <field name="productName" title="外部名称"><display/></field>
+        <field name="internalName" title="内部名称"><display/></field>
+        <field name="groupId" title="组别" map-name="groupInfo">
+            <display-entity entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId" cache="true"></display-entity>
+        </field>
+        <field name="styleId" title="款型"><display/></field>
+
+        <field name="seriesName" title="系列"><display/></field>
+        <field name="subSeriesName" title="子系列"><display/></field>
+
+        <field name="listPrice" title="吊牌价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="wholeSalesPrice" title="供货价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="releaseDate" title="上市时间" >
+            <display type="date"></display>
+        </field>
+        <field name="waveId" title="波段" map-name="wave">
+            <display-entity entity-name="ProductCategory" cache="true" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="infoProduct" title="操作" widget-style="buttontext">
+            <hyperlink target="realProductContent" also-hidden="false" description="详细" target-window="_blank">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
+        </field>
+    </form>
+
+
+    <form name="realProductContent" type="list" list-name="productAssocList"
+          odd-row-style="alternate-row" header-row-style="header-row" default-table-style="basic-table hover-bar">
+        <actions>
+
+        </actions>
+        <row-actions>
+            <!-- 查询组别的信息 -->
+            <set field="groupInfo" type="Object" value="${groovy:com.zuczug.product.ZuczugProductUtils.getVariantGroupCategorys(delegator,productIdTo)}"/>
+
+            <entity-one entity-name="Product" value-field="pro">
+                <field-map field-name="productId" from-field="productIdTo"/>
+            </entity-one>
+            <entity-and entity-name="ProductDesignFeatureWithType" list="pdfwColor">
+                <field-map field-name="productId" from-field="productIdTo"/>
+                <field-map field-name="productFeatureTypeId" value="COLOR"/>
+            </entity-and>
+            <set field="colorFeatrue.colorId" from-field="pdfwColor[0].productFeatureId"/>
+
+            <entity-and entity-name="ProductDesignFeatureWithType" list="pdfwSize">
+                <field-map field-name="productId" from-field="productIdTo"/>
+                <field-map field-name="productFeatureTypeId" value="SIZE"/>
+            </entity-and>
+            <set field="sizeFeatrue.sizeId" from-field="pdfwSize[0].productFeatureId"/>
+
+            <entity-and list="waves" entity-name="ProductCategoryAndMember">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productCategoryTypeId" value="WAVE"/>
+            </entity-and>
+            <set field="wave.waveId" from-field="waves[0].productCategoryId"/>
+
+            <entity-and entity-name="ProductPrice" list="pps">
+                <field-map field-name="productId" from-field="productIdTo"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <set field="listPrice" from-field="pps[0].price"/>
+
+            <entity-and entity-name="ProductPrice" list="pps2">
+                <field-map field-name="productId" from-field="productIdTo"/>
+                <field-map field-name="productPriceTypeId" value="WHOLESALE_PRICE"/>
+            </entity-and>
+            <set field="wholsalesPrice" from-field="pps2[0].price"/>
+
+            <!-- 款型 -->
+            <entity-and entity-name="ProductDesignFeatureWithType" list="stylelist">
+                <field-map field-name="productId" from-field="productIdTo"/>
+                <field-map field-name="productFeatureTypeId" value="STYLE"/>
+            </entity-and>
+            <set field="groupInfo.styleFeatureId" from-field="stylelist[0].productFeatureId"/>
+
+            <entity-and entity-name="ProductAssocViewWithVariant" list="productAssocList" filter-by-date="true">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+            </entity-and>
+        </row-actions>
+
+        <field name="productIdTo" title="商品ID">
+            <display></display>
+        </field>
+        <field name="productName" map-name="pro" title="商品名">
+            <display></display>
+        </field>
+        <field name="color" map-name="colorFeatrue" entry-name="colorId" title="颜色">
+            <display-entity entity-name="ProductFeature" description="${description}" key-field-name="productFeatureId"></display-entity>
+        </field>
+        <field name="size" map-name="sizeFeatrue" entry-name="sizeId" title="尺寸">
+            <display-entity entity-name="ProductFeature" description="${description}" key-field-name="productFeatureId"></display-entity>
+        </field>
+        <field name="waveId" map-name="wave" entry-name="waveId" title="波段">
+            <display-entity cache="true" entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="groupId" map-name="groupInfo" title="组别">
+            <display-entity cache="true" entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="seasonId" map-name="groupInfo" title="季节">
+            <display-entity cache="true" entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="seriesId" map-name="groupInfo" title="系列">
+            <display-entity cache="true" entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="subSeriesId" map-name="groupInfo" title="子系列">
+            <display-entity cache="true" entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="styleFeatureId" map-name="groupInfo" title="款型">
+            <display-entity cache="true" entity-name="ProductFeature" description="${productFeatureId}-${description}" key-field-name="productFeatureId"></display-entity>
+        </field>
+        <field name="listPrice" title="${uiLabelMap.ProductListPrice}">
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="wholsalesPrice" title="供货价">
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="infoProduct" title="操作" widget-style="buttontext">
+            <hyperlink target="EditRealProductContent" also-hidden="false" description="编辑电商数据" target-window="_blank">
+                <parameter param-name="productId" from-field="productIdTo"/>
+            </hyperlink>
+        </field>
+    </form>
+
+
+
+    <form name="EditShopProductContent" type="single" default-map-name="product" target="EditShopProductContent">
+        <actions>
+            <entity-and entity-name="ProductContent" list="productContents">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productContentTypeId" value="REAL_PRODUCT_DESCRIPTION"/>
+            </entity-and>
+            <set field="contentId" from-field="productContents[0].contentId"/>
+            <entity-one value-field="content" entity-name="Content">
+                <field-map field-name="contentId" from-field="contentId"/>
+            </entity-one>
+            <entity-one value-field="electronicText" entity-name="ElectronicText">
+                <field-map field-name="dataResourceId" from-field="content.dataResourceId"/>
+            </entity-one>
+            <set field="realProductDescription" from-field="electronicText.textData"/>
+            <set field="realProductDescriptionId" from-field="content.dataResourceId"/>
+
+            <entity-and entity-name="ProductContent" list="productContents">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productContentTypeId" value="REAL_PRODUCT_SPECIAL_ALERT"/>
+            </entity-and>
+            <set field="contentId" from-field="productContents[0].contentId"/>
+            <entity-one value-field="content" entity-name="Content">
+                <field-map field-name="contentId" from-field="contentId"/>
+            </entity-one>
+            <entity-one value-field="electronicText" entity-name="ElectronicText">
+                <field-map field-name="dataResourceId" from-field="content.dataResourceId"/>
+            </entity-one>
+            <set field="specialPackaging" from-field="electronicText.textData"/>
+            <set field="specialPackagingId" from-field="content.dataResourceId"/>
+
+            <entity-and entity-name="ProductContent" list="productContents">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productContentTypeId" value="REAL_PRODUCT_INGREDIENT"/>
+            </entity-and>
+            <set field="contentId" from-field="productContents[0].contentId"/>
+            <entity-one value-field="content" entity-name="Content">
+                <field-map field-name="contentId" from-field="contentId"/>
+            </entity-one>
+            <entity-one value-field="electronicText" entity-name="ElectronicText">
+                <field-map field-name="dataResourceId" from-field="content.dataResourceId"/>
+            </entity-one>
+            <set field="ingredient" from-field="electronicText.textData"/>
+            <set field="ingredientId" from-field="content.dataResourceId"/>
+        </actions>
+        <field name="productId" title="商品编号">
+            <display></display>
+        </field>
+        <field name="realProductDescription" title="商品描述">
+            <textarea/>
+        </field>
+        <field name="realProductDescriptionId"><hidden/></field>
+        <field name="ingredient" title="成分和保养">
+            <textarea/>
+        </field>
+        <field name="ingredientId"><hidden/></field>
+        <field name="specialPackaging" title="特别提醒">
+            <textarea/>
+        </field>
+        <field name="specialPackagingId"><hidden/></field>
+
+        <field name="loadProductContent" title="导入数据" widget-style="buttontext">
+            <hyperlink target="javascript:loadContentcenterProductInfo()" target-type="content" also-hidden="false" description="导入数据" target-window="_blank"></hyperlink>
+        </field>
+        <field name="saveProductContent" title="保存" widget-style="buttontext">
+            <hyperlink target="javascript:saveContentcenterProductInfo()" target-type="content" also-hidden="false" description="保存" target-window="_blank"></hyperlink>
+        </field>
+    </form>
+
+    <form name="SelectColorToAssoc" type="single" default-map-name="product" target="RealProductImageAssoc">
+        <actions>
+            <set field="colorId" from-field="parameters.colorId"/>
+            <entity-one value-field="colorFeature" entity-name="ProductFeature">
+                <field-map field-name="productFeatureId" from-field="colorId"/>
+            </entity-one>
+
+            <set field="masterColorId" value="${groovy:com.zuczug.product.ZuczugProductUtils.getProductMasterColorId(delegator,parameters.productId)}"/>
+        </actions>
+        <field name="productId" title="商品编号">
+            <display></display>
+        </field>
+        <field name="productName" title="商品名称">
+            <display></display>
+        </field>
+        <field name="description" title="备注">
+            <display></display>
+        </field>
+        <field name="comments" title="描述">
+            <display></display>
+        </field>
+        <field name="colorId" title="颜色列表" map-name="parameters" use-when="${groovy:org.ofbiz.base.util.UtilValidate.isNotEmpty(parameters.colorId)}">
+            <drop-down current="selected">
+                <option key="" description=""/>
+                <list-options key-name="productFeatureId" list-name="colorList" description="${idCode} / ${description} ${groovy:return (masterColorId==productFeatureId?'/ 主色':'')}"/>
+            </drop-down>
+        </field>
+        <field name="submitBtn" title="选择这个颜色">
+            <submit/>
+        </field>
+        <field name="setProductMasterColor" title=" " use-when="${groovy:org.ofbiz.base.util.UtilValidate.isNotEmpty(colorFeature)}">
+            <hyperlink description="把 [${colorFeature.description}(${colorFeature.idCode})] 设为主色" target-type="plain" target="setProductMasterColor">
+                <parameter param-name="productId" from-field="parameters.productId"/>
+                <parameter param-name="colorId"/>
+            </hyperlink>
+        </field>
+    </form>
+
+    <form name="realProductDescriptionUpload" type="single" default-map-name=""  target="realProductDescriptionUpload">
+        <field name="excelFile" title="excel文件" tooltip="确认上传的Excel中包含“SKU”，“商品描述”字段"><file></file></field>
+        <field name="submit" title="提交" event="onClick" action="javascript:document.realProductDescriptionUpload.setAttribute('enctype', 'multipart/form-data');document.realProductDescriptionUpload.submit();"><submit button-type="button" confirmation-message="提示:此功能只是导入商品描述信息！"/></field>
+    </form>
+
+
+    <form name="FindProductSimple" target="FindRealProductContentListSimple" title="" type="single"
+          header-row-style="header-row" default-table-style="basic-table">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productId" title="款号商品编码"><text-find/></field>
+        <field name="productName" title="款号名称"><text-find/></field>
+        <field name="isVirtual" title="是否虚拟">
+            <drop-down>
+                <option key="N" description="否"/>
+                <option key="Y" description="是"/>
+            </drop-down>
+        </field>
+        <field name="isVariant" title="是否变型">
+            <drop-down>
+                <option key="N" description="否"/>
+                <option key="Y" description="是"/>
+            </drop-down>
+        </field>
+        <field title="查询" widget-style="buttontext">
+            <submit/>
+        </field>
+    </form>
+
+
+    <form name="ListProductContentSimple" target="FindRealProductContentListSimple" title="" type="list" list-name="listIt"
+          paginate-target="FindRealProductContentListSimple" paginate="true" paginate-style="nav-pager"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <set field="productType" from-field="parameters.productType" default-value="KH"/>
+            <set field="parameters.productTypeId" value="FINISHED_GOOD"/>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="entityName" value="Product"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <row-actions>
+            <set field="groupInfo" type="Object" value="${groovy:com.zuczug.product.ZuczugProductUtils.getVariantGroupCategorys(delegator,productId)}"/>
+
+            <entity-one value-field="seriesCategory" entity-name="ProductCategory">
+                <field-map field-name="productCategoryId" from-field="groupInfo.seriesId"/>
+            </entity-one>
+            <set field="seriesName" from-field="seriesCategory.categoryName"/>
+
+            <entity-one value-field="subSeriesCategory" entity-name="ProductCategory">
+                <field-map field-name="productCategoryId" from-field="groupInfo.subSeriesId"/>
+            </entity-one>
+            <set field="subSeriesName" from-field="subSeriesCategory.categoryName"/>
+
+            <!-- 吊牌价 -->
+            <entity-and entity-name="ProductPrice" list="priceList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <set field="listPrice" from-field="priceList[0].price"/>
+
+            <!-- 供货价 -->
+            <entity-and entity-name="ProductPrice" list="wholeSalesList">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productPriceTypeId" value="WHOLESALE_PRICE"/>
+            </entity-and>
+            <set field="wholeSalesPrice" from-field="wholeSalesList[0].price"/>
+
+            <entity-and list="waves" entity-name="ProductCategoryAndMember">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productCategoryTypeId" value="WAVE"/>
+            </entity-and>
+            <set field="wave.waveId" from-field="waves[0].productCategoryId"/>
+
+            <entity-and list="styleList" entity-name="ProductDesignFeatureWithType">
+                <field-map field-name="productId" from-field="productId"/>
+                <field-map field-name="productFeatureTypeId" value="STYLE"/>
+            </entity-and>
+            <set field="styleId" from-field="styleList[0].productFeatureId"/>
+        </row-actions>
+
+        <field name="productId" title="款号" sort-field="true">
+            <display></display>
+        </field>
+
+        <field name="productName" title="外部名称"><display/></field>
+        <field name="internalName" title="内部名称"><display/></field>
+        <field name="groupId" title="组别" map-name="groupInfo">
+            <display-entity entity-name="ProductCategory" description="${categoryName}" key-field-name="productCategoryId" cache="true"></display-entity>
+        </field>
+        <field name="styleId" title="款型"><display/></field>
+
+        <field name="seriesName" title="系列"><display/></field>
+        <field name="subSeriesName" title="子系列"><display/></field>
+
+        <field name="listPrice" title="吊牌价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="wholeSalesPrice" title="供货价" >
+            <display currency="CNY" type="currency"></display>
+        </field>
+        <field name="releaseDate" title="上市时间" >
+            <display type="date"></display>
+        </field>
+        <field name="waveId" title="波段" map-name="wave">
+            <display-entity entity-name="ProductCategory" cache="true" description="${categoryName}" key-field-name="productCategoryId"></display-entity>
+        </field>
+        <field name="infoProduct" title="操作" widget-style="buttontext">
+            <hyperlink target="realProductContent" also-hidden="false" description="详细" target-window="_blank">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
+        </field>
+    </form>
+</forms>

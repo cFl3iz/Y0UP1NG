@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the PlatformManager Component." permissionId="PLATFORMMANAGER_VIEW"/>
+    <SecurityPermission description="Create operations in the PlatformManager Component." permissionId="PLATFORMMANAGER_CREATE"/>
+    <SecurityPermission description="Update operations in the PlatformManager Component." permissionId="PLATFORMMANAGER_UPDATE"/>
+    <SecurityPermission description="Delete operations in the PlatformManager Component." permissionId="PLATFORMMANAGER_DELETE"/>
+    <SecurityPermission description="ALL operations in the PlatformManager Component." permissionId="PLATFORMMANAGER_ADMIN"/>
+
+    <SecurityGroupPermission groupId="SUPER" permissionId="PLATFORMMANAGER_ADMIN"/>
+
+</entity-engine-xml>

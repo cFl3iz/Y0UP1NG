@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <!-- PartyIdentification -->
+    <PartyIdentificationType createdStamp="2018-04-11 12:02:23.0" createdTxStamp="2018-04-11 12:02:23.0" description="授权验证的手机号码" hasTable="Y" lastUpdatedStamp="2018-04-11 12:02:23.0" lastUpdatedTxStamp="2018-04-11 12:02:23.0" partyIdentificationTypeId="AUTHORIZATION_TEL"/>
+
+
+
+    <!-- Tarjeta Property-->
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.expirationTime" systemPropertyValue="1296000" description="tarjeta的有效时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.issuer" systemPropertyValue="pe" description="tarjeta的issuer"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.secret" systemPropertyValue="{{secret used for signing}}" description="tarjeta的secret"/>
+
+    <!-- SSMS Property -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="24620277" description="短信平台appkey"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.intervalTime" systemPropertyValue="20" description="第二次与第一次短信发送间隔时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.secret" systemPropertyValue="6d86dc0f2c5b3eb893142db3bbcaf2d2" description="短信平台secret"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="友评" description="短信平台配置签名"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsTemplateCode" systemPropertyValue="SMS_52105414" description="短信平台模版号"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.url" systemPropertyValue="http://gw.api.tbsandbox.com/router/rest" description="短信平台请求地址"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.validTime" systemPropertyValue="900" description="短信使用有效时间"/>
+
+
+    <!-- OSS Property -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.endpoint" systemPropertyValue="oss-cn-hangzhou.aliyuncs.com" description="endpoint为:OSS外网域名或OSS内网域名去掉您的Bucket.后"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.accessKeyId" systemPropertyValue="LTAIMIU42pe743cb" description="accessKeyId"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="oss.accessKeySecret" systemPropertyValue="9G5xDQFq5YPfP6l1wyN2LiH9Nw6I3f" description="your accessKeySecret"/>
+
+
+    <!-- JPush -->
+    <PartyIdentificationType createdStamp="2017-05-11 15:22:41.0" createdTxStamp="2017-05-11 15:22:41.0" lastUpdatedStamp="2017-05-11 15:22:41.0" lastUpdatedTxStamp="2017-05-11 15:22:41.0" partyIdentificationTypeId="JPUSH_IOS"/>
+    <PartyIdentificationType createdStamp="2017-05-11 15:22:41.0" createdTxStamp="2017-05-11 15:22:41.0" lastUpdatedStamp="2017-05-11 15:22:41.0" lastUpdatedTxStamp="2017-05-11 15:22:41.0" partyIdentificationTypeId="JPUSH_ANDROID"/>
+
+
+
+    <!-- 微信UnioID-->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_UNIO_ID"/>
+    <!-- 公众号OpenId -->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_GZ_OPEN_ID"/>
+    <!-- 小程序OpenId -->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_MINIPRO_OPEN_ID"/>
+
+
+
+    <!-- 支付宝和微信支付的paymentMethodTypeId -->
+    <PaymentMethodType description="支付宝" paymentMethodTypeId="EXT_ALIPAY"/>
+
+    <PaymentMethodType description="微信支付" paymentMethodTypeId="EXT_WXPAY"/>
+
+
+
+    <!-- Message Type -->
+
+    <MessageLogType messageLogTypeId="TEXT" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="文字" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+    <MessageLogType messageLogTypeId="IMAGE" createdStamp="2017-11-16 16:57:59.0" createdTxStamp="2017-11-16 16:57:59.0" description="图片" lastUpdatedStamp="2017-11-16 16:57:59.0" lastUpdatedTxStamp="2017-11-16 16:57:59.0"/>
+
+    <MessageLogType messageLogTypeId="LOCATION" createdStamp="2017-11-16 16:58:16.0" createdTxStamp="2017-11-16 16:58:16.0" description="位置" lastUpdatedStamp="2017-11-16 16:58:16.0" lastUpdatedTxStamp="2017-11-16 16:58:16.0"/>
+
+    <MessageLogType messageLogTypeId="SYSTEM" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
+    <MessageLogType messageLogTypeId="SHARE" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
+    <MessageLogType messageLogTypeId="ORDER" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
+    <MessageLogType messageLogTypeId="PAYMENT" createdStamp="2017-11-16 16:56:38.0" createdTxStamp="2017-11-16 16:56:38.0" description="系统提示支付状态" lastUpdatedStamp="2017-11-16 16:56:38.0" lastUpdatedTxStamp="2017-11-16 16:56:38.0"/>
+
+
+    <!-- 对产品的吐槽 -->
+
+    <ProductContentType createdStamp="2018-02-12 14:33:59.0" createdTxStamp="2018-02-12 14:33:59.0" description="吐槽" lastUpdatedStamp="2018-02-12 14:33:59.0" lastUpdatedTxStamp="2018-02-12 14:33:59.0" productContentTypeId="TUCAO"/>
+
+
+
+    <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="颜色" lastUpdatedStamp="2016-05-04 09:53:21.0" lastUpdatedTxStamp="2016-05-04 09:53:21.0" productFeatureCategoryId="PRODUCT_COLOR"/>
+    <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="尺码" lastUpdatedStamp="2017-10-17 17:07:00.0" lastUpdatedTxStamp="2017-10-17 17:07:00.0" productFeatureCategoryId="PRODUCT_SIZE"/>
+
+</entity-engine-xml>

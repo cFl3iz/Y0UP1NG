@@ -1,0 +1,1286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PersonManager Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+
+    <!-- 初始化库存服务,只会执行一次 -->
+    <service name="initialAllSkuInventory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="initialAllSkuInventory" auth="false">
+        <description>initialAllSkuInventory</description>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 初始化所有Sku图片 -->
+    <service name="initialAllSkuPicture" engine="java"
+             location="main.java.com.banfftech.platformmanager.util.ImageManageService"
+             invoke="initialAllSkuPicture" auth="false">
+        <description>initialAllSkuPicture</description>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <service name="initialAllSkuPictureTemp" engine="java"
+             location="main.java.com.banfftech.platformmanager.util.ImageManageService"
+             invoke="initialAllSkuPictureTemp" auth="false">
+        <description>initialAllSkuPictureTemp</description>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- validateOrderStatus 支付前效验订单状态 -->
+    <service name="orderStatusValidation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderStatusValidation" auth="false">
+        <description>orderStatusValidation</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderStatus" type="String" mode="OUT" optional="true"/>
+        <attribute name="paymentReady" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 加入商店招募 -->
+    <service name="recruitingPartyToParty" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="recruitingPartyToParty" auth="false">
+        <description>recruitingPartyToParty</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="false"/>
+        <attribute name="storeId" type="String" mode="IN" optional="false"/>
+        <attribute name="userName" type="String" mode="IN" optional="false"/>
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
+
+        <attribute name="message" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!--createPeOrder-->
+    <service name="createPeOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPeOrder" auth="false">
+        <description>createPeOrder</description>
+
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="salesRepPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="billFromVendorPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="originFacilityId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="grandTotal" type="BigDecimal" mode="IN" optional="false"/>
+
+        <attribute name="orderId" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 订单发货 -->
+    <service name="peSentOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="peSentOrder" auth="false">
+        <description>peSentOrder</description>
+
+        <attribute name="sinceTheSend" type="String" mode="IN" optional="true"/>
+
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <!-- 物流单位名称 -->
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
+
+        <attribute name="name" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="shipmentMethodId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- orderCancel -->
+    <service name="orderCancel" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderCancel" auth="false">
+        <description>Order Cancel</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="false"/>
+        <attribute name="changeReason" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- hiddenOrder -->
+    <service name="hiddenOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="hiddenOrder" auth="false">
+        <description>Order Cancel</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="false"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- User Create -->
+    <service name="createPeUser" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPeUser" auth="false">
+        <description>Create Simple PE User</description>
+        <attribute name="uuid" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tel" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="userLoginId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- Create Person Store -->
+    <service name="createPersonStore" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonStore" auth="false">
+        <description>Create Person Store</description>
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="false"/>
+        <attribute name="inventoryFacilityId" type="String" mode="IN"
+                   optional="false"/>
+
+        <attribute name="storeId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <service name="createPersonFacility" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonFacility" auth="false">
+        <description>createPersonFacility</description>
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="false"/>
+        <attribute name="facilityId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- create Pe Product -->
+
+
+    <!-- Affirm Order -->
+    <service name="affirmOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="affirmOrder" auth="false">
+        <description>Affirm Order</description>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <!-- 2b转发收到-->
+    <service name="receivedBProductInformation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="receivedBProductInformation" auth="false">
+        <description>receivedBProductInformation</description>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="shareFromId" type="String" mode="IN" optional="false"/>
+        <attribute name="salesRepId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    <!-- 2b转发发起-->
+    <service name="shareBProductInformation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="shareBProductInformation" auth="false">
+        <description>shareInformation</description>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="shareFromId" type="String" mode="IN" optional="false"/>
+        <attribute name="salesRepId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- 分享转发信息 -->
+    <service name="shareInformation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="shareInformation" auth="false">
+        <description>shareInformation</description>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 收到转发信息 received Information -->
+    <service name="receivedInformation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="receivedInformation" auth="false">
+        <description>receivedInformation</description>
+         <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+         <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="false"/>
+        <!-- 来自谁的引用? 如果没有值, 说明发给你的人就是资源主 -->
+        <attribute name="spm" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <service name="doAddPartyRelation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="doAddPartyRelation" auth="false">
+        <description>doAddPartyRelation</description>
+
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="spm" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <service name="addProductRole" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addProductRole" auth="false">
+        <description>addProductRole</description>
+
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="roleTypeId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 查询当前产品的转发链条 -->
+
+    <service name="queryProductShareFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductShareFirstLines" auth="false">
+        <description>queryProductShareLines</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="sharePartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 查询当前产品的转发链条FROM B -->
+    <service name="queryBProductShareFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryBProductShareFirstLines" auth="false">
+        <description>queryBProductShareFirstLines</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <!--<attribute name="salesPartyId" type="String" mode="IN"  optional="true"/>-->
+        <attribute name="sharePartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- Query MyResource Order -->
+    <service name="queryMyResourceOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyResourceOrder" auth="false">
+        <description>Query MyResourceOrder</description>
+
+
+
+        <attribute name="area" type="String" mode="IN"  optional="true"/>
+        <attribute name="isCancelled" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="orderStatus" type="String" mode="INOUT"
+                   optional="true"/>
+
+        <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- WeChatPlatForm OrderList-->
+    <service name="queryMyOrders" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyOrders" auth="false">
+        <description>Query MyOrders</description>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderStatus" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="isCancelled" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="orderList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <!-- 查询联系圈的资源 -->
+    <service name="queryAppContactResourceList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryAppContactResourceList" auth="false">
+        <description>queryAppContactResourceList</description>
+
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="resourcesList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <!--  query MyOrdersDetail -->
+    <service name="queryMyOrdersDetail" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyOrdersDetail" auth="false">
+        <description>Query MyOrders Detail</description>
+
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderInfo" type="Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="orderExpressInfo" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="orderExpressName" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- Query Dimension Resource -->
+    <service name="queryDimensionResource" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryDimensionResource" auth="false">
+        <description>queryDimensionResource</description>
+
+        <attribute name="dimensionResourceList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- Query My Resource -->
+    <service name="queryMyResource" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyResource" auth="false">
+        <description>Query My Resource</description>
+
+        <attribute name="viewSize" type="String" mode="IN" optional="true"/>
+        <!--<attribute name="viewIndex" type="String" mode="IN" optional="true"/>-->
+        <attribute name="isDiscontinuation" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="myResourceList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="productCategoryId" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <service name="queryProductFeatures" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductFeatures" auth="false">
+        <description>queryProductFeatures</description>
+
+        <attribute name="productId" type="String" mode="INOUT"
+               optional="true"/>
+        <attribute name="productFeaturesList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <service name="getTelFromEncryptedData" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="getTelFromEncryptedData" auth="false">
+        <description>getTelFromEncryptedData</description>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <attribute name="iv" type="String" mode="IN" optional="true"/>
+        <attribute name="encryptedData" type="String" mode="IN" optional="true"/>
+
+        <attribute name="tel" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <service name="queryProductFeatures2" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductFeatures2" auth="false">
+        <description>queryProductFeatures2</description>
+
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="htmlBuilder" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="rowTypeCount" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 查询用户产品特征类型的偏好设置
+            即便没有该用户偏好设置也会返回系统预设的产品特征类型
+     -->
+    <service name="queryUserProductFeaturePreference" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryUserProductFeaturePreference" auth="false">
+        <description>queryUserProductFeaturePreference</description>
+
+        <attribute name="featureTypeList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <service name="genericPaymentService" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="genericPaymentService" auth="false">
+        <description>genericPaymentService</description>
+
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderItems" type="List" mode="IN" optional="true"/>
+        <attribute name="orderPaymentPreference" type="org.apache.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="paymentConfig" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentGatewayConfigId" type="String" mode="IN" optional="true"/>
+        <attribute name="processAmount" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="shippingAddress" type="org.apache.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="currency" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <!-- 更新资源 -->
+    <service name="updateResourceInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updateResourceInfo" auth="false">
+        <description>updateResourceInfo</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="productPrice" type="String" mode="IN" optional="true"/>
+        <attribute name="quantityTotal" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- query Resource Detail -->
+    <service name="queryResourceDetailMiniProgram" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryResourceDetailMiniProgram" auth="false">
+        <description>queryResourceDetailMiniProgram</description>
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="unioId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="nowPartyId" type="String" mode="INOUT"
+                   optional="true"/>
+
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="nowPersonName" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <service name="queryPartyRequests" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryPartyRequests" auth="false">
+        <description>queryPartyRequests</description>
+        <attribute name="requestList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- query Resource Detail -->
+    <service name="queryResourceDetail" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryResourceDetail" auth="false">
+        <description>Query Resource Detail</description>
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true"/>
+
+
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="nowPersonName" type="String" mode="OUT"
+                   optional="true"/>
+
+        <!--<attribute name="productFeatureAndApplList" type="List" mode="OUT"-->
+                   <!--optional="true"/>-->
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <service name="queryCustRequestList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryCustRequestList" auth="false">
+        <description>queryCust RequestList</description>
+        <attribute name="roleTypeId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="custRequestList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <!-- Query My RelationShip -->
+    <service name="queryMyRelationShip" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyRelationShip" auth="false">
+        <description>Query My RelationShip</description>
+
+        <attribute name="relationList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 吐槽List -->
+    <service name="queryProductTuCaoList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductTuCaoList" auth="false">
+        <description>queryProductTuCaoList</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tuCaoList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- Update Person Info -->
+    <service name="updatePersonInfo" engine="java" default-entity-name="Person"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updatePersonInfo"
+             auth="false">
+        <description>updatePersonInfo</description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <attribute name="noteInfo" type="String" mode="IN"
+                   optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    <service name="updateGenericPersonInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="updateGenericPersonInfo"
+             auth="false">
+        <description>updatePersonInfo</description>
+
+        <attribute name="name" type="String" mode="IN" optional="true"/>
+        <attribute name="imgPath" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- createPartyToPartyRelation -->
+    <service name="createPartyToPartyRelation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createPartyToPartyRelation"
+             auth="false">
+        <description>创建两个当事人的关系</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="relationShipType" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 吐槽/评论 -->
+    <service name="tuCao" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="tuCao"
+             auth="false">
+        <description>tuCao</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- 响应客户请求并创建报价单 -->
+    <service name="returnFormAndCreateQuoteFromCustRequest" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="returnFormAndCreateQuoteFromCustRequest"
+             auth="false">
+        <description>returnFormAndCreateQuoteFromCustRequest</description>
+
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="formField" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="custPartyId" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <service name="createCustRequestFromMiniApp" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromMiniApp"
+             auth="false">
+        <description>createCustRequestFromMiniApp</description>
+
+        <attribute name="unioId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 发送客户请求 -->
+    <service name="createCustRequestFromWeb" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices" invoke="createCustRequestFromWeb"
+             auth="false">
+        <description>createCustRequestFromWeb</description>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="selectFeatures" type="String" mode="IN" optional="true"/>
+        <!-- 备注 -->
+        <attribute name="markText" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- createPartyPostalAddress -->
+    <service name="createPersonPartyPostalAddress" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonPartyPostalAddress" auth="false">
+        <description>createPersonPartyPostalAddress</description>
+
+        <attribute name="tarjeta" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="address1" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="address2" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="orderId" type="String" mode="INOUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <service name="createPersonPartyPostalAddressFromMiniprogram" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPersonPartyPostalAddressFromMiniprogram" auth="false">
+        <description>createPersonPartyPostalAddressFromMiniprogram</description>
+
+        <attribute name="tarjeta" type="String" mode="INOUT"
+                   optional="true"/>
+
+        <attribute name="orderId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="userName" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="provinceName" type="String" mode="IN" optional="true"/>
+        <attribute name="cityName" type="String" mode="IN" optional="true"/>
+        <attribute name="countyName" type="String" mode="IN" optional="true"/>
+        <attribute name="detailInfo" type="String" mode="IN" optional="true"/>
+        <attribute name="nationalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="telNumber" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <service name="getUserContactInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="getUserContactInfo" auth="false">
+        <description>getUserContactInfo</description>
+
+        <attribute name="unioId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="contactInfo" type="Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 查询快递信息 -->
+    <service name="queryExpressInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="queryExpressInfo" auth="false">
+        <description>queryExpressInfo</description>
+
+        <attribute name="code" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="expressCode" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="carrierCode" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="name" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="expressInfos" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <!-- 客户创建支付 -->
+    <service name="createPaymentFromCust" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPaymentFromCust" auth="false">
+        <description>createPaymentFromCust</description>
+
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="paymentId" type="String" mode="OUT"
+                   optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <!-- 确认货款到账 -->
+    <service name="orderPaymentReceived" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderPaymentReceived" auth="false">
+        <description>orderPaymentReceived</description>
+
+        <attribute name="orderId" type="String" mode="IN"   optional="true"/>
+        <!-- 如果传过来openid,说明是小程序调用的收款 -->
+        <attribute name="openId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 买家确认付款了 -->
+    <service name="setOrderPaymentStatus" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="setOrderPaymentStatus" auth="false">
+        <description>setOrderPaymentStatus</description>
+
+
+        <attribute name="paymentId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- removeResourcePicture -->
+    <service name="removeResourcePicture" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="removeResourcePicture" auth="false">
+        <description>removeResourcePicture</description>
+
+
+        <attribute name="productId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="contentId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 更新货运信息 -->
+    <service name="selectPartyPostalAddress2Order" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="selectPartyPostalAddress2Order" auth="false">
+        <description>selectPartyPostalAddress2Order</description>
+
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="subscribe" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="contactMechId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <!-- 更新货运信息 -->
+    <service name="updateShipGroupShipInfoForWeChat" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updateShipGroupShipInfoForWeChat" auth="false">
+        <description>updateShipGroupShipInfoForWeChat</description>
+
+        <attribute name="sinceTheSend" type="String" mode="IN" optional="true"/>
+
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <!-- 物流单位名称 -->
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
+
+        <attribute name="name" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="contactMechId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="shipmentMethodId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- queryPostalAddress -->
+    <service name="queryPostalAddress" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryPostalAddress" auth="false">
+        <description>queryPostalAddress</description>
+        <attribute name="tarjeta" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="postalAddress" type="List" mode="OUT"   optional="true"/>
+        <attribute name="teleNumber" type="String" mode="OUT"   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+
+    <!-- queryCustSalesReport -->
+    <service name="queryCustSalesReport" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryCustSalesReport" auth="false">
+        <description>queryCustSalesReport</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="custList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="placingCustList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="visitorList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="partnerList" type="List" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- markOrOutMarkProduct -->
+    <service name="markOrOutMarkProduct" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="markOrOutMarkProduct" auth="false">
+        <description>markOrOutMarkProduct</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="markIt" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- confrim Payment -->
+    <service name="confirmPayment" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="confirmPayment" auth="false">
+        <description>confirmPayment</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="realPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- Query ConsumerInfo -->
+    <service name="queryConsumerInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryConsumerInfo" auth="false">
+        <description>queryConsumerInfo</description>
+
+        <attribute name="realPartyId" type="String" mode="INOUT"
+                   optional="true"/>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+        <!--<attribute name="queryConsumerInfoList" type="List" mode="OUT"-->
+                   <!--optional="true"/>-->
+        <!--<attribute name="orderList" type="List" mode="OUT"-->
+                   <!--optional="true"/>-->
+
+        <attribute name="partyRelation" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="distributingLeaflets" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resourceDetail" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <!-- queryProductRole-->
+    <service name="queryProductRole" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductRole" auth="false">
+        <description>queryProductRole</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="mark" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- Query Person BaseInfo WeChat -->
+    <service name="queryPersonBaseInfoByChat" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryPersonBaseInfoByChat" auth="false">
+        <description>queryPersonBaseInfoByChat</description>
+        <attribute name="tarjeta" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="productId" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="payToPartyFirstName" type="String" mode="INOUT"
+                   optional="true"/>
+        <attribute name="payToPartyHead" type="String" mode="INOUT"
+                   optional="true"/>
+
+
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="personInfo" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 推广产品 -->
+      <service name="spreadProduct" engine="java"
+                            location="main.java.com.banfftech.personmanager.PersonManagerServices"
+                            invoke="spreadProduct" auth="false">
+    <description>spreadProduct</description>
+    <attribute name="productId" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="text" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="roleTypeId" type="String" mode="IN"
+               optional="true"/>
+    <attribute name="resultMap" type="java.util.Map" mode="OUT"
+               optional="true"/>
+</service>
+
+    <!-- 增加转发记录 -->
+    <service name="addDistributingLeaflets" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addDistributingLeaflets" auth="false">
+        <description>add DistributingLeaflets</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="sellerPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="buyerPartyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="workerPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <!-- Place Resource Order -->
+    <service name="placeResourceOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="placeResourceOrder" auth="false">
+        <description>Place Resource Order</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <!-- 销售代表的Id -->
+        <attribute name="salesRepId" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="String" mode="IN"
+                   optional="true"/>
+        <!-- 订单备注 -->
+        <attribute name="orderReMark" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="amount" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="productStoreId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="orderId" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="partyIdFrom" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="relationEnum" type="String" mode="OUT"
+                   optional="true"/>
+
+
+        <attribute name="contactTel" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- Query Person Info -->
+    <service name="queryPersonInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryPersonInfo"
+             auth="false">
+        <description>queryPersonInfo</description>
+
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="userInfo" type="java.util.Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Query More Option Resource -->
+    <service name="queryMoreResource" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryMoreResource"
+             auth="false">
+        <description>queryMoreResource</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="roster" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="resourceList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Query Local Roster -->
+    <service name="queryLocalRoster" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices" invoke="queryLocalRoster"
+             auth="false">
+        <description>queryLocalRoster</description>
+        <attribute name="partyId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="roster" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- doRemoveProductFromCategory 真正意义上的删除产品无法恢复 -->
+    <service name="doRemoveProductFromCategory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="doRemoveProductFromCategory" auth="false">
+        <description>doRemoveProductFromCategory</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- salesDiscontinuation 销售终止-->
+    <service name="salesDiscontinuation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="salesDiscontinuation" auth="false">
+        <description>sales Discontinuation</description>
+
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <!-- recoveResource 恢复上架 -->
+ <service name="recoveResource" engine="java"  location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="recoveResource" auth="false">
+        <description>recoveResource</description>
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- TODO 重构 -->
+    <service name="addPartyRelationShip" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addPartyRelationShip" auth="false">
+        <description>add Party RelationShip</description>
+
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN"  optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="relationEnum" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 匹配手机联系人 -->
+    <service name="matchingContact" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="matchingContact" auth="false">
+        <description>Matching Contact</description>
+        <attribute name="contacts" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="count" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+</services>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
+    <menu name="MainAppBar" title="${uiLabelMap.PlatformManagerApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
+        <menu-item name="productUpload" title="产品导入"><link target="ProductUploadImport"/></menu-item>
+        <menu-item name="productImageUpload" title="产品图片上传"><link target="ProductImageUpload"/></menu-item>
+        <menu-item name="QuickShipOrder" title="快速装运"><link target="QuickShipOrder"/></menu-item>
+        <menu-item name="ExportShareCpsToExcel" title="导出分享报表Excel"><link target="ExportShareCpsToExcel"/></menu-item>
+
+        <menu-item name="ProductContent" title="商品信息" >
+            <link target="FindRealProductContentList"/>
+        </menu-item>
+        <menu-item name="RealProductImageManage" title="成衣图片管理">
+            <link target="FindRealProductList"/>
+        </menu-item>
+        <menu-item name="FindProductSizeDescription" title="SPU尺码管理">
+            <link target="FindProductSizeDescription"/>
+        </menu-item>
+
+
+    </menu>
+
+
+
+
+    <!-- 成衣图片管理的tabbar -->
+    <menu name="realProductImageTabBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="ProductContent" title="商品信息" >
+            <link target="realProductContent">
+                <parameter param-name="productId"/>
+            </link>
+        </menu-item>
+        <menu-item name="RealProductImageAssoc" title="图片关联">
+            <link target="RealProductImageAssoc">
+                <parameter param-name="productId"/>
+            </link>
+        </menu-item>
+        <menu-item name="EditProductMatch" title="搭配管理">
+            <link target="EditProductMatch">
+                <parameter param-name="productId"/>
+            </link>
+        </menu-item>
+    </menu>
+
+    <menu name="mainSearchBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="FindRealProductContentList" title="常规搜索" >
+            <link target="FindRealProductContentList">
+            </link>
+        </menu-item>
+        <menu-item name="SimpleSearchProductContent" title="简单搜索">
+            <link target="FindRealProductContentListSimple">
+            </link>
+        </menu-item>
+    </menu>
+</menus>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="DELETEERROR">
+        <value xml:lang="en">DELETEERROR </value>
+        <value xml:lang="zh">删除失败</value>
+        <value xml:lang="zh-TW">删除失败</value>
+    </property>
+
+</resource>

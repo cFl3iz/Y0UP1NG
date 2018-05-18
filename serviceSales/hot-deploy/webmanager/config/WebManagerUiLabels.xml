@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="WebManagerApplication">
+        <value xml:lang="en">WebManager Application</value>
+        <value xml:lang="zh">WebManager应用程序</value>
+        <value xml:lang="zh_CN">WebManager應用程式</value>
+    </property>
+    <property key="WebManagerCompanyName">
+        <value xml:lang="en">OFBiz: WebManager</value>
+        <value xml:lang="zh_CN">OFBiz: WebManager</value>
+    </property>
+    <property key="WebManagerCompanySubtitle">
+        <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
+        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
+        <value xml:lang="zh_CN">開源軟體OFBiz的組成部�?</value>
+    </property>
+    <property key="WebManagerViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">不允许你浏览这个页面�?</value>
+        <value xml:lang="zh_CN">不允許您檢視這�?�頁�?.</value>
+    </property>
+
+    <property key="DownApp">
+        <value xml:lang="en">Down App.</value>
+        <value xml:lang="zh">立即前往.</value>
+        <value xml:lang="zh_CN">立即前往.</value>
+    </property>
+
+
+    <property key="NotInventory">
+        <value xml:lang="en">Not Inventory.</value>
+        <value xml:lang="zh">卖完了</value>
+        <value xml:lang="zh_CN">卖完了</value>
+    </property>
+
+    <property key="DownReFlash">
+        <value xml:lang="en">DownReFlash</value>
+        <value xml:lang="zh">下拉刷新</value>
+        <value xml:lang="zh_CN">下拉刷新</value>
+    </property>
+
+    <property key="StopReFlash">
+        <value xml:lang="en">StopReFlash</value>
+        <value xml:lang="zh">释放刷新</value>
+        <value xml:lang="zh_CN">释放刷新</value>
+    </property>
+
+    <property key="NowReFlash">
+        <value xml:lang="en">NowReFlash</value>
+        <value xml:lang="zh">正在刷新</value>
+        <value xml:lang="zh_CN">正在刷新</value>
+    </property>
+    <property key="ReFlashSuccess">
+        <value xml:lang="en">ReFlashSuccess!</value>
+        <value xml:lang="zh">刷新成功!</value>
+        <value xml:lang="zh_CN">刷新成功!</value>
+    </property>
+
+    <property key="DownCanFlash">
+        <value xml:lang="en">ReFlash!</value>
+        <value xml:lang="zh">下拉可更新信息</value>
+        <value xml:lang="zh_CN">下拉可更新信息</value>
+    </property>
+
+    <property key="shipmentAddress">
+        <value xml:lang="en">shipmentAddress!</value>
+        <value xml:lang="zh">收货地址:</value>
+        <value xml:lang="zh_CN">收货地址:</value>
+    </property>
+
+
+    <property key="ExpressInfoNotFound">
+        <value xml:lang="en">Express Info NotFound</value>
+        <value xml:lang="zh">还没有物流信息</value>
+        <value xml:lang="zh_CN">还没有物流信息</value>
+    </property>
+
+
+    <property key="orderTime">
+        <value xml:lang="en">orderTime</value>
+        <value xml:lang="zh">下单时间:</value>
+        <value xml:lang="zh_CN">下单时间:</value>
+    </property>
+
+    <property key="orderStatus">
+        <value xml:lang="en">orderStatus</value>
+        <value xml:lang="zh">订单状态:</value>
+        <value xml:lang="zh_CN">订单状态:</value>
+    </property>
+    <property key="orderPrice">
+        <value xml:lang="en">orderPrice</value>
+        <value xml:lang="zh">订单金额:</value>
+        <value xml:lang="zh_CN">订单金额:</value>
+    </property>
+
+
+    <property key="AppDesc">
+        <value xml:lang="en">Good App.</value>
+        <value xml:lang="zh">更专业的熟人资源交易平台.</value>
+        <value xml:lang="zh_CN">更专业的熟人资源交易平台.</value>
+    </property>
+
+
+    <property key="Talk">
+        <value xml:lang="en">Talk.</value>
+        <value xml:lang="zh">聊一聊</value>
+        <value xml:lang="zh_CN">聊一聊</value>
+    </property>
+
+    <property key="More">
+        <value xml:lang="en">More.</value>
+        <value xml:lang="zh">相关</value>
+        <value xml:lang="zh_CN">相关</value>
+    </property>
+
+    <property key="MyOrder">
+        <value xml:lang="en">MyOrder</value>
+        <value xml:lang="zh">我的单</value>
+        <value xml:lang="zh_CN">我的单</value>
+    </property>
+
+
+    <property key="clickOnSay">
+        <value xml:lang="en">click On.</value>
+        <value xml:lang="zh">按住 说话</value>
+        <value xml:lang="zh_CN">按住 说话</value>
+    </property>
+
+    <property key="send">
+        <value xml:lang="en">send.</value>
+        <value xml:lang="zh">发送</value>
+        <value xml:lang="zh_CN">发送</value>
+    </property>
+
+    <property key="to">
+        <value xml:lang="en">to </value>
+        <value xml:lang="zh">与 </value>
+        <value xml:lang="zh_CN">与 </value>
+    </property>
+
+    <property key="chat">
+        <value xml:lang="en">chat </value>
+        <value xml:lang="zh">的聊天 </value>
+        <value xml:lang="zh_CN">的聊天 </value>
+    </property>
+
+    <property key="confirmMessage">
+        <value xml:lang="en">Buy Now?</value>
+        <value xml:lang="zh">确认要吗?</value>
+        <value xml:lang="zh_CN">确认要吗?</value>
+    </property>
+
+
+    <property key="About">
+        <value xml:lang="en">Hi.</value>
+        <value xml:lang="zh">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
+        <value xml:lang="zh_CN">Hi,有什么话您就直接留言吧,我会尽快回复您!</value>
+    </property>
+
+    <property key="Mark">
+        <value xml:lang="en">MarkStar</value>
+        <value xml:lang="zh">收藏</value>
+        <value xml:lang="zh_CN">收藏</value>
+    </property>
+
+
+    <property key="confirmMarkMessage">
+        <value xml:lang="en">Are you a fickle person?</value>
+        <value xml:lang="zh">从'我的收藏'移除?</value>
+        <value xml:lang="zh_CN">从'我的收藏'移除?</value>
+    </property>
+
+    <property key="confirmMarkProductMessage">
+        <value xml:lang="en">Mark Product!</value>
+        <value xml:lang="zh">已添加到'我的收藏'。</value>
+        <value xml:lang="zh_CN">已添加到'我的收藏'。</value>
+    </property>
+
+
+    <property key="ProductDetail">
+        <value xml:lang="en">Product Detail</value>
+        <value xml:lang="zh">商品详情</value>
+        <value xml:lang="zh_CN">商品详情</value>
+    </property>
+
+
+
+    <property key="NoProductMoreDetail">
+        <value xml:lang="en">NoProductMoreDetail</value>
+        <value xml:lang="zh">没有更多的图文消息...</value>
+        <value xml:lang="zh_CN">没有更多的图文消息...</value>
+    </property>
+
+
+
+    <property key="Buy">
+        <value xml:lang="en">Buy</value>
+        <value xml:lang="zh">我要一个</value>
+        <value xml:lang="zh_CN">我要一个</value>
+    </property>
+
+    <property key="FriendSay">
+        <value xml:lang="en">Friend Buy</value>
+        <value xml:lang="zh">这些朋友试过</value>
+        <value xml:lang="zh_CN">这些朋友试过</value>
+    </property>
+
+
+    <property key="ProductSpecDetail">
+        <value xml:lang="en">ProductSpecDetail</value>
+        <value xml:lang="zh">图文介绍</value>
+        <value xml:lang="zh_CN">图文介绍</value>
+    </property>
+
+    <property key="Person">
+        <value xml:lang="en">Person</value>
+        <value xml:lang="zh">人</value>
+        <value xml:lang="zh_CN">人</value>
+    </property>
+
+    <property key="De">
+        <value xml:lang="en">-</value>
+        <value xml:lang="zh">的</value>
+        <value xml:lang="zh_CN">的</value>
+    </property>
+
+    <property key="DefaultAction">
+        <value xml:lang="en">DefaultAction</value>
+        <value xml:lang="zh">预留功能</value>
+        <value xml:lang="zh_CN">预留功能</value>
+    </property>
+
+    <property key="CleanOne">
+        <value xml:lang="en">CleanOne</value>
+        <value xml:lang="zh">该地址用完这单后自动清理不要保存</value>
+        <value xml:lang="zh_CN">该地址用完这单后自动清理不要保存</value>
+    </property>
+
+
+    <property key="Over">
+        <value xml:lang="en">Over</value>
+        <value xml:lang="zh">卖家正在处理订单</value>
+        <value xml:lang="zh_CN">卖家正在处理订单</value>
+    </property>
+
+
+    <property key="ViewMyOrder">
+        <value xml:lang="en">ViewMyOrder</value>
+        <value xml:lang="zh">看看</value>
+        <value xml:lang="zh_CN">看看</value>
+    </property>
+    <property key="ViewMiniChat">
+        <value xml:lang="en">Chat</value>
+        <value xml:lang="zh">聊聊</value>
+        <value xml:lang="zh_CN">聊聊</value>
+    </property>
+
+    <property key="Amount">
+        <value xml:lang="en">amount</value>
+        <value xml:lang="zh">数量</value>
+        <value xml:lang="zh_CN">数量</value>
+    </property>
+    <property key="Weight">
+        <value xml:lang="en">weight</value>
+        <value xml:lang="zh">重量</value>
+        <value xml:lang="zh_CN">重量</value>
+    </property>
+
+    <property key="BuyNow">
+        <value xml:lang="en">Buy Now!.</value>
+        <value xml:lang="zh">立即购买 '${productName}'!</value>
+        <value xml:lang="zh_CN">立即购买 '${productName}'!</value>
+    </property>
+
+    <property key="noBuyHistory">
+        <value xml:lang="en">no Buy History.</value>
+        <value xml:lang="zh">这个产品还没有过交易记录!</value>
+        <value xml:lang="zh_CN">这个产品还没有过交易记录!</value>
+    </property>
+
+
+    <property key="YouHaoTiShi">
+        <value xml:lang="en">Please Scan The'qr'code。</value>
+        <value xml:lang="zh">为给您提供后续服务,请先关注。</value>
+        <value xml:lang="zh_CN">为给您提供后续服务,请先关注。</value>
+    </property>
+
+
+    <property key="CLOSE">
+        <value xml:lang="en">CLOSE。</value>
+        <value xml:lang="zh">关闭</value>
+        <value xml:lang="zh_CN">关闭</value>
+    </property>
+
+    <property key="CheckAddress">
+        <value xml:lang="en">Check Address</value>
+        <value xml:lang="zh">选择您的收货地址</value>
+        <value xml:lang="zh_CN">选择您的收货地址</value>
+    </property>
+
+    <property key="AddressDetail">
+        <value xml:lang="en">AddressDetail</value>
+        <value xml:lang="zh">具体地址</value>
+        <value xml:lang="zh_CN">具体地址</value>
+    </property>
+
+    <property key="AddressScope">
+        <value xml:lang="en">Scope</value>
+        <value xml:lang="zh">所在地区</value>
+        <value xml:lang="zh_CN">所在地区</value>
+    </property>
+
+    <property key="Chose">
+        <value xml:lang="en">Chose</value>
+        <value xml:lang="zh">请选择</value>
+        <value xml:lang="zh_CN">请选择</value>
+    </property>
+
+    <property key="SelectAddress">
+        <value xml:lang="en">Select Address</value>
+        <value xml:lang="zh">请选择收货地址</value>
+        <value xml:lang="zh_CN">请选择收货地址</value>
+    </property>
+
+    <property key="SetDefaultAddress">
+        <value xml:lang="en">SetDefaultAddress</value>
+        <value xml:lang="zh">设为默认地址</value>
+        <value xml:lang="zh_CN">设为默认地址</value>
+    </property>
+
+    <property key="SettingAbout">
+        <value xml:lang="en">Setting About</value>
+        <value xml:lang="zh">偏好设置</value>
+        <value xml:lang="zh_CN">偏好设置</value>
+    </property>
+
+
+
+    <property key="CreateOrderSuccess">
+        <value xml:lang="en">Create Order Success!.</value>
+        <value xml:lang="zh">需要您的邮政地址作为货运目的</value>
+        <value xml:lang="zh_CN">需要您的邮政地址作为货运目的</value>
+    </property>
+
+    <property key="SetAddress">
+        <value xml:lang="en">Set Address</value>
+        <value xml:lang="zh">您还未设置地址,补充便于发货。</value>
+        <value xml:lang="zh_CN">您还未设置地址,补充便于发货。</value>
+    </property>
+
+
+
+    <property key="NoFuckSetting">
+        <value xml:lang="en">NoFuckSetting</value>
+        <value xml:lang="zh">不要再试图得到我地址</value>
+        <value xml:lang="zh_CN">不要再试图得到我地址</value>
+    </property>
+
+
+    <property key="AddressDetailDemo">
+        <value xml:lang="en">Tips:Shanghai PuDong 15N-301</value>
+        <value xml:lang="zh">如:东方路223弄9号E301</value>
+        <value xml:lang="zh_CN">如:东方路223弄9号E301</value>
+    </property>
+
+
+    <property key="Setting">
+        <value xml:lang="en">Setting</value>
+        <value xml:lang="zh">保存</value>
+        <value xml:lang="zh_CN">保存</value>
+    </property>
+
+    <property key="apply">
+        <value xml:lang="en">Select</value>
+        <value xml:lang="zh">确认收货地址</value>
+        <value xml:lang="zh_CN">确认收货地址</value>
+    </property>
+    <property key="otherAddress">
+        <value xml:lang="en">other Address</value>
+        <value xml:lang="zh">其他地址</value>
+        <value xml:lang="zh_CN">其他地址</value>
+    </property>
+
+    <property key="MyLocation">
+        <value xml:lang="en">MyLocation</value>
+        <value xml:lang="zh">我的位置</value>
+        <value xml:lang="zh_CN">我的位置</value>
+    </property>
+
+
+    <property key="ErrorLocation">
+        <value xml:lang="en">ErrorLocation</value>
+        <value xml:lang="zh">该位置已失效,请看最新位置</value>
+        <value xml:lang="zh_CN">该位置已失效,请看最新位置</value>
+    </property>
+
+
+    <property key="Ok">
+        <value xml:lang="en">Ok</value>
+        <value xml:lang="zh">确定</value>
+        <value xml:lang="zh_CN">确定</value>
+    </property>
+
+    <property key="SettingSuccess">
+        <value xml:lang="en">Setting Success</value>
+        <value xml:lang="zh">保存成功</value>
+        <value xml:lang="zh_CN">保存成功</value>
+    </property>
+
+    <property key="TitleFont">
+        <value xml:lang="en">TitleFont</value>
+        <value xml:lang="zh">儿子与他的滑板车</value>
+        <value xml:lang="zh_CN">儿子与他的滑板车</value>
+    </property>
+
+
+    <property key="BodyFont">
+        <value xml:lang="en">BodyFont</value>
+        <value xml:lang="zh">帅克trikke儿童三轮滑板车使用全球三点曲面联动系统技术研发，不同于蛙式滑板车对孩子骨骼发育有损害，帅克儿童滑板车不需要腿部蛙式分合动作前进，依靠的是身体左右摇摆，重心改变获取动力，是一种全身运动，同时，良好的人车互动，也让孩子从中获得乐趣，从此喜爱上运动</value>
+        <value xml:lang="zh_CN">帅克trikke儿童三轮滑板车使用全球三点曲面联动系统技术研发，不同于蛙式滑板车对孩子骨骼发育有损害，帅克儿童滑板车不需要腿部蛙式分合动作前进，依靠的是身体左右摇摆，重心改变获取动力，是一种全身运动，同时，良好的人车互动，也让孩子从中获得乐趣，从此喜爱上运动</value>
+    </property>
+
+    <property key="Author">
+        <value xml:lang="en">Author</value>
+        <value xml:lang="zh">作者:金龙熙</value>
+        <value xml:lang="zh_CN">作者:金龙熙</value>
+    </property>
+
+    <property key="Content">
+        <value xml:lang="en">Content</value>
+        <value xml:lang="zh">儿子两岁生日的那一天，孩子妈给他买了一辆黑色的帅客牌滑板车作为礼物送，开始他不敢上，在妈妈的帮助下，壮着胆子双手扶住车把，试着把右脚踩到车板上，并用力地将左脚在地面上一蹬。但没想到，啪地一声他连人带车一起摔到了地上，我害怕极了，怕他摔到哪里，但没想到，他立马站了起来，扶起车子继续滑了起来。后来又摔了几跤，不过在绕喷泉周围骑了几圈以后，慢慢地可以很流畅的滑行了！</value>
+        <value xml:lang="zh_CN">儿子两岁生日的那一天，孩子妈给他买了一辆黑色的帅客牌滑板车作为礼物送，开始他不敢上，在妈妈的帮助下，壮着胆子双手扶住车把，试着把右脚踩到车板上，并用力地将左脚在地面上一蹬。但没想到，啪地一声他连人带车一起摔到了地上，我害怕极了，怕他摔到哪里，但没想到，他立马站了起来，扶起车子继续滑了起来。后来又摔了几跤，不过在绕喷泉周围骑了几圈以后，慢慢地可以很流畅的滑行了！</value>
+    </property>
+
+
+
+
+    <property key="Msg">
+        <value xml:lang="en">Msg</value>
+        <value xml:lang="zh">如果你对产品有什么疑问或要求,请直接联系我哦!</value>
+        <value xml:lang="zh_CN">如果你对产品有什么疑问或要求,请直接联系我哦!</value>
+    </property>
+
+
+
+    <property key="DisProduct">
+        <value xml:lang="en">Product Disable</value>
+        <value xml:lang="zh">商品已下架</value>
+        <value xml:lang="zh_CN">商品已下架</value>
+    </property>
+
+
+    <property key="ContactMe">
+        <value xml:lang="en">ContactMe</value>
+        <value xml:lang="zh">联系我</value>
+        <value xml:lang="zh_CN">联系我</value>
+    </property>
+
+
+
+
+    <property key="GoToPay">
+        <value xml:lang="en">GoToPay</value>
+        <value xml:lang="zh">下单</value>
+        <value xml:lang="zh_CN">下单</value>
+    </property>
+
+
+
+
+
+</resource>

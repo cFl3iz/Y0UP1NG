@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>VIEW Entity of PersonManager Component</title>
+    <description>None</description>
+    <copyright>S</copyright>
+    <version>1</version>
+    <!-- Tele & Party View -->
+    <view-entity entity-name="TelecomNumberAndPartyView" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+        <alias entity-alias="PCM" name="partyId" field="partyId"/>
+        <alias entity-alias="PCM" name="fromDate" field="fromDate"/>
+        <alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
+        <alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
+        <alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
+        <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="TN" name="contactNumber" field="contactNumber"/>
+        <view-link entity-alias="PCM" rel-entity-alias="PCMP">
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+            <entity-condition>
+                <condition-list>
+                    <condition-expr entity-alias="PCM" field-name="thruDate" operator="equals" value=""/>
+                    <condition-expr entity-alias="PCMP" field-name="thruDate" operator="equals" value=""/>
+                </condition-list>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM">
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="TN">
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <entity-condition>
+            <order-by field-name="-fromDate"/>
+        </entity-condition>
+    </view-entity>
+
+
+
+    <view-entity entity-name="WorkEffortPartyRoleAndProduct" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="WPAR" entity-name="WorkEffortPartyAssignAndRoleType"/>
+        <member-entity entity-alias="WEPG" entity-name="WorkEffortProductGoods"/>
+        <member-entity entity-alias="W" entity-name="WorkEffort"/>
+
+        <alias-all entity-alias="WPAR" />
+        <alias entity-alias="WEPG" field="productId" name="productId"/>
+        <alias entity-alias="W" field="description" name="description"/>
+
+        <view-link entity-alias="WPAR" rel-entity-alias="WEPG">
+            <key-map field-name="workEffortId" rel-field-name="workEffortId"/>
+        </view-link>
+        <view-link entity-alias="WPAR" rel-entity-alias="W">
+            <key-map field-name="workEffortId" rel-field-name="workEffortId"/>
+        </view-link>
+    </view-entity>
+
+
+    <!-- Email & Party -->
+    <view-entity entity-name="EmailAndPartyView" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <alias entity-alias="PCM" name="partyId" field="partyId"/>
+        <alias entity-alias="PCM" name="fromDate" field="fromDate"/>
+        <alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
+        <alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
+        <alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
+        <alias entity-alias="CM" name="infoString" field="infoString"/>
+        <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <view-link entity-alias="PCM" rel-entity-alias="PCMP">
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+            <entity-condition>
+                <condition-list>
+                    <condition-expr entity-alias="PCM" field-name="thruDate" operator="equals" value=""/>
+                    <condition-expr entity-alias="PCMP" field-name="thruDate" operator="equals" value=""/>
+                </condition-list>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM">
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <entity-condition>
+            <order-by field-name="-fromDate"/>
+        </entity-condition>
+    </view-entity>
+    <!-- Postal Address & Party -->
+    <view-entity entity-name="PostalAddressAndPartyView" package-name="com.banfftech.personerp">
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="G" entity-name="Geo"/>
+        <alias entity-alias="PCM" name="partyId" field="partyId"/>
+        <alias entity-alias="PCM" name="fromDate" field="fromDate"/>
+        <alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
+        <alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
+        <alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
+        <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="PA" name="address1" field="address1"/>
+        <alias entity-alias="PA" name="address2" field="address2"/>
+        <alias entity-alias="PA" name="city" field="city"/>
+        <alias entity-alias="PA" name="stateProvinceGeoId" field="stateProvinceGeoId"/>
+        <alias entity-alias="G" name="geoName" field="geoName"/>
+        <view-link entity-alias="PCM" rel-entity-alias="PCMP">
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+            <entity-condition>
+                <condition-list>
+                    <condition-expr entity-alias="PCM" field-name="thruDate" operator="equals" value=""/>
+                    <condition-expr entity-alias="PCMP" field-name="thruDate" operator="equals" value=""/>
+                </condition-list>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM">
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="PA">
+            <key-map field-name="contactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PA" rel-entity-alias="G">
+            <key-map field-name="stateProvinceGeoId" rel-field-name="geoId"/>
+        </view-link>
+        <entity-condition>
+            <order-by field-name="-fromDate"/>
+        </entity-condition>
+    </view-entity>
+
+
+    <!--头像*新)-->
+    <view-entity entity-name="PartyContentAndDataResource" package-name="com.banfftech.personerp">
+        <member-entity entity-name="Content" entity-alias="Content" />
+        <member-entity entity-name="PartyContent" entity-alias="PartyContent" />
+        <member-entity entity-name="DataResource" entity-alias="DataResource" />
+
+        <alias entity-alias="DataResource" field="objectInfo" name="objectInfo"/>
+        <alias entity-alias="PartyContent" field="partyContentTypeId" name="partyContentTypeId"/>
+        <alias entity-alias="PartyContent" field="fromDate" name="fromDate"/>
+        <alias entity-alias="PartyContent" field="partyId" name="partyId"/>
+
+
+        <alias entity-alias="DataResource" field="dataResourceId" name="dataResourceId"/>
+
+        <alias entity-alias="Content" field="contentId" name="contentId"/>
+
+
+        <alias entity-alias="PartyContent" field="thruDate" name="thruDate"/>
+
+
+        <view-link entity-alias="Content" rel-entity-alias="PartyContent">
+            <key-map rel-field-name="contentId" field-name="contentId"/>
+        </view-link>
+
+        <view-link entity-alias="Content" rel-entity-alias="DataResource">
+            <key-map rel-field-name="dataResourceId" field-name="dataResourceId"/>
+        </view-link>
+
+
+
+    </view-entity>
+
+
+
+    <view-entity entity-name="ProductStoreRoleAndStoreDetail" package-name="com.banfftech.personerp">
+        <member-entity entity-name="ProductStoreRole" entity-alias="ProductStoreRole" />
+        <member-entity entity-name="ProductStore" entity-alias="ProductStore" />
+        <member-entity entity-name="ProductStoreCatalog" entity-alias="ProductStoreCatalog" />
+
+        <alias-all entity-alias="ProductStoreRole"/>
+        <alias entity-alias="ProductStoreCatalog" field="prodCatalogId" name="prodCatalogId"/>
+        <alias entity-alias="ProductStore" field="storeName" name="storeName"/>
+        <alias entity-alias="ProductStore" field="productStoreId" name="productStoreId"/>
+
+
+
+        <view-link entity-alias="ProductStore" rel-entity-alias="ProductStoreRole">
+            <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
+        </view-link>
+
+        <view-link entity-alias="ProductStore" rel-entity-alias="ProductStoreCatalog">
+            <key-map rel-field-name="productStoreId" field-name="productStoreId"/>
+        </view-link>
+    </view-entity>
+
+
+    <!-- 查询 消息列表的视图 , 非常痛苦  -->
+    <view-entity entity-name="MessageLogView" package-name="com.banfftech.personerp">
+    <member-entity entity-name="MessageLog" entity-alias="ML" />
+        <!--<alias-all entity-alias="ML"/>-->
+        <alias name="fromDate" field="fromDate" entity-alias="ML"/>
+        <alias name="partyIdTo" field="partyIdTo" group-by="true" entity-alias="ML"/>
+        <alias name="partyIdFrom" field="partyIdFrom" group-by="true" entity-alias="ML"/>
+        <alias name="badge" field="badge" entity-alias="ML"/>
+        <alias name="messageId" field="messageId" entity-alias="ML"/>
+        <alias name="message" field="message" entity-alias="ML"/>
+        <alias name="objectId" field="objectId" entity-alias="ML" group-by="true"/>
+        <!--<entity-condition>-->
+            <!--<order-by field-name="fromDate" />-->
+        <!--</entity-condition>-->
+    </view-entity>
+
+
+
+
+    <!-- 我的产品特征类型偏好设置 -->
+    <view-entity entity-name="UserPreferenceProductFeatures" package-name="com.banfftech.personerp">
+        <member-entity entity-name="UserPreference" entity-alias="UserPreference" />
+        <member-entity entity-name="ProductFeatureType" entity-alias="ProductFeatureType" />
+
+        <alias field="userLoginId" name="userLoginId" entity-alias="UserPreference"/>
+        <alias field="userPrefTypeId" name="userPrefTypeId" entity-alias="UserPreference"/>
+        <alias field="userPrefGroupTypeId" name="userPrefGroupTypeId" entity-alias="UserPreference"/>
+        <alias field="userPrefValue" name="userPrefValue" entity-alias="UserPreference"/>
+
+        <alias field="productFeatureTypeId" name="productFeatureTypeId" entity-alias="ProductFeatureType"/>
+        <alias field="description" name="description" entity-alias="ProductFeatureType"/>
+
+        <view-link entity-alias="ProductFeatureType" rel-entity-alias="UserPreference">
+            <key-map field-name="productFeatureTypeId" rel-field-name="userPrefTypeId" />
+            <entity-condition>
+                <condition-expr entity-alias="UserPreference" field-name="userPrefGroupTypeId" operator="equals" value="PRODUCT_FEATURES"/>
+            </entity-condition>
+        </view-link>
+    </view-entity>
+
+
+
+    <!-- 检查是否存在这条转发:资源主 -->
+    <view-entity entity-name="WorkEffortAndProductAndParty" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 资源ID -->
+        <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="WorkEffort"/>
+
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="SHIP_FROM_VENDOR"/>
+        </entity-condition>
+
+    </view-entity>
+
+    <!-- 检查是否存在这条转发:转发人 -->
+    <view-entity entity-name="WorkEffortAndProductAndPartyReFerrer" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 资源ID -->
+        <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- 分享次数 -->
+        <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="WorkEffort"/>
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="REFERRER"/>
+        </entity-condition>
+
+    </view-entity>
+
+
+    <!-- 是否存在的销售代表 -->
+    <view-entity entity-name="WorkEffortAndProductAndPartySalesRep" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 资源ID -->
+        <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- 分享次数 -->
+        <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="WorkEffort"/>
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+
+
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="SALES_REP"/>
+        </entity-condition>
+
+    </view-entity>
+
+
+    <!-- 检查是否存在这条转发:收信人 -->
+    <view-entity entity-name="WorkEffortAndProductAndPartyAddressee" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffortProductGoods" entity-alias="workEffortProductGoods" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 资源ID -->
+        <alias field="productId" name="productId" entity-alias="workEffortProductGoods"/>
+        <!-- 分享次数 -->
+        <alias field="percentComplete" name="percentComplete" entity-alias="workEffortProductGoods"/>
+        <!-- Desc 但此处起到了标识作用 资源id+转发人id -->
+        <alias field="description" name="description" entity-alias="WorkEffort"/>
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="workEffortProductGoods">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="ADDRESSEE"/>
+        </entity-condition>
+
+    </view-entity>
+
+
+
+
+    <view-entity entity-name="PartyRelationshipAndType" package-name="com.banfftech.personerp">
+        <member-entity entity-name="PartyRelationship" entity-alias="PartyRelationship" />
+        <member-entity entity-name="PartyRelationshipType" entity-alias="PartyRelationshipType" />
+
+        <alias field="partyIdTo" name="partyIdTo" entity-alias="PartyRelationship"/>
+
+        <alias field="partyIdFrom" name="partyIdFrom" entity-alias="PartyRelationship"/>
+        <alias field="statusId" name="statusId" entity-alias="PartyRelationship"/>
+        <alias field="partyRelationshipTypeId" name="partyRelationshipTypeId" entity-alias="PartyRelationship"/>
+
+
+        <alias field="parentTypeId" name="parentTypeId" entity-alias="PartyRelationshipType"/>
+        <alias field="partyRelationshipName" name="partyRelationshipName" entity-alias="PartyRelationshipType"/>
+
+        <view-link entity-alias="PartyRelationship" rel-entity-alias="PartyRelationshipType">
+            <key-map field-name="partyRelationshipTypeId" />
+        </view-link>
+    </view-entity>
+
+    <!-- 联系人的资源视图实体 -->
+    <view-entity entity-name="PartyContactResources" package-name="com.banfftech.personerp">
+        <member-entity entity-name="PartyRelationship" entity-alias="PartyRelationship" />
+        <member-entity entity-name="ProductRole" entity-alias="ProductRole" />
+        <member-entity entity-name="ProductAndCategoryMember" entity-alias="Product" />
+        <member-entity entity-alias="PP" entity-name="ProductPrice"/>
+
+        <alias field="price" name="price" entity-alias="PP"/>
+        <alias field="productPriceTypeId" name="productPriceTypeId" entity-alias="PP"/>
+
+
+
+        <alias entity-alias="PartyRelationship" field="partyIdTo" name="partyIdTo"/>
+        <alias entity-alias="PartyRelationship" field="partyIdFrom" name="partyIdFrom"/>
+        <alias entity-alias="PartyRelationship" field="partyRelationshipTypeId" name="partyRelationshipTypeId"/>
+
+        <alias entity-alias="ProductRole" field="partyId" name="partyId"/>
+        <alias entity-alias="ProductRole" field="roleTypeId" name="roleTypeId"/>
+
+        <alias entity-alias="Product" field="productId" name="productId"/>
+        <alias entity-alias="Product" field="salesDiscontinuationDate" name="salesDiscontinuationDate"/>
+        <alias entity-alias="Product" field="productName" name="productName"/>
+        <alias entity-alias="Product" field="detailImageUrl" name="detailImageUrl"/>
+        <!--<alias entity-alias="Product" field="price" name="price"/>-->
+        <alias entity-alias="Product" field="description" name="description"/>
+
+        <alias entity-alias="Product" field="createdDate" name="createdDate"/>
+
+        <view-link entity-alias="PartyRelationship" rel-entity-alias="ProductRole">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId" />
+        </view-link>
+
+        <view-link entity-alias="ProductRole" rel-entity-alias="Product">
+            <key-map rel-field-name="productId" field-name="productId"/>
+        </view-link>
+
+        <view-link entity-alias="Product" rel-entity-alias="PP">
+            <key-map field-name="productId" rel-field-name="productId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PP" field-name="productPriceTypeId" operator="equals" value="DEFAULT_PRICE"/>
+            </entity-condition>
+        </view-link>
+
+    </view-entity>
+
+
+
+
+
+    <view-entity entity-name="ProductCategoryMemberAndProdDetail" package-name="com.banfftech.personerp">
+        <member-entity entity-name="ProductCategoryMember" entity-alias="ProductCategoryMember" />
+        <member-entity entity-name="Product" entity-alias="Product" />
+
+
+        <alias-all entity-alias="Product" />
+
+        <alias entity-alias="ProductCategoryMember" field="productCategoryId" name="productCategoryId"/>
+
+        <view-link entity-alias="Product" rel-entity-alias="ProductCategoryMember">
+            <key-map field-name="productId" />
+        </view-link>
+
+
+
+    </view-entity>
+</entitymodel>

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+
+
+
+
+
+    <!-- Every Request Do Check -->
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java"
+               path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+    </preprocessor>
+
+
+
+
+    <!-- 商品导入 Copy By ZucZug Moka -->
+    <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
+    <request-map uri="ProductImageUpload"><security https="true" auth="true"/><response name="success" type="view" value="ProductImageUpload"/></request-map>
+    <request-map uri="ExportShareCpsToExcel"><security https="true" auth="true"/><response name="success" type="view" value="ExportShareCpsToExcel"/></request-map>
+    <!-- 快速运送整个订单-->
+    <request-map uri="QuickShipOrder"><security https="true" auth="true"/><response name="success" type="view" value="QuickShipOrder"/></request-map>
+
+    <request-map uri="QuickShipOrderFormEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="quickShipOrder"/>
+        <response name="success" type="view" value="QuickShipOrder"/>
+    </request-map>
+
+
+    <!-- 导出Cps报表 -->
+    <request-map uri="ExportShareCpsToExcelEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="exportShareCpsToExcelEvent"/>
+        <response name="success" type="view" value="ExportShareCpsToExcel"/>
+    </request-map>
+
+
+
+    <request-map uri="ProductUploadImportEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImport"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+    <request-map uri="kangChengProductUploadImport">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="kangChengProductUploadImport"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+
+
+    <request-map uri="ProductImageUploadFormEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productImageUploadFormEvent"/>
+        <response name="success" type="view" value="ProductImageUpload"/>
+    </request-map>
+
+
+
+
+
+    <!-- Query Express Info -->
+    <request-map uri="queryExpressInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryExpressInfo"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="deleteMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="deleteMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!--updateShipGroupShipInfoForWeChat-->
+    <request-map uri="updateShipGroupShipInfoForWeChat">
+        <security https="false" auth="false"/>
+        <!-- 老服务已弃用-->
+        <!--<event type="service" invoke="updateShipGroupShipInfoForWeChat"  />-->
+
+        <event type="service" invoke="peSentOrder"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+    <!-- Send Message -->
+    <request-map uri="sendMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sendMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="sendAppAndWeChatMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sendAppAndWeChatMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- Load Message -->
+    <request-map uri="loadMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="loadAllMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadAllMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="cleanSessionMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="cleanSessionMessage"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- 退出登录删除regId -->
+    <request-map uri="removeJpushRegId">
+        <security https="false" auth="false" />
+        <event type="service" invoke="removeJpushRegId"  />
+        <response name="success" type="request" value="result_json" />
+        <response name="error" type="request" value="result_json" />
+    </request-map>
+
+    <!-- 注册极光ID -->
+    <request-map uri="regJpushRegId">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="regJpushRegId"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="pushNotifOrMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="pushNotifOrMessage"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+
+
+
+
+
+    <!-- Query Local Roster
+         # Relation Roster List
+         # Cache Match
+    -->
+    <request-map uri="queryLocalRoster">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryLocalRoster"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <!-- AppLogin (Tel) -->
+    <request-map uri="userAppLogin">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="userAppLogin"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- weChatAppLogin For App -->
+    <request-map uri="weChatAppLogin">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="weChatAppLogin"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- 新 -->
+    <request-map uri="getCaptcha">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getLoginCaptcha"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- Get Login/Regist Captcha -->
+    <request-map uri="getTelCaptcha">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getTelCaptcha"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="FindRealProductList">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductList"/>
+    </request-map>
+
+    <request-map uri="FindRealProductContentList">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductContentList"/>
+    </request-map>
+    <request-map uri="FindRealProductContentListSimple">
+        <description>商品列表</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindRealProductContentListSimple"/>
+    </request-map>
+
+    <request-map uri="RealProductImageAssoc">
+        <description>成衣图片管理</description>
+        <security https="true" auth="true"/>
+        <!--<event type="service" invoke="copyImageAndContentInfoFromMiddleSize"></event>-->
+
+        <!-- 把这个颜色的中码的图片，都复制到其他尺码上去 -->
+        <response name="success" type="view" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="LoadOSSResourceHtml">
+        <description>载入OSS的图片</description>
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.util.ImageManageService" invoke="loadOSSImageListWithProduct" />
+        <response name="success" type="view" value="LoadOSSResourceHtml"/>
+    </request-map>
+
+    <request-map uri="associateProductAndImage">
+        <description>提交图片的关联</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="associateProductAndImage"></event>
+        <response name="success" type="request-redirect" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="colorId"/>
+        </response>
+        <response name="error" type="view" value="RealProductImageAssoc"></response>
+    </request-map>
+
+    <request-map uri="removeProductContent">
+        <description>删除一个商品的图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductContent" />
+        <response name="success" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="EditProductMatch">
+        <description>编辑或添加商品搭配</description>
+        <security https="true" auth="true"/>
+        <!--<event type="service" invoke="removeProductContentMatchAndPutAgain"></event>-->
+        <!-- 为搭配下的主款设置ProductContent中的内容 -->
+        <response name="success" type="view" value="EditProductMatch">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="addProductToMatch">
+        <description>添加商品到搭配中去</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="addProductToMatch" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeProductFromMatch">
+        <description>把商品从搭配中删除</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductFromMatch" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="saveMatchImages">
+        <description>保存搭配的图片</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="saveMatchImages"></event>
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeProductCategoryContent">
+        <description>删除搭配中的一个图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductCategoryContent" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="removeMatchProductCategory">
+        <description>删除搭配中的一个图片</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeMatchProductCategory" />
+        <response name="success" type="request-redirect-noparam" value="EditProductMatch">
+        </response>
+    </request-map>
+
+    <request-map uri="setMatchIsIpadUse">
+        <description>设置是否ipad可以用这个搭配</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setMatchIsIpadUse" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="setMatchIsWebsiteUse">
+        <description>设置网站是否可以用这个搭配</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setMatchIsWebsiteUse" />
+        <response name="success" type="request-redirect" value="EditProductMatch">
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="setProductMasterColor">
+        <description>为某个商品设置主色</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="setProductMasterColor" />
+        <response name="success" type="request-redirect" value="RealProductImageAssoc">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="colorId"/>
+        </response>
+        <response name="error" type="view" value="RealProductImageAssoc"></response>
+    </request-map>
+
+
+    <request-map uri="realProductContent">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="realProductContent">
+            <redirect-parameter name="productId"/>
+        </response>
+    </request-map>
+
+    <request-map uri="EditRealProductContent">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditRealProductContent"/>
+    </request-map>
+
+    <request-map uri="downloadExcel">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.zuczug.util.ExcelUtilService" invoke="downloadExcel"/>
+        <response name="success" type="request-redirect" value="FindRealProductContentList"/>
+        <response name="error" type="request-redirect" value="FindRealProductContentList"/>
+    </request-map>
+
+    <request-map uri="realProductDescriptionUpload">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.zuczug.util.ExcelUtilService" invoke="upLoadExcel"/>
+        <response name="success" type="request-redirect" value="FindRealProductContentList"/>
+        <response name="error" type="request-redirect" value="FindRealProductContentList"/>
+    </request-map>
+
+    <request-map uri="EditShopProductContent">
+        <description>为某个商品设置主色</description>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="editShopProductContent" />
+        <response name="success" type="request-redirect" value="EditRealProductContent">
+            <redirect-parameter name="productId"/>
+        </response>
+        <response name="error" type="view" value="EditRealProductContent"></response>
+    </request-map>
+
+    <request-map uri="loadProductInfo">
+        <security auth="true"/>
+        <event type="simple" path="component://contentcenter/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="loadProductInfo"/>
+        <response name="success" type="view" value="EditRealProductContent"/>
+        <response name="error" type="view" value="EditRealProductContent"/>
+    </request-map>
+
+    <request-map uri="realProductDescriptionExcelUpload">
+        <description>商品信息</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="realProductDescriptionExcelUpload"/>
+    </request-map>
+
+
+    <!-- SPU尺码编辑 -->
+    <request-map uri="FindProductSizeDescription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindProductSizeDescription"/>
+    </request-map>
+    <request-map uri="EditProductSizeDescription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductSizeDescription"/>
+    </request-map>
+    <request-map uri="createProductSizeContentAndInfo">
+        <security https="true" auth="true"/>
+        <event invoke="createProductSizeContentAndInfo" type="service"/>
+        <response name="success" type="view" value="FindProductSizeDescription"/>
+        <response name="error" type="view" value="FindProductSizeDescription"/>
+    </request-map>
+
+    <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
+    <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
+
+    <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
+    <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>
+    <view-map name="QuickShipOrder" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickShipOrder"/>
+    <view-map name="ExportShareCpsToExcel" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ExportShareCpsToExcel"/>
+
+<!-- 产品内容 -->
+    <view-map name="FindRealProductList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductList"/>
+    <view-map name="FindRealProductContentList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentList"/>
+    <view-map name="FindRealProductContentListSimple" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentListSimple"/>
+    <view-map name="RealProductImageAssoc" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#RealProductImageAssoc"/>
+    <view-map name="LoadOSSResourceHtml" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#LoadOSSResourceHtml"/>
+    <view-map name="EditProductMatch" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductMatch"/>
+    <view-map name="realProductContent" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#realProductContent"/>
+    <view-map name="EditRealProductContent" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditRealProductContent"/>
+    <view-map name="realProductDescriptionExcelUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#realProductDescriptionExcelUpload"/>
+</site-conf>

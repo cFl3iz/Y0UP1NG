@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>WechatMiniProgram Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+    <!-- 微信小程序查询销售订单 -->
+    <service name="queryMyResourceOrderFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyResourceOrderFromWeChat" auth="false">
+        <description>queryMyResourceOrderFromWeChat</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="orderStatus" type="String" mode="IN"  optional="true" />
+        <attribute name="queryMyResourceOrderList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <service name="queryOrderDetailFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderDetailFromWeChat" auth="false">
+        <description>queryOrderDetailFromWeChat</description>
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="orderDetail" type="java.util.Map" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- 小程序查询分享报表 -->
+    <service name="queryShareCpsReport" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryShareCpsReport" auth="false">
+        <description>queryShareCpsReport</description>
+        <attribute name="shareInfoList" type="List" mode="OUT" optional="true" />
+        <attribute name="shareCount" type="String" mode="OUT" optional="true" />
+        <attribute name="salesRepCount" type="String" mode="OUT" optional="true" />
+        <attribute name="total" type="String" mode="OUT" optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+    <!-- 小程序查询订单分成表-->
+    <service name="queryOrderCpsReport" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderCpsReport" auth="false">
+        <description>queryOrderCpsReport</description>
+        <attribute name="statusId" type="String" mode="IN"  optional="true" />
+        <attribute name="year" type="String" mode="IN"  optional="true" />
+        <attribute name="orderList" type="List" mode="OUT" optional="true" />
+
+        <attribute name="allOrderGrandTotal" type="String" mode="OUT" optional="true" />
+        <attribute name="orderCount" type="String" mode="OUT" optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <!--QueryOrderFromWeChatList-->
+    <service name="queryOrderListFromWeChat" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryOrderListFromWeChat" auth="false">
+        <description>query Order FromWeChatList</description>
+        <attribute name="openId" type="String" mode="IN"  optional="true" />
+        <attribute name="orderStatus" type="String" mode="IN"  optional="true" />
+        <attribute name="orderList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- query My Collect Product 我收藏 我关注的产品 -->
+    <service name="queryMyCollectProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyCollectProduct" auth="false">
+        <description>queryMyCollectProduct</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="collectList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <!-- 查询目录中的资源  -->
+    <service name="queryCatalogProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryCatalogProduct" auth="false">
+        <description>queryCatalogProduct</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true" />
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="true" />
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="productList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <service name="queryProductStoreAndRole" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryProductStoreAndRole" auth="false">
+        <description>queryProductStoreAndRole</description>
+        <attribute name="openId" type="String" mode="IN"  optional="true"/>
+        <attribute name="appId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
+        <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
+
+    <service name="queryCatalogProductDetail" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryCatalogProductDetail" auth="false">
+        <description>queryCatalogProductDetail</description>
+        <attribute name="openId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productDetail" type="java.util.Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
+    <service name="querySku" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="querySku" auth="false">
+        <description>querySku</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="color" type="String" mode="IN"  optional="true"/>
+        <attribute name="size" type="String" mode="IN"  optional="true"/>
+        <attribute name="sku" type="String" mode="OUT" optional="true"/>
+        <attribute name="quantityOnHandTotal" type="String" mode="OUT" optional="true"/>
+        <attribute name="availableToPromiseTotal" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
+
+
+
+
+
+    <!-- 查询联系圈的资源 -->
+    <service name="queryContactResourceList" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryContactResourceList" auth="false">
+        <description>queryContactResourceList</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true" />
+
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="resourcesList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+    <!-- queryPostalAddress -->
+    <service name="queryMyPostalAddress" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyPostalAddress" auth="false">
+        <description>queryMyPostalAddress</description>
+        <attribute name="openId" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="postalAddress" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <service name="queryMyProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMyProduct" auth="false">
+        <description>queryMyProduct</description>
+        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="isDiscontinuation" type="String" mode="IN"  optional="true"/>
+        <attribute name="nowPartyId" type="String" mode="OUT"   optional="true"/>
+        <attribute name="tarjeta" type="String" mode="OUT"   optional="true"/>
+        <attribute name="productList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <service name="getSkuFromProductFeatureDesc" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="getSkuFromProductFeatureDesc" auth="false">
+        <description>getSkuFromProductFeatureDesc</description>
+        <attribute name="productFeatureSelect" type="String" mode="IN" optional="true"/>
+        <attribute name="virtualId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- 查询绝对正确的资源 -->
+    <service name="queryDesiredResources" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryDesiredResources" auth="false">
+        <description>queryDesiredResources</description>
+        <attribute name="resourceName" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resourcesList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <!-- addRoleToStore -->
+    <service name="addRoleToStore" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="addRoleToStore" auth="false">
+        <description>addRoleToStore</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+    <service name="wechatReleaseResource" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="wechatReleaseResource" auth="false">
+        <description>wechatReleaseResource</description>
+        <attribute name="unioId" type="String" mode="IN" optional="true"/>
+        <!-- 可能出现的库存量 -->
+        <attribute name="kuCun" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="String" mode="IN" optional="true"/>
+
+        <attribute name="tel" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="address" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="latitude" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="longitude" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="productName" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="description" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="filePath" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="productId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <!-- 组建一些人与我的好友关系 -->
+    <service name="autoCreateFriendRelation" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="autoCreateFriendRelation" auth="false">
+        <description>autoCreateFriendRelation</description>
+        <attribute name="friends" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="resourcesName" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="resourcesName" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+</services>

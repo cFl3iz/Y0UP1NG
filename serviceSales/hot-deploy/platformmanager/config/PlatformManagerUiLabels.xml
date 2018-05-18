@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="PlatformManagerApplication">
+        <value xml:lang="en">PlatformManager Application</value>
+        <value xml:lang="zh">PlatformManager应用程序</value>
+        <value xml:lang="zh-TW">PlatformManager應用程式</value>
+    </property> <property key="CreateProductSizeDes">
+        <value xml:lang="en">CreateProductSizeDes</value>
+        <value xml:lang="zh">给SPU创建尺码</value>
+        <value xml:lang="zh-TW">给SPU创建尺码</value>
+    </property>
+    <property key="PlatformManagerCompanyName">
+        <value xml:lang="en">OFBiz: PlatformManager</value>
+        <value xml:lang="zh-TW">OFBiz: PlatformManager</value>
+    </property>
+    <property key="PlatformManagerCompanySubtitle">
+        <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
+        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
+        <value xml:lang="zh-TW">開源軟體OFBiz的組成部�?</value>
+    </property>
+    <property key="PlatformManagerViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">不允许你浏览这个页面�?</value>
+        <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
+    </property>
+
+    <property key="OrderCompleted">
+        <value xml:lang="ar">الإكمال</value>
+        <value xml:lang="de">Abgeschlossen</value>
+        <value xml:lang="en">Completed</value>
+        <value xml:lang="es">Terminado</value>
+        <value xml:lang="fr">Terminée</value>
+        <value xml:lang="it">Completato</value>
+        <value xml:lang="ja">完了</value>
+        <value xml:lang="nl">Afgehandeld</value>
+        <value xml:lang="pt-BR">Concluído</value>
+        <value xml:lang="ro">Completat</value>
+        <value xml:lang="ru">Заполнен</value>
+        <value xml:lang="th">เสร็จสมบูรณ์</value>
+        <value xml:lang="vi">Đã hoàn thành</value>
+        <value xml:lang="zh">订单已完成</value>
+        <value xml:lang="zh-CN">订单已完成</value>
+        <value xml:lang="zh-TW">订单已完成</value>
+    </property>
+    <property key="ORDER_CREATED">
+        <value xml:lang="ar">مخلق</value>
+        <value xml:lang="de">Erstellt</value>
+        <value xml:lang="en">Created</value>
+        <value xml:lang="es">Creado</value>
+        <value xml:lang="fr">Créée</value>
+        <value xml:lang="it">Creato</value>
+        <value xml:lang="ja">作成済</value>
+        <value xml:lang="nl">Aangemaakt op</value>
+        <value xml:lang="ro">Creat</value>
+        <value xml:lang="ru">Создано</value>
+        <value xml:lang="th">สร้าง</value>
+        <value xml:lang="vi">Đã tạo</value>
+        <value xml:lang="zh">订单已创建</value>
+        <value xml:lang="zh-TW">订单已新建</value>
+    </property>
+
+
+    <property key="OrderApproved">
+        <value xml:lang="ar">موافقة</value>
+        <value xml:lang="de">Genehmigt</value>
+        <value xml:lang="en">Approved</value>
+        <value xml:lang="es">Aprobada</value>
+        <value xml:lang="fr">Approuvée</value>
+        <value xml:lang="it">Approvato</value>
+        <value xml:lang="ja">承認</value>
+        <value xml:lang="nl">Goedgekeurd</value>
+        <value xml:lang="pt-BR">Aprovado</value>
+        <value xml:lang="ro">Aprobat</value>
+        <value xml:lang="ru">Утвержден</value>
+        <value xml:lang="th">ปรับปรุง</value>
+        <value xml:lang="vi">Đã phê duyệt</value>
+        <value xml:lang="zh">卖家已确认</value>
+        <value xml:lang="zh-CN">卖家已确认</value>
+        <value xml:lang="zh-TW">卖家已确认</value>
+    </property>
+
+
+    <property key="LoginSuccess">
+        <value xml:lang="en">LoginSuccess.</value>
+        <value xml:lang="zh">登录成功</value>
+        <value xml:lang="zh-TW">登录成功</value>
+    </property>
+
+
+    <property key="CUSTOMER">
+        <value xml:lang="en">CUSTOMER.</value>
+        <value xml:lang="zh">已购买</value>
+        <value xml:lang="zh-TW">已购买</value>
+    </property>
+
+    <property key="PLACING_CUSTOMER">
+        <value xml:lang="en">PLACING_CUSTOMER.</value>
+        <value xml:lang="zh">有意向</value>
+        <value xml:lang="zh-TW">有意向</value>
+    </property>
+
+
+    <property key="CUSTOMER_REL">
+        <value xml:lang="en">客户</value>
+        <value xml:lang="zh">客户</value>
+        <value xml:lang="zh-TW">客户</value>
+    </property>
+
+
+    <property key="CONTACT_REL">
+        <value xml:lang="en">联系人</value>
+        <value xml:lang="zh">联系人</value>
+        <value xml:lang="zh-TW">联系人</value>
+    </property>
+
+    <!-- 供货商 -->
+    <property key="SUPPLIER_REL">
+        <value xml:lang="en"> </value>
+        <value xml:lang="zh"> </value>
+        <value xml:lang="zh-TW"> </value>
+    </property>
+
+
+
+    <!-- 特征需要 -->
+    <property key="ProductFeatureType.description.ACCESSORY">
+        <value xml:lang="de">Zubehör</value>
+        <value xml:lang="en">Accessory</value>
+        <value xml:lang="es">Accesorio</value>
+        <value xml:lang="fr">Accessoire</value>
+        <value xml:lang="it">Accessorio</value>
+        <value xml:lang="ja">アクセサリ</value>
+        <value xml:lang="ro">Accesoriu</value>
+        <value xml:lang="nl">Accessoire</value>
+        <value xml:lang="ru">Принадлежности</value>
+        <value xml:lang="th">ส่วนประกอบ</value>
+        <value xml:lang="vi">Phụ kiện</value>
+        <value xml:lang="zh">附属品</value>
+        <value xml:lang="zh_CN">附属品</value>
+        <value xml:lang="zh-TW">附屬品</value>
+    </property>
+    <property key="ProductFeatureType.description.AMOUNT">
+        <value xml:lang="de">Betrag</value>
+        <value xml:lang="en">Amount</value>
+        <value xml:lang="es">Cantidad</value>
+        <value xml:lang="fr">Quantité</value>
+        <value xml:lang="it">Importo</value>
+        <value xml:lang="ja">金額</value>
+        <value xml:lang="nl">Bedrag</value>
+        <value xml:lang="ro">Valoare</value>
+        <value xml:lang="ru">Количество</value>
+        <value xml:lang="th">จำนวน</value>
+        <value xml:lang="vi">Tổng số</value>
+        <value xml:lang="zh">金额</value>
+        <value xml:lang="zh_CN">金额</value>
+        <value xml:lang="zh-TW">金額</value>
+    </property>
+    <property key="ProductFeatureType.description.ARTIST">
+        <value xml:lang="de">Künstler</value>
+        <value xml:lang="en">Artist</value>
+        <value xml:lang="es">Artista</value>
+        <value xml:lang="fr">Artiste</value>
+        <value xml:lang="it">Artista</value>
+        <value xml:lang="ja">達人</value>
+        <value xml:lang="nl">Artiest</value>
+        <value xml:lang="ro">Artist</value>
+        <value xml:lang="ru">Оформление</value>
+        <value xml:lang="th">ศิลปะ</value>
+        <value xml:lang="vi">Họa sĩ</value>
+        <value xml:lang="zh">艺术家</value>
+        <value xml:lang="zh_CN">艺术家</value>
+        <value xml:lang="zh-TW">藝術家</value>
+    </property>
+    <property key="ProductFeatureType.description.BILLING_FEATURE">
+        <value xml:lang="de">Verrechnungsmerkmal</value>
+        <value xml:lang="en">Billing Feature</value>
+        <value xml:lang="es">Característica de facturación</value>
+        <value xml:lang="fr">Caractéristiques</value>
+        <value xml:lang="it">Caratteristica fatturazione</value>
+        <value xml:lang="ja">請求特性</value>
+        <value xml:lang="nl">Feature - Verrekening</value>
+        <value xml:lang="ro">Caracteristica Facturare</value>
+        <value xml:lang="ru">Оплата</value>
+        <value xml:lang="th">ลักษณะใบเสร็จรับเงิน</value>
+        <value xml:lang="vi">Tính năng thanh toán</value>
+        <value xml:lang="zh">账单特征</value>
+        <value xml:lang="zh_CN">账单特征</value>
+        <value xml:lang="zh-TW">帳單特色</value>
+    </property>
+    <property key="ProductFeatureType.description.BRAND">
+        <value xml:lang="de">Marke</value>
+        <value xml:lang="en">Brand</value>
+        <value xml:lang="es">Marca</value>
+        <value xml:lang="fr">Marque</value>
+        <value xml:lang="it">Marca</value>
+        <value xml:lang="ja">ブランド</value>
+        <value xml:lang="nl">Merk</value>
+        <value xml:lang="ro">Marca</value>
+        <value xml:lang="ru">Брэнд</value>
+        <value xml:lang="th">ยี่ห้อ</value>
+        <value xml:lang="vi">Nhãn hiệu</value>
+        <value xml:lang="zh">品牌</value>
+        <value xml:lang="zh_CN">品牌</value>
+        <value xml:lang="zh-TW">品牌</value>
+    </property>
+    <property key="ProductFeatureType.description.CARE">
+        <value xml:lang="de">Pflege</value>
+        <value xml:lang="en">Care</value>
+        <value xml:lang="es">Cuidado</value>
+        <value xml:lang="fr">Soin</value>
+        <value xml:lang="it">Cura</value>
+        <value xml:lang="ja">ケア</value>
+        <value xml:lang="nl">Behandeling</value>
+        <value xml:lang="ro">Cura</value>
+        <value xml:lang="ru">Обслуживание</value>
+        <value xml:lang="th">การปกป้อง</value>
+        <value xml:lang="vi">Quan tâm</value>
+        <value xml:lang="zh">关心</value>
+        <value xml:lang="zh_CN">关心</value>
+        <value xml:lang="zh-TW">關心</value>
+    </property>
+    <property key="ProductFeatureType.description.COLOR">
+        <value xml:lang="de">Farbe</value>
+        <value xml:lang="en">Color</value>
+        <value xml:lang="es">Color</value>
+        <value xml:lang="fr">Couleur</value>
+        <value xml:lang="it">Colore</value>
+        <value xml:lang="ja">色</value>
+        <value xml:lang="nl">Kleur</value>
+        <value xml:lang="ro">Culoare</value>
+        <value xml:lang="ru">Цвет</value>
+        <value xml:lang="th">สี</value>
+        <value xml:lang="vi">Màu sắc</value>
+        <value xml:lang="zh">颜色</value>
+        <value xml:lang="zh_CN">颜色</value>
+        <value xml:lang="zh-TW">顏色</value>
+    </property>
+    <property key="ProductFeatureType.description.DIMENSION">
+        <value xml:lang="de">Abmessungen</value>
+        <value xml:lang="en">Dimension</value>
+        <value xml:lang="es">Dimensión</value>
+        <value xml:lang="fr">Dimension</value>
+        <value xml:lang="it">Dimensione</value>
+        <value xml:lang="ja">寸法</value>
+        <value xml:lang="nl">Dimensie</value>
+        <value xml:lang="ro">Dimensiune</value>
+        <value xml:lang="ru">Размеры</value>
+        <value xml:lang="th">มิติ</value>
+        <value xml:lang="vi">Kích thước</value>
+        <value xml:lang="zh">尺寸</value>
+        <value xml:lang="zh_CN">尺寸</value>
+        <value xml:lang="zh-TW">尺寸</value>
+    </property>
+    <property key="ProductFeatureType.description.EQUIP_CLASS">
+        <value xml:lang="de">Ausrüstungsklasse</value>
+        <value xml:lang="en">Equipment Class</value>
+        <value xml:lang="es">Clase de equipo</value>
+        <value xml:lang="fr">Classe d'équipement</value>
+        <value xml:lang="it">Classe apparecchiatura</value>
+        <value xml:lang="ja">機器分類</value>
+        <value xml:lang="nl">Materieel klasse</value>
+        <value xml:lang="ro">Clasa Aparatura</value>
+        <value xml:lang="ru">Класс оборудования</value>
+        <value xml:lang="th">ชั้นอุปกรณ์</value>
+        <value xml:lang="vi">Lớp thiết bị</value>
+        <value xml:lang="zh">设备类</value>
+        <value xml:lang="zh_CN">设备类</value>
+        <value xml:lang="zh-TW">設備類</value>
+    </property>
+    <property key="ProductFeatureType.description.FABRIC">
+        <value xml:lang="de">Stoff/Gewebe</value>
+        <value xml:lang="en">Fabric</value>
+        <value xml:lang="es">Tela</value>
+        <value xml:lang="fr">Fabrication</value>
+        <value xml:lang="it">Tessuto</value>
+        <value xml:lang="ja">構造</value>
+        <value xml:lang="nl">Stof</value>
+        <value xml:lang="ro">Tesut</value>
+        <value xml:lang="ru">Материал</value>
+        <value xml:lang="th">สิ่งทอ</value>
+        <value xml:lang="vi">Vải</value>
+        <value xml:lang="zh">织物</value>
+        <value xml:lang="zh_CN">织物</value>
+        <value xml:lang="zh-TW">織物</value>
+    </property>
+    <property key="ProductFeatureType.description.GENRE">
+        <value xml:lang="de">Gattung</value>
+        <value xml:lang="en">Genre</value>
+        <value xml:lang="es">Género</value>
+        <value xml:lang="fr">Genre</value>
+        <value xml:lang="it">Genere</value>
+        <value xml:lang="ja">ジャンル</value>
+        <value xml:lang="nl">Genre</value>
+        <value xml:lang="ro">Fel</value>
+        <value xml:lang="ru">Жанр</value>
+        <value xml:lang="th">ชนิด</value>
+        <value xml:lang="vi">Thể loại</value>
+        <value xml:lang="zh">流派</value>
+        <value xml:lang="zh_CN">流派</value>
+        <value xml:lang="zh-TW">流派</value>
+    </property>
+    <property key="ProductFeatureType.description.GIFT_WRAP">
+        <value xml:lang="de">Geschenkverpackung</value>
+        <value xml:lang="en">Gift Wrap</value>
+        <value xml:lang="es">Envoltura de regalo</value>
+        <value xml:lang="fr">Emballage de cadeau</value>
+        <value xml:lang="it">Involucro regalo</value>
+        <value xml:lang="ja">ギフト包装</value>
+        <value xml:lang="nl">Cadeauverpakking</value>
+        <value xml:lang="ro">Invelis Cadou</value>
+        <value xml:lang="ru">Подарочная упаковка</value>
+        <value xml:lang="th">กระดาษห่อของขวัญ</value>
+        <value xml:lang="zh">礼品包装</value>
+        <value xml:lang="zh_CN">礼品包装</value>
+        <value xml:lang="zh-TW">禮物包裝</value>
+    </property>
+    <property key="ProductFeatureType.description.HARDWARE_FEATURE">
+        <value xml:lang="de">Hardware-Merkmal</value>
+        <value xml:lang="en">Hardware Feature</value>
+        <value xml:lang="es">Característica de hardware</value>
+        <value xml:lang="fr">Matériaux utilisés</value>
+        <value xml:lang="it">Caratteristica hardware</value>
+        <value xml:lang="ja">ハードウェア機能</value>
+        <value xml:lang="nl">Feature - Hardware</value>
+        <value xml:lang="ro">Caracteristica Hardware</value>
+        <value xml:lang="ru">Техническая особенность</value>
+        <value xml:lang="th">ลักษณะฮาร์ดแวร์</value>
+        <value xml:lang="vi">Tính năng phần cứng</value>
+        <value xml:lang="zh">硬件特征</value>
+        <value xml:lang="zh_CN">硬件特征</value>
+        <value xml:lang="zh-TW">硬體特色</value>
+    </property>
+    <property key="ProductFeatureType.description.HAZMAT">
+        <value xml:lang="de">Gefahrengut</value>
+        <value xml:lang="en">Hazmat</value>
+        <value xml:lang="es">Peligroso</value>
+        <value xml:lang="fr">Caractère dangereux</value>
+        <value xml:lang="it">Danneggiato</value>
+        <value xml:lang="ja">危険物</value>
+        <value xml:lang="nl">Gevaarlijk goed</value>
+        <value xml:lang="ro">Hazmat</value>
+        <value xml:lang="ru">Hazmat</value>
+        <value xml:lang="th">Hazmat</value>
+        <value xml:lang="vi">Hazmat</value>
+        <value xml:lang="zh">危险物品</value>
+        <value xml:lang="zh-TW">危險物品</value>
+    </property>
+    <property key="ProductFeatureType.description.LICENSE">
+        <value xml:lang="de">Lizenz</value>
+        <value xml:lang="en">License</value>
+        <value xml:lang="es">Licencia</value>
+        <value xml:lang="fr">License</value>
+        <value xml:lang="it">Licenza</value>
+        <value xml:lang="ja">ライセンス</value>
+        <value xml:lang="nl">Licentie</value>
+        <value xml:lang="ro">Licenta</value>
+        <value xml:lang="ru">Лицензия</value>
+        <value xml:lang="th">ใบอนุญาต</value>
+        <value xml:lang="vi">Bản cấp phép sử dụng</value>
+        <value xml:lang="zh">版权</value>
+        <value xml:lang="zh-TW">版權</value>
+    </property>
+    <property key="ProductFeatureType.description.MODEL_YEAR">
+        <value xml:lang="de">Modelljahr</value>
+        <value xml:lang="en">Model Year</value>
+        <value xml:lang="es">Año de modelo</value>
+        <value xml:lang="fr">Année modèle</value>
+        <value xml:lang="it">Anno modello</value>
+        <value xml:lang="ja">年式</value>
+        <value xml:lang="nl">Modeljaar</value>
+        <value xml:lang="ro">Anno Model</value>
+        <value xml:lang="ru">Год выпуска модели</value>
+        <value xml:lang="th">ปีโมเดล</value>
+        <value xml:lang="vi">Kiểu theo năm</value>
+        <value xml:lang="zh">年度款式</value>
+        <value xml:lang="zh-TW">年度款式</value>
+    </property>
+    <property key="ProductFeatureType.description.NET_WEIGHT">
+        <value xml:lang="de">Nettogewicht</value>
+        <value xml:lang="en">Net Weight</value>
+        <value xml:lang="es">Peso neto</value>
+        <value xml:lang="fr">Poids net</value>
+        <value xml:lang="it">Peso netto</value>
+        <value xml:lang="ja">正味重量</value>
+        <value xml:lang="nl">Netto gewicht</value>
+        <value xml:lang="ro">Greutate Neta</value>
+        <value xml:lang="ru">Вес нетто</value>
+        <value xml:lang="th">น้ำหนักสุทธิ</value>
+        <value xml:lang="vi">Trọng lượng tịnh</value>
+        <value xml:lang="zh">净重</value>
+        <value xml:lang="zh-TW">淨重</value>
+    </property>
+    <property key="ProductFeatureType.description.ORIGIN">
+        <value xml:lang="de">Herkunft</value>
+        <value xml:lang="en">Origin</value>
+        <value xml:lang="es">Origen</value>
+        <value xml:lang="fr">Origine</value>
+        <value xml:lang="it">Origine</value>
+        <value xml:lang="ja">由来</value>
+        <value xml:lang="nl">Origine</value>
+        <value xml:lang="ro">Origine</value>
+        <value xml:lang="ru">Происхождение</value>
+        <value xml:lang="th">ต้นกำเนิด</value>
+        <value xml:lang="vi">Nguyên bản</value>
+        <value xml:lang="zh">来源</value>
+        <value xml:lang="zh-TW">來源</value>
+    </property>
+    <property key="ProductFeatureType.description.OTHER_FEATURE">
+        <value xml:lang="de">Anderes Merkmal</value>
+        <value xml:lang="en">Other Feature</value>
+        <value xml:lang="es">Otra característica</value>
+        <value xml:lang="fr">Autre caractéristique</value>
+        <value xml:lang="it">Altra caratteristica</value>
+        <value xml:lang="ja">その他機能</value>
+        <value xml:lang="nl">Feature - Overige</value>
+        <value xml:lang="ro">Alta Caracteristica</value>
+        <value xml:lang="ru">Другие особенности</value>
+        <value xml:lang="th">ลักษณะอื่นๆ</value>
+        <value xml:lang="vi">Tính năng khác</value>
+        <value xml:lang="zh">其它特征</value>
+        <value xml:lang="zh-TW">其他特色</value>
+    </property>
+    <property key="ProductFeatureType.description.PRODUCT_QUALITY">
+        <value xml:lang="de">Produktqualität</value>
+        <value xml:lang="en">Product Quality</value>
+        <value xml:lang="es">Calidad de producto</value>
+        <value xml:lang="fr">Qualité</value>
+        <value xml:lang="it">Qualità prodotto</value>
+        <value xml:lang="ja">製品品質</value>
+        <value xml:lang="nl">Productkwaliteit</value>
+        <value xml:lang="ro">Calitate Produs</value>
+        <value xml:lang="ru">Качество продукта</value>
+        <value xml:lang="th">คุณภาพสินค้า</value>
+        <value xml:lang="vi">Số lượng sản phẩm</value>
+        <value xml:lang="zh">产品质量</value>
+        <value xml:lang="zh-TW">產品質量</value>
+    </property>
+    <property key="ProductFeatureType.description.SIZE">
+        <value xml:lang="de">Größe</value>
+        <value xml:lang="de-CH">Grösse</value>
+        <value xml:lang="en">Size</value>
+        <value xml:lang="es">Tamaño</value>
+        <value xml:lang="fr">Taille</value>
+        <value xml:lang="it">Larghezza</value>
+        <value xml:lang="ja">サイズ</value>
+        <value xml:lang="nl">Maat</value>
+        <value xml:lang="ro">Latime </value>
+        <value xml:lang="ru">Размер</value>
+        <value xml:lang="th">ขนาด</value>
+        <value xml:lang="vi">Cỡ</value>
+        <value xml:lang="zh">大小</value>
+        <value xml:lang="zh-TW">大小</value>
+    </property>
+    <property key="ProductFeatureType.description.SOFTWARE_FEATURE">
+        <value xml:lang="de">Software-Merkmal</value>
+        <value xml:lang="en">Software Feature</value>
+        <value xml:lang="es">Característica de software</value>
+        <value xml:lang="fr">Caractéristique du logiciel</value>
+        <value xml:lang="it">Caratteristica software</value>
+        <value xml:lang="ja">ソフトウェア機能</value>
+        <value xml:lang="nl">Feature - Software</value>
+        <value xml:lang="ro">Caracteristica Software</value>
+        <value xml:lang="ru">Программная особенность</value>
+        <value xml:lang="th">ลักษณะซอฟต์แวร์</value>
+        <value xml:lang="vi">Tính năng phần mềm</value>
+        <value xml:lang="zh">软件特征</value>
+        <value xml:lang="zh-TW">軟體特色</value>
+    </property>
+    <property key="ProductFeatureType.description.STYLE">
+        <value xml:lang="de">Stil</value>
+        <value xml:lang="en">Style</value>
+        <value xml:lang="es">Estilo</value>
+        <value xml:lang="fr">Modèle</value>
+        <value xml:lang="it">Stile</value>
+        <value xml:lang="ja">スタイル</value>
+        <value xml:lang="nl">Stijl</value>
+        <value xml:lang="ro">Stil</value>
+        <value xml:lang="ru">Стиль</value>
+        <value xml:lang="th">สไตล์</value>
+        <value xml:lang="vi">Kiểu thời trang</value>
+        <value xml:lang="zh">样式</value>
+        <value xml:lang="zh-TW">樣式</value>
+    </property>
+    <property key="ProductFeatureType.description.SYMPTOM">
+        <value xml:lang="de">Symptom</value>
+        <value xml:lang="en">Symptom</value>
+        <value xml:lang="es">Síntoma</value>
+        <value xml:lang="fr">Symptôme</value>
+        <value xml:lang="it">Sintomo</value>
+        <value xml:lang="ja">症状</value>
+        <value xml:lang="nl">Symptoom</value>
+        <value xml:lang="ro">Sintom</value>
+        <value xml:lang="ru">Признак</value>
+        <value xml:lang="th">อาการ</value>
+        <value xml:lang="vi">Triệu chứng</value>
+        <value xml:lang="zh">症状</value>
+        <value xml:lang="zh-TW">症狀</value>
+    </property>
+    <property key="ProductFeatureType.description.TOPIC">
+        <value xml:lang="de">Thema</value>
+        <value xml:lang="en">Topic</value>
+        <value xml:lang="es">Asunto</value>
+        <value xml:lang="fr">Matière</value>
+        <value xml:lang="it">Argomento</value>
+        <value xml:lang="ja">トピック</value>
+        <value xml:lang="nl">Thema</value>
+        <value xml:lang="ro">Argument</value>
+        <value xml:lang="ru">Тема</value>
+        <value xml:lang="th">ใจความ</value>
+        <value xml:lang="vi">Chủ đề</value>
+        <value xml:lang="zh">话题</value>
+        <value xml:lang="zh-TW">話題</value>
+    </property>
+    <property key="ProductFeatureType.description.TYPE">
+        <value xml:lang="de">Typ</value>
+        <value xml:lang="en">Type</value>
+        <value xml:lang="es">Tipo</value>
+        <value xml:lang="fr">Type</value>
+        <value xml:lang="it">Tipo</value>
+        <value xml:lang="ja">種類</value>
+        <value xml:lang="nl">Type</value>
+        <value xml:lang="ro">Tip</value>
+        <value xml:lang="ru">Тип</value>
+        <value xml:lang="th">ประเภท</value>
+        <value xml:lang="vi">Loại</value>
+        <value xml:lang="zh">类型</value>
+        <value xml:lang="zh-TW">類型</value>
+    </property>
+    <property key="ProductFeatureType.description.WARRANTY">
+        <value xml:lang="de">Gewährleistung</value>
+        <value xml:lang="en">Warranty</value>
+        <value xml:lang="es">Garantía</value>
+        <value xml:lang="fr">Garantie</value>
+        <value xml:lang="it">Garanzia</value>
+        <value xml:lang="ja">保証</value>
+        <value xml:lang="nl">Garantie</value>
+        <value xml:lang="ro">Garantie</value>
+        <value xml:lang="ru">Гарантия</value>
+        <value xml:lang="th">การรับประกัน</value>
+        <value xml:lang="vi">Bảo hành</value>
+        <value xml:lang="zh">保修</value>
+        <value xml:lang="zh-TW">保修</value>
+    </property>
+    <property key="ProductFeatureType.description.YEAR_MADE">
+        <value xml:lang="de">Herstellungsjahr</value>
+        <value xml:lang="en">Year Made</value>
+        <value xml:lang="es">Año de fabricación</value>
+        <value xml:lang="fr">Année de construction</value>
+        <value xml:lang="it">Anno di fabbricazione</value>
+        <value xml:lang="ja">製造年</value>
+        <value xml:lang="nl">Jaar - Fabricage</value>
+        <value xml:lang="ro">An Fabricatie</value>
+        <value xml:lang="ru">Год изготовления</value>
+        <value xml:lang="th">ทำปี</value>
+        <value xml:lang="vi">Năm sản xuất</value>
+        <value xml:lang="zh">年生产</value>
+        <value xml:lang="zh-TW">年生產</value>
+    </property>
+    <!-- 特征需要-->
+
+</resource>

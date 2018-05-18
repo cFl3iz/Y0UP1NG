@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!--<PaymentMethodType createdStamp="2017-06-22 13:24:07.0" createdTxStamp="2017-06-22 13:24:07.0" description="媒介支付、第三方支付、跨平台支付类型" lastUpdatedStamp="2017-06-22 13:24:07.0" lastUpdatedTxStamp="2017-06-22 13:24:07.0" paymentMethodTypeId="MEDIATION_PAY"/>-->
+
+    <!-- 卖家的两个二维码 -->
+    <PartyContentType createdStamp="2017-11-15 11:31:23.0" createdTxStamp="2017-11-15 11:31:23.0" description="支付宝付款二维码" lastUpdatedStamp="2017-11-15 11:31:23.0" lastUpdatedTxStamp="2017-11-15 11:31:23.0" partyContentTypeId="ALIQRCODE"/>
+    <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信付款二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATQRCODE"/>
+    <PartyContentType createdStamp="2017-11-15 11:31:59.0" createdTxStamp="2017-11-15 11:31:59.0" description="微信名片二维码" lastUpdatedStamp="2017-11-15 11:31:59.0" lastUpdatedTxStamp="2017-11-15 11:31:59.0" partyContentTypeId="WECHATCONTACTQRCODE"/>
+
+    <!-- 父类型 -->
+    <PartyRelationshipType createdStamp="2018-03-16 18:17:13.0" createdTxStamp="2018-03-16 18:17:13.0" description="Interpersonal relationships" lastUpdatedStamp="2018-03-16 18:17:13.0" lastUpdatedTxStamp="2018-03-16 18:17:13.0" partyRelationshipName="Interpersonal relationships" partyRelationshipTypeId="INTERPERSONAL"/>
+    <!-- 一些当事人关系类型 -->
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="亲戚" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="亲戚" partyRelationshipTypeId="RELATIVES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="同事" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="同事" partyRelationshipTypeId="COLLEAGUES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="同学" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="同学" partyRelationshipTypeId="CLASSMATES"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="邻居" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="邻居" partyRelationshipTypeId="NEIGHBOR"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="死党" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="死党" partyRelationshipTypeId="SWORN_FOLLOWERS"/>
+    <PartyRelationshipType parentTypeId="INTERPERSONAL" createdStamp="2018-03-16 17:37:51.0" createdTxStamp="2018-03-16 17:37:51.0" description="前任" lastUpdatedStamp="2018-03-16 17:37:51.0" lastUpdatedTxStamp="2018-03-16 17:37:51.0" partyRelationshipName="前任" partyRelationshipTypeId="THE_FORMER"/>
+
+
+    <!-- 用户偏好设置组-->
+    <!-- 用户产品特征偏好设置-->
+    <UserPrefGroupType createdStamp="2018-01-29 14:08:35.0" createdTxStamp="2018-01-29 14:08:35.0" description="我自己设置的产品特征" lastUpdatedStamp="2018-01-29 14:08:35.0" lastUpdatedTxStamp="2018-01-29 14:08:35.0" userPrefGroupTypeId="PRODUCT_FEATURES"/>
+
+    <MessageLogType createdStamp="2018-03-19 15:17:48.0" createdTxStamp="2018-03-19 15:17:48.0" description="系统消息" lastUpdatedStamp="2018-03-19 15:17:48.0" lastUpdatedTxStamp="2018-03-19 15:17:48.0" messageLogTypeId="SYSTEM"/>
+    <!-- 产品资源类型 -->
+    <!--<InformationShareType createdStamp="2018-03-07 17:18:17.0" createdTxStamp="2018-03-07 17:18:17.0" description="产品资源分享类型" lastUpdatedStamp="2018-03-07 17:18:17.0" lastUpdatedTxStamp="2018-03-07 17:18:17.0" shareTypeId="PRODUCT"/>-->
+
+</entity-engine-xml>

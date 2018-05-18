@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>ContentCenter Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service> 
+    
+    
+    <service name="associateProductAndImage" engine="java" 
+    		location="com.zuczug.content.image.ZuczugImageManageService" invoke="associateProductAndImage">
+		<description>关联商品的图片和类型 by sven</description>
+    	<attribute name="productId" mode="INOUT" type="String" optional="false"></attribute>
+    	<attribute name="colorId" mode="INOUT" type="String" optional="true"></attribute>
+    	<attribute name="variantProductId" mode="IN" type="String" optional="false"></attribute>
+    	<attribute name="contentId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="sequenceNum" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="objectInfo" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="productContentTypeId" mode="IN" type="String" optional="true"></attribute>
+    </service>
+    
+     <service name="ossUploadFile" engine="java" 
+    		location="com.zuczug.content.image.ZuczugImageManageService" invoke="ossUploadFile">
+		<description>OSS上传图片 by sven</description>
+    	<attribute name="image" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+    	<attribute name="_image_fileName" type="String" mode="IN" optional="true"/>
+    	<attribute name="imgUrl" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="saveMatchImages" engine="java" 
+    		location="com.zuczug.content.image.ZuczugImageManageService" invoke="saveMatchImages">
+		<description>保存搭配图片 by sven</description>
+    	<attribute name="productCategoryId" mode="INOUT" type="String" optional="false"></attribute>
+    	<attribute name="contentId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="sequenceNum" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="objectInfo" mode="IN" type="String" optional="productCategoryId"></attribute>
+    </service>
+    
+    <service name="copyImageAndContentInfoFromMiddleSize" engine="simple" 
+    		location="component://platformmanager/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="copyImageAndContentInfoFromMiddleSize">
+    	<description>复制一个商品的中间码到其他的码 by sven</description>
+    	<attribute name="productId" mode="IN" type="String" optional="false"></attribute>
+    	<attribute name="colorId" mode="IN" type="String" optional="true"></attribute>
+    </service>
+    
+    <service name="removeProductContentMatchAndPutAgain" engine="simple" 
+    		location="component://platformmanager/script/com/zuczug/contentcenter/ContentCenterServices.xml" invoke="removeProductContentMatchAndPutAgain">
+    	<description>
+    		一个商品的所有搭配，如果它自己是主款的话，就把勾选了网站使用，就把它的搭配图放到ProductContent中 by sven
+    	</description>
+    	<attribute name="productCategoryId" mode="IN" type="String" optional="true"></attribute>
+    </service>
+    
+</services>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <SecurityGroupPermission groupId="FULLADMIN" permissionId="PLATFORMMANAGER_ADMIN"/>
+    <SecurityGroupPermission groupId="FLEXADMIN" permissionId="PLATFORMMANAGER_CREATE"/>
+    <SecurityGroupPermission groupId="FLEXADMIN" permissionId="PLATFORMMANAGER_DELETE"/>
+    <SecurityGroupPermission groupId="FLEXADMIN" permissionId="PLATFORMMANAGER_UPDATE"/>
+    <SecurityGroupPermission groupId="FLEXADMIN" permissionId="PLATFORMMANAGER_VIEW"/>
+    <SecurityGroupPermission groupId="VIEWADMIN" permissionId="PLATFORMMANAGER_VIEW"/>
+    <SecurityGroupPermission groupId="BIZADMIN" permissionId="PLATFORMMANAGER_ADMIN"/>
+</entity-engine-xml>

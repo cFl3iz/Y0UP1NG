@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PlatformManager Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service>
+    <service name="createProductSizeContentAndInfo" engine="simple" invoke="createProductSizeContentAndInfo"
+             location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
+        <description>create product size content and info</description>
+        <attribute name="productId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="textData" type="String" allow-html="safe" mode="IN" optional="false"/>
+    </service>
+
+
+
+
+    <!-- Get Captcha To Login -->
+    <service name="getLoginCaptcha" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="getLoginCaptcha" auth="false">
+        <description>Get Captcha To Login</description>
+        <attribute name="teleNumber" type="String" mode="IN"  optional="false" />
+        <attribute name="smsType" type="String" mode="IN" optional="false" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <service name="importProductToComp" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="importProductToComp" auth="false">
+        <description>importProductToComp</description>
+    </service>
+
+
+
+
+
+    <!-- JPush -->
+    <service name="pushNotifOrMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="pushNotifOrMessage" auth="false">
+        <description>pushNotifOrMessage</description>
+        <attribute name="message" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="badge" type="String" mode="IN" optional="true"><description>badge</description></attribute>
+        <attribute name="productId" type="String" mode="IN" optional="true"><description>badge</description></attribute>
+        <attribute name="content" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="deviceType" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="objectId" type="String" mode="IN" optional="true"><description>推送Id</description></attribute>
+        <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
+        <attribute name="sendType" type="String" mode="IN" optional="true"><description>安卓还是ios</description></attribute>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    <!-- RegisterJpushID -->
+    <service name="regJpushRegId" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="regJpushRegId" auth="false">
+        <description>RegisterJpushID</description>
+
+        <attribute name="regId" type="String" mode="INOUT" optional="true"><description>推送Id</description></attribute>
+        <attribute name="deviceType" type="String" mode="INOUT" optional="true"><description>设备类型</description></attribute>
+        <!--<attribute name="appType" type="String" mode="INOUT" optional="true"><description>用户app类型</description></attribute>-->
+        <attribute name="time" type="String" mode="OUT" optional="true"><description>时间</description></attribute>
+    </service>
+    <!-- ExitJpush -->
+    <service name="removeJpushRegId" engine="java"
+             location="main.java.com.banfftech.platformmanager.jpush.JPushServices" invoke="removeJpushRegId" auth="false">
+        <description>退出登录删除regId</description>
+        <attribute name="regId" type="String" mode="IN" optional="true"><description>设备Id</description></attribute>
+    </service>
+
+
+
+
+
+    <service name="deleteMessage" engine="java" require-new-transaction="true" use-transaction="true"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="deleteMessage" auth="false">
+    <description>deleteMessage</description>
+    <attribute name="msgId" type="String" mode="IN" optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+    <service name="createProductFeatureInertPk" engine="java" require-new-transaction="true" use-transaction="true"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="createProductFeatureInertPk" auth="false">
+        <description>createProductFeatureInertPk</description>
+
+        <attribute name="productFeatureId" type="String" mode="INOUT" optional="true" />
+        <attribute name="idCode" type="String" mode="IN" optional="true" />
+        <attribute name="productFeatureCategoryId" type="String" mode="IN" optional="true" />
+        <attribute name="productFeatureTypeId" type="String" mode="IN" optional="true" />
+        <attribute name="description" type="String" mode="IN" optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <service name="sendAppAndWeChatMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="sendAppAndWeChatMessage" auth="false">
+        <description>sendAppAndWeChatMessage</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="message" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="INOUT"
+                   optional="true" />
+
+        <attribute name="deviceType" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="regId" type="String" mode="OUT"
+                   optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+
+
+    <!-- DoSend -->
+    <service name="sendMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="sendMessage" auth="false">
+        <description>sendMessage</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="message" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="INOUT"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="deviceType" type="String" mode="OUT"
+                   optional="true" />
+        <attribute name="regId" type="String" mode="OUT"
+                   optional="true" />
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+<!-- loadMaiJiaMessage -->
+    <service name="loadMaiJiaMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="loadMaiJiaMessage" auth="false">
+        <description>loadMaiJiaMessage</description>
+
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="objectId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="messages" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <service name="cleanSessionMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="cleanSessionMessage" auth="false">
+        <description>cleanSessionMessage</description>
+
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+    <service name="loadAllMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="loadAllMessage" auth="false">
+        <description>loadMessage</description>
+
+        <attribute name="bizType" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="objectId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="productId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="click" type="String" mode="IN"
+                   optional="true" />
+
+        <attribute name="messages" type="List" mode="OUT"
+                   optional="true" />
+
+
+        <attribute name="partyId" type="String" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+    <!-- create Simple Carrier Shipment Method -->
+    <service name="createSimpleCarrierShipmentMethod" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="createSimpleCarrierShipmentMethod" auth="false">
+        <description>createSimpleCarrierShipmentMethod</description>
+        <attribute name="carrierCode" type="String" mode="IN" optional="true"/>
+        <attribute name="code" type="String" mode="IN" optional="true"/>
+        <attribute name="name" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
+    <!-- push WeChat MessageInfo -->
+    <service name="pushWeChatMessageInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushWeChatMessageInfo" auth="false">
+        <description>pushWeChatMessageInfo</description>
+        <attribute name="url" type="String" mode="IN" optional="true"/>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="true"/>
+        <attribute name="message" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="tarjeta" type="String" mode="IN" optional="true"/>
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 推送小程序 -->
+    <service name="pushMiniProgramMessageInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushMiniProgramMessageInfo" auth="false">
+        <description>pushMiniProgramMessageInfo</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="formId" type="String" mode="IN" optional="true"/>
+
+        <!--<attribute name="url" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="firstName" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="message" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="productId" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="payToPartyId" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="tarjeta" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="date" type="String" mode="IN" optional="true"/>-->
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Push Order Status Message -->
+    <service name="pushOrderStatusInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushOrderStatusInfo" auth="false">
+        <description>pushOrderStatusInfo</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="messageInfo" type="String" mode="IN" optional="true"/>
+        <attribute name="jumpUrl" type="String" mode="IN" optional="true"/>
+
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <service name="pushMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushMessage" auth="false">
+        <description>pushMessage</description>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true"/>
+        <attribute name="objectId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
+    <!-- Load Message -->
+    <service name="loadMessage" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="loadMessage" auth="false">
+        <description>loadMessage</description>
+
+        <attribute name="bizType" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdFrom" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="partyIdTo" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="objectId" type="String" mode="IN"
+                   optional="true" />
+        <attribute name="messages" type="List" mode="OUT"
+                   optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
+
+
+    <service name="getWeChatUserInfo" engine="java"
+             location="main.java.com.banfftech.platformmanager.wechat.WeChatUtil"
+             invoke="getWeChatUserInfo" auth="false">
+        <description> Get We Chat User Info</description>
+        <attribute name="code" type="String" mode="IN" optional="true" />
+        <attribute name="accessToken" type="String" mode="IN" optional="true" />
+        <attribute name="openId" type="String" mode="IN" optional="true" />
+        <attribute name="weChatUserInfo" type="java.util.Map" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+</services>

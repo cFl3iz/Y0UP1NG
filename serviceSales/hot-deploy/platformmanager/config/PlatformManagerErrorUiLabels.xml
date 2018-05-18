@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+
+    <property key="CaptchaNotExistError">
+        <value xml:lang="en">captcha not exist</value>
+        <value xml:lang="zh">验证码不存在</value>
+    </property>
+    <property key="NotFoundOpenId">
+        <value xml:lang="en">NotFoundOpenId</value>
+        <value xml:lang="zh">当前OpenID在数据库中不存在用户!</value>
+    </property>
+
+    <property key="AccountingGiftCerticateNumberCannotStoreFulfillmentInfo">
+        <value xml:lang="de">Kann Ausführungsinformation nicht speichern:  ${errorString}</value>
+        <value xml:lang="en">Unable to store fulfillment info:  ${errorString}</value>
+        <value xml:lang="it">Non è possibile registrazione le informazioni di ricarica: ${errorString}</value>
+        <value xml:lang="ja">執行情報が格納できません: ${errorString}</value>
+        <value xml:lang="pt">Não é possível armazenar informações de cumprimento: ${errorString}</value>
+        <value xml:lang="zh">无法存储执行信息：${errorString}</value>
+        <value xml:lang="zh-TW">無法儲存責任履行履行資訊:${errorString}</value>
+    </property>
+
+    <property key="TelNotExistError">
+        <value xml:lang="en">Tel not exist</value>
+        <value xml:lang="zh">手机号不存在</value>
+    </property>
+
+    <property key="TelDisabledError">
+        <value xml:lang="en">Tel Is Disabled</value>
+        <value xml:lang="zh">该手机号无法使用</value>
+    </property>
+
+    <property key="InternalServiceError">
+        <value xml:lang="en">Internal service error, please contact the platform administrator</value>
+        <value xml:lang="zh">内部服务错误</value>
+    </property>
+
+    <property key="ExpressInfoNotFound">
+        <value xml:lang="en">ExpressInfoNotFound</value>
+        <value xml:lang="zh">阿里云Api:没有找到这个物流信息</value>
+    </property>
+
+    <property key="JPushError">
+        <value xml:lang="en">JPushError</value>
+        <value xml:lang="zh">极光推送失败</value>
+    </property>
+
+
+    <property key="UserNotFoundError">
+        <value xml:lang="en">User Not Found Error</value>
+        <value xml:lang="zh">没有找到用户</value>
+    </property>
+
+    <property key="CaptchaCheckFailedError">
+        <value xml:lang="en">Captcha Check Failed Error</value>
+        <value xml:lang="zh">验证码错误</value>
+    </property>
+
+
+    <property key="ProductNoLongerForSale">
+        <value xml:lang="en">This product is no longer available for sale</value>
+        <value xml:lang="zh">抱歉,这个产品已经停售!</value>
+    </property>
+
+</resource>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
+            </actions>
+            <widgets>
+                <decorator-screen name="WebManagerCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+
+    <!-- miniChat -->
+    <screen name="miniChat">
+        <section>
+            <actions>
+
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+                <set field="payToPartyId" value="${parameters.payToPartyId}"/>
+                <set field="payToPartyFirstName" value="${parameters.payToPartyFirstName}"/>
+                <set field="payToPartyHead" value="${parameters.payToPartyHead}"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="personInfo" value="${parameters.personInfo}"/>
+
+                <!--<service service-name="queryPersonBaseInfo" result-map="resultMap">-->
+                    <!--<field-map field-name="tarjeta"/>-->
+                <!--</service>-->
+
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/miniChat.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- Share Source -->
+    <screen name="shareProduct">
+        <!-- 老商品购买页面 -->
+        <section>
+            <actions>
+
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+                <set field="productId" value="${parameters.productId}"/>
+
+                <set field="partyId" value="${parameters.partyId}"/>
+
+                <set field="tarjeta" from-field="parameters.tarjeta" type="String" default-value=""/>
+
+                <set field="subscribe" from-field="parameters.subscribe" type="String" default-value="0"/>
+
+                <service service-name="queryResourceDetail" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                </service>
+
+                <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
+
+                <set field="morePicture" value="${resourceDetail.morePicture}"/>
+
+                <set field="strProductFeaturesList" value="${resultMap.strProductFeaturesList}"/>
+
+                <!--<set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>-->
+
+
+                <set field="returnPayToPartyId" value="${parameters.returnPayToPartyId}" />
+
+
+                <set field="mark" value="${resourceDetail.mark}"/>
+
+                <set field="payToPartyId" value="${returnPayToPartyId}" />
+
+
+
+                <!-- 微信授权登录后的回调地址 -->
+                <set field="fromurl" value="http://www.yo-pe.com/oauth2_buy_product.php?productId=${productId}&amp;payToPartyId=${resourceDetail.payToPartyId}"/>
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileProductCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                <decorator-section name="body">
+                    <platform-specific>
+                        <html>
+                            <!--<html-template location="component://webmanager/webapp/WebManager/template/shareProduct.ftl"></html-template>-->
+                            <html-template location="component://webmanager/webapp/WebManager/template/shareProduct_v2.ftl"></html-template>
+                        </html>
+                    </platform-specific>
+                </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- shareCategory -->
+    <screen name="shareCategory">
+        <section>
+            <actions>
+                <set field="productId" value="${parameters.productId}"/>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/shareCategory.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+
+
+    <screen name="viewContactQrCode">
+        <section>
+            <actions>
+                <set field="qrCodePath" value="${parameters.qrCodePath}"/>
+                <set field="title" value="${parameters.title}"/>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/viewContactQrCode.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="ViewSelectProductFeature">
+        <section>
+            <actions>
+                <set field="productId" value="${parameters.productId}"/>
+                <set field="partyId" value="${parameters.partyId}"/>
+                <set field="payToPartyId" value="${parameters.payToPartyId}"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="spm" value="${parameters.spm}"/>
+                <service service-name="queryProductFeatures2" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                </service>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="NullCommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/selectProductFeature.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- myStory -->
+    <screen name="myStory">
+        <section>
+            <actions>
+                <set field="productId" value="${parameters.productId}"/>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <!-- 微信授权登录后的回调地址 -->
+
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+
+
+                <set field="subscribe" value="${parameters.subscribe}" type="String" default-value="0"/>
+                <set field="productId" value="${parameters.productId}"/>
+
+                <set field="spm" value="${parameters.spm}"/>
+
+                <set field="fromurl" value="http://www.yo-pe.com/oauth2_buy_story.php?productId=${productId}&amp;spm=${spm}"/>
+
+                <set field="nowPersonName" value="${parameters.nowPersonName}"/>
+
+                <set field="partyId" value="${parameters.partyId}"/>
+
+
+
+
+                <service service-name="queryResourceDetail" result-map="resultMap">
+                    <field-map field-name="productId"/>
+                    <field-map field-name="tarjeta"/>
+                    <field-map field-name="partyId"/>
+                </service>
+
+                <!--<service service-name="addProductRole" result-map="addProductRoleMap">-->
+                    <!--<field-map field-name="partyId"/>-->
+                    <!--<field-map field-name="productId"/>-->
+                    <!--<field-map field-name="roleTypeId" value="VISITOR"/>-->
+                <!--</service>-->
+
+
+                <set field="queryResourceDetailpartyId" value="${resultMap.partyId}"/>
+
+                <set field="resourceDetail" value="${resultMap.resourceDetail}"/>
+
+                <!--<set field="nowPersonName" value="${resourceDetail.nowPersonName}"/>-->
+
+                <set field="morePicture" value="${resourceDetail.morePicture}"/>
+
+                <set field="mark" value="${resourceDetail.mark}"/>
+
+                <set field="payToPartyId" value="${resourceDetail.payToPartyId}"/>
+
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/myStory.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- myOrderDetail -->
+    <screen name="myOrderDetail">
+        <section>
+            <actions>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="orderId" value="${parameters.orderId}"/>
+                <service service-name="queryMyOrdersDetail" result-map="resultMap">
+                    <field-map field-name="tarjeta"/>
+                    <field-map field-name="orderId"/>
+                </service>
+                <set field="orderInfo" from-field="resultMap.orderInfo"/>
+                <set field="orderExpressInfo" from-field="resultMap.orderExpressInfo"/>
+                <set field="orderExpressName" from-field="resultMap.orderExpressName"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/myOrderDetail.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Web页面查询我的订单 该页面需要再次鉴权 -->
+    <screen name="myOrder">
+        <section>
+            <actions>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+
+                <!-- 微信授权登录后的回调地址 -->
+                <set field="fromurl" value="http://www.yo-pe.com/access_order.php"/>
+
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <set field="subscribe" value="${parameters.subscribe}"/>
+                <service service-name="queryMyOrders" result-map="resultMap">
+                <field-map field-name="tarjeta"/>
+                </service>
+                <set field="orderList" from-field="resultMap.orderList"/>
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/viewOrderQrCode.ftl"></html-template>
+                                <!--<html-template location="component://webmanager/webapp/WebManager/template/myOrder.ftl"></html-template>-->
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Order -->
+    <screen name="viewWebOrderDetail">
+        <section>
+            <actions>
+                <set field="orderId" value="${parameters.orderId}"/>
+
+                <set field="subscribe" value="${parameters.subscribe}"/>
+
+                <set field="tarjeta" value="${parameters.tarjeta}"/>
+                <property-map resource="WebManagerUiLabels.xml" map-name="uiLabel" global="true"/>
+                <service service-name="queryPostalAddress" result-map="resultMap">
+                <field-map field-name="tarjeta"/>
+                </service>
+                <set field="addressInfo" value="${resultMap.postalAddress}"/>
+
+            </actions>
+            <widgets>
+                <!-- MobileYDUICommonDecorator -->
+                <decorator-screen name="MobileYDUICommonDecorator" location="component://webmanager/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://webmanager/webapp/WebManager/template/viewWebOrderDetail.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+
+            </widgets>
+        </section>
+    </screen>
+</screens>

@@ -20,6 +20,19 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>
 
+    <!-- 加入转发链 -->
+    <service name="joinForwardChain" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="joinForwardChain" auth="false">
+        <description>joinForwardChain</description>
+        <attribute name="objectId"   type="String"    mode="IN"  optional="true" />
+        <attribute name="objectType" type="String"    mode="IN"  optional="true" />
+        <attribute name="dateKey"    type="String"    mode="IN"  optional="true" />
+        <attribute name="partyIdFrom"    type="String"    mode="IN"  optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
+    </service>
+
 
     <!-- 微信小程序查询销售订单 -->
     <service name="queryMyResourceOrderFromWeChat" engine="java"

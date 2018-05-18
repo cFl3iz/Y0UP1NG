@@ -33,6 +33,7 @@ import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
+import static main.java.com.banfftech.personmanager.PersonManagerServices.module;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -93,7 +94,15 @@ public class WeChatMiniProgramServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String objectId = (String) context.get("objectId");
         String objectType = (String) context.get("objectType");
+        String dateKey = (String) context.get("dateKey");
+        String partyIdFrom = (String) context.get("partyIdFrom");
 
+
+        Debug.logInfo("*joinForwardChain",module);
+        Debug.logInfo("objectId:"+objectId,module);
+        Debug.logInfo("objectType:"+objectType,module);
+        Debug.logInfo("dateKey:"+dateKey,module);
+        Debug.logInfo("partyIdFrom:"+partyIdFrom,module);
 
 
         return resultMap;

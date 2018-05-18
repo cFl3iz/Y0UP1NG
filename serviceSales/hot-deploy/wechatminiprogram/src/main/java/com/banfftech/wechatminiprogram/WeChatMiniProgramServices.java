@@ -89,7 +89,7 @@ public class WeChatMiniProgramServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        GenericValue userLogin = (String) context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String objectId = (String) context.get("objectId");
         String objectType = (String) context.get("objectType");
@@ -116,7 +116,7 @@ public class WeChatMiniProgramServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        GenericValue userLogin = (String) context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String objectId = (String) context.get("objectId");
         String objectType = (String) context.get("objectType");

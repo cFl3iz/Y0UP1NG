@@ -303,6 +303,18 @@
     </entity>
 
 
+
+    <!-- 转发链路头 -->
+    <entity entity-name="ShareChain" package-name="org.ofbiz.cloudLake.product" title="转发链头">
+        <description>转发链路头</description>
+        <field name="partyId"      type="id"></field>
+        <field name="workEffortId" type="value"></field>
+        <field name="fromDate"     type="date-time"></field>
+        <prim-key field="partyId"/>
+    </entity>
+
+
+
     <entity entity-name="ProductImagesTemp" package-name="org.ofbiz.cloudLake.product" title="图片地址临表">
         <description>图片地址临表</description>
         <field name="skuId" type="value"></field>

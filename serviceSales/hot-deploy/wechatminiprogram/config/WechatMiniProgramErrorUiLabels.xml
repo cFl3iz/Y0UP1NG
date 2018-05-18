@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="TARJETA_NOT_FOUND">
+        <value xml:lang="en">TarjetaError</value>
+        <value xml:lang="zh">未授权的访问,Tarjeta Not Fund!</value>
+        <value xml:lang="zh-TW">未授权的访问,Tarjeta Not Fund!</value>
+    </property>
+
+    <property key="WORK_EFFORT_CREATE_FAIL">
+        <value xml:lang="en">WORK_EFFORT_CREATE_FAIL!</value>
+        <value xml:lang="zh">创建链路失败</value>
+        <value xml:lang="zh-TW">创建链路失败</value>
+    </property>
+</resource>

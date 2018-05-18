@@ -4,6 +4,22 @@
     <description>WechatMiniProgram Services</description>
     <vendor></vendor>
     <version>1.0</version>
+
+
+
+
+    <!-- 创建链/或创建子链 -->
+    <service name="createShareChain" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="createShareChain" auth="false">
+        <description>createShareChain</description>
+        <attribute name="objectId"   type="String"    mode="IN"  optional="true" />
+        <attribute name="objectType" type="String"    mode="IN"  optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
+    </service>
+
+
     <!-- 微信小程序查询销售订单 -->
     <service name="queryMyResourceOrderFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"

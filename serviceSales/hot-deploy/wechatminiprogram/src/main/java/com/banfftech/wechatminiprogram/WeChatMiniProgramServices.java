@@ -32,9 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
-import static main.java.com.banfftech.personmanager.PersonManagerServices.addAddressRoleToWorkeffort;
-import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
-import static main.java.com.banfftech.personmanager.PersonManagerServices.module;
+import static main.java.com.banfftech.personmanager.PersonManagerServices.*;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -355,7 +353,7 @@ public class WeChatMiniProgramServices {
 
 
         //把自己加入到链中
-        addAddressRoleToWorkeffort(dispatcher,delegator,admin,partyId,newWorkEffortId);
+        addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
         return resultMap;
     }

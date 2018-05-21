@@ -184,8 +184,8 @@ public class PersonManagerQueryServices {
                             rowMap.put("workEffortId", childWorkEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
                             //他转发过多少次
-                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
-                                    UtilMisc.toMap("fatherWorkEffortId", childWorkEffortId)).queryList();
+                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAssoc").where(
+                                    UtilMisc.toMap("workEffortIdFrom", childWorkEffortId)).queryList();
                             rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
                             returnList.add(rowMap);
                         }

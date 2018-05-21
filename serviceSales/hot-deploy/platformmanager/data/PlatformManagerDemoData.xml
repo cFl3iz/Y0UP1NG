@@ -316,4 +316,12 @@
                               productStoreShipMethId="10041" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
 
 
+
+
+
+
+    <!-- 友评数据-->
+
+
+
 </entity-engine-xml>

@@ -301,18 +301,6 @@ public class WeChatMiniProgramServices {
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
             }
 
-        } else {
-            //没有上层链路,单纯创建链
-            Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "根链路", "workEffortTypeId", "EVENT", "description", dateKey,
-                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
-            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
-                    createWorkEffortMap);
-            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-                Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
-                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
-            }
-             newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
             switch (objectType) {
                 case "PRODUCT":
                     Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", userLogin, "statusId", "WEGS_CREATED",
@@ -340,6 +328,52 @@ public class WeChatMiniProgramServices {
                     break;
             }
 
+        } else {
+            //没有上层链路,单纯创建链
+            Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+                    "workEffortName", "根链路", "workEffortTypeId", "EVENT", "description", dateKey,
+                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                    createWorkEffortMap);
+            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
+            }
+             newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+            switch (objectType) {
+                case "PRODUCT":
+                    Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", userLogin, "statusId", "WEGS_CREATED",
+                            "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", objectId);
+                    Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+                    if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+                        Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+                    }
+
+                    //创建我的产品业务事件
+                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
+
+                    break;
+                case "CATALOG":
+                    Map<String, Object> createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
+                            "workEffortId", newWorkEffortId, "noteName", objectType, "noteInfo", objectId);
+                    Map<String, Object> createWorkEffortNoteResultMap = dispatcher.runSync("createWorkEffortNote", createWorkEffortNoteMap);
+                    if (!ServiceUtil.isSuccess(createWorkEffortNoteResultMap)) {
+                        Debug.logInfo("*createWorkEffortNote(catalog)Fail:" + createWorkEffortNoteResultMap, module);
+                    }
+                    break;
+                case "APP":
+                    createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
+                            "workEffortId", newWorkEffortId, "noteName", objectType, "noteInfo", objectId);
+                    createWorkEffortNoteResultMap = dispatcher.runSync("createWorkEffortNote", createWorkEffortNoteMap);
+                    if (!ServiceUtil.isSuccess(createWorkEffortNoteResultMap)) {
+                        Debug.logInfo("*createWorkEffortNote(app)Fail:" + createWorkEffortNoteResultMap, module);
+                    }
+                    break;
+            }
+
+
+
+
         }
 
 
@@ -350,6 +384,42 @@ public class WeChatMiniProgramServices {
         resultMap.put("workEffortId",newWorkEffortId);
 
         return resultMap;
+    }
+
+    /**
+     * 创建我的唯一产品业务统计数据
+     * @param delegator
+     * @param dispatcher
+     * @param admin
+     * @param partyId
+     * @param productId
+     * @param objectId
+     * @param bizTypeId
+     * @throws GenericEntityException
+     * @throws GenericServiceExcetpion
+     */
+    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
+
+        //TODO 1. If Empty ,Create
+
+        //TODO 2. If Exsits , Break
+    }
+
+    /**
+     * updateProductBizData
+     * @param delegator
+     * @param dispatcher
+     * @param admin
+     * @param partyId
+     * @param productId
+     * @param objectId
+     * @param bizTypeId
+     * @throws GenericEntityException
+     * @throws GenericServiceExcetpion
+     */
+    private static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
+
+        //TODO Update
     }
 
 

@@ -78,4 +78,12 @@
     <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="颜色" lastUpdatedStamp="2016-05-04 09:53:21.0" lastUpdatedTxStamp="2016-05-04 09:53:21.0" productFeatureCategoryId="PRODUCT_COLOR"/>
     <ProductFeatureCategory createdStamp="2016-05-04 09:53:21.0" createdTxStamp="2016-05-04 09:53:21.0" description="尺码" lastUpdatedStamp="2017-10-17 17:07:00.0" lastUpdatedTxStamp="2017-10-17 17:07:00.0" productFeatureCategoryId="PRODUCT_SIZE"/>
 
+
+
+    <!-- New Types 2018-05-21 -->
+    <!-- 记录用户对于产品业务的统计数据类型 -->
+    <ProductBizDataType bizTypeId="FORWARD_PRODUCT" createdStamp="2018-05-21 19:51:15.0" createdTxStamp="2018-05-21 19:51:15.0" description="转发产品" lastUpdatedStamp="2018-05-21 19:51:15.0" lastUpdatedTxStamp="2018-05-21 19:51:15.0"/>
+    <ProductBizDataType bizTypeId="ADDRESSEE_PRODUCT" createdStamp="2018-05-21 19:52:16.0" createdTxStamp="2018-05-21 19:52:16.0" description="浏览产品" lastUpdatedStamp="2018-05-21 19:52:16.0" lastUpdatedTxStamp="2018-05-21 19:52:16.0"/>
+    <ProductBizDataType bizTypeId="BUY_PRODUCT" createdStamp="2018-05-21 19:53:43.0" createdTxStamp="2018-05-21 19:53:43.0" description="购买产品" lastUpdatedStamp="2018-05-21 19:53:43.0" lastUpdatedTxStamp="2018-05-21 19:53:43.0"/>
+
 </entity-engine-xml>

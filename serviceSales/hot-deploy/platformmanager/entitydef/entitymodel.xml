@@ -314,6 +314,63 @@
     </entity>
 
 
+    <entity entity-name="ProductBizDataType" package-name="org.ofbiz.cloudLake.product" title="产品业务数据类型表">
+        <description>产品业务数据类型表</description>
+        <field name="bizTypeId"      type="id-ne"></field>
+        <field name="description"   type="value"></field>
+        <prim-key field="bizTypeId"/>
+    </entity>
+
+    <!-- 发生产品业务数据时
+        '转发’、'浏览’
+        必然创建一条 ,
+        产品对人不会重复 -->
+    <entity entity-name="ProductBizData" package-name="org.ofbiz.cloudLake.product" title="产品业务数据">
+        <description>产品业务数据</description>
+        <field name="dataId" type="id"></field>
+        <field name="productId"      type="id"></field>
+        <field name="ownerPartyId" type="id"></field>
+
+        <!-- 浏览量 -->
+        <field name="addresseeCount" type="value"></field>
+        <!-- 转发量 -->
+        <field name="forwardCount" type="value"></field>
+        <!-- 购买量 -->
+        <field name="buyCount" type="value"></field>
+        <!-- 发生时间 -->
+        <field name="fromDate"     type="date-time"></field>
+
+        <prim-key field="dataId"/>
+        <prim-key field="productId"/>
+        <prim-key field="ownerPartyId"/>
+    </entity>
+
+
+    <!-- 当产品发生业务数据时，必然会有多条明细 、该明细对到详细的当事人 -->
+    <entity entity-name="ProductBizDataDetail" package-name="org.ofbiz.cloudLake.product" title="产品业务数据">
+        <description>产品业务数据明细表</description>
+        <field name="dataId"      type="id"></field>
+        <!-- WorkEffort Or OrderId -->
+        <field name="objectId" type="id"></field>
+        <field name="partyId" type="id"></field>
+        <field name="bizTypeId" type="id"></field>
+        <!-- 发生时间 -->
+        <field name="fromDate"     type="date-time"></field>
+        <relation type="one" fk-name="DATA_FK" rel-entity-name="ProductBizData">
+            <key-map field-name="dataId"/>
+        </relation>
+        <relation type="one" fk-name="BIZ_TYPE_FK" rel-entity-name="ProductBizDataType">
+            <key-map field-name="bizTypeId"/>
+        </relation>
+        <prim-key field="partyId"/>
+        <prim-key field="fromDate"/>
+        <prim-key field="bizTypeId"/>
+        <prim-key field="objectId"/>
+    </entity>
+
+
+
+
 
     <entity entity-name="ProductImagesTemp" package-name="org.ofbiz.cloudLake.product" title="图片地址临表">
         <description>图片地址临表</description>

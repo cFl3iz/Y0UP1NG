@@ -270,6 +270,7 @@
 
         <!-- 子链 -->
         <alias field="workEffortId" name="subWorkEffortId" entity-alias="SubWorkEffort"/>
+        <alias field="workEffortId" name="fatherWorkEffortId" entity-alias="WorkEffort"/>
 
         <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
         <!-- 转发当事人 -->

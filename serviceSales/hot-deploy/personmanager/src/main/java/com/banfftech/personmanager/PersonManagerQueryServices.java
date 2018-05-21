@@ -172,14 +172,20 @@ public class PersonManagerQueryServices {
                         continue;
                     }
 
-                    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
+                  //  List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
+                    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", fatherWorkEffortId)).queryList();
                     Debug.logInfo("*开始查询父链点开者= " + firstShareLines, module);
                     // 有人点开过
                     if (null != firstShareLines && firstShareLines.size() > 0) {
                         for (GenericValue gv : firstShareLines) {
+
                             Map<String, Object> rowMap = new HashMap<String, Object>();
                             String rowPartyId = (String) gv.get("partyId");
-                            String childWorkEffortId = (String) gv.get("subWorkEffortId");
+
+                            GenericValue workEffortPartyAddress =  EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
+                                    UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId,"partyId",rowPartyId)).queryFirst();
+
+                            String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                             rowMap.put("addresseePartyId", rowPartyId);
                             rowMap.put("workEffortId", childWorkEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
@@ -190,20 +196,23 @@ public class PersonManagerQueryServices {
                             returnList.add(rowMap);
                         }
                     }
-
                 }
             }
         }else{
+
             //以父链Id查子链
-            List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId)).queryList();
+        //    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId)).queryList();
+            List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", rowWorkEffortId)).queryList();
             Debug.logInfo("*开始查询子链点开者:" + firstShareLines, module);
             // 有人点开过
             if (null != firstShareLines && firstShareLines.size() > 0) {
                 for (GenericValue gv : firstShareLines) {
                     Map<String, Object> rowMap = new HashMap<String, Object>();
                     String rowPartyId = (String) gv.get("partyId");
+                    GenericValue workEffortPartyAddress =  EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
+                            UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId,"partyId",rowPartyId)).queryFirst();
                     String fatherWorkEffortId = (String) gv.get("fatherWorkEffortId");
-                    String childWorkEffortId = (String) gv.get("subWorkEffortId");
+                    String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                     rowMap.put("addresseePartyId", rowPartyId);
                     rowMap.put("workEffortId", childWorkEffortId);
                     rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));

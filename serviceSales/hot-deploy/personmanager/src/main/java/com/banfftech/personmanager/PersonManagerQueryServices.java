@@ -181,7 +181,7 @@ public class PersonManagerQueryServices {
                             String rowPartyId = (String) gv.get("partyId");
                             String childWorkEffortId = (String) gv.get("workEffortId");
                             rowMap.put("addresseePartyId", rowPartyId);
-                            rowMap.put("workEffortId", workEffortId);
+                            rowMap.put("workEffortId", childWorkEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
                             //他转发过多少次
                             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(

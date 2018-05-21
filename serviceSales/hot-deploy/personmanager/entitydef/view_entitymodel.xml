@@ -276,27 +276,23 @@
         <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
         <!-- 当事人是资源主 -->
         <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
-
         <!-- Desc   -->
-        <alias field="description" name="description" entity-alias="WorkEffort"/>
+        <alias field="description" name="description" entity-alias="SubWorkEffort"/>
         <!-- 父 -->
+
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="WorkEffort">
-            <key-map rel-field-name="workEffortId" field-name="workEffortIdFrom"/>
+            <key-map field-name="workEffortIdFrom" rel-field-name="workEffortId" />
         </view-link>
         <!-- 子 -->
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
-            <key-map rel-field-name="workEffortId" field-name="workEffortIdTo"/>
+            <key-map field-name="workEffortIdTo" rel-field-name="workEffortId" />
         </view-link>
-
-        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="SubWorkEffort">
-            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
-        </view-link>
-
-
         <entity-condition>
             <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="REFERRER"/>
         </entity-condition>
-
     </view-entity>
 
     <!-- WorkEffortRole 转发者 -->

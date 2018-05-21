@@ -147,7 +147,8 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // 当前行的basePartyId
-        String addresseePartyId = (String) context.get("addresseePartyId");
+        String addresseePartyId =     (String) context.get("addresseePartyId");
+        String rowWorkEffortId  =     (String) context.get("rowWorkEffortId");
 
         if (userLogin == null) {
             Debug.logError("User Token Not Found...", module);
@@ -181,6 +182,11 @@ public class PersonManagerQueryServices {
                             rowMap.put("addresseePartyId", rowPartyId);
                             rowMap.put("workEffortId", workEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
+
+                            //他转发过多少次
+                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
+                                    UtilMisc.toMap("workEffortId", workEffortId,"partyId",rowPartyId)).queryList();
+                            rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
                             returnList.add(rowMap);
                         }
                     }
@@ -188,14 +194,32 @@ public class PersonManagerQueryServices {
                 }
             }
         }else{
-            for(int i = 0 ; i <=10 ; i++){
-                Map<String, Object> rowMap = new HashMap<String, Object>();
-                String rowPartyId = i + "";
-                rowMap.put("addresseePartyId", rowPartyId);
-                rowMap.put("workEffortId", i * 2);
-                rowMap.put("user", null);
-                returnList.add(rowMap);
+            //以父链Id查子链
+            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
+                    UtilMisc.toMap("workEffortId", rowWorkEffortId,"partyId",addresseePartyId)).queryList();
+            if(null!=workEffortAndSubWorkEffortPartyReFerrer && workEffortAndSubWorkEffortPartyReFerrer.size()>0){
+                //查出多少行转发子链
+                for(GenericValue gv:workEffortAndSubWorkEffortPartyReFerrer){
+                    String innerRowWorkEffortId = gv.getString("workEffortId");
+                    //子链中又有多少点开的人
+                    List<GenericValue> firstAddresseeLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", innerRowWorkEffortId)).queryList();
+                    Debug.logInfo("*First Addressee Lines = " + firstAddresseeLines, module);
+                    if(null!=firstAddresseeLines && firstAddresseeLines.size()>0){
+                        for(GenericValue innerAddress :firstAddresseeLines){
+                            String childRowWorkEffortId = innerAddress.getString("workEffortId");
+                            Map<String, Object> rowMap = new HashMap<String, Object>();
+                            String rowPartyId = (String) innerAddress.get("partyId");
+                            rowMap.put("addresseePartyId", rowPartyId);
+                            rowMap.put("workEffortId", childRowWorkEffortId);
+                            rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
+                            returnList.add(rowMap);
+                        }
+                    }
+
+                }
             }
+
+
         }
         resultMap.put("firstShareLines",returnList);
         return resultMap;

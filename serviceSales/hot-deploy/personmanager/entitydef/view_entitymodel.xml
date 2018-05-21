@@ -285,11 +285,11 @@
             <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
         </view-link>
         <!-- 父 -->
-        <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="WorkEffort">
+        <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">
             <key-map rel-field-name="workEffortIdFrom" field-name="workEffortId"/>
         </view-link>
         <!-- 子 -->
-        <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
+        <view-link entity-alias="SubWorkEffort" rel-entity-alias="WorkEffortAssoc">
             <key-map rel-field-name="workEffortId" field-name="workEffortIdTo"/>
         </view-link>
 

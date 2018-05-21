@@ -157,6 +157,7 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <!-- 查询首行2B -->
     <request-map uri="queryBProductShareFirstLines">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryBProductShareFirstLines"/>
@@ -164,6 +165,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 查询首行2B 最新 -->
+    <request-map uri="queryForwardChainFirstLines">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryForwardChainFirstLines"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="queryMyOrders">

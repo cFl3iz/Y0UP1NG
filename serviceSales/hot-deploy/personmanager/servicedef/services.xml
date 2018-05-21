@@ -34,7 +34,7 @@
                    optional="true"/>
     </service>
 
-    <!-- validateOrderStatus 支付前效验订单状态 -->
+    <!-- ValidateOrderStatus 支付前效验订单状态 -->
     <service name="orderStatusValidation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="orderStatusValidation" auth="false">
@@ -316,6 +316,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+    <!-- QueryForwardChainFirstLines 2B New -->
+    <service name="queryForwardChainFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryForwardChainFirstLines" auth="false">
+        <description>queryForwardChainFirstLines</description>
+        <!-- 收信人 -->
+        <attribute name="addresseePartyId" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
 
     <!-- Query MyResource Order -->

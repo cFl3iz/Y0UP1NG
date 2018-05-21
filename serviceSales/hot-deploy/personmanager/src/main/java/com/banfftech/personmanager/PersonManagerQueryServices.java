@@ -179,7 +179,7 @@ public class PersonManagerQueryServices {
                         for (GenericValue gv : firstShareLines) {
                             Map<String, Object> rowMap = new HashMap<String, Object>();
                             String rowPartyId = (String) gv.get("partyId");
-                            String childWorkEffortId = (String) gv.get("workEffortId");
+                            String childWorkEffortId = (String) gv.get("subWorkEffortId");
                             rowMap.put("addresseePartyId", rowPartyId);
                             rowMap.put("workEffortId", childWorkEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));

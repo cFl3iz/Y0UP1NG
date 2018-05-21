@@ -158,14 +158,15 @@ public class PersonManagerQueryServices {
 
         if (!UtilValidate.isNotEmpty(addresseePartyId)) {
 
+            
             String basePartyId = userLogin.getString("partyId");
 
-            List<GenericValue> forwardChainMainLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyReFerrer").where(
+            List<GenericValue> forwardChainMainLines = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where(
                     UtilMisc.toMap("partyId", basePartyId)).queryList();
 
             if (null != forwardChainMainLines && forwardChainMainLines.size() > 0) {
                 for (GenericValue rowWorkEffort : forwardChainMainLines) {
-                    String fatherWorkEffortId = rowWorkEffort.getString("fatherWorkEffortId");
+                    String fatherWorkEffortId = rowWorkEffort.getString("workEffortId");
                     //是一条子链吗? 首行只查主链路
                     if (EntityQuery.use(delegator).from("WorkEffortAssoc").where(
                             UtilMisc.toMap("workEffortIdTo", fatherWorkEffortId)).queryFirst() != null) {

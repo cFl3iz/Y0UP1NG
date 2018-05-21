@@ -280,15 +280,15 @@
         <alias field="description" name="description" entity-alias="SubWorkEffort"/>
         <!-- 父 -->
 
-        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="SubWorkEffort">
-            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
-        </view-link>
         <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">
             <key-map field-name="workEffortId" rel-field-name="workEffortIdFrom" />
         </view-link>
         <!-- 子 -->
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
             <key-map field-name="workEffortIdTo" rel-field-name="workEffortId" />
+        </view-link>
+        <view-link entity-alias="SubWorkEffort" rel-entity-alias="workEffortPartyAssignByRole">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
         </view-link>
         <entity-condition>
             <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="REFERRER"/>

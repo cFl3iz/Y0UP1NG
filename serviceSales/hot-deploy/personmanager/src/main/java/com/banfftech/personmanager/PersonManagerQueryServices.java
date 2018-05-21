@@ -147,7 +147,7 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // 当前行的basePartyId
-        GenericValue addresseePartyId = (String) context.get("addresseePartyId");
+        String addresseePartyId = (String) context.get("addresseePartyId");
 
         if (userLogin == null) {
             Debug.logError("User Token Not Found...", module);

@@ -280,7 +280,7 @@
         <alias field="description" name="description" entity-alias="SubWorkEffort"/>
         <!-- 父 -->
 
-        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
+        <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="SubWorkEffort">
             <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
         </view-link>
         <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">

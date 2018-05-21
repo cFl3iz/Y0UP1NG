@@ -185,7 +185,7 @@ public class PersonManagerQueryServices {
 
                             //他转发过多少次
                             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
-                                    UtilMisc.toMap("workEffortId", workEffortId,"partyId",rowPartyId)).queryList();
+                                    UtilMisc.toMap("workEffortId", workEffortId)).queryList();
                             rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
                             returnList.add(rowMap);
                         }

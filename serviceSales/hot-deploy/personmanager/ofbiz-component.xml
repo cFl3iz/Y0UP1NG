@@ -29,7 +29,7 @@
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="personManager"
-        title="Person管理中心"
+        title="PersonMGR"
         server="default-server"
         location="webapp/personManager"
         base-permission="OFBTOOLS,PERSONMANAGER"

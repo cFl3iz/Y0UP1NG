@@ -323,6 +323,7 @@
         <description>queryForwardChainFirstLines</description>
         <!-- 收信人 -->
         <attribute name="addresseePartyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN"  optional="true"/>
 
         <attribute name="firstShareLines" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

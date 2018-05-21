@@ -283,8 +283,8 @@
         <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="WorkEffort">
             <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
         </view-link>
-        <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="WorkEffort">
-            <key-map field-name="workEffortIdFrom" rel-field-name="workEffortId" />
+        <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">
+            <key-map field-name="workEffortId" rel-field-name="workEffortIdFrom" />
         </view-link>
         <!-- 子 -->
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">

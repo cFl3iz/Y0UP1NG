@@ -169,7 +169,7 @@ public class PersonManagerQueryServices {
                     String subWorkEffortId = rowWorkEffort.getString("subWorkEffortId");
                     //是一条子链吗? 首行只查主链路
                     if (EntityQuery.use(delegator).from("WorkEffortAssoc").where(
-                            UtilMisc.toMap("workEffortIdTo", fatherEffortId)).queryFirst() != null) {
+                            UtilMisc.toMap("workEffortIdTo", fatherWorkEffortId)).queryFirst() != null) {
                         continue;
                     }
 

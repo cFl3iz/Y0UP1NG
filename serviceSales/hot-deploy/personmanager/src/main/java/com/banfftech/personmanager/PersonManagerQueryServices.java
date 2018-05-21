@@ -211,7 +211,7 @@ public class PersonManagerQueryServices {
                     String rowPartyId = (String) gv.get("partyId");
                     GenericValue workEffortPartyAddress =  EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
                             UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId,"partyId",rowPartyId)).queryFirst();
-                    String fatherWorkEffortId = (String) gv.get("fatherWorkEffortId");
+                    String fatherWorkEffortId = (String) workEffortPartyAddress.get("fatherWorkEffortId");
                     String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                     rowMap.put("addresseePartyId", rowPartyId);
                     rowMap.put("workEffortId", childWorkEffortId);

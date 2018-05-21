@@ -188,15 +188,18 @@ public class PersonManagerQueryServices {
                             if(null!=workEffortPartyAddress){
                                 String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                                 rowMap.put("workEffortId", childWorkEffortId);
+                             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
+                                    UtilMisc.toMap("workEffortId",childWorkEffortId)).queryList();
+                            rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
 
                             }else{
                                 rowMap.put("workEffortId", "NA");
-
+                                rowMap.put("addressCount","0");
                             }
 //他转发过多少次
-                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAssoc").where(
-                                    UtilMisc.toMap("workEffortIdFrom", gv.getString("workEffortId"))).queryList();
-                            rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
+//                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAssoc").where(
+//                                    UtilMisc.toMap("workEffortIdFrom", gv.getString("workEffortId"))).queryList();
+//                            rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
 
                             rowMap.put("addresseePartyId", rowPartyId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));

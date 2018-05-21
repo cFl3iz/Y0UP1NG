@@ -346,6 +346,9 @@ public class WeChatMiniProgramServices {
         //把自己加入到链中
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
+
+        resultMap.put("workEffortId",newWorkEffortId);
+
         return resultMap;
     }
 

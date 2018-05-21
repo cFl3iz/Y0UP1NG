@@ -17,6 +17,8 @@
         <attribute name="objectType" type="String"    mode="IN"  optional="true" />
         <attribute name="dateKey"    type="String"    mode="IN"  optional="true" />
 
+        <attribute name="workEffortId"    type="String"    mode="OUT"  optional="true" />
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>
 

@@ -282,7 +282,7 @@
 
 
         <view-link entity-alias="workEffortPartyAssignByRole" rel-entity-alias="SubWorkEffort">
-            <key-map rel-field-name="subWorkEffortId" field-name="workEffortId"/>
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
         </view-link>
         <!-- 父 -->
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="WorkEffort">
@@ -290,7 +290,7 @@
         </view-link>
         <!-- 子 -->
         <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
-            <key-map rel-field-name="subWorkEffortId" field-name="workEffortIdTo"/>
+            <key-map rel-field-name="workEffortId" field-name="workEffortIdTo"/>
         </view-link>
 
         <entity-condition>

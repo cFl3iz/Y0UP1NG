@@ -196,7 +196,7 @@ public class PersonManagerQueryServices {
         }else{
             //以父链Id查子链
             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
-                    UtilMisc.toMap("workEffortId", rowWorkEffortId,"partyId",addresseePartyId)).queryList();
+                    UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId,"partyId",addresseePartyId)).queryList();
             if(null!=workEffortAndSubWorkEffortPartyReFerrer && workEffortAndSubWorkEffortPartyReFerrer.size()>0){
                 //查出多少行转发子链
                 for(GenericValue gv:workEffortAndSubWorkEffortPartyReFerrer){

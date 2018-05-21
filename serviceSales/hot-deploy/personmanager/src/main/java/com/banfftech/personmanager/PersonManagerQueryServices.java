@@ -228,8 +228,8 @@ public class PersonManagerQueryServices {
                         String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                         rowMap.put("workEffortId", childWorkEffortId);
                         //他转发过多少次
-                        List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAssoc").where(
-                                UtilMisc.toMap("workEffortIdFrom", childWorkEffortId)).queryList();
+                        List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
+                                UtilMisc.toMap("workEffortId", childWorkEffortId)).queryList();
                         rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
                     }else{
                         rowMap.put("workEffortId", "NA");

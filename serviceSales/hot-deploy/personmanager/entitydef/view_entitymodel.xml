@@ -296,6 +296,80 @@
         </entity-condition>
     </view-entity>
 
+
+
+
+    <!-- 查询转发父链 -->
+    <view-entity entity-name="FatherWorkEffortPartyReFerrer" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+        <member-entity entity-name="WorkEffort" entity-alias="SubWorkEffort"/>
+        <member-entity entity-name="WorkEffortAssoc" entity-alias="WorkEffortAssoc"/>
+
+        <!-- 子链 -->
+        <alias field="workEffortId" name="subWorkEffortId" entity-alias="SubWorkEffort"/>
+        <alias field="workEffortId" name="fatherWorkEffortId" entity-alias="WorkEffort"/>
+
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- Desc   -->
+        <alias field="description" name="description" entity-alias="SubWorkEffort"/>
+        <!-- 父 -->
+
+        <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">
+            <key-map field-name="workEffortId" rel-field-name="workEffortIdFrom" />
+        </view-link>
+        <!-- 子 -->
+        <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
+            <key-map field-name="workEffortIdTo" rel-field-name="workEffortId" />
+        </view-link>
+        <view-link entity-alias="WorkEffort" rel-entity-alias="workEffortPartyAssignByRole">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="REFERRER"/>
+        </entity-condition>
+    </view-entity>
+
+
+    <!-- 查询收信父链 -->
+    <view-entity entity-name="FatherWorkEffortPartyAddressee" package-name="com.banfftech.personerp">
+        <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />
+        <member-entity entity-name="WorkEffort" entity-alias="WorkEffort"/>
+        <member-entity entity-name="WorkEffort" entity-alias="SubWorkEffort"/>
+        <member-entity entity-name="WorkEffortAssoc" entity-alias="WorkEffortAssoc"/>
+
+        <!-- 子链 -->
+        <alias field="workEffortId" name="subWorkEffortId" entity-alias="SubWorkEffort"/>
+        <alias field="workEffortId" name="fatherWorkEffortId" entity-alias="WorkEffort"/>
+
+        <alias field="workEffortId" name="workEffortId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 转发当事人 -->
+        <alias field="partyId" name="partyId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- 当事人是资源主 -->
+        <alias field="roleTypeId" name="roleTypeId" entity-alias="workEffortPartyAssignByRole"/>
+        <!-- Desc   -->
+        <alias field="description" name="description" entity-alias="SubWorkEffort"/>
+        <!-- 父 -->
+
+        <view-link entity-alias="WorkEffort" rel-entity-alias="WorkEffortAssoc">
+            <key-map field-name="workEffortId" rel-field-name="workEffortIdFrom" />
+        </view-link>
+        <!-- 子 -->
+        <view-link entity-alias="WorkEffortAssoc" rel-entity-alias="SubWorkEffort">
+            <key-map field-name="workEffortIdTo" rel-field-name="workEffortId" />
+        </view-link>
+        <view-link entity-alias="WorkEffort" rel-entity-alias="workEffortPartyAssignByRole">
+            <key-map rel-field-name="workEffortId" field-name="workEffortId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr field-name="roleTypeId" entity-alias="workEffortPartyAssignByRole" value="ADDRESSEE"/>
+        </entity-condition>
+    </view-entity>
+
     <!-- WorkEffortRole 转发者 -->
     <view-entity entity-name="WorkEffortAndPartyReFerrer" package-name="com.banfftech.personerp">
         <member-entity entity-name="WorkEffortPartyAssignment" entity-alias="workEffortPartyAssignByRole" />

@@ -160,32 +160,32 @@ public class PersonManagerQueryServices {
 
             String basePartyId = userLogin.getString("partyId");
 
-            List<GenericValue> forwardChainMainLines = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
+            List<GenericValue> forwardChainMainLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyReFerrer").where(
                     UtilMisc.toMap("partyId", basePartyId)).queryList();
 
             if (null != forwardChainMainLines && forwardChainMainLines.size() > 0) {
                 for (GenericValue rowWorkEffort : forwardChainMainLines) {
                     String fatherWorkEffortId = rowWorkEffort.getString("fatherWorkEffortId");
-                    String subWorkEffortId = rowWorkEffort.getString("subWorkEffortId");
                     //是一条子链吗? 首行只查主链路
                     if (EntityQuery.use(delegator).from("WorkEffortAssoc").where(
                             UtilMisc.toMap("workEffortIdTo", fatherWorkEffortId)).queryFirst() != null) {
                         continue;
                     }
 
-                    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", subWorkEffortId)).queryList();
+                    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
                     Debug.logInfo("*First Addressee Lines = " + firstShareLines, module);
                     // 有人点开过
                     if (null != firstShareLines && firstShareLines.size() > 0) {
                         for (GenericValue gv : firstShareLines) {
                             Map<String, Object> rowMap = new HashMap<String, Object>();
                             String rowPartyId = (String) gv.get("partyId");
+                            String childWorkEffortId = (String) gv.get("workEffortId");
                             rowMap.put("addresseePartyId", rowPartyId);
-                            rowMap.put("workEffortId", subWorkEffortId);
+                            rowMap.put("workEffortId", workEffortId);
                             rowMap.put("user", queryPersonBaseInfo(delegator, rowPartyId));
                             //他转发过多少次
                             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndSubWorkEffortPartyReFerrer").where(
-                                    UtilMisc.toMap("fatherWorkEffortId", subWorkEffortId)).queryList();
+                                    UtilMisc.toMap("fatherWorkEffortId", childWorkEffortId)).queryList();
                             rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
                             returnList.add(rowMap);
                         }

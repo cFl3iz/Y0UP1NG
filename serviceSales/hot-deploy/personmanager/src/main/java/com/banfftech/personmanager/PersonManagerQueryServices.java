@@ -197,6 +197,7 @@ public class PersonManagerQueryServices {
                 returnList.add(rowMap);
             }
         }
+        resultMap.put("firstShareLines",returnList);
         return resultMap;
     }
 

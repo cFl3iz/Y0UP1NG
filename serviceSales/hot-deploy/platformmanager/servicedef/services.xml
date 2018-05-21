@@ -14,7 +14,7 @@
              location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
         <description>create product size content and info</description>
         <attribute name="productId" type="String" mode="INOUT" optional="false"/>
-        <attribute name="textData" type="String" allow-html="safe" mode="IN" optional="false"/>
+        <attribute name="textData" type="String" allow-html="any" mode="IN" optional="false"/>
     </service>
 
 

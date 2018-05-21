@@ -38,7 +38,7 @@
     	<attribute name="productCategoryId" mode="INOUT" type="String" optional="false"></attribute>
     	<attribute name="contentId" mode="IN" type="String" optional="true"></attribute>
     	<attribute name="sequenceNum" mode="IN" type="String" optional="true"></attribute>
-    	<attribute name="objectInfo" mode="IN" type="String" optional="productCategoryId"></attribute>
+    	<attribute name="objectInfo" mode="IN" type="String" optional="true"></attribute>
     </service>
     
     <service name="copyImageAndContentInfoFromMiddleSize" engine="simple" 

@@ -350,7 +350,7 @@ public class WeChatMiniProgramServices {
                     }
 
                     //创建我的产品业务事件
-                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
+//                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
 
                     break;
                 case "CATALOG":
@@ -398,12 +398,9 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
-
-        //TODO 1. If Empty ,Create
-
-        //TODO 2. If Exsits , Break
-    }
+//    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
+//
+//    }
 
     /**
      * updateProductBizData
@@ -417,10 +414,10 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-    private static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
-
-        //TODO Update
-    }
+//    private static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceException{
+//
+//
+//    }
 
 
     /**

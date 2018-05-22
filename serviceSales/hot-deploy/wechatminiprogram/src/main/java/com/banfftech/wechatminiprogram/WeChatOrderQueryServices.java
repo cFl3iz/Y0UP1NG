@@ -525,7 +525,7 @@ public class WeChatOrderQueryServices {
             resultMap.put("isSalesRep", "true");
         }
 
-
+        resultMap.put("partyId",partyIdentification.getString("partyId"));
         resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
         resultMap.put("productStoreId", productStoreId);
 

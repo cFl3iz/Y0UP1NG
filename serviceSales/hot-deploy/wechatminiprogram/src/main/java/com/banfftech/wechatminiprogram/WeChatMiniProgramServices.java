@@ -177,7 +177,7 @@ public class WeChatMiniProgramServices {
          * 4.LogicBlock
          * 如果初始链中的是一个产品,则要增加浏览量。
          */
-
+        updateProductBizData(delegator,dispatcher,admin,partyId,objectId,workEffortId,"ADDRESSEE_PRODUCT");
 
         return resultMap;
     }
@@ -309,6 +309,8 @@ public class WeChatMiniProgramServices {
                     if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
                         Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
                     }
+                    // Update ForWard Count
+                    updateProductBizData(delegator,dispatcher,admin,partyId,objectId,beforeChainId,"FORWARD_PRODUCT");
                     break;
                 case "CATALOG":
                     Map<String, Object> createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
@@ -350,7 +352,7 @@ public class WeChatMiniProgramServices {
                     }
 
                     //创建我的产品业务事件
-//                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
+                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
 
                     break;
                 case "CATALOG":
@@ -398,9 +400,27 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-//    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceExcetpion{
-//
-//    }
+    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException, GenericServiceException{
+
+        // Find If Not Exsits
+
+        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", partyId , "productId" , productId).queryFirst();
+
+        if(null == productBizData){
+            // Create
+            Map<String, Object> createProductBizData = new HashMap<String, Object>();
+            createProductBizData.put("ownerPartyId",partyId);
+            createProductBizData.put("productId",productId);
+            createProductBizData.put("addresseeCount","0");
+            createProductBizData.put("forwardCount","0");
+            createProductBizData.put("buyCount","0");
+            createProductBizData.put("dataId",delegator.getNextSeqId("ProductBizData"));
+            createProductBizData.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            GenericValue bizData = delegator.makeValue("ProductBizData", createProductBizData);
+            bizData.create();
+        }
+
+    }
 
     /**
      * updateProductBizData
@@ -414,10 +434,63 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-//    private static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException,GenericServiceException{
-//
-//
-//    }
+    public static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException, GenericServiceException{
+
+
+        String workEffortId  =  objectId;
+
+        GenericValue workEffortAndReferrer = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where("workEffortId",workEffortId).queryFirst();
+
+        String ownerPartyId = workEffortAndReferrer.getString("workEffortId");
+
+        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId , "productId" , productId).queryFirst();
+
+        if(null == productBizData){
+
+        }else{
+            String dataId = productBizData.getString("dataId");
+            switch (bizTypeId){
+                case "FORWARD_PRODUCT":
+                    String forwardCount = productBizData.getString("forwardCount");
+                    productBizData.set("forwardCount", (Integer.parseInt(forwardCount)+1)+"");
+                break;
+                case "ADDRESSEE_PRODUCT":
+                    String addresseeCount = productBizData.getString("addresseeCount");
+                    productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount)+1)+"");
+                    break;
+                case "BUY_PRODUCT":
+                    String buyCount = productBizData.getString("buyCount");
+                    productBizData.set("buyCount", (Integer.parseInt(buyCount)+1)+"");
+                    break;
+            }
+
+            productBizData.store();
+
+            // Do Create Detail
+            createProductBizDataDetail(dataId,objectId,partyId,bizTypeId);
+        }
+
+    }
+
+    /**
+     * 创建产品业务事件数据明细
+     * @param dataId
+     * @param objectId
+     * @param partyId
+     * @param bizTypeId
+     */
+    private static void createProductBizDataDetail(String dataId, String objectId, String partyId, String bizTypeId) throws GenericEntityException, GenericServiceException{
+
+        // Create Detail Data
+        Map<String, Object> createProductBizDataDetail = new HashMap<String, Object>();
+        createProductBizDataDetail.put("partyId",partyId);
+        createProductBizDataDetail.put("objectId",objectId);
+        createProductBizDataDetail.put("dataId",dataId);
+        createProductBizDataDetail.put("bizTypeId",bizTypeId);
+        createProductBizDataDetail.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+        GenericValue productBizDataDetail = delegator.makeValue("ProductBizDataDetail", createProductBizDataDetail);
+        productBizDataDetail.create();
+    }
 
 
     /**

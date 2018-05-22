@@ -88,6 +88,7 @@ import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
+import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
 
 /**
  * Created by S on 2017/9/12.
@@ -6642,6 +6643,10 @@ public class PersonManagerServices {
 //
 //        }
 
+
+        // 记录购买量
+
+        updateProductBizData(delegator,dispatcher,admin,partyId,productId,orderId,"BUY_PRODUCT");
 
         resultMap.put("partyIdFrom", partyId);
         resultMap.put("partyIdTo", payToPartyId);

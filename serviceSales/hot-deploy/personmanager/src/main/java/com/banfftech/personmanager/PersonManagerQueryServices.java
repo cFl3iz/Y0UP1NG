@@ -168,10 +168,10 @@ public class PersonManagerQueryServices {
                 for (GenericValue rowWorkEffort : forwardChainMainLines) {
                     String fatherWorkEffortId = rowWorkEffort.getString("workEffortId");
                     //是一条子链吗? 首行只查主链路
-                    if (EntityQuery.use(delegator).from("WorkEffortAssoc").where(
-                            UtilMisc.toMap("workEffortIdTo", fatherWorkEffortId)).queryFirst() != null) {
-                        continue;
-                    }
+//                    if (EntityQuery.use(delegator).from("WorkEffortAssoc").where(
+//                            UtilMisc.toMap("workEffortIdTo", fatherWorkEffortId)).queryFirst() != null) {
+//                        continue;
+//                    }
 
                   //  List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
                     List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", fatherWorkEffortId)).queryList();

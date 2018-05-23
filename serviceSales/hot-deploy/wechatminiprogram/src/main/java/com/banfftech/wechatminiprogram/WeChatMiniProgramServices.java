@@ -475,6 +475,8 @@ public class WeChatMiniProgramServices {
 
         GenericValue workEffortAndReferrer = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where("workEffortId",workEffortId).queryFirst();
 
+        if(null!=workEffortAndReferrer){
+
         String ownerPartyId = workEffortAndReferrer.getString("workEffortId");
 
         GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId , "productId" , productId).queryFirst();
@@ -503,7 +505,7 @@ public class WeChatMiniProgramServices {
             // Do Create Detail
             createProductBizDataDetail(delegator, dataId,objectId,partyId,bizTypeId);
         }
-
+        }
     }
 
     /**

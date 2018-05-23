@@ -74,8 +74,42 @@ public class WeChatMiniProgramServices {
 
 
     /**
+     * assocCustToSalesRep
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> assocCustToSalesRep(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String salesPartyId = (String) context.get("salesPartyId");
+        String partyId = (String) userLogin.get("partyId");
+
+
+        //建立我与他的partyRelationship
+        boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,salesPartyId);
+        if(!isSuccess){
+            Debug.logInfo("*Assoc Cust To SalesRep Relationship Fail:" + isSuccess, module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ASSOC_PRELATION_ERROR", locale));
+        }
+
+        return resultMap;
+    }
+
+
+    /**
      * 加入转发链
-     *
      * @param dctx
      * @param context
      * @return

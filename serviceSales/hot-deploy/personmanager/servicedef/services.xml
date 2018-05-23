@@ -6,6 +6,9 @@
     <version>1.0</version>
 
 
+
+
+
     <!-- 初始化库存服务,只会执行一次 -->
     <service name="initialAllSkuInventory" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

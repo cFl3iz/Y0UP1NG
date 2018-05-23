@@ -38,6 +38,17 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <!-- 客户关联销售代表 -->
+    <request-map uri="assocCustToSalesRep">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="assocCustToSalesRep"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
     <!-- 新增的更新用户基础信息 -->
     <request-map uri="updateGenericPersonInfo">
         <security https="false" auth="false"/>

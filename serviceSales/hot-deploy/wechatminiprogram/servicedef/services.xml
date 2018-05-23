@@ -27,11 +27,24 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
              invoke="joinForwardChain" auth="false">
         <description>joinForwardChain</description>
+
         <attribute name="objectId"   type="String"    mode="IN"  optional="true" />
         <attribute name="objectType" type="String"    mode="IN"  optional="true" />
         <attribute name="dateKey"    type="String"    mode="IN"  optional="true" />
         <attribute name="partyIdFrom"    type="String"    mode="IN"  optional="true" />
         <attribute name="appId"          type="String"    mode="IN"  optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
+    </service>
+
+
+    <service name="assocCustToSalesRep" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="assocCustToSalesRep" auth="false">
+        <description>assocCustToSalesRep</description>
+
+
+        <attribute name="salesPartyId"    type="String"    mode="IN"  optional="true" />
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>

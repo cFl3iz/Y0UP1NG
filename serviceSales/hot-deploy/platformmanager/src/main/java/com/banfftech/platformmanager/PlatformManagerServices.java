@@ -113,6 +113,26 @@ public class PlatformManagerServices {
     private static String smsFreeSignName = null;
     private static String smsTemplateCode = null;
 
+
+    /**
+     * 促销专用四舍五入
+     * @param ctx
+     * @param context
+     * @return
+     */
+    public static Map<String, Object> doRoundHalfUp(DispatchContext ctx, Map<String, Object> context) {
+        ShoppingCart cart = (ShoppingCart) context.get("shoppingCart");
+        GenericValue productPromoAction = (GenericValue) context.get("productPromoAction");
+        Debug.log("[doRoundHalfUp] productPromoId ==>" + productPromoAction.getString("productPromoId"));
+        int index = cart.getAdjustmentPromoIndex(productPromoAction.getString("productPromoId"));
+        if (index != -1) {
+            GenericValue adjustment = cart.getAdjustment(index);
+            adjustment.set("amount", adjustment.getBigDecimal("amount").setScale(0, BigDecimal.ROUND_HALF_UP));
+            Debug.log("[doRoundHalfUp] adjustment amount ==>" + adjustment.get("amount"));
+        }
+        return ServiceUtil.returnSuccess();
+    }
+
     /**
      * 导出分享报表至Excel
      * @param request

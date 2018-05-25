@@ -20,6 +20,9 @@
 
 
 
+
+
+
     <!-- Get Captcha To Login -->
     <service name="getLoginCaptcha" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
@@ -340,5 +343,43 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
+
+    <!-- 关于促销 -->
+    <service name="doRoundHalfUp" auth="false" engine="java" invoke="doRoundHalfUp"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices">
+        <description>促销专用:四舍五入</description>
+        <attribute name="shoppingCart" type="org.apache.apache.ofbiz.order.shoppingcart.ShoppingCart" mode="IN"/>
+        <attribute name="productPromoAction" type="org.apache.ofbiz.entity.GenericValue" mode="IN"/>
+        <attribute name="nowTimestamp" type="Timestamp" mode="IN"/>
+        <attribute name="actionResultInfo" type="org.apache.ofbiz.order.shoppingcart.product.ProductPromoWorker$ActionResultInfo" mode="IN"/>
+    </service>
+
+    <!--<service name="doRoundUp" auth="false" engine="java" invoke="doRoundUp" location="com.zuczug.zuczugwarehouse.ZuczugWarehouseServices">-->
+        <!--<description>促销专用:上舍入</description>-->
+        <!--<attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="IN"/>-->
+        <!--<attribute name="productPromoAction" type="org.ofbiz.entity.GenericValue" mode="IN"/>-->
+        <!--<attribute name="nowTimestamp" type="Timestamp" mode="IN"/>-->
+        <!--<attribute name="actionResultInfo" type="org.ofbiz.order.shoppingcart.product.ProductPromoWorker$ActionResultInfo" mode="IN"/>-->
+    <!--</service>-->
+
+    <!--<service name="removePromoAdjustment" auth="false" engine="java" invoke="removePromoAdjustment" location="com.zuczug.zuczugwarehouse.ZuczugWarehouseServices">-->
+        <!--<description>促销专用:清除当前促销产生adjustment</description>-->
+        <!--<implements service="interfaceProductPromoAction"/>-->
+    <!--</service>-->
+
+    <!--<service name="discountStorePromo" auth="false" engine="java" invoke="discountStorePromo" location="com.zuczug.zuczugwarehouse.ZuczugWarehouseServices">-->
+        <!--<description>折扣店促销</description>-->
+        <!--<implements service="interfaceProductPromoAction"/>-->
+    <!--</service>-->
+
+    <!--<service name="moneyOffStorePromo" auth="false" engine="java" invoke="moneyOffStorePromo" location="com.zuczug.zuczugwarehouse.ZuczugWarehouseServices">-->
+        <!--<description>满减促销</description>-->
+        <!--<implements service="interfaceProductPromoAction"/>-->
+    <!--</service>-->
+
+    <!--<service name="updateNegativePromoAdjustmentAmount" auth="false" engine="java" invoke="updateNegativePromoAdjustmentAmount" location="com.zuczug.zuczugwarehouse.ZuczugWarehouseServices">-->
+        <!--<description>促销专用:解决促销产品金额为负数情况</description>-->
+        <!--<implements service="interfaceProductPromoAction"/>-->
+    <!--</service>-->
 
 </services>

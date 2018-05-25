@@ -348,7 +348,7 @@
     <service name="doRoundHalfUp" auth="false" engine="java" invoke="doRoundHalfUp"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices">
         <description>促销专用:四舍五入</description>
-        <attribute name="shoppingCart" type="org.apache.apache.ofbiz.order.shoppingcart.ShoppingCart" mode="IN"/>
+        <attribute name="shoppingCart" type="org.apache.ofbiz.order.shoppingcart.ShoppingCart" mode="IN"/>
         <attribute name="productPromoAction" type="org.apache.ofbiz.entity.GenericValue" mode="IN"/>
         <attribute name="nowTimestamp" type="Timestamp" mode="IN"/>
         <attribute name="actionResultInfo" type="org.apache.ofbiz.order.shoppingcart.product.ProductPromoWorker$ActionResultInfo" mode="IN"/>

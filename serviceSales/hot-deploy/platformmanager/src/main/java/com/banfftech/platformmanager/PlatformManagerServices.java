@@ -51,7 +51,8 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
-
+import org.apache.ofbiz.order.shoppingcart.ShoppingCart;
+import org.apache.ofbiz.order.shoppingcart.ShoppingCartItem;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;

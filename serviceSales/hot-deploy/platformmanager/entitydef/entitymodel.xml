@@ -9,6 +9,21 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+    <!-- 产品店铺的促销规则视图 -->
+    <view-entity entity-name="StorePromoAndAction" package-name="">
+        <member-entity entity-alias="PSP" entity-name="ProductStorePromoAndAppl"/>
+        <member-entity entity-alias="PSA" entity-name="ProductPromoAction"/>
+
+        <alias-all entity-alias="PSP" />
+        <alias-all entity-alias="PSA" />
+
+        <view-link entity-alias="PSP" rel-entity-alias="PSA">
+            <key-map field-name="productPromoId" rel-field-name="productPromoId"/>
+        </view-link>
+
+    </view-entity>
+
+
     <view-entity entity-name="ProductContentAndElectronicText" package-name="org.ofbiz.product.product">
         <member-entity entity-alias="PC" entity-name="ProductContent"/>
         <member-entity entity-alias="CON" entity-name="Content"/>

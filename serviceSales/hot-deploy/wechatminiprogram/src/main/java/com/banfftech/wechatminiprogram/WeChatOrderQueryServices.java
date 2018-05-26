@@ -525,9 +525,33 @@ public class WeChatOrderQueryServices {
             resultMap.put("isSalesRep", "true");
         }
 
+
+        // Query  ProductStorePromoAndAppl  & ProductPromoAction
+        List<Map<String,Object>> returnPromos  = new ArrayList<Map<String, Object>>();
+        List<GenericValue> storePromoAndAction =  EntityQuery.use(delegator).from("StorePromoAndAction").where("productStoreId", productStoreId).queryList();
+
+        if(null!= storePromoAndAction && storePromoAndAction.size()>0){
+            for(GenericValue promo : storePromoAndAction){
+                    Map<String,Object> rowMap = new HashMap<String, Object>();
+                    String productPromoId = promo.getString("productPromoId");
+                    String promoName = promo.getString("promoName");
+                    String amount = promo.get("amount") + "";
+                    GenericValue cond = EntityQuery.use(delegator).from("ProductPromoCond").where("productPromoId", productPromoId).queryFirst();
+                    String condValue = cond.get("condValue")+"";
+
+                    rowMap.put("promoName",promoName);
+                    rowMap.put("conditionValue",condValue);
+                    rowMap.put("discount",(100-Integer.parseInt(amount+""))*0.1);
+
+                returnPromos.add(rowMap);
+            }
+        }
+
+
         resultMap.put("partyId",partyIdentification.getString("partyId"));
         resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
         resultMap.put("productStoreId", productStoreId);
+        resultMap.put("storePromos", returnPromos);
 
 
         return resultMap;

@@ -161,6 +161,7 @@
         <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
         <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
         <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
+        <attribute name="storePromos" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 

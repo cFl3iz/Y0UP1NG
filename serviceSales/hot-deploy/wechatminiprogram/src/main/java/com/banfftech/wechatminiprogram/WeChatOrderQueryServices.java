@@ -1766,6 +1766,12 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
+
+                Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
+                        UtilMisc.toMap("orderId",rowMap.get("orderId")));
+
+                rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
+
                 //隐藏
                 if(null!=hiddenList){
                     if(hiddenList.contains(rowMap.get("orderId"))){
@@ -2045,6 +2051,17 @@ public class WeChatOrderQueryServices {
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
                 rowMap = gv.getAllFields();
+
+                Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
+                        UtilMisc.toMap("orderId",rowMap.get("orderId")));
+
+                rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
+
+                //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)
+
+                //grandTotal 要算订单调整项目
+
+
                 //隐藏
                 if(null!=hiddenList){
                     if(hiddenList.contains(rowMap.get("orderId"))){

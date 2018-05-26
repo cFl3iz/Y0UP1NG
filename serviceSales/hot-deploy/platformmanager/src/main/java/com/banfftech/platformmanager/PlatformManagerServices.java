@@ -131,6 +131,9 @@ public class PlatformManagerServices {
             adjustment.set("amount", adjustment.getBigDecimal("amount").setScale(0, BigDecimal.ROUND_HALF_UP));
             Debug.log("[doRoundHalfUp] adjustment amount ==>" + adjustment.get("amount"));
         }
+
+
+
         return ServiceUtil.returnSuccess();
     }
 

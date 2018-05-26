@@ -541,7 +541,7 @@ public class WeChatOrderQueryServices {
 
                     rowMap.put("promoName",promoName);
                     rowMap.put("conditionValue",condValue);
-                    rowMap.put("discount",(100-Integer.parseInt(amount+"".substring(0,amount.indexOf("."))))*0.1);
+                    rowMap.put("discount",( new Double(100) - Double.parseDouble(amount+""))*0.1);
 
                 returnPromos.add(rowMap);
             }

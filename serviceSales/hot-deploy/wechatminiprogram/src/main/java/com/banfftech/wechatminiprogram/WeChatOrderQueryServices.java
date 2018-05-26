@@ -536,7 +536,7 @@ public class WeChatOrderQueryServices {
                     String productPromoId = promo.getString("productPromoId");
                     String promoName = promo.getString("promoName");
 
-                    if(promo.get("amount")==null || promo.get("amount")+"".equals("")){
+                    if(promo.get("amount")==null || UtilValidate.isEmpty(promo.get("amount"))){
                         //maybe action service
                         continue;
                     }

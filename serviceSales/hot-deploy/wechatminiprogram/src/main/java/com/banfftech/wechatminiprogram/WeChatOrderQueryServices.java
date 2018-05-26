@@ -535,12 +535,19 @@ public class WeChatOrderQueryServices {
                     Map<String,Object> rowMap = new HashMap<String, Object>();
                     String productPromoId = promo.getString("productPromoId");
                     String promoName = promo.getString("promoName");
+
+                    if(promo.get("amount")==null || promo.get("amount")+"".equals("")){
+                        //maybe action service
+                        continue;
+                    }
+
                     String amount = promo.get("amount") + "";
                     GenericValue cond = EntityQuery.use(delegator).from("ProductPromoCond").where("productPromoId", productPromoId).queryFirst();
                     String condValue = cond.get("condValue")+"";
 
                     rowMap.put("promoName",promoName);
                     rowMap.put("conditionValue",condValue);
+
                     rowMap.put("discount",( new Double(100) - Double.parseDouble(amount+""))*0.1);
 
                 returnPromos.add(rowMap);

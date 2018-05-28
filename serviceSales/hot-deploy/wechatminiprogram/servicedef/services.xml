@@ -6,6 +6,19 @@
     <version>1.0</version>
 
 
+    <!-- checkSkusIsRight -->
+    <service name="checkSkusIsRight" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="checkSkusIsRight" auth="false">
+        <description>checkSkusIsRight</description>
+        <attribute name="productId"   type="String"    mode="IN"  optional="true" />
+        <attribute name="amount" type="String"    mode="IN"  optional="true" />
+        <attribute name="price"    type="String"    mode="IN"  optional="true" />
+
+        <attribute name="msg"    type="String"    mode="IN"  optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
+    </service>
+
 
 
     <!-- 创建链/或创建子链 -->

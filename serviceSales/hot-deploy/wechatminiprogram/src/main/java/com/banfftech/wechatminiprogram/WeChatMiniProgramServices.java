@@ -74,6 +74,60 @@ public class WeChatMiniProgramServices {
 
 
     /**
+     * 检查当前SKU是否能够下单
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> checkSkusIsRight(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String msg = null;
+
+        String productId = (String) context.get("productId");
+        String amount = (String) context.get("amount");
+        String price = (String) context.get("price");
+
+        //检查价格
+        GenericValue productPrice = EntityQuery.use(delegator).from("ProductAndPriceView").where(UtilMisc.toMap("productId", productId)).queryFirst();
+        String priceStr = productPrice.get("price")+"";
+        if(!priceStr.equals(price)){
+            msg = productPrice.getString("productName")+"的价格已经调整!";
+            resultMap.put("msg",msg);
+            return resultMap;
+        }
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+        String productStoreId = category.getString("productStoreId");
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //检查库存
+        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
+                "facilityId",inventoryFacilityId,"productId",productId));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal")+"";
+            if(Integer.parseInt(availableToPromiseTotal)<Integer.parseInt(amount)){
+                msg = productPrice.getString("productName")+"的库存不足!";
+                resultMap.put("msg",msg);
+                return resultMap;
+            }
+        }
+
+        return resultMap;
+    }
+
+
+    /**
      * assocCustToSalesRep
      * @param dctx
      * @param context

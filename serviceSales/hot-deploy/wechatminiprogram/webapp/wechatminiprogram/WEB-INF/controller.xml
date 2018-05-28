@@ -29,6 +29,14 @@
 
 
 
+    <!-- 效验产品库存、价格是否一致 -->
+    <request-map uri="checkSkusIsRight">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="checkSkusIsRight"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- 查产品Sku -->
     <request-map uri="querySku">
         <security https="false" auth="false"/>

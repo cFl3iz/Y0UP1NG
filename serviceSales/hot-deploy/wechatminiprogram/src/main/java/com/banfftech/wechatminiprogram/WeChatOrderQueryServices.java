@@ -1775,13 +1775,14 @@ public class WeChatOrderQueryServices {
             for (GenericValue gv : queryMyResourceOrderList) {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
-                rowMap = gv.getAllFields();
 
+                rowMap = gv.getAllFields();
+                String statusId = (String) gv.get("statusId");
                 Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId",rowMap.get("orderId")));
-
-                rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
-
+                if(!statusId.equals("ORDER_CANCELLED")){
+                    rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
+                }
                 //隐藏
                 if(null!=hiddenList){
                     if(hiddenList.contains(rowMap.get("orderId"))){
@@ -1823,7 +1824,7 @@ public class WeChatOrderQueryServices {
 //                }
 
                 rowMap.put("payToPartyId", payToPartyId);
-                String statusId = (String) gv.get("statusId");
+
 
 
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
@@ -1925,6 +1926,10 @@ public class WeChatOrderQueryServices {
                     if (!rowMap.get("orderPayStatus").equals("未付款")) {
                         myResourceOrderList.add(rowMap);
                     }
+                }
+                //已取消的情况
+                if(statusId.equals("ORDER_CANCELLED")){
+                    rowMap.put("orderPayStatus","已取消");
                 }
             }
         }
@@ -2064,11 +2069,14 @@ public class WeChatOrderQueryServices {
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
                 rowMap = gv.getAllFields();
+                String statusId = (String) gv.get("statusId");
 
                 Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId",rowMap.get("orderId")));
 
-                rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
+                if(!statusId.equals("ORDER_CANCELLED")){
+                    rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
+                }
 
                 //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)
 
@@ -2165,7 +2173,6 @@ public class WeChatOrderQueryServices {
                 }
 
 
-                String statusId = (String) gv.get("statusId");
 
                 //区分订单状态
                 if (statusId.toLowerCase().indexOf("comp") > 0) {
@@ -2264,6 +2271,9 @@ public class WeChatOrderQueryServices {
                 }
                 if (UtilValidate.isEmpty(orderStatusId)) {
                     orderList.add(rowMap);
+                }
+                if(statusId.equals("ORDER_CANCELLED")){
+                    rowMap.put("orderPayStatus","已取消");
                 }
 
             }

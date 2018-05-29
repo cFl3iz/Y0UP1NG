@@ -6438,6 +6438,10 @@ public class PersonManagerServices {
             String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
             String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);
 
+            System.out.println("->productId:"+productId);
+            System.out.println("->amount:"+amount);
+
+
 
             GenericValue category = EntityQuery.use(delegator).from("ProductCategoryAndMember").where("productId", productId).queryFirst();
             String rowStoreId = category.getString("productStoreId");

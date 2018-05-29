@@ -3014,8 +3014,13 @@ public class PersonManagerServices {
 
         String changeReason = context.get("changeReason") == null ? "default change" : (String) context.get("changeReason");
 
+//        Map<String, Object> changeOrderStatusMap =
+//                dispatcher.runSync("changeOrderStatus", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "statusId", "ORDER_CANCELLED", "changeReason", changeReason));
+//        if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
+//            return changeOrderStatusMap;
+//        }
         Map<String, Object> changeOrderStatusMap =
-                dispatcher.runSync("changeOrderStatus", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "statusId", "ORDER_CANCELLED", "changeReason", changeReason));
+                dispatcher.runSync("cancelOrderItem", UtilMisc.toMap("userLogin", admin, "orderId", orderId));
         if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
             return changeOrderStatusMap;
         }

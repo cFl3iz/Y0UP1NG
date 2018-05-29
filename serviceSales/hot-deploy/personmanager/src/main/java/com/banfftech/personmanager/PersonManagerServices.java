@@ -6447,7 +6447,7 @@ public class PersonManagerServices {
 
 
 
-            GenericValue category = EntityQuery.use(delegator).from("ProductCategoryAndMember").where("productId", productId).queryFirst();
+            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
             String rowStoreId = category.getString("productStoreId");
 
 

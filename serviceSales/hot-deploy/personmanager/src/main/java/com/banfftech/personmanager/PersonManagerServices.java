@@ -6626,7 +6626,7 @@ public class PersonManagerServices {
         return orderId;
     }
 
-    private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key,String partyId) {
+    private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key,String partyId)throws GenericEntityException {
         List<GenericValue> productPromoUses = new LinkedList<GenericValue>();
         List<GenericValue> productPromoUseInfoList  =  EntityQuery.use(delegator).from("StorePromoAndAction").where("productStoreId", key).queryList();
         int sequenceValue = 0;

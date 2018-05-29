@@ -1726,7 +1726,7 @@ public class WeChatOrderQueryServices {
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         } else {
-            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
+//            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         }
@@ -1987,7 +1987,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("payToPartyId");
 
         EntityCondition findConditions3 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
-        EntityCondition orderCancelCondition = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
+//        EntityCondition orderCancelCondition = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
         EntityCondition findConditions = EntityCondition
                 .makeCondition("partyId", EntityOperator.EQUALS, partyId);
 

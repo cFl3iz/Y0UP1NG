@@ -6452,7 +6452,7 @@ public class PersonManagerServices {
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
             String rowStoreId = category.getString("productStoreId");
-
+            System.out.println("->rowStoreId:"+rowStoreId);
             System.out.println("->splitOrderItemList==null?"+(null == splitOrderItemList.get(rowStoreId)));
             System.out.println("->splitOrderItemList=="+(splitOrderItemList.get(rowStoreId)));
             //还没放过的店铺
@@ -6488,8 +6488,11 @@ public class PersonManagerServices {
             itemProduct.set("prodCatalogId", prodCatalogId);
 
 
+            System.out.println("->orderItemList add  before:"+orderItemList.size()+"|"+orderItemList.toString());
             orderItemList.add(itemProduct);
+            System.out.println("->orderItemList add  after:"+orderItemList.size()+"|"+orderItemList.toString());
             splitOrderItemList.put(rowStoreId, orderItemList);
+            System.out.println("->splitOrderItemList get list :"+splitOrderItemList.get(rowStoreId).toString());
         }
 
 

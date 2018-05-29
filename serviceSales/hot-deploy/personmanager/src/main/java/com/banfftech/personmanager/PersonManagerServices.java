@@ -6574,6 +6574,10 @@ public class PersonManagerServices {
 
             createOrderServiceIn.put("supplierPartyId", billFromVendorPartyId);
             createOrderServiceIn.put("shipFromVendorPartyId", billFromVendorPartyId);
+            createOrderServiceIn.put("orderProductPromoUses", makeProductPromoUses(delegator,dispatcher,key,partyId));
+
+
+
             createOrderServiceIn.put("userLogin", admin);
 
 
@@ -6620,6 +6624,29 @@ public class PersonManagerServices {
 
 
         return orderId;
+    }
+
+    private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key,String partyId) {
+        List<GenericValue> productPromoUses = new LinkedList<GenericValue>();
+        List<GenericValue> productPromoUseInfoList  =  EntityQuery.use(delegator).from("StorePromoAndAction").where("productStoreId", key).queryList();
+        int sequenceValue = 0;
+        for (GenericValue productPromoUseInfo: productPromoUseInfoList) {
+            if(productPromoUseInfo.get("amount")==null || UtilValidate.isEmpty(productPromoUseInfo.get("amount"))){
+                //maybe action service
+                continue;
+            }
+            GenericValue productPromoUse = delegator.makeValue("ProductPromoUse");
+            productPromoUse.set("promoSequenceId", org.apache.ofbiz.base.util.UtilFormatOut.formatPaddedNumber(sequenceValue, 5));
+            productPromoUse.set("productPromoId", productPromoUseInfo.get("productPromoId"));
+            productPromoUse.set("totalDiscountAmount", productPromoUseInfo.get("amount"));
+//            productPromoUse.set("quantityLeftInActions", productPromoUseInfo.getQuantityLeftInActions());
+            productPromoUse.set("partyId", partyId);
+            productPromoUses.add(productPromoUse);
+            sequenceValue++;
+        }
+        return productPromoUses;
+
+
     }
 
 

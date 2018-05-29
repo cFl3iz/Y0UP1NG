@@ -6503,9 +6503,9 @@ public class PersonManagerServices {
         }
 
 
-        resultMap.put("partyIdFrom", partyId);
-        resultMap.put("partyIdTo", payToPartyId);
-        resultMap.put("relationEnum", "C2CRSS");
+//        resultMap.put("partyIdFrom", partyId);
+//        resultMap.put("partyIdTo", payToPartyId);
+//        resultMap.put("relationEnum", "C2CRSS");
 
         //单店铺
         if (orderIds == null) {

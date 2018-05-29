@@ -6437,7 +6437,7 @@ public class PersonManagerServices {
 
             String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
             if(productId.indexOf("[")>-1){
-                    productId = productId.replaceAll("[","");
+                    productId = productId.replaceAll("\\[","");
             }
 
             String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);

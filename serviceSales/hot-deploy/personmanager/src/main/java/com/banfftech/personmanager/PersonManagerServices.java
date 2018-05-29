@@ -6430,11 +6430,14 @@ public class PersonManagerServices {
 
 
         int index = 1;
+        System.out.println("->productsArray:"+productsArray.toString());
         for (String rowProduct : productsArray) {
 
             //Order Items
             List<GenericValue> orderItemList = null;
-
+            if(rowProduct.indexOf(":")<0){
+                break;
+            }
             String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
             if(productId.indexOf("[")>-1){
                     productId = productId.replaceAll("\\[","");

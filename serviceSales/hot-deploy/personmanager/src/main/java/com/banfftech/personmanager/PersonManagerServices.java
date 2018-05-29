@@ -6574,7 +6574,7 @@ public class PersonManagerServices {
 
             createOrderServiceIn.put("supplierPartyId", billFromVendorPartyId);
             createOrderServiceIn.put("shipFromVendorPartyId", billFromVendorPartyId);
-            createOrderServiceIn.put("orderProductPromoUses", makeProductPromoUses(delegator,dispatcher,key,partyId));
+//            createOrderServiceIn.put("orderProductPromoUses", makeProductPromoUses(delegator,dispatcher,key,partyId));
 
 
 

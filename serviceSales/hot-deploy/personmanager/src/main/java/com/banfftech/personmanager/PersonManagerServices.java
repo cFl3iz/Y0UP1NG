@@ -1907,15 +1907,18 @@ public class PersonManagerServices {
         List<String> orderBy = UtilMisc.toList("-fromDate");
         GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber, "isValid", "N").orderBy(orderBy).queryFirst();
 
+        //UTF-8代表微信授权出来的手机则不效验。
+        if(!captcha.equals("UTF-8")){
+            if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
+                smsValidateCode.set("isValid", "Y");
+                smsValidateCode.store();
+            } else {
+                resultMap.put("message", "验证码错误!");
 
-        if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
-            smsValidateCode.set("isValid", "Y");
-            smsValidateCode.store();
-        } else {
-            resultMap.put("message", "验证码错误!");
-
-            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+            }
         }
+
 
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryFirst();

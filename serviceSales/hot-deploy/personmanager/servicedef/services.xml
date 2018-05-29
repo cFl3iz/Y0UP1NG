@@ -1165,6 +1165,7 @@
 
 
         <attribute name="orderId" type="String" mode="OUT" optional="true"/>
+        <attribute name="grandTotal" type="String" mode="OUT" optional="true"/>
 
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

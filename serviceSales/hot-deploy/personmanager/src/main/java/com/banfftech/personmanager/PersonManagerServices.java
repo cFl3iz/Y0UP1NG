@@ -6453,7 +6453,8 @@ public class PersonManagerServices {
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
             String rowStoreId = category.getString("productStoreId");
 
-
+            System.out.println("->splitOrderItemList==null?"+(null == splitOrderItemList.get(rowStoreId)));
+            System.out.println("->splitOrderItemList=="+(splitOrderItemList.get(rowStoreId)));
             //还没放过的店铺
             if (null == splitOrderItemList.get(rowStoreId)) {
                 orderItemList = new ArrayList<GenericValue>();

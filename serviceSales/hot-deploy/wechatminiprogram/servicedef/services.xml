@@ -15,7 +15,7 @@
         <attribute name="amount" type="String"    mode="IN"  optional="true" />
         <attribute name="price"    type="String"    mode="IN"  optional="true" />
 
-        <attribute name="msg"    type="String"    mode="IN"  optional="true" />
+        <attribute name="msg"    type="String"    mode="OUT"  optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>
 

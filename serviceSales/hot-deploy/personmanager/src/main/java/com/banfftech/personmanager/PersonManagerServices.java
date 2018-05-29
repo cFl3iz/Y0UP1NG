@@ -6457,6 +6457,7 @@ public class PersonManagerServices {
             System.out.println("->splitOrderItemList=="+(splitOrderItemList.get(rowStoreId)));
             //还没放过的店铺
             if (null == splitOrderItemList.get(rowStoreId)) {
+                index = 1;
                 orderItemList = new ArrayList<GenericValue>();
             } else {
                 orderItemList = splitOrderItemList.get(rowStoreId);
@@ -6493,6 +6494,7 @@ public class PersonManagerServices {
             System.out.println("->orderItemList add  after:"+orderItemList.size()+"|"+orderItemList.toString());
             splitOrderItemList.put(rowStoreId, orderItemList);
             System.out.println("->splitOrderItemList get list :"+splitOrderItemList.get(rowStoreId).toString());
+            index += 1;
         }
 
 
@@ -6557,6 +6559,7 @@ public class PersonManagerServices {
 
             createOrderServiceIn.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
             createOrderServiceIn.put("orderName", key + "_" + System.currentTimeMillis());
+            System.out.println("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> orderItemListSize :" + orderItemList.size());
             createOrderServiceIn.put("orderItems", orderItemList);
             createOrderServiceIn.put("orderTypeId", PeConstant.SALES_ORDER);
             createOrderServiceIn.put("partyId", partyId);

@@ -413,6 +413,17 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+    <!-- Buy Shopping Cart -->
+    <request-map uri="placeResourcesOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placeResourcesOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="addProductRole">
         <security https="false" auth="false"/>
         <event type="service" invoke="addProductRole"/>

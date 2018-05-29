@@ -75,6 +75,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * 检查当前SKU是否能够下单
+     *
      * @param dctx
      * @param context
      * @return
@@ -101,10 +102,10 @@ public class WeChatMiniProgramServices {
 
         //检查价格
         GenericValue productPrice = EntityQuery.use(delegator).from("ProductAndPriceView").where(UtilMisc.toMap("productId", productId)).queryFirst();
-        String priceStr = productPrice.get("price")+"";
-        if(!priceStr.equals(price)){
-            msg = productPrice.getString("productName")+"的价格已经调整!";
-            resultMap.put("msg",msg);
+        String priceStr = productPrice.get("price") + "";
+        if (!priceStr.equals(price)) {
+            msg = productPrice.getString("productName") + "的价格已经调整!";
+            resultMap.put("msg", msg);
             return resultMap;
         }
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
@@ -112,13 +113,13 @@ public class WeChatMiniProgramServices {
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
         String inventoryFacilityId = store.getString("inventoryFacilityId");
         //检查库存
-        Map<String,Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility",UtilMisc.toMap("userLogin",admin,
-                "facilityId",inventoryFacilityId,"productId",productId));
+        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                "facilityId", inventoryFacilityId, "productId", productId));
         if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal")+"";
-            if(Integer.parseInt(availableToPromiseTotal)<Integer.parseInt(amount)){
-                msg = productPrice.getString("productName")+"的库存不足!";
-                resultMap.put("msg",msg);
+            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "";
+            if (Integer.parseInt(availableToPromiseTotal) < Integer.parseInt(amount)) {
+                msg = productPrice.getString("productName") + "的库存不足!";
+                resultMap.put("msg", msg);
                 return resultMap;
             }
         }
@@ -129,6 +130,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * assocCustToSalesRep
+     *
      * @param dctx
      * @param context
      * @return
@@ -152,8 +154,8 @@ public class WeChatMiniProgramServices {
 
 
         //建立我与他的partyRelationship
-        boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,salesPartyId);
-        if(!isSuccess){
+        boolean isSuccess = assocCustToSalesRep(admin, delegator, dispatcher, partyId, salesPartyId);
+        if (!isSuccess) {
             Debug.logInfo("*Assoc Cust To SalesRep Relationship Fail:" + isSuccess, module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ASSOC_PRELATION_ERROR", locale));
         }
@@ -164,6 +166,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * 加入转发链
+     *
      * @param dctx
      * @param context
      * @return
@@ -185,9 +188,7 @@ public class WeChatMiniProgramServices {
         String dateKey = (String) context.get("dateKey");
         String partyIdFrom = (String) context.get("partyIdFrom");
         String partyId = userLogin.getString("partyId");
-        String appId   = (String) context.get("appId");
-
-
+        String appId = (String) context.get("appId");
 
 
         Debug.logInfo("*joinForwardChain", module);
@@ -209,7 +210,7 @@ public class WeChatMiniProgramServices {
                 productStoreId = "ZUCZUGSTORE";
             }
             //Demo小程序
-            if(PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())){
+            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
 //                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
 //                productStoreId = (String) store.get("productStoreId");
                 //暂时先用素然的
@@ -222,8 +223,6 @@ public class WeChatMiniProgramServices {
                 productStoreId = "KANGCHENGSTORE";
             }
         }
-
-
 
 
         /**
@@ -244,18 +243,18 @@ public class WeChatMiniProgramServices {
          * 2.LogicBlock
          * 将我点开的这个动作,记录到链条中
          */
-        addAddressRoleToWorkeffort(dispatcher,delegator,admin,partyId,workEffortId);
+        addAddressRoleToWorkeffort(dispatcher, delegator, admin, partyId, workEffortId);
         /**
          * 3.LogicBlock
          * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
          */
-        GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId",productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
 
-        if(null!=isSalesRep){
+        if (null != isSalesRep) {
             //建立我与他的partyRelationship
-            boolean isSuccess    =    assocCustToSalesRep(admin,delegator,dispatcher,partyId,partyIdFrom);
-            if(!isSuccess){
+            boolean isSuccess = assocCustToSalesRep(admin, delegator, dispatcher, partyId, partyIdFrom);
+            if (!isSuccess) {
                 Debug.logInfo("*Assoc Cust To SalesRep Relationship Fail:" + isSuccess, module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ASSOC_PRELATION_ERROR", locale));
             }
@@ -265,13 +264,14 @@ public class WeChatMiniProgramServices {
          * 4.LogicBlock
          * 如果初始链中的是一个产品,则要增加浏览量。
          */
-        updateProductBizData(delegator,dispatcher,admin,partyId,objectId,workEffortId,"ADDRESSEE_PRODUCT");
+        updateProductBizData(Integer.parseInt("1"),delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
 
         return resultMap;
     }
 
     /**
      * 建立销售代表和客户的关系
+     *
      * @param delegator
      * @param dispatcher
      * @param partyId
@@ -280,7 +280,7 @@ public class WeChatMiniProgramServices {
      * @throws GenericServiceException
      */
     private static boolean assocCustToSalesRep(GenericValue admin, Delegator delegator, LocalDispatcher dispatcher, String partyId, String partyIdFrom)
-            throws GenericEntityException,GenericServiceException  {
+            throws GenericEntityException, GenericServiceException {
         GenericValue dataRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdFrom", partyIdFrom,
                 "partyIdTo", partyId,
@@ -377,7 +377,7 @@ public class WeChatMiniProgramServices {
                 Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
             }
-              newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+            newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
             //关联父子链路
             Map<String, Object> createWorkEffortAssocMap = UtilMisc.toMap("userLogin", userLogin,
@@ -398,7 +398,7 @@ public class WeChatMiniProgramServices {
                         Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
                     }
                     // Update ForWard Count
-                    updateProductBizData(delegator,dispatcher,admin,partyId,objectId,beforeChainId,"FORWARD_PRODUCT");
+                    updateProductBizData(Integer.parseInt("1"),delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
                     break;
                 case "CATALOG":
                     Map<String, Object> createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
@@ -429,7 +429,7 @@ public class WeChatMiniProgramServices {
                 Debug.logInfo("*Create WorkEffort Fail:" + serviceResultByCreateWorkEffortMap, module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "WORK_EFFORT_CREATE_FAIL", locale));
             }
-             newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+            newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
             switch (objectType) {
                 case "PRODUCT":
                     Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", userLogin, "statusId", "WEGS_CREATED",
@@ -440,7 +440,7 @@ public class WeChatMiniProgramServices {
                     }
 
                     //创建我的产品业务事件
-                    createProductBizData(delegator,dispatcher,admin,partyId,objectId,newWorkEffortId,"FORWARD_PRODUCT");
+                    createProductBizData(delegator, dispatcher, admin, partyId, objectId, newWorkEffortId, "FORWARD_PRODUCT");
 
                     break;
                 case "CATALOG":
@@ -462,8 +462,6 @@ public class WeChatMiniProgramServices {
             }
 
 
-
-
         }
 
 
@@ -471,13 +469,14 @@ public class WeChatMiniProgramServices {
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
 
-        resultMap.put("workEffortId",newWorkEffortId);
+        resultMap.put("workEffortId", newWorkEffortId);
 
         return resultMap;
     }
 
     /**
      * 创建我的唯一产品业务统计数据
+     *
      * @param delegator
      * @param dispatcher
      * @param admin
@@ -488,21 +487,21 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException, GenericServiceException{
+    private static void createProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId, String bizTypeId) throws GenericEntityException, GenericServiceException {
 
         // Find If Not Exsits
 
-        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", partyId , "productId" , productId).queryFirst();
+        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", partyId, "productId", productId).queryFirst();
 
-        if(null == productBizData){
+        if (null == productBizData) {
             // Create
             Map<String, Object> createProductBizData = new HashMap<String, Object>();
-            createProductBizData.put("ownerPartyId",partyId);
-            createProductBizData.put("productId",productId);
-            createProductBizData.put("addresseeCount","0");
-            createProductBizData.put("forwardCount","0");
-            createProductBizData.put("buyCount","0");
-            createProductBizData.put("dataId",delegator.getNextSeqId("ProductBizData"));
+            createProductBizData.put("ownerPartyId", partyId);
+            createProductBizData.put("productId", productId);
+            createProductBizData.put("addresseeCount", "0");
+            createProductBizData.put("forwardCount", "0");
+            createProductBizData.put("buyCount", "0");
+            createProductBizData.put("dataId", delegator.getNextSeqId("ProductBizData"));
             createProductBizData.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
             GenericValue bizData = delegator.makeValue("ProductBizData", createProductBizData);
             bizData.create();
@@ -512,6 +511,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * updateProductBizData
+     *
      * @param delegator
      * @param dispatcher
      * @param admin
@@ -522,61 +522,62 @@ public class WeChatMiniProgramServices {
      * @throws GenericEntityException
      * @throws GenericServiceExcetpion
      */
-    public static void updateProductBizData(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId,String bizTypeId) throws GenericEntityException, GenericServiceException{
+    public static void updateProductBizData(int count, Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId, String bizTypeId) throws GenericEntityException, GenericServiceException {
 
 
-        String workEffortId  =  objectId;
+        String workEffortId = objectId;
 
-        GenericValue workEffortAndReferrer = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where("workEffortId",workEffortId).queryFirst();
+        GenericValue workEffortAndReferrer = EntityQuery.use(delegator).from("WorkEffortAndPartyReFerrer").where("workEffortId", workEffortId).queryFirst();
 
-        if(null!=workEffortAndReferrer){
+        if (null != workEffortAndReferrer) {
 
-        String ownerPartyId = workEffortAndReferrer.getString("workEffortId");
+            String ownerPartyId = workEffortAndReferrer.getString("workEffortId");
 
-        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId , "productId" , productId).queryFirst();
+            GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
 
-        if(null == productBizData){
+            if (null == productBizData) {
 
-        }else{
-            String dataId = productBizData.getString("dataId");
-            switch (bizTypeId){
-                case "FORWARD_PRODUCT":
-                    String forwardCount = productBizData.getString("forwardCount");
-                    productBizData.set("forwardCount", (Integer.parseInt(forwardCount)+1)+"");
-                break;
-                case "ADDRESSEE_PRODUCT":
-                    String addresseeCount = productBizData.getString("addresseeCount");
-                    productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount)+1)+"");
-                    break;
-                case "BUY_PRODUCT":
-                    String buyCount = productBizData.getString("buyCount");
-                    productBizData.set("buyCount", (Integer.parseInt(buyCount)+1)+"");
-                    break;
+            } else {
+                String dataId = productBizData.getString("dataId");
+                switch (bizTypeId) {
+                    case "FORWARD_PRODUCT":
+                        String forwardCount = productBizData.getString("forwardCount");
+                        productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
+                        break;
+                    case "ADDRESSEE_PRODUCT":
+                        String addresseeCount = productBizData.getString("addresseeCount");
+                        productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
+                        break;
+                    case "BUY_PRODUCT":
+                        String buyCount = productBizData.getString("buyCount");
+                        productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
+                        break;
+                }
+
+                productBizData.store();
+
+                // Do Create Detail
+                createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
             }
-
-            productBizData.store();
-
-            // Do Create Detail
-            createProductBizDataDetail(delegator, dataId,objectId,partyId,bizTypeId);
-        }
         }
     }
 
     /**
      * 创建产品业务事件数据明细
+     *
      * @param dataId
      * @param objectId
      * @param partyId
      * @param bizTypeId
      */
-    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId) throws GenericEntityException, GenericServiceException{
+    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId) throws GenericEntityException, GenericServiceException {
 
         // Create Detail Data
         Map<String, Object> createProductBizDataDetail = new HashMap<String, Object>();
-        createProductBizDataDetail.put("partyId",partyId);
-        createProductBizDataDetail.put("objectId",objectId);
-        createProductBizDataDetail.put("dataId",dataId);
-        createProductBizDataDetail.put("bizTypeId",bizTypeId);
+        createProductBizDataDetail.put("partyId", partyId);
+        createProductBizDataDetail.put("objectId", objectId);
+        createProductBizDataDetail.put("dataId", dataId);
+        createProductBizDataDetail.put("bizTypeId", bizTypeId);
         createProductBizDataDetail.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
         GenericValue productBizDataDetail = delegator.makeValue("ProductBizDataDetail", createProductBizDataDetail);
         productBizDataDetail.create();

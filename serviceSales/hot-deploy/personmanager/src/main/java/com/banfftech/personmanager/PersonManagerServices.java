@@ -719,13 +719,13 @@ public class PersonManagerServices {
         String salesRepId = (String) context.get("salesRepId");
 
         // 如果打开了一个没有销售代表的链接
-        if(salesRepId==null){
+        if (salesRepId == null) {
             String workEffortId = queryShareFromWorkEffortId(delegator, productId, shareFromId, shareFromId);
-           boolean isAddRoleSuccess = addAddressRoleToWorkeffort(dispatcher, delegator, admin, partyId, workEffortId);
-            if(isAddRoleSuccess){
+            boolean isAddRoleSuccess = addAddressRoleToWorkeffort(dispatcher, delegator, admin, partyId, workEffortId);
+            if (isAddRoleSuccess) {
                 return resultMap;
-            }else{
-                Debug.logInfo("AddedAddressee Fail",module);
+            } else {
+                Debug.logInfo("AddedAddressee Fail", module);
             }
         }
 
@@ -1042,6 +1042,7 @@ public class PersonManagerServices {
 
         return shareWorkEffortId;
     }
+
     //上层转发连不是销售代表
     public static String queryShareFromWorkEffortId(Delegator delegator, String productId, String sharePartyId, String shareFromId) throws GenericEntityException {
 
@@ -1050,7 +1051,7 @@ public class PersonManagerServices {
         String shareWorkEffortId = "NA";
 
         GenericValue workEffortAndProductAndParty = EntityQuery.use(delegator).from("WorkEffortAndProductAndPartyReFerrer")
-                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId +shareFromId)).queryFirst();
+                .where(UtilMisc.toMap("productId", productId, "partyId", sharePartyId, "description", productId + shareFromId)).queryFirst();
         if (null != workEffortAndProductAndParty) {
             shareWorkEffortId = workEffortAndProductAndParty.getString("workEffortId");
         }
@@ -1129,17 +1130,16 @@ public class PersonManagerServices {
     public static String createShareWorkEffort(LocalDispatcher dispatcher, Delegator delegator, GenericValue userLogin, String productId, String nowPartyId, String salesRepId) throws GenericServiceException, GenericEntityException {
 
 
-
         String newWorkEffortId = "NA";
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
         Map<String, Object> createWorkEffortMap = null;
-        if(null!=salesRepId) {
-         createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+        if (null != salesRepId) {
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
                     "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId + salesRepId + nowPartyId,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
-        }else{
-             createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId +  nowPartyId,
+        } else {
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+                    "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId + nowPartyId,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
         }
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
@@ -1159,7 +1159,7 @@ public class PersonManagerServices {
             Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
 
         }
-        if(null!=salesRepId) {
+        if (null != salesRepId) {
             //增加销售代表
             Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", userLogin, "partyId", salesRepId,
                     "roleTypeId", "SALES_REP", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
@@ -1171,7 +1171,7 @@ public class PersonManagerServices {
 
         //                //REFERRER
         //增加当前转发者对于转发引用的关联角色
-        Map<String, Object>  createReferrerMap = UtilMisc.toMap("userLogin", userLogin, "partyId", nowPartyId,
+        Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", userLogin, "partyId", nowPartyId,
                 "roleTypeId", "REFERRER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
         Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
         if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
@@ -2805,9 +2805,6 @@ public class PersonManagerServices {
     }
 
 
-
-
-
     /**
      * TestCreatePeOrder(Demo)
      *
@@ -2922,7 +2919,7 @@ public class PersonManagerServices {
 
         GenericValue invItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
 
-        Debug.logInfo("createOrderItemShipGrpInvRes:quantity:"+quantity,module);
+        Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
 
 
 //        dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
@@ -6318,6 +6315,289 @@ public class PersonManagerServices {
 
 
     /**
+     * 购物车下单
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> placeResourcesOrder(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Sudo
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        // StoreId
+        String productStoreId = (String) context.get("productStoreId");
+        // PayTo
+        String payToPartyId = (String) context.get("payToPartyId");
+        // CatalogId
+        String prodCatalogId = (String) context.get("prodCatalogId");
+        // 订单备注
+        String orderReMark = (String) context.get("orderReMark");
+
+        //SelectProducts
+        String strList = (String) context.get("strList");
+
+        String salesRepId = "";
+
+        /**
+         * 关于当事人的销售代表在订单中的取值逻辑:
+         * 打开来自销售代表转发的产品或目录或其他页面时。
+         * 如果我从未与该销售代表建立当事人关系，则创建关系。
+         * 如果已经存在当事人关系则更新fromDate。
+         * 任意产品下单时,这笔订单的销售代表取自当事人关系中倒序（-fromDate）排第一的销售代表作为本订单销售代表。
+         * >如不存在任何当事人关系(销售代表)时,销售代表仍记给ZUCZUG。
+         * >如下单时自身就是销售代表,则永远记录自己是本订单销售代表。
+         */
+
+        String salesRepPartyId = null;
+        List<String> orderBy = UtilMisc.toList("-fromDate");
+        GenericValue relationSalesRep = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdTo", partyId,
+                "partyRelationshipTypeId", "CUSTOMER_REL",
+                "roleTypeIdTo", "PLACING_CUSTOMER",
+                "roleTypeIdFrom", "SALES_REP").orderBy(orderBy).queryFirst();
+
+        if (null != relationSalesRep) {
+            salesRepId = relationSalesRep.getString("partyIdFrom");
+        }
+        //判断无销售代表Id的情况
+        switch (productStoreId) {
+            case "ZUCZUGSTORE":
+                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+                    salesRepId = "ZUCZUG";
+                }
+                break;
+            case "KANGCHENGSTORE":
+                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+                    salesRepId = "KANGCHENG";
+                }
+                break;
+        }
+
+
+        //判断自身是销售代表的情况
+        GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+
+        if (iamSalesRep != null) {
+            salesRepId = partyId;
+        }
+
+        salesRepPartyId = salesRepId;
+
+
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+        String originFacilityId = (String) facility.get("facilityId");
+
+
+        //订单流程
+
+
+        //供应商
+        String billFromVendorPartyId = payToPartyId;
+
+        //最终客户、收货客户、意向客户等客户当事人
+        String billToCustomerPartyId, endUserCustomerPartyId, placingCustomerPartyId, shipToCustomerPartyId = partyId;
+        //发货人就是供应商
+        String supplierPartyId, shipFromVendorPartyId = billFromVendorPartyId;
+
+        //StoreOrderMap
+        Map<String, Object> createOrderServiceIn = new HashMap<String, Object>();
+
+
+        String[] productsArray = strList.split(",");
+
+        //一个店->一个订单->多个订单项目
+        Map<String, List<GenericValue>> splitOrderItemList = new HashMap<String, List<GenericValue>>();
+
+
+        int index = 1;
+        for (String rowProduct : productsArray) {
+
+            //Order Items
+            List<GenericValue> orderItemList = null;
+
+            String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
+            String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);
+
+
+            GenericValue category = EntityQuery.use(delegator).from("ProductCategoryAndMember").where("productId", productId).queryFirst();
+            String rowStoreId = category.getString("productStoreId");
+
+
+            //还没放过的店铺
+            if (null == splitOrderItemList.get(rowStoreId)) {
+                orderItemList = new ArrayList<GenericValue>();
+            } else {
+                orderItemList = splitOrderItemList.get(rowStoreId);
+            }
+
+
+            GenericValue product = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
+            GenericValue itemProduct = delegator.makeValue("OrderItem", UtilMisc.toMap());
+            itemProduct.set("productId", productId);
+            itemProduct.set("isModifiedPrice", "N");
+            itemProduct.set("shipBeforeDate", null);
+            itemProduct.set("productCategoryId", category.getString("productCategoryId"));
+            // Unit Price = List Price
+            itemProduct.set("unitListPrice", context.get("grandTotal"));
+            itemProduct.set("shoppingListId", null);
+            itemProduct.set("cancelBackOrderDate", null);
+            // Desc To Order Item List
+            itemProduct.set("itemDescription", product.get("productName"));
+            itemProduct.set("selectedAmount", BigDecimal.ZERO);
+            itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
+            itemProduct.set("orderItemSeqId", "0000" + index);
+            itemProduct.set("unitPrice", product.get("price"));
+            itemProduct.set("quantity", new BigDecimal(amount));
+            itemProduct.set("comments", null);
+            itemProduct.set("statusId", PeConstant.ORDER_ITEM_APPROVED_STATUS_ID);
+            itemProduct.set("quoteItemSeqId", null);
+            itemProduct.set("externalId", null);
+            itemProduct.set("supplierProductId", null);
+            itemProduct.set("prodCatalogId", prodCatalogId);
+
+
+            orderItemList.add(itemProduct);
+            splitOrderItemList.put(rowStoreId, orderItemList);
+        }
+
+
+        String orderIds = null;
+        String orderId = null;
+
+        //单店铺2b结算
+        if (splitOrderItemList.size() == 1) {
+            orderId = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList);
+        } else {
+            orderIds = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList);
+        }
+
+
+        resultMap.put("partyIdFrom", partyId);
+        resultMap.put("partyIdTo", payToPartyId);
+        resultMap.put("relationEnum", "C2CRSS");
+
+        //单店铺
+        if (orderIds == null) {
+            Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
+                    UtilMisc.toMap("orderId", orderId));
+            resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
+            resultMap.put("orderId", orderId);
+        } else {
+            String []orderArray = orderId.split(",");
+            Double count = 0.0;
+            for(String rowOrderId : orderArray){
+                Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
+                        UtilMisc.toMap("orderId", rowOrderId));
+                 count +=  Double.parseDouble(calcOrderTotal.get("availableReturnTotal")+ "");
+            }
+            resultMap.put("grandTotal", count+"");
+            resultMap.put("orderId", orderId);
+        }
+
+
+        return resultMap;
+    }
+
+    /**
+     * 生产订单或订单列表
+     *
+     * @param dispatcher
+     * @param splitOrderItemList
+     */
+    private static String doCreateOrder(Delegator delegator,
+                                        String orderReMark,
+                                        String salesRepPartyId,
+                                        String billFromVendorPartyId,
+                                        String partyId,
+                                        GenericValue admin,
+                                        LocalDispatcher dispatcher,
+                                        Map<String, List<GenericValue>> splitOrderItemList)
+            throws GenericServiceException, GenericEntityException {
+        String orderId = null;
+        for (String key : splitOrderItemList.keySet()) {
+            List<GenericValue> orderItemList = splitOrderItemList.get(key);
+            Map<String, Object> createOrderServiceIn = new HashMap<String, Object>();
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", key).queryFirst();
+            String originFacilityId = (String) store.get("inventoryFacilityId");
+
+            createOrderServiceIn.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+            createOrderServiceIn.put("orderName", key + "_" + System.currentTimeMillis());
+            createOrderServiceIn.put("orderItems", orderItemList);
+            createOrderServiceIn.put("orderTypeId", PeConstant.SALES_ORDER);
+            createOrderServiceIn.put("partyId", partyId);
+            createOrderServiceIn.put("billFromVendorPartyId", billFromVendorPartyId);
+            createOrderServiceIn.put("productStoreId", key);
+            createOrderServiceIn.put("originFacilityId", originFacilityId);
+
+            createOrderServiceIn.put("billToCustomerPartyId", partyId);
+            createOrderServiceIn.put("endUserCustomerPartyId", partyId);
+            createOrderServiceIn.put("placingCustomerPartyId", partyId);
+            createOrderServiceIn.put("shipToCustomerPartyId", partyId);
+
+            createOrderServiceIn.put("supplierPartyId", billFromVendorPartyId);
+            createOrderServiceIn.put("shipFromVendorPartyId", billFromVendorPartyId);
+            createOrderServiceIn.put("userLogin", admin);
+
+
+            //Do Run Service
+            Map<String, Object> createOrderOut = dispatcher.runSync("storeOrder", createOrderServiceIn);
+
+
+            //销售代表角色
+            if (null != salesRepPartyId) {
+                dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", createOrderOut.get("orderId"), "roleTypeId", "SALES_REP", "partyId", salesRepPartyId));
+            }
+
+
+            // 如果有备注
+            if (!UtilValidate.isEmpty(orderReMark)) {
+                Map<String, Object> createOrderNoteOut = dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId", createOrderOut.get("orderId"), "noteName", "买家备注", "note", orderReMark, "internalNote", "N"));
+
+            }
+
+
+            //  auto approved
+
+            Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus",
+                    UtilMisc.toMap("userLogin", admin,
+                            "orderId", createOrderOut.get("orderId"),
+                            "statusId", PeConstant.ORDER_APPROVED_STATUS_ID));
+
+
+            // 记录购买量
+            for (GenericValue item : orderItemList) {
+                String productId = item.get("productId") + "";
+                String amount = item.get("quantity") + "";
+                updateProductBizData(Integer.parseInt(amount), delegator, dispatcher, admin, partyId, productId, createOrderOut.get("orderId") + "", "BUY_PRODUCT");
+            }
+
+
+            if (null != orderId) {
+                orderId = orderId + "," + (String) createOrderOut.get("orderId");
+            } else {
+                orderId = (String) createOrderOut.get("orderId");
+            }
+
+        }
+
+
+        return orderId;
+    }
+
+
+    /**
      * 资源下单
      *
      * @param dctx
@@ -6525,11 +6805,14 @@ public class PersonManagerServices {
 
         // 记录购买量
 
-        updateProductBizData(delegator,dispatcher,admin,partyId,productId,orderId,"BUY_PRODUCT");
+        updateProductBizData(Integer.parseInt(amount_str), delegator, dispatcher, admin, partyId, productId, orderId, "BUY_PRODUCT");
 
         resultMap.put("partyIdFrom", partyId);
         resultMap.put("partyIdTo", payToPartyId);
         resultMap.put("relationEnum", "C2CRSS");
+        Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
+                UtilMisc.toMap("orderId", orderId));
+        resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
         resultMap.put("orderId", orderId);
 
         return resultMap;

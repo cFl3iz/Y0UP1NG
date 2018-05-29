@@ -1146,6 +1146,31 @@
     </service>
 
 
+    <!-- 结算购物车订单 -->
+    <service name="placeResourcesOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="placeResourcesOrder" auth="false">
+        <description>Place Resources Order</description>
+
+        <attribute name="strList" type="String" mode="IN" optional="true"/>
+
+        <!-- 订单备注 -->
+        <attribute name="orderReMark" type="String" mode="IN" optional="true"/>
+
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="orderId" type="String" mode="OUT" optional="true"/>
+
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
 
 
     <!-- Place Resource Order -->
@@ -1173,8 +1198,8 @@
                    optional="true"/>
 
 
-        <attribute name="orderId" type="String" mode="OUT"
-                   optional="true"/>
+        <attribute name="orderId" type="String" mode="OUT"  optional="true"/>
+        <attribute name="grandTotal" type="String" mode="OUT"  optional="true"/>
 
         <attribute name="partyIdFrom" type="String" mode="OUT"
                    optional="true"/>

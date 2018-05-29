@@ -1716,7 +1716,9 @@ public class WeChatOrderQueryServices {
         if (null != orderStatus && orderStatus.equals("CANCEL")) {
             isCancelled = "1";
         }
-
+        if("ORDER_CANCELLED".equals(orderStatus)){
+            isCancelled ="1";
+        }
 
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
@@ -2000,7 +2002,9 @@ public class WeChatOrderQueryServices {
         if (null != orderStatusId && orderStatusId.equals("CANCEL")) {
             isCancelled = "1";
         }
-
+        if("ORDER_CANCELLED".equals(orderStatusId)){
+            isCancelled ="1";
+        }
         //如果isCancelled 为1  则查询取消的订单。
         if (!UtilValidate.isEmpty(isCancelled) && isCancelled.equals("1")) {
             EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");

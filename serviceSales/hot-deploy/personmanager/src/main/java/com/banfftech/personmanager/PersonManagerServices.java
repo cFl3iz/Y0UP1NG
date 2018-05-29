@@ -6436,7 +6436,7 @@ public class PersonManagerServices {
             List<GenericValue> orderItemList = null;
 
             String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
-            if(productId.indexOf("[")>0){
+            if(productId.indexOf("[")>-1){
                     productId = productId.replaceAll("[","");
             }
 

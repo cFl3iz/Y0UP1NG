@@ -6474,7 +6474,7 @@ public class PersonManagerServices {
             Double rowPrice = Double.parseDouble(product.get("price") + "");
             Double rowAmount = Double.parseDouble(amount);
             Double rowListPrice = rowPrice * rowAmount;
-            itemProduct.set("unitListPrice", rowListPrice.toString());
+            itemProduct.set("unitListPrice", new BigDecimal(rowListPrice.toString()));
             itemProduct.set("shoppingListId", null);
             itemProduct.set("cancelBackOrderDate", null);
             // Desc To Order Item List

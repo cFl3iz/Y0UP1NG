@@ -1683,6 +1683,7 @@ public class WeChatOrderQueryServices {
 
         String orderStatus = (String) context.get("orderStatus");
 
+//        [unitPrice, quantity, productId, payToPartyId] (In selectListIteratorByCondition invalid field names specified:
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
@@ -1690,15 +1691,16 @@ public class WeChatOrderQueryServices {
         fieldSet.add("statusId");
         fieldSet.add("currencyUom");
         fieldSet.add("grandTotal");
-        fieldSet.add("productId");
-        fieldSet.add("quantity");
-        fieldSet.add("unitPrice");
+//        fieldSet.add("productId");
+//        fieldSet.add("quantity");
+//        fieldSet.add("unitPrice");
+//        fieldSet.add("payToPartyId");
+
         fieldSet.add("internalCode");
 
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
-        fieldSet.add("payToPartyId");
 
 
         //  EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
@@ -1980,13 +1982,13 @@ public class WeChatOrderQueryServices {
         fieldSet.add("statusId");
         fieldSet.add("currencyUom");
         fieldSet.add("grandTotal");
-        fieldSet.add("productId");
-        fieldSet.add("quantity");
-        fieldSet.add("unitPrice");
+//        fieldSet.add("productId");
+//        fieldSet.add("quantity");
+//        fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
-        fieldSet.add("payToPartyId");
+//        fieldSet.add("payToPartyId");
 
         EntityCondition findConditions3 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
 //        EntityCondition orderCancelCondition = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");

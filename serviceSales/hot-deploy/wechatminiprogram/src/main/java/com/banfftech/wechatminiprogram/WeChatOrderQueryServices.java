@@ -1804,7 +1804,7 @@ public class WeChatOrderQueryServices {
                     Map<String,Object> itemMap = new HashMap<String, Object>();
                     String productId = (String) items.get("productId");
                     String quantity =  items.get("quantity")+"";
-                    BigDecimal quantityBdc = items.get("quantity");
+                    BigDecimal quantityBdc = (BigDecimal) items.get("quantity");
                     itemMap.put("quantity",quantityBdc.intValue());
                     itemMap.put("productId",productId);
                     List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();
@@ -2133,7 +2133,7 @@ public class WeChatOrderQueryServices {
                     Map<String,Object> itemMap = new HashMap<String, Object>();
                     String productId = (String) items.get("productId");
                     String quantity =  items.get("quantity")+"";
-                    BigDecimal quantityBdc = items.get("quantity");
+                    BigDecimal quantityBdc = (BigDecimal) items.get("quantity");
                     itemMap.put("quantity",quantityBdc.intValue());
                     itemMap.put("productId",productId);
                     List<GenericValue> productFeatureAndAppls = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId).queryList();

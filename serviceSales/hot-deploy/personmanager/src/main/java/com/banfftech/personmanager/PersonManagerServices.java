@@ -6360,6 +6360,19 @@ public class PersonManagerServices {
 
         String salesRepId = "";
 
+
+        /*用户地址*/
+        String userName = (String) context.get("userName");
+        String postalCode = (String) context.get("postalCode");
+        String provinceName = (String) context.get("provinceName");
+        String cityName = (String) context.get("cityName");
+        String countyName = (String) context.get("countyName");
+        String detailInfo = (String) context.get("detailInfo");
+        String nationalCode = (String) context.get("nationalCode");
+        String telNumber = (String) context.get("telNumber");
+
+
+
         /**
          * 关于当事人的销售代表在订单中的取值逻辑:
          * 打开来自销售代表转发的产品或目录或其他页面时。
@@ -6497,9 +6510,11 @@ public class PersonManagerServices {
 
         //单店铺2b结算
         if (splitOrderItemList.size() == 1) {
-            orderId = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList);
+            orderId = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList
+            ,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber);
         } else {
-            orderIds = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList);
+            orderIds = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList
+                    ,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber);
         }
 
 
@@ -6542,7 +6557,14 @@ public class PersonManagerServices {
                                         String partyId,
                                         GenericValue admin,
                                         LocalDispatcher dispatcher,
-                                        Map<String, List<GenericValue>> splitOrderItemList)
+                                        Map<String, List<GenericValue>> splitOrderItemList,
+                                        String provinceName,
+                                        String cityName,
+                                        String countyName,
+                                        String detailInfo,
+                                        String postalCode,
+                                        String userName,
+                                        String telNumber)
             throws GenericServiceException, GenericEntityException {
         String orderId = null;
         for (String key : splitOrderItemList.keySet()) {
@@ -6607,7 +6629,9 @@ public class PersonManagerServices {
                 updateProductBizData(Integer.parseInt(amount), delegator, dispatcher, admin, partyId, productId, createOrderOut.get("orderId") + "", "BUY_PRODUCT");
             }
 
+            //判断是不是只有一个orderId
 
+            addShipAddressToOrder(delegator,dispatcher,partyId,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber,(String) createOrderOut.get("orderId"),admin,admin);
             if (null != orderId) {
                 orderId = orderId + "," + (String) createOrderOut.get("orderId");
             } else {
@@ -6619,6 +6643,59 @@ public class PersonManagerServices {
 
         return orderId;
     }
+
+
+    public static void addShipAddressToOrder(Delegator delegator,LocalDispatcher dispatcher,
+                                             String partyId,
+                                             String provinceName,
+                                             String cityName,
+                                             String countyName,
+                                             String detailInfo,
+                                             String postalCode,
+                                             String userName,
+                                             String telNumber,
+                                             String orderId,
+                                             GenericValue userLogin,
+                                             GenericValue admin) throws GenericServiceException, GenericEntityException {
+        List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId", partyId, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
+
+        String contactMechId = "";
+        Debug.logInfo("->partyAndPostalAddress:" + "partyId" + partyId + "|address1" + provinceName + " " + cityName + " " + countyName + " " + detailInfo, module);
+        Debug.logInfo("->partyAndPostalAddress:" + partyAndPostalAddress, module);
+
+        if (null == partyAndPostalAddress || partyAndPostalAddress.size() == 0) {
+            // 货运目的地址
+            String contactMechPurposeTypeId = "SHIPPING_LOCATION";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
+            contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+
+        } else {
+            GenericValue contactAddress = (GenericValue) partyAndPostalAddress.get(0);
+            contactMechId = (String) contactAddress.get("contactMechId");
+        }
+
+        //更新一下订单的货运地址
+        Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
+                "userLogin", userLogin, "orderId", orderId,
+                "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
+
+
+
+        if (null != telNumber && !telNumber.trim().equals("")) {
+            // 创建联系电话
+            Map<String, Object> inputTelecom = UtilMisc.toMap();
+            inputTelecom.put("partyId", partyId);
+            inputTelecom.put("contactNumber", telNumber);
+            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+            inputTelecom.put("userLogin", admin);
+            Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+        }
+    }
+
 
     private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key,String partyId)throws GenericEntityException {
         List<GenericValue> productPromoUses = new LinkedList<GenericValue>();

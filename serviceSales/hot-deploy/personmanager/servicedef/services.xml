@@ -1164,6 +1164,16 @@
         <attribute name="payToPartyId" type="String" mode="IN" optional="true"/>
 
 
+        <attribute name="userName" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="provinceName" type="String" mode="IN" optional="true"/>
+        <attribute name="cityName" type="String" mode="IN" optional="true"/>
+        <attribute name="countyName" type="String" mode="IN" optional="true"/>
+        <attribute name="detailInfo" type="String" mode="IN" optional="true"/>
+        <attribute name="nationalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="telNumber" type="String" mode="IN" optional="true"/>
+
+
         <attribute name="orderId" type="String" mode="OUT" optional="true"/>
         <attribute name="grandTotal" type="String" mode="OUT" optional="true"/>
 

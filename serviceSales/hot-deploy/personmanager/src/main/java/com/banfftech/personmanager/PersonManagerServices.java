@@ -2882,6 +2882,9 @@ public class PersonManagerServices {
         itemProduct.set("supplierProductId", null);
         itemProduct.set("prodCatalogId", prodCatalogId);
 
+
+        System.out.println("->itemProduct:"+itemProduct);
+
         orderItemList.add(itemProduct);
 
         createOrderServiceIn.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
@@ -6445,16 +6448,10 @@ public class PersonManagerServices {
 
             String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);
 
-            System.out.println("->productId:"+productId);
-            System.out.println("->amount:"+amount);
-
-
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
             String rowStoreId = category.getString("productStoreId");
-            System.out.println("->rowStoreId:"+rowStoreId);
-            System.out.println("->splitOrderItemList==null?"+(null == splitOrderItemList.get(rowStoreId)));
-            System.out.println("->splitOrderItemList=="+(splitOrderItemList.get(rowStoreId)));
+
             //还没放过的店铺
             if (null == splitOrderItemList.get(rowStoreId)) {
                 index = 1;
@@ -6471,16 +6468,13 @@ public class PersonManagerServices {
             itemProduct.set("shipBeforeDate", null);
             itemProduct.set("productCategoryId", category.getString("productCategoryId"));
             // Unit Price = List Price
-//            Double rowPrice = Double.parseDouble(product.get("price") + "");
-//            Double rowAmount = Double.parseDouble(amount);
-//            Double rowListPrice = rowPrice * rowAmount;
             itemProduct.set("unitListPrice", new BigDecimal(product.get("price")+""));
             itemProduct.set("shoppingListId", null);
             itemProduct.set("cancelBackOrderDate", null);
             // Desc To Order Item List
 
             itemProduct.set("itemDescription", product.get("productName"));
-            itemProduct.set("selectedAmount", new BigDecimal(amount));
+            itemProduct.set("selectedAmount", BigDecimal.ZERO);
             itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
             itemProduct.set("orderItemSeqId", "0000" + index);
             itemProduct.set("unitPrice", product.get("price"));
@@ -6492,12 +6486,8 @@ public class PersonManagerServices {
             itemProduct.set("supplierProductId", null);
             itemProduct.set("prodCatalogId", prodCatalogId);
 
-
-            System.out.println("->orderItemList add  before:"+orderItemList.size()+"|"+orderItemList.toString());
             orderItemList.add(itemProduct);
-            System.out.println("->orderItemList add  after:"+orderItemList.size()+"|"+orderItemList.toString());
             splitOrderItemList.put(rowStoreId, orderItemList);
-            System.out.println("->splitOrderItemList get list :"+splitOrderItemList.get(rowStoreId).toString());
             index += 1;
         }
 

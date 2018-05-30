@@ -6471,10 +6471,14 @@ public class PersonManagerServices {
             itemProduct.set("shipBeforeDate", null);
             itemProduct.set("productCategoryId", category.getString("productCategoryId"));
             // Unit Price = List Price
-            itemProduct.set("unitListPrice", context.get("grandTotal"));
+            Double rowPrice = Double.parseDouble(product.get("price") + "");
+            Double rowAmount = Double.parseDouble(amount);
+            Double rowListPrice = rowPrice * rowAmount;
+            itemProduct.set("unitListPrice", rowListPrice.toString());
             itemProduct.set("shoppingListId", null);
             itemProduct.set("cancelBackOrderDate", null);
             // Desc To Order Item List
+
             itemProduct.set("itemDescription", product.get("productName"));
             itemProduct.set("selectedAmount", BigDecimal.ZERO);
             itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);

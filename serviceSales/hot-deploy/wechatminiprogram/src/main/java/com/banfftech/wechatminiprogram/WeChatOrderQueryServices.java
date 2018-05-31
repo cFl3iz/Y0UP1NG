@@ -1827,7 +1827,10 @@ public class WeChatOrderQueryServices {
                     GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
 
                     itemMap.put("productName", "" + product.get("productName"));
-
+                    fieldSet = new HashSet<String>();
+                    fieldSet.add("drObjectInfo");
+                    fieldSet.add("productId");
+                    fieldSet.add("productContentTypeId");
                     //有单品图就拿单品图,否则就拿首图
                     EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
                     EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
@@ -2169,6 +2172,10 @@ public class WeChatOrderQueryServices {
 //有单品图就拿单品图,否则就拿首图
                     EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
                     EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                     fieldSet = new HashSet<String>();
+                    fieldSet.add("drObjectInfo");
+                    fieldSet.add("productId");
+                    fieldSet.add("productContentTypeId");
                     List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
                             null, null, false);
                     if(singlePictures!=null && singlePictures.size()>0){

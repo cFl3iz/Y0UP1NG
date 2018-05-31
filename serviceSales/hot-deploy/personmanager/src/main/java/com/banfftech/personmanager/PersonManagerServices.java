@@ -6529,7 +6529,7 @@ public class PersonManagerServices {
             resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
             resultMap.put("orderId", orderId);
         } else {
-            String []orderArray = orderId.split(",");
+            String []orderArray = orderIds.split(",");
             Double count = 0.0;
             for(String rowOrderId : orderArray){
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",

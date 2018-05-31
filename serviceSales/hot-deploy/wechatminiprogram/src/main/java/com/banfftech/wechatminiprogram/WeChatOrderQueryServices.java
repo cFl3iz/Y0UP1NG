@@ -1828,7 +1828,17 @@ public class WeChatOrderQueryServices {
 
                     itemMap.put("productName", "" + product.get("productName"));
 
-                    itemMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+                    //有单品图就拿单品图,否则就拿首图
+                    EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
+                    EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                    EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                    List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
+                            null, null, false);
+                    if(singlePictures!=null && singlePictures.size()>0){
+                        itemMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo")+"");
+                    }else{
+                        itemMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+                    }
 
                     orderItemList.add(itemMap);
                 }
@@ -2154,10 +2164,19 @@ public class WeChatOrderQueryServices {
                     }
                     itemMap.put("featuresList", featuresList);
                     GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-
+                    EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
                     itemMap.put("productName", "" + product.get("productName"));
+//有单品图就拿单品图,否则就拿首图
+                    EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                    EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                    List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
+                            null, null, false);
+                    if(singlePictures!=null && singlePictures.size()>0){
+                        itemMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo")+"");
+                    }else{
+                        itemMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+                    }
 
-                    itemMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
 
                     orderItemList.add(itemMap);
                 }

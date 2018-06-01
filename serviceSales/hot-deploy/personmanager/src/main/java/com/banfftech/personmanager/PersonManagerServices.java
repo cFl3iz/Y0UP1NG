@@ -2927,10 +2927,13 @@ public class PersonManagerServices {
 
         Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
 
+        GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
+        if(null == orderItemShipGrpInvRes){
+            dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
+                    "inventoryItemId", invItem.get("inventoryItemId")
+                    , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
 
-//        dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
-//                "inventoryItemId", invItem.get("inventoryItemId")
-//                , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
+        }
 
 
         return resultMap;

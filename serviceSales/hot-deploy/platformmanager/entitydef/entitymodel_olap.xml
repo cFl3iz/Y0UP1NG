@@ -20,6 +20,10 @@
         <field name="workEffortId" type="id-ne"/>
         <field name="productId" type="id-ne"/>
         <field name="createDate" type="date-time" />
+
+        <prim-key field="basePartyId"/>
+        <prim-key field="partyIdFrom"/>
+        <prim-key field="partyIdTo"/>
     </entity>
 
     <entity entity-name="YpPersonDimension" package-name="org.apache.ofbiz.olap" title="Person Dimension">

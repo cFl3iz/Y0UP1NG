@@ -27,6 +27,14 @@ under the License.
     <entity-group group="org.apache.ofbiz.olap" entity="CurrencyDimension"/>
     <entity-group group="org.apache.ofbiz.olap" entity="DateDimension"/>
     <entity-group group="org.apache.ofbiz.olap" entity="ProductDimension"/>
+    <!-- 友评产品维度 -->
+    <entity-group group="org.apache.ofbiz.olap" entity="YpProductDimension"/>
+    <!-- 店铺维度 -->
+    <entity-group group="org.apache.ofbiz.olap" entity="YpStoreDimension"/>
+    <!-- 人维度 -->
+    <entity-group group="org.apache.ofbiz.olap" entity="YpPersonDimension"/>
+    <!-- 转发链维度 -->
+    <entity-group group="org.apache.ofbiz.olap" entity="YpForwardChainDimension"/>
 
     <!-- ========================================================= -->
     <!-- Facts                                                     -->

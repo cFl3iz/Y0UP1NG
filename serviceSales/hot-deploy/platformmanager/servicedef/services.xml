@@ -18,6 +18,118 @@
     </service>
 
 
+    <!-- OLAP ETL SERVICE -->
+    <service name="autoDayloadAllProductsInProductDimension" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="autoDayloadAllProductsInProductDimension">
+        <description>everyday load YpProductDimension</description>
+    </service>
+    <!--<service name="getIngredientsListWashingWay" engine="java"-->
+             <!--location="com.zuczug.zuczugetl.ZuczugEtlService" invoke="getIngredientsListWashingWay">-->
+        <!--<description>获取商品的成份列表，特殊说明.zhoulei</description>-->
+        <!--<attribute name="productId" mode="IN" type="String"></attribute>-->
+        <!--<attribute name="ingredientsTextBm" mode="OUT" type="String"></attribute>-->
+        <!--<attribute name="specialInstructionsBm" mode="OUT" type="String"></attribute>-->
+    <!--</service>-->
+
+    <service name="zuczug.loadAllProductsInProductDimension" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="loadAllProductsInProductDimension">
+        <description>Calls the loadProductInProductDimension service for all the products.  zhoulei</description>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="updateMode" type="String" mode="IN" optional="true" default-value="TYPE1"/>
+    </service>
+
+    <service name="lastPCMUpdateToZPD" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="lastPCMUpdateToZPD">
+        <description>取productCategoryMember中的分类数据</description>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="false"/>
+    </service>
+    <service name="zuczug.prepareProductDimensionData" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="prepareProductDimensionData">
+        <description>Pulls information from the Product* entities (oltp entities) and
+            prepares data for the ProductDimension entity (olap entity). zhoulei</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="productDimension" type="GenericEntity" mode="OUT" optional="false"/>
+    </service>
+    <service name="zuczug.loadProductInProductDimension" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="loadProductInProductDimension">
+        <description>Pulls information from the Product* entities and
+            stores them in the ProductDimension entity (olap entity) zhoulei</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="updateMode" type="String" mode="IN" optional="false"/> <!-- TYPE1, TYPE2, TYPE3 -->
+    </service>
+    <service name="lastPFAUpdateToZPD" auth="true" engine="simple" transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductDimensionServices.xml" invoke="lastPFAUpdateToZPD">
+        <description>取productFeatureAppl中的特征数据</description>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="false"/>
+    </service>
+
+
+
+
+
+   <!-- Store 相关 -->
+    <service name="loadAllYpStoreDimension" auth="true" engine="simple" transaction-timeout="30000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductStoreDimensionServices.xml" invoke="loadAllYpStoreDimension">
+        <description>Calls the loadYpStoreDimension service for all the people. zhoulei</description>
+        <attribute name="updateMode" type="String" mode="IN" optional="true" default-value="TYPE1"/>
+    </service>
+    <service name="loadYpStoreDimension" auth="true" engine="simple"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductStoreDimensionServices.xml" invoke="loadYpStoreDimension">
+        <description>Load Product Store Dimension.zhoulei</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="updateMode" type="String" mode="IN" optional="false"/> <!-- TYPE1, TYPE2, TYPE3 -->
+    </service>
+
+    <service name="prepareYpStoreDimensionData" auth="true" engine="simple"
+             location="component://platformmanager/minilang/com/cloudlake/etl/ProductStoreDimensionServices.xml" invoke="prepareYpStoreDimensionData">
+        <description>Prepare Product Store dimension data. zhoulei</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="YpStoreDimension" type="GenericEntity" mode="OUT" optional="false"/>
+    </service>
+
+
+    <!-- 人相关 -->
+    <service name="loadAllYpPersonDimension" auth="true" engine="simple" transaction-timeout="90000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/PersonDimensionServices.xml" invoke="loadAllYpPersonDimension">
+        <description>Calls the loadAllYpPersonDimension</description>
+
+    </service>
+
+
+    <service name="inForwardChainFact" auth="true" engine="simple" transaction-timeout="90000"
+             location="component://platformmanager/minilang/com/cloudlake/etl/PersonDimensionServices.xml" invoke="inForwardChainFact">
+        <description>Calls the inForwardFact</description>
+        <attribute name="basePartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="objectInfo" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="createDate" type="Timestamp" mode="IN" optional="true"/>
+    </service>
+
+    <!-- OLAP ETL SERVICE -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

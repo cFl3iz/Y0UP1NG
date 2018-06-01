@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -265,6 +266,21 @@ public class WeChatMiniProgramServices {
          * 如果初始链中的是一个产品,则要增加浏览量。
          */
         updateProductBizData(Integer.parseInt("1"),delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
+
+        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "partyIdTo",partyIdFrom ).queryFirst();
+
+        Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
+        // 记录到 olap fact
+        dispatcher.runAsync("inForwardChainFact",UtilMisc.toMap(
+                "userLogin",admin,
+                "partyIdFrom",partyIdFrom,
+                "partyIdTo",partyId,
+                "workEffortId",workEffortId,
+                "basePartyId",forwardChainFact==null?partyIdFrom:forwardChainFact.getString("partyIdFrom"),
+                "firstName",personInfoMap.get("firstName"),
+                "objectInfo",personInfoMap.get("headPortrait"),
+                "createDate",new Timestamp(new Date().getTime())));
 
         return resultMap;
     }

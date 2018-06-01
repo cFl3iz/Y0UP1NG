@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== OLAP-Model ======================= -->
+    <!-- ========================================================= -->
+    <title>OLAP Entity of PlatformManager Component</title>
+    <description>Platform_OLAP_Model</description>
+    <copyright>CloudLake</copyright>
+    <version>1.0</version>
+
+    <entity entity-name="YpForwardChainFact" package-name="org.apache.ofbiz.olap" title="YpForwardChainFact">
+
+        <!-- 链条头 -->
+        <field name="basePartyId" type="id-ne"/>
+        <field name="partyIdFrom" type="id-ne"/>
+        <field name="partyIdTo" type="id-ne"/>
+        <field name="firstName" type="value"/>
+        <field name="objectInfo" type="value"/>
+        <field name="workEffortId" type="id-ne"/>
+        <field name="productId" type="id-ne"/>
+        <field name="createDate" type="date-time" />
+    </entity>
+
+    <entity entity-name="YpPersonDimension" package-name="org.apache.ofbiz.olap" title="Person Dimension">
+    <description>person dimension. The natural key is [partyId]</description>
+        <field name="dimensionId" type="id-long-ne" />
+
+        <field name="partyId" type="id-ne" />
+
+        <field name="firstName" type="value" />
+        <field name="lastName" type="value" />
+        <field name="middleName" type="value" />
+        <field name="nickName" type="value" />
+        <field name="gender" type="value" />
+        <field name="birthDate" type="date-time" />
+        <field name="height" type="floating-point" />
+        <field name="weight" type="floating-point" />
+
+        <field name="userLoginId" type="id-ne" />
+        <field name="miniprogramOpenId" type="value" />
+        <field name="salesRepId" type="id-ne" />
+
+
+
+        <prim-key field="dimensionId"/>
+    </entity>
+
+    <entity entity-name="YpStoreDimension" package-name="org.apache.ofbiz.olap" title="Facility Dimension">
+        <description>PorductStore dimension. The natural key is [productStoreId]</description>
+        <field name="dimensionId" type="id-long-ne" />
+        <field name="productStoreId" type="id-ne" />
+        <field name="storeName" type="name" />
+        <field name="cityGeoId" type="id-ne" />
+        <field name="cityName" type="name" />
+        <field name="payToPartyId" type="id-ne" />
+        <field name="payToPartyName" type="name" />
+        <field name="isRetailStoreGroupId" type="id-ne" />
+        <field name="isRetailStoreGroupName" type="name" />
+        <field name="geoArea" type="name"></field>
+        <field name="provinceGeoId" type="id-ne"></field>
+        <field name="provinceName" type="name"></field>
+        <field name="storeSize" type="name"></field>
+        <field name="businessModel" type="name" />
+        <field name="channel" type="name"></field>
+        <field name="cityArea" type="name" />
+        <field name="directSale" type="name" />
+        <field name="wholesale" type="name" />
+        <field name="online" type="name" />
+
+        <prim-key field="dimensionId"/>
+    </entity>
+
+    <entity entity-name="YpProductDimension" package-name="org.apache.ofbiz.olap" title="友评销售产品维度表Dimension">
+        <description>Product dimension only for sale. The natural key is [productId]</description>
+        <field name="dimensionId" type="id-long-ne" />
+        <field name="productId" type="id-ne" />
+        <field name="productColorId" type="id-long"><description>到产品颜色到ID，如W173TS01-44</description></field>
+        <field name="productType" type="name"><description>如成品、再制品等</description></field>
+        <field name="brandId" type="name"><description>品牌ID</description></field>
+        <field name="brandName" type="name"><description>品牌名称</description></field>
+        <field name="internalName" type="name"><description>产品内部名称</description></field>
+        <field name="productName" type="name"><description>产品名称，对外</description></field>
+        <field name="groupname" type="name" ><description>组别名称</description></field>
+        <field name="groupId" type="id-long" ><description>组别ID</description></field>
+        <field name="series" type="name" ><description>系列名称</description></field>
+        <field name="seriesId" type="id-long" ><description>系列ID</description></field>
+        <field name="subseries" type="name" ><description>子系列名称</description></field>
+        <field name="subseriesId" type="id-long" ><description>子系列ID</description></field>
+        <field name="zuczugSeason" type="description" ><description>季</description></field>
+        <field name="zuczugSeasonId" type="id-long" ><description>季ID</description></field>
+        <field name="colorCode" type="id-long" ><description>色号</description></field>
+        <field name="color" type="description" ><description>颜色</description></field>
+        <field name="productSize" type="description" ><description>尺码</description></field>
+        <field name="sizeCode" type="id-long" ><description>尺码号</description></field>
+        <field name="modelYear" type="description" ><description>年份</description></field>
+        <field name="yearCode" type="id-long" ><description>年份号</description></field>
+        <field name="wave" type="description" ><description>波段</description></field>
+        <field name="waveId" type="id-long" ><description>波段号</description></field>
+        <field name="style" type="description" ><description>款型</description></field>
+        <field name="styleId" type="id-long" ><description>款型号</description></field>
+        <field name="quantityUomId" type="id" ><description>单位</description></field>
+        <field name="ean" type="id-long" ><description>EAN码</description></field>
+        <field name="listPrice" type="currency-precise" ><description>吊牌价</description></field>
+        <field name="estDesignEngineerCost" type="currency-precise" ><description>估算成本</description></field>
+        <field name="releaseDate" type="date-time"><description>发布日期</description></field>
+        <field name="releaseMonthOfYear" type="description"><description>发布月份</description></field>
+        <field name="virtualProductId" type="id-ne"><description>虚拟产品ID</description></field>
+        <field name="sellingPoint" type="value"><description>买点介绍</description></field>
+        <field name="materialFeature" type="value"><description>材质特点</description></field>
+        <field name="ingredientsText" type="value"><description>成份</description></field>
+        <field name="specialInstructions" type="value"><description>特别提醒</description></field>
+        <field name="productDescription" type="value"><description>商品描述</description></field>
+        <field name="designProductId" type="id-ne"><description>设计产品ID</description></field>
+        <field name="mainFabricId" type="id"><description>主要面料</description></field>
+        <field name="mainSupplierPartyId" type="id"><description>主供应商ID</description></field>
+        <field name="mainSupplierPartyName" type="name"><description>主供应商名字</description></field>
+        <field name="outLine" type="description"><description></description></field>
+        <field name="outLineId" type="id-long"><description></description></field>
+        <field name="fitType" type="description"><description></description></field>
+        <field name="fitTypeId" type="id-long"><description></description></field>
+        <field name="clothLength" type="description"><description></description></field>
+        <field name="clothLengthId" type="id-long"><description></description></field>
+        <field name="openStyle" type="description"><description></description></field>
+        <field name="openStyleId" type="id-long"><description></description></field>
+        <field name="openType" type="description"><description></description></field>
+        <field name="openTypeId" type="id-long"><description></description></field>
+        <field name="skirtStyle" type="description"><description></description></field>
+        <field name="skirtStyleId" type="id-long"><description></description></field>
+        <field name="sleeveLength" type="description"><description></description></field>
+        <field name="sleeveLengthId" type="id-long"><description></description></field>
+        <field name="collarType" type="description"><description></description></field>
+        <field name="collarTypeId" type="id-long"><description></description></field>
+        <field name="collarStyle" type="description"><description></description></field>
+        <field name="collarStyleId" type="id-long"><description></description></field>
+        <field name="wristStyle" type="description"><description></description></field>
+        <field name="wristStyleId" type="id-long"><description></description></field>
+        <field name="pantStyle" type="description"><description></description></field>
+        <field name="pantStyleId" type="id-long"><description></description></field>
+        <field name="clothStructure" type="description"><description></description></field>
+        <field name="clothStructureId" type="id-long"><description></description></field>
+        <field name="wareStyle" type="description"><description></description></field>
+        <field name="wareStyleId" type="id-long"><description></description></field>
+        <field name="clothThickness" type="description"><description></description></field>
+        <field name="clothThicknessId" type="id-long"><description></description></field>
+        <field name="elastic" type="description"><description></description></field>
+        <field name="elasticId" type="id-long"><description></description></field>
+        <field name="softness" type="description"><description></description></field>
+        <field name="softnessId" type="id-long"><description></description></field>
+        <field name="graph" type="description"><description></description></field>
+        <field name="graphId" type="id-long"><description></description></field>
+        <field name="largeColor" type="description"><description></description></field>
+        <field name="largeColorId" type="id-long"><description></description></field>
+        <field name="originSeries" type="id-long"><description></description></field>
+        <field name="originSubSeries" type="id-long"><description></description></field>
+        <field name="gender" type="name"><description></description></field>
+        <field name="introductionDate" type="date-time"></field>
+        <field name="salesDiscontinuationDate" type="date-time"></field>
+        <field name="supportDiscontinuationDate" type="date-time"></field>
+        <prim-key field="dimensionId"/>
+    </entity>
+
+
+
+</entitymodel>

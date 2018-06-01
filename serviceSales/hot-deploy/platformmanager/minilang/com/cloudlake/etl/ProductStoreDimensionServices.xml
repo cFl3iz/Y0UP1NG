@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+      <!-- zhoulei -->  
+    <simple-method method-name="loadAllYpStoreDimension" short-description="">
+        <entity-condition entity-name="ProductStore" list="productStores"/>
+        <iterate list="productStores" entry="productStore">
+        	<log level="info" message="productStore.productStoreId is: ${productStore.productStoreId}"></log>
+            <set-service-fields service-name="loadYpStoreDimension" map="parameters" to-map="inMap"/>
+            <set field="inMap.productStoreId" from-field="productStore.productStoreId"/>
+            <call-service service-name="loadYpStoreDimension" in-map-name="inMap"/>
+            <clear-field field="inMap"/>
+        </iterate>
+    </simple-method>
+    
+    <simple-method method-name="loadYpStoreDimension" short-description="">
+
+        <set-service-fields service-name="prepareYpStoreDimensionData" map="parameters" to-map="inMap"/>
+        <call-service service-name="prepareYpStoreDimensionData" in-map-name="inMap">
+            <result-to-field result-name="YpStoreDimension"/>
+        </call-service>
+        <clear-field field="inMap"/>
+        <set-service-fields service-name="storeGenericDimension" map="parameters" to-map="inMap"/>
+        <set field="inMap.naturalKeyFields[]" value="productStoreId"/>
+        <set field="inMap.dimensionValue" from-field="YpStoreDimension"/>
+        <call-service service-name="storeGenericDimension" in-map-name="inMap"/>
+    </simple-method>
+    
+    <simple-method method-name="prepareYpStoreDimensionData" short-description="">
+        <entity-one entity-name="ProductStore" value-field="productStore">
+        </entity-one>
+        <if-empty field="productStore">
+            <add-error>
+                <fail-property resource="ProductUiLabels" property="ProductProductNotFoundWithProduct"/>
+            </add-error>
+        </if-empty>
+        <check-errors/>
+        <make-value value-field="YpStoreDimension" entity-name="YpStoreDimension"/>
+        <set field="YpStoreDimension.productStoreId" from-field="productStore.productStoreId"/>
+        <set field="YpStoreDimension.storeName" from-field="productStore.storeName"/>
+        
+		<!-- payToPartyId||payToPartyName --> 
+		<if-not-empty field="productStore.payToPartyId">
+			<set field="YpStoreDimension.payToPartyId" from-field="productStore.payToPartyId"/>
+			<entity-one value-field="partyGroup" entity-name="PartyGroup">
+				<field-map field-name="partyId" from-field="productStore.payToPartyId"/>
+				<select-field field-name="groupName"/>
+			</entity-one>
+			<set field="YpStoreDimension.payToPartyName" from-field="partyGroup.groupName"/>
+		<else>
+			<set field="YpStoreDimension.payToPartyId" value="_NA_"/>
+			<set field="YpStoreDimension.payToPartyName" value="_NA_"/>
+		</else>
+		</if-not-empty>
+		
+		<!-- cityGeoId||cityName||cityArea -->
+		<set field="YpStoreDimension.cityGeoId" value="_NA_"/>
+		<set field="YpStoreDimension.cityName" value="_NA_"/>
+		<set field="YpStoreDimension.cityArea" value="_NA_"/>
+		<entity-and list="productStoreFacilityList" entity-name="ProductStoreFacility">
+			<field-map field-name="productStoreId" from-field="productStore.productStoreId"/>
+		</entity-and>
+		<if-not-empty field="productStoreFacilityList">
+			<first-from-list entry="productStoreFacility" list="productStoreFacilityList"/>
+			<entity-and list="facilityContactMechPurposeList" entity-name="FacilityContactMechPurpose" filter-by-date="true">
+				<field-map field-name="facilityId" from-field="productStoreFacility.facilityId"/>
+				<field-map field-name="contactMechPurposeTypeId" value="PRIMARY_LOCATION"/>
+			</entity-and>
+			<if-not-empty field="facilityContactMechPurposeList">
+				<first-from-list entry="facilityContactMechPurpose" list="facilityContactMechPurposeList"/>
+				<entity-one value-field="postalAddress" entity-name="PostalAddress">
+					<field-map field-name="contactMechId" from-field="facilityContactMechPurpose.contactMechId"/>
+				</entity-one>
+				<if-not-empty field="postalAddress">
+					<if-not-empty field="postalAddress.cityGeoId">
+						<entity-and list="geoCityList" entity-name="Geo">
+							<field-map field-name="geoId" from-field="postalAddress.cityGeoId"/>
+						</entity-and>
+						<if-not-empty field="geoCityList">
+							<first-from-list entry="geoCityOne" list="geoCityList"/>
+							<set field="YpStoreDimension.cityName" from-field="geoCityOne.geoName"/>
+						</if-not-empty>
+					
+						<set field="YpStoreDimension.cityGeoId" from-field="postalAddress.cityGeoId"/>
+
+						<if-not-empty field="geoCityList">
+							<first-from-list entry="geoOne" list="geoCityList"/>
+							<set field="YpStoreDimension.cityGeoId" from-field="geoOne.geoId"/>
+							<entity-and list="geoRegionList" entity-name="GeoAssoc">
+								<field-map field-name="geoIdTo" from-field="geoOne.geoId"/>
+								<field-map field-name="geoAssocTypeId" value="REGIONS"/>
+							</entity-and>
+							<if-not-empty field="geoRegionList">
+								<first-from-list entry="geoRegionOne" list="geoRegionList"/>
+								<entity-one value-field="geoRegion" entity-name="Geo">
+									<field-map field-name="geoId" from-field="geoRegionOne.geoId"/>
+								</entity-one>
+								<set field="YpStoreDimension.cityArea" from-field="geoRegion.geoName"/>
+							</if-not-empty>
+						</if-not-empty>
+					</if-not-empty>
+					
+					<if-not-empty field="postalAddress.stateProvinceGeoId">
+						<set field="YpStoreDimension.provinceGeoId" from-field="postalAddress.stateProvinceGeoId"/>
+						<entity-one value-field="geo" entity-name="Geo">
+							<field-map field-name="geoId" from-field="postalAddress.stateProvinceGeoId"/>
+						</entity-one>
+						<set field="YpStoreDimension.provinceName" from-field="geo.geoName"/>
+					<else>
+						<set field="YpStoreDimension.provinceGeoId" value="_NA_"/>
+						<set field="YpStoreDimension.provinceName" value="_NA_"/>
+					</else>
+					</if-not-empty>
+				</if-not-empty>
+			<else>
+				<set field="YpStoreDimension.cityName" value="_NA_"/>
+				<set field="YpStoreDimension.provinceGeoId" value="_NA_"/>
+				<set field="YpStoreDimension.provinceName" value="_NA_"/>
+			</else>
+			</if-not-empty>
+			
+			<entity-one value-field="facility" entity-name="Facility">
+				<field-map field-name="facilityId" from-field="productStoreFacility.facilityId"/>
+			</entity-one>
+			<if-not-empty field="facility.facilitySize">
+				<set field="YpStoreDimension.geoArea" from-field="facility.facilitySize"/>
+			<else>
+				<set field="YpStoreDimension.geoArea" value="_NA_"/>
+			</else>
+			</if-not-empty>
+		
+			<!-- 如果有对应多个facility的统一设置为NA 
+			<entity-count entity-name="ProductStoreFacility" count-field="productStoreFacilityCount">
+				<condition-expr field-name="productStoreId" from-field="productStore.productStoreId"/>
+			</entity-count>
+			
+			<if-compare field="productStoreFacilityCount" operator="greater" value="1">
+				<set field="YpStoreDimension.cityName" value="_NA_"/>
+				<set field="YpStoreDimension.provinceGeoId" value="_NA_"/>
+				<set field="YpStoreDimension.provinceName" value="_NA_"/>
+				<set field="YpStoreDimension.geoArea" value="_NA_"/>
+			</if-compare>
+			-->
+			
+			<if-not-empty field="productStore.inventoryFacilityId">
+				<entity-one value-field="facilityOne" entity-name="Facility">
+					<field-map field-name="facilityId" from-field="productStore.inventoryFacilityId"/>
+				</entity-one>
+				<if-not-empty field="facilityOne.facilityTypeId">
+					<if-compare field="facilityOne.facilityTypeId" operator="equals" value="WAREHOUSE">
+						<set field="YpStoreDimension.cityName" value="_NA_"/>
+						<set field="YpStoreDimension.provinceGeoId" value="_NA_"/>
+						<set field="YpStoreDimension.provinceName" value="_NA_"/>
+						<set field="YpStoreDimension.geoArea" value="_NA_"/>
+					</if-compare>
+				</if-not-empty>
+			</if-not-empty>
+		<else>
+			<set field="YpStoreDimension.cityName" value="_NA_"/>
+			<set field="YpStoreDimension.provinceGeoId" value="_NA_"/>
+			<set field="YpStoreDimension.provinceName" value="_NA_"/>
+			<set field="YpStoreDimension.geoArea" value="_NA_"/>
+		</else>
+		</if-not-empty>
+		
+		<!--if-not-empty field="productStore.primaryStoreGroupId">
+			<entity-one value-field="cityGeo" entity-name="ProductStoreGroup">
+				<field-map field-name="productStoreGroupId" from-field="productStore.primaryStoreGroupId"/>
+			</entity-one>
+			<if-not-empty field="cityGeo">
+				<set field="YpStoreDimension.cityGeoId" from-field="cityGeo.productStoreGroupId"/>
+				<set field="YpStoreDimension.cityName" from-field="cityGeo.productStoreGroupName"/>
+			<else>
+				<set field="YpStoreDimension.cityGeoId" value="_NA_"/>
+				<set field="YpStoreDimension.cityName" value="_NA_"/>
+			</else>
+			</if-not-empty>
+		<else>
+			<set field="YpStoreDimension.cityGeoId" value="_NA_"/>
+			<set field="YpStoreDimension.cityName" value="_NA_"/>
+		</else>
+		</if-not-empty-->
+		
+		<!-- isRetailStoreGroupId||isRetailStoreGroupName -->
+		<entity-and list="productStoreGroupMembers" entity-name="ProductStoreGroupMember">
+			<field-map field-name="productStoreId" from-field="productStore.productStoreId"/>
+		</entity-and>
+		<if-not-empty field="productStoreGroupMembers">
+			<iterate entry="productStoreGroupMember" list="productStoreGroupMembers">
+				<if>
+					<condition>
+						<or>
+							<if-compare operator="equals" value="B2B" field="productStoreGroupMember.productStoreGroupId"/>
+							<if-compare operator="equals" value="RETAIL" field="productStoreGroupMember.productStoreGroupId"/>
+						</or>
+					</condition>
+					<then>
+						<entity-one value-field="productStoreGroup" entity-name="ProductStoreGroup">
+						<field-map field-name="productStoreGroupId" from-field="productStoreGroupMember.productStoreGroupId" />
+						</entity-one>
+						<set field="YpStoreDimension.isRetailStoreGroupId" from-field="productStoreGroup.productStoreGroupId"/>
+						<set field="YpStoreDimension.isRetailStoreGroupName" from-field="productStoreGroup.productStoreGroupName"/>
+					</then>
+				<else>
+					<set field="YpStoreDimension.isRetailStoreGroupId" value="_NA_"/>
+	           	 	<set field="YpStoreDimension.isRetailStoreGroupName" value="_NA_"/>
+				</else>
+				</if>
+			</iterate>
+		<else>
+			<set field="YpStoreDimension.isRetailStoreGroupId" value="_NA_"/>
+            <set field="YpStoreDimension.isRetailStoreGroupName" value="_NA_"/>
+		</else>
+		</if-not-empty>
+		
+		<set field="YpStoreDimension.businessModel" value="_NA_"/>
+		
+		<set field="YpStoreDimension.directSale" value="_NA_"/>
+		<if-not-empty field="productStore.payToPartyId">
+			<if>
+				<condition>
+					<and>
+						<if-compare field="YpStoreDimension.payToPartyId" operator="equals" value="Company" />
+					</and>
+				</condition>
+				<then>
+					<set field="YpStoreDimension.directSale" value="直营"/>
+				</then>
+				<else-if>
+					<condition>
+						<and>
+							<if-compare field="YpStoreDimension.payToPartyId" operator="not-equals" value="Company" />
+							<if-compare field="YpStoreDimension.payToPartyId" operator="not-equals" value="_NA_" />
+						</and>
+					</condition>
+					<then>
+						<set field="YpStoreDimension.directSale" value="经销"/>
+					</then>
+				</else-if>
+			</if>
+		</if-not-empty>
+		
+		<set field="YpStoreDimension.wholesale" value="_NA_"/>
+		<if-not-empty field="YpStoreDimension.productStoreId">
+			<if>
+				<condition>
+					<or>
+						<if-compare field="YpStoreDimension.productStoreId" operator="equals" value="B2B" />
+						<if-compare field="YpStoreDimension.productStoreId" operator="equals" value="G-B2B" />
+					</or>
+				</condition>
+				<then>
+					<set field="YpStoreDimension.wholesale" value="批发"/>
+				</then>
+				<else-if>
+					<condition>
+						<and>
+							<if-compare field="YpStoreDimension.productStoreId" operator="not-equals" value="B2B" />
+							<if-compare field="YpStoreDimension.productStoreId" operator="not-equals" value="G-B2B" />
+						</and>
+					</condition>
+					<then>
+						<set field="YpStoreDimension.wholesale" value="零售"/>
+					</then>
+				</else-if>
+			</if>
+		</if-not-empty>
+		
+		<set field="YpStoreDimension.online" value="_NA_"/>
+		<if-not-empty field="YpStoreDimension.productStoreId">
+			<if>
+				<condition>
+					<or>
+						<if-compare field="YpStoreDimension.productStoreId" operator="equals" value="B2C_WEBSTORE" />
+						<if-compare field="YpStoreDimension.productStoreId" operator="equals" value="WECHAT_STORE" />
+						<if-compare field="YpStoreDimension.productStoreId" operator="equals" value="EC10" />
+					</or>
+				</condition>
+				<then>
+					<set field="YpStoreDimension.online" value="线上"/>
+				</then>
+				<else-if>
+					<condition>
+						<and>
+							<if-compare field="YpStoreDimension.productStoreId" operator="not-equals" value="B2C_WEBSTORE" />
+							<if-compare field="YpStoreDimension.productStoreId" operator="not-equals" value="WECHAT_STORE" />
+							<if-compare field="YpStoreDimension.productStoreId" operator="not-equals" value="EC10" />
+						</and>
+					</condition>
+					<then>
+						<set field="YpStoreDimension.online" value="线下"/>
+					</then>
+				</else-if>
+			</if>
+		</if-not-empty>
+		
+		
+        <field-to-result field="YpStoreDimension"/>
+    </simple-method>
+
+</simple-methods>

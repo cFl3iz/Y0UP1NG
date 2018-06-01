@@ -34,7 +34,7 @@ under the License.
     <!-- 人维度 -->
     <entity-group group="org.apache.ofbiz.olap" entity="YpPersonDimension"/>
     <!-- 转发链维度 -->
-    <entity-group group="org.apache.ofbiz.olap" entity="YpForwardChainDimension"/>
+    <entity-group group="org.apache.ofbiz.olap" entity="YpForwardChainFact"/>
 
     <!-- ========================================================= -->
     <!-- Facts                                                     -->

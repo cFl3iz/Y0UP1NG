@@ -702,7 +702,7 @@ public class WeChatOrderQueryServices {
 
                     }
                 }else{
-                    featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+                    featureMap.put(rowColor == null?"普通":rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
                 }
 
                 //3 查询细节图

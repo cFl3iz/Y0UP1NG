@@ -158,7 +158,7 @@ public class PersonManagerQueryServices {
             Debug.logInfo("*rowForwardCount:"+rowForwardCount,module);
 
             // 从第i+1为开始循环数组
-            for (int j = i + 1; j < returnList.size(); j++) {
+            for (int j = i + 1; j < returnList.size();) {
                 Map<String, Object> gvMap2 = returnList.get(j);
 
                 int innerRowForwardCount = Integer.parseInt(gvMap2.get("forwardCount") + "");
@@ -173,6 +173,7 @@ public class PersonManagerQueryServices {
                     returnList.set(i, returnList.get(j));
                     returnList.set(j, r);
                 }
+                j+=1;
             }
         }
         Debug.logInfo("*afterList:"+returnList,module);

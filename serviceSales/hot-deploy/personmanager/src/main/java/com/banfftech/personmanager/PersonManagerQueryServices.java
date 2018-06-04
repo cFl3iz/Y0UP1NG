@@ -149,26 +149,33 @@ public class PersonManagerQueryServices {
                 returnList.add(rowMap);
             }
         }
+        Debug.logInfo("*beforeList:"+returnList,module);
 
-
-
+        Debug.logInfo("*returnListSize:"+returnList.size(),module);
         for (int i = 0; i < returnList.size(); i++) {
             Map<String, Object> gvMap = returnList.get(i);
             int rowForwardCount = Integer.parseInt(gvMap.get("forwardCount") + "");
+            Debug.logInfo("*rowForwardCount:"+rowForwardCount,module);
+
             // 从第i+1为开始循环数组
             for (int j = i + 1; j < returnList.size(); j++) {
                 Map<String, Object> gvMap2 = returnList.get(j);
+
                 int innerRowForwardCount = Integer.parseInt(gvMap2.get("forwardCount") + "");
+                Debug.logInfo("*innerRowForwardCount:"+innerRowForwardCount,module);
+
                 // 如果前一位比后一位小，那么就将两个数字调换
                 // 这里是按降序排列
                 // 如果你想按升序排列只要改变符号即可
                 if (rowForwardCount < innerRowForwardCount) {
+                    Debug.logInfo("*rowForwardCount < innerRowForwardCount!i="+i+"|j="+j,module);
                     Map<String, Object> r = returnList.get(i);
                     returnList.set(i, returnList.get(j));
                     returnList.set(j, r);
                 }
             }
         }
+        Debug.logInfo("*afterList:"+returnList,module);
 
 
         resultMap.put("reportList",returnList);

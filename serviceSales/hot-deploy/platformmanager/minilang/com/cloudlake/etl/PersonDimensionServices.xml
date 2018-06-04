@@ -57,13 +57,23 @@
 <!-- TODO FIX ME -->
 		<entity-condition entity-name="YpForwardChainFact" list="isExsits">
 			<condition-list combine="and">
+				<!-- 这一行的销售代表不会重复创建新链.和首行出现 -->
+				<condition-expr field-name="partyIdFrom" from-field="basePartyId" operator="equals"/>
 				<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
-				<condition-list combine="or">
-					<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
-					<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
-					<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
-					<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>
-				</condition-list>
+
+				<!-- 已经在第一行出现的人不会创建重复出现第一行 -->
+				<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
+
+				<!-- 销售代表自己不能在后续行出现 -->
+				<condition-expr field-name="partyIdTo" from-field="basePartyId" operator="equals"/>
+
+				<!--<condition-list combine="or">-->
+					<!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
+					<!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
+					<!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
+					<!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
+				<!--</condition-list>-->
+
 			</condition-list>
 			<!--<order-by field-name="-fromDate"/>-->
 		</entity-condition>

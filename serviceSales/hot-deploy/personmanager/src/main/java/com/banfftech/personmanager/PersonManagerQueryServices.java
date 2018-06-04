@@ -125,7 +125,7 @@ public class PersonManagerQueryServices {
                 String detailImageUrl = product.getString("detailImageUrl");
                 rowMap.put("productName",productName);
                 rowMap.put("detailImageUrl",detailImageUrl);
-                rowMap.put("forwardCount",forwardCount);
+                rowMap.put("forwardCount",forwardCountStr);
                 rowMap.put("buyCountStr",buyCountStr);
 
                 returnList.add(rowMap);

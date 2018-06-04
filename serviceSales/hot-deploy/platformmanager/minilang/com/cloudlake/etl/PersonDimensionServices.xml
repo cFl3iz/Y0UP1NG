@@ -54,17 +54,28 @@
 		<set field="workEffortId" from-field="parameters.workEffortId" />
 		<set field="productId" from-field="parameters.productId" />
 		<set field="createDate" from-field="parameters.createDate" />
-
-
+<!-- TODO FIX ME -->
 		<entity-condition entity-name="YpForwardChainFact" list="isExsits">
-			<condition-list>
+			<condition-list combine="and">
 				<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
-				<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
-				<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
-				<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
-				<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>
+				<condition-list combine="or">
+					<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
+					<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
+					<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
+					<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>
+				</condition-list>
 			</condition-list>
+			<!--<order-by field-name="-fromDate"/>-->
 		</entity-condition>
+		<!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->
+			<!--<condition-list>-->
+				<!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
+				<!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
+				<!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
+				<!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
+				<!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
+			<!--</condition-list>-->
+		<!--</entity-condition>-->
 
 		<if-empty field="isExsits">
 			<make-value value-field="YpForwardChainFact" entity-name="YpForwardChainFact"/>

@@ -123,6 +123,7 @@ public class PersonManagerQueryServices {
                 GenericValue  product  = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
                 String productName = product.getString("productName");
                 String detailImageUrl = product.getString("detailImageUrl");
+                rowMap.put("productId",productId);
                 rowMap.put("productName",productName);
                 rowMap.put("detailImageUrl",detailImageUrl);
                 rowMap.put("forwardCount",forwardCountStr);

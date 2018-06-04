@@ -89,6 +89,7 @@ import sun.security.krb5.Config;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
+import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizDataFromOrder;
 
 /**
  * Created by S on 2017/9/12.
@@ -3141,11 +3142,11 @@ public class PersonManagerServices {
 
         String orderId = (String) context.get("orderId");
 
-        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
-
-        String productId = (String) orderItem.get("productId");
-
-        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+//        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+//
+//        String productId = (String) orderItem.get("productId");
+//
+//        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
@@ -3170,8 +3171,11 @@ public class PersonManagerServices {
 
         //找到买家
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
 
         String payFromPartyId = (String) orderCust.get("partyId");
+        String salesRepId  =  (String) orderSalesRep.get("partyId");
+
 
 
         //应用收款支付.....
@@ -3224,6 +3228,12 @@ public class PersonManagerServices {
 //
 //        msg.create();
 
+        List<GenericValue> items =  EntityQuery.use(delegator).from("OrderItem").where("orderId",orderId).queryList();
+
+        for(GenericValue item : items){
+                String innerProductId = item.get("productId");
+                updateProductBizDataFromOrder(salesRepId,(int) item.get("quantity"), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
+        }
         return resultMap;
     }
 
@@ -6932,7 +6942,7 @@ public class PersonManagerServices {
 
         // 记录购买量
 
-        updateProductBizData(Integer.parseInt(amount_str), delegator, dispatcher, admin, partyId, productId, orderId, "BUY_PRODUCT");
+//        updateProductBizData(Integer.parseInt(amount_str), delegator, dispatcher, admin, partyId, productId, orderId, "BUY_PRODUCT");
 
         resultMap.put("partyIdFrom", partyId);
         resultMap.put("partyIdTo", payToPartyId);

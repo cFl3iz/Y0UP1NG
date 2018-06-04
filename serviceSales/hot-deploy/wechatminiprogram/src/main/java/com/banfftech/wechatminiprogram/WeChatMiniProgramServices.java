@@ -526,6 +526,60 @@ public class WeChatMiniProgramServices {
     }
 
     /**
+     * updateProductBizDataFromOrder
+     * @param count
+     * @param delegator
+     * @param dispatcher
+     * @param admin
+     * @param partyId
+     * @param productId
+     * @param objectId
+     * @param bizTypeId
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static void updateProductBizDataFromOrder(String salesRepId, int count, Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId, String bizTypeId) throws GenericEntityException, GenericServiceException {
+
+
+            String ownerPartyId = salesRepId;
+
+            GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
+
+            if (null == productBizData) {
+
+            } else {
+                String dataId = productBizData.getString("dataId");
+
+                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId).queryFirst();
+                //已经记录过则不可刷单
+                if (null == isExsitsBizData) {
+                    switch (bizTypeId) {
+                        case "FORWARD_PRODUCT":
+                            String forwardCount = productBizData.getString("forwardCount");
+                            productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
+                            break;
+                        case "ADDRESSEE_PRODUCT":
+                            String addresseeCount = productBizData.getString("addresseeCount");
+                            productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
+                            break;
+                        case "BUY_PRODUCT":
+                            String buyCount = productBizData.getString("buyCount");
+                            productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
+                            break;
+                    }
+
+                    productBizData.store();
+
+                    // Do Create Detail
+                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
+                }
+            }
+
+    }
+
+
+
+    /**
      * updateProductBizData
      *
      * @param delegator

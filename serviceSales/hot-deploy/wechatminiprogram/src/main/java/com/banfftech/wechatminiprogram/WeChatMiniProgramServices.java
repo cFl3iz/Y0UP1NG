@@ -547,7 +547,7 @@ public class WeChatMiniProgramServices {
 
         if (null != workEffortAndReferrer) {
 
-            String ownerPartyId = workEffortAndReferrer.getString("workEffortId");
+            String ownerPartyId = workEffortAndReferrer.getString("partyId");
 
             GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
 

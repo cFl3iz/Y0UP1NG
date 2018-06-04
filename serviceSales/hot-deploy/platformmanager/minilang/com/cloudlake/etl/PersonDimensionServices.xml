@@ -58,15 +58,16 @@
         <entity-condition entity-name="YpForwardChainFact" list="isExsits">
             <condition-list combine="or">
                 <!--  普通筛选,不重复记录自己在同一个base和同一个from的to -->
+                <!--basePartyId:10750 , partyIdFrom:10432 , partyIdTo:10291-->
                 <condition-list combine="and">
                     <condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
                     <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
                     <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
                 </condition-list>
                 <condition-list combine="and">
-                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+                    <condition-expr field-name="basePartyId" from-field="partyIdTo" operator="equals"/>
                     <!-- baseParty不再被记录到任何自己的子链或首链 -->
-                    <condition-expr field-name="partyIdFrom" from-field="basePartyId" operator="equals"/>
+                    <condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
                 </condition-list>
 
                 <condition-list combine="and">

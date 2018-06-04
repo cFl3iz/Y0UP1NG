@@ -168,12 +168,12 @@ public class PersonManagerQueryServices {
                     }
              }
         }else{
-            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("workEffortId",rowWorkEffortId,"partyIdFrom",addresseePartyId)).queryList();
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",addresseePartyId)).queryList();
             for(GenericValue row : firstShareLines){
                 Map<String,Object> rowMap = row.getAllFields();
                 String partyIdTo = row.getString("partyIdTo");
-                String basePartyId = row.getString("basePartyId");
-                Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",basePartyId,"partyIdFrom",partyIdTo)).queryCount();
+//                String basePartyId = row.getString("basePartyId");
+                Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
                 rowMap.put("nextChainPersonNum",xiaJiRenShu);
                 returnList.add(rowMap);
             }

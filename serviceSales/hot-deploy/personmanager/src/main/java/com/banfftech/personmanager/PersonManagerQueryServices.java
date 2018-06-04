@@ -154,8 +154,17 @@ public class PersonManagerQueryServices {
             Debug.logError("User Token Not Found...", module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
         }
+        List<GenericValue> firstShareLines = null;
+        //查询首行
+        if (!UtilValidate.isNotEmpty(addresseePartyId)) {
+             firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"),"partyIdFrom",userLogin.get("partyId"))).queryList();
+
+        }else{
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("rowWorkEffortId",rowWorkEffortId,"partyIdFrom",addresseePartyId)).queryList();
+        }
 
 
+        resultMap.put("firstShareLines",firstShareLines);
 
         return resultMap;
     }

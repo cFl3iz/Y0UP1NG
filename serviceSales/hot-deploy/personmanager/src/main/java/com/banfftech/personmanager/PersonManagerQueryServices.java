@@ -168,7 +168,7 @@ public class PersonManagerQueryServices {
                     }
              }
         }else{
-            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("rowWorkEffortId",rowWorkEffortId,"partyIdFrom",addresseePartyId)).queryList();
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("workEffortId",rowWorkEffortId,"partyIdFrom",addresseePartyId)).queryList();
             for(GenericValue row : firstShareLines){
                 Map<String,Object> rowMap = row.getAllFields();
                 String partyIdTo = row.getString("partyIdTo");

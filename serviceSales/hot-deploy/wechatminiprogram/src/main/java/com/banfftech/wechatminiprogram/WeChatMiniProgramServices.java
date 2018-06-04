@@ -265,22 +265,22 @@ public class WeChatMiniProgramServices {
          * 4.LogicBlock
          * 如果初始链中的是一个产品,则要增加浏览量。
          */
-        updateProductBizData(Integer.parseInt("1"),delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
+        updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
 
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "partyIdTo",partyIdFrom ).queryFirst();
+                "partyIdTo", partyIdFrom).queryFirst();
 
         Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
         // 记录到 olap fact
-        dispatcher.runAsync("inForwardChainFact",UtilMisc.toMap(
-                "userLogin",admin,
-                "partyIdFrom",partyIdFrom,
-                "partyIdTo",partyId,
-                "workEffortId",workEffortId,
-                "basePartyId",forwardChainFact==null?partyIdFrom:forwardChainFact.getString("basePartyId"),
-                "firstName",personInfoMap.get("firstName"),
-                "objectInfo",personInfoMap.get("headPortrait"),
-                "createDate",new Timestamp(new Date().getTime())));
+        dispatcher.runAsync("inForwardChainFact", UtilMisc.toMap(
+                "userLogin", admin,
+                "partyIdFrom", partyIdFrom,
+                "partyIdTo", partyId,
+                "workEffortId", workEffortId,
+                "basePartyId", forwardChainFact == null ? partyIdFrom : forwardChainFact.getString("basePartyId"),
+                "firstName", personInfoMap.get("firstName"),
+                "objectInfo", personInfoMap.get("headPortrait"),
+                "createDate", new Timestamp(new Date().getTime())));
 
         return resultMap;
     }
@@ -414,7 +414,7 @@ public class WeChatMiniProgramServices {
                         Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
                     }
                     // Update ForWard Count
-                    updateProductBizData(Integer.parseInt("1"),delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
+                    updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
                     break;
                 case "CATALOG":
                     Map<String, Object> createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
@@ -555,25 +555,30 @@ public class WeChatMiniProgramServices {
 
             } else {
                 String dataId = productBizData.getString("dataId");
-                switch (bizTypeId) {
-                    case "FORWARD_PRODUCT":
-                        String forwardCount = productBizData.getString("forwardCount");
-                        productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
-                        break;
-                    case "ADDRESSEE_PRODUCT":
-                        String addresseeCount = productBizData.getString("addresseeCount");
-                        productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
-                        break;
-                    case "BUY_PRODUCT":
-                        String buyCount = productBizData.getString("buyCount");
-                        productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
-                        break;
+
+                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId).queryFirst();
+                //已经记录过则不可刷单
+                if (null == isExsitsBizData) {
+                    switch (bizTypeId) {
+                        case "FORWARD_PRODUCT":
+                            String forwardCount = productBizData.getString("forwardCount");
+                            productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
+                            break;
+                        case "ADDRESSEE_PRODUCT":
+                            String addresseeCount = productBizData.getString("addresseeCount");
+                            productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
+                            break;
+                        case "BUY_PRODUCT":
+                            String buyCount = productBizData.getString("buyCount");
+                            productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
+                            break;
+                    }
+
+                    productBizData.store();
+
+                    // Do Create Detail
+                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
                 }
-
-                productBizData.store();
-
-                // Do Create Detail
-                createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
             }
         }
     }

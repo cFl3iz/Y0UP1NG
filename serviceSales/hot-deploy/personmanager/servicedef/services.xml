@@ -335,6 +335,7 @@
 
 
 
+
     <!-- Query MyResource Order -->
     <service name="queryMyResourceOrder" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
@@ -485,6 +486,23 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+    <!-- queryProductCpsReport 产品排行 -->
+    <service name="queryProductCpsReport" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductCpsReport" auth="false">
+        <description>queryProductCpsReport</description>
+
+
+        <attribute name="reportList" type="List" mode="OUT" optional="true"/>
+        <attribute name="forwardCount" type="String" mode="OUT" optional="true"/>
+        <attribute name="salesCount" type="String" mode="OUT" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
 
     <service name="queryProductFeatures2" engine="java"

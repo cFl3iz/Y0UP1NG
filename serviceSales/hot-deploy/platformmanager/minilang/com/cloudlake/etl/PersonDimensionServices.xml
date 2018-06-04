@@ -76,7 +76,6 @@
                 </condition-list>
 
                 <condition-list combine="and">
-
                     <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
                     <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
                 </condition-list>

@@ -74,6 +74,93 @@ public class PersonManagerQueryServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+
+    /**
+     * queryProductCpsReport
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
+    public Map<String, Object> queryProductCpsReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        if (userLogin == null) {
+            Debug.logError("User Token Not Found...", module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+        }
+
+
+        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", userLogin.getString("partyId")).queryList();
+
+        int forwardCount = 0;
+        int buyCount = 0;
+
+        if(null!=productBizData&& productBizData.size()>0){
+            for(GenericValue gv : productBizData){
+
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String productId = gv.getString("productId");
+                String forwardCountStr = gv.getString("forwardCount");
+                String buyCountStr = gv.getString("buyCount");
+
+                forwardCount +=  Integer.parseInt(forwardCountStr);
+                buyCountStr +=  Integer.parseInt(buyCountStr);
+
+                GenericValue  product  = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+                String productName = product.getString("productName");
+                String detailImageUrl = product.getString("detailImageUrl");
+                rowMap.put("productName",productName);
+                rowMap.put("detailImageUrl",detailImageUrl);
+                rowMap.put("forwardCount",forwardCount);
+                rowMap.put("buyCountStr",buyCountStr);
+
+                returnList.add(rowMap);
+            }
+        }
+
+
+
+        for (int i = 0; i < returnList.size(); i++) {
+            Map<String, Object> gvMap = returnList.get(i);
+            int rowForwardCount = Integer.parseInt(gvMap.get("forwardCount") + "");
+            // 从第i+1为开始循环数组
+            for (int j = i + 1; j < returnList.size(); j++) {
+                Map<String, Object> gvMap2 = returnList.get(j);
+                int innerRowForwardCount = Integer.parseInt(gvMap2.get("forwardCount") + "");
+                // 如果前一位比后一位小，那么就将两个数字调换
+                // 这里是按降序排列
+                // 如果你想按升序排列只要改变符号即可
+                if (rowForwardCount < innerRowForwardCount) {
+                    Map<String, Object> r = returnList.get(i);
+                    returnList.set(i, returnList.get(j));
+                    returnList.set(j, r);
+                }
+            }
+        }
+
+
+        resultMap.put("reportList",returnList);
+        resultMap.put("forwardCount",forwardCount+"");
+        resultMap.put("salesCount",buyCount+"");
+
+        return resultMap;
+    }
+
+
     /**
      * QueryCustRequestList
      *

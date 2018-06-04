@@ -54,6 +54,7 @@
         <set field="productId" from-field="parameters.productId"/>
         <set field="createDate" from-field="parameters.createDate"/>
         <!-- TODO FIX ME -->
+        <log level="info" message=" inForwardChainFact : basePartyId:${basePartyId} , partyIdFrom:${partyIdFrom} , partyIdTo:${partyIdTo}"/>
         <entity-condition entity-name="YpForwardChainFact" list="isExsits">
             <condition-list combine="or">
                 <!--  普通筛选,不重复记录自己在同一个base和同一个from的to -->

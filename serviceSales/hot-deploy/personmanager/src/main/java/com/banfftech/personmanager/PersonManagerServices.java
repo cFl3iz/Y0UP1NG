@@ -3231,7 +3231,7 @@ public class PersonManagerServices {
         List<GenericValue> items =  EntityQuery.use(delegator).from("OrderItem").where("orderId",orderId).queryList();
 
         for(GenericValue item : items){
-                String innerProductId = item.get("productId");
+                String innerProductId = (String) item.get("productId");
                 updateProductBizDataFromOrder(salesRepId,(int) item.get("quantity"), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
         }
         return resultMap;

@@ -158,13 +158,29 @@ public class PersonManagerQueryServices {
         //查询首行
         if (!UtilValidate.isNotEmpty(addresseePartyId)) {
              firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"),"partyIdFrom",userLogin.get("partyId"))).queryList();
-
+             if(null!=firstShareLines){
+                    for(GenericValue row : firstShareLines){
+                        Map<String,Object> rowMap = row.getAllFields();
+                        String partyIdTo = row.getString("partyIdTo");
+                        Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
+                        rowMap.put("nextChainPersonNum",xiaJiRenShu);
+                        returnList.add(rowMap);
+                    }
+             }
         }else{
             firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("rowWorkEffortId",rowWorkEffortId,"partyIdFrom",addresseePartyId)).queryList();
+            for(GenericValue row : firstShareLines){
+                Map<String,Object> rowMap = row.getAllFields();
+                String partyIdTo = row.getString("partyIdTo");
+                String basePartyId = row.getString("basePartyId");
+                Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",basePartyId,"partyIdFrom",partyIdTo)).queryCount();
+                rowMap.put("nextChainPersonNum",xiaJiRenShu);
+                returnList.add(rowMap);
+            }
         }
 
 
-        resultMap.put("firstShareLines",firstShareLines);
+        resultMap.put("firstShareLines",returnList);
 
         return resultMap;
     }

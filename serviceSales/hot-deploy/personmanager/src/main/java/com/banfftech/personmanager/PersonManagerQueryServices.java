@@ -125,7 +125,11 @@ public class PersonManagerQueryServices {
                 String detailImageUrl = product.getString("detailImageUrl");
                 rowMap.put("productId",productId);
                 rowMap.put("productName",productName);
-
+                Set<String> fieldSet = new HashSet<String>();
+                fieldSet = new HashSet<String>();
+                fieldSet.add("drObjectInfo");
+                fieldSet.add("productId");
+                fieldSet.add("productContentTypeId");
                 //有单品图就拿单品图,否则就拿首图
                 EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");

@@ -277,7 +277,7 @@ public class WeChatMiniProgramServices {
                 "partyIdFrom",partyIdFrom,
                 "partyIdTo",partyId,
                 "workEffortId",workEffortId,
-                "basePartyId",forwardChainFact==null?partyIdFrom:forwardChainFact.getString("partyIdFrom"),
+                "basePartyId",forwardChainFact==null?partyIdFrom:forwardChainFact.getString("basePartyId"),
                 "firstName",personInfoMap.get("firstName"),
                 "objectInfo",personInfoMap.get("headPortrait"),
                 "createDate",new Timestamp(new Date().getTime())));

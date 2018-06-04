@@ -1,112 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+                xmlns="http://ofbiz.apache.org/Simple-Method"
+                xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
 
+    <simple-method method-name="loadAllYpPersonDimension" use-transaction="true"
+                   short-description="load Person Dimension">
 
-	<simple-method method-name="loadAllYpPersonDimension" use-transaction="true" short-description="load Person Dimension">
+        <entity-and list="personList" entity-name="Person">
+            <field-map field-name=""/>
+        </entity-and>
+        <iterate entry="person" list="personList">
+            <entity-and entity-name="YpPersonDimension" list="personDimension">
+                <field-map field-name="partyId" from-field="person.partyId"/>
+            </entity-and>
+            <if-empty field="personDimension">
+                <make-value value-field="YpPersonDimension" entity-name="YpPersonDimension"/>
 
-		<entity-and list="personList" entity-name="Person">
-			<field-map field-name=""/>
-		</entity-and>
-		<iterate entry="person" list="personList">
-		 	<entity-and entity-name="YpPersonDimension" list="personDimension">
-				<field-map field-name="partyId" from-field="person.partyId"/>
-			</entity-and>
-			<if-empty field="personDimension">
-				<make-value value-field="YpPersonDimension" entity-name="YpPersonDimension"/>
+                <set field="YpPersonDimension.partyId" from-field="person.partyId"/>
+                <set field="YpPersonDimension.firstName" from-field="person.firstName"/>
+                <set field="YpPersonDimension.middleName" from-field="person.middleName"/>
+                <set field="YpPersonDimension.lastName" from-field="person.lastName"/>
+                <set field="YpPersonDimension.nickname" from-field="person.nickname"/>
+                <set field="YpPersonDimension.gender" from-field="person.gender"/>
+                <set field="YpPersonDimension.birthDate" from-field="person.birthDate"/>
+                <set field="YpPersonDimension.height" from-field="person.height"/>
+                <set field="YpPersonDimension.weight" from-field="person.weight"/>
+                <entity-and entity-name="UserLogin" list="userLogins">
+                    <field-map field-name="partyId" from-field="person.partyId"/>
+                </entity-and>
+                <first-from-list entry="userLogin" list="userLogins"/>
+                <set field="YpPersonDimension.userLoginId" from-field="person.userLoginId"/>
+                <set-service-fields service-name="storeGenericDimension" map="parameters" to-map="inMap"/>
+                <set field="inMap.naturalKeyFields[]" value="partyId"/>
+                <set field="inMap.dimensionValue" from-field="YpPersonDimension"/>
+                <set field="inMap.updateMode" value="TYPE1"/>
+                <call-service service-name="storeGenericDimension" in-map-name="inMap"/>
+            </if-empty>
+        </iterate>
 
-				<set field="YpPersonDimension.partyId" from-field="person.partyId"/>
-				<set field="YpPersonDimension.firstName" from-field="person.firstName"/>
-				<set field="YpPersonDimension.middleName" from-field="person.middleName"/>
-				<set field="YpPersonDimension.lastName" from-field="person.lastName"/>
-				<set field="YpPersonDimension.nickname" from-field="person.nickname"/>
-				<set field="YpPersonDimension.gender" from-field="person.gender"/>
-				<set field="YpPersonDimension.birthDate" from-field="person.birthDate"/>
-				<set field="YpPersonDimension.height" from-field="person.height"/>
-				<set field="YpPersonDimension.weight" from-field="person.weight"/>
-				<entity-and entity-name="UserLogin" list="userLogins">
-					<field-map field-name="partyId" from-field="person.partyId"/>
-				</entity-and>
-				<first-from-list entry="userLogin" list="userLogins"/>
-				<set field="YpPersonDimension.userLoginId" from-field="person.userLoginId"/>
-				<set-service-fields service-name="storeGenericDimension" map="parameters" to-map="inMap"/>
-				<set field="inMap.naturalKeyFields[]" value="partyId"/>
-				<set field="inMap.dimensionValue" from-field="YpPersonDimension"/>
-				<set field="inMap.updateMode" value="TYPE1"/>
-				<call-service service-name="storeGenericDimension" in-map-name="inMap"/>
-			</if-empty>
-		</iterate>
-
-	</simple-method>
-
-
+    </simple-method>
 
 
-	<!-- join forward chain Dimension -->
-	<simple-method method-name="inForwardChainFact" use-transaction="true" short-description="load  Fact">
+    <!-- join forward chain Dimension -->
+    <simple-method method-name="inForwardChainFact" use-transaction="true" short-description="load  Fact">
 
-		<set field="basePartyId" from-field="parameters.basePartyId" />
-		<set field="partyIdFrom" from-field="parameters.partyIdFrom" />
-		<set field="partyIdTo" from-field="parameters.partyIdTo" />
-		<set field="firstName" from-field="parameters.firstName" />
-		<set field="objectInfo" from-field="parameters.objectInfo" />
-		<set field="workEffortId" from-field="parameters.workEffortId" />
-		<set field="productId" from-field="parameters.productId" />
-		<set field="createDate" from-field="parameters.createDate" />
-<!-- TODO FIX ME -->
-		<entity-condition entity-name="YpForwardChainFact" list="isExsits">
-			<condition-list combine="and">
-				<!-- 这一行的销售代表不会重复创建新链.和首行出现 -->
-				<condition-expr field-name="partyIdFrom" from-field="basePartyId" operator="equals"/>
-				<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+        <set field="basePartyId" from-field="parameters.basePartyId"/>
+        <set field="partyIdFrom" from-field="parameters.partyIdFrom"/>
+        <set field="partyIdTo" from-field="parameters.partyIdTo"/>
+        <set field="firstName" from-field="parameters.firstName"/>
+        <set field="objectInfo" from-field="parameters.objectInfo"/>
+        <set field="workEffortId" from-field="parameters.workEffortId"/>
+        <set field="productId" from-field="parameters.productId"/>
+        <set field="createDate" from-field="parameters.createDate"/>
+        <!-- TODO FIX ME -->
+        <entity-condition entity-name="YpForwardChainFact" list="isExsits">
+            <condition-list combine="or">
+                <!--  普通筛选,不重复记录自己在同一个base和同一个from的to -->
+                <condition-list combine="and">
+                    <condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
+                    <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
+                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+                </condition-list>
+                <condition-list combine="and">
+                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+                    <!-- baseParty不再被记录到任何自己的子链或首链 -->
+                    <condition-expr field-name="partyIdFrom" from-field="basePartyId" operator="equals"/>
+                    <condition-expr field-name="basePartyId" from-field="partyIdTo" operator="equals"/>
+                </condition-list>
 
-				<!-- 已经在第一行出现的人不会创建重复出现第一行 -->
-				<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
+                <condition-list combine="and">
+                    <!-- 已经作为from的人不能再被记录成to -->
+                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+                    <condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>
+                </condition-list>
 
-				<!-- 销售代表自己不能在后续行出现 -->
-				<condition-expr field-name="partyIdTo" from-field="basePartyId" operator="equals"/>
+                <condition-list combine="and">
+                    <!-- 已经作为to的人不能再出现在上层的from -->
+                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
+                    <condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
+                </condition-list>
 
-				<!--<condition-list combine="or">-->
-					<!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
-					<!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
-					<!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-					<!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
-				<!--</condition-list>-->
+            </condition-list>
+            <!--<order-by field-name="-fromDate"/>-->
+        </entity-condition>
+        <!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->
+        <!--<condition-list>-->
+        <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
+        <!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
+        <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
+        <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
+        <!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
+        <!--</condition-list>-->
+        <!--</entity-condition>-->
 
-			</condition-list>
-			<!--<order-by field-name="-fromDate"/>-->
-		</entity-condition>
-		<!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->
-			<!--<condition-list>-->
-				<!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
-				<!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
-				<!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
-				<!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-				<!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
-			<!--</condition-list>-->
-		<!--</entity-condition>-->
-
-		<if-empty field="isExsits">
-			<make-value value-field="YpForwardChainFact" entity-name="YpForwardChainFact"/>
-			<set field="YpForwardChainFact.basePartyId" from-field="parameters.basePartyId" />
-			<set field="YpForwardChainFact.partyIdFrom" from-field="parameters.partyIdFrom" />
-			<set field="YpForwardChainFact.partyIdTo" from-field="parameters.partyIdTo" />
-			<set field="YpForwardChainFact.firstName" from-field="parameters.firstName" />
-			<set field="YpForwardChainFact.objectInfo" from-field="parameters.objectInfo" />
-			<set field="YpForwardChainFact.workEffortId" from-field="parameters.workEffortId" />
-			<set field="YpForwardChainFact.productId" from-field="parameters.productId" />
-			<set field="YpForwardChainFact.createDate" from-field="parameters.createDate" />
-			<create-value value-field="YpForwardChainFact"/>
-		</if-empty>
-
+        <if-empty field="isExsits">
+            <make-value value-field="YpForwardChainFact" entity-name="YpForwardChainFact"/>
+            <set field="YpForwardChainFact.basePartyId" from-field="parameters.basePartyId"/>
+            <set field="YpForwardChainFact.partyIdFrom" from-field="parameters.partyIdFrom"/>
+            <set field="YpForwardChainFact.partyIdTo" from-field="parameters.partyIdTo"/>
+            <set field="YpForwardChainFact.firstName" from-field="parameters.firstName"/>
+            <set field="YpForwardChainFact.objectInfo" from-field="parameters.objectInfo"/>
+            <set field="YpForwardChainFact.workEffortId" from-field="parameters.workEffortId"/>
+            <set field="YpForwardChainFact.productId" from-field="parameters.productId"/>
+            <set field="YpForwardChainFact.createDate" from-field="parameters.createDate"/>
+            <create-value value-field="YpForwardChainFact"/>
+        </if-empty>
 
 
-
-	</simple-method>
-
-
-
+    </simple-method>
 
 
 </simple-methods>

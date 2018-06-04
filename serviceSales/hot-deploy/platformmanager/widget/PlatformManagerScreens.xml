@@ -262,8 +262,27 @@
 
 
 
-
-
+    <!-- App 商家管理 -->
+    <screen name="FindPartyApps">
+    <section>
+        <actions>
+            <set field="headerItem" value="FindPartyApps"/>
+            <set field="tabButtonItem" value="FindPartyApps" />
+        </actions>
+        <widgets>
+            <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                <decorator-section name="body">
+                    <screenlet title="${uiLabelMap.CommonSearch}">
+                        <include-form name="FindPartyApps" location="component://platformmanager/widget/PlatformManagerForms.xml" />
+                    </screenlet>
+                    <screenlet title="${uiLabelMap.CommonList}">
+                        <include-form name="partyAppList" location="component://platformmanager/widget/PlatformManagerForms.xml" />
+                    </screenlet>
+                </decorator-section>
+            </decorator-screen>
+        </widgets>
+    </section>
+</screen>
 
     <screen name="FindRealProductList">
         <section>

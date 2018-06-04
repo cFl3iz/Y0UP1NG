@@ -118,13 +118,26 @@ public class PersonManagerQueryServices {
                 String buyCountStr = gv.getString("buyCount");
 
                 forwardCount +=  Integer.parseInt(forwardCountStr);
-                buyCountStr +=  Integer.parseInt(buyCountStr);
+                buyCount +=  Integer.parseInt(buyCountStr);
 
                 GenericValue  product  = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
                 String productName = product.getString("productName");
                 String detailImageUrl = product.getString("detailImageUrl");
                 rowMap.put("productId",productId);
                 rowMap.put("productName",productName);
+
+                //有单品图就拿单品图,否则就拿首图
+                EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
+                EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
+                        null, null, false);
+                if(singlePictures!=null && singlePictures.size()>0){
+                    rowMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo")+"");
+                }else{
+                    rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+                }
+
                 rowMap.put("detailImageUrl",detailImageUrl);
                 rowMap.put("forwardCount",forwardCountStr);
                 rowMap.put("buyCountStr",buyCountStr);

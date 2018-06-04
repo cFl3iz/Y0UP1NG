@@ -550,7 +550,7 @@ public class WeChatMiniProgramServices {
             } else {
                 String dataId = productBizData.getString("dataId");
 
-                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId).queryFirst();
+                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
                 //已经记录过则不可刷单
                 if (null == isExsitsBizData) {
                     switch (bizTypeId) {
@@ -609,8 +609,7 @@ public class WeChatMiniProgramServices {
 
             } else {
                 String dataId = productBizData.getString("dataId");
-
-                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId).queryFirst();
+                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
                 //已经记录过则不可刷单
                 if (null == isExsitsBizData) {
                     switch (bizTypeId) {

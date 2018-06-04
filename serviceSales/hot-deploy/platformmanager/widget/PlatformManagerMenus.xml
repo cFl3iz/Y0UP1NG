@@ -17,6 +17,9 @@
             <link target="FindProductSizeDescription"/>
         </menu-item>
 
+        <menu-item name="FindPartyApps" title="商家管理(小程序APP管理)">
+            <link target="FindPartyApps"/>
+        </menu-item>
 
     </menu>
 

@@ -6636,11 +6636,11 @@ public class PersonManagerServices {
 
 
             // 记录购买量
-            for (GenericValue item : orderItemList) {
-                String productId = item.get("productId") + "";
-                String amount = item.get("quantity") + "";
-                updateProductBizData(Integer.parseInt(amount), delegator, dispatcher, admin, partyId, productId, createOrderOut.get("orderId") + "", "BUY_PRODUCT");
-            }
+//            for (GenericValue item : orderItemList) {
+//                String productId = item.get("productId") + "";
+//                String amount = item.get("quantity") + "";
+//                updateProductBizData(Integer.parseInt(amount), delegator, dispatcher, admin, partyId, productId, createOrderOut.get("orderId") + "", "BUY_PRODUCT");
+//            }
 
             //判断是不是只有一个orderId
 

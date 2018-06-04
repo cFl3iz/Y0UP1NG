@@ -429,6 +429,14 @@
         <response name="error" type="view" value="FindProductSizeDescription"/>
     </request-map>
 
+    <!-- 小程序App应用列表管理 -->
+    <request-map uri="FindPartyApps">
+    <security https="true" auth="true"/>
+    <!--<event invoke="FindPartyApps" type="service"/>-->
+    <response name="success" type="view" value="FindPartyApps"/>
+    <response name="error" type="view" value="FindPartyApps"/>
+    </request-map>
+
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
     <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
 
@@ -439,6 +447,8 @@
 
 <!-- 产品内容 -->
     <view-map name="FindRealProductList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductList"/>
+    <!-- 小程序应用列表 -->
+    <view-map name="FindPartyApps" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindPartyApps"/>
     <view-map name="FindRealProductContentList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentList"/>
     <view-map name="FindRealProductContentListSimple" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentListSimple"/>
     <view-map name="RealProductImageAssoc" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#RealProductImageAssoc"/>

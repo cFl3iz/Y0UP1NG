@@ -122,6 +122,47 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * 从OLAP中查询转发数据
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryForwardChainFirstLinesOlap(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+
+        // 当前行的basePartyId
+        String addresseePartyId =     (String) context.get("addresseePartyId");
+        String rowWorkEffortId  =     (String) context.get("workEffortId");
+
+        if (userLogin == null) {
+            Debug.logError("User Token Not Found...", module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+        }
+
+
+
+        return resultMap;
+    }
+
+
+
+    /**
      * Query ForwardChain FirstLines 'New Logic'
      *
      * @param dctx

@@ -249,7 +249,7 @@ public class WeChatMiniProgramServices {
          * 3.LogicBlock
          * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
          */
-        GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdFrom, "roleTypeId", "SALES_REP").queryFirst();
 
 
         if (null != isSalesRep) {

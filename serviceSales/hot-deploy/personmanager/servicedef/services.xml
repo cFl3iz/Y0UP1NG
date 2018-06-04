@@ -321,8 +321,9 @@
     </service>
 
     <!-- QueryForwardChainFirstLines 2B New -->
+    <!-- 更新后 从olap 查询转发记录 -->
     <service name="queryForwardChainFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
-             invoke="queryForwardChainFirstLines" auth="false">
+             invoke="queryForwardChainFirstLinesOlap" auth="false">
         <description>queryForwardChainFirstLines</description>
         <!-- 收信人 -->
         <attribute name="addresseePartyId" type="String" mode="IN"  optional="true"/>

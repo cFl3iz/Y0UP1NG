@@ -276,7 +276,7 @@
                         <include-form name="FindPartyApps" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                     </screenlet>
                     <screenlet title="${uiLabelMap.CommonList}">
-                        <include-form name="partyAppList" location="component://platformmanager/widget/PlatformManagerForms.xml" />
+                        <include-form name="PartyAppList" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                     </screenlet>
                 </decorator-section>
             </decorator-screen>

@@ -132,17 +132,17 @@
         <field name="noConditionFind">
             <hidden value="Y"/>
         </field>
-        <field name="appId" title="款号商品编码">
+        <field name="appId" title="AppID">
             <text-find/>
         </field>
-        <field name="partyId" title="款号商品编码">
+        <field name="partyId" title="组织编号">
             <text-find/>
         </field>
 
     </form>
 
 
-    <form name="ProductVirtualList" target="FindRealProductList" title="" type="list" list-name="listIt"
+    <form name="PartyAppList" target="FindPartyApps" title="" type="list" list-name="listIt"
           paginate-target="FindRealProductList" paginate="true" paginate-style="nav-pager"
           odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <actions>

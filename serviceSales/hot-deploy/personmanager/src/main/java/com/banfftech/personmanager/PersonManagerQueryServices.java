@@ -104,7 +104,7 @@ public class PersonManagerQueryServices {
         }
 
 
-        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", userLogin.getString("partyId")).orderBy("forwardCount").queryList();
+        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", userLogin.getString("partyId")).orderBy("-forwardCount").queryList();
 
         int forwardCount = 0;
         int buyCount = 0;

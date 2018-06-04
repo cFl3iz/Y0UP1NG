@@ -61,10 +61,9 @@
 				<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
 				<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
 				<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
-				<!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-				<!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
+				<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
+				<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>
 			</condition-list>
-
 		</entity-condition>
 
 		<if-empty field="isExsits">

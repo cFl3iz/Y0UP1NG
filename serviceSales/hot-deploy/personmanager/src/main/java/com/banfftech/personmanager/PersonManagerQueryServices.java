@@ -142,7 +142,7 @@ public class PersonManagerQueryServices {
                     rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
                 }
 
-                rowMap.put("detailImageUrl",detailImageUrl);
+//                rowMap.put("detailImageUrl",detailImageUrl);
                 rowMap.put("forwardCount",forwardCountStr);
                 rowMap.put("buyCountStr",buyCountStr);
 

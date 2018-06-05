@@ -1786,9 +1786,9 @@ public class WeChatOrderQueryServices {
                 String statusId = (String) gv.get("statusId");
                 Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId",rowMap.get("orderId")));
-                if(!statusId.equals("ORDER_CANCELLED")){
+//                if(!statusId.equals("ORDER_CANCELLED")){    }
                     rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
-                }
+
                 //隐藏
                 if(null!=hiddenList){
                     if(hiddenList.contains(rowMap.get("orderId"))){
@@ -2091,9 +2091,9 @@ public class WeChatOrderQueryServices {
                 Map<String,Object> calcOrderTotal =  dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId",rowMap.get("orderId")));
 
-                if(!statusId.equals("ORDER_CANCELLED")){
+//                if(!statusId.equals("ORDER_CANCELLED")){}
                     rowMap.put("grandTotal",calcOrderTotal.get("availableReturnTotal")+"");
-                }
+
 
                 //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)
 

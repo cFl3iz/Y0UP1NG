@@ -1786,7 +1786,7 @@ public class WeChatOrderQueryServices {
                 BigDecimal availableTotal = (BigDecimal) calcOrderTotal.get("availableReturnTotal");
                 int r = availableTotal.compareTo(BigDecimal.ZERO); //和0，Zero比较
                 //小于
-                if (r == -1) {
+                if (r == -1 || r==0) {
                     rowMap.put("grandTotal", "0");
                 } else {
                     rowMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
@@ -2092,7 +2092,7 @@ public class WeChatOrderQueryServices {
                 BigDecimal availableTotal = (BigDecimal) calcOrderTotal.get("availableReturnTotal");
                 int r = availableTotal.compareTo(BigDecimal.ZERO); //和0，Zero比较
                 //小于
-                if (r == -1) {
+                if (r == -1 || r==0) {
                     rowMap.put("grandTotal", "0");
                 } else {
                     rowMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");

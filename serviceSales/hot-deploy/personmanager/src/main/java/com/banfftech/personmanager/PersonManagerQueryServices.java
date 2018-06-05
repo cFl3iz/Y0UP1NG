@@ -142,7 +142,7 @@ public class PersonManagerQueryServices {
         if(productBizData!=null && productBizData.size()>0){
             for(GenericValue gv : productBizData ){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
-                String partyId = gv.get("partyId");
+                String partyId = gv.getString("partyId");
                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String dateStr = "";
                 try {

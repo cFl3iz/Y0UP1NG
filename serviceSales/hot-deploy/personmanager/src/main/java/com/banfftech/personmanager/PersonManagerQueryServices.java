@@ -76,13 +76,113 @@ public class PersonManagerQueryServices {
 
 
     /**
-     * queryProductCpsReport
-     * @param request
-     * @param response
+     * 统计详情数据
+     * @param dctx
+     * @param context
      * @return
-     * @throws GenericServiceException
      * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
      */
+    public Map<String, Object> queryProductCpsReportDetail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String productId = (String) context.get("productId");
+        String bizType = (String) context.get("bizType");
+        String dataId  = (String) context.get("dataId");
+
+
+        if (userLogin == null) {
+            Debug.logError("User Token Not Found...", module);
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+        }
+
+
+
+        int resultCount = 0;
+
+
+        Map<String,Object> productMap = new HashMap<String, Object>();
+
+        GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId", productId ).queryFirst();
+
+        productMap.put("productName",product.getString("productName"));
+        productMap.put("productId",product.getString("productId"));
+        HashSet<String> fieldSet = new HashSet<String>();
+        fieldSet.add("drObjectInfo");
+        fieldSet.add("productId");
+        fieldSet.add("productContentTypeId");
+        //有单品图就拿单品图,否则就拿首图
+        EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
+        EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+        EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+        List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, fieldSet,
+                null, null, false);
+        if (singlePictures != null && singlePictures.size() > 0) {
+            productMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo") + "");
+        } else {
+            productMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+        }
+
+
+
+        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("productId", productId,"dataId",dataId ,"bizTypeId",bizType).orderBy("-fromDate").queryList();
+
+        if(productBizData!=null && productBizData.size()>0){
+            for(GenericValue gv : productBizData ){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String partyId = gv.get("partyId");
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateStr = "";
+                try {
+                    dateStr = sdf.format(gv.get("fromDate"));
+                } catch (Exception e) {
+                }
+                rowMap.put("personInfo",queryPersonBaseInfo(delegator,partyId));
+                rowMap.put("dateTime",dateStr);
+                returnList.add(rowMap);
+            }
+        }
+
+        GenericValue bizData =  EntityQuery.use(delegator).from("ProductBizData").where("productId", productId,"productId",productId ).queryFirst();
+        String count = "";
+        if(bizType.equals("ADDRESSEE_PRODUCT")){
+            count = ""+bizData.get("addresseeCount");
+        }
+        if(bizType.equals("FORWARD_PRODUCT")){
+            count = ""+bizData.get("forwardCount");
+        }
+        if(bizType.equals("BUY_PRODUCT")){
+            count = ""+bizData.get("buyCount");
+        }
+        productMap.put("count",count);
+
+        resultMap.put("detailList",returnList);
+        resultMap.put("productMap",productMap);
+
+        return resultMap;
+    }
+
+
+        /**
+         * queryProductCpsReport
+         * @param request
+         * @param response
+         * @return
+         * @throws GenericServiceException
+         * @throws GenericEntityException
+         */
     public Map<String, Object> queryProductCpsReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
         //Service Head
@@ -114,6 +214,7 @@ public class PersonManagerQueryServices {
 
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
+                String dataId = gv.getString("dataId");
                 String forwardCountStr = gv.getString("forwardCount");
                 String buyCountStr = gv.getString("buyCount");
 
@@ -124,6 +225,7 @@ public class PersonManagerQueryServices {
                 String productName = product.getString("productName");
                 String detailImageUrl = product.getString("detailImageUrl");
                 rowMap.put("productId",productId);
+                rowMap.put("dataId",dataId);
                 rowMap.put("productName",productName);
                 Set<String> fieldSet = new HashSet<String>();
                 fieldSet = new HashSet<String>();

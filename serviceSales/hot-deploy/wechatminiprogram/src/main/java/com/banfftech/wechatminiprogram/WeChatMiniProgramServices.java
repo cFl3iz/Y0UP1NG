@@ -571,7 +571,7 @@ public class WeChatMiniProgramServices {
                     productBizData.store();
 
                     // Do Create Detail
-                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
+                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
                 }
             }
 
@@ -630,7 +630,7 @@ public class WeChatMiniProgramServices {
                     productBizData.store();
 
                     // Do Create Detail
-                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId);
+                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
                 }
             }
         }
@@ -644,13 +644,14 @@ public class WeChatMiniProgramServices {
      * @param partyId
      * @param bizTypeId
      */
-    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId) throws GenericEntityException, GenericServiceException {
+    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId,String productId) throws GenericEntityException, GenericServiceException {
 
         // Create Detail Data
         Map<String, Object> createProductBizDataDetail = new HashMap<String, Object>();
         createProductBizDataDetail.put("partyId", partyId);
         createProductBizDataDetail.put("objectId", objectId);
         createProductBizDataDetail.put("dataId", dataId);
+        createProductBizDataDetail.put("productId", productId);
         createProductBizDataDetail.put("bizTypeId", bizTypeId);
         createProductBizDataDetail.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
         GenericValue productBizDataDetail = delegator.makeValue("ProductBizDataDetail", createProductBizDataDetail);

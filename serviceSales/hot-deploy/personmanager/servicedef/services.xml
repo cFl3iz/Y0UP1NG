@@ -503,8 +503,19 @@
                    optional="true"/>
     </service>
 
-
-
+    <!-- 详细数据统计 -->
+    <service name="queryProductCpsReportDetail" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryProductCpsReportDetail" auth="false">
+        <description>queryProductCpsReportDetail</description>
+        <attribute name="productId" type="String" mode="IN"/>
+        <attribute name="bizType" type="String" mode="IN"/>
+        <attribute name="dataId" type="String" mode="IN"/>
+        <attribute name="detailList" type="List" mode="OUT" optional="true"/>
+        <attribute name="productMap" type="Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
     <service name="queryProductFeatures2" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryProductFeatures2" auth="false">

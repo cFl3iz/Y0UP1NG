@@ -367,6 +367,7 @@
         <field name="dataId"      type="id"></field>
         <!-- WorkEffort Or OrderId -->
         <field name="objectId" type="id"></field>
+        <field name="productId" type="id"></field>
         <field name="partyId" type="id"></field>
         <field name="bizTypeId" type="id"></field>
         <!-- 发生时间 -->

@@ -606,7 +606,8 @@ public class WeChatMiniProgramServices {
             GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
 
             if (null == productBizData) {
-
+                //创建我的产品业务事件
+                createProductBizData(delegator, dispatcher, admin, ownerPartyId, objectId, workEffortId, "FORWARD_PRODUCT");
             } else {
                 String dataId = productBizData.getString("dataId");
                 GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();

@@ -328,5 +328,60 @@
     <Party partyId="YP_DEMO" partyTypeId="PARTY_GROUP"/>
     <PartyGroup partyId="YP_DEMO" groupName="DEMO_2C"/>
 
+    <ProductStore productStoreId="YP_STORE" storeName="友评店铺" companyName="YP" title="YP"
+                  payToPartyId="YP" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+                   oneInventoryFacility="Y" checkInventory="Y"
+                  splitPayPrefPerShpGrp="N" reserveInventory="Y"
+                  reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="Y" isImmediatelyFulfilled="Y"
+                  defaultLocaleString="zh_CN" defaultCurrencyUomId="CNY" allowPassword="Y" explodeOrderItems="N"
+                  retryFailedAuths="N" manualAuthIsCapture="Y"
+                  headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
+                  digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+                  itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="YP"
+                  visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+    <ProductStore productStoreId="YP_DEMO_STORE" storeName="友评DEMO店铺" companyName="YP" title="YP"
+                  payToPartyId="YP_DEMO" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+                   oneInventoryFacility="Y" checkInventory="Y"
+                  splitPayPrefPerShpGrp="N" reserveInventory="Y"
+                  reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="Y" isImmediatelyFulfilled="Y"
+                  defaultLocaleString="zh_CN" defaultCurrencyUomId="CNY" allowPassword="Y" explodeOrderItems="N"
+                  retryFailedAuths="N" manualAuthIsCapture="Y"
+                  headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
+                  digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+                  itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="YP_DEMO"
+                  visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+
+
+
+
+
+
+    <PartyAttribute partyId="ZUCZUG" attrName="DEMO_STORE" attrValue="false"/>
+    <PartyAttribute partyId="ZUCZUG" attrName="SERVICE_TYPE" attrValue="2B"/>
+    <PartyAttribute partyId="ZUCZUG" attrName="NEED_SHOPPING_CART" attrValue="true"/>
+    <PartyIdentification partyId="ZUCZUG" partyIdentificationTypeId="MINIPROGRAM_APP_ID" idValue="wx1106576d138cd8e6"/>
+
+    <PartyIdentification partyId="KANGCHENG" partyIdentificationTypeId="MINIPROGRAM_APP_ID" idValue="wx119831dae45a3f3f"/>
+    <PartyIdentification partyId="YP" partyIdentificationTypeId="MINIPROGRAM_APP_ID" idValue="wx299644ef4c9afbde"/>
+    <PartyIdentification partyId="YP_DEMO" partyIdentificationTypeId="MINIPROGRAM_APP_ID" idValue="wxe8b50001e5ea4383"/>
+
+
+    <PartyAttribute partyId="KANGCHENG" attrName="DEMO_STORE" attrValue="false"/>
+    <PartyAttribute partyId="KANGCHENG" attrName="SERVICE_TYPE" attrValue="2B"/>
+    <PartyAttribute partyId="KANGCHENG" attrName="NEED_SHOPPING_CART" attrValue="true"/>
+
+    <PartyAttribute partyId="YP" attrName="DEMO_STORE" attrValue="true"/>
+    <PartyAttribute partyId="YP" attrName="SERVICE_TYPE" attrValue="2B"/>
+    <PartyAttribute partyId="YP" attrName="NEED_SHOPPING_CART" attrValue="true"/>
+
+
+    <PartyAttribute partyId="YP_DEMO" attrName="DEMO_STORE" attrValue="true"/>
+    <PartyAttribute partyId="YP_DEMO" attrName="SERVICE_TYPE" attrValue="2C"/>
+    <PartyAttribute partyId="YP_DEMO" attrName="NEED_SHOPPING_CART" attrValue="true"/>
+
+
+
 
 </entity-engine-xml>

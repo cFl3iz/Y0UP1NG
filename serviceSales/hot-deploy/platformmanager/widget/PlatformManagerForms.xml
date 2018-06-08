@@ -161,7 +161,7 @@
                 <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
-        <field name="partyId" title="应用编号" id-name="partyId"    >
+        <field name="partyId" title="应用代号" id-name="partyId"    >
             <hyperlink description="${partyId}" target="EditParty" also-hidden="false" link-type="layered-modal">
                 <parameter param-name="exampleId"/>
             </hyperlink>

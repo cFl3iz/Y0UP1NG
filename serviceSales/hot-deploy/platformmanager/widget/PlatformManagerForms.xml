@@ -204,7 +204,7 @@
             </display>
         </field>
 
-        <field name="hasShoppingCart"  title="应用购物车" id-name="hasShoppingCart"   >
+        <field name="hasShoppingCart"  title="应用购物车" tooltip="点我直接改" id-name="hasShoppingCart"   >
             <display>
                 <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
                     <simple-editor/>

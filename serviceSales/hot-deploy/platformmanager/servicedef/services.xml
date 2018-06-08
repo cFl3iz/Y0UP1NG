@@ -494,4 +494,29 @@
         <!--<implements service="interfaceProductPromoAction"/>-->
     <!--</service>-->
 
+
+
+
+    <!-- Update Party App Config -->
+    <service name="updatePartyAppConfig"
+             engine="simple"
+             transaction-timeout="7200000"
+             location="component://platformmanager/minilang/com/cloudlake/common/PartyAppConfiguration.xml"
+             invoke="updatePartyAppConfig"
+             auth="false">
+        <description>updatePartyAppConfig</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="idValue" type="String" mode="IN" optional="true"/>
+        <attribute name="groupName" type="String" mode="IN" optional="true"/>
+        <attribute name="isDemoStore" type="String" mode="IN" optional="true"/>
+        <attribute name="appServiceType" type="String" mode="IN" optional="true"/>
+        <attribute name="hasShoppingCart" type="String" mode="IN" optional="true"/>
+
+
+    </service>
+
+
+
+
 </services>

@@ -459,4 +459,77 @@
     </entity>
 
 
+
+
+    <!-- 小程序店铺配置视图实体 -->
+    <view-entity entity-name="PartyStoreAppConfig" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
+
+        <member-entity entity-name="ProductStore" entity-alias="Store"/>
+        <member-entity entity-name="PartyIdentification" entity-alias="Identification" />
+        <member-entity entity-name="PartyGroup" entity-alias="PartyGroup" />
+
+        <member-entity entity-name="PartyAttribute" entity-alias="DemoAppStore"/>
+        <member-entity entity-name="PartyAttribute" entity-alias="AppStoreServiceType"/>
+        <member-entity entity-name="PartyAttribute" entity-alias="AppShoppingCart"/>
+
+
+
+
+        <!-- Group Fields Alias -->
+        <alias entity-alias="PartyGroup" name="groupName" field="groupName"/>
+        <alias entity-alias="PartyGroup" name="partyId" field="partyId"/>
+
+
+
+
+
+
+        <!-- Store Fields Alias -->
+        <!--<alias entity-alias="Store" name="isDemoStore" field="isDemoStore"/>-->
+
+        <!-- Identification Fields Alias -->
+        <alias entity-alias="Identification" name="idValue" field="idValue"/>
+        <alias entity-alias="Identification" name="partyIdentificationTypeId" field="partyIdentificationTypeId"/>
+
+
+        <!--<alias-all entity-alias="DemoAppStore"/>-->
+        <!--<alias-all entity-alias="AppStoreServiceType"/>-->
+        <!--<alias-all entity-alias="AppShoppingCart"/>-->
+        <alias entity-alias="DemoAppStore" name="isDemoStore" field="attrValue"/>
+        <alias entity-alias="AppStoreServiceType" name="appServiceType" field="attrValue"/>
+        <alias entity-alias="AppShoppingCart" name="hasShoppingCart" field="attrValue"/>
+
+        <view-link entity-alias="PartyGroup" rel-entity-alias="Identification" >
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PartyGroup" rel-entity-alias="Store" >
+            <key-map field-name="partyId" rel-field-name="payToPartyId" />
+        </view-link>
+
+        <view-link entity-alias="PartyGroup" rel-entity-alias="DemoAppStore" >
+            <key-map field-name="partyId" rel-field-name="partyId" />
+            <entity-condition>
+                <condition-expr entity-alias="DemoAppStore" field-name="attrName" operator="equals" value="DEMO_STORE"/>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PartyGroup" rel-entity-alias="AppStoreServiceType" >
+            <key-map field-name="partyId" rel-field-name="partyId" />
+            <entity-condition>
+                <condition-expr
+                        entity-alias="AppStoreServiceType" field-name="attrName" operator="equals" value="SERVICE_TYPE"/>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PartyGroup" rel-entity-alias="AppShoppingCart" >
+            <key-map field-name="partyId" rel-field-name="partyId" />
+            <entity-condition>
+                <condition-expr
+                        entity-alias="AppShoppingCart" field-name="attrName" operator="equals" value="NEED_SHOPPING_CART"/>
+            </entity-condition>
+        </view-link>
+
+
+    </view-entity>
+
+
+
 </entitymodel>

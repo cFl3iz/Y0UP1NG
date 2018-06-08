@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+    <!-- The controller elements that are common to all OFBiz components
+         can be found in the following xml file. A component can override the
+         elements found in the common-controller.xml file. -->
+    <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+
+    <description>ZuczugEtl Component Site Configuration File</description>
+
+    <!-- Events to run on every request before security (chains exempt) -->
+    <!--
+    <preprocessor>
+    </preprocessor>
+    -->
+    <!-- Events to run on every request after all other processing (chains exempt) -->
+    <!--
+    <postprocessor>
+        <event name="test" type="java" path="org.ofbiz.webapp.event.TestEvent" invoke="test"/>
+    </postprocessor>
+    -->
+
+    <!-- Request Mappings -->
+    <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
+    <request-map uri="ReportBuilderSelectStarSchema">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ReportBuilderSelectStarSchema"/>
+    </request-map>
+    <request-map uri="ReportBuilderSelectStarSchemaFields">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ReportBuilderSelectStarSchemaFields"/>
+    </request-map>
+    <request-map uri="ReportBuilderRenderStarSchemaReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ReportBuilderRenderStarSchemaReport"/>
+    </request-map>
+    
+    <request-map uri="storeOrderListReport"><security https="true" auth="true"/>
+        <response name="success" type="view" value="storeOrderListReport"/>
+    </request-map>
+    <request-map uri="requestProductReport"><security https="true" auth="true"/>
+        <response name="success" type="view" value="requestProductReport"/>
+    </request-map>    
+    <request-map uri="requestProductList"><security https="true" auth="true"/>
+        <response name="success" type="view" value="requestProductList"/>
+    </request-map>    
+    <request-map uri="requestCustomerReport"><security https="true" auth="true"/>
+        <response name="success" type="view" value="requestCustomerReport"/>
+    </request-map>    
+    <request-map uri="requestCustomerList"><security https="true" auth="true"/>
+        <response name="success" type="view" value="requestCustomerList"/>
+    </request-map>    
+    <request-map uri="requestCustomerStoreReport"><security https="true" auth="true"/>
+        <response name="success" type="view" value="requestCustomerStoreReport"/>
+    </request-map>    
+
+    <request-map uri="customerOrderListReport"><security https="true" auth="true"/>
+        <response name="success" type="view" value="customerOrderListReport"/>
+    </request-map>    
+
+	<!-- json request -->
+    <request-map uri="loadCustomerInventoryDailyFact">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadCustomerInventoryDailyFact"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+    <request-map uri="loadAllCustomerInventoryDailyFact">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadAllCustomerInventoryDailyFact"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <request-map uri="DemoService.svc">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="main.java.com.banfftech.platformmanager.odata.OdataEvents" invoke="demoService"/>
+        <response name="success" type="none" />
+    </request-map>
+
+    <!-- View Mappings -->
+	<view-map name="storeOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#storeOrderListReport"/>
+	<view-map name="requestProductReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductReport"/>
+	<view-map name="requestProductList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductList"/>
+	<view-map name="requestCustomerReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerReport"/>
+	<view-map name="requestCustomerList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerList"/>
+	<view-map name="requestCustomerStoreReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerStoreReport"/>
+    <view-map name="customerOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#customerOrderListReport"/>
+
+    <view-map name="main" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#main"/>
+    <view-map name="ReportBuilderSelectStarSchema" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchema"/>
+    <view-map name="ReportBuilderSelectStarSchemaFields" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchemaFields"/>
+    <view-map name="ReportBuilderRenderStarSchemaReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderRenderStarSchemaReport"/>
+</site-conf>

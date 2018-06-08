@@ -323,5 +323,10 @@
     <!-- 友评数据-->
 
 
+    <Party partyId="YP" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="YP" groupName="友评"/>
+    <Party partyId="YP_DEMO" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="YP_DEMO" groupName="DEMO_2C"/>
+
 
 </entity-engine-xml>

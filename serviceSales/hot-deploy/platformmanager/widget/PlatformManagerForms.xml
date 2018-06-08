@@ -55,13 +55,14 @@
     <form name="EditProductSizeDescription" type="single" target="createProductSizeContentAndInfo"
           header-row-style="header-row" default-table-style="basic-table"
           default-map-name="productContentAndElectronicText">
+
         <field name="productId" use-when="productContentAndElectronicText==null">
             <lookup target-form-name="LookupProduct"/>
         </field>
         <field name="productId" use-when="productContentAndElectronicText!=null">
             <display></display>
         </field>
-        <field name="textData" id-name="textData" encode-output="true">
+        <field name="textData" id-name="textData" encode-output="true" tooltip="数据格式:尺码,衣长,胸围,袖长,下摆,袖肥-2,64,98,27.4,100.8,40.2,4,66,102,28.2,104.8,41.3">
             <textarea cols="120" rows="20" visual-editor-enable="false"/>
         </field>
         <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
@@ -132,38 +133,95 @@
         <field name="noConditionFind">
             <hidden value="Y"/>
         </field>
-        <field name="appId" title="AppID">
+        <field name="partyIdentificationTypeId">
+            <hidden value="MINIPROGRAM_APP_ID"/>
+        </field>
+
+        <field name="idValue" title="AppID">
             <text-find/>
         </field>
         <field name="partyId" title="组织编号">
             <text-find/>
         </field>
-
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
     </form>
 
 
-    <form name="PartyAppList" target="FindPartyApps" title="" type="list" list-name="listIt"
-          paginate-target="FindRealProductList" paginate="true" paginate-style="nav-pager"
+    <form name="PartyAppList"  title="" type="list" list-name="listIt"
+          paginate="true" paginate-style="nav-pager"
           odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <actions>
-            <set field="noConditionFind" from-field="parameters.noConditionFind" default-value="Y"/>
-            <set field="appId" from-field="parameters.appId"  />
-            <set field="partyId" from-field="parameters.partyId" />
-
             <service service-name="performFind" result-map="result" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="orderBy" from-field="parameters.sortField"/>
-                <field-map field-name="entityName" value="PartyIdentification"/>
+                <field-map field-name="entityName" value="PartyStoreAppConfig"/>
                 <field-map field-name="viewIndex" from-field="viewIndex"/>
                 <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
-        <field name="partyId" title="组织编号"  >
-            <display></display>
+        <field name="partyId" title="应用编号" id-name="partyId"    >
+            <hyperlink description="${partyId}" target="EditParty" also-hidden="false" link-type="layered-modal">
+                <parameter param-name="exampleId"/>
+            </hyperlink>
         </field>
-        <field name="value" title="小程序AppID"  >
-            <display></display>
+
+        <field name="groupName" title="应用名称">
+            <display>
+                <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
+                    <simple-editor/>
+                    <field-map field-name="partyId" from-field="partyId"/>
+                </in-place-editor>
+            </display>
         </field>
+
+
+        <field name="idValue" title="应用APP_ID" tooltip="点我直接改" id-name="idValue" >
+            <display>
+                <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
+                    <simple-editor/>
+                    <field-map field-name="partyId" from-field="partyId"/>
+                </in-place-editor>
+            </display>
+        </field>
+        <field name="isDemoStore" title="演示功能" tooltip="点我直接改" id-name="isDemoStore"  >
+
+            <display>
+                <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
+                    <simple-editor/>
+                    <field-map field-name="partyId" from-field="partyId"/>
+                </in-place-editor>
+            </display>
+        </field>
+
+        <field name="appServiceType" title="应用对象" tooltip="点我直接改" id-name="appServiceType"   >
+            <display>
+                <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
+                    <simple-editor/>
+                    <field-map field-name="partyId" from-field="partyId"/>
+                </in-place-editor>
+            </display>
+        </field>
+
+        <field name="hasShoppingCart"  title="应用购物车" id-name="hasShoppingCart"   >
+            <display>
+                <in-place-editor url="/platformManager/control/updatePartyAppConfig" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
+                    <simple-editor/>
+                    <field-map field-name="partyId" from-field="partyId"/>
+                </in-place-editor>
+            </display>
+        </field>
+        <!--<field name="" title="操作" widget-style="buttontext">-->
+            <!--<hyperlink description="更新" target="updatePartyAppConfig"  target-type="plain" >-->
+                <!--<parameter param-name="partyId" from-field="partyId"/>-->
+                <!--<parameter param-name="idValue" from-field="idValue"/>-->
+                <!--<parameter param-name="isDemoStore" from-field="isDemoStore" />-->
+                <!--<parameter param-name="appServiceType" from-field="appServiceType"/>-->
+                <!--<parameter param-name="hasShoppingCart" from-field="hasShoppingCart"/>-->
+            <!--</hyperlink>-->
+        <!--</field>-->
+
 
     </form>
 

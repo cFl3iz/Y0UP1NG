@@ -268,6 +268,7 @@
         <actions>
             <set field="headerItem" value="FindPartyApps"/>
             <set field="tabButtonItem" value="FindPartyApps" />
+            <set field="parameters.noConditionFind" value="Y"/>
         </actions>
         <widgets>
             <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">

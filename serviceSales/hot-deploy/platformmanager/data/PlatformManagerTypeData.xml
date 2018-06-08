@@ -40,6 +40,9 @@
     <!-- 小程序OpenId -->
     <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="WX_MINIPRO_OPEN_ID"/>
 
+    <!-- APP ID -->
+    <PartyIdentificationType createdStamp="2017-05-11 15:14:45.0" createdTxStamp="2017-05-11 15:14:45.0" lastUpdatedStamp="2017-05-11 15:14:45.0" lastUpdatedTxStamp="2017-05-11 15:14:45.0" partyIdentificationTypeId="MINIPROGRAM_APP_ID"/>
+
 
 
     <!-- 支付宝和微信支付的paymentMethodTypeId -->

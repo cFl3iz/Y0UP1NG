@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns="http://ofbiz.apache.org/Simple-Method"
+                xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <!-- 更新店铺对应的小程序 -->
+        <simple-method method-name="updatePartyAppConfig" short-description="updatePartyAppConfig">
+            <set field="partyId" from-field="parameters.partyId" />
+            <set field="idValue" from-field="parameters.idValue" />
+
+
+            <set field="isDemoStore" from-field="parameters.isDemoStore" />
+            <set field="appServiceType" from-field="parameters.appServiceType" />
+            <set field="hasShoppingCart" from-field="parameters.hasShoppingCart" />
+            <set field="groupName" from-field="parameters.groupName" />
+
+            <log level="info" message="parameters ${parameters} isDemoStore=${isDemoStore} appServiceType=${appServiceType} hasShoppingCart=${hasShoppingCart} "/>
+
+            <!-- 更新小程序App_Id -->
+            <if-not-empty field="idValue">
+                <entity-and entity-name="PartyIdentification" list="partyIdentifications">
+                    <field-map field-name="partyId"/>
+                    <field-map field-name="partyIdentificationTypeId" value="MINIPROGRAM_APP_ID"/>
+                </entity-and>
+                <first-from-list entry="firstLine" list="partyIdentifications"/>
+                <set field="firstLine.idValue" from-field="idValue"/>
+                <store-value value-field="firstLine"/>
+                <check-errors/>
+            </if-not-empty>
+            <if-not-empty field="isDemoStore">
+            <!-- Update 应用是否是演示版 -->
+            <make-value entity-name="PartyAttribute" value-field="demoAppStore" ></make-value>
+            <set field="demoAppStore.partyId" from-field="partyId" />
+            <set field="demoAppStore.attrName" value="DEMO_STORE" />
+            <set field="demoAppStore.attrValue" from-field="isDemoStore" />
+            <create-value value-field="demoAppStore" or-store="true"/>
+            </if-not-empty>
+            <!-- Update 应用类型 -->
+            <if-not-empty field="appServiceType">
+                <make-value entity-name="PartyAttribute" value-field="appService" ></make-value>
+                <set field="appService.partyId" from-field="partyId" />
+                <set field="appService.attrName" value="SERVICE_TYPE" />
+                <set field="appService.attrValue" from-field="appServiceType" />
+                <create-value value-field="appService" or-store="true"/>
+
+            </if-not-empty>
+
+            <if-not-empty field="groupName">
+                <make-value entity-name="PartyGroup" value-field="partyGroup" ></make-value>
+                <set field="partyGroup.partyId" from-field="partyId" />
+                <set field="partyGroup.groupName" from-field="groupName" />
+                <create-value value-field="partyGroup" or-store="true"/>
+            </if-not-empty>
+
+            <if-not-empty field="hasShoppingCart">
+            <!-- Update 购物车配置 -->
+                <make-value entity-name="PartyAttribute" value-field="shoppingCart" ></make-value>
+                <set field="shoppingCart.partyId" from-field="partyId" />
+                <set field="shoppingCart.attrName" value="NEED_SHOPPING_CART" />
+                <set field="shoppingCart.attrValue" from-field="hasShoppingCart" />
+                <create-value value-field="shoppingCart" or-store="true"/>
+
+            <create-value value-field="shoppingCart" or-store="true"/>
+            </if-not-empty>
+
+        </simple-method>
+
+</simple-methods>

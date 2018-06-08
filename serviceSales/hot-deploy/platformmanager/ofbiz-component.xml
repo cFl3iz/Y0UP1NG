@@ -51,4 +51,12 @@
         location="webapp/platformManager"
         base-permission="OFBTOOLS,PLATFORMMANAGER"
         mount-point="/platformManager"/>
+
+    <webapp name="openui"
+            title="Openui Demo"
+            server="default-server"
+            location="webapp/openui"
+            base-permission="OFBTOOLS"
+            mount-point="/openui"/>
+
 </ofbiz-component>

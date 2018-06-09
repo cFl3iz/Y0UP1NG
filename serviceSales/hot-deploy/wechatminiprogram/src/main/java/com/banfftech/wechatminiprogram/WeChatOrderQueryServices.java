@@ -601,10 +601,7 @@ public class WeChatOrderQueryServices {
 
         GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryFirst();
         String[] imgAttr = new String[]{
-                "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-1.jpg",
-                "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-2.jpg",
-                "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/TU-5.jpg"};
-
+                product.getString("detailImageUrl")};
         Map<String, String> isExsitsPath = new HashMap<String, String>();
 
         if (vir_product != null) {

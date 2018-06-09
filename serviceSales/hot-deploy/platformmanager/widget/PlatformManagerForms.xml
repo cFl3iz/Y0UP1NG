@@ -176,6 +176,10 @@
             </display>
         </field>
 
+        <field name="productStoreId" title="店铺代号">
+            <display/>
+        </field>
+
 
         <field name="idValue" title="应用APP_ID" tooltip="点我直接改" id-name="idValue" >
             <display>

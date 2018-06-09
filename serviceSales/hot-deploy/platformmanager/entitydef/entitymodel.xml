@@ -485,7 +485,7 @@
 
 
         <!-- Store Fields Alias -->
-        <!--<alias entity-alias="Store" name="isDemoStore" field="isDemoStore"/>-->
+        <alias entity-alias="Store" name="productStoreId" field="productStoreId"/>
 
         <!-- Identification Fields Alias -->
         <alias entity-alias="Identification" name="idValue" field="idValue"/>

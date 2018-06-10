@@ -6416,18 +6416,18 @@ public class PersonManagerServices {
             salesRepId = relationSalesRep.getString("partyIdFrom");
         }
         //判断无销售代表Id的情况
-        switch (productStoreId) {
-            case "ZUCZUGSTORE":
-                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-                    salesRepId = "ZUCZUG";
-                }
-                break;
-            case "KANGCHENGSTORE":
-                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-                    salesRepId = "KANGCHENG";
-                }
-                break;
-        }
+//        switch (productStoreId) {
+//            case "ZUCZUGSTORE":
+//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+//                    salesRepId = "ZUCZUG";
+//                }
+//                break;
+//            case "KANGCHENGSTORE":
+//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+//                    salesRepId = "KANGCHENG";
+//                }
+//                break;
+//        }
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "productStoreId", productStoreId).queryFirst();
@@ -6581,7 +6581,7 @@ public class PersonManagerServices {
             resultMap.put("orderId", orderId);
         }
 
-
+        resultMap.put("orderId", orderId);
         return resultMap;
     }
 
@@ -6916,9 +6916,9 @@ public class PersonManagerServices {
         GenericValue queryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         //买家就是卖家的情况直接返回
-        if (partyId.equals(payToPartyId)) {
-            return resultMap;
-        }
+//        if (partyId.equals(payToPartyId)) {
+//            return resultMap;
+//        }
 
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER", "productId", productId).queryFirst();
         //如果这个客户已经是产品的意向客户,取消这个角色,并且给予 '客户'角色

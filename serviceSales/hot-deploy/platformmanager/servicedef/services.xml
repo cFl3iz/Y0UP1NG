@@ -99,7 +99,7 @@
     </service>
 
 
-    <service name="inForwardChainFact" auth="true" engine="simple" transaction-timeout="90000"
+    <service name="inForwardChainFact" auth="false" engine="simple" transaction-timeout="90000"
              location="component://platformmanager/minilang/com/cloudlake/etl/PersonDimensionServices.xml" invoke="inForwardChainFact">
         <description>Calls the inForwardFact</description>
         <attribute name="basePartyId" type="String" mode="IN" optional="false"/>

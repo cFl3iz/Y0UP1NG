@@ -6799,7 +6799,7 @@ public class PersonManagerServices {
                         "productStoreId", productStoreId).queryFirst();
         String appServiceType   = queryAppConfig.getString("appServiceType");
 
-        GenericValue productStore =  EntityQuery.use(delegator).from("PartyStore").where(
+        GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
 
         salesRepId = productStore.getString("payToPartyId");

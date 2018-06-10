@@ -6420,7 +6420,17 @@ public class PersonManagerServices {
                 }
                 break;
         }
+        GenericValue queryAppConfig =
+                EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "productStoreId", productStoreId).queryFirst();
+        String appServiceType   = queryAppConfig.getString("appServiceType");
 
+        GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
+                "productStoreId", productStoreId).queryFirst();
+
+
+        salesRepId = productStore.getString("payToPartyId");
+        payToPartyId = productStore.getString("payToPartyId");
 
         //判断自身是销售代表的情况
         GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
@@ -6430,6 +6440,8 @@ public class PersonManagerServices {
         }
 
         salesRepPartyId = salesRepId;
+
+
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
@@ -6802,22 +6814,6 @@ public class PersonManagerServices {
         GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
 
-
-
-
-        //判断无销售代表Id的情况
-//        switch (productStoreId) {
-//            case "ZUCZUGSTORE":
-//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-//                    salesRepId = "ZUCZUG";
-//                }
-//                break;
-//            case "KANGCHENGSTORE":
-//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-//                    salesRepId = "KANGCHENG";
-//                }
-//                break;
-//        }
 
         salesRepId = productStore.getString("payToPartyId");
         payToPartyId = productStore.getString("payToPartyId");

@@ -6546,10 +6546,13 @@ public class PersonManagerServices {
                     ,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber);
         }
 
+        //TO C 的情况下
+        if( appServiceType.toUpperCase().equals("2C")){
+            resultMap.put("partyIdFrom", partyId);
+            resultMap.put("partyIdTo", payToPartyId);
+            resultMap.put("relationEnum", "C2CRSS");
+        }
 
-//        resultMap.put("partyIdFrom", partyId);
-//        resultMap.put("partyIdTo", payToPartyId);
-//        resultMap.put("relationEnum", "C2CRSS");
 
         //单店铺
         if (orderIds == null) {

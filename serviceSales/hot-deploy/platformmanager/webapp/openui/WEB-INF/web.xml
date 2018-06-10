@@ -10,7 +10,7 @@
         <description>A unique ID used to look up the WebSite entity</description>
     </context-param-->
     <context-param>
-        <param-name>localDispatcherName</param-name><param-value>zuczugetl</param-value>
+        <param-name>localDispatcherName</param-name><param-value>platformmanager</param-value>
         <description>A unique name used to identify/recognize the local dispatcher for the Service Engine</description>
     </context-param>
     <context-param>
@@ -19,7 +19,7 @@
     </context-param>
     <context-param>
         <param-name>mainDecoratorLocation</param-name>
-        <param-value>component://zuczugetl/widget/CommonScreens.xml</param-value>
+        <param-value>component://platformmanager/widget/CommonScreens.xml</param-value>
         <description>The location of the main-decorator screen to use for this webapp; referred to as a context variable in screen def XML files.</description>
     </context-param>
     <!--
@@ -38,7 +38,7 @@
     <filter>
         <filter-name>ContextFilter</filter-name>
         <display-name>ContextFilter</display-name>
-        <filter-class>org.ofbiz.webapp.control.ContextFilter</filter-class>
+        <filter-class>org.apache.ofbiz.webapp.control.ContextFilter</filter-class>
         <init-param><param-name>disableContextSecurity</param-name><param-value>N</param-value></init-param>
         <init-param>
             <param-name>allowedPaths</param-name>
@@ -49,8 +49,8 @@
     </filter>
     <filter-mapping><filter-name>ContextFilter</filter-name><url-pattern>/*</url-pattern></filter-mapping>
 
-    <listener><listener-class>org.ofbiz.webapp.control.ControlEventListener</listener-class></listener>
-    <listener><listener-class>org.ofbiz.webapp.control.LoginEventListener</listener-class></listener>
+    <listener><listener-class>org.apache.ofbiz.webapp.control.ControlEventListener</listener-class></listener>
+    <listener><listener-class>org.apache.ofbiz.webapp.control.LoginEventListener</listener-class></listener>
     <!-- NOTE: not all app servers support mounting implementations of the HttpSessionActivationListener interface -->
     <!-- <listener><listener-class>org.ofbiz.webapp.control.ControlActivationEventListener</listener-class></listener> -->
 
@@ -58,13 +58,13 @@
         <servlet-name>ControlServlet</servlet-name>
         <display-name>ControlServlet</display-name>
         <description>Main Control Servlet</description>
-        <servlet-class>org.ofbiz.webapp.control.ControlServlet</servlet-class>
+        <servlet-class>org.apache.ofbiz.webapp.control.ControlServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     
     <servlet>
 	<servlet-name>DemoServlet</servlet-name>
-		<servlet-class> com.zuczug.odata.DemoServlet</servlet-class>
+		<servlet-class> main.java.com.banfftech.platformmanager.odata.DemoServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 

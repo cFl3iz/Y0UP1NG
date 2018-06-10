@@ -6793,19 +6793,31 @@ public class PersonManagerServices {
         if (null != relationSalesRep) {
             salesRepId = relationSalesRep.getString("partyIdFrom");
         }
+
+        GenericValue queryAppConfig =
+                EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "productStoreId", productStoreId).queryFirst();
+        String appServiceType   = queryAppConfig.getString("appServiceType");
+
+        GenericValue productStore =  EntityQuery.use(delegator).from("PartyStore").where(
+                "productStoreId", productStoreId).queryFirst();
+
+        salesRepId = productStore.getString("payToPartyId");
+
+
         //判断无销售代表Id的情况
-        switch (productStoreId) {
-            case "ZUCZUGSTORE":
-                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-                    salesRepId = "ZUCZUG";
-                }
-                break;
-            case "KANGCHENGSTORE":
-                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
-                    salesRepId = "KANGCHENG";
-                }
-                break;
-        }
+//        switch (productStoreId) {
+//            case "ZUCZUGSTORE":
+//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+//                    salesRepId = "ZUCZUG";
+//                }
+//                break;
+//            case "KANGCHENGSTORE":
+//                if (salesRepId == null || UtilValidate.isEmpty(salesRepId)) {
+//                    salesRepId = "KANGCHENG";
+//                }
+//                break;
+//        }
 
 
         //判断自身是销售代表的情况

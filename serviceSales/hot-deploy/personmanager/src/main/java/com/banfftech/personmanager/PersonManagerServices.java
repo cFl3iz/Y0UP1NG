@@ -6802,7 +6802,7 @@ public class PersonManagerServices {
         GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
 
-        salesRepId = productStore.getString("payToPartyId");
+
 
 
         //判断无销售代表Id的情况
@@ -6819,7 +6819,8 @@ public class PersonManagerServices {
 //                break;
 //        }
 
-
+        salesRepId = productStore.getString("payToPartyId");
+        payToPartyId = productStore.getString("payToPartyId");
         //判断自身是销售代表的情况
         GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 

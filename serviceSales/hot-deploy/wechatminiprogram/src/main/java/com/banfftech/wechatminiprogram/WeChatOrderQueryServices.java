@@ -503,9 +503,22 @@ public class WeChatOrderQueryServices {
 //                productStoreId = "KANGCHENGSTORE";
 //            }
         }
+        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
+
         // TO C 的情况下 拿自己的 ProductStoreID
         if(!appServiceType.toUpperCase().equals("2B")){
                 productStoreId = (String) EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyId).queryFirst().get("productStoreId");
+            if (null == role) {
+                Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
+                        "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", "SALES_REP"));
+            }
+            resultMap.put("isSalesRep", "true");
+        }else{
+            if (null == role) {
+                resultMap.put("isSalesRep", "false");
+            } else {
+                resultMap.put("isSalesRep", "true");
+            }
         }
 
         EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
@@ -521,14 +534,9 @@ public class WeChatOrderQueryServices {
 
         Debug.logInfo("-> storeList: " + storeList, module);
 
-        GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
 
-        if (null == role) {
-            resultMap.put("isSalesRep", "false");
-        } else {
-            resultMap.put("isSalesRep", "true");
-        }
+
 
 
         // Query  ProductStorePromoAndAppl  & ProductPromoAction

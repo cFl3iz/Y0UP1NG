@@ -836,6 +836,8 @@ public class WeChatOrderQueryServices {
 
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
         String productStoreId = category.getString("productStoreId");
+        GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+        String prodCatalogId = prodCatalog.getString("prodCatalogId");
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
         String inventoryFacilityId = store.getString("inventoryFacilityId");
         //获得库存信息 getInventoryAvailableByFacility
@@ -848,6 +850,7 @@ public class WeChatOrderQueryServices {
 
         resultMap.put("productDetail", allField);
         resultMap.put("productStoreId", productStoreId);
+        resultMap.put("prodCatalogId", prodCatalogId);
         return resultMap;
     }
 

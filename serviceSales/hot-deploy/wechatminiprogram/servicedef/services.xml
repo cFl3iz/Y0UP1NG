@@ -194,6 +194,7 @@
         <attribute name="openId" type="String" mode="IN"  optional="true"/>
         <attribute name="productId" type="String" mode="IN"  optional="true"/>
         <attribute name="productStoreId" type="String" mode="OUT"  optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="OUT"  optional="true"/>
         <attribute name="productDetail" type="java.util.Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>

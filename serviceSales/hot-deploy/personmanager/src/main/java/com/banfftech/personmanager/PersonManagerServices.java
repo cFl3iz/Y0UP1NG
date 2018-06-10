@@ -5736,6 +5736,10 @@ public class PersonManagerServices {
         String relationEnum = (String) context.get("relationEnum");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
+        Debug.logInfo("*addPartyRelationShip partyIdFrom:"+partyIdFrom,module);
+        Debug.logInfo("*addPartyRelationShip partyIdTo:"+partyIdTo,module);
+        Debug.logInfo("*addPartyRelationShip relationEnum:"+relationEnum,module);
+
         String partyRelationshipTypeId = (String) context.get("partyRelationshipTypeId");
 
         Map<String, Object> serviceResultMap = null;
@@ -5771,6 +5775,8 @@ public class PersonManagerServices {
             }
 
         } else {
+            if(null!=relationEnum ){
+
             switch (relationType.getRelationType(relationEnum)) {
                 case C2CRSS:
                     serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
@@ -5783,6 +5789,8 @@ public class PersonManagerServices {
                         return serviceResultMap;
                     }
             }
+            }
+
         }
 
 

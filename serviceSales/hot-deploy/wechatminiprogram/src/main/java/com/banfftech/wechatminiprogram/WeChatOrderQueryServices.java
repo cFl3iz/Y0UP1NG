@@ -460,60 +460,65 @@ public class WeChatOrderQueryServices {
         String appId = (String) context.get("appId");
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
-        //,"roleTypeId","SALES_REP"
-//        EntityCondition findConditionsParty = EntityCondition
-//                .makeCondition(UtilMisc.toMap("partyId", partyIdentification.get("partyId")));
-//
-//        EntityCondition findConditionsSrp = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId","SALES_REP"));
-//
-//        EntityCondition listConditions1 = EntityCondition
-//                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsSrp);
-//
-//        EntityCondition findConditionsCus = EntityCondition
-//                .makeCondition(UtilMisc.toMap("roleTypeId","PLACING_CUSTOMER"));
-//
-//        EntityCondition listConditions2 = EntityCondition
-//                .makeCondition(findConditionsParty, EntityOperator.AND, findConditionsCus);
-//
-//        EntityCondition listConditions3 = EntityCondition
-//                .makeCondition(listConditions1, EntityOperator.OR, listConditions2);
-
+        String partyId = partyIdentification.getString("partyId");
 
         String productStoreId = "";
+        String prodCatalogId  = "";
+        String appServiceType   = "2B";
+        String isDemoStore      = "false";
+        String hasShoppingCart  = "false";
+        String groupName        = "";
 
         Debug.logInfo("-> APP_ID: " + appId, module);
 
+
         if (appId != null) {
-            //素然小程序(友评)
-            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "ZUCZUGSTORE";
-            }
-            //素然小程序(素然)
-            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "ZUCZUGSTORE";
-            }
-            //Demo小程序
-            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-//                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
-//                productStoreId = (String) store.get("productStoreId");
-                //暂时先用素然的
-                productStoreId = "ZUCZUGSTORE";
-            }
+            // 查询小程序配置
+            GenericValue queryAppConfig =
+                    EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                            "idValue", appId).queryFirst();
+            appServiceType   = queryAppConfig.getString("appServiceType");
+            isDemoStore      = queryAppConfig.getString("isDemoStore");
+            hasShoppingCart  = queryAppConfig.getString("hasShoppingCart");
+            productStoreId  = queryAppConfig.getString("productStoreId");
+            groupName        = queryAppConfig.getString("groupName");
 
-
-            //不分梨白酒
-            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "KANGCHENGSTORE";
-            }
+//            // (友评2C) wx299644ef4c9afbde
+//            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//            //素然小程序(素然)wx1106576d138cd8e6
+//            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//            //Demo小程序wxe8b50001e5ea4383
+//            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+////                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
+////                productStoreId = (String) store.get("productStoreId");
+//                //暂时先用素然的
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//            //不分梨白酒 wx119831dae45a3f3f
+//            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "KANGCHENGSTORE";
+//            }
+        }
+        // TO C 的情况下 拿自己的 ProductStoreID
+        if(!appServiceType.toUpperCase().equals("2B")){
+                productStoreId = (String) EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyId).queryFirst().get("productStoreId");
         }
 
         EntityCondition findConditionsStore = EntityCondition.makeCondition(UtilMisc.toMap("productStoreId", productStoreId));
 
         // List<GenericValue> storeList = EntityQuery.use(delegator).from("ProductStoreRoleAndStoreDetail").where("partyId", partyIdentification.get("partyId")).queryList();
+
         List<GenericValue> storeList = delegator.findList("ProductStoreCatalog",
                 findConditionsStore, null,
                 UtilMisc.toList("-fromDate"), null, false);
+        if(null!= storeList && storeList.size() >0){
+            prodCatalogId = (String) storeList.get(0).get("prodCatalogId");
+        }
+
         Debug.logInfo("-> storeList: " + storeList, module);
 
         GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
@@ -555,10 +560,19 @@ public class WeChatOrderQueryServices {
         }
 
 
+
+
         resultMap.put("partyId", partyIdentification.getString("partyId"));
-        resultMap.put("prodCatalogId", storeList == null ? "" : storeList.get(0).get("prodCatalogId"));
+
+        resultMap.put("prodCatalogId",prodCatalogId);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("storePromos", returnPromos);
+
+        resultMap.put("appServiceType", appServiceType);
+        resultMap.put("isDemoStore", isDemoStore);
+        resultMap.put("hasShoppingCart", hasShoppingCart);
+        resultMap.put("appName", groupName);
+
 
 
         return resultMap;
@@ -602,6 +616,7 @@ public class WeChatOrderQueryServices {
         GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryFirst();
         String[] imgAttr = new String[]{
                 product.getString("detailImageUrl")};
+
         Map<String, String> isExsitsPath = new HashMap<String, String>();
 
         if (vir_product != null) {

@@ -328,6 +328,7 @@
     <Party partyId="YP_DEMO" partyTypeId="PARTY_GROUP"/>
     <PartyGroup partyId="YP_DEMO" groupName="DEMO_2C"/>
 
+
     <ProductStore productStoreId="YP_STORE" storeName="友评店铺" companyName="YP" title="YP"
                   payToPartyId="YP" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
                    oneInventoryFacility="Y" checkInventory="Y"
@@ -352,6 +353,90 @@
                   itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
                   itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="YP_DEMO"
                   visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+
+
+
+    <PartyRole partyId="YP_DEMO" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="SUPPLIER"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="SUPPLIER_AGENT"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="SALES_REP"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="_NA_"/>
+    <PartyRole partyId="YP_DEMO" roleTypeId="ACCOUNT"/>
+
+
+    <!-- 默认联系方式 -->
+    <ContactMech contactMechId="5001" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PartyContactMech partyId="YP_DEMO" contactMechId="5001" fromDate="2001-05-13 00:00:00.000" allowSolicitation="Y"/>
+    <PostalAddress contactMechId="5001" toName="YP_DEMO" address1="2018 Factory Blvd" city="City of Industry"
+                   postalCode="50000" countryGeoId="CHN"/>
+    <PartyContactMechPurpose partyId="YP_DEMO" contactMechId="5001" contactMechPurposeTypeId="BILLING_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="YP_DEMO" contactMechId="5001" contactMechPurposeTypeId="GENERAL_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="YP_DEMO" contactMechId="5001" contactMechPurposeTypeId="PAYMENT_LOCATION"
+                             fromDate="2018-05-04 00:00:00.000"/>
+
+    <!-- DEMO店铺 -->
+
+    <Facility facilityId="DEMO_FACILITY" ownerPartyId="YP_DEMO" facilityTypeId="WAREHOUSE" facilityName="DEMO仓库"
+              description="DEMO仓库"/>
+    <ContactMech contactMechId="5200" contactMechTypeId="POSTAL_ADDRESS"/>
+    <ContactMech contactMechId="5201" contactMechTypeId="TELECOM_NUMBER"/>
+    <ContactMech contactMechId="5202" contactMechTypeId="EMAIL_ADDRESS" infoString="demo@yo-pe.com"/>
+    <PostalAddress contactMechId="5200" toName="DEMO" attnName="DEMO" address1="2015 Open Blvd" city="Shanghai"
+                   countryGeoId="CHN"/>
+    <TelecomNumber contactMechId="5201" areaCode="21" contactNumber="55555555"/>
+    <FacilityContactMech facilityId="DEMO_FACILITY" contactMechId="5200" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="DEMO_FACILITY" contactMechId="5201" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMech facilityId="DEMO_FACILITY" contactMechId="5202" fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="DEMO_FACILITY" contactMechId="5200" contactMechPurposeTypeId="SHIPPING_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="DEMO_FACILITY" contactMechId="5200" contactMechPurposeTypeId="SHIP_ORIG_LOCATION"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="DEMO_FACILITY" contactMechId="5201" contactMechPurposeTypeId="PHONE_SHIPPING"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="DEMO_FACILITY" contactMechId="5201" contactMechPurposeTypeId="PHONE_SHIP_ORIG"
+                                fromDate="2001-05-13 12:00:00.0"/>
+    <FacilityContactMechPurpose facilityId="DEMO_FACILITY" contactMechId="5202" contactMechPurposeTypeId="PRIMARY_EMAIL"
+                                fromDate="2001-05-13 12:00:00.0"/>
+
+    <!-- DEMO产品目录 -->
+
+    <ProdCatalog catalogName="DEMO零售总目录" createdStamp="2018-05-04 11:04:56.0" createdTxStamp="2018-05-04 11:04:56.0" lastUpdatedStamp="2018-05-04 11:04:56.0" lastUpdatedTxStamp="2018-05-04 11:04:56.0"
+                 prodCatalogId="DEMO_RETAIL"/>
+    <ProductStoreCatalog createdStamp="2018-05-04 11:05:36.0" createdTxStamp="2018-05-04 11:05:36.0" fromDate="2018-05-04 11:05:39.0" lastUpdatedStamp="2018-05-04 11:05:36.0" lastUpdatedTxStamp="2018-05-04 11:05:36.0"
+                         prodCatalogId="DEMO_RETAIL" productStoreId="YP_DEMO_STORE"/>
+    <ProductCategory createdStamp="2018-05-04 11:06:23.0" createdTxStamp="2018-05-04 11:06:23.0" lastUpdatedStamp="2018-05-04 11:06:23.0" lastUpdatedTxStamp="2018-05-04 11:06:23.0"
+                     productCategoryId="DEMO_RETAIL_ROO" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProdCatalogCategory createdStamp="2018-05-04 11:07:40.0" createdTxStamp="2018-05-04 11:07:40.0" fromDate="2018-05-04 11:07:43.0" lastUpdatedStamp="2018-05-04 11:07:40.0" lastUpdatedTxStamp="2018-05-04 11:07:40.0"
+                         prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT"
+                         prodCatalogId="DEMO_RETAIL" productCategoryId="DEMO_RETAIL_ROO"/>
+
+    <!-- DEMO店铺的货运 -->
+    <ProductStoreShipmentMeth allowCompanyAddr="Y" allowUspsAddr="Y" createdStamp="2018-04-17 15:16:33.0" createdTxStamp="2018-04-17 15:16:33.0" includeNoChargeItems="Y" lastUpdatedStamp="2018-04-17 15:16:38.0" lastUpdatedTxStamp="2018-04-17 15:16:38.0" partyId="SHUNFENG_EXPRESS"
+                              productStoreId="YP_DEMO_STORE"
+                              productStoreShipMethId="10041" requireCompanyAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

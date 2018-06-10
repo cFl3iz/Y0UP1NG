@@ -847,6 +847,7 @@ public class WeChatOrderQueryServices {
         }
 
         resultMap.put("productDetail", allField);
+        resultMap.put("productStoreId", productStoreId);
         return resultMap;
     }
 

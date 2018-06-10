@@ -6547,11 +6547,12 @@ public class PersonManagerServices {
         }
 
         //TO C 的情况下
-        if( appServiceType.toUpperCase().equals("2C")){
+//        if( appServiceType.toUpperCase().equals("2C")){ }
+
             resultMap.put("partyIdFrom", partyId);
             resultMap.put("partyIdTo", payToPartyId);
             resultMap.put("relationEnum", "C2CRSS");
-        }
+
 
 
         //单店铺

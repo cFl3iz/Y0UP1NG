@@ -6423,7 +6423,11 @@ public class PersonManagerServices {
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "productStoreId", productStoreId).queryFirst();
-        String appServiceType   = queryAppConfig.getString("appServiceType");
+        //为空说明现在是2C 卖家店铺
+        String appServiceType   = "2C";
+        if(null != queryAppConfig){
+            appServiceType   = queryAppConfig.getString("appServiceType");
+        }
 
         GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
@@ -6809,7 +6813,12 @@ public class PersonManagerServices {
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "productStoreId", productStoreId).queryFirst();
-        String appServiceType   = queryAppConfig.getString("appServiceType");
+        //为空说明现在是2C 卖家店铺
+        String appServiceType   = "2C";
+        if(null != queryAppConfig){
+              appServiceType   = queryAppConfig.getString("appServiceType");
+        }
+
 
         GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();

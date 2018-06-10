@@ -1079,6 +1079,10 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("partyId", partyId);
 
+                if(null!=gv.get("salesDiscontinuationDate")){
+                    continue;
+                }
+
                 rowMap.put("salesDiscontinuationDate", gv.get("salesDiscontinuationDate"));
 
                 rowMap.put("user", userInfoMap);

@@ -1028,7 +1028,7 @@ public class WeChatOrderQueryServices {
         int highIndex = 0;
         int resourceCount = 0;
 
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
         String partyId = "NA";
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
@@ -1039,6 +1039,7 @@ public class WeChatOrderQueryServices {
         //查询联系人列表
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
+
         myContactListPage = EntityQuery.use(delegator).from("PartyContactResources").
                 where("partyIdTo", partyId, "partyRelationshipTypeId", PeConstant.CONTACT, "roleTypeId", "ADMIN").orderBy(orderBy)
                 .distinct()

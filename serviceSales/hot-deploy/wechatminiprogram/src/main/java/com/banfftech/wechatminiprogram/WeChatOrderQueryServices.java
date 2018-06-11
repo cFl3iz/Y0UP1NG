@@ -458,7 +458,9 @@ public class WeChatOrderQueryServices {
         Debug.logInfo("-> APP_ID: " + appId, module);
 
 
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        Map<String,List<String>> returnMap = new HashMap<String, List<String>>();
 
         GenericValue queryAppConfig = EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "idValue", appId).queryFirst();
@@ -489,25 +491,34 @@ public class WeChatOrderQueryServices {
 
         if(null!= appContentList){
             for(GenericValue content : appContentList){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
+                List<String> rowList = new ArrayList<String>();
+
                 String contentType = content.getString("partyContentTypeId");
+
                 String dataResourceId = content.getString("dataResourceId");
 
+                if(returnMap.containsKey(contentType)){
+                    rowList = returnMap.get(contentType);
+                }
                 if(contentType.equals("MINIPROGRAM_TBAR")){
                    String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
                             "dataResourceId", dataResourceId).queryFirst().getString("textData");
-                    rowMap.put(contentType,textData);
-                    continue;
+                    rowList.add(textData);
+                }else{
+                    String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
+                            "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
+                    rowList.add(objectInfo);
                 }
-                String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
-                        "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
-                rowMap.put(contentType,objectInfo);
-                returnList.add(rowMap);
+
+                if(!returnMap.containsKey(contentType)){
+                    returnMap.put(contentType,rowList);
+                }
+
             }
         }
 
 
-        resultMap.put("appContentDataResource",returnList);
+        resultMap.put("appContentDataResource",returnMap);
 
         return resultMap;
     }

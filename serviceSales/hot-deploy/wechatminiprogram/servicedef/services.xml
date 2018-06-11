@@ -171,7 +171,7 @@
              invoke="queryMiniAppConfig" auth="false">
         <description>queryMiniAppConfig</description>
         <attribute name="appId" type="String" mode="IN"  optional="true"/>
-        <attribute name="appContentDataResource" type="List" mode="OUT" optional="true"/>
+        <attribute name="appContentDataResource" type="Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 

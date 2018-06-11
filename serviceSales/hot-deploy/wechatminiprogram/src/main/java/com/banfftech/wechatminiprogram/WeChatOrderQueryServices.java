@@ -441,6 +441,52 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * 查询小程序的应用配置内容数据等
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMiniAppConfig(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        String appId = (String) context.get("appId");
+        Debug.logInfo("-> APP_ID: " + appId, module);
+
+        GenericValue queryAppConfig = EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "idValue", appId).queryFirst();
+
+        // 店铺ID
+        String productStoreId = queryAppConfig.getString("productStoreId");
+        // 组织ID
+        String compPartyId    =  EntityQuery.use(delegator).from("ProductStore").where(
+                "productStoreId", productStoreId).queryFirst().getString("payToPartyId");
+
+//
+//        Set<String> fieldSet = new HashSet<String>();
+//        fieldSet.add("partyId");
+//        fieldSet.add("partyContentTypeId");
+//        fieldSet.add("dataResourceId");
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition("partyContentTypeId", EntityOperator.LIKE, "%" + "MINIPROGRAM" + "%");
+//
+//        List<GenericValue> appContentList = delegator.findList("PartyContentAndDataResource",
+//                findConditions, fieldSet,null, null, true);
+
+
+        return resultMap;
+    }
+
+
+
+
+
+
+    /**
      * queryProductStoreAndRole
      *
      * @param dctx
@@ -567,11 +613,7 @@ public class WeChatOrderQueryServices {
             }
         }
 
-
-
-
         resultMap.put("partyId", partyIdentification.getString("partyId"));
-
         resultMap.put("prodCatalogId",prodCatalogId);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("storePromos", returnPromos);

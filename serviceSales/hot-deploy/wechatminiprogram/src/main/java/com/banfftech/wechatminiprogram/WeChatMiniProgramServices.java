@@ -422,9 +422,20 @@ public class WeChatMiniProgramServices {
                     if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
                         Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
                     }
-                    // Update ForWard Count
-                    updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
-                    break;
+                    GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
+                    String rowStoreId = category.getString("productStoreId");
+                    GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", rowStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+                    if (iamSalesRep != null) {
+                        // create ForWard Count
+                        createProductBizData(delegator, dispatcher, admin, partyId, objectId, newWorkEffortId, "FORWARD_PRODUCT");
+
+                        break;
+                    }else{
+                        // Update ForWard Count
+                        updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
+                        break;
+                    }
+
                 case "CATALOG":
                     Map<String, Object> createWorkEffortNoteMap = UtilMisc.toMap("userLogin", userLogin,
                             "workEffortId", newWorkEffortId, "noteName", objectType, "noteInfo", objectId);

@@ -164,6 +164,20 @@
                    optional="true" />
     </service>
 
+
+    <!-- 查询小程序应用的配置 -->
+    <service name="queryMiniAppConfig" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryMiniAppConfig" auth="false">
+        <description>queryMiniAppConfig</description>
+        <attribute name="appId" type="String" mode="IN"  optional="true"/>
+        <attribute name="appContentDataResource" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
+
+
+
     <service name="queryProductStoreAndRole" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryProductStoreAndRole" auth="false">
@@ -173,7 +187,6 @@
         <attribute name="partyId" type="String" mode="OUT"  optional="true"/>
         <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
         <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
-
         <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
         <attribute name="appServiceType" type="String" mode="OUT" optional="true"/>
         <attribute name="isDemoStore" type="String" mode="OUT" optional="true"/>

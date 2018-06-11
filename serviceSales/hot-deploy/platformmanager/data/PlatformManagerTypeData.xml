@@ -89,4 +89,18 @@
     <ProductBizDataType bizTypeId="ADDRESSEE_PRODUCT" createdStamp="2018-05-21 19:52:16.0" createdTxStamp="2018-05-21 19:52:16.0" description="浏览产品" lastUpdatedStamp="2018-05-21 19:52:16.0" lastUpdatedTxStamp="2018-05-21 19:52:16.0"/>
     <ProductBizDataType bizTypeId="BUY_PRODUCT" createdStamp="2018-05-21 19:53:43.0" createdTxStamp="2018-05-21 19:53:43.0" description="购买产品" lastUpdatedStamp="2018-05-21 19:53:43.0" lastUpdatedTxStamp="2018-05-21 19:53:43.0"/>
 
+
+
+
+    <!-- WeChat MiniProGram ContentType MiniMSc -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM" createdStamp="2018-06-11 11:49:42.0" createdTxStamp="2018-06-11 11:49:42.0" description="小程序客户端内容祖类型" lastUpdatedStamp="2018-06-11 11:49:42.0" lastUpdatedTxStamp="2018-06-11 11:49:42.0"/>
+    <!-- Tab Bar -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM_TBAR" createdStamp="2018-06-11 11:52:11.0" createdTxStamp="2018-06-11 11:52:11.0" description="小程序TabBar" lastUpdatedStamp="2018-06-11 11:52:11.0" lastUpdatedTxStamp="2018-06-11 11:52:11.0" parentTypeId="MINIPROGRAM"/>
+    <!-- Home Banner Image -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM_BIMAGE" createdStamp="2018-06-11 11:53:25.0" createdTxStamp="2018-06-11 11:53:25.0" description="首页Banner轮播图、广告图" lastUpdatedStamp="2018-06-11 11:53:25.0" lastUpdatedTxStamp="2018-06-11 11:53:25.0" parentTypeId="MINIPROGRAM"/>
+    <!-- App Desc Title -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM_PDESC" createdStamp="2018-06-11 11:54:02.0" createdTxStamp="2018-06-11 11:54:02.0" description="小程序描述段落" lastUpdatedStamp="2018-06-11 11:54:02.0" lastUpdatedTxStamp="2018-06-11 11:54:02.0" parentTypeId="MINIPROGRAM"/>
+    <!-- App Recruit 招募内容 -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM_RECRUIT" createdStamp="2018-06-11 11:56:45.0" createdTxStamp="2018-06-11 11:56:45.0" description="小程序的招募图片" lastUpdatedStamp="2018-06-11 11:56:45.0" lastUpdatedTxStamp="2018-06-11 11:56:45.0" parentTypeId="MINIPROGRAM"/>
+
 </entity-engine-xml>

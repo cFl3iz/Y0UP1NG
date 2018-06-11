@@ -201,28 +201,37 @@ public class WeChatMiniProgramServices {
 
         String productStoreId = "";
 
-        if (appId != null) {
-            //素然小程序(友评)
-            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "ZUCZUGSTORE";
-            }
-            //素然小程序(素然)
-            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "ZUCZUGSTORE";
-            }
-            //Demo小程序
-            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-//                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
-//                productStoreId = (String) store.get("productStoreId");
-                //暂时先用素然的
-                productStoreId = "ZUCZUGSTORE";
-            }
-
-
-            //不分梨白酒
-            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-                productStoreId = "KANGCHENGSTORE";
-            }
+//        if (appId != null) {
+//            //素然小程序(友评)
+//            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//            //素然小程序(素然)
+//            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//            //Demo小程序
+//            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+////                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
+////                productStoreId = (String) store.get("productStoreId");
+//                //暂时先用素然的
+//                productStoreId = "ZUCZUGSTORE";
+//            }
+//
+//
+//            //不分梨白酒
+//            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
+//                productStoreId = "KANGCHENGSTORE";
+//            }
+//        }
+        GenericValue queryAppConfig =
+                EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "idValue", appId).queryFirst();
+        //为空说明现在是2C 卖家店铺
+        String appServiceType   = "2C";
+        if(null != queryAppConfig){
+            appServiceType   = queryAppConfig.getString("appServiceType");
+            productStoreId = queryAppConfig.getString("productStoreId");
         }
 
 

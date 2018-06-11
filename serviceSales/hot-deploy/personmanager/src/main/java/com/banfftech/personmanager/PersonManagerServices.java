@@ -6440,8 +6440,9 @@ public class PersonManagerServices {
         GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
 
-
-        salesRepId = productStore.getString("payToPartyId");
+        if(appServiceType.equals("2C")){
+            salesRepId = productStore.getString("payToPartyId");
+        }
         payToPartyId = productStore.getString("payToPartyId");
 
         //判断自身是销售代表的情况
@@ -6836,13 +6837,18 @@ public class PersonManagerServices {
                 "productStoreId", productStoreId).queryFirst();
 
 
-        salesRepId = productStore.getString("payToPartyId");
+
         payToPartyId = productStore.getString("payToPartyId");
         //判断自身是销售代表的情况
         GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
 
         if (iamSalesRep != null) {
             salesRepId = partyId;
+        }
+
+
+        if(appServiceType.equals("2C")){
+            salesRepId = productStore.getString("payToPartyId");
         }
 
         salesRepPartyId = salesRepId;
@@ -6852,6 +6858,7 @@ public class PersonManagerServices {
         Debug.logInfo("*PlaceResourceOrder|payToPartyId=" + payToPartyId, module);
         Debug.logInfo("*PlaceResourceOrder|productId=" + productId, module);
         Debug.logInfo("*PlaceResourceOrder|prodCatalogId=" + prodCatalogId, module);
+        Debug.logInfo("*PlaceResourceOrder|salesRepPartyId=" + salesRepPartyId, module);
 
 
         BigDecimal subTotal = BigDecimal.ZERO;

@@ -846,7 +846,7 @@ under the License.
         <field name="dataResourceId" title="${uiLabelMap.FormFieldTitle_dataResourceName}" use-when="dataResourceId==null"><display/> </field>
         <field name="dataResourceId" title="${uiLabelMap.FormFieldTitle_dataResourceName}" use-when="dataResourceId!=null">
             <display-entity entity-name="DataResource" description="${dataResourceName}">
-                <sub-hyperlink target="EditDataResource" description="${dataResourceId}" link-style="smallSubmit">
+                <sub-hyperlink target="EditDataResourceText" description="${dataResourceId}" link-style="smallSubmit">
                     <parameter param-name="dataResourceId"/>
                 </sub-hyperlink>
             </display-entity>

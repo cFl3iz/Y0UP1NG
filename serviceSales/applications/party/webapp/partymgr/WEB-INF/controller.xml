@@ -39,7 +39,7 @@ under the License.
         <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
     </postprocessor>
     -->
-
+    <request-map uri="EditDataResourceText"><security auth="true" https="true"/><response name="success" type="view" value="EditDataResourceText"/></request-map>
     <!-- Request Mappings -->
     <request-map uri="view"><security https="true" auth="false"/><response name="success" type="request" value="main"/></request-map>
     
@@ -1410,6 +1410,9 @@ under the License.
 
     <!-- GeoLocation-->
     <view-map name="addGeoLocation" type="screen" page="component://party/widget/partymgr/PartyScreens.xml#EditGeoLocation"/>
+
+
+    <view-map name="EditDataResourceText"  page="component://content/widget/content/DataResourceScreens.xml#EditDataResourceText" type="screen"/>
 
     <!-- end of view mappings -->
 </site-conf>

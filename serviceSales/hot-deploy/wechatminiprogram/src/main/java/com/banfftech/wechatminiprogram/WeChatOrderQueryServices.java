@@ -457,6 +457,9 @@ public class WeChatOrderQueryServices {
         String appId = (String) context.get("appId");
         Debug.logInfo("-> APP_ID: " + appId, module);
 
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
         GenericValue queryAppConfig = EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "idValue", appId).queryFirst();
 
@@ -466,17 +469,38 @@ public class WeChatOrderQueryServices {
         String compPartyId    =  EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst().getString("payToPartyId");
 
-//
-//        Set<String> fieldSet = new HashSet<String>();
-//        fieldSet.add("partyId");
-//        fieldSet.add("partyContentTypeId");
-//        fieldSet.add("dataResourceId");
-//        EntityCondition findConditions = EntityCondition
-//                .makeCondition("partyContentTypeId", EntityOperator.LIKE, "%" + "MINIPROGRAM" + "%");
-//
-//        List<GenericValue> appContentList = delegator.findList("PartyContentAndDataResource",
-//                findConditions, fieldSet,null, null, true);
 
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("partyId");
+        fieldSet.add("partyContentTypeId");
+        fieldSet.add("dataResourceId");
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("partyContentTypeId", EntityOperator.LIKE,   "MINIPROGRAM" + "%");
+
+        EntityCondition findConditions2 = EntityCondition
+                .makeCondition("partyId", compPartyId);
+        EntityCondition findConditions3 = EntityCondition
+                .makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+        List<GenericValue> appContentList = delegator.findList("PartyContentAndDataResource",
+                findConditions3, fieldSet,null, null, true);
+
+
+        if(null!= appContentList){
+            for(GenericValue content : appContentList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String contentType = content.getString("partyContentTypeId");
+                String dataResourceId = content.getString("dataResourceId");
+                String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
+                        "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
+                rowMap.put(contentType,objectInfo);
+                returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("appContentDataResource",returnList);
 
         return resultMap;
     }

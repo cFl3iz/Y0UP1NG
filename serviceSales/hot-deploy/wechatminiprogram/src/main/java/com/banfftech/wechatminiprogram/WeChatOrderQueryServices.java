@@ -492,6 +492,13 @@ public class WeChatOrderQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String contentType = content.getString("partyContentTypeId");
                 String dataResourceId = content.getString("dataResourceId");
+
+                if(contentType.equals("MINIPROGRAM_TBAR")){
+                   String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
+                            "dataResourceId", dataResourceId).queryFirst().getString("textData");
+                    rowMap.put(contentType,textData);
+                    continue;
+                }
                 String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
                         "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
                 rowMap.put(contentType,objectInfo);

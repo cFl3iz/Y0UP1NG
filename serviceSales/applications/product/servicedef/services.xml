@@ -358,7 +358,8 @@ under the License.
     </service>
 
     <!-- Product content services -->
-    <service name="createProductContent" default-entity-name="ProductContent" engine="simple"
+    <service name="createProductContent" default-entity-name="ProductContent" engine="simple" require-new-transaction="true"
+             transaction-timeout="9800000" use-transaction="true"
         location="component://product/minilang/product/product/ProductContentServices.xml" invoke="createProductContent" auth="true">
         <description>Add Content To Product</description>
         <auto-attributes include="pk" mode="INOUT" optional="false"/>

@@ -37,7 +37,7 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import org.apache.ofbiz.entity.util.EntityQuery;
 
-
+import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import org.apache.ofbiz.product.imagemanagement.ImageManagementServices;
 
 /**
@@ -187,6 +187,7 @@ public class ImageManageService {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        TransactionUtil.setTransactionTimeout(9980000);
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String prodCatalogId = (String) context.get("prodCatalogId");
 
@@ -360,6 +361,8 @@ public class ImageManageService {
         try {
             GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", variantProductId));
             if (UtilValidate.isNotEmpty(product)) {
+
+                TransactionUtil.begin();
                 String smallSize = UtilProperties.getPropertyValue("aliyunoss", "OSS_SMALL_IMAGE_SIZE");
                 String mediumSize = UtilProperties.getPropertyValue("aliyunoss", "OSS_MEDIUM_IMAGE_SIZE");
                 String largeSize = UtilProperties.getPropertyValue("aliyunoss", "OSS_LARGE_IMAGE_SIZE");
@@ -371,6 +374,7 @@ public class ImageManageService {
                 product.set("detailImageUrl", objectInfo + detailSize);
                 product.set("originalImageUrl", objectInfo);
                 product.store();
+                TransactionUtil.commit();
             }
         } catch (GenericEntityException e) {
             e.printStackTrace();

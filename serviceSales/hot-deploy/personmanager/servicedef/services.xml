@@ -20,7 +20,7 @@
     </service>
 
     <!-- 初始化所有Sku图片 -->
-    <service name="initialAllSkuPicture" engine="java"
+    <service name="initialAllSkuPicture" engine="java" transaction-timeout="980000"
              location="main.java.com.banfftech.platformmanager.util.ImageManageService"
              invoke="initialAllSkuPicture" auth="false">
         <description>initialAllSkuPicture</description>
@@ -28,7 +28,7 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
-    <service name="initialAllSkuPictureTemp" engine="java"
+    <service name="initialAllSkuPictureTemp" engine="java" transaction-timeout="980000"
              location="main.java.com.banfftech.platformmanager.util.ImageManageService"
              invoke="initialAllSkuPictureTemp" auth="false">
         <description>initialAllSkuPictureTemp</description>

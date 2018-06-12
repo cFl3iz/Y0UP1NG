@@ -750,7 +750,7 @@ public class WeChatOrderQueryServices {
                 String detailImageUrl = rowProduct.getString("detailImageUrl");
                 Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
                 //如果没有图的默认不看 针对zuczug
-                if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
+                if(detailImageUrl.indexOf("DEFAULT_PRODUCT")>=0){
                     GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
                     hiddenMap.put(rowSkuId,rowColor.getString("productFeatureId"));
                 }

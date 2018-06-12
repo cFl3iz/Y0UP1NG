@@ -57,26 +57,10 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
-//    public static String getVariantProductIdFromFeatureTree(Delegator delegator,String productId,List selectedFeatures) throws GenericEntityException {
-//        GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),true);
-//        if(UtilValidate.isEmpty(product)){
-//            return null;
-//        }
-//        String virtualProductId = null;
-//        if("Y".equals(product.getString("isVariant"))){
-//            virtualProductId = ProductWorker.getVariantVirtualId(product);
-//        }else if("Y".equals(product.getString("isVirtual"))){
-//            virtualProductId = productId;
-//        }else{
-//            return productId;
-//        }
-//        String variantProductId = ProductWorker.getVariantFromFeatureTree(virtualProductId, selectedFeatures, delegator);
-//        return variantProductId;
-//    }
 
 
     /**
-     * querySku
+     * QuerySku
      *
      * @param dctx
      * @param context
@@ -339,11 +323,6 @@ public class WeChatOrderQueryServices {
                     }
                 }
                 rowMap.put("productSharePartys", productPartys);
-                //浏览量
-//                Long addressCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "ADDRESSEE").queryCount();
-//                //转发量
-//                Long refreCount = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("workEffortId", workEffortId,"roleTypeId", "REFERRER").queryCount();
-
                 rowMap.put("addressCount", workEffort.get("addressCount") == null ? "0" : workEffort.get("addressCount"));
                 rowMap.put("refreCount", workEffort.get("shareCount") == null ? "0" : workEffort.get("shareCount"));
                 EntityCondition findConditions = null;
@@ -383,7 +362,7 @@ public class WeChatOrderQueryServices {
 
 
     /**
-     * getSkuFromProductFeatureDesc
+     * GetSkuFromProductFeatureDesc
      *
      * @param dctx
      * @param context
@@ -529,7 +508,7 @@ public class WeChatOrderQueryServices {
 
 
     /**
-     * queryProductStoreAndRole
+     * Query ProductStoreAndRole
      *
      * @param dctx
      * @param context
@@ -672,7 +651,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * queryCatalogProductDetail
-     *
+     * //TODO 没有图片的变形产品 不要出现特征选择了!
      * @param dctx
      * @param context
      * @return
@@ -688,11 +667,13 @@ public class WeChatOrderQueryServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productId = (String) context.get("productId");
         GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-
+        Map<String,Object> hiddenMap = new HashMap<String, Object>();
 
         Map<String, Object> allField = product.getAllFields();
 
         String desc = (String) allField.get("description");
+
+        List<GenericValue> skus = new ArrayList<GenericValue>();
 
         if (null != desc && !desc.equals("")) {
             desc = desc.replaceAll("/", "\n/");
@@ -748,7 +729,7 @@ public class WeChatOrderQueryServices {
             String rowVirId = (String) vir_product.get("productId");
 
 
-            List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
+             skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
 
             Set<String> fieldSet = new HashSet<String>();
 
@@ -764,6 +745,15 @@ public class WeChatOrderQueryServices {
 
             for (GenericValue rowSku : skus) {
                 String rowSkuId = rowSku.getString("productIdTo");
+                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where("productId", rowSkuId).queryFirst();
+                // 不管怎么样 这个变形产品得有图
+                String detailImageUrl = rowProduct.getString("detailImageUrl");
+                Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
+                //如果没有图的默认不看 针对zuczug
+                if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
+                    hiddenMap.put(rowSkuId,"");
+                }
+
                 //1 查询搭配图
                 EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
                 EntityCondition matchTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "MATCH_PRODUCT_IMAGE");
@@ -824,33 +814,6 @@ public class WeChatOrderQueryServices {
                     }
                 }
 
-
-//                EntityCondition findConditions3 = EntityCondition
-//                        .makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
-//                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
-//                        findConditions3, fieldSet,
-//                        null, null, false);
-//                int index = 0;
-//
-//                Map<String, Object> rowFeature = new HashMap<String, Object>();
-//                for (GenericValue pict : rowPictures) {
-//                    if (index == 0) {
-//                        rowFeature.put("drObjectInfo", (String) pict.get("drObjectInfo"));
-//                    }
-//                    Map<String, Object> rowMap = new HashMap<String, Object>();
-//                    String drObjectInfo = (String) pict.get("drObjectInfo");
-//                    rowMap.put("drObjectInfo", drObjectInfo);
-//                    pictures.add(rowMap);
-//                    index++;
-//                }
-//                GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-//                if (rowFeature == null) {
-//                    featureMap.put(rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
-//                } else {
-//                    featureMap.put(rowColor.get("description") + "", rowFeature);
-//                }
-
-
             }
 
             Debug.logInfo("QUERY DETAIL pictures:" + pictures, module);
@@ -864,38 +827,50 @@ public class WeChatOrderQueryServices {
                 }
             }
 
+
             List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
             for (GenericValue gv : gvs) {
 
                 Map<String, Object> innerMap = new HashMap<String, Object>();
-
+                String productFeatureId = gv.getString("productFeatureId");
                 String innerAttr = gv.getString("productFeatureTypeId");
                 String innerDesc = gv.getString("description");
+
+                //还没有图片的变形产品 不显示该特征型号
+                if(hiddenMap != null && hiddenMap.size()>0 && isHiddenSku(productFeatureId,innerAttr,rowVirId,hiddenMap,delegator,skus)){
+                    continue;
+                }
+
+
                 switch (innerAttr) {
                     case "COLOR": {
-                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
-                        if (isSelect != null) {
-                            innerMap.put("COLOR_DESC", innerDesc);
-                        } else {
-                            innerMap.put("COLOR_DESC", innerDesc);
-                        }
+//                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "COLOR", "description", innerDesc).queryFirst();
+//                        if (isSelect != null) {
+//                            innerMap.put("COLOR_DESC", innerDesc);
+//                        } else {
+//                            innerMap.put("COLOR_DESC", innerDesc);
+//                        }
+                        innerMap.put("COLOR_DESC", innerDesc);
                         break;
                     }
                     case "SIZE": {
-                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
-                        if (isSelect != null) {
-                            innerMap.put("SIZE_DESC", innerDesc);
-                        } else {
-                            innerMap.put("SIZE_DESC", innerDesc);
-                        }
+//                        GenericValue isSelect = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureTypeId", "SIZE", "description", innerDesc).queryFirst();
+//                        if (isSelect != null) {
+//                            innerMap.put("SIZE_DESC", innerDesc);
+//                        } else {
+//                            innerMap.put("SIZE_DESC", innerDesc);
+//                        }
+                        innerMap.put("SIZE_DESC", innerDesc);
                         break;
                     }
                     default: {
                         break;
                     }
                 }
-                productFeatureList.add(innerMap);
+
+                    productFeatureList.add(innerMap);
+
             }
             //图片数组
             allField.put("imgArray", imgAttr);
@@ -936,6 +911,32 @@ public class WeChatOrderQueryServices {
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("prodCatalogId", prodCatalogId);
         return resultMap;
+    }
+
+    /**
+     * IS HIDDEN
+     * @param productFeatureId
+     * @param innerAttr
+     * @param rowVirId
+     * @param hiddenMap
+     * @param delegator
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    private static boolean isHiddenSku(String productFeatureId, String innerAttr, String rowVirId, Map<String, Object> hiddenMap,Delegator delegator,List<GenericValue> skus)throws GenericEntityException, GenericServiceException  {
+
+        if(skus.size()==0){
+            return false;
+        }
+        for(GenericValue gv : skus){
+                String partyId = skus.getString("productIdTo");
+                if(hiddenMap.containsKey(partyId)){
+                    return true;
+                }
+        }
+
+        return false;
     }
 
 

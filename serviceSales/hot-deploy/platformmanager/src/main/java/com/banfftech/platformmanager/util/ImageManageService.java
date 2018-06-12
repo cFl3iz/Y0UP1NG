@@ -158,7 +158,7 @@ public class ImageManageService {
                 GenericValue prodImg = delegator.findOne("ProductImagesTemp", UtilMisc.toMap("skuId", fileName, "contentType", "MATCH_PRODUCT_IMAGE"), false);
                 if (prodImg == null) {
                     GenericValue prodImgTemp = delegator.makeValue("ProductImagesTemp", UtilMisc.toMap("skuId", fileName, "contentType", "MATCH_PRODUCT_IMAGE", "path", getFileUrl(objectSummary.getKey())));
-                    prodImgTemp.create();
+                    delegator.createOrStore(prodImgTemp);
                 } else {
                     prodImg.set("path", getFileUrl(objectSummary.getKey()));
                     prodImg.store();

@@ -1031,16 +1031,21 @@ public class WeChatOrderQueryServices {
 
                 GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
                 if (vir_product != null) {
+                    String detailImageUrl = (String) gv.getString("detailImageUrl");
+
                     String rowVirId = (String) vir_product.get("productId");
                     //别展示相同产品了
                     if (rowVirId.equals(beforeVir)) {
 
                     } else {
+                        //如果没有图的默认不看 针对zuczug
+                        if(detailImageUrl.indexOf("http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg")<0){
                         count++;
                         GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                         rowMap.put("price", productPrice.get("price"));
                         returnProductList.add(rowMap);
                         beforeVir = rowVirId;
+                        }
                     }
                 } else {
                     count++;

@@ -1158,7 +1158,8 @@ public class PlatformManagerServices {
                         if (UtilValidate.isNotEmpty(listPrice)) {
                             GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
                             newProductVariantPrice.set("price", new BigDecimal(listPrice));
-                            newProductVariantPrice.create();
+                            delegator.createOrStore(newProductVariantPrice);
+//                            newProductVariantPrice.create();
                         }
 
 

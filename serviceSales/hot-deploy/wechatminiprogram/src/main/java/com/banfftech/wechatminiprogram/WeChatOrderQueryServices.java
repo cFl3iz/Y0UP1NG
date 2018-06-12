@@ -930,7 +930,8 @@ public class WeChatOrderQueryServices {
             return false;
         }
         for(GenericValue gv : skus){
-                String partyId = skus.getString("productIdTo");
+                String partyId = gv.getString("productIdTo");
+            
                 if(hiddenMap.containsKey(partyId)){
                     return true;
                 }

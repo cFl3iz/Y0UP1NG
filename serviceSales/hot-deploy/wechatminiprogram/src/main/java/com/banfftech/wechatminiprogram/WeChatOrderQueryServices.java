@@ -1038,8 +1038,9 @@ public class WeChatOrderQueryServices {
                     if (rowVirId.equals(beforeVir)) {
 
                     } else {
+                        Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
                         //如果没有图的默认不看 针对zuczug
-                        if(detailImageUrl.indexOf("http://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg")<0){
+                        if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
                         count++;
                         GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                         rowMap.put("price", productPrice.get("price"));

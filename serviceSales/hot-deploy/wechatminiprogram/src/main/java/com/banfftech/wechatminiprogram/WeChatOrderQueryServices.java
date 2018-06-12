@@ -751,7 +751,8 @@ public class WeChatOrderQueryServices {
                 Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
                 //如果没有图的默认不看 针对zuczug
                 if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
-                    hiddenMap.put(rowSkuId,"");
+                    GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+                    hiddenMap.put(rowSkuId,rowColor.getString("productFeatureId"));
                 }
 
                 //1 查询搭配图
@@ -930,9 +931,8 @@ public class WeChatOrderQueryServices {
             return false;
         }
         for(GenericValue gv : skus){
-                String partyId = gv.getString("productIdTo");
-            
-                if(hiddenMap.containsKey(partyId)){
+                String productId = gv.getString("productIdTo");
+                if(hiddenMap.containsKey(productId) && hiddenMap.get(productId).equals(productFeatureId)){
                     return true;
                 }
         }

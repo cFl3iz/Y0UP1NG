@@ -268,7 +268,7 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <include-menu location="component://platformManager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml" name="AppToolsBar"/>
                         <screenlet title="施工中...">
 
                         </screenlet>
@@ -293,7 +293,7 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <include-menu location="component://platformManager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml" name="AppToolsBar"/>
                         <screenlet title="Quick Start">
                             <include-form name="QuickStartAppStore" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                         </screenlet>
@@ -321,7 +321,7 @@
             <widgets>
                 <decorator-screen name="CommonPartyDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <include-menu location="component://platformManager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml" name="AppToolsBar"/>
                         <screenlet title="快速加角色到店铺">
                             <include-form name="EditProductStoreRole" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
@@ -353,7 +353,7 @@
         <widgets>
             <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                 <decorator-section name="body">
-                    <include-menu location="component://platformManager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                    <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml" name="AppToolsBar"/>
                     <screenlet title="${uiLabelMap.CommonSearch}">
                         <include-form name="FindPartyApps" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                     </screenlet>

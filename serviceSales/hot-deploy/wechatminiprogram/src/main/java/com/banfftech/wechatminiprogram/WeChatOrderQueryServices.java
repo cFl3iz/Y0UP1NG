@@ -2331,7 +2331,7 @@ public class WeChatOrderQueryServices {
 
 
                 GenericValue salesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", gv.get("orderId"), "roleTypeId", "SALES_REP").queryFirst();
-                String salesRepId = (String) salesRep.get("partyId");
+
 
                 rowMap.put("payToPartyId", payToPartyId);
 
@@ -2362,8 +2362,12 @@ public class WeChatOrderQueryServices {
 
                 Map<String, String> personAddressInfoMap = null;
 
-                //查询的是销售代表
-                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, salesRepId));
+                if(null!=salesRep){
+                    String salesRepId = (String) salesRep.get("partyId");
+                    //查询的是销售代表
+                    rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, salesRepId));
+                }
+
 //                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
                 rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, payFromPartyId));
                 if (payToPartyId.equals(partyId)) {

@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+	<!-- 物理移除店铺角色 -->
+	<simple-method method-name="storeDeleteRole" short-description="storeDeleteRole">
+		<set field="partyId" from-field="parameters.partyId"/>
+		<set field="productStoreId" from-field="parameters.productStoreId"/>
+		<set field="roleTypeId" from-field="parameters.roleTypeId"/>
+
+		<entity-and entity-name="ProductStoreRole" list="productStoreRoles">
+			<field-map field-name="partyId" from-field="partyId"/>
+			<field-map field-name="productStoreId" from-field="productStoreId"/>
+			<field-map field-name="roleTypeId" from-field="roleTypeId"/>
+		</entity-and>
+
+		<if-not-empty field="productStoreRoles">
+			<first-from-list entry="productStoreRole" list="productStoreRoles"/>
+			<remove-value value-field="productStoreRole"/>
+		</if-not-empty>
+
+	</simple-method>
+
+
 	<simple-method method-name="createProductSizeContentAndInfo" short-description="create product size content and info">
 		<set field="productId" from-field="parameters.productId"/>
 		<set field="textData" from-field="parameters.textData"/>

@@ -3,8 +3,8 @@
         xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
 
 
-
-
+    <include location="component://party/webapp/partymgr/WEB-INF/controller.xml"/>
+    <include location="component://product/webapp/catalog/WEB-INF/controller.xml"/>
 
     <!-- Every Request Do Check -->
     <preprocessor>
@@ -12,6 +12,9 @@
                path="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker"
                invoke="checkTarjetaLogin"/>
     </preprocessor>
+
+
+
 
 
     <!-- 创建链 -->
@@ -429,6 +432,32 @@
         <response name="error" type="view" value="FindProductSizeDescription"/>
     </request-map>
 
+
+    <!-- 快速开店 -->
+    <request-map uri="QuickStartAppStore">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="QuickStartAppStore"/>
+    </request-map>
+    <!-- 管理店铺角色 -->
+    <request-map uri="StoreRoleMgr">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="StoreRoleMgr"/>
+    </request-map>
+    <!-- 快速上货 -->
+    <request-map uri="QuickPutProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="QuickPutProduct"/>
+    </request-map>
+
+
+    <request-map uri="storeDeleteRole">
+        <security https="true" auth="true"/>
+        <event invoke="storeDeleteRole" type="service"/>
+        <response name="success" type="request-redirect" value="StoreRoleMgr"/>
+        <response name="error" type="request-redirect" value="StoreRoleMgr"/>
+    </request-map>
+
+
     <!-- 小程序App应用列表管理 -->
     <request-map uri="FindPartyApps">
     <security https="true" auth="true"/>
@@ -447,6 +476,7 @@
 
 
 
+
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
     <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
 
@@ -455,10 +485,15 @@
     <view-map name="QuickShipOrder" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickShipOrder"/>
     <view-map name="ExportShareCpsToExcel" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ExportShareCpsToExcel"/>
 
-<!-- 产品内容 -->
+    <!-- 产品内容 -->
     <view-map name="FindRealProductList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductList"/>
     <!-- 小程序应用列表 -->
     <view-map name="FindPartyApps" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindPartyApps"/>
+    <!-- 快速上货 -->
+    <view-map name="QuickPutProduct" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickPutProduct"/>
+    <!-- 快速开店 -->
+    <view-map name="QuickStartAppStore" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickStartAppStore"/>
+    <view-map name="StoreRoleMgr" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#StoreRoleMgr"/>
     <view-map name="FindRealProductContentList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentList"/>
     <view-map name="FindRealProductContentListSimple" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductContentListSimple"/>
     <view-map name="RealProductImageAssoc" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#RealProductImageAssoc"/>

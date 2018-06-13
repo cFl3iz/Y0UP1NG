@@ -111,6 +111,120 @@
     </form>
 
 
+    <form name="EditProductStoreRole" type="single"  >
+        <field name="partyId" use-when="productStoreRole==null" title="${uiLabelMap.PartyPartyId}" required-field="true"><lookup target-form-name="LookupPartyName"/></field>
+        <field name="productStoreId" use-when="productStoreRole==null" title="${uiLabelMap.ProductStoreId}" required-field="true">
+            <drop-down>
+                <entity-options entity-name="ProductStore" key-field-name="productStoreId" description="${storeName} (${productStoreId})">
+                    <entity-order-by field-name="productStoreId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="roleTypeId" use-when="productStoreRole==null" title="${uiLabelMap.PartyRoleTypeId}" required-field="true">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="RoleType" key-field-name="roleTypeId"/>
+            </drop-down>
+        </field>
+        <field name="productStoreId" use-when="productStoreRole!=null" title="${uiLabelMap.ProductStoreId}"><display/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="FindProductStoreRole" type="single" target="StoreRoleMgr" default-entity-name="ProductStoreRole" >
+
+        <field name="productStoreId" title="${uiLabelMap.ProductStoreId}">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="ProductStore" key-field-name="productStoreId" description="${storeName} (${productStoreId})">
+                    <entity-order-by field-name="productStoreId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+            <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+            <!--<field name="productStoreId" title="${uiLabelMap.ProductStoreId}"><hidden/></field>-->
+            <field name="partyId" title="${uiLabelMap.PartyPartyId}"><lookup target-form-name="LookupPartyName"/></field>
+            <field name="roleTypeId" title="${uiLabelMap.PartyRoleTypeId}">
+                <drop-down allow-empty="true">
+                    <entity-options entity-name="RoleType" key-field-name="roleTypeId"/>
+                </drop-down>
+            </field>
+
+            <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+
+    </form>
+    <form name="ListProductStoreRole" type="list" list-name="listIt" paginate-target="FindProductStoreRoles" default-entity-name="ProductStoreRole" separate-columns="true"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="ProductStoreRole"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <field name="partyId"><display/></field>
+        <field name="productStoreId" title="${uiLabelMap.ProductStoreId}">
+            <display-entity entity-name="ProductStore" key-field-name="productStoreId" description="${storeName}">
+                <sub-hyperlink target="/catalog/control/EditProductStore" target-type="inter-app" description="${storeName} (${productStoreId})" >
+                    <parameter param-name="productStoreId"/>
+                </sub-hyperlink>
+            </display-entity>
+        </field>
+        <field name="roleTypeId" title="${uiLabelMap.PartyRoleTypeId}"><display-entity entity-name="RoleType"/></field>
+        <field name="fromDate"><display/></field>
+
+        <field name="deleteLink" widget-style="buttontext" title="解除角色(物理)">
+            <hyperlink description="${uiLabelMap.CommonDelete}" target="storeDeleteRole">
+                <parameter param-name="partyId"/>
+                <parameter param-name="productStoreId"/>
+                <parameter param-name="roleTypeId"/>
+                <!--<parameter param-name="fromDate"/>-->
+            </hyperlink>
+        </field>
+    </form>
+    <!-- 快速开店 -->
+    <form name="QuickStartAppStore" type="single" target="QuickStartAppStoreEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+
+        <!--<field name="appName" required-field="true">-->
+            <!--<lookup target-form-name="LookupOrderHeader" size="15"/>-->
+        <!--</field>-->
+
+        <field name="appName" title="AppName" required-field="true">
+            <text/>
+        </field>
+        <field name="isDemoStore" title="isDemoStore" required-field="true">
+            <drop-down>
+                <option key="true" description="是演示小程序(无支付)"/>
+                <option key="false" description="正式版"/>
+            </drop-down>
+        </field>
+        <field name="appServiceType" title="appType" required-field="true">
+            <drop-down>
+                <option key="2B" description="对企业商户"/>
+                <option key="2C" description="对个人卖家"/>
+            </drop-down>
+        </field>
+        <field name="hasShoppingCart" title="ShoppingCart" required-field="true">
+            <drop-down>
+                <option key="true" description="需要购物车"/>
+                <option key="false" description="无需购物车"/>
+            </drop-down>
+        </field>
+
+        <field name="AppId" title="APP_ID" required-field="true">
+            <text/>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
+
     <!-- 快速货运 -->
     <form name="QuickShipOrderForm" type="single" target="QuickShipOrderFormEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
@@ -143,7 +257,7 @@
         <field name="partyId" title="组织编号">
             <text-find/>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
             <submit button-type="button"/>
         </field>
     </form>
@@ -161,9 +275,11 @@
                 <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
-        <field name="partyId" title="应用代号" id-name="partyId"    >
-            <hyperlink description="${partyId}" target="EditParty" also-hidden="false" link-type="layered-modal">
-                <parameter param-name="exampleId"/>
+        <!--link-type="layered-modal"-->
+        <field name="partyId" title="应用代号" id-name="partyId"  >
+
+            <hyperlink description="${partyId}" target="editpartygroup" also-hidden="false" >
+                <parameter param-name="partyId"/>
             </hyperlink>
         </field>
 
@@ -177,7 +293,9 @@
         </field>
 
         <field name="productStoreId" title="店铺代号">
-            <display/>
+            <hyperlink description="${productStoreId}" target="EditProductStore" also-hidden="false" >
+                <parameter param-name="productStoreId"/>
+            </hyperlink>
         </field>
 
 

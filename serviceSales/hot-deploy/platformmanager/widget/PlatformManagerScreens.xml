@@ -258,7 +258,86 @@
         </section>
     </screen>
 
+    <screen name="QuickPutProduct">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickPutProduct"/>
+                <set field="tabButtonItem" value="QuickPutProduct" />
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <screenlet title="施工中...">
 
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+
+
+
+    <!-- 快速开店 -->
+    <screen name="QuickStartAppStore">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickStartAppStore"/>
+                <set field="tabButtonItem" value="QuickStartAppStore" />
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <screenlet title="Quick Start">
+                            <include-form name="QuickStartAppStore" location="component://platformmanager/widget/PlatformManagerForms.xml" />
+                        </screenlet>
+                        <!--<screenlet title="${uiLabelMap.CommonList}">-->
+                            <!--<include-form name="PartyAppList" location="component://platformmanager/widget/PlatformManagerForms.xml" />-->
+                        <!--</screenlet>-->
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 店铺角色 -->
+    <screen name="StoreRoleMgr">
+        <section>
+            <actions>
+                <!--<set field="titleProperty" value="StoreRoleMgr"/>-->
+                <set field="headerItem" value="StoreRoleMgr"/>
+                <set field="tabButtonItem" value="StoreRoleMgr"/>
+                <!--<set field="labelTitleProperty" value="ProductProductStoreRoles"/>-->
+                <set field="parameters.noConditionFind" value="Y"/>
+                <entity-one entity-name="ProductStoreRole" value-field="productStoreRole" auto-field-map="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonPartyDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
+                        <screenlet title="快速加角色到店铺">
+                            <include-form name="EditProductStoreRole" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <decorator-screen name="FindScreenDecorator" location="component://common/widget/CommonScreens.xml">
+                            <decorator-section name="search-options">
+                                <include-form name="FindProductStoreRole" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                            </decorator-section>
+                            <decorator-section name="search-results">
+                                <include-form name="ListProductStoreRole" location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                            </decorator-section>
+                        </decorator-screen>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 
 
 
@@ -269,10 +348,12 @@
             <set field="headerItem" value="FindPartyApps"/>
             <set field="tabButtonItem" value="FindPartyApps" />
             <set field="parameters.noConditionFind" value="Y"/>
+
         </actions>
         <widgets>
             <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                 <decorator-section name="body">
+                    <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml" name="AppToolsBar"/>
                     <screenlet title="${uiLabelMap.CommonSearch}">
                         <include-form name="FindPartyApps" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                     </screenlet>

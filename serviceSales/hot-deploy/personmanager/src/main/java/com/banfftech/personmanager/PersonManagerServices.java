@@ -6644,7 +6644,7 @@ public class PersonManagerServices {
 
 
             //销售代表角色
-            if (null != salesRepPartyId) {
+            if (null != salesRepPartyId && (!salesRepPartyId.trim().equals(""))) {
                 dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", createOrderOut.get("orderId"), "roleTypeId", "SALES_REP", "partyId", salesRepPartyId));
             }
 

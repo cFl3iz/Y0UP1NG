@@ -3232,7 +3232,7 @@ public class PersonManagerServices {
 
         for(GenericValue item : items){
                 String innerProductId = (String) item.get("productId");
-                updateProductBizDataFromOrder(salesRepId, item.get("quantity").intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
+                updateProductBizDataFromOrder(salesRepId,  ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
         }
         return resultMap;
     }

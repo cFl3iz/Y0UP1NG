@@ -1,6 +1,6 @@
 package main.java.com.banfftech.platformmanager;
 
-
+import net.sf.json.JSONArray;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.ExportExcelFile;
@@ -30,6 +30,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+//import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -91,25 +92,168 @@ public class PlatformInventoryServices {
         List<GenericValue> productCategoryVariantMembers = delegator.findList("ProductCategoryVariantMember",
                 findCondition, fieldSet,
                 null, null, false);
-
-        if (null != productCategoryVariantMembers) {
+        Map<String,String> keyMap = new HashMap<String, String>();
+        List<Map<String,Object>> toFormatList = new ArrayList<Map<String, Object>>();
+        if(null!=productCategoryVariantMembers&& productCategoryVariantMembers.size()>0){
+            for(GenericValue gv : productCategoryVariantMembers){
+                String productId = gv.getString("productId");
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                if(!keyMap.containsKey(productId)){
+                    rowMap.put("productId",productId);
+                    keyMap.put(productId,null);
+                    toFormatList.add(rowMap);
+                }
+            }
+        }
+        if (null != toFormatList && toFormatList.size()>0) {
 
             JSONObject json = new JSONObject();
             json.put("login.username","omsapiaccount");
             json.put("login.password","1qazZAQ!");
-            Debug.logInfo("productCategoryVariantMembers:"+productCategoryVariantMembers,module);
-            json.put("skus",productCategoryVariantMembers);
+            json.put("skus",toFormatList);
             String strSku = json.getString("skus");
             //准备发送报文给长宁获取库存数据
-            String postResult = HttpHelper.sendPost("http://121.199.20.78:9191/zuczugopen/control/ypSyncOfInventory",
-                    "login.username=omsapiaccount&login.password=1qazZAQ!&skus="+strSku);
+            String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypSyncOfInventory",
+                    "login.username=omsapiaccount&login.password=1qazZAQ!&skus=" + strSku);
 
-            //String postResult = WeChatUtil.PostSendMsg(json, "http://121.199.20.78:9191/zuczugopen/control/ypSyncOfInventory");
+            if(UtilValidate.isNotEmpty(postResult)){
+                JSONObject returnJson = JSONObject.fromObject(postResult);
+//                Debug.logInfo("returnJson:"+returnJson,module);
+                String resultMsg = (String) returnJson.get("responseMessage");
+//                Debug.logInfo("resultMsg:"+resultMsg,module);
+                if(resultMsg.trim().equals("success")){
+                    JSONObject data = (JSONObject) returnJson.get("data");
+                    JSONArray invList = (JSONArray) data.get("skusInvList");
+                    if(null!=invList){
+                        doSyncIven(invList, delegator, dispatcher);
+                    }
+                }
+            }
 
-            Debug.logInfo("PostResult:"+postResult,module);
+//            Debug.logInfo("PostResult:"+postResult,module);
         }
 
         return returnResult;
+    }
+
+    /**
+     * 更新库存
+     * @param invList
+     * @param delegator
+     * @param dispatcher
+     */
+    private static void doSyncIven(JSONArray invList, Delegator delegator, LocalDispatcher dispatcher)throws GenericEntityException, GenericServiceException {
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+        for(int i = 0 ; i < invList.size();i++){
+            JSONObject rowInv = invList.getJSONObject(i);
+            String skuId = "" + rowInv.keys().next();
+
+            JSONObject invJson = (JSONObject) rowInv.get(skuId);
+            String quantityOnHandTotalStr = "" + invJson.get("quantityOnHandTotal");
+            String availableToPromiseTotalStr = "" + invJson.get("availableToPromiseTotal");
+            Debug.logInfo("*product:"+skuId,module);
+            Debug.logInfo("*quantityOnHandTotal:"+quantityOnHandTotalStr,module);
+            Debug.logInfo("*availableToPromiseTotal:"+availableToPromiseTotalStr,module);
+
+            BigDecimal quantityOnHandTotalZuczug = new BigDecimal(quantityOnHandTotalStr);
+            BigDecimal availableToPromiseTotalZuczug = new BigDecimal(availableToPromiseTotalStr);
+
+            if((quantityOnHandTotalZuczug.compareTo(BigDecimal.ZERO) <= 0)){
+                quantityOnHandTotalZuczug = BigDecimal.ZERO;
+            }
+            if((availableToPromiseTotalZuczug.compareTo(BigDecimal.ZERO) <= 0)){
+                availableToPromiseTotalZuczug = BigDecimal.ZERO;
+            }
+
+            //开始搞库存
+            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", skuId).queryFirst();
+            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+            String productStoreId = category.getString("productStoreId");
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+            String inventoryFacilityId = store.getString("inventoryFacilityId");
+            //获得库存信息 getInventoryAvailableByFacility
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", inventoryFacilityId, "productId", skuId));
+            BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+            BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+
+
+            GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", skuId).queryFirst();
+            String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+//          -1,表示bigdemical小于bigdemical2；
+//           0,表示bigdemical等于bigdemical2；
+//           1,表示bigdemical大于bigdemical2；
+
+            Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+            createInventoryItemDetailMap.put("userLogin", admin);
+            createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
+
+
+            Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+            Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) > 0), module);
+            Debug.logInfo("*update resource quantityOnHandTotal.compareTo(quantity)>0 = " + (quantityOnHandTotal.compareTo(quantityOnHandTotalZuczug) > 0), module);
+
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = availableToPromiseTotalZuczug.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = availableToPromiseTotalZuczug.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //一模一样的库存我还差异个屁?
+            if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) == 0) {
+
+            } else {
+                //3.2 Do create
+                Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+            }
+
+            //再来一遍
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (quantityOnHandTotal.compareTo(quantityOnHandTotalZuczug) > 0) {
+                int quantityOnHandTotalInt = quantityOnHandTotal.intValue();
+                int quantityInt = quantityOnHandTotalZuczug.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + quantityOnHandTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (quantityOnHandTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (quantityOnHandTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (quantityOnHandTotal.compareTo(quantityOnHandTotalZuczug) < 0) {
+                int quantityOnHandTotalInt = quantityOnHandTotal.intValue();
+                int quantityInt = quantityOnHandTotalZuczug.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource quantityOnHandTotalInt =   " + quantityOnHandTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - quantityOnHandTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - quantityOnHandTotalInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //一模一样的库存我还差异个屁?
+            if (quantityOnHandTotal.compareTo(quantityOnHandTotalZuczug) == 0) {
+
+            } else {
+                //3.2 Do create
+                Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+            }
+
+        }
     }
 
 }

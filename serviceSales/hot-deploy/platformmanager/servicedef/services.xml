@@ -10,6 +10,25 @@
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
     </service>
+
+
+
+
+
+    <service name="testMail" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="testMail" auth="false">
+
+    </service>
+
+
+    <service name="sendEmailNotification" engine="java"
+             location="main.java.com.banfftech.platformmanager.util.EmailService" invoke="sendEmailNotification" auth="false">
+        <attribute name="content" type="String" mode="IN"/>
+        <attribute name="title" type="String" mode="IN"/>
+    </service>
+
+
+
     <service name="createProductSizeContentAndInfo" engine="simple" invoke="createProductSizeContentAndInfo"
              location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
         <description>create product size content and info</description>

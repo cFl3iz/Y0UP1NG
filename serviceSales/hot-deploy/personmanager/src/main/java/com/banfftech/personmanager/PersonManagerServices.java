@@ -6583,6 +6583,12 @@ public class PersonManagerServices {
         }
 
         resultMap.put("orderId", orderId);
+
+        dispatcher.runAsync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        splitOrderItemList.toString()
+                        ,"title","["+partyId+"]下单了,单号:"+orderId));
+
         return resultMap;
     }
 
@@ -6853,12 +6859,6 @@ public class PersonManagerServices {
 
         salesRepPartyId = salesRepId;
 
-        Debug.logInfo("*PlaceResourceOrder|productStoreId=" + productStoreId, module);
-        Debug.logInfo("*PlaceResourceOrder|amount_str=" + amount_str, module);
-        Debug.logInfo("*PlaceResourceOrder|payToPartyId=" + payToPartyId, module);
-        Debug.logInfo("*PlaceResourceOrder|productId=" + productId, module);
-        Debug.logInfo("*PlaceResourceOrder|prodCatalogId=" + prodCatalogId, module);
-        Debug.logInfo("*PlaceResourceOrder|salesRepPartyId=" + salesRepPartyId, module);
 
 
         BigDecimal subTotal = BigDecimal.ZERO;
@@ -6945,28 +6945,28 @@ public class PersonManagerServices {
         GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
 
-        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
-
-        createMessageLogMap.put("partyIdFrom", partyId);
-
-        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件(" + sQueryProduct.get("productName") + ")。");
-
-        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-
-        createMessageLogMap.put("partyIdTo", salesRepPartyId);
-
-        createMessageLogMap.put("badge", "CHECK");
-
-        createMessageLogMap.put("messageLogTypeId", "ORDER");
-
-        createMessageLogMap.put("objectId", productId);
-
-
-        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-
-        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-
-        msg.create();
+//        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
+//
+//        createMessageLogMap.put("partyIdFrom", partyId);
+//
+//        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件(" + sQueryProduct.get("productName") + ")。");
+//
+//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
+//
+//        createMessageLogMap.put("partyIdTo", salesRepPartyId);
+//
+//        createMessageLogMap.put("badge", "CHECK");
+//
+//        createMessageLogMap.put("messageLogTypeId", "ORDER");
+//
+//        createMessageLogMap.put("objectId", productId);
+//
+//
+//        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+//
+//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
+//
+//        msg.create();
 
 
         //  auto approved
@@ -6988,6 +6988,11 @@ public class PersonManagerServices {
                 UtilMisc.toMap("orderId", orderId));
         resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
         resultMap.put("orderId", orderId);
+
+        dispatcher.runAsync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        doCreateOrderIn.toString()
+                        ,"title",maiJiaName+"["+partyId+"]下单了,单号:"+orderId));
 
         return resultMap;
     }

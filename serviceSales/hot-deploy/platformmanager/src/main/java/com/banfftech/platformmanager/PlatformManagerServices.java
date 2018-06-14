@@ -5,11 +5,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import main.java.com.banfftech.platformmanager.util.ExportExcelFile;
+import main.java.com.banfftech.platformmanager.util.*;
 import org.apache.ofbiz.base.util.HttpRequestFileUpload;
 import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import com.taobao.api.ApiException;
@@ -22,11 +23,8 @@ import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
-import main.java.com.banfftech.platformmanager.util.TestExcel;
 import net.sf.json.JSONObject;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
-import main.java.com.banfftech.platformmanager.util.EmojiHandler;
-import main.java.com.banfftech.platformmanager.util.UtilTools;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
 import org.apache.commons.fileupload.FileItem;
@@ -94,6 +92,7 @@ import java.sql.Timestamp;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.createProductContentAndDataResource;
+import static main.java.com.banfftech.platformmanager.util.EmailService.sendMail;
 import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
@@ -217,6 +216,18 @@ public class PlatformManagerServices {
             e.printStackTrace();
         }
         return "success";
+    }
+
+    public static Map<String, Object> testMail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException ,UnknownHostException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        return result;
     }
 
 

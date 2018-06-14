@@ -23,6 +23,23 @@
 
     </view-entity>
 
+    <!-- 某目录中的在售变形产品 -->
+    <view-entity entity-name="ProductCategoryVariantMember" package-name="org.ofbiz.product.product">
+        <member-entity entity-alias="ProductCategoryMember" entity-name="ProductCategoryMember"/>
+        <member-entity entity-alias="Product" entity-name="Product"/>
+        <alias-all entity-alias="ProductCategoryMember"/>
+        <alias-all entity-alias="Product"/>
+
+
+        <view-link entity-alias="Product" rel-entity-alias="ProductCategoryMember">
+            <key-map field-name="productId" rel-field-name="productId"/>
+        </view-link>
+
+        <entity-condition>
+            <condition-expr field-name="isVariant" entity-alias="Product" operator="equals" value="Y"/>
+        </entity-condition>
+    </view-entity>
+
 
     <view-entity entity-name="ProductContentAndElectronicText" package-name="org.ofbiz.product.product">
         <member-entity entity-alias="PC" entity-name="ProductContent"/>

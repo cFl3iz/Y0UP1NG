@@ -31,11 +31,14 @@
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
 
-
+    <!-- 账户相关 -->
     <service-resource type="model" loader="main" location="servicedef/account_services.xml"/>
 
     <!-- 产品内容 -->
     <service-resource type="model" loader="main" location="servicedef/prod_content_services.xml"/>
+
+    <!-- 库存相关 -->
+    <service-resource type="model" loader="main" location="servicedef/inventory_services.xml"/>
 
 
     <service-resource type="eca" loader="main" location="servicedef/secas_push.xml"/>

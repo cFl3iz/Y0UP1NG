@@ -650,8 +650,7 @@ public class WeChatOrderQueryServices {
     }
 
     /**
-     * queryCatalogProductDetail
-     * //TODO 没有图片的变形产品 不要出现特征选择了!
+     * QueryCatalogProductDetail
      * @param dctx
      * @param context
      * @return
@@ -790,6 +789,7 @@ public class WeChatOrderQueryServices {
                             pictures.add(rowMap);
                             if (sigleIndex == 0) {
                                 featureMap.put(rowColor.get("description") + "", rowMap);
+                                sigleIndex++;
                             }
                         }
 

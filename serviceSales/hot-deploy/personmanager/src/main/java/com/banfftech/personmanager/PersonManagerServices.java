@@ -3311,7 +3311,7 @@ public class PersonManagerServices {
             String productId = item.getString("productId");
             String quantity = item.get("quantity") +"";
             String unitPrice = item.get("unitPrice") + "";
-            String orderItemSeqId = item.get("orderItemSeqId");
+            String orderItemSeqId = item.getString("orderItemSeqId");
             itemOrder.put("productName",productName);
             itemOrder.put("productId",productId);
             itemOrder.put("quantity",quantity);

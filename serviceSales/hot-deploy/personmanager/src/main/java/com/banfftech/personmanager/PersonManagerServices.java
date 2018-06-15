@@ -3293,13 +3293,16 @@ public class PersonManagerServices {
         GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();
         orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
         orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
-        orderMap.put("cityGeoId",orderHeaderAndShipGroups.getString("cityGeoId"));
+
+        orderMap.put("city",orderHeaderAndShipGroups.getString("cityGeoId"));
+        orderMap.put("county",orderHeaderAndShipGroups.getString("countyGeoId"));
+
         orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
         orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
         orderMap.put("internalNote","");
         orderMap.put("noteInfo","");
        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        orderMap.put("orderDate",sdf.format((Timestamp)orderHeader.get("orderDate")));
+        orderMap.put("orderDate",sdf.format((Timestamp) orderHeader.get("orderDate")));
         orderMap.put("paymentDate",sdf.format(new Date()));
         orderMap.put("invoiceAmount","0");
         orderMap.put("invoiceTitle","");
@@ -4258,7 +4261,8 @@ public class PersonManagerServices {
                             "partyId", partyId,
                             "countryGeoId", countyGeo.size() <= 0 ?"":countyGeo.get(0).get("geoId"),
                             "stateProvinceGeoId",provinceGeo.size()<=0?"":provinceGeo.get(0).get("geoId"),
-                            "city", cityGeo.size()<=0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "cityGeoId", cityGeo.size()<=0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "city", cityName,
                             "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");

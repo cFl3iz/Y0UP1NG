@@ -4161,7 +4161,7 @@ public class PersonManagerServices {
         String telNumber = (String) context.get("telNumber");
         //没有给订单号的情况下只是增加地址
         System.out.println("ORDER_ID=" + orderId);
-        EntityCondition findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+provinceName+"%" );
+        EntityCondition findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+provinceName.substring(0,1)+"%" );
         EntityCondition findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "PROVINCE" );
         EntityConditionList<EntityCondition> listConditions = EntityCondition
                 .makeCondition(findGeoCondition,findGeoCondition2);
@@ -4179,26 +4179,26 @@ public class PersonManagerServices {
         fieldSet.add("geoTypeId");
         //Query My Resource
         List<GenericValue> provinceGeo = delegator.findList("Geo",
-                findGeoCondition, fieldSet,null, null, false);
+                listConditions, fieldSet,null, null, false);
 
 
 
 
 
-        findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+countyName+"%" );
+        findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+countyName.substring(0,1)+"%" );
          findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "COUNTY" );
          listConditions = EntityCondition
                 .makeCondition(findGeoCondition,findGeoCondition2);
         List<GenericValue> countyGeo = delegator.findList("Geo",
-                findGeoCondition, fieldSet,null, null, false);
+                listConditions, fieldSet,null, null, false);
 
 
-        findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+cityName+"%" );
+        findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+cityName.substring(0,1)+"%" );
         findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "CITY" );
         listConditions = EntityCondition
                 .makeCondition(findGeoCondition,findGeoCondition2);
         List<GenericValue> cityGeo = delegator.findList("Geo",
-                findGeoCondition, fieldSet,null, null, false);
+                listConditions, fieldSet,null, null, false);
 
 
 

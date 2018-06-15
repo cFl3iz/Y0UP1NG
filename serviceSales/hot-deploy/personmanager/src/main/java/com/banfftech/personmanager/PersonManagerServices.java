@@ -4208,9 +4208,9 @@ public class PersonManagerServices {
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId,
-                            "countryGeoId", countyGeo.size()>0 ?"":countyGeo.get(0).get("geoId"),
-                            "stateProvinceGeoId",provinceGeo.size()>0?"":provinceGeo.get(0).get("geoId"),
-                            "city", cityGeo.size()>0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "countryGeoId", countyGeo.size()<=0 ?"":countyGeo.get(0).get("geoId"),
+                            "stateProvinceGeoId",provinceGeo.size()<=0?"":provinceGeo.get(0).get("geoId"),
+                            "city", cityGeo.size()<=0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
                             "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
@@ -4234,9 +4234,9 @@ public class PersonManagerServices {
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "toName", userName,
                             "partyId", partyId,
-                            "countryGeoId", countyGeo.size()>0 ?"":countyGeo.get(0).get("geoId"),
-                            "stateProvinceGeoId",provinceGeo.size()>0?"":provinceGeo.get(0).get("geoId"),
-                            "city", cityGeo.size()>0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "countryGeoId", countyGeo.size() <= 0 ?"":countyGeo.get(0).get("geoId"),
+                            "stateProvinceGeoId",provinceGeo.size()<=0?"":provinceGeo.get(0).get("geoId"),
+                            "city", cityGeo.size()<=0 ? PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
                             "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");

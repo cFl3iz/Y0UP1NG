@@ -3295,8 +3295,14 @@ public class PersonManagerServices {
         orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
 
         orderMap.put("city",orderHeaderAndShipGroups.getString("city"));
-        orderMap.put("county",orderHeaderAndShipGroups.getString("countyGeoId"));
-        orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
+        String address = orderHeaderAndShipGroups.getString("address1");
+        //湖北省 武汉市 江岸区 江岸大啊到
+        try{
+            orderMap.put("county",address.substring(address.indexOf("市")+1,address.lastIndexOf(" ")));
+        }catch (StringIndexOutOfBoundsException e){
+            // ...
+        }
+//        orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
         orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
         orderMap.put("internalNote","");
         orderMap.put("noteInfo","");

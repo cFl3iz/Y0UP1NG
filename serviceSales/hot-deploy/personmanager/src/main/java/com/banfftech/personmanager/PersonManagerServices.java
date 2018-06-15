@@ -3290,7 +3290,8 @@ public class PersonManagerServices {
         orderMap.put("nickName",custPerson.getString("firstName"));
         orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
         orderMap.put("postalCode",orderHeaderAndShipGroups.getString("postalCode"));
-        orderMap.put("phoneNumber",orderHeaderAndShipGroups.getString("contactNumber"));
+        GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();
+        orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
         orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
         orderMap.put("cityGeoId",orderHeaderAndShipGroups.getString("cityGeoId"));
         orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
@@ -4250,7 +4251,7 @@ public class PersonManagerServices {
             contactMechId = (String) contactAddress.get("contactMechId");
         }
 
-        //更新一下订单的货运地址
+        //更新一下订单的货运地址houseNumber
         Map<String, Object> updateShipGroupShipInfoOutMap = dispatcher.runSync("updateShipGroupShipInfo", UtilMisc.toMap(
                 "userLogin", userLogin, "orderId", orderId,
                 "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));

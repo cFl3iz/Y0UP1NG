@@ -897,6 +897,14 @@
                    optional="true"/>
     </service>
 
+    <!-- 请求素然发货,生成素然订单 -->
+    <service name="akrmOrderShipRequest"
+             engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="akrmOrderShipRequest" auth="false">
+        <description>请求素然发货,生成素然订单</description>
+        <attribute name="orderId" type="String" mode="IN"/>
+    </service>
 
 
     <!-- 确认货款到账 -->

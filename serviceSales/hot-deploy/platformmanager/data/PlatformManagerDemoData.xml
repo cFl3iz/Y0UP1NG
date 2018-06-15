@@ -72,7 +72,7 @@
                   headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
                   digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
                   itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
-                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="RS"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="AKRM"
                   visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
 
     <ProductStoreFacility createdStamp="2018-04-10 18:42:27.0" createdTxStamp="2018-04-10 18:42:27.0" facilityId="ZUCZUG" fromDate="2018-04-10 18:42:26.0" lastUpdatedStamp="2018-04-10 18:42:27.0" lastUpdatedTxStamp="2018-04-10 18:42:27.0" productStoreId="ZUCZUGSTORE"/>
@@ -284,7 +284,7 @@
                   headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED"
                   digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
                   itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED"
-                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="RS"
+                  itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="KC"
                   visualThemeId="EC_DEFAULT" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
 
     <ProductStoreFacility createdStamp="2018-04-10 18:42:27.0" createdTxStamp="2018-04-10 18:42:27.0" facilityId="KANGCHENG" fromDate="2018-04-10 18:42:26.0" lastUpdatedStamp="2018-04-10 18:42:27.0" lastUpdatedTxStamp="2018-04-10 18:42:27.0" productStoreId="KANGCHENGSTORE"/>

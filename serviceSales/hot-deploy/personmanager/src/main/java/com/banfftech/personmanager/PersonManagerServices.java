@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
+import main.java.com.banfftech.platformmanager.util.HttpHelper;
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.ObjectType;
@@ -1909,7 +1910,7 @@ public class PersonManagerServices {
         GenericValue smsValidateCode = EntityQuery.use(delegator).from("SmsValidateCode").where("teleNumber", teleNumber, "isValid", "N").orderBy(orderBy).queryFirst();
 
         //UTF-8代表微信授权出来的手机则不效验。
-        if(!captcha.equals("UTF-8")){
+        if (!captcha.equals("UTF-8")) {
             if (null != smsValidateCode && smsValidateCode.get("captcha").equals(captcha)) {
                 smsValidateCode.set("isValid", "Y");
                 smsValidateCode.store();
@@ -1919,7 +1920,6 @@ public class PersonManagerServices {
                 return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
             }
         }
-
 
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId).queryFirst();
@@ -2884,7 +2884,7 @@ public class PersonManagerServices {
         itemProduct.set("prodCatalogId", prodCatalogId);
 
 
-        System.out.println("->itemProduct:"+itemProduct);
+        System.out.println("->itemProduct:" + itemProduct);
 
         orderItemList.add(itemProduct);
 
@@ -2918,7 +2918,7 @@ public class PersonManagerServices {
 
 
         //销售代表角色
-        if (null != salesRepPartyId && (!salesRepPartyId.trim().equals("")) ) {
+        if (null != salesRepPartyId && (!salesRepPartyId.trim().equals(""))) {
             dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "roleTypeId", "SALES_REP", "partyId", salesRepPartyId));
         }
 
@@ -2929,7 +2929,7 @@ public class PersonManagerServices {
         Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
 
         GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
-        if(null == orderItemShipGrpInvRes){
+        if (null == orderItemShipGrpInvRes) {
             dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
                     "inventoryItemId", invItem.get("inventoryItemId")
                     , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
@@ -3142,11 +3142,6 @@ public class PersonManagerServices {
 
         String orderId = (String) context.get("orderId");
 
-//        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
-//
-//        String productId = (String) orderItem.get("productId");
-//
-//        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
         GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
@@ -3174,70 +3169,177 @@ public class PersonManagerServices {
         GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
 
         String payFromPartyId = (String) orderCust.get("partyId");
-        String salesRepId  =  (String) orderSalesRep.get("partyId");
-
-
+        String salesRepId = (String) orderSalesRep.get("partyId");
 
         //应用收款支付.....
         receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
 
-        //下列推送逻辑暂不适用
+        List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
 
-//        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-//        //推送告知买家
-//
-//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payFromPartyId);
-//
-//        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-//
-//
-//        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-//            String jpushId = (String) partyIdentification.getString("idValue");
-//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-//            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "资源:" + product.get("productName") + "的卖家已确认货款到账!", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-//        }
-
-
-        //推送微信
-
-        //pushMsgBase(orderId, partyId, payFromPartyId, delegator, dispatcher, userLogin, "订单:+" + orderId + "|" + product.get("productName") + "的卖家已经确认货款到账!", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
-
-
-//        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
-//
-//        createMessageLogMap.put("partyIdFrom", partyId);
-//
-//        createMessageLogMap.put("message", "微信付款成功!");
-//
-//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-//
-//        createMessageLogMap.put("partyIdTo", partyId);
-//
-//        createMessageLogMap.put("badge", "CHECK");
-//
-//        createMessageLogMap.put("messageLogTypeId", "PAYMENT");
-//
-//        createMessageLogMap.put("objectId", productId);
-//
-//
-//        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-//
-//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-//
-//        msg.create();
-
-        List<GenericValue> items =  EntityQuery.use(delegator).from("OrderItem").where("orderId",orderId).queryList();
-
-        for(GenericValue item : items){
-                String innerProductId = (String) item.get("productId");
-                updateProductBizDataFromOrder(salesRepId,  ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
+        for (GenericValue item : items) {
+            String innerProductId = (String) item.get("productId");
+            updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
         }
+
+
+        Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);
+        // Async To Zuczug
+        dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
+
+
         return resultMap;
     }
 
 
+    /**
+     * 请求素然发货,生成素然订单
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+
+//    数据格式:
+
+//    {
+//        login.password = 1 qazZAQ!, orderList = [{
+//                "AkrmOrderId": "10205786301",
+//                "externalId": "177506304607885824",
+//                "grandTotal": "1352.0000",
+//                "paymentMethodTypeId": "EXT_ALIPAY",
+//                "needInvoic": "0",
+//                "nickName": "东东和团团",
+//                "toName": "徐晓霞",
+//                "postalCode": "201100",
+//                "phoneNumber": "13003101890",
+//                "stateProvince": "上海",
+//                "city": "上海市",
+//                "county": "闵行区",
+//                "address1": "马桥镇昆阳北路3299号中心红庐8号",
+//                "internalNote": "",
+//                "noteInfo": "",
+//                "orderDate": "2018-06-14 00:05:05",
+//                "paymentDate": "2018-06-14 00:05:05",
+//                "invoiceAmount": "0",
+//                "invoiceTitle": "",
+//                "invoiceContent": "",
+//                "shippingAmount": "0.0000",
+//                "orderItems": [{
+//            "orderItemSeqId": "791805",
+//                    "productName": "宽条泡泡纱A型短裤",
+//                    "productId": "Z171PA06-S72-4",
+//                    "quantity": "1",
+//                    "unitPrice": "676"
+//        }, {
+//            "orderItemSeqId": "791807",
+//                    "productName": "罗马针织布套头衫",
+//                    "productId": "0171TS03-38-2",
+//                    "quantity": "1",
+//                    "unitPrice": "676"
+//        }]
+//    }], login.username = omsapiaccount
+//    }
+    public static Map<String, Object> akrmOrderShipRequest(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String orderId   = (String) context.get("orderId");
+
+
+        GenericValue orderHeader =  EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
+        List<GenericValue> orderItems = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
+
+        List<Map<String,Object>> orderList = new ArrayList<Map<String, Object>>();
+
+        Map<String,Object> orderMap = new HashMap<String, Object>();
+
+        orderMap.put("akrmOrderId",orderId);
+        orderMap.put("externalId",orderId);
+
+        Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
+                UtilMisc.toMap("orderId", orderId));
+
+        BigDecimal availableTotal = (BigDecimal) calcOrderTotal.get("availableReturnTotal");
+        int r = availableTotal.compareTo(BigDecimal.ZERO); //和0，Zero比较
+        //小于
+        if (r == -1 || r==0) {
+            orderMap.put("grandTotal","0");
+        } else {
+            orderMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
+        }
+        orderMap.put("paymentMethodTypeId","EXT_WECHAT_PAY");
+        orderMap.put("needInvoic","0");
+        // Query Buyer Info
+        GenericValue orderHeaderAndRoles = EntityQuery.use(delegator).from("OrderHeaderAndRoles").where("orderId", orderId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
+        String orderCustPartyId = orderHeaderAndRoles.getString("partyId");
+        GenericValue custPerson = EntityQuery.use(delegator).from("Person").where("partyId",orderCustPartyId).queryFirst();
+        GenericValue orderHeaderAndShipGroups = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").where("orderId", orderId).queryFirst();
+        orderMap.put("nickName",custPerson.getString("firstName"));
+        orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
+        orderMap.put("postalCode",orderHeaderAndShipGroups.getString("postalCode"));
+        orderMap.put("phoneNumber",orderHeaderAndShipGroups.getString("contactNumber"));
+        orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
+        orderMap.put("cityGeoId",orderHeaderAndShipGroups.getString("cityGeoId"));
+        orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
+        orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
+        orderMap.put("internalNote","");
+        orderMap.put("noteInfo","");
+        orderMap.put("orderDate",orderHeader.get("orderDate"));
+//        orderMap.put("paymentDate","2018-06-14 00:05:05");
+        orderMap.put("invoiceAmount","0");
+        orderMap.put("invoiceTitle","");
+        orderMap.put("invoiceContent","");
+        orderMap.put("shippingAmount","0.0000");
+        orderMap.put("orderItems",orderItems);
+
+
+        orderList.add(orderMap);
+
+        JSONObject json = new JSONObject();
+        json.put("login.username", "omsapiaccount");
+        json.put("login.password", "1qazZAQ!");
+        json.put("orderList", orderList);
+        String orderListStr = json.getString("orderList");
+        //准备发送报文给长宁获取库存数据
+        String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypOrderShip",
+                "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
+
+        if (UtilValidate.isNotEmpty(postResult)) {
+            net.sf.json.JSONObject returnJson = net.sf.json.JSONObject.fromObject(postResult);
+            String resultMsg = (String) returnJson.get("responseMessage");
+            if (resultMsg.trim().equals("success")) {
+
+            }
+        }
+
+        return resultMap;
+    }
+
+    /**
+     * 收到款项
+     *
+     * @param paymentMethodStr
+     * @param paymentAmountStr
+     * @param orderId
+     * @param partyId
+     * @param locale
+     * @param delegator
+     * @param dispatcher
+     * @param userLogin
+     * @return
+     */
     public static String receiveOfflinePayment(String paymentMethodStr, String paymentAmountStr, String orderId, String partyId, Locale locale, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) {
 
 
@@ -4058,11 +4160,51 @@ public class PersonManagerServices {
         String telNumber = (String) context.get("telNumber");
         //没有给订单号的情况下只是增加地址
         System.out.println("ORDER_ID=" + orderId);
+
+        EntityCondition findGeoCondition = EntityCondition.makeCondition("geoId", EntityOperator.LIKE,"%"+provinceName+"%" );
+        EntityCondition findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "PROVINCE" );
+        EntityConditionList<EntityCondition> listConditions = EntityCondition
+                .makeCondition(findGeoCondition,findGeoCondition2);
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("geoId");
+        fieldSet.add("geoName");
+        fieldSet.add("geoTypeId");
+        //Query My Resource
+        List<GenericValue> provinceGeo = delegator.findList("Geo",
+                findGeoCondition, fieldSet,null, null, false);
+
+
+
+
+
+        findGeoCondition = EntityCondition.makeCondition("geoId", EntityOperator.LIKE,"%"+countyName+"%" );
+         findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "COUNTY" );
+         listConditions = EntityCondition
+                .makeCondition(findGeoCondition,findGeoCondition2);
+        List<GenericValue> countyGeo = delegator.findList("Geo",
+                findGeoCondition, fieldSet,null, null, false);
+
+
+        findGeoCondition = EntityCondition.makeCondition("geoId", EntityOperator.LIKE,"%"+cityName+"%" );
+        findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "CITY" );
+        listConditions = EntityCondition
+                .makeCondition(findGeoCondition,findGeoCondition2);
+        List<GenericValue> cityGeo = delegator.findList("Geo",
+                findGeoCondition, fieldSet,null, null, false);
+
+
+
+
         if (orderId.toUpperCase().equals("NA")) {
             // 货运目的地址
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
+                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId,
+                            "countryGeoId", null== countyGeo ?"":countyGeo.get(0).get("geoId"),
+                            "stateProvinceGeoId",null==provinceGeo?"":provinceGeo.get(0).get("geoId"),
+                            "city", cityGeo==null?PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
@@ -4078,14 +4220,17 @@ public class PersonManagerServices {
         List<GenericValue> partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where("partyId", partyId, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo).queryList();
 
         String contactMechId = "";
-        Debug.logInfo("->partyAndPostalAddress:" + "partyId" + partyId + "|address1" + provinceName + " " + cityName + " " + countyName + " " + detailInfo, module);
-        Debug.logInfo("->partyAndPostalAddress:" + partyAndPostalAddress, module);
 
         if (null == partyAndPostalAddress || partyAndPostalAddress.size() == 0) {
             // 货运目的地址
             String contactMechPurposeTypeId = "SHIPPING_LOCATION";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                    UtilMisc.toMap("userLogin", admin, "toName", userName, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", PeConstant.DEFAULT_CITY_GEO_COUNTRY, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
+                    UtilMisc.toMap("userLogin", admin, "toName", userName,
+                            "partyId", partyId,
+                            "countryGeoId", null== countyGeo ?"":countyGeo.get(0).get("geoId"),
+                            "stateProvinceGeoId",null==provinceGeo?"":provinceGeo.get(0).get("geoId"),
+                            "city", cityGeo==null?PeConstant.DEFAULT_CITY_GEO_COUNTRY:cityGeo.get(0).get("geoId"),
+                            "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", postalCode,
                             "contactMechPurposeTypeId", contactMechPurposeTypeId, "comments", telNumber));
             contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
@@ -5736,9 +5881,9 @@ public class PersonManagerServices {
         String relationEnum = (String) context.get("relationEnum");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        Debug.logInfo("*addPartyRelationShip partyIdFrom:"+partyIdFrom,module);
-        Debug.logInfo("*addPartyRelationShip partyIdTo:"+partyIdTo,module);
-        Debug.logInfo("*addPartyRelationShip relationEnum:"+relationEnum,module);
+        Debug.logInfo("*addPartyRelationShip partyIdFrom:" + partyIdFrom, module);
+        Debug.logInfo("*addPartyRelationShip partyIdTo:" + partyIdTo, module);
+        Debug.logInfo("*addPartyRelationShip relationEnum:" + relationEnum, module);
 
         String partyRelationshipTypeId = (String) context.get("partyRelationshipTypeId");
 
@@ -5775,20 +5920,20 @@ public class PersonManagerServices {
             }
 
         } else {
-            if(null!=relationEnum ){
+            if (null != relationEnum) {
 
-            switch (relationType.getRelationType(relationEnum)) {
-                case C2CRSS:
-                    serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
-                    if (ServiceUtil.isError(serviceResultMap)) {
-                        return serviceResultMap;
-                    }
-                case CONTACT:
-                    serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
-                    if (ServiceUtil.isError(serviceResultMap)) {
-                        return serviceResultMap;
-                    }
-            }
+                switch (relationType.getRelationType(relationEnum)) {
+                    case C2CRSS:
+                        serviceResultMap = createRelationC2CRSS(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                        if (ServiceUtil.isError(serviceResultMap)) {
+                            return serviceResultMap;
+                        }
+                    case CONTACT:
+                        serviceResultMap = createRelationCONTACT(delegator, dispatcher, admin, partyIdFrom, partyIdTo);
+                        if (ServiceUtil.isError(serviceResultMap)) {
+                            return serviceResultMap;
+                        }
+                }
             }
 
         }
@@ -6393,7 +6538,6 @@ public class PersonManagerServices {
         String telNumber = (String) context.get("telNumber");
 
 
-
         /**
          * 关于当事人的销售代表在订单中的取值逻辑:
          * 打开来自销售代表转发的产品或目录或其他页面时。
@@ -6432,15 +6576,15 @@ public class PersonManagerServices {
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "productStoreId", productStoreId).queryFirst();
         //为空说明现在是2C 卖家店铺
-        String appServiceType   = "2C";
-        if(null != queryAppConfig){
-            appServiceType   = queryAppConfig.getString("appServiceType");
+        String appServiceType = "2C";
+        if (null != queryAppConfig) {
+            appServiceType = queryAppConfig.getString("appServiceType");
         }
 
-        GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
+        GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
 
-        if(appServiceType.equals("2C")){
+        if (appServiceType.equals("2C")) {
             salesRepId = productStore.getString("payToPartyId");
         }
         payToPartyId = productStore.getString("payToPartyId");
@@ -6453,8 +6597,6 @@ public class PersonManagerServices {
         }
 
         salesRepPartyId = salesRepId;
-
-
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
@@ -6484,17 +6626,17 @@ public class PersonManagerServices {
 
 
         int index = 1;
-        System.out.println("->productsArray:"+productsArray.toString());
+        System.out.println("->productsArray:" + productsArray.toString());
         for (String rowProduct : productsArray) {
 
             //Order Items
             List<GenericValue> orderItemList = null;
-            if(rowProduct.indexOf(":")<0){
+            if (rowProduct.indexOf(":") < 0) {
                 break;
             }
             String productId = rowProduct.substring(0, rowProduct.indexOf(":"));
-            if(productId.indexOf("[")>-1){
-                    productId = productId.replaceAll("\\[","");
+            if (productId.indexOf("[") > -1) {
+                productId = productId.replaceAll("\\[", "");
             }
 
             String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);
@@ -6519,7 +6661,7 @@ public class PersonManagerServices {
             itemProduct.set("shipBeforeDate", null);
             itemProduct.set("productCategoryId", category.getString("productCategoryId"));
             // Unit Price = List Price
-            itemProduct.set("unitListPrice", new BigDecimal(product.get("price")+""));
+            itemProduct.set("unitListPrice", new BigDecimal(product.get("price") + ""));
             itemProduct.set("shoppingListId", null);
             itemProduct.set("cancelBackOrderDate", null);
             // Desc To Order Item List
@@ -6549,10 +6691,10 @@ public class PersonManagerServices {
         //单店铺2b结算
         if (splitOrderItemList.size() == 1) {
             orderId = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList
-            ,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber);
+                    , provinceName, cityName, countyName, detailInfo, postalCode, userName, telNumber);
         } else {
             orderIds = doCreateOrder(delegator, orderReMark, salesRepPartyId, billFromVendorPartyId, partyId, admin, dispatcher, splitOrderItemList
-                    ,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber);
+                    , provinceName, cityName, countyName, detailInfo, postalCode, userName, telNumber);
         }
 
         //TO C 的情况下
@@ -6563,7 +6705,6 @@ public class PersonManagerServices {
 //            resultMap.put("relationEnum", "C2CRSS");
 
 
-
         //单店铺
         if (orderIds == null) {
             Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
@@ -6571,14 +6712,14 @@ public class PersonManagerServices {
             resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
             resultMap.put("orderId", orderId);
         } else {
-            String []orderArray = orderIds.split(",");
+            String[] orderArray = orderIds.split(",");
             Double count = 0.0;
-            for(String rowOrderId : orderArray){
+            for (String rowOrderId : orderArray) {
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId", rowOrderId));
-                 count +=  Double.parseDouble(calcOrderTotal.get("availableReturnTotal")+ "");
+                count += Double.parseDouble(calcOrderTotal.get("availableReturnTotal") + "");
             }
-            resultMap.put("grandTotal", count+"");
+            resultMap.put("grandTotal", count + "");
             resultMap.put("orderId", orderId);
         }
 
@@ -6587,7 +6728,7 @@ public class PersonManagerServices {
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         splitOrderItemList.toString()
-                        ,"title","["+partyId+"]下单了,单号:"+orderId));
+                        , "title", "[" + partyId + "]下单了,单号:" + orderId));
 
         return resultMap;
     }
@@ -6641,7 +6782,6 @@ public class PersonManagerServices {
 //            createOrderServiceIn.put("orderProductPromoUses", makeProductPromoUses(delegator,dispatcher,key,partyId));
 
 
-
             createOrderServiceIn.put("userLogin", admin);
 
 
@@ -6679,7 +6819,7 @@ public class PersonManagerServices {
 
             //判断是不是只有一个orderId
 
-            addShipAddressToOrder(delegator,dispatcher,partyId,provinceName,cityName,countyName,detailInfo,postalCode,userName,telNumber,(String) createOrderOut.get("orderId"),admin,admin);
+            addShipAddressToOrder(delegator, dispatcher, partyId, provinceName, cityName, countyName, detailInfo, postalCode, userName, telNumber, (String) createOrderOut.get("orderId"), admin, admin);
             if (null != orderId) {
                 orderId = orderId + "," + (String) createOrderOut.get("orderId");
             } else {
@@ -6693,7 +6833,7 @@ public class PersonManagerServices {
     }
 
 
-    public static void addShipAddressToOrder(Delegator delegator,LocalDispatcher dispatcher,
+    public static void addShipAddressToOrder(Delegator delegator, LocalDispatcher dispatcher,
                                              String partyId,
                                              String provinceName,
                                              String cityName,
@@ -6730,7 +6870,6 @@ public class PersonManagerServices {
                 "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
 
 
-
         if (null != telNumber && !telNumber.trim().equals("")) {
             // 创建联系电话
             Map<String, Object> inputTelecom = UtilMisc.toMap();
@@ -6745,12 +6884,12 @@ public class PersonManagerServices {
     }
 
 
-    private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key,String partyId)throws GenericEntityException {
+    private static List<GenericValue> makeProductPromoUses(Delegator delegator, LocalDispatcher dispatcher, String key, String partyId) throws GenericEntityException {
         List<GenericValue> productPromoUses = new LinkedList<GenericValue>();
-        List<GenericValue> productPromoUseInfoList  =  EntityQuery.use(delegator).from("StorePromoAndAction").where("productStoreId", key).queryList();
+        List<GenericValue> productPromoUseInfoList = EntityQuery.use(delegator).from("StorePromoAndAction").where("productStoreId", key).queryList();
         int sequenceValue = 0;
-        for (GenericValue productPromoUseInfo: productPromoUseInfoList) {
-            if(productPromoUseInfo.get("amount")==null || UtilValidate.isEmpty(productPromoUseInfo.get("amount"))){
+        for (GenericValue productPromoUseInfo : productPromoUseInfoList) {
+            if (productPromoUseInfo.get("amount") == null || UtilValidate.isEmpty(productPromoUseInfo.get("amount"))) {
                 //maybe action service
                 continue;
             }
@@ -6833,15 +6972,14 @@ public class PersonManagerServices {
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "productStoreId", productStoreId).queryFirst();
         //为空说明现在是2C 卖家店铺
-        String appServiceType   = "2C";
-        if(null != queryAppConfig){
-              appServiceType   = queryAppConfig.getString("appServiceType");
+        String appServiceType = "2C";
+        if (null != queryAppConfig) {
+            appServiceType = queryAppConfig.getString("appServiceType");
         }
 
 
-        GenericValue productStore =  EntityQuery.use(delegator).from("ProductStore").where(
+        GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst();
-
 
 
         payToPartyId = productStore.getString("payToPartyId");
@@ -6853,12 +6991,11 @@ public class PersonManagerServices {
         }
 
 
-        if(appServiceType.equals("2C")){
+        if (appServiceType.equals("2C")) {
             salesRepId = productStore.getString("payToPartyId");
         }
 
         salesRepPartyId = salesRepId;
-
 
 
         BigDecimal subTotal = BigDecimal.ZERO;
@@ -6992,7 +7129,7 @@ public class PersonManagerServices {
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         doCreateOrderIn.toString()
-                        ,"title",maiJiaName+"["+partyId+"]下单了,单号:"+orderId));
+                        , "title", maiJiaName + "[" + partyId + "]下单了,单号:" + orderId));
 
         return resultMap;
     }

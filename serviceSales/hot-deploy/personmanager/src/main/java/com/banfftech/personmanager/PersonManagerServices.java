@@ -3298,8 +3298,9 @@ public class PersonManagerServices {
         orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
         orderMap.put("internalNote","");
         orderMap.put("noteInfo","");
-        orderMap.put("orderDate",orderHeader.get("orderDate"));
-//        orderMap.put("paymentDate","2018-06-14 00:05:05");
+       SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        orderMap.put("orderDate",sdf.format((Timestamp)orderHeader.get("orderDate")));
+        orderMap.put("paymentDate",sdf.format(new Date()));
         orderMap.put("invoiceAmount","0");
         orderMap.put("invoiceTitle","");
         orderMap.put("invoiceContent","");

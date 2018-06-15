@@ -3312,11 +3312,12 @@ public class PersonManagerServices {
         JSONObject json = new JSONObject();
         json.put("login.username", "omsapiaccount");
         json.put("login.password", "1qazZAQ!");
-        json.put("orderList", orderList);
+        json.put("orderList", orderList.toString());
         String orderListStr = json.getString("orderList");
         //准备发送报文给长宁获取库存数据
         //http://121.199.20.78
         //http://114.215.180.140
+        Debug.logInfo("orderListStr:"+orderListStr,module);
         String postResult = HttpHelper.sendPost("http://121.199.20.78:9191/zuczugopen/control/ypOrderShip",
                 "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
 

@@ -986,7 +986,7 @@ public class WeChatOrderQueryServices {
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
 
-//"isVirtual", "Y","isVariant","N"
+        //"isVirtual", "Y","isVariant","N"
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").

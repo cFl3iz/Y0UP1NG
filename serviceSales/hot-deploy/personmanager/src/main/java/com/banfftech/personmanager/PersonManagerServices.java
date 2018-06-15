@@ -3294,9 +3294,8 @@ public class PersonManagerServices {
         orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
         orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
 
-        orderMap.put("city",orderHeaderAndShipGroups.getString("cityGeoId"));
+        orderMap.put("city",orderHeaderAndShipGroups.getString("city"));
         orderMap.put("county",orderHeaderAndShipGroups.getString("countyGeoId"));
-
         orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
         orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
         orderMap.put("internalNote","");

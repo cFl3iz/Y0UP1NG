@@ -3304,7 +3304,23 @@ public class PersonManagerServices {
         orderMap.put("invoiceTitle","");
         orderMap.put("invoiceContent","");
         orderMap.put("shippingAmount","0.0000");
-        orderMap.put("orderItems",orderItems);
+        List<Map<String,String>> items = new ArrayList<Map<String, String>>();
+        for(GenericValue item : orderItems){
+            Map<String,String> itemOrder = new HashMap<String, String>();
+            String productName = item.getString("itemDescription");
+            String productId = item.getString("productId");
+            String quantity = item.get("quantity") +"";
+            String unitPrice = item.get("unitPrice") + "";
+            String orderItemSeqId = item.get("orderItemSeqId");
+            itemOrder.put("productName",productName);
+            itemOrder.put("productId",productId);
+            itemOrder.put("quantity",quantity);
+            itemOrder.put("unitPrice",unitPrice);
+            itemOrder.put("orderItemSeqId",orderItemSeqId);
+            items.add(itemOrder);
+        }
+
+        orderMap.put("orderItems",items);
 
 
         orderList.add(orderMap);
@@ -3312,12 +3328,12 @@ public class PersonManagerServices {
         JSONObject json = new JSONObject();
         json.put("login.username", "omsapiaccount");
         json.put("login.password", "1qazZAQ!");
-        json.put("orderList", orderList.toString());
+        json.put("orderList", items);
         String orderListStr = json.getString("orderList");
         //准备发送报文给长宁获取库存数据
         //http://121.199.20.78
         //http://114.215.180.140
-        Debug.logInfo("orderListStr:"+orderListStr,module);
+        Debug.logInfo("---------------------------------orderListStr:"+orderListStr,module);
         String postResult = HttpHelper.sendPost("http://121.199.20.78:9191/zuczugopen/control/ypOrderShip",
                 "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
 

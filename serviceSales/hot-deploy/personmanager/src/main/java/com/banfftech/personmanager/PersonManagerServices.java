@@ -3314,7 +3314,9 @@ public class PersonManagerServices {
         json.put("orderList", orderList);
         String orderListStr = json.getString("orderList");
         //准备发送报文给长宁获取库存数据
-        String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypOrderShip",
+        //http://121.199.20.78
+        //http://114.215.180.140
+        String postResult = HttpHelper.sendPost("http://121.199.20.78:9191/zuczugopen/control/ypOrderShip",
                 "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
 
         if (UtilValidate.isNotEmpty(postResult)) {
@@ -4185,7 +4187,7 @@ public class PersonManagerServices {
 
 
 
-        findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+countyName.substring(0,1)+"%" );
+         findGeoCondition = EntityCondition.makeCondition("geoName", EntityOperator.LIKE,"%"+countyName.substring(0,1)+"%" );
          findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "COUNTY" );
          listConditions = EntityCondition
                 .makeCondition(findGeoCondition,findGeoCondition2);

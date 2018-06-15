@@ -83,7 +83,6 @@ import main.java.com.banfftech.platformmanager.oss.OSSUnit;
 
 
 import net.sf.json.JSONArray;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
@@ -3326,12 +3325,12 @@ public class PersonManagerServices {
 
         orderList.add(orderMap);
 
-//        JSONObject json = new JSONObject();
-//        json.put("login.username", "omsapiaccount");
-//        json.put("login.password", "1qazZAQ!");
-//        json.put("orderList", items);
-
-        String orderListStr = JSONArray.fromObject(items).toString();
+        JSONObject json = new JSONObject();
+        json.put("login.username", "omsapiaccount");
+        json.put("login.password", "1qazZAQ!");
+        json.put("orderList", items);
+        JSONArray array = JSONArray.fromObject(orderList);
+        String orderListStr = array.toString();
         //准备发送报文给长宁获取库存数据
         //http://121.199.20.78
         //http://114.215.180.140

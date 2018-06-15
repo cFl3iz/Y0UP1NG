@@ -4161,13 +4161,17 @@ public class PersonManagerServices {
         String telNumber = (String) context.get("telNumber");
         //没有给订单号的情况下只是增加地址
         System.out.println("ORDER_ID=" + orderId);
-        Debug.logInfo("cityName:" + cityName, module);
-        Debug.logInfo("countyName:"+countyName,module);
-        Debug.logInfo("provinceName:"+provinceName,module);
         EntityCondition findGeoCondition = EntityCondition.makeCondition("geoId", EntityOperator.LIKE,"%"+provinceName+"%" );
         EntityCondition findGeoCondition2 = EntityCondition.makeCondition("geoTypeId", "PROVINCE" );
         EntityConditionList<EntityCondition> listConditions = EntityCondition
                 .makeCondition(findGeoCondition,findGeoCondition2);
+
+
+
+
+        Debug.logInfo("cityName:" + cityName, module);
+        Debug.logInfo("countyName:"+countyName,module);
+        Debug.logInfo("provinceName:"+provinceName,module);
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("geoId");

@@ -3358,9 +3358,8 @@ public class PersonManagerServices {
 
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",
-                        "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:<span style=\"color:red;\">"+orderId+
-                                "</span> 已通知素然长宁工作机产生订单.<br/> <br/>请求报文:<br/><hr/><p>"+orderListStr.toString()+"</p><hr/><br/>素然回馈结果为["+resultMsg+"]。查看订单:<a href=\""+"https://www.yo-pe.com:3401/ordermgr/control/orderview?lookupFlag=Y&hideFields=Y&viewSize=20&viewIndex=1&orderId="+orderId+"\">"+"CLICK_ME"+
-                                "</a></div>"
+                        "订单:"+orderId+
+                                "|已通知素然长宁工作机产生订单。请求报文:"+orderListStr.toString()+"。素然回馈结果为["+resultMsg+"]"
                         , "title", "[正式]" + orderMap.get("toName") + "用户付款下单!" + orderId));
 
 

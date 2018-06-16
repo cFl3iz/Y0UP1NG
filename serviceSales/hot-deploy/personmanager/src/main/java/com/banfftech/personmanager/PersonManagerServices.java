@@ -3188,13 +3188,6 @@ public class PersonManagerServices {
         // Async To Zuczug
         dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
 
-        dispatcher.runAsync("sendEmailNotification",
-                UtilMisc.toMap("content",
-                        "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:<span style=\"color:red;\">"+orderId+
-                                "</span> 已通知素然长宁工作机产生订单.<br/> <br/>商品正文<br/><hr/><p>"+items.toString()+"</p><hr/><br/>查看订单:<a href=\""+"https://www.yo-pe.com:3401/ordermgr/control/orderview?lookupFlag=Y&hideFields=Y&viewSize=20&viewIndex=1&orderId="+orderId+"\">"+"CLICK_ME"+
-                                "</a></div>"
-                        , "title", "[" + partyId + "]-[正式]用户付款下单!" + orderId));
-
         return resultMap;
     }
 
@@ -3353,13 +3346,24 @@ public class PersonManagerServices {
         String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypOrderShip",
                 "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
 
+        String resultMsg = "FAILL";
+
         if (UtilValidate.isNotEmpty(postResult)) {
             net.sf.json.JSONObject returnJson = net.sf.json.JSONObject.fromObject(postResult);
-            String resultMsg = (String) returnJson.get("responseMessage");
+            resultMsg = (String) returnJson.get("responseMessage");
             if (resultMsg.trim().equals("success")) {
                 Debug.logInfo("SUCCESS SYNC ORDER",module);
             }
         }
+
+        dispatcher.runSync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:<span style=\"color:red;\">"+orderId+
+                                "</span> 已通知素然长宁工作机产生订单.<br/> <br/>请求报文:<br/><hr/><p>"+orderListStr.toString()+"</p><hr/><br/>素然回馈结果为["+resultMsg+"]。查看订单:<a href=\""+"https://www.yo-pe.com:3401/ordermgr/control/orderview?lookupFlag=Y&hideFields=Y&viewSize=20&viewIndex=1&orderId="+orderId+"\">"+"CLICK_ME"+
+                                "</a></div>"
+                        , "title", "[正式]" + orderMap.get("toName") + "用户付款下单!" + orderId));
+
+
 
         return resultMap;
     }

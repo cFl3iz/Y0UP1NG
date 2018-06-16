@@ -3188,6 +3188,12 @@ public class PersonManagerServices {
         // Async To Zuczug
         dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
 
+        dispatcher.runAsync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:<span style=\"color:red;\">"+orderId+
+                                "</span> 已通知素然长宁工作机产生订单.<br/> <br/>商品正文<br/><hr/><p>"+items.toString()+"</p><hr/><br/>查看订单:<a href=\""+"https://www.yo-pe.com:3401/ordermgr/control/orderview?lookupFlag=Y&hideFields=Y&viewSize=20&viewIndex=1&orderId="+orderId+"\">"+"CLICK_ME"+
+                                "</a></div>"
+                        , "title", "[" + partyId + "]-[正式]用户付款下单!" + orderId));
 
         return resultMap;
     }
@@ -3351,7 +3357,7 @@ public class PersonManagerServices {
             net.sf.json.JSONObject returnJson = net.sf.json.JSONObject.fromObject(postResult);
             String resultMsg = (String) returnJson.get("responseMessage");
             if (resultMsg.trim().equals("success")) {
-
+                Debug.logInfo("SUCCESS SYNC ORDER",module);
             }
         }
 
@@ -6766,7 +6772,7 @@ public class PersonManagerServices {
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         splitOrderItemList.toString()
-                        , "title", "[" + partyId + "]下单了,单号:" + orderId));
+                        , "title", "[" + partyId + "]购物车下单,单号:" + orderId));
 
         return resultMap;
     }
@@ -7120,30 +7126,6 @@ public class PersonManagerServices {
         GenericValue sQueryProduct = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
 
-//        Map<String, Object> createMessageLogMap = new HashMap<String, Object>();
-//
-//        createMessageLogMap.put("partyIdFrom", partyId);
-//
-//        createMessageLogMap.put("message", maiJiaName + " 购买了" + amount_str + "件(" + sQueryProduct.get("productName") + ")。");
-//
-//        createMessageLogMap.put("messageId", delegator.getNextSeqId("MessageLog"));
-//
-//        createMessageLogMap.put("partyIdTo", salesRepPartyId);
-//
-//        createMessageLogMap.put("badge", "CHECK");
-//
-//        createMessageLogMap.put("messageLogTypeId", "ORDER");
-//
-//        createMessageLogMap.put("objectId", productId);
-//
-//
-//        createMessageLogMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-//
-//        GenericValue msg = delegator.makeValue("MessageLog", createMessageLogMap);
-//
-//        msg.create();
-
-
         //  auto approved
 
         Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus",
@@ -7166,7 +7148,7 @@ public class PersonManagerServices {
 
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
-                        doCreateOrderIn.toString()
+                        "productId:"+productId+",quantity:"+amount_str
                         , "title", maiJiaName + "[" + partyId + "]下单了,单号:" + orderId));
 
         return resultMap;

@@ -3287,7 +3287,7 @@ public class PersonManagerServices {
         String orderCustPartyId = orderHeaderAndRoles.getString("partyId");
         GenericValue custPerson = EntityQuery.use(delegator).from("Person").where("partyId",orderCustPartyId).queryFirst();
         GenericValue orderHeaderAndShipGroups = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").where("orderId", orderId).queryFirst();
-        orderMap.put("nickName",custPerson.getString("firstName"));
+        orderMap.put("nickName","YP_"+custPerson.getString("firstName"));
         orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
         orderMap.put("postalCode",orderHeaderAndShipGroups.getString("postalCode"));
         GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();

@@ -3344,7 +3344,7 @@ public class PersonManagerServices {
         //http://121.199.20.78
         //http://114.215.180.140
         Debug.logInfo("---------------------------------orderListStr:"+orderListStr,module);
-        String postResult = HttpHelper.sendPost("http://121.199.20.78:9191/zuczugopen/control/ypOrderShip",
+        String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypOrderShip",
                 "login.username=omsapiaccount&login.password=1qazZAQ!&orderList=" + orderListStr);
 
         if (UtilValidate.isNotEmpty(postResult)) {

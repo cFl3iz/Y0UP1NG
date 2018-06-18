@@ -32,6 +32,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.*;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
@@ -285,10 +286,10 @@ public class WeChatMiniProgramServices {
 
         // base 不会成为自己的 to
         // from 不会成为自己的 to
-        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------");
-        Debug.logInfo("-> TO:"+partyId);
-        Debug.logInfo("-> FROM:"+partyIdFrom);
-        Debug.logInfo("-> BASE:"+base);
+        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------",module);
+        Debug.logInfo("-> TO:"+partyId,module);
+        Debug.logInfo("-> FROM:"+partyIdFrom,module);
+        Debug.logInfo("-> BASE:"+base,module);
         if(base.equals(partyId) || partyIdFrom.equals(partyId)){
 
         }else{

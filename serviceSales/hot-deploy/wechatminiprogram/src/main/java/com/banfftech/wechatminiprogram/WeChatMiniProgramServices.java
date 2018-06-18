@@ -280,16 +280,30 @@ public class WeChatMiniProgramServices {
                 "partyIdTo", partyIdFrom).queryFirst();
 
         Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
-        // 记录到 olap fact
-        dispatcher.runAsync("inForwardChainFact", UtilMisc.toMap(
-                "userLogin", admin,
-                "partyIdFrom", partyIdFrom,
-                "partyIdTo", partyId,
-                "workEffortId", workEffortId,
-                "basePartyId", forwardChainFact == null ? partyIdFrom : forwardChainFact.getString("basePartyId"),
-                "firstName", personInfoMap.get("firstName"),
-                "objectInfo", personInfoMap.get("headPortrait"),
-                "createDate", new Timestamp(new Date().getTime())));
+
+        String base = forwardChainFact == null ? partyIdFrom : forwardChainFact.getString("basePartyId");
+
+        // base 不会成为自己的 to
+        // from 不会成为自己的 to
+        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------");
+        Debug.logInfo("-> TO:"+partyId);
+        Debug.logInfo("-> FROM:"+partyIdFrom);
+        Debug.logInfo("-> BASE:"+base);
+        if(base.equals(partyId) || partyIdFrom.equals(partyId)){
+
+        }else{
+            // 记录到 olap fact
+            dispatcher.runAsync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", partyIdFrom,
+                    "partyIdTo", partyId,
+                    "workEffortId", workEffortId,
+                    "basePartyId", base,
+                    "firstName", personInfoMap.get("firstName"),
+                    "objectInfo", personInfoMap.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
+        }
+
 
         return resultMap;
     }

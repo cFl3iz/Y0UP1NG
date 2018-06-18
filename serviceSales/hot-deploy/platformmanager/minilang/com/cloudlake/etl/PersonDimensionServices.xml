@@ -56,33 +56,39 @@
         <!-- TODO FIX ME -->
         <log level="info" message=" inForwardChainFact : basePartyId:${basePartyId} , partyIdFrom:${partyIdFrom} , partyIdTo:${partyIdTo}"/>
         <entity-condition entity-name="YpForwardChainFact" list="isExsits">
-            <condition-list combine="or">
 
-                <!--basePartyId:10750 , partyIdFrom:10432 , partyIdTo:10291-->
-                <condition-list combine="and">
+                
+                <condition-list>
                     <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
                     <condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
                     <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
                 </condition-list>
+                
+                
+                <!--<condition-list combine="and">-->
+                    <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
+                    <!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
+                    <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
+                <!--</condition-list>-->
 
-                <condition-list combine="and">
-                    <condition-expr field-name="basePartyId" from-field="partyIdTo" operator="equals"/>
-                    <condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
-                </condition-list>
+                <!--<condition-list combine="and">-->
+                    <!--<condition-expr field-name="basePartyId" from-field="partyIdTo" operator="equals"/>-->
+                    <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
+                <!--</condition-list>-->
 
-                <condition-list combine="and">
-                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
-                    <condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>
-                </condition-list>
+                <!--<condition-list combine="and">-->
+                    <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
+                    <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
+                <!--</condition-list>-->
 
-                <condition-list combine="and">
-                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
-                    <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
-                </condition-list>
+                <!--<condition-list combine="and">-->
+                    <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
+                    <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
+                <!--</condition-list>-->
 
 
 
-            </condition-list>
+
             <!--<order-by field-name="-fromDate"/>-->
         </entity-condition>
         <!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->

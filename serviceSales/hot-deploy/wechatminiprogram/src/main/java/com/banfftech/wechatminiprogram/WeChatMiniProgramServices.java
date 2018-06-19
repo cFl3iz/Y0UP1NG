@@ -259,10 +259,11 @@ public class WeChatMiniProgramServices {
          * 3.LogicBlock
          * 如果发给我的人,他是一位销售代表,那么他就是我的销售代表。
          */
+        GenericValue amISalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
         GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdFrom, "roleTypeId", "SALES_REP").queryFirst();
 
-
-        if (null != isSalesRep) {
+        //自己就是销售代表就不要管这个逻辑了
+        if (null != isSalesRep && amISalesRep ==null) {
             //建立我与他的partyRelationship
             boolean isSuccess = assocCustToSalesRep(admin, delegator, dispatcher, partyId, partyIdFrom);
             if (!isSuccess) {
@@ -282,8 +283,12 @@ public class WeChatMiniProgramServices {
 
         Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
 
+        //此处需要增加销售代表的逻辑.如果自己是销售代表,则base就是自己
         String base = forwardChainFact == null ? partyIdFrom : forwardChainFact.getString("basePartyId");
-
+        if(isSalesRep!=null){
+            //FROM IS BASE .因为传给你的人他是销售代表.你变成了他的首行
+            base = partyIdFrom;
+        }
         // base 不会成为自己的 to
         // from 不会成为自己的 to
         Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------",module);

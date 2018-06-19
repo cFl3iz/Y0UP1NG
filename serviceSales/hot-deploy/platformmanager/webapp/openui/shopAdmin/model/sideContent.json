@@ -8,16 +8,29 @@
 			"items": []
 		},
 		{
+			"title": "Orders",
+			"icon": "sap-icon://sales-order",
+			"expanded": false,
+			"key": "orders",
+			"items": []
+		},
+		{
+		  "title": "ProductData",
+		  "icon": "sap-icon://product",
+		  "expanded": false,
+		  "key": "productData",
+		  "items": []
+		},
+		{
 			"title": "Settings",
 			"icon": "sap-icon://settings",
 			"expanded": false,
-			"key": "masterSettings"
-		,
+			"key": "masterSettings",
 			"items": []
 		},
 		{
 			"title": "Statistics",
-			"icon": "sap-icon://line-chart",
+			"icon": "sap-icon://Statistics",
 			"expanded": true,
 			"key": "statistics",
 			"items": [
@@ -27,7 +40,7 @@
 				},
 				{
 					"title": "Order Statistics",
-					"key": "Order Statistics was pressed"
+					"key": "orderStatistics"
 				}
 			]
 		}

@@ -94,7 +94,7 @@ public class Storage {
      private void initSampleData(Delegator delegator){
  		List<GenericValue> invoices = null;
  		try {
- 			invoices = EntityQuery.use(delegator).from("Product").where().queryList();
+ 			invoices = EntityQuery.use(delegator).from("Invoice").where().queryList();
 
 //                    delegator.findByAnd("Invoice", UtilMisc.toMap("partyIdFrom", "HANGZHOU_AGENT"));
  		} catch (GenericEntityException e) {

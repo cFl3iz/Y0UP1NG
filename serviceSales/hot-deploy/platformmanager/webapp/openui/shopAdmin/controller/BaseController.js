@@ -15,6 +15,15 @@ sap.ui.define([
 			},
 
 			/**
+			 * Convenience method for getting the resource bundle.
+			 * @public
+			 * @returns {sap.ui.model.resource.ResourceModel} the resourceModel of the component
+			 */
+			getResourceBundle : function () {
+				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+			},
+
+			/**
 			 * Convenience method for getting the view model by name.
 			 * @public
 			 * @param {string} [sName] the model name

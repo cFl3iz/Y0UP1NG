@@ -4,15 +4,30 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.AlgorithmParameterSpec;
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.apache.ofbiz.base.util.UtilDateTime;
 /**
  * Created by Administrator on 2017/9/26.
  */
 public class UtilTools {
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static Timestamp dateStringToTimestamp(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        try {
+            Date parsedDate = sdf.parse(dateString);
+            return UtilDateTime.toTimestamp(parsedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 
     /**
      * 解密

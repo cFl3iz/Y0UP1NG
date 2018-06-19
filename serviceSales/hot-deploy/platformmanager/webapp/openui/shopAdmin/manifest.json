@@ -8,16 +8,16 @@
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0"
+		},
+		"dataSources": {
+			"ofbizData": {
+				"uri": "/openui/DemoOdataService.svc/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "4.0"
+				}
+			}
 		}
-	},
-	"dataSources": {
-	  "ofbizData": {
-		"uri": "/openui/DemoOdataService.svc/",
-		"type": "OData",
-		"settings": {
-		  "odataVersion": "4.0"
-		}
-	  }
 	},
 	"sap.ui": {
 		"technology": "UI5",
@@ -44,6 +44,8 @@
 			"libs": {
 				"sap.ui.core": {},
 				"sap.m": {},
+				"sap.ui.table": {},
+				"sap.ui.unified": {},
 				"sap.tnt": {},
 				"sap.ui.layout": {},
 				"sap.uxap": {}
@@ -67,6 +69,24 @@
 			"customer": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "model/customers.json"
+			},
+			"orders": {
+				"dataSource": "ofbizData",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server"
+				}
+			},
+			"orderFilters": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/orderFilters.json"
+			},
+			"productData": {
+			  "dataSource": "ofbizData",
+			  "settings": {
+				"synchronizationMode": "None",
+				"operationMode": "Server"
+			  }
 			}
 		},
 		"routing": {
@@ -85,6 +105,21 @@
 					"target": "home"
 				},
 				{
+					"pattern": "Orders",
+					"name": "orders",
+					"target": "orders"
+				},
+				{
+					"pattern": "orderDetail/{orderPath}",
+					"name": "orderDetail",
+					"target": "orderDetail"
+				},
+				{
+				  "pattern": "ProductData",
+				  "name": "productData",
+				  "target": "productData"
+				},
+				{
 					"pattern": "MasterSettings",
 					"name": "masterSettings",
 					"target": [
@@ -101,12 +136,29 @@
 					"pattern": "Statistics",
 					"name": "statistics",
 					"target": "statistics"
+				},
+				{
+					"pattern": "orderStatistics",
+					"name": "orderStatistics",
+					"target": "orderStatistics"
 				}
 			],
 			"targets": {
 				"home": {
 					"viewId": "home",
 					"viewName": "Home"
+				},
+				"orders": {
+					"viewId": "orders",
+					"viewName": "Orders"
+				},
+				"productData": {
+				  "viewId": "productData",
+				  "viewName": "ProductData"
+				},
+				"orderDetail": {
+					"viewId": "orderDetail",
+					"viewName": "OrderDetail"
 				},
 				"appSettings": {
 					"viewId": "appSettings",
@@ -129,6 +181,10 @@
 				"statistics": {
 					"viewId": "statistics",
 					"viewName": "Statistics"
+				},
+				"orderStatistics": {
+					"viewId": "orderStatistics",
+					"viewName": "OrderStatistics"
 				}
 			}
 		}

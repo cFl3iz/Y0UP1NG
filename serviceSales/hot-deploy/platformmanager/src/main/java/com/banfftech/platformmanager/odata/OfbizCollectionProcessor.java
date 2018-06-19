@@ -1,12 +1,26 @@
 package main.java.com.banfftech.platformmanager.odata;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
-import org.apache.olingo.commons.api.data.*;
+import org.apache.olingo.commons.api.data.ContextURL;
+import org.apache.olingo.commons.api.data.Entity;
+import org.apache.olingo.commons.api.data.EntityCollection;
+import org.apache.olingo.commons.api.data.Property;
+import org.apache.olingo.commons.api.data.ValueType;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
-import org.apache.olingo.server.api.*;
+import org.apache.olingo.server.api.OData;
+import org.apache.olingo.server.api.ODataApplicationException;
+import org.apache.olingo.server.api.ODataLibraryException;
+import org.apache.olingo.server.api.ODataRequest;
+import org.apache.olingo.server.api.ODataResponse;
+import org.apache.olingo.server.api.ServiceMetadata;
 import org.apache.olingo.server.api.processor.EntityCollectionProcessor;
 import org.apache.olingo.server.api.serializer.EntityCollectionSerializerOptions;
 import org.apache.olingo.server.api.serializer.ODataSerializer;
@@ -33,11 +47,7 @@ import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
 
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+
 
 public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 
@@ -73,19 +83,20 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 
 	@Override
 	public void readEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-			ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
+									 ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
 		// 1st we have retrieve the requested EntitySet from the uriInfo object
 		// (representation of the parsed service URI)
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); // in our example, the
-																									// first segment is
-																									// the EntitySet
+		// first segment is
+		// the EntitySet
 		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
 
 		// 2nd: fetch the data from backend for this requested EntitySetName
 		// it has to be delivered as EntitySet object
+		FilterOption filterOption = uriInfo.getFilterOption();
 		EntityCollection entitySet = storage.readEntitySetData(edmEntitySet);
-		entitySet = getData(edmEntitySet);
+		entitySet = getData(edmEntitySet, filterOption);
 
 		EntityCollection returnEntityCollection = new EntityCollection();
 		List<Entity> entityList = entitySet.getEntities();
@@ -96,42 +107,47 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 				returnEntityCollection.setCount(entityList.size());
 			}
 		}
-		FilterOption filterOption = uriInfo.getFilterOption();
-		if (filterOption != null) {
-			Expression filterExpression = filterOption.getExpression();
-			try {
-				Iterator<Entity> entityIterator = entityList.iterator();
+		/**
+		 if (filterOption != null) {
+		 Expression filterExpression = filterOption.getExpression();
+		 try {
+		 Iterator<Entity> entityIterator = entityList.iterator();
 
-				// Evaluate the expression for each entity
-				// If the expression is evaluated to "true", keep the entity otherwise remove it
-				// from
-				// the entityList
-				while (entityIterator.hasNext()) {
-					// To evaluate the the expression, create an instance of the Filter Expression
-					// Visitor and pass the current entity to the constructor
-					Entity currentEntity = entityIterator.next();
-					FilterExpressionVisitor expressionVisitor = new FilterExpressionVisitor(currentEntity);
+		 // Evaluate the expression for each entity
+		 // If the expression is evaluated to "true", keep the entity otherwise remove it
+		 // from
+		 // the entityList
+		 while (entityIterator.hasNext()) {
+		 // To evaluate the the expression, create an instance of the Filter Expression
+		 // Visitor and pass the current entity to the constructor
+		 Entity currentEntity = entityIterator.next();
+		 Debug.logInfo("====================== before new filtervisitor", module);
+		 // FilterExpressionVisitor expressionVisitor = new FilterExpressionVisitor(currentEntity);
+		 OfbizExpressionVisitor expressionVisitor = new OfbizExpressionVisitor();
+		 Debug.logInfo("====================== after new filtervisitor", module);
 
-					// Evaluating the expression
-					Object visitorResult = filterExpression.accept(expressionVisitor);
-					// The result of the filter expression must be of type Edm.Boolean
-					if (visitorResult instanceof Boolean) {
-						if (!Boolean.TRUE.equals(visitorResult)) {
-							// The expression evaluated to false (or null), so we have to remove the
-							// currentEntity from entityList
-							entityIterator.remove();
-						}
-					} else {
-						throw new ODataApplicationException("A filter expression must evaulate to type Edm.Boolean",
-								HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ENGLISH);
-					}
-				} // End while
-			} catch (ExpressionVisitException e) {
-				throw new ODataApplicationException("Exception in filter evaluation",
-						HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ENGLISH);
-			}
+		 // Evaluating the expression
+		 Object visitorResult = filterExpression.accept(expressionVisitor);
+		 Debug.logInfo("====================== after accept", module);
+		 // The result of the filter expression must be of type Edm.Boolean
+		 if (visitorResult instanceof Boolean) {
+		 if (!Boolean.TRUE.equals(visitorResult)) {
+		 // The expression evaluated to false (or null), so we have to remove the
+		 // currentEntity from entityList
+		 entityIterator.remove();
+		 }
+		 } else {
+		 throw new ODataApplicationException("A filter expression must evaulate to type Edm.Boolean",
+		 HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ENGLISH);
+		 }
+		 } // End while
+		 } catch (ExpressionVisitException e) {
+		 throw new ODataApplicationException("Exception in filter evaluation",
+		 HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ENGLISH);
+		 }
 
-		}
+		 }
+		 **/
 
 		// 3rd: create a serializer based on the requested format (json)
 		ODataSerializer serializer = odata.createSerializer(responseFormat);
@@ -155,23 +171,30 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 	}
 
 	/*****************/
-	private EntityCollection getData(EdmEntitySet edmEntitySet) {
+	private EntityCollection getData(EdmEntitySet edmEntitySet, FilterOption filterOption) {
 
+		Debug.logInfo("------------------ entering in OfbizCollectionProcessor.getData", module);
 		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
 		String entityName = edmEntityType.getName();
-		Debug.logInfo("adding entity property for .... " + entityName, module);
+		// Debug.logInfo("adding entity property for .... " + entityName, module);
 		List<GenericValue> genericValues = null;
 		try {
 			// genericValues = delegator.findByAnd(entityName, UtilMisc.toMap("partyIdFrom", "HANGZHOU_AGENT"));
 			EntityFindOptions efo = new EntityFindOptions();
 			efo.setMaxRows(MAX_ROWS);
-			List<String> orderBy = UtilMisc.toList("-lastUpdatedStamp");
-			if (entityName.equals("OrderHeader")) {
-				genericValues = orderHeaderFindList(entityName, orderBy, efo);
-			} else {
-				genericValues = delegator.findList(entityName, null, null, orderBy, efo, false);
+			EntityCondition entityCondition = null;
+			if (filterOption != null) {
+				Expression filterExpression = filterOption.getExpression();
+				com.zuczug.odata.OfbizExpressionVisitor expressionVisitor = new com.zuczug.odata.OfbizExpressionVisitor();
+				entityCondition = (EntityCondition) filterExpression.accept(expressionVisitor);
 			}
+			List<String> orderBy = UtilMisc.toList("-lastUpdatedStamp");
+			genericValues = delegator.findList(entityName, entityCondition, null, orderBy, efo, false);
 		} catch (GenericEntityException e) {
+			e.printStackTrace();
+		} catch (ExpressionVisitException e) {
+			e.printStackTrace();
+		} catch (ODataApplicationException e) {
 			e.printStackTrace();
 		}
 		EntityCollection entityCollection = new EntityCollection();
@@ -210,11 +233,11 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		List<GenericValue> genericValues = null;
 		Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
 		Timestamp beginTimestamp = UtilDateTime.addDaysToTimestamp(nowTimestamp, DAYS_BEFORE);
-        EntityConditionList<EntityExpr> conditions = EntityCondition.makeCondition(UtilMisc.toList(
-        			EntityCondition.makeCondition("lastUpdatedStamp", EntityOperator.GREATER_THAN_EQUAL_TO, beginTimestamp),
-                EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, "EC10")),
-                EntityOperator.AND);
-        
+		EntityConditionList<EntityExpr> conditions = EntityCondition.makeCondition(UtilMisc.toList(
+						EntityCondition.makeCondition("lastUpdatedStamp", EntityOperator.GREATER_THAN_EQUAL_TO, beginTimestamp),
+						EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, "EC10")),
+				EntityOperator.AND);
+
 		genericValues = delegator.findList(entityName, conditions, null, orderBy, efo, false);
 		return genericValues;
 	}

@@ -442,7 +442,12 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-
+    <!-- 查询产品品转发浏览报表 -->
+    <service name="queryProductReport" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="queryProductReport" auth="false">
+    <description>queryProductForwardReport</description>
+    </service>
 
 
     <!-- Load Message -->

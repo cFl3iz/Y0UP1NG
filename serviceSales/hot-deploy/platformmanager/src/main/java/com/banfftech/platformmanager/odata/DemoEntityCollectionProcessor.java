@@ -1,13 +1,26 @@
 package main.java.com.banfftech.platformmanager.odata;
 
-import org.apache.olingo.commons.api.data.*;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import org.apache.olingo.commons.api.data.ContextURL;
+import org.apache.olingo.commons.api.data.Entity;
+import org.apache.olingo.commons.api.data.EntityCollection;
+import org.apache.olingo.commons.api.data.Property;
+import org.apache.olingo.commons.api.data.ValueType;
 import org.apache.olingo.commons.api.edm.EdmEntitySet;
 import org.apache.olingo.commons.api.edm.EdmEntityType;
 import org.apache.olingo.commons.api.ex.ODataRuntimeException;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
-import org.apache.olingo.server.api.*;
+import org.apache.olingo.server.api.OData;
+import org.apache.olingo.server.api.ODataApplicationException;
+import org.apache.olingo.server.api.ODataRequest;
+import org.apache.olingo.server.api.ODataResponse;
+import org.apache.olingo.server.api.ServiceMetadata;
 import org.apache.olingo.server.api.processor.EntityCollectionProcessor;
 import org.apache.olingo.server.api.serializer.EntityCollectionSerializerOptions;
 import org.apache.olingo.server.api.serializer.ODataSerializer;
@@ -16,11 +29,6 @@ import org.apache.olingo.server.api.serializer.SerializerResult;
 import org.apache.olingo.server.api.uri.UriInfo;
 import org.apache.olingo.server.api.uri.UriResource;
 import org.apache.olingo.server.api.uri.UriResourceEntitySet;
-
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
 
 public class DemoEntityCollectionProcessor implements EntityCollectionProcessor {
 
@@ -35,14 +43,14 @@ public class DemoEntityCollectionProcessor implements EntityCollectionProcessor 
 
 	@Override
 	public void readEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-			ContentType responseFormat) throws ODataApplicationException, SerializerException {
+									 ContentType responseFormat) throws ODataApplicationException, SerializerException {
 
 		// 1st we have retrieve the requested EntitySet from the uriInfo object
 		// (representation of the parsed service URI)
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); // in our example, the
-																									// first segment is
-																									// the EntitySet
+		// first segment is
+		// the EntitySet
 		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
 
 		// 2nd: fetch the data from backend for this requested EntitySetName

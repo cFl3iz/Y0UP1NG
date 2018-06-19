@@ -1,0 +1,25 @@
+{
+	"filters": [
+		{
+			"type": "Status",
+			"values": [
+				{
+					"text": "已创建",
+					"data": "ORDER_CREATED"
+				},
+				{
+					"text": "已确认",
+					"data": "ORDER_APPROVED"
+				},
+				{
+					"text": "已取消",
+					"data": "ORDER_CANCELLED"
+				},
+				{
+					"text": "已完成",
+					"data": "ORDER_COMPLETED"
+				}
+			]
+		}
+	]
+}

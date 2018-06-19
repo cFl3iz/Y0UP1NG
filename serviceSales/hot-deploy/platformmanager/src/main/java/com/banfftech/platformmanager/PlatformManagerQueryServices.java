@@ -142,6 +142,29 @@ public class PlatformManagerQueryServices {
 
 
     /**
+     * 查询产品转发报表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryProductReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+
+        return resultMap;
+    }
+
+
+
+    /**
      * Load Message Log
      *
      * @param dctx

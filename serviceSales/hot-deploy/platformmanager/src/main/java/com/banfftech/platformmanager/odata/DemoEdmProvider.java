@@ -1,13 +1,21 @@
 package main.java.com.banfftech.platformmanager.odata;
 
-import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
-import org.apache.olingo.commons.api.edm.FullQualifiedName;
-import org.apache.olingo.commons.api.edm.provider.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
+import org.apache.olingo.commons.api.edm.FullQualifiedName;
+import org.apache.olingo.commons.api.edm.provider.CsdlAbstractEdmProvider;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainer;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainerInfo;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntitySet;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityType;
+import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
+import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
+import org.apache.olingo.commons.api.edm.provider.CsdlSchema;
 
 public class DemoEdmProvider extends CsdlAbstractEdmProvider {
 	// Service Namespace

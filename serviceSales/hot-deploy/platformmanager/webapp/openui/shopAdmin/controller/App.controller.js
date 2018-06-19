@@ -67,7 +67,7 @@ sap.ui.define([
 				var oItem = oEvent.getParameter('item');
 				var sKey = oItem.getKey();
 				// if you click on home, settings or statistics button, call the navTo function
-				if ((sKey === "home" || sKey === "masterSettings" || sKey === "statistics")) {
+				if ((sKey === "home" || sKey === "masterSettings" || sKey === "statistics" || sKey === "orders" || sKey === "orderStatistics" || sKey === "productData")) {
 					// if the device is phone, collaps the navigation side of the app to give more space
 					if (Device.system.phone) {
 						this.onSideNavButtonPress();

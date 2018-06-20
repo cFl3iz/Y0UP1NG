@@ -70,5 +70,9 @@
             <link target="StoreRoleMgr">
             </link>
         </menu-item>
+        <menu-item name="HomePageMgr" title="首页管理">
+            <link target="HomePageMgr">
+            </link>
+        </menu-item>
     </menu>
 </menus>

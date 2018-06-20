@@ -258,6 +258,33 @@
         </section>
     </screen>
 
+
+    <!-- 应用首页管理 -->
+    <screen name="HomePageMgr">
+        <section>
+            <actions>
+                <set field="headerItem" value="HomePageMgr"/>
+                <set field="tabButtonItem" value="HomePageMgr" />
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productStoreId" value="${parameters.productStoreId}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml" name="AppToolsBar"/>
+                        <screenlet title="现在,请先选择一个店铺/应用...">
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml" name="SelectStore"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.HomeContent}">
+
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- 快速铺货 上产品 -->
     <screen name="QuickPutProduct">
         <section>
             <actions>

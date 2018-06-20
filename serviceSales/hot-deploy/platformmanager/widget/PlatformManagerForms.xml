@@ -111,26 +111,28 @@
     </form>
 
 
-    <form name="EditProductStoreRole" type="single"  >
-        <field name="partyId" use-when="productStoreRole==null" title="${uiLabelMap.PartyPartyId}" required-field="true"><lookup target-form-name="LookupPartyName"/></field>
-        <field name="productStoreId" use-when="productStoreRole==null" title="${uiLabelMap.ProductStoreId}" required-field="true">
+    <form name="EditProductStoreRole" target="storeUpdateRole" type="single"  >
+        <field name="partyId"   title="${uiLabelMap.PartyId}" required-field="true"><lookup target-form-name="LookupPartyName"/></field>
+        <field name="productStoreId" title="${uiLabelMap.ProductStoreId}" required-field="true">
             <drop-down>
                 <entity-options entity-name="ProductStore" key-field-name="productStoreId" description="${storeName} (${productStoreId})">
                     <entity-order-by field-name="productStoreId"/>
                 </entity-options>
             </drop-down>
         </field>
-        <field name="roleTypeId" use-when="productStoreRole==null" title="${uiLabelMap.PartyRoleTypeId}" required-field="true">
+        <field name="roleTypeId"   title="${uiLabelMap.PartyRoleTypeId}" required-field="true">
             <drop-down allow-empty="true">
                 <entity-options entity-name="RoleType" key-field-name="roleTypeId"/>
             </drop-down>
         </field>
-        <field name="productStoreId" use-when="productStoreRole!=null" title="${uiLabelMap.ProductStoreId}"><display/></field>
+        <field name="fromDate" required-field="true" title="生效时间(必选的)">
+            <date-time/>
+        </field>
         <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
             <submit button-type="button"/>
         </field>
     </form>
-
+    <!-- 查询店铺角色 -->
     <form name="FindProductStoreRole" type="single" target="StoreRoleMgr" default-entity-name="ProductStoreRole" >
 
         <field name="productStoreId" title="${uiLabelMap.ProductStoreId}">
@@ -142,7 +144,7 @@
         </field>
             <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
             <!--<field name="productStoreId" title="${uiLabelMap.ProductStoreId}"><hidden/></field>-->
-            <field name="partyId" title="${uiLabelMap.PartyPartyId}"><lookup target-form-name="LookupPartyName"/></field>
+            <field name="partyId" title="${uiLabelMap.PartyId}"><lookup target-form-name="LookupPartyName"/></field>
             <field name="roleTypeId" title="${uiLabelMap.PartyRoleTypeId}">
                 <drop-down allow-empty="true">
                     <entity-options entity-name="RoleType" key-field-name="roleTypeId"/>
@@ -183,6 +185,23 @@
             </hyperlink>
         </field>
     </form>
+
+    <!-- 选择店铺 -->
+    <form name="SelectStore" type="single" target="" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <field name="productStoreId" title="店铺Id">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="PartyStoreAppConfig" key-field-name="productStoreId"
+                                description="${groupName} - ${idValue}"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.ChoseThis}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
     <!-- 快速开店 -->
     <form name="QuickStartAppStore" type="single" target="QuickStartAppStoreEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar">

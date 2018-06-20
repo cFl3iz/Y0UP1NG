@@ -9,6 +9,21 @@
         <value xml:lang="zh">给SPU创建尺码</value>
         <value xml:lang="zh-TW">给SPU创建尺码</value>
     </property>
+   <property key="ProductStoreId">
+        <value xml:lang="en">ProductStoreId</value>
+        <value xml:lang="zh">店铺ID</value>
+        <value xml:lang="zh-TW">店铺ID</value>
+    </property>
+    <property key="PartyId">
+        <value xml:lang="en">PartyId</value>
+        <value xml:lang="zh">当事人ID</value>
+        <value xml:lang="zh-TW">当事人ID</value>
+    </property>
+    <property key="PartyRoleTypeId">
+        <value xml:lang="en">PartyRoleTypeId</value>
+        <value xml:lang="zh">当事人角色类型</value>
+        <value xml:lang="zh-TW">当事人角色类型</value>
+    </property>
     <property key="PlatformManagerCompanyName">
         <value xml:lang="en">OFBiz: PlatformManager</value>
         <value xml:lang="zh-TW">OFBiz: PlatformManager</value>
@@ -86,6 +101,20 @@
         <value xml:lang="zh">登录成功</value>
         <value xml:lang="zh-TW">登录成功</value>
     </property>
+
+
+    <property key="ChoseThis">
+        <value xml:lang="en">Chose</value>
+        <value xml:lang="zh">就选它了!</value>
+        <value xml:lang="zh-TW">就选它了!</value>
+    </property>
+
+    <property key="HomeContent">
+        <value xml:lang="en">Home Content</value>
+        <value xml:lang="zh">首页内容</value>
+        <value xml:lang="zh-TW">首页内容</value>
+    </property>
+
 
 
     <property key="CUSTOMER">

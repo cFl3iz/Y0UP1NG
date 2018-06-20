@@ -443,13 +443,29 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="StoreRoleMgr"/>
     </request-map>
+
+    <request-map uri="storeUpdateRole">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createProductStoreRole"/>
+        <response name="success" type="request-redirect" value="StoreRoleMgr"/>
+        <response name="error" type="request-redirect" value="StoreRoleMgr"/>
+    </request-map>
+
+
     <!-- 快速上货 -->
     <request-map uri="QuickPutProduct">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="QuickPutProduct"/>
     </request-map>
 
+    <!-- 管理应用首页 -->
+    <request-map uri="HomePageMgr">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="HomePageMgr"/>
+    </request-map>
 
+
+    <!-- 删除角色 -->
     <request-map uri="storeDeleteRole">
         <security https="true" auth="true"/>
         <event invoke="storeDeleteRole" type="service"/>
@@ -489,6 +505,8 @@
     <view-map name="FindRealProductList" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindRealProductList"/>
     <!-- 小程序应用列表 -->
     <view-map name="FindPartyApps" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindPartyApps"/>
+    <!-- 应用店铺首页 -->
+    <view-map name="HomePageMgr" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#HomePageMgr"/>
     <!-- 快速上货 -->
     <view-map name="QuickPutProduct" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickPutProduct"/>
     <!-- 快速开店 -->

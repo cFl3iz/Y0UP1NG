@@ -226,7 +226,7 @@
             <hidden value="${ProductStoreHomeJson[0].dataResourceId}" />
         </field>
         <field required-field="true" name="textData" use-when="productStoreId!=null" title="[${productStoreId}]的首页JSON">
-            <textarea />
+            <textarea visual-editor-enable="true"  />
         </field>
 
         <field name="submitButton" use-when="productStoreId!=null" title="立即更新->[${productStoreId}]配置" widget-style="smallSubmit">

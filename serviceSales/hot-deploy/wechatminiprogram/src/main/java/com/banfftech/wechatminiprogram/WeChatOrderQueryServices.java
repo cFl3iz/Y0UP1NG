@@ -483,11 +483,8 @@ public class WeChatOrderQueryServices {
                    String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
                             "dataResourceId", dataResourceId).queryFirst().getString("textData");
                     rowList.add(textData);
-                }else{
-                    String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
-                            "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
-                    rowList.add(objectInfo);
                 }
+
 
                 if(contentType.equals("MINIPROGRAM_HOME")){
                     String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
@@ -495,6 +492,11 @@ public class WeChatOrderQueryServices {
                     rowList.add(textData);
                 }
 
+                if(!contentType.equals("MINIPROGRAM_TBAR") && !contentType.equals("MINIPROGRAM_HOME")){
+                    String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
+                            "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
+                    rowList.add(objectInfo);
+                }
 
                 if(!returnMap.containsKey(contentType)){
                     returnMap.put(contentType,rowList);

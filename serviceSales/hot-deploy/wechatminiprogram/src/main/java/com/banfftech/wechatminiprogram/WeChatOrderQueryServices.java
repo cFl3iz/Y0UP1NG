@@ -489,6 +489,13 @@ public class WeChatOrderQueryServices {
                     rowList.add(objectInfo);
                 }
 
+                if(contentType.equals("MINIPROGRAM_HOME")){
+                    String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
+                            "dataResourceId", dataResourceId).queryFirst().getString("textData");
+                    rowList.add(textData);
+                }
+
+
                 if(!returnMap.containsKey(contentType)){
                     returnMap.put(contentType,rowList);
                 }

@@ -44,6 +44,16 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
         <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
     </service>
+    <!-- added or update productStore Home Page JSON -->
+    <service name="EditHomePageJsonEvent" engine="simple" invoke="EditHomePageJsonEvent" require-new-transaction="true"
+             transaction-timeout="53299" use-transaction="true"
+             location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
+        <description>EditHomePageJsonEvent</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="textData" type="String" mode="IN" optional="false"/>
+        <attribute name="dataResourceId" type="String" mode="IN" optional="true"/>
+    </service>
 
 
     <!-- OLAP ETL SERVICE -->

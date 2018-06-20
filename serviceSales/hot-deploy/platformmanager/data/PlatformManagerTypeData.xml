@@ -105,4 +105,7 @@
     <!-- 开机动画 -->
     <PartyContentType partyContentTypeId="MINIPROGRAM_STARTPIC" createdStamp="2018-06-11 11:56:45.0" createdTxStamp="2018-06-11 11:56:45.0" description="小程序的开机动画" lastUpdatedStamp="2018-06-11 11:56:45.0" lastUpdatedTxStamp="2018-06-11 11:56:45.0" parentTypeId="MINIPROGRAM"/>
 
+    <!-- 首页自定义JSON数据 -->
+    <PartyContentType partyContentTypeId="MINIPROGRAM_HOME" createdStamp="2018-06-11 11:56:45.0" createdTxStamp="2018-06-11 11:56:45.0" description="首页自定义JSON数据" lastUpdatedStamp="2018-06-11 11:56:45.0" lastUpdatedTxStamp="2018-06-11 11:56:45.0" parentTypeId="MINIPROGRAM"/>
+
 </entity-engine-xml>

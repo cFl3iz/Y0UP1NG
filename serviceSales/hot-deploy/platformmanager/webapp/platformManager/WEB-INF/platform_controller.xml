@@ -450,6 +450,16 @@
         <response name="success" type="request-redirect" value="StoreRoleMgr"/>
         <response name="error" type="request-redirect" value="StoreRoleMgr"/>
     </request-map>
+    <!-- 更新首页JSON数据 -->
+    <request-map uri="EditHomePageJsonEvent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="EditHomePageJsonEvent"/>
+        <response name="success" type="request-redirect" value="HomePageMgr">
+            <redirect-parameter name="productStoreId" from="productStoreId"/>
+        </response>
+        <response name="error" type="request-redirect" value="HomePageMgr"/>
+    </request-map>
+
 
 
     <!-- 快速上货 -->

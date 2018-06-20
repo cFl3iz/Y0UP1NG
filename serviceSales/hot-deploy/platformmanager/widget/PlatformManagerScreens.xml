@@ -276,7 +276,7 @@
                             <include-form location="component://platformmanager/widget/PlatformManagerForms.xml" name="SelectStore"/>
                         </screenlet>
                         <screenlet title="${uiLabelMap.HomeContent}">
-
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml" name="EditHomePageJson"/>
                         </screenlet>
                     </decorator-section>
                 </decorator-screen>

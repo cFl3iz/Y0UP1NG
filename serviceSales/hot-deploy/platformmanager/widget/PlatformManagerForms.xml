@@ -110,7 +110,7 @@
         </field>
     </form>
 
-
+    <!-- 编辑角色  -->
     <form name="EditProductStoreRole" target="storeUpdateRole" type="single"  >
         <field name="partyId"   title="${uiLabelMap.PartyId}" required-field="true"><lookup target-form-name="LookupPartyName"/></field>
         <field name="productStoreId" title="${uiLabelMap.ProductStoreId}" required-field="true">
@@ -188,18 +188,51 @@
 
     <!-- 选择店铺 -->
     <form name="SelectStore" type="single" target="" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
-        <field name="productStoreId" title="店铺Id">
+        <field use-when="productStoreId==null" name="productStoreId" title="店铺Id">
             <drop-down allow-empty="false">
                 <entity-options entity-name="PartyStoreAppConfig" key-field-name="productStoreId"
                                 description="${groupName} - ${idValue}"/>
             </drop-down>
         </field>
-
-        <field name="submitButton" title="${uiLabelMap.ChoseThis}" widget-style="smallSubmit">
+        <field name="" use-when="productStoreId!=null" title="">
+            <display description="你正在编辑[${productStoreId}]的首页JSON.."/>
+        </field>
+        <field name="submitButton" use-when="productStoreId==null" title="${uiLabelMap.ChoseThis}" widget-style="smallSubmit">
             <submit button-type="button"/>
+        </field>
+
+        <field name="submitButton" use-when="productStoreId!=null" title="我想重新选店铺" widget-style="smallSubmit">
+            <submit button-type="button" onclick="javascript:location.reload();"/>
         </field>
     </form>
 
+    <form name="EditHomePageJson" type="single" target="EditHomePageJsonEvent" default-map-name="ProductStoreHomeJson[0]" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+
+            <entity-and entity-name="ProductStoreHomeJson" list="ProductStoreHomeJson" auto-field-map="false">
+                <field-map field-name="productStoreId" from-field="productStoreId"/>
+            </entity-and>
+        </actions>
+        <field name="" use-when="productStoreId==null" title="">
+            <display description="你必须先选择一个店铺,才能编辑他的首页JSON数据"/>
+        </field>
+        <field name="partyId" title="1">
+            <hidden  value="${ProductStoreHomeJson[0].payToPartyId}" />
+        </field>
+        <field name="productStoreId" title="3">
+            <hidden  value="${productStoreId}" />
+        </field>
+        <field name="dataResourceId" title="2">
+            <hidden value="${ProductStoreHomeJson[0].dataResourceId}" />
+        </field>
+        <field required-field="true" name="textData" use-when="productStoreId!=null" title="[${productStoreId}]的首页JSON">
+            <textarea />
+        </field>
+
+        <field name="submitButton" use-when="productStoreId!=null" title="立即更新->[${productStoreId}]配置" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
 
 
     <!-- 快速开店 -->

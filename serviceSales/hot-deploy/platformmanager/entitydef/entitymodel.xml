@@ -547,6 +547,34 @@
 
     </view-entity>
 
+    <!-- 小程序首页内容 对到店 -->
+    <view-entity entity-name="ProductStoreHomeJson" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
+
+    <member-entity entity-name="ProductStore" entity-alias="Store"/>
+    <member-entity entity-name="ElectronicText" entity-alias="EleText"/>
+    <member-entity entity-name="PartyContent" entity-alias="PContent"/>
+    <member-entity entity-name="Content" entity-alias="Content"/>
+
+        <alias-all entity-alias="Store"/>
+        <alias-all entity-alias="EleText"/>
+        <alias-all entity-alias="PContent"/>
+        <alias-all entity-alias="Content"/>
+
+         <view-link entity-alias="Store" rel-entity-alias="PContent">
+            <key-map field-name="payToPartyId" rel-field-name="partyId"/>
+          </view-link>
+
+        <view-link entity-alias="PContent" rel-entity-alias="Content">
+            <key-map field-name="contentId" rel-field-name="contentId"/>
+        </view-link>
+
+        <view-link entity-alias="Content" rel-entity-alias="EleText">
+            <key-map field-name="dataResourceId" rel-field-name="dataResourceId"/>
+        </view-link>
+        <entity-condition>
+            <condition-expr entity-alias="PContent" field-name="partyContentTypeId" operator="equals" value="MINIPROGRAM_HOME"/>
+        </entity-condition>
+    </view-entity>
 
 
 </entitymodel>

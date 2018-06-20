@@ -13,6 +13,7 @@
 
 
 		<if-not-empty field="dataResourceId">
+
 			<!-- update -->
 			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
 			<set field="inMap.textData" from-field="textData"/>
@@ -21,6 +22,11 @@
 		</if-not-empty>
 
 		<if-empty field="dataResourceId">
+
+			<entity-one entity-name="ProductStore" value-field="store">
+				<field-map field-name="productStoreId" from-field="productStoreId"/>
+			</entity-one>
+
 			<!-- createElText -->
 			<set field="inMap.textData" from-field="textData"/>
 			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
@@ -36,7 +42,7 @@
 			</call-service>
 			<clear-field field="inMap"/>
 			<set field="inMap.contentId" from-field="newContentId"/>
-			<set field="inMap.partyId" from-field="partyId"/>
+			<set field="inMap.partyId" from-field="store.payToPartyId"/>
 			<set field="inMap.partyContentTypeId" value="MINIPROGRAM_HOME"/>
 			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
 			<call-service service-name="createPartyContent" in-map-name="inMap">

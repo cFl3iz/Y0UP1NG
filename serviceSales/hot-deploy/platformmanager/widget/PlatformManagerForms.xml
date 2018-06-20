@@ -187,7 +187,7 @@
     </form>
 
     <!-- 选择店铺 -->
-    <form name="SelectStore" type="single" target="" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+    <form name="SelectStore" type="single" target="HomePageMgr" odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
         <field use-when="productStoreId==null" name="productStoreId" title="店铺Id">
             <drop-down allow-empty="false">
                 <entity-options entity-name="PartyStoreAppConfig" key-field-name="productStoreId"

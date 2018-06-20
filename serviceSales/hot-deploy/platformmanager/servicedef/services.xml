@@ -49,7 +49,7 @@
              transaction-timeout="53299" use-transaction="true"
              location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
         <description>EditHomePageJsonEvent</description>
-        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="INOUT" optional="false"/>
         <attribute name="textData" type="String" mode="IN" optional="false"/>
         <attribute name="dataResourceId" type="String" mode="IN" optional="true"/>

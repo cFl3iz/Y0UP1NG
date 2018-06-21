@@ -324,7 +324,7 @@
 
 
     <service name="getProductPayInfo" engine="java"
-             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="getProductPayInfo" auth="false">
         <description>getProductPayInfo</description>
         <attribute name="productId" type="String" mode="IN" optional="true"/>

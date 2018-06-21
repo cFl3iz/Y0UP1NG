@@ -917,6 +917,14 @@ public class WeChatOrderQueryServices {
             allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
 
+
+        // 2 c 找media_id
+        GenericValue productMedia =  EntityQuery.use(delegator).from("ProductAttribute").where("productId",productId,"attrName", "media_id").queryFirst();
+
+        if(null!= productMedia){
+            allField.put("media_id",productMedia.getString("attrValue"));
+        }
+
         resultMap.put("productDetail", allField);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("prodCatalogId", prodCatalogId);

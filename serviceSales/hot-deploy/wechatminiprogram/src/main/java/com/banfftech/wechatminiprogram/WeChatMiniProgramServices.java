@@ -776,7 +776,12 @@ public class WeChatMiniProgramServices {
 
         String tel = (String) context.get("tel");
 
+        String media_id = (String) context.get("media_id");
+
+        //TODO ADD MEDIA _ID
+
         String unioId = (String) context.get("unioId");
+
         String kuCun = (String) context.get("kuCun");
 
         String priceStr = (String) context.get("price");
@@ -803,6 +808,8 @@ public class WeChatMiniProgramServices {
         if (UtilValidate.isNotEmpty(priceStr)) {
             price = new BigDecimal(priceStr);
         }
+
+
 
 
 //        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
@@ -971,6 +978,13 @@ public class WeChatMiniProgramServices {
 
         }
 
+
+
+        //media
+        Debug.logInfo(">>>> media_id:"+media_id,module);
+        if(UtilValidate.isNotEmpty(media_id)){
+            dispatcher.runSync("createProductAttribute", UtilMisc.toMap("userLogin", admin, "productId", productId, "attrName", "media_id", "attrValue", media_id));
+        }
 
         resultMap.put("productId", productId);
         resultMap.put("payToPartyId", partyId);

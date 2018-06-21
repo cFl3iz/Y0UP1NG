@@ -983,9 +983,12 @@ public class WeChatMiniProgramServices {
         //media
         Debug.logInfo(">>>> media_id:"+media_id,module);
         if(UtilValidate.isNotEmpty(media_id)){
-            //关联到人
-            dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
-
+            GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
+            if(null!= productMedia){
+                dispatcher.runSync("updatePartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
+            }else{
+                dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
+            }
         }
 
         resultMap.put("productId", productId);

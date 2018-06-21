@@ -959,7 +959,13 @@ public class WeChatOrderQueryServices {
         String productId = (String) context.get("productId");
 
 
-        GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+        String productStoreId = category.getString("productStoreId");
+        GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+        String prodCatalogId = prodCatalog.getString("prodCatalogId");
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+
+        GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",store.getString("payToPartyId"),"attrName", "media_id").queryFirst();
         GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
 
         if(null!= productMedia){

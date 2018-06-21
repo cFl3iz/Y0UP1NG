@@ -983,7 +983,9 @@ public class WeChatMiniProgramServices {
         //media
         Debug.logInfo(">>>> media_id:"+media_id,module);
         if(UtilValidate.isNotEmpty(media_id)){
-            dispatcher.runSync("createProductAttribute", UtilMisc.toMap("userLogin", admin, "productId", productId, "attrName", "media_id", "attrValue", media_id));
+            //关联到人
+            dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
+
         }
 
         resultMap.put("productId", productId);

@@ -589,6 +589,15 @@ public class WeChatOrderQueryServices {
                         "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", "SALES_REP"));
             }
             resultMap.put("isSalesRep", "true");
+
+            //To C 可能有media pay
+            GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
+
+            if(null!= media){
+                resultMap.put("pay_media","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/pay_qr_code/"+media.getString("attrValue")+".png");
+            }
+
+
         }else{
             if (null == role) {
                 resultMap.put("isSalesRep", "false");
@@ -919,10 +928,10 @@ public class WeChatOrderQueryServices {
 
 
         // 2 c 找media_id
-        GenericValue productMedia =  EntityQuery.use(delegator).from("ProductAttribute").where("productId",productId,"attrName", "media_id").queryFirst();
+        GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",store.getString("payToPartyId"),"attrName", "media_id").queryFirst();
 
-        if(null!= productMedia){
-            allField.put("media_id",productMedia.getString("attrValue"));
+        if(null!= media){
+            allField.put("media_id",media.getString("attrValue"));
         }
 
         resultMap.put("productDetail", allField);
@@ -950,7 +959,7 @@ public class WeChatOrderQueryServices {
         String productId = (String) context.get("productId");
 
 
-        GenericValue productMedia =  EntityQuery.use(delegator).from("ProductAttribute").where("productId",productId,"attrName", "media_id").queryFirst();
+        GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
         GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
 
         if(null!= productMedia){

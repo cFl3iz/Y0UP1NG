@@ -193,6 +193,8 @@
         <attribute name="hasShoppingCart" type="String" mode="OUT" optional="true"/>
         <attribute name="appName" type="String" mode="OUT" optional="true"/>
 
+        <attribute name="pay_media" type="String" mode="OUT" optional="true"/>
+
 
         <attribute name="storePromos" type="List" mode="OUT" optional="true"/>
 

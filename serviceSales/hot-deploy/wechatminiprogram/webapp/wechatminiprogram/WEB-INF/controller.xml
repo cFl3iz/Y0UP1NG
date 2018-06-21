@@ -28,6 +28,14 @@
     </request-map>
 
 
+    <request-map uri="getProductPayInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getProductPayInfo"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
     <!-- 效验产品库存、价格是否一致 -->
     <request-map uri="checkSkusIsRight">

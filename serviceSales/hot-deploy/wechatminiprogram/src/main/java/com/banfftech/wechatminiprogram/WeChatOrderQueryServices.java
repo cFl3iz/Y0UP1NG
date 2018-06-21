@@ -931,6 +931,39 @@ public class WeChatOrderQueryServices {
         return resultMap;
     }
 
+
+    /**
+     * 2C TODO PAY
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> getProductPayInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String productId = (String) context.get("productId");
+
+
+        GenericValue productMedia =  EntityQuery.use(delegator).from("ProductAttribute").where("productId",productId,"attrName", "media_id").queryFirst();
+        GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+
+        if(null!= productMedia){
+            resultMap.put("media_id",productMedia.getString("attrValue"));
+        }
+        resultMap.put("productName",product.getString("productName"));
+        return resultMap;
+    }
+
+
+
+
+
     /**
      * IS HIDDEN
      * @param productFeatureId

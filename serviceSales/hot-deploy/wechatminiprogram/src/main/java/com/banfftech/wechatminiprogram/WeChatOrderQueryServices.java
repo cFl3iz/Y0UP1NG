@@ -961,8 +961,7 @@ public class WeChatOrderQueryServices {
 
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
         String productStoreId = category.getString("productStoreId");
-        GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
-        String prodCatalogId = prodCatalog.getString("prodCatalogId");
+
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
 
         GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",store.getString("payToPartyId"),"attrName", "media_id").queryFirst();

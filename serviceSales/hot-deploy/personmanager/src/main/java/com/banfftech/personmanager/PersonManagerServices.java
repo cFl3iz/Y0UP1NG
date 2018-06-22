@@ -3170,18 +3170,22 @@ public class PersonManagerServices {
         GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
 
         String payFromPartyId = (String) orderCust.get("partyId");
-        String salesRepId = (String) orderSalesRep.get("partyId");
+        if(orderSalesRep!=null){
+            String salesRepId = (String) orderSalesRep.get("partyId");
+
+            List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
+            for (GenericValue item : items) {
+                String innerProductId = (String) item.get("productId");
+                updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
+            }
+        }
 
         //应用收款支付.....
         receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
 
 
-        List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
 
-        for (GenericValue item : items) {
-            String innerProductId = (String) item.get("productId");
-            updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
-        }
+
 
 
         Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);

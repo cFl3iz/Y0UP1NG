@@ -107,7 +107,7 @@ public class WeChatMiniProgramServices {
 
         //拿originFacilityId
         String originFacilityId = orderHeader.getString("originFacilityId");
-        Map<String,Object> serviceResult = dispatcher.runSync("",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"originFacilityId",originFacilityId));
+        Map<String,Object> serviceResult = dispatcher.runSync("quickShipEntireOrder",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"originFacilityId",originFacilityId));
         if (!ServiceUtil.isSuccess(serviceResult)) {
             Debug.logInfo("*quickShipEntireOrder2C fail:"+orderId, module);
             return serviceResult;

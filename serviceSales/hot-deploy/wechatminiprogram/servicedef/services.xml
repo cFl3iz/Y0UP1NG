@@ -18,7 +18,15 @@
         <attribute name="msg"    type="String"    mode="OUT"  optional="true" />
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
     </service>
-
+    <!-- quickShipEntireOrder2C -->
+    <service name="quickShipEntireOrder2C" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
+             invoke="quickShipEntireOrder2C" auth="false">
+        <description>quickShipEntireOrder2C</description>
+        <attribute name="orderId"   type="String"    mode="IN"  optional="true" />
+        <attribute name="trackingNumber" type="String"    mode="IN"  optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true" />
+    </service>
 
 
     <!-- 创建链/或创建子链 -->

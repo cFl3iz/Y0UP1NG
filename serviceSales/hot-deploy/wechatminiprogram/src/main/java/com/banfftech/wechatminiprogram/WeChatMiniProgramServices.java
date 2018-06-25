@@ -1,6 +1,7 @@
 package main.java.com.banfftech.wechatminiprogram;
 
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
+import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
@@ -72,6 +73,57 @@ public class WeChatMiniProgramServices {
 
         }
 
+    }
+
+
+    /**
+     * 2C发货
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> quickShipEntireOrder2C(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        String orderId = (String) context.get("orderId");
+        String trackingNumber = (String) context.get("trackingNumber");
+
+
+        GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
+
+        if(null == orderHeader){
+            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ORDER_NOT_FOUND", locale));
+        }
+
+        //拿originFacilityId
+        String originFacilityId = orderHeader.getString("originFacilityId");
+        Map<String,Object> serviceResult = dispatcher.runSync("",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"originFacilityId",originFacilityId));
+        if (!ServiceUtil.isSuccess(serviceResult)) {
+            Debug.logInfo("*quickShipEntireOrder2C fail:"+orderId, module);
+            return serviceResult;
+        }
+
+
+        GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", orderId).queryFirst();
+
+        Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingNumber));
+        if (!ServiceUtil.isSuccess(updateResult)) {
+            Debug.logInfo("*updateOrderItemShipGroup fail:"+orderId, module);
+            return updateResult;
+        }
+
+
+        return resultMap;
     }
 
 
@@ -202,29 +254,6 @@ public class WeChatMiniProgramServices {
 
         String productStoreId = "";
 
-//        if (appId != null) {
-//            //素然小程序(友评)
-//            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-//                productStoreId = "ZUCZUGSTORE";
-//            }
-//            //素然小程序(素然)
-//            if (PeConstant.ZUCZUG_ANKORAU_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-//                productStoreId = "ZUCZUGSTORE";
-//            }
-//            //Demo小程序
-//            if (PeConstant.DEMO_WECHAT_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-////                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(UtilMisc.toMap("payToPartyId", partyIdentification.getString("partyId"))).queryFirst();
-////                productStoreId = (String) store.get("productStoreId");
-//                //暂时先用素然的
-//                productStoreId = "ZUCZUGSTORE";
-//            }
-//
-//
-//            //不分梨白酒
-//            if (PeConstant.BUFENLI_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
-//                productStoreId = "KANGCHENGSTORE";
-//            }
-//        }
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "idValue", appId).queryFirst();

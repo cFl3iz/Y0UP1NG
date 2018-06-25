@@ -11,6 +11,15 @@
         <value xml:lang="zh">创建链路失败</value>
         <value xml:lang="zh-TW">创建链路失败</value>
     </property>
+
+
+
+    <property key="ORDER_NOT_FOUND">
+        <value xml:lang="en">ORDER_NOT_FOUND!</value>
+        <value xml:lang="zh">订单没有找到</value>
+        <value xml:lang="zh-TW">订单没有找到</value>
+    </property>
+
     <property key="FORWARDCHAIN_NOT_FOUND">
         <value xml:lang="en">FORWARDCHAIN_NOT_FOUND!</value>
         <value xml:lang="zh">找不到原始链路</value>

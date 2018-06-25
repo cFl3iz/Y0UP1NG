@@ -45,6 +45,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 2C发货 -->
+    <request-map uri="quickShipEntireOrder2C">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="quickShipEntireOrder2C"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- 查产品Sku -->
     <request-map uri="querySku">
         <security https="false" auth="false"/>

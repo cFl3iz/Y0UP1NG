@@ -921,6 +921,22 @@
                    optional="true"/>
     </service>
 
+
+
+    <service name="orderPaymentReceived2c" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="orderPaymentReceived2c" auth="false">
+        <description>orderPaymentReceived2c</description>
+
+        <attribute name="orderId" type="String" mode="IN"   optional="true"/>
+        <!-- 如果传过来openid,说明是小程序调用的收款 -->
+        <attribute name="openId" type="String" mode="IN"   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- 买家确认付款了 -->
     <service name="setOrderPaymentStatus" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

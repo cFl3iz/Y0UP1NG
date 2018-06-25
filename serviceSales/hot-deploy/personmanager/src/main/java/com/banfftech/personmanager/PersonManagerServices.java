@@ -3196,6 +3196,90 @@ public class PersonManagerServices {
     }
 
 
+
+
+
+    public static Map<String, Object> orderPaymentReceived2c(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+
+        String openId = (String) context.get("openId");
+
+        String partyId = "";
+
+        if (null != openId) {
+            GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+            partyId = (String) partyIdentification.get("partyId");
+            //小程序确认收款
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+        } else {
+            partyId = (String) userLogin.get("partyId");
+        }
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+
+        GenericValue orderHeader = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
+
+
+        Map<String, Object> createOrderPaymentPreferenceMap = new HashMap<String, Object>();
+        createOrderPaymentPreferenceMap.put("userLogin", admin);
+        createOrderPaymentPreferenceMap.put("orderId", orderId);
+        createOrderPaymentPreferenceMap.put("createdByUserLogin", userLogin.get("userLoginId"));
+        createOrderPaymentPreferenceMap.put("maxAmount", orderHeader.get("grandTotal"));
+        createOrderPaymentPreferenceMap.put("overflowFlag", "N");
+        createOrderPaymentPreferenceMap.put("paymentMethodTypeId", "EXT_WXPAY");
+        // createOrderPaymentPreferenceMap.put("paymentMethodTypeId","EXT_COD");
+        createOrderPaymentPreferenceMap.put("presentFlag", "N");
+        createOrderPaymentPreferenceMap.put("statusId", "PAYMENT_RECEIVED");
+        createOrderPaymentPreferenceMap.put("swipedFlag", "N");
+
+        Map<String, Object> createOrderPaymentPreferenceOutMap =
+                dispatcher.runSync("createOrderPaymentPreference", createOrderPaymentPreferenceMap);
+        if (!ServiceUtil.isSuccess(createOrderPaymentPreferenceOutMap)) {
+            return createOrderPaymentPreferenceOutMap;
+        }
+
+        //找到买家
+        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
+
+        String payFromPartyId = (String) orderCust.get("partyId");
+        if(orderSalesRep!=null){
+            String salesRepId = (String) orderSalesRep.get("partyId");
+
+            List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
+            for (GenericValue item : items) {
+                String innerProductId = (String) item.get("productId");
+                updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
+            }
+        }
+
+        //应用收款支付.....
+        receiveOfflinePayment("EXT_WXPAY", orderHeader.get("grandTotal").toString(), orderId, payFromPartyId, locale, delegator, dispatcher, userLogin);
+
+
+
+        return resultMap;
+    }
+
+
     /**
      * 请求素然发货,生成素然订单
      * @param dctx

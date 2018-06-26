@@ -235,6 +235,27 @@
     </form>
 
 
+    <!-- 选择店铺和目录 -->
+    <form name="ChoeseStoreAndCatelog" type="single" target="#"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <field id-name="productStoreSelect" name="productStoreId" event="onchange" action="location.href = 'QuickPutProduct?productStoreId='+document.getElementById('productStoreSelect').value;" title="店铺${productStoreId}">
+            <drop-down >
+                <entity-options entity-name="ProductStore" key-field-name="productStoreId" description="${storeName}">
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="prodCatalogId" title="目录">
+            <drop-down>
+                <entity-options entity-name="ProductStoreCatalog" key-field-name="prodCatalogId" description="${prodCatalogId}">
+                    <entity-constraint name="productStoreId" operator="equals" value="${productStoreId}"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
     <!-- 快速开店 -->
     <form name="QuickStartAppStore" type="single" target="QuickStartAppStoreEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar">

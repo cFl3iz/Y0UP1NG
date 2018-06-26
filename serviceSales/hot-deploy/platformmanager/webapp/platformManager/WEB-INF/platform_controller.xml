@@ -438,6 +438,11 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="QuickStartAppStore"/>
     </request-map>
+    <!-- 小程序高级配置 -->
+    <request-map uri="AppSetting">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AppSetting"/>
+    </request-map>
     <!-- 开店 -->
     <request-map uri="QuickStartAppStoreEvent">
         <security https="true" auth="true"/>

@@ -78,5 +78,10 @@
             <link target="HomePageMgr">
             </link>
         </menu-item>
+
+        <menu-item name="AppSetting" title="小程序高级配置">
+            <link target="AppSetting">
+            </link>
+        </menu-item>
     </menu>
 </menus>

@@ -474,6 +474,9 @@ public class WeChatMiniProgramServices {
                     GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
                     String rowStoreId = category.getString("productStoreId");
                     GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", rowStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+                    Debug.logInfo("*createForwardChain iamSalesRep?"+iamSalesRep,module);
+                    Debug.logInfo("*createForwardChain rowStoreId="+rowStoreId,module);
+                    Debug.logInfo("*createForwardChain partyId="+partyId,module);
                     if (iamSalesRep != null) {
                         // create ForWard Count
                         createProductBizData(delegator, dispatcher, admin, partyId, objectId, newWorkEffortId, "FORWARD_PRODUCT");

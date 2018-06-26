@@ -586,8 +586,8 @@ public class WeChatMiniProgramServices {
             Map<String, Object> createProductBizData = new HashMap<String, Object>();
             createProductBizData.put("ownerPartyId", partyId);
             createProductBizData.put("productId", productId);
-            createProductBizData.put("addresseeCount", "1");
-            createProductBizData.put("forwardCount", "1");
+            createProductBizData.put("addresseeCount", "0");
+            createProductBizData.put("forwardCount", "0");
             createProductBizData.put("buyCount", "0");
             String dataId =  delegator.getNextSeqId("ProductBizData");
             createProductBizData.put("dataId",dataId);

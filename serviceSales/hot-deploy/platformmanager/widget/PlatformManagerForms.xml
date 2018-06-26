@@ -265,7 +265,7 @@
             </drop-down>
         </field>
 
-        <field name="AppId" title="APP_ID" required-field="true">
+        <field name="appId" title="APP_ID" required-field="true" tooltip="我从哪里获取AppId?登录你的公众平台-开发配置:https://mp.weixin.qq.com/">
             <text/>
         </field>
 

@@ -10,6 +10,13 @@
         <value xml:lang="zh">当前OpenID在数据库中不存在用户!</value>
     </property>
 
+    <property key="AppIDExsits">
+        <value xml:lang="en">AppID is Exsits! Can't Added!</value>
+        <value xml:lang="zh">这个AppId:${appId}已被使用了,请删除旧店关联或换一个AppID试试!</value>
+        <value xml:lang="zh_CN">这个AppId:${appId}已被使用了,请删除旧店关联或换一个AppID试试!</value>
+    </property>
+
+
     <property key="AccountingGiftCerticateNumberCannotStoreFulfillmentInfo">
         <value xml:lang="de">Kann Ausführungsinformation nicht speichern:  ${errorString}</value>
         <value xml:lang="en">Unable to store fulfillment info:  ${errorString}</value>

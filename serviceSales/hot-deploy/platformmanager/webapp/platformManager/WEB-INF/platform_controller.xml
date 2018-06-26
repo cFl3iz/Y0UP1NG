@@ -438,6 +438,15 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="QuickStartAppStore"/>
     </request-map>
+    <!-- 开店 -->
+    <request-map uri="QuickStartAppStoreEvent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="QuickStartAppStoreEvent"/>
+        <response name="success" type="request-redirect" value="QuickStartAppStore"/>
+        <response name="error" type="request-redirect" value="QuickStartAppStore"/>
+    </request-map>
+
+
     <!-- 管理店铺角色 -->
     <request-map uri="StoreRoleMgr">
         <security https="true" auth="true"/>

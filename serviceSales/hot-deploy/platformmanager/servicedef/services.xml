@@ -35,6 +35,20 @@
         <attribute name="productId" type="String" mode="INOUT" optional="false"/>
         <attribute name="textData" type="String" allow-html="any" mode="IN" optional="false"/>
     </service>
+
+
+    <service name="QuickStartAppStoreEvent" engine="simple" invoke="quickStartAppStoreEvent" require-new-transaction="true"
+             transaction-timeout="53299" use-transaction="true"
+             location="component://platformmanager/minilang/com/cloudlake/common/PartyAppConfiguration.xml">
+        <description>Quick StartApp StoreEvent</description>
+        <attribute name="appName" type="String" mode="IN" optional="false"/>
+        <attribute name="isDemoStore" type="String" mode="IN" optional="false"/>
+        <attribute name="appServiceType" type="String" mode="IN" optional="false"/>
+        <attribute name="hasShoppingCart" type="String" mode="IN" optional="false"/>
+        <attribute name="appId" type="String" mode="IN" optional="false"/>
+    </service>
+
+
     <!-- 物理删除店铺角色 -->
     <service name="storeDeleteRole" engine="simple" invoke="storeDeleteRole" require-new-transaction="true"
              transaction-timeout="53299" use-transaction="true"

@@ -88,6 +88,10 @@ dependencies {
     //狗腿伪静态包
 //    compile 'org.apache.servicemix.bundles:org.apache.servicemix.bundles.urlrewritefilter:4.0.4_1'
 
+    //汉字转拼音
+//    compile 'com.github.stuxuhai:jpinyin:1.1.8'
+    compile group: 'com.belerweb', name: 'pinyin4j', version: '2.5.0'
+
     //ALI OSS
     compile 'com.aliyun.oss:aliyun-sdk-oss:2.2.1'
     // ofbiz compile libs

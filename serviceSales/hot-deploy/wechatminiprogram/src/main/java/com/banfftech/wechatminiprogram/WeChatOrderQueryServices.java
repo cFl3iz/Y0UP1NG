@@ -1845,10 +1845,8 @@ public class WeChatOrderQueryServices {
 
         String unioId = (String) context.get("openId");
 
-        System.out.println("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>unioId = " + unioId);
-//
+
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
-        // GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
         String partyId = "NA";
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
@@ -1864,7 +1862,6 @@ public class WeChatOrderQueryServices {
 
         String orderStatus = (String) context.get("orderStatus");
 
-//        [unitPrice, quantity, productId, payToPartyId] (In selectListIteratorByCondition invalid field names specified:
 
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
@@ -1872,22 +1869,14 @@ public class WeChatOrderQueryServices {
         fieldSet.add("statusId");
         fieldSet.add("currencyUom");
         fieldSet.add("grandTotal");
-//        fieldSet.add("productId");
-//        fieldSet.add("quantity");
-//        fieldSet.add("unitPrice");
-//        fieldSet.add("payToPartyId");
-
         fieldSet.add("internalCode");
-
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
 
 
-        //  EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
         EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "SALES_REP"));
 
-        //EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("payToPartyId", partyId));
         //定死素然
         EntityCondition payToPartyIdCondition = EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId));
 
@@ -1909,14 +1898,10 @@ public class WeChatOrderQueryServices {
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         } else {
-//            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED");
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
-//            listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
             listConditions2 = EntityCondition.makeCondition(genericCondition);
         }
 
-//        EntityCondition listConditions2 = EntityCondition
-//                .makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
 
 
         String queryEntity = "OrderHeaderItemAndRoles";
@@ -2052,6 +2037,23 @@ public class WeChatOrderQueryServices {
                 String payToPartyId = (String) productStore.get("payToPartyId");
 
                 rowMap.put("payToPartyId", payToPartyId);
+
+                //查询店铺配置
+                GenericValue queryAppConfig =
+                        EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                                "productStoreId", productStoreId).queryFirst();
+                String appServiceType = "2C";
+                if (null != queryAppConfig) {
+                    appServiceType = queryAppConfig.getString("appServiceType");
+                }
+                // 查询卖家付款二维码。
+                if( appServiceType.toUpperCase().equals("2C")){
+                    GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",payToPartyId,"attrName", "media_id").queryFirst();
+                    if(null!= media){
+                        rowMap.put("media_id",media.getString("attrValue"));
+                    }
+                }
+
 
 
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
@@ -2399,14 +2401,29 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("payToPartyId", payToPartyId);
 
-                // 查询卖家付款二维码。
-                GenericValue wxPayQrCodes =
-                        EntityQuery.use(delegator).from("PartyContentAndDataResource").
-                                where("partyId", payToPartyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
-
-                if (null != wxPayQrCodes) {
-                    rowMap.put("weChatPayQrCode", wxPayQrCodes.getString("objectInfo"));
+                //查询店铺配置
+                GenericValue queryAppConfig =
+                        EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                                "productStoreId", productStoreId).queryFirst();
+                String appServiceType = "2C";
+                if (null != queryAppConfig) {
+                    appServiceType = queryAppConfig.getString("appServiceType");
                 }
+                // 查询卖家付款二维码。
+                if( appServiceType.toUpperCase().equals("2C")){
+                    GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",payToPartyId,"attrName", "media_id").queryFirst();
+                    if(null!= media){
+                        rowMap.put("media_id",media.getString("attrValue"));
+                    }
+                }
+
+//                GenericValue wxPayQrCodes =
+//                        EntityQuery.use(delegator).from("PartyContentAndDataResource").
+//                                where("partyId", payToPartyId, "partyContentTypeId", "WECHATQRCODE").orderBy("-fromDate").queryFirst();
+//
+//                if (null != wxPayQrCodes) {
+//                    rowMap.put("weChatPayQrCode", wxPayQrCodes.getString("objectInfo"));
+//                }
 
 
                 //区分订单状态

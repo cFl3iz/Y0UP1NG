@@ -236,7 +236,7 @@
 
 
     <!-- 选择店铺和目录 -->
-    <form name="ChoeseStoreAndCatelog" type="single" target="#"
+    <form name="ChoeseStoreAndCatelog" type="single" target="QuickPutProduct"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
         <field id-name="productStoreSelect" name="productStoreId" event="onchange" action="location.href = 'QuickPutProduct?productStoreId='+document.getElementById('productStoreSelect').value;" title="店铺${productStoreId}">
             <drop-down >
@@ -335,6 +335,45 @@
         </field>
     </form>
 
+
+    <form name="ProductList"  title="" type="list" list-name="productList" row-count="countRow"
+          paginate="true" paginate-style="nav-pager"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="queryProductByCatalog" result-map="result" result-map-list="productList">
+                <field-map field-name="prodCatalogId" value="${prodCatalogId}"/>
+             </service>
+            <!--<entity-and entity-name="ProdCatalogCategory" list="prodCatalogCategorys">-->
+                <!--<field-map field-name="prodCatalogId" value="${prodCatalogId}"/>-->
+            <!--</entity-and>-->
+
+
+            <!--<set field="findMap.productCategoryId" value="${prodCatalogCategorys[0].productCategoryId}"/>-->
+            <!--<service service-name="performFind" result-map="result" result-map-list="listIt">-->
+                <!--<field-map field-name="inputFields" from-field="findMap"/>-->
+                <!--<field-map field-name="orderBy" from-field="parameters.sortField"/>-->
+                <!--<field-map field-name="entityName" value="ProductCategoryAndMember"/>-->
+                <!--<field-map field-name="viewIndex" from-field="viewIndex"/>-->
+                <!--<field-map field-name="viewSize" from-field="viewSize"/>-->
+            <!--</service>-->
+        </actions>
+        <!--<row-actions>-->
+            <!---->
+            <!--<set field="hasVariants" value=""/>-->
+        <!--</row-actions>-->
+        <field name="productId" title="productId" attribute-name="productId" field-name="productId" entity-name="productId">
+            <display />
+        </field>
+        <field name="productName" title="productName">
+            <display />
+        </field>
+        <field name="description" title="description">
+          <display size="130"/>
+        </field>
+        <field name="detailImageUrl" title="detailImageUrl" >
+            <image  style="imageDetail"/>
+        </field>
+    </form>
 
     <form name="PartyAppList"  title="" type="list" list-name="listIt"
           paginate="true" paginate-style="nav-pager"

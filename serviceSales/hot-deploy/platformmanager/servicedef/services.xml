@@ -474,6 +474,22 @@
     </service>
 
 
+    <!-- Query Product ByCatalog -->
+    <service name="queryProductByCatalog" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"
+             invoke="queryProductByCatalog" auth="false">
+    <description>queryProductByCatalog</description>
+    <attribute name="prodCatalogId" type="String" mode="IN" optional="true" />
+    <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+    <attribute name="productList" type="List" mode="OUT" optional="true" />
+    </service>
+
+
+
+
+
+
+
     <!-- Load Message -->
     <service name="loadMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerQueryServices"

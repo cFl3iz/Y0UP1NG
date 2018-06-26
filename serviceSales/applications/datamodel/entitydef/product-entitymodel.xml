@@ -249,11 +249,18 @@ under the License.
             title="ProductCategory And ProductCategoryMember View Entity">
       <member-entity entity-alias="PC" entity-name="ProductCategory"/>
       <member-entity entity-alias="PCM" entity-name="ProductCategoryMember"/>
+      <member-entity entity-alias="P" entity-name="Product"/>
       <alias-all entity-alias="PC"/>
+      <alias entity-alias="P" name="productName" field="productName"/>
       <alias-all entity-alias="PCM"/>
       <view-link entity-alias="PC" rel-entity-alias="PCM">
         <key-map field-name="productCategoryId"/>
       </view-link>
+
+        <view-link entity-alias="PCM" rel-entity-alias="P">
+            <key-map field-name="productId" rel-field-name="productId"/>
+        </view-link>
+
       <relation type="one-nofk" rel-entity-name="ProductCategoryMember">
         <key-map field-name="productCategoryId"/>
         <key-map field-name="productId"/>
@@ -265,6 +272,7 @@ under the License.
       <relation type="one-nofk" rel-entity-name="Product">
         <key-map field-name="productId"/>
       </relation>
+
     </view-entity>
     <entity entity-name="ProductCategoryAttribute"
             package-name="org.apache.ofbiz.product.category"

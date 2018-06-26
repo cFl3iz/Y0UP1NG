@@ -1,6 +1,8 @@
 package main.java.com.banfftech.platformmanager;
 
 
+import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.base.util.collections.PagedList;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
@@ -139,6 +141,105 @@ public class PlatformManagerQueryServices {
 
         return resultMap;
     }
+
+
+    /**
+     * 根据目录找产品
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryProductByCatalog(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        String prodCatalogId = (String) context.get("prodCatalogId");
+        String viewIndexStr = (String) context.get("viewIndexStr");
+
+        List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        int viewIndex = 0;
+        if (viewIndexStr != null) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+
+        int viewSize = 600;
+        int lowIndex = 0;
+        int highIndex = 0;
+        Long resourceCount;
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
+
+        if(null== prodCatalogCategory){
+            resultMap.put("productList", null);
+            return resultMap;
+        }
+
+        String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+        PagedList<GenericValue> myContactListPage = null;
+        myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
+                where("productCategoryId", productCategoryId).orderBy(orderBy)
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
+
+        List<GenericValue> productList = myContactListPage.getData();
+        String beforeVir = "NA";
+        int count = 0;
+        if (null != myContactListPage) {
+            for (GenericValue gv : myContactListPage) {
+                Map<String, Object> rowMap = gv.getAllFields();
+                //自己就是sku
+                String skuId = (String) rowMap.get("productId");
+                EntityCondition findConditions3 = EntityCondition
+                        .makeCondition("productId", EntityOperator.EQUALS, skuId);
+                Set<String> fieldSet = new HashSet<String>();
+
+                fieldSet.add("drObjectInfo");
+
+                fieldSet.add("productId");
+                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
+                        findConditions3, fieldSet,
+                        null, null, false);
+                int index = 0;
+
+                GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
+                if (vir_product != null) {
+                    String detailImageUrl = (String) gv.getString("detailImageUrl");
+
+                    String rowVirId = (String) vir_product.get("productId");
+                    //别展示相同产品了
+                    if (rowVirId.equals(beforeVir)) {
+
+                    } else {   }
+                        Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
+                        //如果没有图的默认不看 针对zuczug
+                        if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
+                            count++;
+                            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                            rowMap.put("price", productPrice.get("price"));
+                            returnProductList.add(rowMap);
+                            beforeVir = rowVirId;
+                        }
+
+                } else {
+                    count++;
+                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                    rowMap.put("price", productPrice.get("price"));
+                    returnProductList.add(rowMap);
+                }
+            }
+        }
+
+        resultMap.put("productList", returnProductList);
+
+        return resultMap;
+    }
+
 
 
     /**

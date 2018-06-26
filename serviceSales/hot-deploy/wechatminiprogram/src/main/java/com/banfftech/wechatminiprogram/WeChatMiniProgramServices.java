@@ -686,7 +686,9 @@ public class WeChatMiniProgramServices {
                 String dataId = productBizData.getString("dataId");
                 GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
                 //已经记录过则不可刷单
-                if (null == isExsitsBizData) {
+                // 2018-06-26 我管你记没记过 无限刷
+               // if (null == isExsitsBizData) {
+                if (1<2) {
                     switch (bizTypeId) {
                         case "FORWARD_PRODUCT":
                             String forwardCount = productBizData.getString("forwardCount");

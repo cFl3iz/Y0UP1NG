@@ -324,6 +324,7 @@
                 <set field="tabButtonItem" value="QuickPutProduct"/>
                 <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="productStoreId" value="${parameters.productStoreId}"/>
+                <set field="prodCatalogId" value="${parameters.prodCatalogId}"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -341,12 +342,21 @@
                             <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
                             <!--<parameter param-name="workEffortId" value="${parameters.workEffortId}"/>-->
                         </link>
-
-                        <screenlet title="选择要编辑的店铺及产品目录">
-                            <include-form name="ChoeseStoreAndCatelog"
-                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
-                        </screenlet>
-                        <screenlet title="产品列表">
+                        <section>
+                            <condition>
+                                <if-compare operator="equals"
+                                            value=""
+                                            field="prodCatalogId"/>
+                            </condition>
+                            <widgets>
+                                <screenlet title="选择要编辑的店铺及产品目录">
+                                    <include-form name="ChoeseStoreAndCatelog"
+                                                  location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                </screenlet>
+                            </widgets>
+                        </section>
+                        <screenlet title="${prodCatalogId}产品列表" tab-menu-name="productBar">
+                            <include-form name="ProductList" location="component://platformmanager/widget/PlatformManagerForms.xml" />
                             <!--<platform-specific>-->
                             <!--<html>-->
                             <!--<html-template location="component://jjstudy/widget/ftl/editHuoXinPage.ftl"/>-->

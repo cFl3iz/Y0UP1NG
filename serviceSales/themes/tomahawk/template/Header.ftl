@@ -16,6 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<head>
+    <style>
+        .imageDetail{
+            width:65px;
+            height:65px;
+        }
+    </style>
+</head>
 <#assign externalKeyParam = "&amp;externalLoginKey=" + requestAttributes.externalLoginKey!>
 
 <#if (requestAttributes.person)??><#assign person = requestAttributes.person></#if>

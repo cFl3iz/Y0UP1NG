@@ -442,7 +442,7 @@
     <request-map uri="QuickStartAppStoreEvent">
         <security https="true" auth="true"/>
         <event type="service" invoke="QuickStartAppStoreEvent"/>
-        <response name="success" type="request-redirect" value="QuickStartAppStore"/>
+        <response name="success" type="request-redirect" value="FindPartyApps"/>
         <response name="error" type="request-redirect" value="QuickStartAppStore"/>
     </request-map>
 

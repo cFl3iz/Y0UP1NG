@@ -1470,7 +1470,19 @@ public class WeChatOrderQueryServices {
                     List<GenericValue> pictures = delegator.findList("ProductContentAndInfo",
                             findConditions3, fieldSet,
                             null, null, false);
-                    rowMap.put("morePicture", pictures);
+                    List<Map<String,Object>> morePicture = new ArrayList<Map<String, Object>>();
+                    Map<String,Object> rowPicMapFirst = new HashMap<String, Object>();
+                    rowPicMapFirst.put("drObjectInfo",(String) gv.get("detailImageUrl"));
+                    rowPicMapFirst.put("contentId","308561217_784838898");
+                    morePicture.add(rowPicMapFirst);
+                    if(null!=pictures && pictures.size()>0 ){
+
+                        for(GenericValue gvPic : pictures){
+                            Map<String,Object> rowPicMap = gvPic.getAllFields();
+                            morePicture.add(rowPicMap);
+                        }
+                    }
+                    rowMap.put("morePicture", morePicture);
 
                     //获得库存信息 getInventoryAvailableByFacility
                     Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,

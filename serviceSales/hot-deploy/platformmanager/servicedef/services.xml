@@ -484,8 +484,27 @@
     <attribute name="productList" type="List" mode="OUT" optional="true" />
     </service>
 
+    <!-- EditSkuEvent -->
+    <service name="EditSkuEvent" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="editSkuEvent" auth="false">
+        <description>EditSkuEvent</description>
 
+        <attribute name="productId" type="String" mode="IN" optional="true" />
+        <attribute name="productName" type="String" mode="IN" optional="true" />
+        <attribute name="description" type="String" mode="IN" optional="true" />
+        <attribute name="colorFeture" type="String" mode="IN" optional="true" />
+        <attribute name="sizeFeture" type="String" mode="IN" optional="true" />
+        <attribute name="categoryId" type="String" mode="IN" optional="true" />
+        <attribute name="invQuantity" type="String" mode="IN" optional="true" />
+        <attribute name="detailImg" type="String" mode="IN" optional="true" />
+        <attribute name="price" type="String" mode="IN" optional="true" />
 
+        <attribute name="_EVENT_MESSAGE_" type="String" mode="OUT" optional="true" />
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
 
 

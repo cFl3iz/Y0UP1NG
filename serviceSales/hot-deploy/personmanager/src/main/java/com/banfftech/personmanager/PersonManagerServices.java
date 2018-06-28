@@ -5720,6 +5720,145 @@ public class PersonManagerServices {
         pc.create();
     }
 
+
+    /**
+     * edit SkuEvent
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> editSkuEvent(DispatchContext dctx, Map<String, Object> context) throws
+            GenericEntityException,GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        // 当事人
+        String productId = (String) context.get("productId");
+        String productName = (String) context.get("productName");
+        String description = (String) context.get("description");
+        String colorFeture = (String) context.get("colorFeture");
+        String sizeFeture = (String) context.get("sizeFeture");
+        String categoryId = (String) context.get("categoryId");
+        String invQuantity = (String) context.get("invQuantity");
+        String detailImg = (String) context.get("detailImg");
+        String priceStr = (String) context.get("price");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        BigDecimal quantityTotal = BigDecimal.ZERO;
+
+        //默认的价格是0
+        BigDecimal price = BigDecimal.ZERO;
+
+        try {
+            if (!UtilValidate.isEmpty(priceStr) && !priceStr.trim().equals("")) {
+                price = new BigDecimal(priceStr);
+            }
+            if (!UtilValidate.isEmpty(invQuantity) && !invQuantity.trim().equals("")) {
+                quantityTotal = new BigDecimal(invQuantity);
+            }
+        } catch (Exception e) {
+
+        }
+
+
+        //Update
+        if (!UtilValidate.isEmpty(productId)) {
+
+        }else{
+
+            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productCategoryId", categoryId).queryFirst();
+            String productStoreId = category.getString("productStoreId");
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+            String partyId  = store.getString("payToPartyId");
+
+            //Create New
+            //创建产品
+            Map<String, Object> createProductInMap = new HashMap<String, Object>();
+            createProductInMap.put("userLogin", admin);
+            long ctm = System.currentTimeMillis();
+            createProductInMap.put("internalName", productName);
+            createProductInMap.put("productName", productName);
+            createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
+            createProductInMap.put("description", description);
+
+            if (!UtilValidate.isEmpty(detailImg)) {
+                createProductInMap.put("smallImageUrl", detailImg);
+                createProductInMap.put("detailImageUrl", detailImg);
+            }
+
+            Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+
+            if (!ServiceUtil.isSuccess(createProductOutMap)) {
+                Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductOutMap, module);
+                return createProductOutMap;
+            }
+
+            productId = (String) createProductOutMap.get("productId");
+
+            //Create Product Price
+            Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
+            createProductPriceInMap.put("userLogin", admin);
+            createProductPriceInMap.put("productId", productId);
+            createProductPriceInMap.put("currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+            createProductPriceInMap.put("price", price);
+            createProductPriceInMap.put("productPricePurposeId", PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE);
+            createProductPriceInMap.put("productPriceTypeId", PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID);
+            createProductPriceInMap.put("productStoreGroupId", PeConstant.NA);
+            Map<String, Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
+            if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
+                Debug.logError("*Mother Fuck Create Product Price Error:" + createProductPriceServiceResultMap, module);
+                return createProductPriceServiceResultMap;
+            }
+
+            //产品关联分类
+            Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+            addProductToCategoryInMap.put("userLogin", admin);
+            addProductToCategoryInMap.put("productId", productId);
+            addProductToCategoryInMap.put("productCategoryId", categoryId);
+            Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+            if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                return addProductToCategoryServiceResultMap;
+            }
+
+            //找到仓库
+            GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
+
+            //为产品创建库存量
+            Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                    "facilityId", (String) facility.get("facilityId"),
+                    "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                    "productId", productId,
+                    "description ", "卖家发布产品时的录入库存",
+                    "quantityAccepted", quantityTotal,
+                    "quantityRejected", BigDecimal.ZERO,
+                    "unitCost", price,
+                    "ownerPartyId", partyId,
+                    "partyId", partyId,
+                    "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                    "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+            Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+            );
+            if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                return receiveInventoryProductOut;
+            }
+            resultMap.put("_EVENT_MESSAGE_","创建产品成功!["+productId+"]");
+
+        }
+
+
+        return resultMap;
+    }
+
+
     /**
      * 发布资源(产品)
      *

@@ -314,6 +314,49 @@
     </form>
 
 
+
+    <!-- 新建或编辑Sku-->
+    <form name="EditSku" target="EditSkuEvent" title="" type="single"
+          header-row-style="header-row" default-table-style="basic-table center">
+        <field required-field="true"   name="productName" title="产品名称" tooltip="只支持Sku创建,如需虚拟产品变形请原生页面操作,因为没有什么比原生页面更合理了。">
+            <text/>
+        </field>
+        <field  required-field="true" name="description" title="描述">
+           <textarea/>
+        </field>
+
+        <field name="colorFeture" title="颜色特征">
+            <lookup target-form-name="LookupProductFeature" />
+        </field>
+
+        <field name="sizeFeture" title="尺码特征">
+            <lookup target-form-name="LookupProductFeature" />
+        </field>
+
+        <field name="categoryId" title="产品分类" tooltip="填了此参数意味着产品上架">
+            <lookup target-form-name="LookupProductCategory"></lookup>
+        </field>
+
+        <field name="invQuantity" title="库存总数" tooltip="自动在承诺有效和实际库存中做多减少加的差异">
+            <text default-value="1"/>
+        </field>
+
+        <field   name="detailImg" title="产品首图">
+            <text/>
+        </field>
+
+        <field required-field="true"  name="price" title="产品价格" tooltip="￥CNY">
+            <text default-value="0"/>
+        </field>
+
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
     <!-- App  商家应用列表 -->
     <form name="FindPartyApps" target="FindPartyApps" title="" type="single"
           header-row-style="header-row" default-table-style="basic-table">
@@ -362,6 +405,9 @@
             <!--<set field="hasVariants" value=""/>-->
         <!--</row-actions>-->
         <field name="productId" title="productId" attribute-name="productId" field-name="productId" entity-name="productId">
+            <display />
+        </field>
+        <field name="price" title="price" attribute-name="price" field-name="price" entity-name="price">
             <display />
         </field>
         <field name="productName" title="productName">

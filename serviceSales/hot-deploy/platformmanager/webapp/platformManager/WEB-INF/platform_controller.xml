@@ -515,6 +515,21 @@
     </request-map>
 
 
+    <!-- 新建单品或编辑单品 -->
+    <request-map uri="EditSku">
+        <security https="true" auth="true"/>
+        <!--<event invoke="FindPartyApps" type="service"/>-->
+        <response name="success" type="view" value="EditSku"/>
+        <response name="error" type="view" value="EditSku"/>
+    </request-map>
+
+    <!-- Create Or Update Sku -->
+    <request-map uri="EditSkuEvent">
+        <security https="true" auth="true"/>
+        <event invoke="EditSkuEvent" type="service"/>
+        <response name="success" type="view" value="EditSku"/>
+        <response name="error" type="view" value="EditSku"/>
+    </request-map>
 
 
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
@@ -533,6 +548,10 @@
     <view-map name="HomePageMgr" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#HomePageMgr"/>
     <!-- 快速上货 -->
     <view-map name="QuickPutProduct" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickPutProduct"/>
+
+    <!-- 编辑或新建 -->
+    <view-map name="EditSku" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditSku"/>
+
     <!-- 快速开店 -->
     <view-map name="QuickStartAppStore" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#QuickStartAppStore"/>
     <view-map name="StoreRoleMgr" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#StoreRoleMgr"/>

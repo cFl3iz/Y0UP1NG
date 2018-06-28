@@ -207,31 +207,20 @@ public class PlatformManagerQueryServices {
                         null, null, false);
                 int index = 0;
 
-                GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
-                if (vir_product != null) {
+
                     String detailImageUrl = (String) gv.getString("detailImageUrl");
 
-                    String rowVirId = (String) vir_product.get("productId");
-                    //别展示相同产品了
-                    if (rowVirId.equals(beforeVir)) {
-
-                    } else {   }
-                        Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
-                        //如果没有图的默认不看 针对zuczug
-                        if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
-                            count++;
-                            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                            rowMap.put("price", productPrice.get("price"));
-                            returnProductList.add(rowMap);
-                            beforeVir = rowVirId;
-                        }
-
-                } else {
-                    count++;
+                    Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                    rowMap.put("price", productPrice.get("price"));
+                    if(productPrice!=null){
+                        rowMap.put("price", productPrice.get("price"));
+                    }
+
+
+                    count++;
+
                     returnProductList.add(rowMap);
-                }
+
             }
         }
 

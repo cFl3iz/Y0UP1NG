@@ -131,8 +131,6 @@ public class PlatformManagerServices {
             Debug.log("[doRoundHalfUp] adjustment amount ==>" + adjustment.get("amount"));
         }
 
-
-
         return ServiceUtil.returnSuccess();
     }
 

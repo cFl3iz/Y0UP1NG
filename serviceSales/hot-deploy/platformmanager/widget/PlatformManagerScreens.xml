@@ -316,6 +316,25 @@
     </screen>
 
 
+    <!-- 编辑或新建Sku -->
+    <screen name="EditSku">
+        <section>
+            <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                        <decorator-section name="body">
+                            <include-form name="EditSku"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
     <!-- 快速铺货 上产品 -->
     <screen name="QuickPutProduct">
         <section>
@@ -332,8 +351,7 @@
                         <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
                                       name="AppToolsBar"/>
 
-                        <link text="新建单品" target="#" link-type="ajax-window" width="500"
-                              style="buttontext create" height="500">
+                        <link text="新建单品" target="EditSku"  style="buttontext create"  >
                             <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
                             <!--<parameter param-name="workEffortId" value="${parameters.workEffortId}"/>-->
                         </link>
@@ -356,7 +374,8 @@
                             </widgets>
                         </section>
                         <screenlet title="${prodCatalogId}产品列表" tab-menu-name="productBar">
-                            <include-form name="ProductList" location="component://platformmanager/widget/PlatformManagerForms.xml" />
+                            <include-form name="ProductList"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                             <!--<platform-specific>-->
                             <!--<html>-->
                             <!--<html-template location="component://jjstudy/widget/ftl/editHuoXinPage.ftl"/>-->

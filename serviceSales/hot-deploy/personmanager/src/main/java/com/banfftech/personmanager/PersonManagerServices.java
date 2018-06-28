@@ -1685,7 +1685,7 @@ public class PersonManagerServices {
             return "error";
         }
         String[] filePathsArray = null;
-        if (filePaths != null) {
+        if (filePaths != null && filePaths.trim().length()>20) {
             filePathsArray = filePaths.split(",");
         }
 

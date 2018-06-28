@@ -908,9 +908,15 @@ public class WeChatMiniProgramServices {
                 }
                 productId = (String) createProductOutMap.get("productId");
             }
-            if (i > 0) {
+            if (i > 0 && i <=2) {
                 //创建产品内容和数据资源附图
-                createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+                createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+            }
+            if(i > 2 && i <=4){
+                createProductContentAndDataResource("DETAIL_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+            }
+            if(i>4){
+                createProductContentAndDataResource("MATCH_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
             }
         }
 

@@ -5627,6 +5627,45 @@ public class PersonManagerServices {
     }
 
 
+
+    public static void createProductContentAndDataResource(String contentTypeId,Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
+
+        // Create Content
+        //    String contentTypeId = "ADDITIONAL_IMAGE_" + count;
+
+        Map<String, Object> resultMap1 = dispatcher.runSync("createContent", UtilMisc.toMap("userLogin", admin));
+        String contentId = (String) resultMap1.get("contentId");
+        dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin", admin, "productContentTypeId", "IMAGE_FRAME", "productId", productId, "contentId", contentId));
+
+        // Create DataResource
+        Map<String, Object> dataResourceCtx = new HashMap<String, Object>();
+        dataResourceCtx.put("objectInfo", dataInfo);
+        dataResourceCtx.put("dataResourceName", description);
+        dataResourceCtx.put("userLogin", admin);
+        dataResourceCtx.put("dataResourceTypeId", "SHORT_TEXT");
+        dataResourceCtx.put("mimeTypeId", "text/html");
+        Map<String, Object> dataResourceResult = new HashMap<String, Object>();
+        try {
+            dataResourceResult = dispatcher.runSync("createDataResource", dataResourceCtx);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+
+        }
+
+        // Update Content
+        Map<String, Object> contentCtx = new HashMap<String, Object>();
+        contentCtx.put("contentId", contentId);
+        contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+        contentCtx.put("userLogin", admin);
+        try {
+            dispatcher.runSync("updateContent", contentCtx);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+
+        }
+
+    }
+
     /**
      * 发布资源(产品)
      *

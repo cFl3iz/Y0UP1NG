@@ -61,7 +61,6 @@ public class WeChatOrderQueryServices {
 
     /**
      * QuerySku
-     *
      * @param dctx
      * @param context
      * @return
@@ -1071,6 +1070,7 @@ public class WeChatOrderQueryServices {
         Set<String> fieldSet = new HashSet<String>();
 
         fieldSet.add("drObjectInfo");
+        fieldSet.add("contentId");
 
         fieldSet.add("productId");
         if (null != myContactListPage) {

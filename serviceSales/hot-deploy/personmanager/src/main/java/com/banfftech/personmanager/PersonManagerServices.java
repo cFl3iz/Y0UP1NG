@@ -5628,7 +5628,7 @@ public class PersonManagerServices {
 
 
 
-    public static void createProductContentAndDataResource(String contentTypeId,Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
+    public static void createProductContentAndDataResource(String contentTypeId,Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException,GenericEntityException {
         Map<String, Object> createContentnMap = new HashMap<String, Object>();
         createContentnMap.put("contentId", delegator.getNextSeqId("Content"));
         createContentnMap.put("contentTypeId", "IMAGE_FRAME");

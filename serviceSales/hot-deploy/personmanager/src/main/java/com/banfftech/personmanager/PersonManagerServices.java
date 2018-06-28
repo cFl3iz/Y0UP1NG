@@ -1585,6 +1585,7 @@ public class PersonManagerServices {
 
         String partyId = (String) partyIdentification.get("partyId");
         String productId = (String) request.getParameter("productId");
+        String media_id = (String) request.getParameter("media_id");
         String description = (String) request.getParameter("description");
         String productName = (String) request.getParameter("productName");
         String productPriceStr = (String) request.getParameter("price");
@@ -1594,6 +1595,18 @@ public class PersonManagerServices {
         BigDecimal price = new BigDecimal(productPriceStr);
 
         String filePaths = (String) request.getParameter("filePath");
+
+
+        //media
+        Debug.logInfo(">>>> media_id:"+media_id,module);
+        if(UtilValidate.isNotEmpty(media_id)){
+            GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
+            if(null!= productMedia){
+                dispatcher.runSync("updatePartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
+            }else{
+                dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
+            }
+        }
 
 
         // 更新产品的服务Map

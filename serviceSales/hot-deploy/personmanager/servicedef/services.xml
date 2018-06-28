@@ -577,6 +577,7 @@
         <description>updateResourceInfo</description>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="media_id" type="String" mode="IN" optional="true"/>
         <attribute name="productName" type="String" mode="IN" optional="true"/>
         <attribute name="productPrice" type="String" mode="IN" optional="true"/>
         <attribute name="quantityTotal" type="String" mode="IN" optional="true"/>

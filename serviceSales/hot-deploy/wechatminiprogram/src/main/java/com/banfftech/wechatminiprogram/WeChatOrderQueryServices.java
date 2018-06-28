@@ -946,9 +946,11 @@ public class WeChatOrderQueryServices {
         String appServiceType = "2B";
         if (null != queryAppConfig) {
             appServiceType = queryAppConfig.getString("appServiceType");
+        }else{
+            //店铺没查到数据 说明是卖家自己的店
+            appServiceType = "2C";
         }
         // 2C
-        Debug.logInfo(":appServiceType.toUpperCase().equals(\"2C\")="+appServiceType.toUpperCase().equals("2C"),module);
         if( appServiceType.toUpperCase().equals("2C")){
             HashSet<String> fieldSet = new HashSet<String>();
             fieldSet.add("drObjectInfo");

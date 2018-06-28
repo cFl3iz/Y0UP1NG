@@ -1704,8 +1704,8 @@ public class PersonManagerServices {
 //                    updateProduct.put("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
 //                    updateProduct.put("detailImageUrl", "http://" + filePathsArray[i]);
 //                }
-                if (i > 0 && i <=2) {
-                    //创建产品内容和数据资源附图
+                if (i >= 0 && i <=2) {
+                    //创建产品内容和数据资源附图\
                     createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
                 }
                 if(i > 2 && i <=4){

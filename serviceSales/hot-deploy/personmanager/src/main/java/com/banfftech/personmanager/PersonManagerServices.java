@@ -1579,7 +1579,7 @@ public class PersonManagerServices {
 
         String unioId = (String) request.getParameter("unioId");
 
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
+        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
 
         String tel = (String) request.getParameter("tel");
 

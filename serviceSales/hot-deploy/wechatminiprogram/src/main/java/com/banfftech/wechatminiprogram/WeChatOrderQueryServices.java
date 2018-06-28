@@ -890,6 +890,11 @@ public class WeChatOrderQueryServices {
                     productFeatureList.add(innerMap);
 
             }
+
+
+
+
+
             //图片数组
             allField.put("imgArray", imgAttr);
             //所有特征
@@ -931,6 +936,49 @@ public class WeChatOrderQueryServices {
 
         if(null!= media){
             allField.put("media_id",media.getString("attrValue"));
+        }
+
+
+        //查询店铺配置
+        GenericValue queryAppConfig =
+                EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "productStoreId", productStoreId).queryFirst();
+        String appServiceType = "2B";
+        if (null != queryAppConfig) {
+            appServiceType = queryAppConfig.getString("appServiceType");
+        }
+        // 2C
+        if( appServiceType.toUpperCase().equals("2C")){
+            HashSet<String> fieldSet = new HashSet<String>();
+            fieldSet.add("drObjectInfo");
+            fieldSet.add("productId");
+            fieldSet.add("contentId");
+            EntityCondition findConditions3 = EntityCondition
+                    .makeCondition("productId", EntityOperator.EQUALS, productId);
+            List<GenericValue> pictures = delegator.findList("ProductContentAndInfo",
+                    findConditions3, fieldSet,
+                    null, null, false);
+//            List<Map<String,Object>> morePicture = new ArrayList<Map<String, Object>>();
+//            Map<String,Object> rowPicMapFirst = new HashMap<String, Object>();
+//            rowPicMapFirst.put("drObjectInfo",(String) product.get("detailImageUrl"));
+//            rowPicMapFirst.put("contentId","308561217_784838898");
+//            morePicture.add(rowPicMapFirst);
+
+            if(null!=pictures && pictures.size()>0 ){
+                imgAttr = new String [pictures.size()+1];
+                imgAttr[0] = (String) product.get("detailImageUrl");
+                int i = 1;
+                for(GenericValue gvPic : pictures){
+
+                    imgAttr[i] = gvPic.getString("drObjectInfo");
+//                    Map<String,Object> rowPicMap = gvPic.getAllFields();
+//                    morePicture.add(rowPicMap);
+                    i++;
+                }
+                allField.put("imgArray", imgAttr);
+            }
+//            rowMap.put("morePicture", morePicture);
+
         }
 
         resultMap.put("productDetail", allField);

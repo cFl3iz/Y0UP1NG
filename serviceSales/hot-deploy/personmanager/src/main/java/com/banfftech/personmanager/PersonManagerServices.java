@@ -5664,7 +5664,7 @@ public class PersonManagerServices {
 
         }
         try {
-            dispatcher.runSync("updateContent", UtilMisc.toMap("userLogin",admin,"productId",productId,"contentId",contentId
+            dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin",admin,"productId",productId,"contentId",contentId
             ,"productContentTypeId",contentTypeId));
         } catch (GenericServiceException e) {
             Debug.logError(e, module);

@@ -1681,23 +1681,38 @@ public class PersonManagerServices {
         //开始传图
         if (null != filePathsArray && filePathsArray.length > 0) {
             for (int i = 0; i < filePathsArray.length; i++) {
+//                System.out.println("->File Path = " + filePathsArray[i]);
+//                //说明首图被删除了
+//                if (findProduct.get("detailImageUrl") == null || (findProduct.get("detailImageUrl") + "").trim().equals("") || (findProduct.get("detailImageUrl") + "").length() < 40) {
+//                    System.out.println("detaillength = " + (findProduct.get("detailImageUrl") + "").length());
+//                    if (i == 0) {
+//                        updateProduct.put("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+//                        updateProduct.put("detailImageUrl", "http://" + filePathsArray[i]);
+//                    }
+//                    if (i > 0) {
+//                        //创建产品内容和数据资源附图
+//                        createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+//                    }
+//                } else {
+//
+//                    //只追加为附图
+//                    createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+//
+//                }
                 System.out.println("->File Path = " + filePathsArray[i]);
-                //说明首图被删除了
-                if (findProduct.get("detailImageUrl") == null || (findProduct.get("detailImageUrl") + "").trim().equals("") || (findProduct.get("detailImageUrl") + "").length() < 40) {
-                    System.out.println("detaillength = " + (findProduct.get("detailImageUrl") + "").length());
-                    if (i == 0) {
-                        updateProduct.put("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
-                        updateProduct.put("detailImageUrl", "http://" + filePathsArray[i]);
-                    }
-                    if (i > 0) {
-                        //创建产品内容和数据资源附图
-                        createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
-                    }
-                } else {
-
-                    //只追加为附图
-                    createProductContentAndDataResource(delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
-
+                if (i == 0) {
+                    updateProduct.put("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+                    updateProduct.put("detailImageUrl", "http://" + filePathsArray[i]);
+                }
+                if (i > 0 && i <=2) {
+                    //创建产品内容和数据资源附图
+                    createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+                }
+                if(i > 2 && i <=4){
+                    createProductContentAndDataResource("DETAIL_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+                }
+                if(i>4){
+                    createProductContentAndDataResource("MATCH_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
                 }
             }
         }

@@ -948,6 +948,7 @@ public class WeChatOrderQueryServices {
             appServiceType = queryAppConfig.getString("appServiceType");
         }
         // 2C
+        Debug.logInfo(":appServiceType.toUpperCase().equals(\"2C\")="+appServiceType.toUpperCase().equals("2C"),module);
         if( appServiceType.toUpperCase().equals("2C")){
             HashSet<String> fieldSet = new HashSet<String>();
             fieldSet.add("drObjectInfo");
@@ -975,6 +976,8 @@ public class WeChatOrderQueryServices {
 //                    morePicture.add(rowPicMap);
                     i++;
                 }
+                allField.remove("imgArray");
+                Debug.logInfo(":imgAttr="+imgAttr,module);
                 allField.put("imgArray", imgAttr);
             }
 //            rowMap.put("morePicture", morePicture);

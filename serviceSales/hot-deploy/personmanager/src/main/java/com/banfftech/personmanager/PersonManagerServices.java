@@ -3955,8 +3955,10 @@ public class PersonManagerServices {
             // Update Content
             try {
                 Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", admin, "contentId", contentId,
-                        "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", "ADDITIONAL_OTHER",
+                        "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", contentAndDataResource.getString("productContentTypeId"),
                         "productId", productId);
+
+                Debug.logInfo("*removeProductContent:"+removeProductContent,module);
 
                 dispatcher.runSync("removeProductContent", serviceInputMap);
 

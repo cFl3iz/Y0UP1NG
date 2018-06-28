@@ -3958,7 +3958,7 @@ public class PersonManagerServices {
                         "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", contentAndDataResource.getString("productContentTypeId"),
                         "productId", productId);
 
-                Debug.logInfo("*removeProductContent:"+removeProductContent,module);
+                Debug.logInfo("*removeProductContent:"+serviceInputMap,module);
 
                 dispatcher.runSync("removeProductContent", serviceInputMap);
 

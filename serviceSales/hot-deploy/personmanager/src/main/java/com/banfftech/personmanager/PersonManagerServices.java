@@ -5629,13 +5629,18 @@ public class PersonManagerServices {
 
 
     public static void createProductContentAndDataResource(String contentTypeId,Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String productId, String description, String dataInfo, int count) throws GenericServiceException {
-
+        Map<String, Object> createContentnMap = new HashMap<String, Object>();
+        createContentnMap.put("contentId", delegator.getNextSeqId("Content"));
+        createContentnMap.put("contentTypeId", "IMAGE_FRAME");
+        GenericValue content = delegator.makeValue("Content", createContentnMap);
+        content.create();
         // Create Content
         //    String contentTypeId = "ADDITIONAL_IMAGE_" + count;
 
-        Map<String, Object> resultMap1 = dispatcher.runSync("createContent", UtilMisc.toMap("userLogin", admin));
-        String contentId = (String) resultMap1.get("contentId");
-        dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin", admin, "productContentTypeId", "IMAGE_FRAME", "productId", productId, "contentId", contentId));
+//        Map<String, Object> resultMap1 = dispatcher.runSync("createContent", UtilMisc.toMap(
+//                "userLogin", admin, "contentTypeId", "IMAGE_FRAME"));
+//        String contentId = (String) resultMap1.get("contentId");
+//        dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin", admin, "productContentTypeId", "IMAGE_FRAME", "productId", productId, "contentId", contentId));
 
         // Create DataResource
         Map<String, Object> dataResourceCtx = new HashMap<String, Object>();
@@ -5652,26 +5657,37 @@ public class PersonManagerServices {
 
         }
 
-        // Update Content
-        Map<String, Object> contentCtx = new HashMap<String, Object>();
-        contentCtx.put("contentId", contentId);
-        contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
-        contentCtx.put("userLogin", admin);
-        try {
-            dispatcher.runSync("updateContent", contentCtx);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, module);
+//        // Update Content
+//        Map<String, Object> contentCtx = new HashMap<String, Object>();
+//        contentCtx.put("contentId", contentId);
+//        contentCtx.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+//        contentCtx.put("userLogin", admin);
+//        try {
+//            dispatcher.runSync("updateContent", contentCtx);
+//        } catch (GenericServiceException e) {
+//            Debug.logError(e, module);
+//
+//        }
+//        try {
+//            dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin",admin,"productId",productId,"contentId",contentId
+//            ,"productContentTypeId",contentTypeId));
+//        } catch (GenericServiceException e) {
+//            Debug.logError(e, module);
+//
+//        }
 
-        }
-        try {
-            dispatcher.runSync("createProductContent", UtilMisc.toMap("userLogin",admin,"productId",productId,"contentId",contentId
-            ,"productContentTypeId",contentTypeId));
-        } catch (GenericServiceException e) {
-            Debug.logError(e, module);
+        content.set("dataResourceId", dataResourceResult.get("dataResourceId"));
 
-        }
+        content.store();
 
-
+        //ProductContent
+        Map<String, Object> createProductContentnMap = new HashMap<String, Object>();
+        createProductContentnMap.put("productId", productId);
+        createProductContentnMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+        createProductContentnMap.put("contentId", (String) content.get("contentId"));
+        createProductContentnMap.put("productContentTypeId", contentTypeId);
+        GenericValue pc = delegator.makeValue("ProductContent", createProductContentnMap);
+        pc.create();
     }
 
     /**

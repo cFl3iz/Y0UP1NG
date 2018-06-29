@@ -51,6 +51,7 @@ import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.apache.ofbiz.order.shoppingcart.ShoppingCart;
 import org.apache.ofbiz.order.shoppingcart.ShoppingCartItem;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -115,7 +116,68 @@ public class PlatformManagerServices {
 
 
     /**
+     * deleteProductContentEvent
+     *
+     * @param ctx
+     * @param context
+     * @return
+     */
+    public static Map<String, Object> deleteProductContentEvent(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException{
+
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        // contentId
+        String contentIds = (String) context.get("contentIds");
+        String productId = (String) context.get("productId");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String[] contentArray = contentIds.split(",");
+
+        if (null != contentArray && contentArray.length > 0) {
+
+
+            for (String contentId : contentArray) {
+
+
+                GenericValue contentAndDataResource = EntityQuery.use(delegator).from("ProductContentAndInfo").where("productId", productId, "contentId", contentId).queryFirst();
+
+
+                // Update Content
+                try {
+                    Map<String, Object> serviceInputMap = UtilMisc.toMap("userLogin", admin, "contentId", contentId,
+                            "fromDate", contentAndDataResource.get("fromDate"), "productContentTypeId", contentAndDataResource.getString("productContentTypeId"),
+                            "productId", productId);
+
+                    Debug.logInfo("*removeProductContent:" + serviceInputMap, module);
+
+                    dispatcher.runSync("removeProductContent", serviceInputMap);
+
+                    String dataResourceId = (String) contentAndDataResource.get("dataResourceId");
+
+//                GenericValue dataResource = EntityQuery.use(delegator).from("DataResource")
+//                        .where("dataResourceId", dataResourceId).queryOne();
+//
+//                String pid = (String) dataResource.get("dataResourceName");
+//
+//                OSSUnit.deleteFile(OSSUnit.getOSSClient(), "personerp", "datas/product_img/", pid);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        return result;
+
+    }
+
+    /**
      * 促销专用四舍五入
+     *
      * @param ctx
      * @param context
      * @return
@@ -136,31 +198,32 @@ public class PlatformManagerServices {
 
     /**
      * 导出分享报表至Excel
+     *
      * @param request
      * @param response
      * @return
      */
-    public static String exportShareCpsToExcelEvent(HttpServletRequest request,HttpServletResponse response) {
+    public static String exportShareCpsToExcelEvent(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
 
         Delegator delegator = (Delegator) request.getAttribute("delegator");
-        String[] excelTitle = new String[]{"链ID","转发者","名称","点开的人","销售代表","发生时间"};
+        String[] excelTitle = new String[]{"链ID", "转发者", "名称", "点开的人", "销售代表", "发生时间"};
         String mapKeys = "workEffortId,sharePersonName,productName,addressPersonName,salesRepName,createdDate";
         try {
-            List<Map<String,Object>> arrayList = new ArrayList<Map<String,Object>>();
+            List<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
             List<GenericValue> workEfforts = EntityQuery.use(delegator).from("WorkEffort").where().queryList();
             for (GenericValue item : workEfforts) {
-                Map<String,Object> lineMap = new HashMap<String, Object>();
+                Map<String, Object> lineMap = new HashMap<String, Object>();
 
-                if(null==item.get("createdDate")){
+                if (null == item.get("createdDate")) {
                     continue;
                 }
 
                 String workEffortId = item.getString("workEffortId");
-                lineMap.put("workEffortId",workEffortId);
+                lineMap.put("workEffortId", workEffortId);
                 GenericValue workEffortProduct = EntityQuery.use(delegator).from("WorkEffortProductGoods").where("workEffortId", workEffortId).queryFirst();
-                if(null == workEffortProduct){
+                if (null == workEffortProduct) {
                     continue;
                 }
                 String productId = workEffortProduct.getString("productId");
@@ -170,53 +233,53 @@ public class PlatformManagerServices {
                 GenericValue salesRep = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "SALES_REP", "workEffortId", workEffortId).queryFirst();
                 List<GenericValue> addressees = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "ADDRESSEE", "workEffortId", workEffortId).queryList();
                 List<String> orderBy = UtilMisc.toList("fromDate");
-                GenericValue  shares = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", workEffortId).orderBy(orderBy).queryFirst();
-                if(shares!=null){
+                GenericValue shares = EntityQuery.use(delegator).from("WorkEffortPartyAssignAndRoleType").where("roleTypeId", "REFERRER", "workEffortId", workEffortId).orderBy(orderBy).queryFirst();
+                if (shares != null) {
                     String sharePartyId = shares.getString("partyId");
-                    GenericValue shareInfo  = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyId).queryFirst();
+                    GenericValue shareInfo = EntityQuery.use(delegator).from("Person").where("partyId", sharePartyId).queryFirst();
                     String shareName = shareInfo.getString("firstName");
-                    lineMap.put("sharePersonName",shareName);
-                }else{
-                    lineMap.put("sharePersonName","NA");
+                    lineMap.put("sharePersonName", shareName);
+                } else {
+                    lineMap.put("sharePersonName", "NA");
                 }
 
-                lineMap.put("productName",productName);
-                if(null != addressees && addressees.size()>0){
+                lineMap.put("productName", productName);
+                if (null != addressees && addressees.size() > 0) {
                     String addresseeNames = "";
-                    for(GenericValue addressee : addressees){
+                    for (GenericValue addressee : addressees) {
                         String addresseePartyId = addressee.getString("partyId");
-                        GenericValue addresseeInfo  = EntityQuery.use(delegator).from("Person").where("partyId", addresseePartyId).queryFirst();
+                        GenericValue addresseeInfo = EntityQuery.use(delegator).from("Person").where("partyId", addresseePartyId).queryFirst();
                         String addresseeName = addresseeInfo.getString("firstName");
-                        addresseeNames = addresseeNames+addresseeName+"、";
+                        addresseeNames = addresseeNames + addresseeName + "、";
                     }
-                    lineMap.put("addressPersonName",addresseeNames);
-                }else{
-                    lineMap.put("addressPersonName","无");
+                    lineMap.put("addressPersonName", addresseeNames);
+                } else {
+                    lineMap.put("addressPersonName", "无");
 
                 }
 
 
-                String salesPartyId = salesRep==null?"ZUCZUG":salesRep.getString("partyId");
-                GenericValue personInfo  = EntityQuery.use(delegator).from("Person").where("partyId", salesPartyId).queryFirst();
+                String salesPartyId = salesRep == null ? "ZUCZUG" : salesRep.getString("partyId");
+                GenericValue personInfo = EntityQuery.use(delegator).from("Person").where("partyId", salesPartyId).queryFirst();
 
-                String salesRepName = personInfo==null?"无":personInfo.getString("firstName");
+                String salesRepName = personInfo == null ? "无" : personInfo.getString("firstName");
 
-                lineMap.put("salesRepName",salesRepName);
-                Timestamp createdDateTp = (Timestamp)item.get("createdDate") ;
-                lineMap.put("createdDate",dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));
+                lineMap.put("salesRepName", salesRepName);
+                Timestamp createdDateTp = (Timestamp) item.get("createdDate");
+                lineMap.put("createdDate", dateToStr(createdDateTp, "yyyy-MM-dd HH:mm:ss"));
 
                 arrayList.add(lineMap);
             }
             String fileName = "分享数据导出";
 
             ExportExcelFile.exportExcelMap(request, response, arrayList, excelTitle, mapKeys, fileName);
-        }  catch (GenericEntityException e) {
+        } catch (GenericEntityException e) {
             e.printStackTrace();
         }
         return "success";
     }
 
-    public static Map<String, Object> testMail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException ,UnknownHostException {
+    public static Map<String, Object> testMail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, UnknownHostException {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -640,11 +703,6 @@ public class PlatformManagerServices {
     }
 
 
-
-
-
-
-
     // 导入exlSKU
     public static String productUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
@@ -693,24 +751,24 @@ public class PlatformManagerServices {
 
                 // 没有虚拟产品编号的。 那就是纯SKU的导入
                 if (UtilValidate.isEmpty(productVirtualId)) {
-                    GenericValue productIsExsits = delegator.findOne("Product",UtilMisc.toMap("productId", productId),false);
-                    if(null == productIsExsits){
+                    GenericValue productIsExsits = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                    if (null == productIsExsits) {
 
 
-                    GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
-                    newVariantProduct.set("productTypeId", "FINISHED_GOOD");
-                    newVariantProduct.set("description", otherDesc);
-                    newVariantProduct.set("comments", keyword);
-                    //默认图片
-                    newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
-                    if (UtilValidate.isNotEmpty(internalName)) {
-                        newVariantProduct.set("internalName", internalName);
-                        newVariantProduct.set("productName", internalName);
-                    }
-                    newVariantProduct.set("isVirtual", "N");
-                    newVariantProduct.set("isVariant", "Y");
-                    newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
-                    newVariantProduct.create();
+                        GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                        newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                        newVariantProduct.set("description", otherDesc);
+                        newVariantProduct.set("comments", keyword);
+                        //默认图片
+                        newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
+                        if (UtilValidate.isNotEmpty(internalName)) {
+                            newVariantProduct.set("internalName", internalName);
+                            newVariantProduct.set("productName", internalName);
+                        }
+                        newVariantProduct.set("isVirtual", "N");
+                        newVariantProduct.set("isVariant", "Y");
+                        newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
+                        newVariantProduct.create();
                         //创建缺省价格
                         if (UtilValidate.isNotEmpty(listPrice)) {
                             GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
@@ -985,17 +1043,6 @@ public class PlatformManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     public static String kangChengProductUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
         Delegator delegator = (Delegator) request.getAttribute("delegator");
@@ -1043,9 +1090,9 @@ public class PlatformManagerServices {
 
                 // 没有虚拟产品编号的。 那就是纯SKU的导入
                 if (productVirtualId.equals("NA")) {
-                    Debug.logInfo("upload productId="+productId,module);
-                    GenericValue productIsExsits = delegator.findOne("Product",UtilMisc.toMap("productId", productId),false);
-                    if(null == productIsExsits){
+                    Debug.logInfo("upload productId=" + productId, module);
+                    GenericValue productIsExsits = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                    if (null == productIsExsits) {
                         GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                         newVariantProduct.set("productTypeId", "FINISHED_GOOD");
                         newVariantProduct.set("description", otherDesc);

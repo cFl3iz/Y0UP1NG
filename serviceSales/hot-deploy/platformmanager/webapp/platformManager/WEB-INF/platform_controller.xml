@@ -537,11 +537,34 @@
         <response name="success" type="view" value="EditPicture"/>
         <response name="error" type="view" value="EditPicture"/>
     </request-map>
+    <!-- OssWindow -->
+    <request-map uri="AddFromOss">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AddFromOss"/>
+        <response name="error" type="view" value="AddFromOss"/>
+    </request-map>
+
+    <!-- DeleteProductContent -->
+    <request-map uri="deleteProductContentEvent">
+        <security https="false" auth="true"/>
+        <event invoke="deleteProductContentEvent" type="service"/>
+        <response name="success" type="view" value="EditPicture"/>
+        <response name="error" type="view" value="EditPicture"/>
+    </request-map>
+
+    <!-- addNewPicture -->
+    <request-map uri="addNewPictureEvent">
+        <security https="false" auth="true"/>
+        <event invoke="addNewPictureEvent" type="service"/>
+        <response name="success" type="view" value="EditPicture"/>
+        <response name="error" type="view" value="EditPicture"/>
+    </request-map>
 
 
 
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
     <view-map name="EditPicture" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditPicture"/>
+    <view-map name="AddFromOss" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#AddFromOss"/>
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
     <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>

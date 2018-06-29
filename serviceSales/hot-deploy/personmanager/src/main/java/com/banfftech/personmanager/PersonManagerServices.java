@@ -3940,9 +3940,55 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+
+    /**
+     * addNewPictureEvent
+     * @param dctx
+     * @param context
+     * @return
+     * @throws IOException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> addNewPictureEvent(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+        // Scope Param
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        // contentId
+        String productId = (String) context.get("productId");
+        String partyContentTypeId = (String) context.get("partyContentTypeId");
+        String newPicturePaths = (String) context.get("newPicturePaths");
+
+        String [] pathArray = newPicturePaths.split(",");
+
+        if(null != pathArray && pathArray.length>0){
+            for(String path: pathArray){
+                createProductContentAndDataResource(partyContentTypeId
+                        ,delegator, dispatcher, admin, productId,"",path,0);
+            }
+        }
+
+
+        return result;
+    }
+
+
+
+
     /**
      * 删除产品的图片
-     *
      * @param dctx
      * @param context
      * @return

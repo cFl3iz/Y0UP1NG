@@ -306,6 +306,18 @@
         </section>
     </screen>
 
+
+
+    <screen name="empty">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="main">
         <section>
             <actions>

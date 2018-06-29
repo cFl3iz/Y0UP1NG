@@ -44,6 +44,18 @@
         <value xml:lang="zh">删除</value>
         <value xml:lang="zh-TW">删除</value>
     </property>
+    <property key="ChoseContentType">
+        <value xml:lang="en">ChoseContentType</value>
+        <value xml:lang="zh">选产品的内容类型</value>
+        <value xml:lang="zh-TW">选产品的内容类型</value>
+    </property>
+
+    <property key="NO_CHOSE">
+        <value xml:lang="en">NO_CHOSE_ANY_ONE</value>
+        <value xml:lang="zh">至少选择一项</value>
+        <value xml:lang="zh-TW">至少选择一项</value>
+    </property>
+
     <property key="ADDED_FROM_OSS">
         <value xml:lang="en">ADDED_FROM_OSS</value>
         <value xml:lang="zh">从OSS添加图片</value>

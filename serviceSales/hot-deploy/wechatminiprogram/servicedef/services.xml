@@ -260,7 +260,17 @@
                    optional="true" />
     </service>
 
+    <!-- 从产品上删除一个内容关联 -->
+    <service name="deleteProductContentEvent" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="deleteProductContentEvent" auth="false">
+        <description>deleteProductContentEvent</description>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="contentIds" type="String" mode="IN"  optional="true"/>
 
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
     <!-- queryPostalAddress -->

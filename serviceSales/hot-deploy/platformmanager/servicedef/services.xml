@@ -454,6 +454,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- 从Oss选择要的图片添加到SKU-->
+    <service name="addNewPictureEvent" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="addNewPictureEvent" auth="false">
+        <description>addNewPictureEvent</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyContentTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="newPicturePaths" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
 
     <service name="pushMessage" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushMessage" auth="false">

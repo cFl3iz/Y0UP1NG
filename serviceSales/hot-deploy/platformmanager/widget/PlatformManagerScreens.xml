@@ -335,6 +335,27 @@
     </screen>
 
 
+
+
+    <!-- AddFromOss -->
+    <screen name="AddFromOss">
+        <section>
+            <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+            </actions>
+            <widgets>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/addFromOss.ftl"/>
+                            </html>
+                        </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
     <!-- 成品图片编辑 -->
 
     <screen name="EditPicture">
@@ -369,6 +390,10 @@
                     <decorator-section name="body">
                         <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
                                       name="AppToolsBar"/>
+
+                        <!--<link link-type="ajax-window" text="AddFromOss" target="AddFromOss" style="buttontext right">-->
+                            <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
+                        <!--</link>-->
                         <platform-specific>
                             <html>
                                 <html-template
@@ -682,6 +707,7 @@
     <screen name="LoadOSSResourceHtml">
         <section>
             <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
             </actions>
             <widgets>
                 <platform-specific>

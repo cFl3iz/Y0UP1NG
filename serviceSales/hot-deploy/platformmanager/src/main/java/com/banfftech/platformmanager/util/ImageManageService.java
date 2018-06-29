@@ -517,7 +517,7 @@ public class ImageManageService {
         String colorId = request.getParameter("colorId");
         String imgType = request.getParameter("imgType");
 
-        String prefix = "";
+        String prefix = request.getParameter("prefix");
 
         if(imgType.equals("singleImages")){
             prefix = ANKORAU_SINGLE_PATH;

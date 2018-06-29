@@ -531,9 +531,17 @@
         <response name="error" type="view" value="EditSku"/>
     </request-map>
 
+    <!-- Edit Product Picture -->
+    <request-map uri="EditPicture">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditPicture"/>
+        <response name="error" type="view" value="EditPicture"/>
+    </request-map>
+
+
 
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
-    <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
+    <view-map name="EditPicture" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditPicture"/>
 
     <view-map name="ProductUploadImport" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductUploadImport"/>
     <view-map name="ProductImageUpload" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#ProductImageUpload"/>

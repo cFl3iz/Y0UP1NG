@@ -386,28 +386,17 @@
             <service service-name="queryProductByCatalog" result-map="result" result-map-list="productList">
                 <field-map field-name="prodCatalogId" value="${prodCatalogId}"/>
              </service>
-            <!--<entity-and entity-name="ProdCatalogCategory" list="prodCatalogCategorys">-->
-                <!--<field-map field-name="prodCatalogId" value="${prodCatalogId}"/>-->
-            <!--</entity-and>-->
-
-
-            <!--<set field="findMap.productCategoryId" value="${prodCatalogCategorys[0].productCategoryId}"/>-->
-            <!--<service service-name="performFind" result-map="result" result-map-list="listIt">-->
-                <!--<field-map field-name="inputFields" from-field="findMap"/>-->
-                <!--<field-map field-name="orderBy" from-field="parameters.sortField"/>-->
-                <!--<field-map field-name="entityName" value="ProductCategoryAndMember"/>-->
-                <!--<field-map field-name="viewIndex" from-field="viewIndex"/>-->
-                <!--<field-map field-name="viewSize" from-field="viewSize"/>-->
-            <!--</service>-->
         </actions>
-        <!--<row-actions>-->
-            <!---->
-            <!--<set field="hasVariants" value=""/>-->
-        <!--</row-actions>-->
-        <field name="productId" title="productId" attribute-name="productId" field-name="productId" entity-name="productId">
+        <field name="editPicture" title="操作" widget-style="buttontext" attribute-name="editPicture" field-name="editPicture" >
+            <hyperlink description="${productId}图片管理" target="EditPicture" >
+                <parameter param-name="productId" />
+            </hyperlink>
+        </field>
+
+        <field name="productId" title="productId" attribute-name="productId" field-name="productId">
             <display />
         </field>
-        <field name="price" title="price" attribute-name="price" field-name="price" entity-name="price">
+        <field name="price" title="price" >
             <display />
         </field>
         <field name="productName" title="productName">

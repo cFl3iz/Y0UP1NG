@@ -339,6 +339,9 @@ public class WeChatMiniProgramServices {
                     "createDate", new Timestamp(new Date().getTime())));
         }
 
+        //CONTACT
+        dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin", admin, "partyIdFrom", partyId, "partyIdTo", partyIdFrom, "relationShipType", PeConstant.CONTACT));
+
 
         return resultMap;
     }

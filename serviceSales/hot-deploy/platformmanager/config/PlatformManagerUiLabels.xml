@@ -19,6 +19,43 @@
         <value xml:lang="zh">当事人ID</value>
         <value xml:lang="zh-TW">当事人ID</value>
     </property>
+
+
+
+
+    <property key="SINGLE_IMAGE">
+        <value xml:lang="en">SINGLE_IMAGE</value>
+        <value xml:lang="zh">单品图</value>
+        <value xml:lang="zh-TW">单品图片</value>
+    </property>
+    <property key="DETAIL_IMAGE">
+        <value xml:lang="en">DETAIL_IMAGE</value>
+        <value xml:lang="zh">细节图</value>
+        <value xml:lang="zh-TW">细节图</value>
+    </property>
+    <property key="MATCH_IMAGE">
+        <value xml:lang="en">MATCH_IMAGE</value>
+        <value xml:lang="zh">搭配图</value>
+        <value xml:lang="zh-TW">搭配图</value>
+    </property>
+
+    <property key="DELETE">
+        <value xml:lang="en">DELETE</value>
+        <value xml:lang="zh">删除</value>
+        <value xml:lang="zh-TW">删除</value>
+    </property>
+    <property key="ADDED_FROM_OSS">
+        <value xml:lang="en">ADDED_FROM_OSS</value>
+        <value xml:lang="zh">从OSS添加图片</value>
+        <value xml:lang="zh-TW">从OSS添加图片</value>
+    </property>
+    <property key="ADDED_CONTENT_TYPE">
+        <value xml:lang="en">ADDED_CONTENT_TYPE</value>
+        <value xml:lang="zh">增加类型</value>
+        <value xml:lang="zh-TW">增加类型</value>
+    </property>
+
+
     <property key="PartyRoleTypeId">
         <value xml:lang="en">PartyRoleTypeId</value>
         <value xml:lang="zh">当事人角色类型</value>

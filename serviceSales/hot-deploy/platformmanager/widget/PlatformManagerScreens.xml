@@ -325,10 +325,57 @@
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
-                        <decorator-section name="body">
-                            <include-form name="EditSku"
-                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
-                        </decorator-section>
+                    <decorator-section name="body">
+                        <include-form name="EditSku"
+                                      location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 成品图片编辑 -->
+
+    <screen name="EditPicture">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickPutProduct"/>
+                <set field="tabButtonItem" value="QuickPutProduct"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+                <!-- 查图片 -->
+                <!-- 单品图片 -->
+                <entity-and entity-name="ProductContentAndInfo" list="singlePictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="SINGLE_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+                <entity-and entity-name="ProductContentAndInfo" list="detailPictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="DETAIL_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+                <entity-and entity-name="ProductContentAndInfo" list="matchPictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="MATCH_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+
+
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/editPicture.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
@@ -351,7 +398,7 @@
                         <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
                                       name="AppToolsBar"/>
 
-                        <link text="新建单品" target="EditSku"  style="buttontext create"  >
+                        <link text="新建单品" target="EditSku" style="buttontext create">
                             <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
                             <!--<parameter param-name="workEffortId" value="${parameters.workEffortId}"/>-->
                         </link>

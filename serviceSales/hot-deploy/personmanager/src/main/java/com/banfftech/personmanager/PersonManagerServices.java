@@ -2117,6 +2117,10 @@ public class PersonManagerServices {
         String relationShipType = (String) context.get("relationShipType");
 
 
+        Debug.logInfo("*createPartyToPartyRelation partyIdFrom:"+partyIdFrom,module);
+        Debug.logInfo("*createPartyToPartyRelation partyIdTo:"+partyIdTo,module);
+        Debug.logInfo("*createPartyToPartyRelation relationShipType:"+relationShipType,module);
+
         Long dataCount = EntityQuery.use(delegator).from("PartyRelationship").where("partyIdFrom", partyIdTo, "partyIdTo", partyIdFrom, "partyRelationshipTypeId", relationShipType).queryCount();
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
         if (0 == dataCount) {

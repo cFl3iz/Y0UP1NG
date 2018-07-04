@@ -308,7 +308,7 @@ public class WeChatMiniProgramServices {
         updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
 
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "partyIdTo", partyIdFrom).queryFirst();
+                "partyIdTo", partyIdFrom).orderBy("-createdStamp").queryFirst();
 
         Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
 

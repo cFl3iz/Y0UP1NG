@@ -308,7 +308,7 @@ public class WeChatMiniProgramServices {
         updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, workEffortId, "ADDRESSEE_PRODUCT");
 
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "partyIdTo", partyIdFrom).orderBy("-createdStamp").queryFirst();
+                "partyIdTo", partyIdFrom).orderBy("-createDate").queryFirst();
 
         Map<String, String> personInfoMap = queryPersonBaseInfo(delegator, partyId);
 
@@ -328,7 +328,7 @@ public class WeChatMiniProgramServices {
 
         }else{
             // 记录到 olap fact
-            dispatcher.runAsync("inForwardChainFact", UtilMisc.toMap(
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
                     "partyIdFrom", partyIdFrom,
                     "partyIdTo", partyId,

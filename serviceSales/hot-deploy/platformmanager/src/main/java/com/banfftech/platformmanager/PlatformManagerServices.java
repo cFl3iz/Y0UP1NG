@@ -116,6 +116,39 @@ public class PlatformManagerServices {
 
 
     /**
+     * 初始化用户应用标记
+     * @param ctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> initAppUser(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException {
+
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        // contentId
+        String appId = (String) context.get("appId");
+        String sc = (String) context.get("sc");
+
+
+
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+    /**
      * deleteProductContentEvent
      *
      * @param ctx

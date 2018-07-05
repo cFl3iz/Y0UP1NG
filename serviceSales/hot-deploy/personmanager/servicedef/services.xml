@@ -322,6 +322,15 @@
                    optional="true"/>
     </service>
 
+
+    <!-- 查询转发关系 -->
+    <service name="queryForwardChainLastLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryForwardChainLastLines" auth="false">
+        <description>queryForwardChainLastLines</description>
+        <attribute name="lastShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
     <!-- QueryForwardChainFirstLines 2B New -->
     <!-- 更新后 从olap 查询转发记录 -->
     <service name="queryForwardChainFirstLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

@@ -397,6 +397,53 @@ public class PersonManagerQueryServices {
     }
 
 
+    /**
+     * QueryForwardChainLastLines
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryForwardChainLastLines(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
+
+        Map<String,Object> partyFromMap = new HashMap<String, Object>();
+
+
+        for(GenericValue gv : allList){
+            Map<String,Object> rowMap = new HashMap<String, Object>();
+            String rowFromId = gv.getString("partyIdFrom");
+            String rowBaseId = gv.getString("basePartyId");
+            if(!partyFromMap.containsKey(rowFromId)){
+                rowMap.put(rowFromId,queryPersonBaseInfo(delegator, rowFromId));
+                returnList.add(rowMap);
+                partyFromMap.put(rowFromId,"");
+            }
+        }
+
+
+
+        resultMap.put("lastShareLines",returnList);
+
+        return resultMap;
+    }
+
 
     /**
      * Query ForwardChain FirstLines 'New Logic'

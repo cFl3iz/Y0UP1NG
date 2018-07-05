@@ -202,6 +202,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <!-- 查询所有basePartyId -->
+    <request-map uri="queryForwardChainLastLines">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryForwardChainLastLines"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <request-map uri="queryMyOrders">
         <security https="false" auth="false"/>

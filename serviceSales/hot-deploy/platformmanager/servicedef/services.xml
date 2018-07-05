@@ -440,6 +440,13 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- init AppUser -->
+    <service name="initAppUser" engine="java" location="" invoke="" auth="false">
+        <description>initAppUser</description>
+        <attribute name="appId" type="String" mode="IN" optional="true"/>
+        <attribute name="sc" type="String" mode="IN" optional="true"/>
+    </service>
+
     <!-- Push Order Status Message -->
     <service name="pushOrderStatusInfo" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="pushOrderStatusInfo" auth="false">

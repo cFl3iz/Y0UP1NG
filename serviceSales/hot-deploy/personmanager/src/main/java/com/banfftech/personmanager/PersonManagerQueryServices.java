@@ -514,10 +514,12 @@ public class PersonManagerQueryServices {
                     forwardLine.setId(getStringRandom(15));
                     Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
                     forwardLine.setName(rowInfo.get("firstName"));
-                    List<ForwardLine> rowChilds = null;
+                    List<ForwardLine> innerRowChilds = null;
                     //递归
-                    rowChilds = forEachGetAllChildren(rowChilds,rowBaseId,partyIdTo,delegator);
-                    forwardLine.setChildren(rowChilds);
+                     innerRowChilds = forEachGetAllChildren(innerRowChilds,rowBaseId,partyIdTo,delegator);
+                    if(null!= innerRowChilds ){
+                        forwardLine.setChildren(innerRowChilds);
+                    }
                     rowList.add(forwardLine);
                 }
 

@@ -516,7 +516,13 @@ public class PersonManagerQueryServices {
                     forwardLine.setName(rowInfo.get("firstName"));
                     List<ForwardLine> innerRowChilds = null;
                     //递归
-                     innerRowChilds = forEachGetAllChildren(innerRowChilds,rowBaseId,partyIdTo,delegator);
+                    List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                            "basePartyId",rowBaseId,
+                            "partyIdFrom",partyIdTo).queryList();
+                    if(null!=innerChain && innerChain.size()>0){
+                        innerRowChilds = forEachGetAllChildren(innerRowChilds,rowBaseId,partyIdTo,delegator);
+                    }
+
                     if(null!= innerRowChilds ){
                         forwardLine.setChildren(innerRowChilds);
                     }

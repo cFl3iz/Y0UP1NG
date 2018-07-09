@@ -1,5 +1,6 @@
 package main.java.com.banfftech.personmanager;
 
+import main.java.com.banfftech.platformmanager.bean.ForwardLine;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.util.AesCbcUtil;
 import main.java.com.banfftech.platformmanager.util.Base64Util;
@@ -74,6 +75,7 @@ public class PersonManagerQueryServices {
 
     public static final String resourceUiLabels = "PlatformManagerUiLabels.xml";
 
+    public int rowId = 1;
 
     /**
      * 统计详情数据
@@ -395,6 +397,26 @@ public class PersonManagerQueryServices {
 
         return resultMap;
     }
+    public String getStringRandom(int length) {
+
+        String val = "";
+        Random random = new Random();
+
+        //参数length，表示生成几位随机数
+        for(int i = 0; i < length; i++) {
+
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+            //输出字母还是数字
+            if( "char".equalsIgnoreCase(charOrNum) ) {
+                //输出是大写字母还是小写字母
+                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                val += (char)(random.nextInt(26) + temp);
+            } else if( "num".equalsIgnoreCase(charOrNum) ) {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
 
 
     /**
@@ -417,7 +439,6 @@ public class PersonManagerQueryServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -425,24 +446,139 @@ public class PersonManagerQueryServices {
 
         Map<String,Object> partyFromMap = new HashMap<String, Object>();
 
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
+        ForwardLine root = new ForwardLine();
+        root.setId("1");
+        root.setName("AnKoRau");
+        List<ForwardLine> childrenList = new ArrayList<ForwardLine>();
         for(GenericValue gv : allList){
-            Map<String,Object> rowMap = new HashMap<String, Object>();
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-            if(!partyFromMap.containsKey(rowFromId)){
-                rowMap.put(rowFromId,queryPersonBaseInfo(delegator, rowFromId));
-                returnList.add(rowMap);
-                partyFromMap.put(rowFromId,"");
+            if(!partyFromMap.containsKey(rowBaseId)) {
+                ForwardLine row  = new ForwardLine();
+                row.setId(getStringRandom(15));
+                Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
+                row.setName(rowInfo.get("firstName"));
+                List<ForwardLine> rowChilds = null;
+                //递归
+                rowChilds = forEachGetAllChildren(rowChilds,rowBaseId,rowFromId,delegator);
+                row.setChildren(rowChilds);
+                childrenList.add(row);
+                partyFromMap.put(rowBaseId,"");
+            }
+
+//            Map<String,Object> rowMap = new HashMap<String, Object>();
+
+//            if(!partyFromMap.containsKey(rowBaseId)){
+//                rowMap.put(rowFromId,queryPersonBaseInfo(delegator, rowFromId));
+//                returnList.add(rowMap);
+//                partyFromMap.put(rowBaseId,"");
+//            }
+        }
+
+        root.setChildren(childrenList);
+
+        resultMap.put("lastShareLines",root);
+
+        Debug.logInfo("root:"+root,module);
+        return resultMap;
+    }
+
+    /**
+     * 递归查询子数据
+     * @param rowBaseId
+     * @param rowFromId
+     * @param delegator
+     * @return
+     */
+    private List<ForwardLine> forEachGetAllChildren(List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
+
+        //入口
+        if(null == rowList){
+            rowList = new ArrayList<ForwardLine>();
+        }
+        //next
+        if(null != rowList){
+
+            List<GenericValue> forwardChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                    "rowBaseId",rowBaseId,
+                    "rowFromId",rowFromId).queryList();
+            if(null == forwardChain || forwardChain.size()==0){
+                return rowList;
+            }else{
+                for(GenericValue gv : forwardChain){
+                    String nowFromId = gv.getString("partyIdFrom");
+                    String partyIdTo = gv.getString("partyIdTo");
+                    ForwardLine forwardLine = new ForwardLine();
+                    forwardLine.setId(getStringRandom(15));
+                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
+                    forwardLine.setName(rowInfo.get("firstName"));
+                    List<ForwardLine> rowChilds = null;
+                    //递归
+                    rowChilds = forEachGetAllChildren(rowChilds,rowBaseId,partyIdTo,delegator);
+                    forwardLine.setChildren(rowChilds);
+                    rowList.add(forwardLine);
+                }
+
             }
         }
 
-
-
-        resultMap.put("lastShareLines",returnList);
-
-        return resultMap;
+        return rowList;
     }
+
+//    static List<File> filelist = new ArrayList<>();
+//
+//    // 遍历查找所有的文件装到集合里面去
+//    public static List<File> getFileList(String strPath) {
+//        File dir = new File(strPath);
+//        File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+//        if (files != null) {
+//            for (int i = 0; i < files.length; i++) {
+//                //是文件夹的话就是要递归再深入查找文件
+//                if (files[i].isDirectory()) { // 判断是文件还是文件夹
+//                    getFileList(files[i].getAbsolutePath()); // 获取文件绝对路径
+//                } else {
+//                    //如果是文件，直接添加到集合
+//                    filelist.add(files[i]);
+//                }
+//            }
+//        }
+//        return filelist;
+//    }
+//
+//    public static void main(String[] args) {
+//        List<File> list = getFileList("e:/test");
+//        for (File file : list) {
+//            System.out.println(file.getName());
+//        }
+//    }
+
+    /**
+     * 递归查询
+     */
+//    private List<Map<String, Object>> generateOrgMapToTree(List<Map<String, Object>> orgMaps, Integer pid) {
+//        if (null == orgMaps || orgMaps.size() == 0) {
+//            List<StatusResponseCodeEntity> list = statusResponseCodeRepository.findAll();
+//            String json_list = JSONObject.toJSONString(list);
+//            orgMaps = (List<Map<String, Object>>) JSONObject.parse(json_list);
+//        }
+//        List<Map<String, Object>> orgList = new ArrayList<>();
+//        if (orgMaps != null && orgMaps.size() > 0) {
+//            for (Map<String, Object> item : orgMaps) {
+//                //比较传入pid与当前对象pid是否相等
+//                if (pid.equals(item.get("pid"))) {
+//                    //将当前对象id做为pid递归调用当前方法，获取下级结果
+//                    List<Map<String, Object>> children = generateOrgMapToTree(orgMaps, Integer.valueOf(item.get("id").toString()));
+//                    //将子结果集存入当前对象的children字段中
+//                    item.put("children", children);
+//                    //添加当前对象到主结果集中
+//                    orgList.add(item);
+//                }
+//            }
+//        }
+//        return orgList;
+//    }
 
 
     /**

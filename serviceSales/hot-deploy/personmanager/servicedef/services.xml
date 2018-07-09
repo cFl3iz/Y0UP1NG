@@ -327,7 +327,7 @@
     <service name="queryForwardChainLastLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryForwardChainLastLines" auth="false">
         <description>queryForwardChainLastLines</description>
-        <attribute name="lastShareLines" type="List" mode="OUT" optional="true"/>
+        <attribute name="lastShareLines" type="Object" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

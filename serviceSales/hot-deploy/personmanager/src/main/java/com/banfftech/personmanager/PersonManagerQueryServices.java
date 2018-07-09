@@ -502,8 +502,8 @@ public class PersonManagerQueryServices {
         if(null != rowList){
 
             List<GenericValue> forwardChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                    "rowBaseId",rowBaseId,
-                    "rowFromId",rowFromId).queryList();
+                    "basePartyId",rowBaseId,
+                    "partyIdFrom",rowFromId).queryList();
             if(null == forwardChain || forwardChain.size()==0){
                 return rowList;
             }else{

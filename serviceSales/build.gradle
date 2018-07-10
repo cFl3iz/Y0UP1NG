@@ -33,7 +33,7 @@ ext.os = System.getProperty('os.name').toLowerCase()
 ext.pluginsDir = "${rootDir}/specialpurpose"
 
 // java settings
-def jvmArguments = ['-Xms1024M', '-Xmx2048M']
+def jvmArguments = ['-Xms512M', '-Xmx1024M']
 ext.ofbizMainClass = 'org.apache.ofbiz.base.start.Start'
 javadoc.failOnError = false
 sourceCompatibility = '1.8'

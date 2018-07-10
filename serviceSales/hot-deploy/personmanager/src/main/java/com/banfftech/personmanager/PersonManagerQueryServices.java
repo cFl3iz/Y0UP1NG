@@ -464,7 +464,7 @@ public class PersonManagerQueryServices {
                 row.setId(getStringRandom(15));
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
                 row.setName(rowInfo.get("firstName"));
-
+                row.setAvatar(rowInfo.get("headPortrait")+"");
                 List<ForwardLine> rowChilds = null;
                 //递归
                 rowChilds = forEachGetAllChildren(deepCount+1,rowChilds,rowBaseId,rowFromId,delegator);
@@ -524,6 +524,7 @@ public class PersonManagerQueryServices {
                     forwardLine.setId(getStringRandom(15));
 //                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
                     forwardLine.setName(gv.getString("firstName"));
+                    forwardLine.setAvatar(gv.getString("objectInfo"));
                     List<ForwardLine> innerRowChilds = null;
                     //递归
                     List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(

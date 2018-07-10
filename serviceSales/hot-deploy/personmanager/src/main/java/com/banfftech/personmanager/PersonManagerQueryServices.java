@@ -463,7 +463,8 @@ public class PersonManagerQueryServices {
                 ForwardLine row  = new ForwardLine();
                 row.setId(getStringRandom(15));
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
-                row.setName(rowInfo.get("firstName"));
+//                row.setName(rowInfo.get("firstName"));
+                row.setName(rowInfo.get("headPortrait")+"");
                 row.setAvatar(rowInfo.get("headPortrait")+"");
                 List<ForwardLine> rowChilds = null;
                 //递归
@@ -523,7 +524,8 @@ public class PersonManagerQueryServices {
                     ForwardLine forwardLine = new ForwardLine();
                     forwardLine.setId(getStringRandom(15));
 //                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
-                    forwardLine.setName(gv.getString("firstName"));
+//                    forwardLine.setName(gv.getString("firstName"));
+                    forwardLine.setName(gv.getString("objectInfo"));
                     forwardLine.setAvatar(gv.getString("objectInfo"));
                     List<ForwardLine> innerRowChilds = null;
                     //递归

@@ -501,7 +501,7 @@ public class PersonManagerQueryServices {
      */
     private List<ForwardLine> forEachGetAllChildren(int deepCount ,List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
         Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
-        if(deepCount>=4){
+        if(deepCount>=8){
             return rowList;
         }
         //入口

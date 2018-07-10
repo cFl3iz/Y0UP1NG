@@ -451,8 +451,12 @@ public class PersonManagerQueryServices {
         ForwardLine root = new ForwardLine();
         root.setId("1");
         root.setName("AnKoRau");
+//        Map<String,Object> root = new HashMap<String, Object>();
+//        root.put("id", "1");
+//        root.put("name", "AnKoRau");
         List<ForwardLine> childrenList = new ArrayList<ForwardLine>();
         for(GenericValue gv : allList){
+            int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
             if(!partyFromMap.containsKey(rowBaseId) && rowFromId.equals(rowBaseId)) {
@@ -460,9 +464,10 @@ public class PersonManagerQueryServices {
                 row.setId(getStringRandom(15));
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
                 row.setName(rowInfo.get("firstName"));
+
                 List<ForwardLine> rowChilds = null;
                 //递归
-                rowChilds = forEachGetAllChildren(rowChilds,rowBaseId,rowFromId,delegator);
+                rowChilds = forEachGetAllChildren(deepCount+1,rowChilds,rowBaseId,rowFromId,delegator);
                 row.setChildren(rowChilds);
                 childrenList.add(row);
                 partyFromMap.put(rowBaseId,"");
@@ -477,11 +482,13 @@ public class PersonManagerQueryServices {
 //            }
         }
 
+//        root.put("children", childrenList);
         root.setChildren(childrenList);
 
-        resultMap.put("lastShareLines",root);
 
-        Debug.logInfo("root:"+root,module);
+        JSONObject jsonMap2 = JSONObject.fromObject(root);
+        Debug.logInfo("root:"+ jsonMap2,module);
+        resultMap.put("lastShareLines",jsonMap2);
         return resultMap;
     }
 
@@ -492,8 +499,11 @@ public class PersonManagerQueryServices {
      * @param delegator
      * @return
      */
-    private List<ForwardLine> forEachGetAllChildren(List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
-
+    private List<ForwardLine> forEachGetAllChildren(int deepCount ,List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
+        Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
+        if(deepCount>=4){
+            return rowList;
+        }
         //入口
         if(null == rowList){
             rowList = new ArrayList<ForwardLine>();
@@ -512,15 +522,15 @@ public class PersonManagerQueryServices {
                     String partyIdTo = gv.getString("partyIdTo");
                     ForwardLine forwardLine = new ForwardLine();
                     forwardLine.setId(getStringRandom(15));
-                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
-                    forwardLine.setName(rowInfo.get("firstName"));
+//                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
+                    forwardLine.setName(gv.getString("firstName"));
                     List<ForwardLine> innerRowChilds = null;
                     //递归
                     List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
                             "basePartyId",rowBaseId,
                             "partyIdFrom",partyIdTo).queryList();
                     if(null!=innerChain && innerChain.size()>0){
-                        innerRowChilds = forEachGetAllChildren(innerRowChilds,rowBaseId,partyIdTo,delegator);
+                        innerRowChilds = forEachGetAllChildren(deepCount+1,innerRowChilds,rowBaseId,partyIdTo,delegator);
                     }
 
                     if(null!= innerRowChilds ){
@@ -533,6 +543,17 @@ public class PersonManagerQueryServices {
         }
 
         return rowList;
+    }
+
+
+
+    //下级人数
+    private int hasNextChain(String basePartyId,String partyIdFrom,Delegator delegator)throws GenericEntityException{
+
+        List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "basePartyId",basePartyId,
+                "partyIdFrom",partyIdFrom).queryList();
+        return innerChain.size();
     }
 
 //    static List<File> filelist = new ArrayList<>();

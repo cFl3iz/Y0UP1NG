@@ -455,7 +455,7 @@ public class PersonManagerQueryServices {
         for(GenericValue gv : allList){
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-            if(!partyFromMap.containsKey(rowBaseId)) {
+            if(!partyFromMap.containsKey(rowBaseId) && rowFromId.equals(rowBaseId)) {
                 ForwardLine row  = new ForwardLine();
                 row.setId(getStringRandom(15));
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);

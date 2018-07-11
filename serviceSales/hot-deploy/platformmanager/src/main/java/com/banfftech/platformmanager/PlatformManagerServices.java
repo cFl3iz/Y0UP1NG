@@ -750,8 +750,8 @@ public class PlatformManagerServices {
 
         GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
         try {
-
-            String prodCatalogId = "ANKORAU_RETAIL";
+                //WATERPROOF or ANKORAU_RETAIL
+            String prodCatalogId = "WATERPROOF";
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
             String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
             GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();

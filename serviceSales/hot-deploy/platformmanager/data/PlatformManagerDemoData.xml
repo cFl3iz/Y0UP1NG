@@ -105,10 +105,10 @@
     <ProductCategoryRollup productCategoryId="SEASON_NEW" parentProductCategoryId="ANKORAU_RETAIL_ROOT" fromDate="2016-09-07 12:00:00" />
 
     <!-- AKR新目录 -->
-    <ProdCatalog prodCatalogId="WATERPROOF_RETAIL" catalogName="AKR183防水目录"/>
-    <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="WATERPROOF_RETAIL" fromDate="2018-07-11 12:00:00" />
-    <ProductCategory productCategoryId="WATERPROOF_RETAIL_ROOT" productCategoryTypeId="CATALOG_CATEGORY" categoryName="防水分类"/>
-    <ProdCatalogCategory prodCatalogId="WATERPROOF_RETAIL" productCategoryId="WATERPROOF_RETAIL_ROOT" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT" fromDate="2018-07-11 12:00:00"/>
+    <ProdCatalog prodCatalogId="WATERPROOF" catalogName="AKR183防水目录"/>
+    <ProductStoreCatalog productStoreId="ZUCZUGSTORE" prodCatalogId="WATERPROOF" fromDate="2018-07-11 12:00:00" />
+    <ProductCategory productCategoryId="WATERPROOF_ROOT" productCategoryTypeId="CATALOG_CATEGORY" categoryName="防水分类"/>
+    <ProdCatalogCategory prodCatalogId="WATERPROOF" productCategoryId="WATERPROOF_ROOT" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT" fromDate="2018-07-11 12:00:00"/>
 
 
 

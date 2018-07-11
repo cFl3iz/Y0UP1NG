@@ -195,6 +195,8 @@
         <attribute name="partyId" type="String" mode="OUT"  optional="true"/>
         <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
         <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
+        <!-- 线上在售目录分类列表-->
+        <attribute name="onlineProdCatalogs" type="List" mode="OUT" optional="true"/>
         <attribute name="isSalesRep" type="String" mode="OUT" optional="true"/>
         <attribute name="appServiceType" type="String" mode="OUT" optional="true"/>
         <attribute name="isDemoStore" type="String" mode="OUT" optional="true"/>

@@ -614,6 +614,7 @@ public class WeChatOrderQueryServices {
                 UtilMisc.toList("-fromDate"), null, false);
         if(null!= storeList && storeList.size() >0){
             prodCatalogId = (String) storeList.get(0).get("prodCatalogId");
+            resultMap.put("onlineProdCatalogs",storeList);
         }
 
         Debug.logInfo("-> storeList: " + storeList, module);

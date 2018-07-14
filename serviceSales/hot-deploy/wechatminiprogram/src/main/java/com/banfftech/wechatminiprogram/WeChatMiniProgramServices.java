@@ -560,26 +560,6 @@ public class WeChatMiniProgramServices {
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
 
-
-        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "basePartyId", partyId).orderBy("-createDate").queryFirst();
-
-        if(null == forwardChainFact){
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
-            //如果这是自己第一次转发。
-            // 记录到 olap fact
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
-                    "partyIdFrom", "admin",
-                    "partyIdTo", "NO_PARTY",
-                    "workEffortId", "10000",
-                    "basePartyId", partyId,
-                    "firstName", userInfo.get("firstName"),
-                    "objectInfo", userInfo.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
-        }
-
-
         resultMap.put("workEffortId", newWorkEffortId);
 
         return resultMap;

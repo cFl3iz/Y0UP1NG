@@ -518,16 +518,7 @@ public class PersonManagerQueryServices {
             if(null == forwardChain || forwardChain.size()==0){
                 return rowList;
             }else{
-
                 for(GenericValue gv : forwardChain){
-                    //初始记录不作为子集展示
-                    if(rowFromId.equals("admin")){
-//                        if(null!= innerRowChilds ){
-//                            forwardLine.setChildren(innerRowChilds);
-//                        }
-//                        rowList.add(forwardLine);
-                            continue;
-                    }
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     ForwardLine forwardLine = new ForwardLine();

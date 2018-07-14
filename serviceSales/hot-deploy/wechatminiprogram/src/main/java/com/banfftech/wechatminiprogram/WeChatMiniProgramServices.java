@@ -571,7 +571,7 @@ public class WeChatMiniProgramServices {
             dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
                     "partyIdFrom", "admin",
-                    "partyIdTo", partyId,
+                    "partyIdTo", "NO_PARTY",
                     "workEffortId", "10000",
                     "basePartyId", partyId,
                     "firstName", userInfo.get("firstName"),

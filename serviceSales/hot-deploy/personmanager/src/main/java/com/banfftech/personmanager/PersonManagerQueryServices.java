@@ -79,6 +79,7 @@ public class PersonManagerQueryServices {
 
     /**
      * 统计详情数据
+     *
      * @param dctx
      * @param context
      * @return
@@ -102,7 +103,7 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String productId = (String) context.get("productId");
         String bizType = (String) context.get("bizType");
-        String dataId  = (String) context.get("dataId");
+        String dataId = (String) context.get("dataId");
 
 
         if (userLogin == null) {
@@ -111,16 +112,15 @@ public class PersonManagerQueryServices {
         }
 
 
-
         int resultCount = 0;
 
 
-        Map<String,Object> productMap = new HashMap<String, Object>();
+        Map<String, Object> productMap = new HashMap<String, Object>();
 
-        GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId", productId ).queryFirst();
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-        productMap.put("productName",product.getString("productName"));
-        productMap.put("productId",product.getString("productId"));
+        productMap.put("productName", product.getString("productName"));
+        productMap.put("productId", product.getString("productId"));
         HashSet<String> fieldSet = new HashSet<String>();
         fieldSet.add("drObjectInfo");
         fieldSet.add("productId");
@@ -138,12 +138,11 @@ public class PersonManagerQueryServices {
         }
 
 
+        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("productId", productId, "dataId", dataId, "bizTypeId", bizType).orderBy("-fromDate").queryList();
 
-        List<GenericValue> productBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("productId", productId,"dataId",dataId ,"bizTypeId",bizType).orderBy("-fromDate").queryList();
-
-        if(productBizData!=null && productBizData.size()>0){
-            for(GenericValue gv : productBizData ){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
+        if (productBizData != null && productBizData.size() > 0) {
+            for (GenericValue gv : productBizData) {
+                Map<String, Object> rowMap = new HashMap<String, Object>();
                 String partyId = gv.getString("partyId");
                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String dateStr = "";
@@ -151,27 +150,27 @@ public class PersonManagerQueryServices {
                     dateStr = sdf.format(gv.get("fromDate"));
                 } catch (Exception e) {
                 }
-                rowMap.put("personInfo",queryPersonBaseInfo(delegator,partyId));
-                rowMap.put("dateTime",dateStr);
+                rowMap.put("personInfo", queryPersonBaseInfo(delegator, partyId));
+                rowMap.put("dateTime", dateStr);
                 returnList.add(rowMap);
             }
         }
 
-        GenericValue bizData =  EntityQuery.use(delegator).from("ProductBizData").where("productId", productId,"productId",productId ).queryFirst();
+        GenericValue bizData = EntityQuery.use(delegator).from("ProductBizData").where("productId", productId, "productId", productId).queryFirst();
         String count = "";
-        if(bizType.equals("ADDRESSEE_PRODUCT")){
-            count = ""+bizData.get("addresseeCount");
+        if (bizType.equals("ADDRESSEE_PRODUCT")) {
+            count = "" + bizData.get("addresseeCount");
         }
-        if(bizType.equals("FORWARD_PRODUCT")){
-            count = ""+bizData.get("forwardCount");
+        if (bizType.equals("FORWARD_PRODUCT")) {
+            count = "" + bizData.get("forwardCount");
         }
-        if(bizType.equals("BUY_PRODUCT")){
-            count = ""+bizData.get("buyCount");
+        if (bizType.equals("BUY_PRODUCT")) {
+            count = "" + bizData.get("buyCount");
         }
-        productMap.put("count",count);
+        productMap.put("count", count);
 
-        resultMap.put("detailList",returnList);
-        resultMap.put("productMap",productMap);
+        resultMap.put("detailList", returnList);
+        resultMap.put("productMap", productMap);
 
         return resultMap;
     }
@@ -179,6 +178,7 @@ public class PersonManagerQueryServices {
 
     /**
      * queryProductCpsReport
+     *
      * @param request
      * @param response
      * @return
@@ -211,24 +211,24 @@ public class PersonManagerQueryServices {
         int forwardCount = 0;
         int buyCount = 0;
 
-        if(null!=productBizData&& productBizData.size()>0){
-            for(GenericValue gv : productBizData){
+        if (null != productBizData && productBizData.size() > 0) {
+            for (GenericValue gv : productBizData) {
 
-                Map<String,Object> rowMap = new HashMap<String, Object>();
+                Map<String, Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
                 String dataId = gv.getString("dataId");
                 String forwardCountStr = gv.getString("forwardCount");
                 String buyCountStr = gv.getString("buyCount");
 
-                forwardCount +=  Integer.parseInt(forwardCountStr);
-                buyCount +=  Integer.parseInt(buyCountStr);
+                forwardCount += Integer.parseInt(forwardCountStr);
+                buyCount += Integer.parseInt(buyCountStr);
 
-                GenericValue  product  = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+                GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
                 String productName = product.getString("productName");
                 String detailImageUrl = product.getString("detailImageUrl");
-                rowMap.put("productId",productId);
-                rowMap.put("dataId",dataId);
-                rowMap.put("productName",productName);
+                rowMap.put("productId", productId);
+                rowMap.put("dataId", dataId);
+                rowMap.put("productName", productName);
                 Set<String> fieldSet = new HashSet<String>();
                 fieldSet = new HashSet<String>();
                 fieldSet.add("drObjectInfo");
@@ -238,26 +238,22 @@ public class PersonManagerQueryServices {
                 EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId);
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
                 EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
-                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo",singleCondition, fieldSet,
+                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, fieldSet,
                         null, null, false);
-                if(singlePictures!=null && singlePictures.size()>0){
-                    rowMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo")+"");
-                }else{
+                if (singlePictures != null && singlePictures.size() > 0) {
+                    rowMap.put("detailImageUrl", singlePictures.get(0).get("drObjectInfo") + "");
+                } else {
                     rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
                 }
 
 
-
-
-
 //                rowMap.put("detailImageUrl",detailImageUrl);
-                rowMap.put("forwardCount",forwardCountStr);
-                rowMap.put("buyCountStr",buyCountStr);
+                rowMap.put("forwardCount", forwardCountStr);
+                rowMap.put("buyCountStr", buyCountStr);
 
                 returnList.add(rowMap);
             }
         }
-
 
 
         //集合冒泡,数据量如果大了再封装出去做插入排
@@ -279,9 +275,9 @@ public class PersonManagerQueryServices {
             }
         }
 
-        resultMap.put("reportList",returnList);
-        resultMap.put("forwardCount",forwardCount+"");
-        resultMap.put("salesCount",buyCount+"");
+        resultMap.put("reportList", returnList);
+        resultMap.put("forwardCount", forwardCount + "");
+        resultMap.put("salesCount", buyCount + "");
 
         return resultMap;
     }
@@ -336,6 +332,7 @@ public class PersonManagerQueryServices {
 
     /**
      * 从OLAP中查询转发数据
+     *
      * @param dctx
      * @param context
      * @return
@@ -360,8 +357,8 @@ public class PersonManagerQueryServices {
 
 
         // 当前行的basePartyId
-        String addresseePartyId =     (String) context.get("addresseePartyId");
-        String rowWorkEffortId  =     (String) context.get("workEffortId");
+        String addresseePartyId = (String) context.get("addresseePartyId");
+        String rowWorkEffortId = (String) context.get("workEffortId");
 
         if (userLogin == null) {
             Debug.logError("User Token Not Found...", module);
@@ -370,48 +367,49 @@ public class PersonManagerQueryServices {
         List<GenericValue> firstShareLines = null;
         //查询首行
         if (!UtilValidate.isNotEmpty(addresseePartyId)) {
-            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"),"partyIdFrom",userLogin.get("partyId"))).queryList();
-            if(null!=firstShareLines){
-                for(GenericValue row : firstShareLines){
-                    Map<String,Object> rowMap = row.getAllFields();
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"), "partyIdFrom", userLogin.get("partyId"))).queryList();
+            if (null != firstShareLines) {
+                for (GenericValue row : firstShareLines) {
+                    Map<String, Object> rowMap = row.getAllFields();
                     String partyIdTo = row.getString("partyIdTo");
-                    Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
-                    rowMap.put("nextChainPersonNum",xiaJiRenShu);
+                    Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"), "partyIdFrom", partyIdTo)).queryCount();
+                    rowMap.put("nextChainPersonNum", xiaJiRenShu);
                     returnList.add(rowMap);
                 }
             }
-        }else{
-            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",addresseePartyId)).queryList();
-            for(GenericValue row : firstShareLines){
-                Map<String,Object> rowMap = row.getAllFields();
+        } else {
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"), "partyIdFrom", addresseePartyId)).queryList();
+            for (GenericValue row : firstShareLines) {
+                Map<String, Object> rowMap = row.getAllFields();
                 String partyIdTo = row.getString("partyIdTo");
 //                String basePartyId = row.getString("basePartyId");
-                Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
-                rowMap.put("nextChainPersonNum",xiaJiRenShu);
+                Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"), "partyIdFrom", partyIdTo)).queryCount();
+                rowMap.put("nextChainPersonNum", xiaJiRenShu);
                 returnList.add(rowMap);
             }
         }
 
 
-        resultMap.put("firstShareLines",returnList);
+        resultMap.put("firstShareLines", returnList);
 
         return resultMap;
     }
+
     public String getStringRandom(int length) {
 
         String val = "";
         Random random = new Random();
 
         //参数length，表示生成几位随机数
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
 
             String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
             //输出字母还是数字
-            if( "char".equalsIgnoreCase(charOrNum) ) {
+            if ("char".equalsIgnoreCase(charOrNum)) {
                 //输出是大写字母还是小写字母
                 int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
-                val += (char)(random.nextInt(26) + temp);
-            } else if( "num".equalsIgnoreCase(charOrNum) ) {
+                val += (char) (random.nextInt(26) + temp);
+            } else if ("num".equalsIgnoreCase(charOrNum)) {
                 val += String.valueOf(random.nextInt(10));
             }
         }
@@ -421,6 +419,7 @@ public class PersonManagerQueryServices {
 
     /**
      * QueryForwardChainLastLines
+     *
      * @param dctx
      * @param context
      * @return
@@ -442,9 +441,9 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
+        List<GenericValue> allList = EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
-        Map<String,Object> partyFromMap = new HashMap<String, Object>();
+        Map<String, Object> partyFromMap = new HashMap<String, Object>();
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
@@ -455,23 +454,23 @@ public class PersonManagerQueryServices {
 //        root.put("id", "1");
 //        root.put("name", "AnKoRau");
         List<ForwardLine> childrenList = new ArrayList<ForwardLine>();
-        for(GenericValue gv : allList){
+        for (GenericValue gv : allList) {
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-            if(!partyFromMap.containsKey(rowBaseId)) {
-                ForwardLine row  = new ForwardLine();
+            if (!partyFromMap.containsKey(rowBaseId)) {
+                ForwardLine row = new ForwardLine();
                 row.setId(getStringRandom(15));
-                Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
+                Map<String, String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
 //                row.setName(rowInfo.get("firstName"));
-                row.setName(rowInfo.get("firstName")+"$"+rowInfo.get("headPortrait")+"");
-                row.setAvatar(rowInfo.get("headPortrait")+"");
+                row.setName(rowInfo.get("firstName") + "$" + rowInfo.get("headPortrait") + "");
+                row.setAvatar(rowInfo.get("headPortrait") + "");
                 List<ForwardLine> rowChilds = null;
                 //递归
-                rowChilds = forEachGetAllChildren(deepCount+1,rowChilds,rowBaseId,rowFromId,delegator);
+                rowChilds = forEachGetAllChildren(deepCount + 1, rowChilds, rowBaseId, rowFromId, delegator);
                 row.setChildren(rowChilds);
                 childrenList.add(row);
-                partyFromMap.put(rowBaseId,"");
+                partyFromMap.put(rowBaseId, "");
             }
 
 //            Map<String,Object> rowMap = new HashMap<String, Object>();
@@ -488,67 +487,73 @@ public class PersonManagerQueryServices {
 
 
         JSONObject jsonMap2 = JSONObject.fromObject(root);
-        Debug.logInfo("root:"+ jsonMap2,module);
-        resultMap.put("lastShareLines",jsonMap2);
+        Debug.logInfo("root:" + jsonMap2, module);
+        resultMap.put("lastShareLines", jsonMap2);
         return resultMap;
     }
 
     /**
      * 递归查询子数据
+     *
      * @param rowBaseId
      * @param rowFromId
      * @param delegator
      * @return
      */
-    private List<ForwardLine> forEachGetAllChildren(int deepCount ,List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
-        Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
-        if(deepCount>=5){
+    private List<ForwardLine> forEachGetAllChildren(int deepCount, List<ForwardLine> rowList, String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException, GenericServiceException {
+        Debug.logInfo("*forEachGetAllChildren rowBaseId:" + rowBaseId + "|rowFromId:" + rowFromId + "|deepCount:" + deepCount, module);
+        if (deepCount >= 5) {
             return rowList;
         }
         //入口
-        if(null == rowList){
+        if (null == rowList) {
             rowList = new ArrayList<ForwardLine>();
         }
         //next
-        if(null != rowList){
+        if (null != rowList) {
 
-            List<GenericValue> forwardChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                    "basePartyId",rowBaseId,
-                    "partyIdFrom",rowFromId).queryList();
-            if(null == forwardChain || forwardChain.size()==0){
+            List<GenericValue> forwardChain = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                    "basePartyId", rowBaseId,
+                    "partyIdFrom", rowFromId).queryList();
+            if (null == forwardChain || forwardChain.size() == 0) {
                 return rowList;
-            }else{
+            } else {
 
-                for(GenericValue gv : forwardChain){
+                for (GenericValue gv : forwardChain) {
                     //初始记录不作为子集展示
-                    if(rowFromId.equals("admin")){
+                    //if(rowFromId.equals("admin")){
 //                        if(null!= innerRowChilds ){
 //                            forwardLine.setChildren(innerRowChilds);
 //                        }
 //                        rowList.add(forwardLine);
-                        continue;
-                    }
+//                        continue;
+//                    }
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
-                    ForwardLine forwardLine = new ForwardLine();
-                    forwardLine.setId(getStringRandom(15));
+                    if (!partyIdTo.equals(rowBaseId)) {
+
+
+                        ForwardLine forwardLine = new ForwardLine();
+                        forwardLine.setId(getStringRandom(15));
 //                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
 //                    forwardLine.setName(gv.getString("firstName"));
-                    forwardLine.setName(gv.getString("firstName")+"$"+gv.getString("objectInfo"));
-                    forwardLine.setAvatar(gv.getString("objectInfo"));
-                    List<ForwardLine> innerRowChilds = null;
-                    //递归
-                    List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                            "basePartyId",rowBaseId,
-                            "partyIdFrom",partyIdTo).queryList();
-                    if(null!=innerChain && innerChain.size()>0){
-                        innerRowChilds = forEachGetAllChildren(deepCount+1,innerRowChilds,rowBaseId,partyIdTo,delegator);
-                    }
+                        forwardLine.setName(gv.getString("firstName") + "$" + gv.getString("objectInfo"));
+                        forwardLine.setAvatar(gv.getString("objectInfo"));
+                        List<ForwardLine> innerRowChilds = null;
+                        //递归
+                        List<GenericValue> innerChain = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                                "basePartyId", rowBaseId,
+                                "partyIdFrom", partyIdTo).queryList();
+                        if (null != innerChain && innerChain.size() > 0) {
+                            innerRowChilds = forEachGetAllChildren(deepCount + 1, innerRowChilds, rowBaseId, partyIdTo, delegator);
+                        }
 
-                    if(null!= innerRowChilds ){
-                        forwardLine.setChildren(innerRowChilds);
+                        if (null != innerRowChilds) {
+                            forwardLine.setChildren(innerRowChilds);
+                        }
+                        rowList.add(forwardLine);
+
                     }
-                    rowList.add(forwardLine);
                 }
 
             }
@@ -558,13 +563,12 @@ public class PersonManagerQueryServices {
     }
 
 
-
     //下级人数
-    private int hasNextChain(String basePartyId,String partyIdFrom,Delegator delegator)throws GenericEntityException{
+    private int hasNextChain(String basePartyId, String partyIdFrom, Delegator delegator) throws GenericEntityException {
 
-        List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "basePartyId",basePartyId,
-                "partyIdFrom",partyIdFrom).queryList();
+        List<GenericValue> innerChain = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "basePartyId", basePartyId,
+                "partyIdFrom", partyIdFrom).queryList();
         return innerChain.size();
     }
 
@@ -648,8 +652,8 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // 当前行的basePartyId
-        String addresseePartyId =     (String) context.get("addresseePartyId");
-        String rowWorkEffortId  =     (String) context.get("workEffortId");
+        String addresseePartyId = (String) context.get("addresseePartyId");
+        String rowWorkEffortId = (String) context.get("workEffortId");
 
         if (userLogin == null) {
             Debug.logError("User Token Not Found...", module);
@@ -684,18 +688,18 @@ public class PersonManagerQueryServices {
                             Map<String, Object> rowMap = new HashMap<String, Object>();
                             String rowPartyId = (String) gv.get("partyId");
 
-                            GenericValue workEffortPartyAddress =  EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
-                                    UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId,"partyId",rowPartyId)).queryFirst();
-                            if(null!=workEffortPartyAddress){
+                            GenericValue workEffortPartyAddress = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
+                                    UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId, "partyId", rowPartyId)).queryFirst();
+                            if (null != workEffortPartyAddress) {
                                 String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                                 rowMap.put("workEffortId", childWorkEffortId);
                                 List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
-                                        UtilMisc.toMap("workEffortId",childWorkEffortId)).queryList();
-                                rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
+                                        UtilMisc.toMap("workEffortId", childWorkEffortId)).queryList();
+                                rowMap.put("addressCount", workEffortAndSubWorkEffortPartyReFerrer.size());
 
-                            }else{
+                            } else {
                                 rowMap.put("workEffortId", "NA");
-                                rowMap.put("addressCount","0");
+                                rowMap.put("addressCount", "0");
                             }
 //他转发过多少次
 //                            List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAssoc").where(
@@ -711,7 +715,7 @@ public class PersonManagerQueryServices {
                     }
                 }
             }
-        }else{
+        } else {
 
             //以父链Id查子链
             //    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId)).queryList();
@@ -722,19 +726,19 @@ public class PersonManagerQueryServices {
                 for (GenericValue gv : firstShareLines) {
                     Map<String, Object> rowMap = new HashMap<String, Object>();
                     String rowPartyId = (String) gv.get("partyId");
-                    GenericValue workEffortPartyAddress =  EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
-                            UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId,"partyId",rowPartyId)).queryFirst();
-                    if(null!=workEffortPartyAddress){
+                    GenericValue workEffortPartyAddress = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(
+                            UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId, "partyId", rowPartyId)).queryFirst();
+                    if (null != workEffortPartyAddress) {
                         String fatherWorkEffortId = (String) workEffortPartyAddress.get("fatherWorkEffortId");
                         String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                         rowMap.put("workEffortId", childWorkEffortId);
                         //他转发过多少次
                         List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
                                 UtilMisc.toMap("workEffortId", childWorkEffortId)).queryList();
-                        rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
-                    }else{
+                        rowMap.put("addressCount", workEffortAndSubWorkEffortPartyReFerrer.size());
+                    } else {
                         rowMap.put("workEffortId", "NA");
-                        rowMap.put("addressCount","0");
+                        rowMap.put("addressCount", "0");
                     }
 
                     rowMap.put("addresseePartyId", rowPartyId);
@@ -747,7 +751,7 @@ public class PersonManagerQueryServices {
 
 
         }
-        resultMap.put("firstShareLines",returnList);
+        resultMap.put("firstShareLines", returnList);
         return resultMap;
     }
 

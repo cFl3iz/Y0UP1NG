@@ -571,9 +571,9 @@ public class WeChatMiniProgramServices {
             // 记录到 olap fact
             dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
-                    "partyIdFrom", "admin",
-                    "partyIdTo", "NO_PARTY",
-                    "workEffortId", "10000",
+                    "partyIdFrom", "NO_PARTY",
+                    "partyIdTo", partyId,
+                    "workEffortId", "NA",
                     "basePartyId", partyId,
                     "firstName", userInfo.get("firstName"),
                     "objectInfo", userInfo.get("headPortrait"),

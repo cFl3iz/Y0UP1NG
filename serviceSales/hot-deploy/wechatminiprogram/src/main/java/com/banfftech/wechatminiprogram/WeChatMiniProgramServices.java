@@ -1,5 +1,5 @@
 package main.java.com.banfftech.wechatminiprogram;
-;
+
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
@@ -37,7 +37,6 @@ import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.m
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerServices.*;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
-import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 
 /**
@@ -559,52 +558,6 @@ public class WeChatMiniProgramServices {
 
         //把自己加入到链中
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
-
-
-
-        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "partyIdTo", partyId).orderBy("-createDate").queryFirst();
-        //hard code
-       // GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
-//        if(null == forwardChainFact){}
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
-            //如果这是自己第一次转发。
-            // 记录到 olap fact
-        if(null!= forwardChainFact){
-            Timestamp createdDateTp = (Timestamp) forwardChainFact.get("createDate");
-            Date date1 = createdDateTp;
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date1.getTime());
-            Date cancelDate = cal.getTime();
-            Date nowDate = new Date();
-            long interval = (cancelDate.getTime() - nowDate.getTime()) / 1000;
-            if((interval % (60 * 60)) / 60 < 5){
-                Debug.logInfo("interval:" + interval, module);
-            }else{
-                dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                        "userLogin", admin,
-                        "partyIdFrom", "NO_PARTY",
-                        "partyIdTo", partyId,
-                        "workEffortId", "NA",
-                        "basePartyId", partyId,
-                        "firstName", userInfo.get("firstName"),
-                        "objectInfo", userInfo.get("headPortrait"),
-                        "createDate", new Timestamp(new Date().getTime())));
-            }
-        }else{
-
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
-                    "partyIdFrom", "NO_PARTY",
-                    "partyIdTo", partyId,
-                    "workEffortId", "NA",
-                    "basePartyId", partyId,
-                    "firstName", userInfo.get("firstName"),
-                    "objectInfo", userInfo.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
-        }
-
-
 
 
         resultMap.put("workEffortId", newWorkEffortId);

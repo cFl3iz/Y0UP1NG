@@ -561,11 +561,11 @@ public class WeChatMiniProgramServices {
 
 
 
-        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-                "basePartyId", partyId).orderBy("-createDate").queryFirst();
+//        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+//                "basePartyId", partyId).orderBy("-createDate").queryFirst();
         //hard code
        // GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
-        if(null == forwardChainFact){
+//        if(null == forwardChainFact){}
             Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
             //如果这是自己第一次转发。
             // 记录到 olap fact
@@ -578,7 +578,7 @@ public class WeChatMiniProgramServices {
                     "firstName", userInfo.get("firstName"),
                     "objectInfo", userInfo.get("headPortrait"),
                     "createDate", new Timestamp(new Date().getTime())));
-        }
+
 
 
         resultMap.put("workEffortId", newWorkEffortId);

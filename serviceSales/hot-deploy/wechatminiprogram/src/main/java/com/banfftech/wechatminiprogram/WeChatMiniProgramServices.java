@@ -579,7 +579,7 @@ public class WeChatMiniProgramServices {
             Date nowDate = new Date();
             long interval = (cancelDate.getTime() - nowDate.getTime()) / 1000;
             if((interval % (60 * 60)) / 60 < 5){
-                Debug.logInfo("interval:"+interval,module);
+                Debug.logInfo("interval:" + interval, module);
             }else{
                 dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                         "userLogin", admin,
@@ -591,6 +591,17 @@ public class WeChatMiniProgramServices {
                         "objectInfo", userInfo.get("headPortrait"),
                         "createDate", new Timestamp(new Date().getTime())));
             }
+        }else{
+
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", "NO_PARTY",
+                    "partyIdTo", partyId,
+                    "workEffortId", "NA",
+                    "basePartyId", partyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
         }
 
 

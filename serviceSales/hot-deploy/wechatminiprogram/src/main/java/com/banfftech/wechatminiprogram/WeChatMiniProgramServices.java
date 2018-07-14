@@ -560,6 +560,27 @@ public class WeChatMiniProgramServices {
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
 
+
+        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "basePartyId", partyId).orderBy("-createDate").queryFirst();
+        //hard code
+        GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", "ZUCZUGSTORE", "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        if(null == forwardChainFact && iamSalesRep !=null  ){
+            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+            //如果这是自己第一次转发。
+            // 记录到 olap fact
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", "admin",
+                    "partyIdTo", "NO_PARTY",
+                    "workEffortId", "10000",
+                    "basePartyId", partyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
+        }
+
+
         resultMap.put("workEffortId", newWorkEffortId);
 
         return resultMap;
@@ -599,7 +620,7 @@ public class WeChatMiniProgramServices {
             bizData.create();
 
             // Do Create Detail
-          //  createProductBizDataDetail(delegator,dataId, objectId, partyId, bizTypeId,productId);
+            //  createProductBizDataDetail(delegator,dataId, objectId, partyId, bizTypeId,productId);
         }
 
     }
@@ -620,39 +641,39 @@ public class WeChatMiniProgramServices {
     public static void updateProductBizDataFromOrder(String salesRepId, int count, Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyId, String productId, String objectId, String bizTypeId) throws GenericEntityException, GenericServiceException {
 
 
-            String ownerPartyId = salesRepId;
+        String ownerPartyId = salesRepId;
 
-            GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
+        GenericValue productBizData = EntityQuery.use(delegator).from("ProductBizData").where("ownerPartyId", ownerPartyId, "productId", productId).queryFirst();
 
-            if (null == productBizData) {
+        if (null == productBizData) {
 
-            } else {
-                String dataId = productBizData.getString("dataId");
+        } else {
+            String dataId = productBizData.getString("dataId");
 
-                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
-                //已经记录过则不可刷单
-                if (null == isExsitsBizData) {
-                    switch (bizTypeId) {
-                        case "FORWARD_PRODUCT":
-                            String forwardCount = productBizData.getString("forwardCount");
-                            productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
-                            break;
-                        case "ADDRESSEE_PRODUCT":
-                            String addresseeCount = productBizData.getString("addresseeCount");
-                            productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
-                            break;
-                        case "BUY_PRODUCT":
-                            String buyCount = productBizData.getString("buyCount");
-                            productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
-                            break;
-                    }
-
-                    productBizData.store();
-
-                    // Do Create Detail
-                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
+            GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
+            //已经记录过则不可刷单
+            if (null == isExsitsBizData) {
+                switch (bizTypeId) {
+                    case "FORWARD_PRODUCT":
+                        String forwardCount = productBizData.getString("forwardCount");
+                        productBizData.set("forwardCount", (Integer.parseInt(forwardCount) + count) + "");
+                        break;
+                    case "ADDRESSEE_PRODUCT":
+                        String addresseeCount = productBizData.getString("addresseeCount");
+                        productBizData.set("addresseeCount", (Integer.parseInt(addresseeCount) + count) + "");
+                        break;
+                    case "BUY_PRODUCT":
+                        String buyCount = productBizData.getString("buyCount");
+                        productBizData.set("buyCount", (Integer.parseInt(buyCount) + count) + "");
+                        break;
                 }
+
+                productBizData.store();
+
+                // Do Create Detail
+                createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
             }
+        }
 
     }
 
@@ -693,7 +714,7 @@ public class WeChatMiniProgramServices {
                 GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
                 //已经记录过则不可刷单
                 // 2018-06-26 我管你记没记过 无限刷
-               // if (null == isExsitsBizData) {
+                // if (null == isExsitsBizData) {
                 if (1<2) {
                     switch (bizTypeId) {
                         case "FORWARD_PRODUCT":

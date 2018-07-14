@@ -177,14 +177,14 @@ public class PersonManagerQueryServices {
     }
 
 
-        /**
-         * queryProductCpsReport
-         * @param request
-         * @param response
-         * @return
-         * @throws GenericServiceException
-         * @throws GenericEntityException
-         */
+    /**
+     * queryProductCpsReport
+     * @param request
+     * @param response
+     * @return
+     * @throws GenericServiceException
+     * @throws GenericEntityException
+     */
     public Map<String, Object> queryProductCpsReport(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
         //Service Head
@@ -370,16 +370,16 @@ public class PersonManagerQueryServices {
         List<GenericValue> firstShareLines = null;
         //查询首行
         if (!UtilValidate.isNotEmpty(addresseePartyId)) {
-             firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"),"partyIdFrom",userLogin.get("partyId"))).queryList();
-             if(null!=firstShareLines){
-                    for(GenericValue row : firstShareLines){
-                        Map<String,Object> rowMap = row.getAllFields();
-                        String partyIdTo = row.getString("partyIdTo");
-                        Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
-                        rowMap.put("nextChainPersonNum",xiaJiRenShu);
-                        returnList.add(rowMap);
-                    }
-             }
+            firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId", userLogin.get("partyId"),"partyIdFrom",userLogin.get("partyId"))).queryList();
+            if(null!=firstShareLines){
+                for(GenericValue row : firstShareLines){
+                    Map<String,Object> rowMap = row.getAllFields();
+                    String partyIdTo = row.getString("partyIdTo");
+                    Long xiaJiRenShu = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",partyIdTo)).queryCount();
+                    rowMap.put("nextChainPersonNum",xiaJiRenShu);
+                    returnList.add(rowMap);
+                }
+            }
         }else{
             firstShareLines = EntityQuery.use(delegator).from("YpForwardChainFact").where(UtilMisc.toMap("basePartyId",userLogin.get("partyId"),"partyIdFrom",addresseePartyId)).queryList();
             for(GenericValue row : firstShareLines){
@@ -518,7 +518,16 @@ public class PersonManagerQueryServices {
             if(null == forwardChain || forwardChain.size()==0){
                 return rowList;
             }else{
+
                 for(GenericValue gv : forwardChain){
+                    //初始记录不作为子集展示
+                    if(rowFromId.equals("admin")){
+//                        if(null!= innerRowChilds ){
+//                            forwardLine.setChildren(innerRowChilds);
+//                        }
+//                        rowList.add(forwardLine);
+                        continue;
+                    }
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     ForwardLine forwardLine = new ForwardLine();
@@ -665,7 +674,7 @@ public class PersonManagerQueryServices {
 //                        continue;
 //                    }
 
-                  //  List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
+                    //  List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", fatherWorkEffortId)).queryList();
                     List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", fatherWorkEffortId)).queryList();
                     Debug.logInfo("*开始查询父链点开者= " + firstShareLines, module);
                     // 有人点开过
@@ -680,9 +689,9 @@ public class PersonManagerQueryServices {
                             if(null!=workEffortPartyAddress){
                                 String childWorkEffortId = (String) workEffortPartyAddress.get("subWorkEffortId");
                                 rowMap.put("workEffortId", childWorkEffortId);
-                             List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
-                                    UtilMisc.toMap("workEffortId",childWorkEffortId)).queryList();
-                            rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
+                                List<GenericValue> workEffortAndSubWorkEffortPartyReFerrer = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(
+                                        UtilMisc.toMap("workEffortId",childWorkEffortId)).queryList();
+                                rowMap.put("addressCount",workEffortAndSubWorkEffortPartyReFerrer.size());
 
                             }else{
                                 rowMap.put("workEffortId", "NA");
@@ -705,7 +714,7 @@ public class PersonManagerQueryServices {
         }else{
 
             //以父链Id查子链
-        //    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId)).queryList();
+            //    List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("FatherWorkEffortPartyAddressee").where(UtilMisc.toMap("fatherWorkEffortId", rowWorkEffortId)).queryList();
             List<GenericValue> firstShareLines = EntityQuery.use(delegator).from("WorkEffortAndPartyAdressee").where(UtilMisc.toMap("workEffortId", rowWorkEffortId)).queryList();
             Debug.logInfo("*开始查询子链点开者:" + firstShareLines, module);
             // 有人点开过

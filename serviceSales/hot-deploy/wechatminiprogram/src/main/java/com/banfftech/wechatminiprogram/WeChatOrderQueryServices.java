@@ -1246,7 +1246,15 @@ public class WeChatOrderQueryServices {
                     "objectInfo", userInfo.get("headPortrait"),
                     "createDate", new Timestamp(new Date().getTime())));
         }
+        GenericValue myForwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
 
+        // 更新我的软连接
+        if(null!=myForwardChainFactTemp){
+            myForwardChainFactTemp.set("basePartyId",partyId);
+            myForwardChainFactTemp.store();
+            Debug.logInfo("update ... " + myForwardChainFactTemp,module);
+        }
         return resultMap;
     }
 
@@ -1672,7 +1680,15 @@ public class WeChatOrderQueryServices {
                     "objectInfo", userInfo.get("headPortrait"),
                     "createDate", new Timestamp(new Date().getTime())));
         }
+        GenericValue myForwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
 
+        // 更新我的软连接
+        if(null!=myForwardChainFactTemp){
+            myForwardChainFactTemp.set("basePartyId",partyId);
+            myForwardChainFactTemp.store();
+            Debug.logInfo("update ... " + myForwardChainFactTemp,module);
+        }
         return resultMap;
     }
 

@@ -521,7 +521,7 @@ public class PersonManagerQueryServices {
                 for(GenericValue gv : forwardChain){
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
-                    if (1==1) {
+                    if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
                     ForwardLine forwardLine = new ForwardLine();
                     forwardLine.setId(getStringRandom(15));
 //                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);

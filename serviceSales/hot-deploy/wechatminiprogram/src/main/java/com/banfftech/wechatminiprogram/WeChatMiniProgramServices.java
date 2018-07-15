@@ -361,7 +361,7 @@ public class WeChatMiniProgramServices {
                     "basePartyId", basePartyId,
                     "createDate", new Timestamp(new Date().getTime())
                     ));
-                delegator.createOrStore(newForwardChainFactTemp);
+                delegator.create(newForwardChainFactTemp);
             } else {
                 //转给你的人没有base, 那你就是他下的1级
                 //创建下级关系
@@ -382,7 +382,7 @@ public class WeChatMiniProgramServices {
                         "basePartyId", partyIdFrom,
                         "createDate", new Timestamp(new Date().getTime())
                 ));
-                delegator.createOrStore(newForwardChainFactTemp);
+                delegator.create(newForwardChainFactTemp);
             }
 
         }

@@ -78,6 +78,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * 2C发货
+     *
      * @param dctx
      * @param context
      * @return
@@ -99,17 +100,17 @@ public class WeChatMiniProgramServices {
         String trackingNumber = (String) context.get("trackingNumber");
 
 
-        GenericValue orderHeader = delegator.findOne("OrderHeader",UtilMisc.toMap("orderId",orderId),false);
+        GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", orderId), false);
 
-        if(null == orderHeader){
+        if (null == orderHeader) {
             return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "ORDER_NOT_FOUND", locale));
         }
 
         //拿originFacilityId
         String originFacilityId = orderHeader.getString("originFacilityId");
-        Map<String,Object> serviceResult = dispatcher.runSync("quickShipEntireOrder",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"originFacilityId",originFacilityId));
+        Map<String, Object> serviceResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "originFacilityId", originFacilityId));
         if (!ServiceUtil.isSuccess(serviceResult)) {
-            Debug.logInfo("*quickShipEntireOrder2C fail:"+orderId, module);
+            Debug.logInfo("*quickShipEntireOrder2C fail:" + orderId, module);
             return serviceResult;
         }
 
@@ -118,7 +119,7 @@ public class WeChatMiniProgramServices {
 
         Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingNumber));
         if (!ServiceUtil.isSuccess(updateResult)) {
-            Debug.logInfo("*updateOrderItemShipGroup fail:"+orderId, module);
+            Debug.logInfo("*updateOrderItemShipGroup fail:" + orderId, module);
             return updateResult;
         }
 
@@ -258,9 +259,9 @@ public class WeChatMiniProgramServices {
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "idValue", appId).queryFirst();
         //为空说明现在是2C 卖家店铺
-        String appServiceType   = "2C";
-        if(null != queryAppConfig){
-            appServiceType   = queryAppConfig.getString("appServiceType");
+        String appServiceType = "2C";
+        if (null != queryAppConfig) {
+            appServiceType = queryAppConfig.getString("appServiceType");
             productStoreId = queryAppConfig.getString("productStoreId");
         }
 
@@ -292,7 +293,7 @@ public class WeChatMiniProgramServices {
         GenericValue isSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdFrom, "roleTypeId", "SALES_REP").queryFirst();
 
         //自己就是销售代表就不要管这个逻辑了
-        if (null != isSalesRep && amISalesRep ==null) {
+        if (null != isSalesRep && amISalesRep == null) {
             //建立我与他的partyRelationship
             boolean isSuccess = assocCustToSalesRep(admin, delegator, dispatcher, partyId, partyIdFrom);
             if (!isSuccess) {
@@ -314,7 +315,7 @@ public class WeChatMiniProgramServices {
 
         //此处需要增加销售代表的逻辑.如果自己是销售代表,则base就是自己
         String base = forwardChainFact == null ? partyIdFrom : forwardChainFact.getString("basePartyId");
-        if(isSalesRep!=null){
+        if (isSalesRep != null) {
             //FROM IS BASE .因为传给你的人他是销售代表.你变成了他的首行
             base = partyIdFrom;
         }
@@ -329,6 +330,61 @@ public class WeChatMiniProgramServices {
 //        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
 //                "partyIdTo", partyId).queryFirst();
 //        Map<String,String> userInfo = queryPersonBaseInfo(delegator, partyId);
+
+        //打开自己的链接不管
+        if (partyId.equals(partyIdFrom)) {
+
+        } else {
+            //是别人转给你的，理应加在他后面。
+
+            //转给你的人他拥有base? 那你跟在他后面
+            GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                    "partyIdTo", partyIdFrom).queryFirst();
+            if (null != forwardChainFactTemp) {
+                String fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
+                String basePartyId = forwardChainFactTemp.getString("basePartyId");
+                dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                        "userLogin", admin,
+                        "partyIdFrom", fromPartyId,
+                        "partyIdTo", partyId,
+                        "workEffortId", workEffortId,
+                        "basePartyId", basePartyId,
+                        "firstName", personInfoMap.get("firstName"),
+                        "objectInfo", personInfoMap.get("headPortrait"),
+                        "createDate", new Timestamp(new Date().getTime())));
+                //并且你会继承他的base
+                 GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
+                    "partyIdFrom", partyIdFrom,
+                    "partyIdTo", partyId,
+                    "workEffortId", workEffortId,
+                    "basePartyId", basePartyId,
+                    "createDate", new Timestamp(new Date().getTime())
+                    ));
+                delegator.createOrStore(newForwardChainFactTemp);
+            } else {
+                //转给你的人没有base, 那你就是他下的1级
+                //创建下级关系
+                dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                        "userLogin", admin,
+                        "partyIdFrom", partyIdFrom,
+                        "partyIdTo", partyId,
+                        "workEffortId", workEffortId,
+                        "basePartyId", partyIdFrom,
+                        "firstName", personInfoMap.get("firstName"),
+                        "objectInfo", personInfoMap.get("headPortrait"),
+                        "createDate", new Timestamp(new Date().getTime())));
+                //增加你的链深度关系
+                GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
+                        "partyIdFrom", partyIdFrom,
+                        "partyIdTo", partyId,
+                        "workEffortId", workEffortId,
+                        "basePartyId", partyIdFrom,
+                        "createDate", new Timestamp(new Date().getTime())
+                ));
+                delegator.createOrStore(newForwardChainFactTemp);
+            }
+
+        }
 
 
         //说明加入别人的链路
@@ -366,7 +422,7 @@ public class WeChatMiniProgramServices {
 //                forwardChainFactTemp.store();
 //            }else{
 
-            // 记录到 olap fact temp
+        // 记录到 olap fact temp
 //            GenericValue ypForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
 //                    "partyIdFrom", partyIdFrom,
 //                    "partyIdTo", partyId,
@@ -537,15 +593,15 @@ public class WeChatMiniProgramServices {
                     GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", objectId).queryFirst();
                     String rowStoreId = category.getString("productStoreId");
                     GenericValue iamSalesRep = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", rowStoreId, "partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
-                    Debug.logInfo("*createForwardChain iamSalesRep?"+iamSalesRep,module);
-                    Debug.logInfo("*createForwardChain rowStoreId="+rowStoreId,module);
-                    Debug.logInfo("*createForwardChain partyId="+partyId,module);
+                    Debug.logInfo("*createForwardChain iamSalesRep?" + iamSalesRep, module);
+                    Debug.logInfo("*createForwardChain rowStoreId=" + rowStoreId, module);
+                    Debug.logInfo("*createForwardChain partyId=" + partyId, module);
                     if (iamSalesRep != null) {
                         // create ForWard Count
                         createProductBizData(delegator, dispatcher, admin, partyId, objectId, newWorkEffortId, "FORWARD_PRODUCT");
 
                         break;
-                    }else{
+                    } else {
                         // Update ForWard Count
                         updateProductBizData(Integer.parseInt("1"), delegator, dispatcher, admin, partyId, objectId, beforeChainId, "FORWARD_PRODUCT");
                         break;
@@ -620,7 +676,6 @@ public class WeChatMiniProgramServices {
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
 
 
-
         //Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
         //创建自己的OLAP链或加入别人的转发链
 
@@ -633,9 +688,9 @@ public class WeChatMiniProgramServices {
 //                "partyIdTo", partyId).queryFirst();
 
         //说明加入别人的链路
-       // if(null!=forwardChainFactTemp){
+        // if(null!=forwardChainFactTemp){
 
-            // INIT SERVICE FIELD
+        // INIT SERVICE FIELD
 //            fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
 //            basePartyId = forwardChainFactTemp.getString("basePartyId");
 //            workEffortId = forwardChainFactTemp.getString("workEffortId");
@@ -651,8 +706,6 @@ public class WeChatMiniProgramServices {
 //                "firstName", userInfo.get("firstName"),
 //                "objectInfo", userInfo.get("headPortrait"),
 //                "createDate", new Timestamp(new Date().getTime())));
-
-
 
 
         resultMap.put("workEffortId", newWorkEffortId);
@@ -687,8 +740,8 @@ public class WeChatMiniProgramServices {
             createProductBizData.put("addresseeCount", "0");
             createProductBizData.put("forwardCount", "0");
             createProductBizData.put("buyCount", "0");
-            String dataId =  delegator.getNextSeqId("ProductBizData");
-            createProductBizData.put("dataId",dataId);
+            String dataId = delegator.getNextSeqId("ProductBizData");
+            createProductBizData.put("dataId", dataId);
             createProductBizData.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
             GenericValue bizData = delegator.makeValue("ProductBizData", createProductBizData);
             bizData.create();
@@ -701,6 +754,7 @@ public class WeChatMiniProgramServices {
 
     /**
      * updateProductBizDataFromOrder
+     *
      * @param count
      * @param delegator
      * @param dispatcher
@@ -724,7 +778,7 @@ public class WeChatMiniProgramServices {
         } else {
             String dataId = productBizData.getString("dataId");
 
-            GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
+            GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId, "objectId", productId).queryFirst();
             //已经记录过则不可刷单
             if (null == isExsitsBizData) {
                 switch (bizTypeId) {
@@ -745,12 +799,11 @@ public class WeChatMiniProgramServices {
                 productBizData.store();
 
                 // Do Create Detail
-                createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
+                createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId, productId);
             }
         }
 
     }
-
 
 
     /**
@@ -785,11 +838,11 @@ public class WeChatMiniProgramServices {
                 //createProductBizData(delegator, dispatcher, admin, ownerPartyId, productId, workEffortId, "FORWARD_PRODUCT");
             } else {
                 String dataId = productBizData.getString("dataId");
-                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId,"objectId",productId).queryFirst();
+                GenericValue isExsitsBizData = EntityQuery.use(delegator).from("ProductBizDataDetail").where("bizTypeId", bizTypeId, "dataId", dataId, "partyId", partyId, "objectId", productId).queryFirst();
                 //已经记录过则不可刷单
                 // 2018-06-26 我管你记没记过 无限刷
                 // if (null == isExsitsBizData) {
-                if (1<2) {
+                if (1 < 2) {
                     switch (bizTypeId) {
                         case "FORWARD_PRODUCT":
                             String forwardCount = productBizData.getString("forwardCount");
@@ -808,7 +861,7 @@ public class WeChatMiniProgramServices {
                     productBizData.store();
 
                     // Do Create Detail
-                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId,productId);
+                    createProductBizDataDetail(delegator, dataId, objectId, partyId, bizTypeId, productId);
                 }
             }
         }
@@ -822,7 +875,7 @@ public class WeChatMiniProgramServices {
      * @param partyId
      * @param bizTypeId
      */
-    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId,String productId) throws GenericEntityException, GenericServiceException {
+    private static void createProductBizDataDetail(Delegator delegator, String dataId, String objectId, String partyId, String bizTypeId, String productId) throws GenericEntityException, GenericServiceException {
 
         // Create Detail Data
         Map<String, Object> createProductBizDataDetail = new HashMap<String, Object>();
@@ -942,8 +995,6 @@ public class WeChatMiniProgramServices {
         }
 
 
-
-
 //        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
 //        String partyId = "NA";
 //        if (UtilValidate.isNotEmpty(partyIdentification)) {
@@ -1006,15 +1057,15 @@ public class WeChatMiniProgramServices {
                 }
                 productId = (String) createProductOutMap.get("productId");
             }
-            if (i > 0 && i <=2) {
+            if (i > 0 && i <= 2) {
                 //创建产品内容和数据资源附图
-                createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+                createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
             }
-            if(i > 2 && i <=4){
-                createProductContentAndDataResource("DETAIL_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+            if (i > 2 && i <= 4) {
+                createProductContentAndDataResource("DETAIL_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
             }
-            if(i>4){
-                createProductContentAndDataResource("MATCH_PRODUCT_IMAGE",delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+            if (i > 4) {
+                createProductContentAndDataResource("MATCH_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
             }
         }
 
@@ -1117,14 +1168,13 @@ public class WeChatMiniProgramServices {
         }
 
 
-
         //media
-        Debug.logInfo(">>>> media_id:"+media_id,module);
-        if(UtilValidate.isNotEmpty(media_id)){
-            GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
-            if(null!= productMedia){
+        Debug.logInfo(">>>> media_id:" + media_id, module);
+        if (UtilValidate.isNotEmpty(media_id)) {
+            GenericValue productMedia = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", partyId, "attrName", "media_id").queryFirst();
+            if (null != productMedia) {
                 dispatcher.runSync("updatePartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
-            }else{
+            } else {
                 dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
             }
         }

@@ -9,6 +9,23 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+
+    <entity entity-name="YpForwardChainFactTemp" package-name="org.ofbiz.cloudLake.temp" title="YpForwardChainFacTemp">
+
+        <!-- 链条头 -->
+        <field name="basePartyId" type="id-ne"/>
+        <field name="partyIdFrom" type="id-ne"/>
+        <field name="partyIdTo" type="id-ne"/>
+        <field name="workEffortId" type="id-ne"/>
+        <field name="productId" type="id-ne"/>
+        <field name="createDate" type="date-time" />
+
+        <prim-key field="basePartyId"/>
+        <prim-key field="partyIdFrom"/>
+        <prim-key field="partyIdTo"/>
+    </entity>
+
+
     <!-- 产品店铺的促销规则视图 -->
     <view-entity entity-name="StorePromoAndAction" package-name="">
         <member-entity entity-alias="PSP" entity-name="ProductStorePromoAndAppl"/>

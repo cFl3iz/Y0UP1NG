@@ -116,10 +116,10 @@
 
 
         <if-not-empty field="isExsits">
-           <now-timestamp field="nowTime" />
-            <set field="isExsits[0].createDate" from-field="nowTime"/>
-            <store-value value-field="isExsits[0]" />
-            <log level="info" message="update isExsits Forward ${isExsits}" />
+           <!--<now-timestamp field="nowTime" />-->
+            <!--<set field="isExsits[0].createDate" from-field="nowTime"/>-->
+            <!--<store-value value-field="isExsits[0]" />-->
+            <!--<log level="info" message="update isExsits Forward ${isExsits}" />-->
         </if-not-empty>
 
 

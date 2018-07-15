@@ -327,16 +327,37 @@ public class WeChatMiniProgramServices {
         if(base.equals(partyId) || partyIdFrom.equals(partyId)){
 
         }else{
-            // 记录到 olap fact
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
+
+            GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                    "partyIdTo", partyId).queryFirst();
+            if(forwardChainFactTemp!=null){
+                forwardChainFactTemp.set("partyIdFrom", partyIdFrom);
+//                forwardChainFactTemp.set("partyIdTo", partyId);
+                forwardChainFactTemp.set("workEffortId", workEffortId);
+                forwardChainFactTemp.set("basePartyId", base);
+                forwardChainFactTemp.set("createDate", new Timestamp(new Date().getTime()));
+                forwardChainFactTemp.store();
+            }else{
+
+            // 记录到 olap fact temp
+            GenericValue ypForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
                     "partyIdFrom", partyIdFrom,
                     "partyIdTo", partyId,
                     "workEffortId", workEffortId,
                     "basePartyId", base,
-                    "firstName", personInfoMap.get("firstName"),
-                    "objectInfo", personInfoMap.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
+                    "createDate", new Timestamp(new Date().getTime())
+                    ));
+                delegator.create(ypForwardChainFactTemp);
+            }
+//            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+//                    "userLogin", admin,
+//                    "partyIdFrom", partyIdFrom,
+//                    "partyIdTo", partyId,
+//                    "workEffortId", workEffortId,
+//                    "basePartyId", base,
+//                    "firstName", personInfoMap.get("firstName"),
+//                    "objectInfo", personInfoMap.get("headPortrait"),
+//                    "createDate", new Timestamp(new Date().getTime())));
         }
 
         //CONTACT
@@ -558,6 +579,41 @@ public class WeChatMiniProgramServices {
 
         //把自己加入到链中
         addRefreRoleToWorkeffort(dispatcher, delegator, admin, partyId, newWorkEffortId);
+
+
+
+        Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+        //创建自己的OLAP链或加入别人的转发链
+
+        String fromPartyId = "NO_PARTY";
+        String basePartyId = partyId;
+        String workEffortId = "NA";
+        String partyIdTo    = "NO_PARTY";
+
+        GenericValue forwardChainFactTemp  = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
+
+        //说明加入别人的链路
+        if(null!=forwardChainFactTemp){
+
+            // INIT SERVICE FIELD
+            fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
+            basePartyId = forwardChainFactTemp.getString("basePartyId");
+            workEffortId = forwardChainFactTemp.getString("workEffortId");
+
+        }
+
+        dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                "userLogin", admin,
+                "partyIdFrom", fromPartyId,
+                "partyIdTo", partyIdTo,
+                "workEffortId", workEffortId,
+                "basePartyId", basePartyId,
+                "firstName", userInfo.get("firstName"),
+                "objectInfo", userInfo.get("headPortrait"),
+                "createDate", new Timestamp(new Date().getTime())));
+
+
 
 
         resultMap.put("workEffortId", newWorkEffortId);

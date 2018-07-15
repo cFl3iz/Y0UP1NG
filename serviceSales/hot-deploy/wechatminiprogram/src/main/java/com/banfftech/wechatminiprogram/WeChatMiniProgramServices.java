@@ -322,9 +322,10 @@ public class WeChatMiniProgramServices {
         // base 不会成为自己的 to
         // from 不会成为自己的 to
 //        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------",module);
-//        Debug.logInfo("-> TO:"+partyId,module);
-//        Debug.logInfo("-> FROM:"+partyIdFrom,module);
-//        Debug.logInfo("-> BASE:"+base,module);
+        Debug.logInfo("NOW:"+new Date(),module);
+        Debug.logInfo("-> TO:"+partyId,module);
+        Debug.logInfo("-> FROM:"+partyIdFrom,module);
+        Debug.logInfo("-> BASE:"+base,module);
 //
 //        boolean isFirstView = true;
 //        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(

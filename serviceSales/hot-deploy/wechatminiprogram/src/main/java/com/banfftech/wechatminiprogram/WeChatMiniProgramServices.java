@@ -324,12 +324,15 @@ public class WeChatMiniProgramServices {
         Debug.logInfo("-> TO:"+partyId,module);
         Debug.logInfo("-> FROM:"+partyIdFrom,module);
         Debug.logInfo("-> BASE:"+base,module);
-        if(base.equals(partyId) || partyIdFrom.equals(partyId)){
 
+
+        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
+
+        if(base.equals(partyId) || partyIdFrom.equals(partyId)){
+                    forwardChainFactTemp.remove();
         }else{
 
-            GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                    "partyIdTo", partyId).queryFirst();
             if(forwardChainFactTemp!=null){
                 forwardChainFactTemp.set("partyIdFrom", partyIdFrom);
 //                forwardChainFactTemp.set("partyIdTo", partyId);

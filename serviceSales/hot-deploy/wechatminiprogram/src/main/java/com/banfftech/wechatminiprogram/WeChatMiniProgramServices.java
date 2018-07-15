@@ -600,7 +600,7 @@ public class WeChatMiniProgramServices {
             fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
             basePartyId = forwardChainFactTemp.getString("basePartyId");
             workEffortId = forwardChainFactTemp.getString("workEffortId");
-
+            partyIdTo  = partyId;
         }
 
         dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(

@@ -1516,7 +1516,7 @@ public class WeChatOrderQueryServices {
                 "partyIdTo", partyId).queryFirst();
 
         if(null!= forwardChainFactTemp){
-             forwardChainFactTemp.remove();
+//             forwardChainFactTemp.remove();
         }
 
 

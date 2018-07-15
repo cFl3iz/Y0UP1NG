@@ -1103,6 +1103,13 @@ public class WeChatOrderQueryServices {
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
+        //查看了列表，清空temp
+        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
+
+        if(null!= forwardChainFactTemp){
+            forwardChainFactTemp.remove();
+        }
 
         //"isVirtual", "Y","isVariant","N"
         List<String> orderBy = UtilMisc.toList("-createdDate");
@@ -1438,6 +1445,8 @@ public class WeChatOrderQueryServices {
         }
 
 
+
+
 //        System.out.println("*OPENID = " + openId);
 //
         //TODO FIX ME
@@ -1452,6 +1461,18 @@ public class WeChatOrderQueryServices {
         System.out.println("*partyId = " + partyId);
 
         String productCategoryId = "NA";
+
+
+
+        //查看了我的资源列表，清空temp
+        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
+
+        if(null!= forwardChainFactTemp){
+             forwardChainFactTemp.remove();
+        }
+
+
 
         List<GenericValue> myResourceList = null;
 

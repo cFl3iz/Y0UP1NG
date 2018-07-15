@@ -330,6 +330,25 @@ public class WeChatMiniProgramServices {
                 "partyIdTo", partyId).queryFirst();
 
 
+        //说明加入别人的链路
+        if(null!=forwardChainFactTemp){
+            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+
+            // INIT SERVICE FIELD
+            String    fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
+            String basePartyId = forwardChainFactTemp.getString("basePartyId");
+             workEffortId = forwardChainFactTemp.getString("workEffortId");
+            String partyIdTo  = partyId;
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", fromPartyId,
+                    "partyIdTo", partyIdTo,
+                    "workEffortId", workEffortId,
+                    "basePartyId", basePartyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
+        }
 
         if(base.equals(partyId) || partyIdFrom.equals(partyId)){
                     forwardChainFactTemp.remove();
@@ -602,10 +621,10 @@ public class WeChatMiniProgramServices {
         if(null!=forwardChainFactTemp){
 
             // INIT SERVICE FIELD
-            fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
-            basePartyId = forwardChainFactTemp.getString("basePartyId");
-            workEffortId = forwardChainFactTemp.getString("workEffortId");
-            partyIdTo  = partyId;
+//            fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
+//            basePartyId = forwardChainFactTemp.getString("basePartyId");
+//            workEffortId = forwardChainFactTemp.getString("workEffortId");
+//            partyIdTo  = partyId;
         }
 
         dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(

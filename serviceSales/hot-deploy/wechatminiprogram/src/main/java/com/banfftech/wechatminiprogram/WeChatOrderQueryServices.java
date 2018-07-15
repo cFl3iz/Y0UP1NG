@@ -663,7 +663,26 @@ public class WeChatOrderQueryServices {
         resultMap.put("hasShoppingCart", hasShoppingCart);
         resultMap.put("appName", groupName);
 
+        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+        "basePartyId", partyId).queryFirst();
 
+        if(null== forwardChainFact){
+
+        String fromPartyId = "NO_PARTY";
+        String basePartyId = partyId;
+        String workEffortId = "NA";
+        String partyIdTo    = "NO_PARTY";
+            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+                    dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                "userLogin", admin,
+                "partyIdFrom", fromPartyId,
+                "partyIdTo", partyIdTo,
+                "workEffortId", workEffortId,
+                "basePartyId", basePartyId,
+                "firstName", userInfo.get("firstName"),
+                "objectInfo", userInfo.get("headPortrait"),
+                "createDate", new Timestamp(new Date().getTime())));
+        }
 
         return resultMap;
     }

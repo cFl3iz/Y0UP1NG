@@ -320,61 +320,62 @@ public class WeChatMiniProgramServices {
         }
         // base 不会成为自己的 to
         // from 不会成为自己的 to
-        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------",module);
-        Debug.logInfo("-> TO:"+partyId,module);
-        Debug.logInfo("-> FROM:"+partyIdFrom,module);
-        Debug.logInfo("-> BASE:"+base,module);
-
-
-        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                "partyIdTo", partyId).queryFirst();
+//        Debug.logInfo("-> ASYNC[IN_FORWARDCHAIN_FACT]--------------------------------------",module);
+//        Debug.logInfo("-> TO:"+partyId,module);
+//        Debug.logInfo("-> FROM:"+partyIdFrom,module);
+//        Debug.logInfo("-> BASE:"+base,module);
+//
+//        boolean isFirstView = true;
+//        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+//                "partyIdTo", partyId).queryFirst();
+//        Map<String,String> userInfo = queryPersonBaseInfo(delegator, partyId);
 
 
         //说明加入别人的链路
-        if(null!=forwardChainFactTemp){
-            Debug.logInfo("-> forwardChainFactTemp:"+forwardChainFactTemp,module);
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+//        if(null!=forwardChainFactTemp){
+//            isFirstView = !isFirstView;
+//            Debug.logInfo("-> forwardChainFactTemp:"+forwardChainFactTemp,module);
+//
+//            // INIT SERVICE FIELD
+//            String    fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
+//            String basePartyId = forwardChainFactTemp.getString("basePartyId");
+//             workEffortId = forwardChainFactTemp.getString("workEffortId");
+//            Debug.logInfo("-> fromPartyId:"+fromPartyId,module);
+//
+//            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+//                    "userLogin", admin,
+//                    "partyIdFrom", fromPartyId,
+//                    "partyIdTo", partyId,
+//                    "workEffortId", workEffortId,
+//                    "basePartyId", basePartyId,
+//                    "firstName", userInfo.get("firstName"),
+//                    "objectInfo", userInfo.get("headPortrait"),
+//                    "createDate", new Timestamp(new Date().getTime())));
+//        }
 
-            // INIT SERVICE FIELD
-            String    fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
-            String basePartyId = forwardChainFactTemp.getString("basePartyId");
-             workEffortId = forwardChainFactTemp.getString("workEffortId");
-            Debug.logInfo("-> fromPartyId:"+fromPartyId,module);
-
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
-                    "partyIdFrom", fromPartyId,
-                    "partyIdTo", partyId,
-                    "workEffortId", workEffortId,
-                    "basePartyId", basePartyId,
-                    "firstName", userInfo.get("firstName"),
-                    "objectInfo", userInfo.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
-        }
-
-        if(base.equals(partyId) || partyIdFrom.equals(partyId)){
-                    forwardChainFactTemp.remove();
-        }else{
-
-            if(forwardChainFactTemp!=null){
-                forwardChainFactTemp.set("partyIdFrom", partyIdFrom);
-//                forwardChainFactTemp.set("partyIdTo", partyId);
-                forwardChainFactTemp.set("workEffortId", workEffortId);
-                forwardChainFactTemp.set("basePartyId", base);
-                forwardChainFactTemp.set("createDate", new Timestamp(new Date().getTime()));
-                forwardChainFactTemp.store();
-            }else{
+//        if(base.equals(partyId) || partyIdFrom.equals(partyId)){
+//                    forwardChainFactTemp.remove();
+//        }else{
+//
+//            if(forwardChainFactTemp!=null){
+//                forwardChainFactTemp.set("partyIdFrom", partyIdFrom);
+////                forwardChainFactTemp.set("partyIdTo", partyId);
+//                forwardChainFactTemp.set("workEffortId", workEffortId);
+//                forwardChainFactTemp.set("basePartyId", base);
+//                forwardChainFactTemp.set("createDate", new Timestamp(new Date().getTime()));
+//                forwardChainFactTemp.store();
+//            }else{
 
             // 记录到 olap fact temp
-            GenericValue ypForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
-                    "partyIdFrom", partyIdFrom,
-                    "partyIdTo", partyId,
-                    "workEffortId", workEffortId,
-                    "basePartyId", base,
-                    "createDate", new Timestamp(new Date().getTime())
-                    ));
-                delegator.create(ypForwardChainFactTemp);
-            }
+//            GenericValue ypForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
+//                    "partyIdFrom", partyIdFrom,
+//                    "partyIdTo", partyId,
+//                    "workEffortId", workEffortId,
+//                    "basePartyId", base,
+//                    "createDate", new Timestamp(new Date().getTime())
+//                    ));
+//                delegator.create(ypForwardChainFactTemp);
+//            }
 //            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
 //                    "userLogin", admin,
 //                    "partyIdFrom", partyIdFrom,
@@ -384,11 +385,23 @@ public class WeChatMiniProgramServices {
 //                    "firstName", personInfoMap.get("firstName"),
 //                    "objectInfo", personInfoMap.get("headPortrait"),
 //                    "createDate", new Timestamp(new Date().getTime())));
-        }
+        //}
 
         //CONTACT
         dispatcher.runAsync("createPartyToPartyRelation", UtilMisc.toMap("userLogin", admin, "partyIdFrom", partyId, "partyIdTo", partyIdFrom, "relationShipType", PeConstant.CONTACT));
 
+
+//        if(isFirstView){
+//            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+//                    "userLogin", admin,
+//                    "partyIdFrom", partyIdFrom,
+//                    "partyIdTo", partyId,
+//                    "workEffortId", workEffortId,
+//                    "basePartyId", base,
+//                    "firstName", userInfo.get("firstName"),
+//                    "objectInfo", userInfo.get("headPortrait"),
+//                    "createDate", new Timestamp(new Date().getTime())));
+//        }
 
         return resultMap;
     }
@@ -608,36 +621,36 @@ public class WeChatMiniProgramServices {
 
 
 
-        Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+        //Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
         //创建自己的OLAP链或加入别人的转发链
 
-        String fromPartyId = "NO_PARTY";
-        String basePartyId = partyId;
-        String workEffortId = "NA";
-        String partyIdTo    = "NO_PARTY";
-
-        GenericValue forwardChainFactTemp  = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                "partyIdTo", partyId).queryFirst();
+//        String fromPartyId = "NO_PARTY";
+//        String basePartyId = partyId;
+//        String workEffortId = "NA";
+//        String partyIdTo    = "NO_PARTY";
+//
+//        GenericValue forwardChainFactTemp  = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+//                "partyIdTo", partyId).queryFirst();
 
         //说明加入别人的链路
-        if(null!=forwardChainFactTemp){
+       // if(null!=forwardChainFactTemp){
 
             // INIT SERVICE FIELD
 //            fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
 //            basePartyId = forwardChainFactTemp.getString("basePartyId");
 //            workEffortId = forwardChainFactTemp.getString("workEffortId");
 //            partyIdTo  = partyId;
-        }
+        //}
 
-        dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                "userLogin", admin,
-                "partyIdFrom", fromPartyId,
-                "partyIdTo", partyIdTo,
-                "workEffortId", workEffortId,
-                "basePartyId", basePartyId,
-                "firstName", userInfo.get("firstName"),
-                "objectInfo", userInfo.get("headPortrait"),
-                "createDate", new Timestamp(new Date().getTime())));
+//        dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+//                "userLogin", admin,
+//                "partyIdFrom", fromPartyId,
+//                "partyIdTo", partyIdTo,
+//                "workEffortId", workEffortId,
+//                "basePartyId", basePartyId,
+//                "firstName", userInfo.get("firstName"),
+//                "objectInfo", userInfo.get("headPortrait"),
+//                "createDate", new Timestamp(new Date().getTime())));
 
 
 

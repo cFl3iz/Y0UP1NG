@@ -11,7 +11,7 @@
 
 
     <entity entity-name="YpForwardChainFactTemp" package-name="org.ofbiz.cloudLake.temp" title="YpForwardChainFacTemp">
-
+        <field name="fcId" type="id-ne"/>
         <!-- 链条头 -->
         <field name="basePartyId" type="value"/>
         <field name="partyIdFrom" type="value"/>
@@ -19,7 +19,7 @@
         <field name="workEffortId" type="value"/>
         <field name="productId" type="value"/>
         <field name="createDate" type="date-time" />
-
+        <prim-key field="fcId"/>
     </entity>
 
 

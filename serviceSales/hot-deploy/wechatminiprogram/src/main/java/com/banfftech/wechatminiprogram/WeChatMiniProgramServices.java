@@ -366,6 +366,7 @@ public class WeChatMiniProgramServices {
 
                  GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
                     "partyIdFrom", staticPartyIdFrom,
+                         "fcId", delegator.getNextSeqId("YpForwardChainFactTemp"),
                     "partyIdTo", partyId,
                     "workEffortId", workEffortId,
                     "basePartyId", basePartyId,
@@ -385,7 +386,9 @@ public class WeChatMiniProgramServices {
                         "objectInfo", personInfoMap.get("headPortrait"),
                         "createDate", new Timestamp(new Date().getTime())));
                 //增加你的链深度关系
-                GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
+                GenericValue newForwardChainFactTemp = delegator.makeValidValue(
+                        "YpForwardChainFactTemp", UtilMisc.toMap(
+                                "fcId", delegator.getNextSeqId("YpForwardChainFactTemp"),
                         "partyIdFrom", partyIdFrom,
                         "partyIdTo", partyId,
                         "workEffortId", workEffortId,

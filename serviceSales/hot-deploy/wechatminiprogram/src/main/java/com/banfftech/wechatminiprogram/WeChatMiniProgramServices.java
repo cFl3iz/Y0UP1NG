@@ -342,7 +342,7 @@ public class WeChatMiniProgramServices {
             if(null!=myForwardChainFactTemp){
                 myForwardChainFactTemp.set("basePartyId",partyId);
                 myForwardChainFactTemp.store();
-                Debug.logInfo("update ... " + myForwardChainFactTemp);
+                Debug.logInfo("update ... " + myForwardChainFactTemp,module);
             }
         } else {
             //是别人转给你的，理应加在他后面。

@@ -325,6 +325,7 @@ public class WeChatMiniProgramServices {
         Debug.logInfo("NOW:"+new Date(),module);
         Debug.logInfo("-> TO:"+partyId,module);
         Debug.logInfo("-> FROM:"+partyIdFrom,module);
+        String staticPartyIdFrom = partyIdFrom;
         Debug.logInfo("-> BASE:"+base,module);
 //
 //        boolean isFirstView = true;
@@ -346,7 +347,7 @@ public class WeChatMiniProgramServices {
                 String basePartyId = forwardChainFactTemp.getString("basePartyId");
                 dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                         "userLogin", admin,
-                        "partyIdFrom", fromPartyId,
+                        "partyIdFrom", staticPartyIdFrom,
                         "partyIdTo", partyId,
                         "workEffortId", workEffortId,
                         "basePartyId", basePartyId,
@@ -354,8 +355,9 @@ public class WeChatMiniProgramServices {
                         "objectInfo", personInfoMap.get("headPortrait"),
                         "createDate", new Timestamp(new Date().getTime())));
                 //并且你会继承他的base
+
                  GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
-                    "partyIdFrom", fromPartyId,
+                    "partyIdFrom", staticPartyIdFrom,
                     "partyIdTo", partyId,
                     "workEffortId", workEffortId,
                     "basePartyId", basePartyId,

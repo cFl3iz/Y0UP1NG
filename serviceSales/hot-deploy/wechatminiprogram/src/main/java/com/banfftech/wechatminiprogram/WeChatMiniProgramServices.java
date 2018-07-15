@@ -332,17 +332,19 @@ public class WeChatMiniProgramServices {
 
         //说明加入别人的链路
         if(null!=forwardChainFactTemp){
+            Debug.logInfo("-> forwardChainFactTemp:"+forwardChainFactTemp,module);
             Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
 
             // INIT SERVICE FIELD
             String    fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
             String basePartyId = forwardChainFactTemp.getString("basePartyId");
              workEffortId = forwardChainFactTemp.getString("workEffortId");
-            String partyIdTo  = partyId;
+            Debug.logInfo("-> fromPartyId:"+fromPartyId,module);
+
             dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
                     "partyIdFrom", fromPartyId,
-                    "partyIdTo", partyIdTo,
+                    "partyIdTo", partyId,
                     "workEffortId", workEffortId,
                     "basePartyId", basePartyId,
                     "firstName", userInfo.get("firstName"),

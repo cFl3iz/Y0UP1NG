@@ -333,9 +333,17 @@ public class WeChatMiniProgramServices {
 //                "partyIdTo", partyId).queryFirst();
 //        Map<String,String> userInfo = queryPersonBaseInfo(delegator, partyId);
 
-        //打开自己的链接不管
+        //打开自己的链接了!,这个时候如果存在深度链接,应更改为自己成base,否则点入者挂载出错
         if (partyId.equals(partyIdFrom)) {
+                GenericValue myForwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                "partyIdTo", partyId).queryFirst();
 
+            // 更新我的软连接
+            if(null!=myForwardChainFactTemp){
+                myForwardChainFactTemp.set("basePartyId",partyId);
+                myForwardChainFactTemp.store();
+                Debug.logInfo("update ... " + myForwardChainFactTemp);
+            }
         } else {
             //是别人转给你的，理应加在他后面。
 

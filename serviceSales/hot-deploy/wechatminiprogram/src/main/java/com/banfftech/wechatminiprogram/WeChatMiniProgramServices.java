@@ -329,6 +329,8 @@ public class WeChatMiniProgramServices {
         GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
                 "partyIdTo", partyId).queryFirst();
 
+
+
         if(base.equals(partyId) || partyIdFrom.equals(partyId)){
                     forwardChainFactTemp.remove();
         }else{

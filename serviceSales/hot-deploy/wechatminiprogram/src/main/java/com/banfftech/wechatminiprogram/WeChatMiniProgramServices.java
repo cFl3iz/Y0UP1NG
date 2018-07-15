@@ -349,7 +349,7 @@ public class WeChatMiniProgramServices {
 
             //转给你的人他拥有base? 那你跟在他后面
             GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                    "partyIdTo", partyIdFrom).queryFirst();
+                    "partyIdTo", partyIdFrom).orderBy("-createDate").queryFirst();
             if (null != forwardChainFactTemp) {
                 String fromPartyId = forwardChainFactTemp.getString("partyIdFrom");
                 String basePartyId = forwardChainFactTemp.getString("basePartyId");

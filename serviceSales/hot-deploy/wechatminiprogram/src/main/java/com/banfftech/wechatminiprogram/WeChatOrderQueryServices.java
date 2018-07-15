@@ -1010,6 +1010,10 @@ public class WeChatOrderQueryServices {
         resultMap.put("productDetail", allField);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("prodCatalogId", prodCatalogId);
+
+
+
+
         return resultMap;
     }
 
@@ -1218,6 +1222,30 @@ public class WeChatOrderQueryServices {
         resultMap.put("from", viewIndex);
         resultMap.put("current_page", viewIndex + 1);
         resultMap.put("last_page", Integer.parseInt(resourceCount + ""));
+
+
+
+
+        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "basePartyId", partyId).queryFirst();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        if(null== forwardChainFact){
+
+            String fromPartyId = "NO_PARTY";
+            String basePartyId = partyId;
+            String workEffortId = "NA";
+            String partyIdTo    = "NO_PARTY";
+            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", fromPartyId,
+                    "partyIdTo", partyIdTo,
+                    "workEffortId", workEffortId,
+                    "basePartyId", basePartyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
+        }
 
         return resultMap;
     }
@@ -1624,6 +1652,26 @@ public class WeChatOrderQueryServices {
 
 //        resultMap.put("productCategoryId", productCategoryId);
 
+        GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
+                "basePartyId", partyId).queryFirst();
+
+        if(null== forwardChainFact){
+
+            String fromPartyId = "NO_PARTY";
+            String basePartyId = partyId;
+            String workEffortId = "NA";
+            String partyIdTo    = "NO_PARTY";
+            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", fromPartyId,
+                    "partyIdTo", partyIdTo,
+                    "workEffortId", workEffortId,
+                    "basePartyId", basePartyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
+        }
 
         return resultMap;
     }

@@ -355,7 +355,7 @@ public class WeChatMiniProgramServices {
                         "createDate", new Timestamp(new Date().getTime())));
                 //并且你会继承他的base
                  GenericValue newForwardChainFactTemp = delegator.makeValidValue("YpForwardChainFactTemp", UtilMisc.toMap(
-                    "partyIdFrom", partyIdFrom,
+                    "partyIdFrom", fromPartyId,
                     "partyIdTo", partyId,
                     "workEffortId", workEffortId,
                     "basePartyId", basePartyId,

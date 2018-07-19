@@ -3217,12 +3217,15 @@ public class PersonManagerServices {
 
 
 
+        String productStoreId = (String) orderHeader.getString("productStoreId");
 
-
+        if("ZUCZUGSTORE".equals(productStoreId)){
+            // Async To Zuczug
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
+        }
 
         Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);
-        // Async To Zuczug
-        dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
+
 
         return resultMap;
     }

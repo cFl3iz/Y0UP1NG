@@ -1,5 +1,6 @@
 bin/
 build/
+framework/entity/*
 applications/*/build
 framework/*/build
 hot-deploy/*/build
@@ -38,4 +39,4 @@ desktop.ini
 .*.swp
 .*.swo
 *.patch
-framework/entity/config/
+*.gradle

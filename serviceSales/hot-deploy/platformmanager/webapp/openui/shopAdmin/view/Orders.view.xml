@@ -1,0 +1,94 @@
+<mvc:View
+	controllerName="sap.ui.demo.toolpageapp.controller.Orders"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<Page id="ordersPage"
+		showHeader="true">
+		<List
+			growing="true"
+			growingThreshold="20"
+			id="orderList"
+			class="sapUiResponsiveMargin"
+			width="auto"
+			items="{
+				path : 'orders>/OrderHeaders'
+			}">
+		<!-- 
+		<Table items="{path:'orders>/OrderHeaders', templateShareable: false}">
+		 -->
+			<headerToolbar>
+				<Toolbar>
+					<Title text="{i18n>orderListTitle}"/>
+					<ToolbarSpacer />
+					<SearchField width="50%" search="onFilterOrders"/>
+				</Toolbar>
+			</headerToolbar>
+			<!-- 
+			<columns>
+				<Column>
+					<Text text="{i18n>orderId}"/>
+				</Column>
+				<Column minScreenWidth="Tablet">
+					<Text text="{i18n>externalId}"/>
+				</Column>
+				<Column minScreenWidth="Desktop" hAlign="End">
+					<Text text="{i18n>orderStatus}"/>
+				</Column>
+				<Column hAlign="Center">
+					<Text text="{i18n>grandTotal}"/>
+				</Column>
+			</columns>
+			 -->
+			<items>
+				<!-- 
+				<ColumnListItem press="onPress">
+					<cells press="onPress">
+						<Text text="{orders>orderId}" press="onPress"/>
+						<Text text="{orders>externalId}"/>
+						<Text text="{orders>statusId}"/>
+						<ObjectNumber
+							number="{
+								parts:[{path:'orders>grandTotal'},{path:'customer>currencyCode'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: false}
+							}"
+							unit="{customer>currencyCode}" />
+					</cells>
+				</ColumnListItem>
+				 -->
+				<ObjectListItem
+					title="{orders>orderId}"
+					type="Navigation"
+					press="onPress"
+					number="{
+						path: 'orders>grandTotal',
+						formatOptions: { style: 'short' }
+					}">
+					<firstStatus>
+						<ObjectStatus
+							state="{
+								parts: [
+									{path: 'orders>statusId'}
+								],
+								formatter:'.formatter.statusState'
+							}"
+							text="{
+								parts: [
+									{path: 'orders>orderDate'}
+								]
+							}"/>
+
+					</firstStatus>
+					<attributes>
+						<ObjectAttribute id="externalId" text="{orders>externalId}" />
+					</attributes>
+					
+				</ObjectListItem>
+			</items>
+		<!-- 
+		</Table>
+ 		-->
+ 		</List>
+	</Page>
+</mvc:View>

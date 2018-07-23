@@ -1,0 +1,160 @@
+<!-- 
+<mvc:View
+	controllerName="sap.ui.demo.toolpageapp.controller.OrderDetail"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Page
+		title="{i18n>detailPageTitle}"
+		showNavButton="true"
+		navButtonPress="onNavBack">
+		<ObjectHeader
+			intro="{orders>orderId}"
+			title="Order"/>
+	</Page>
+</mvc:View>
+ -->
+
+<mvc:View
+	controllerName="sap.ui.demo.toolpageapp.controller.OrderDetail"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.m.semantic">
+
+	<semantic:DetailPage
+		id="page"
+		navButtonPress="onNavBack"
+		showNavButton="true"
+		title="{i18n>detailTitle}"
+		busy="{orderDetailView>/busy}"
+		busyIndicatorDelay="{orderDetailView>/delay}">
+
+		<semantic:content>
+			<ObjectHeader
+				id="objectHeader"
+				title="{
+					parts: [
+						'orders>orderId'
+					],
+					formatter: 'jQuery.sap.formatMessage'
+				}"
+				number="{
+					parts: [
+						{path: 'orders>grandTotal'},
+						{path: 'orderDetailView>/currency'}
+					],
+					type: 'sap.ui.model.type.Currency',
+					formatOptions: {
+						showMeasure: false
+					}
+				}"
+				numberUnit="{orderDetailView>/currency}"
+				backgroundDesign="Translucent">
+				<attributes>
+					<ObjectAttribute title="{i18n>externalId}" text="{orders>externalId}" />
+					<ObjectAttribute title="{i18n>status}" text="{orders>statusId}" />
+					<ObjectAttribute title="{i18n>orderDate}" text="{
+						path: 'orders>orderDate',
+						formatOptions: { style: 'medium' }
+					}" />
+					<ObjectAttribute title="{i18n>originFacilityId}" text="{orders>originFacilityId}" />
+				</attributes>
+			</ObjectHeader>
+			<IconTabBar
+				id="iconTabBar"
+				class="sapUiResponsiveContentPadding"
+				select="onTabSelect"
+				selectedKey="{detailView>/selectedTab}">
+				<items>
+					<IconTabFilter
+						id="iconTabFilterShipping"
+						icon="sap-icon://shipping-status"
+						tooltip="{i18n>detailIconTabBarShipping}"
+						key="shipping">
+					</IconTabFilter>
+					<IconTabFilter
+						id="iconTabFilterProcessor"
+						icon="sap-icon://employee"
+						tooltip="{i18n>detailIconTabBarProcessor}"
+						key="processor">
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+			<!-- 
+			<Table
+				id="lineItemsList"
+				width="auto"
+				items="{Order_Details}"
+				updateFinished="onListUpdateFinished"
+				noDataText="{i18n>detailLineItemTableNoDataText}"
+				busyIndicatorDelay="{detailView>/lineItemTableDelay}"
+				class="sapUiResponsiveMargin">
+				<headerToolbar>
+					<Toolbar id="lineItemsToolbar">
+						<Title
+							id="lineItemsHeader"
+							text="{detailView>/lineItemListTitle}"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Text text="{i18n>detailLineItemTableIDColumn}"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="End">
+						<Text text="{i18n>detailLineItemTableUnitPriceColumn}"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="End">
+						<Text text="{i18n>detailLineItemTableUnitQuantityColumn}"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="End">
+						<Text text="{i18n>detailLineItemTableTotalColumn}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier
+								title="{Product/ProductName}"
+								text="{ProductID}"/>
+							<ObjectNumber
+								number="{
+									path: 'UnitPrice',
+									formatter: '.formatter.currencyValue'
+								}"
+								unit="{detailView>/currency}"/>
+							<ObjectAttribute
+								text="{Quantity}"/>
+							<ObjectNumber
+								number="{
+									parts:[
+										{path: 'Quantity'},
+										{path: 'UnitPrice'},
+										{path:'detailView>/currency'}
+									],
+									formatter: '.formatter.calculateItemTotal'
+								}"
+								unit="{detailView>/currency}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			 -->
+		</semantic:content>
+
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction
+				id="shareEmail"
+				press="onShareEmailPress"/>
+		</semantic:sendEmailAction>
+
+	</semantic:DetailPage>
+
+</mvc:View>

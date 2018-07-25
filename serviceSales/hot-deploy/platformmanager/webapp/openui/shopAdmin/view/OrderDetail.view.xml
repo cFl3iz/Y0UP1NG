@@ -50,7 +50,7 @@
 				numberUnit="{orderDetailView>/currency}"
 				backgroundDesign="Translucent">
 				<attributes>
-					<ObjectAttribute title="{i18n>externalId}" text="{orders>externalId}" />
+					<!--<ObjectAttribute title="{i18n>externalId}" text="{orders>externalId}" />-->
 					<ObjectAttribute title="{i18n>status}" text="{orders>statusId}" />
 					<ObjectAttribute title="{i18n>orderDate}" text="{
 						path: 'orders>orderDate',

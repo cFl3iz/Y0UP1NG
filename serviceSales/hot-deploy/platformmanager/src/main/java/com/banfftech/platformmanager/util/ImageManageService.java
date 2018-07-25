@@ -87,7 +87,7 @@ public class ImageManageService {
         // String path = new String(ANKORAU_PATH.getBytes("ISO-8859-1"),"GBK");
         String single_path = ANKORAU_SINGLE_PATH;
         String detail_path = ANKORAU_DETAIL_PATH;
-        String match_path = ANKORAU_MATCH_PATH;
+        String match_path  = ANKORAU_MATCH_PATH;
         // 构造ListObjectsRequest请求
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest(BUCKET_NAME, single_path, null, "/", 999);
         ObjectListing listing = client.listObjects(listObjectsRequest);

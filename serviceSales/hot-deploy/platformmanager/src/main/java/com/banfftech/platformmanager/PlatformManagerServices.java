@@ -736,7 +736,18 @@ public class PlatformManagerServices {
     }
 
 
-    // 导入exlSKU
+    /**
+     * 产品数据Excel导入
+     * (2018-07-25)版
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static String productUploadImport(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 
         Delegator delegator = (Delegator) request.getAttribute("delegator");
@@ -749,6 +760,7 @@ public class PlatformManagerServices {
         List<String[]> excelList = excelToList(fileItem);
 
         GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
         try {
                 //WATERPROOF or ANKORAU_RETAIL
             String prodCatalogId = "WATERPROOF";
@@ -761,14 +773,17 @@ public class PlatformManagerServices {
             for (int i = 0; i < excelList.size(); i++) {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
-                //品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU-特别提醒-洗涤方式-上市年份+季节-组别-备注
+                // 品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU
+                // 2018-07-25
+                // 去除了这些列特别提醒-洗涤方式-上市年份+季节-组别-备注
 
                 String[] excelRow = excelList.get(i);
 
                 String payToPartyId = (String) productStore.get("payToPartyId");
-                String brandName = excelRow[1];
-                String productVirtualId = excelRow[2];
+
                 String internalName = excelRow[1];
+                String productVirtualId = excelRow[2];
+
                 String colorId = excelRow[3];
                 String colorDesc = excelRow[4];
 
@@ -776,11 +791,11 @@ public class PlatformManagerServices {
                 String sizeDesc = excelRow[7];
                 String listPrice = excelRow[6];
                 String productId = excelRow[8];
-                String ean = excelRow[10];
+//                String ean = excelRow[10];
 
                 String desc = excelRow[9];
-                String otherDesc = excelRow[12];
-                String keyword = excelRow[14];
+                String otherDesc = desc;
+//                String keyword = excelRow[14];
 
                 // 没有虚拟产品编号的。 那就是纯SKU的导入
                 if (UtilValidate.isEmpty(productVirtualId)) {
@@ -791,7 +806,7 @@ public class PlatformManagerServices {
                         GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                         newVariantProduct.set("productTypeId", "FINISHED_GOOD");
                         newVariantProduct.set("description", otherDesc);
-                        newVariantProduct.set("comments", keyword);
+//                        newVariantProduct.set("comments", keyword);
                         //默认图片
                         newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
                         if (UtilValidate.isNotEmpty(internalName)) {
@@ -809,14 +824,14 @@ public class PlatformManagerServices {
                             newProductVariantPrice.create();
                         }
                         //创建条形码
-                        if (UtilValidate.isNotEmpty(ean)) {
-                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
-                            if (UtilValidate.isEmpty(goodIdentification)) {
-                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
-                                newGoodIdentification.set("idValue", ean);
-                                newGoodIdentification.create();
-                            }
-                        }
+//                        if (UtilValidate.isNotEmpty(ean)) {
+//                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+//                            if (UtilValidate.isEmpty(goodIdentification)) {
+//                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+//                                newGoodIdentification.set("idValue", ean);
+//                                newGoodIdentification.create();
+//                            }
+//                        }
 
 //找到仓库
                         GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
@@ -868,7 +883,7 @@ public class PlatformManagerServices {
                             GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
                             newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
                             newVirtualProduct.set("description", desc);
-                            newVirtualProduct.set("comments", keyword);
+//                            newVirtualProduct.set("comments", keyword);
                             //默认图片
                             newVirtualProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
                             if (UtilValidate.isNotEmpty(internalName)) {
@@ -885,7 +900,7 @@ public class PlatformManagerServices {
                             GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
                             newVariantProduct.set("productTypeId", "FINISHED_GOOD");
                             newVariantProduct.set("description", desc);
-                            newVariantProduct.set("comments", keyword);
+//                            newVariantProduct.set("comments", keyword);
                             //默认图片
                             newVariantProduct.set("detailImageUrl", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/DEFAULT_PRODUCT.jpg");
                             if (UtilValidate.isNotEmpty(internalName)) {
@@ -914,14 +929,14 @@ public class PlatformManagerServices {
 
 
                         //创建条形码
-                        if (UtilValidate.isNotEmpty(ean)) {
-                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
-                            if (UtilValidate.isEmpty(goodIdentification)) {
-                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
-                                newGoodIdentification.set("idValue", ean);
-                                newGoodIdentification.create();
-                            }
-                        }
+//                        if (UtilValidate.isNotEmpty(ean)) {
+//                            GenericValue goodIdentification = EntityQuery.use(delegator).from("GoodIdentification").where("productId", productId, "goodIdentificationTypeId", "EAN").queryFirst();
+//                            if (UtilValidate.isEmpty(goodIdentification)) {
+//                                GenericValue newGoodIdentification = delegator.makeValue("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "EAN"));
+//                                newGoodIdentification.set("idValue", ean);
+//                                newGoodIdentification.create();
+//                            }
+//                        }
 
 
                         //dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"productId",productId,"keywordTypeId","KWT_KEYWORD","keyword",keyword));

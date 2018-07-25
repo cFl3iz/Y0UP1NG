@@ -93,7 +93,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 						 continue;
 						 }
 						 ****** 结束，是否要包括view？ ******************/
-						// Debug.logInfo("------------------- adding entity -- " + entityName, module);
+						Debug.logInfo("------------------- adding entity -- " + entityName, module);
 						entityNames.add(entityName);
 					} catch (GenericEntityException e) {
 						e.printStackTrace();

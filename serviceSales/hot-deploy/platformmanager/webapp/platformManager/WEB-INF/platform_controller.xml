@@ -563,6 +563,7 @@
 
 
     <view-map name="EditProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditProductSizeDescription"/>
+    <view-map name="FindProductSizeDescription" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#FindProductSizeDescription"/>
     <view-map name="EditPicture" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#EditPicture"/>
     <view-map name="AddFromOss" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#AddFromOss"/>
 

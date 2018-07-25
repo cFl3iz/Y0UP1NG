@@ -80,10 +80,11 @@ public class PlatformInventoryServices {
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Map<String, Object> returnResult = ServiceUtil.returnSuccess();
 
-
+        //店铺线上产品分类目录
+        GenericValue productStoreOnlineCategory = EntityQuery.use(delegator).from("ProductStoreOnlineCategory").where("productStoreId", "ZUCZUGSTORE").queryFirst();
 
         EntityCondition findCondition = EntityCondition.makeCondition(
-                UtilMisc.toMap("productCategoryId", "ANKORAU_RETAIL_ROOT"));
+                UtilMisc.toMap("productCategoryId", productStoreOnlineCategory.getString("productCategoryId")));
         Set<String> fieldSet = new HashSet<String>();
 //        fieldSet.add("productCategoryId");
         fieldSet.add("productId");

@@ -1,20 +1,37 @@
 package main.java.com.banfftech.platformmanager.odata;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
-import org.apache.olingo.commons.api.edm.provider.*;
+import org.apache.olingo.commons.api.edm.provider.CsdlAbstractEdmProvider;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainer;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainerInfo;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntitySet;
+import org.apache.olingo.commons.api.edm.provider.CsdlEntityType;
+import org.apache.olingo.commons.api.edm.provider.CsdlNavigationProperty;
+import org.apache.olingo.commons.api.edm.provider.CsdlNavigationPropertyBinding;
+import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
+import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
+import org.apache.olingo.commons.api.edm.provider.CsdlSchema;
 import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
-import org.apache.ofbiz.entity.model.ModelReader;
-import org.apache.ofbiz.entity.model.ModelViewEntity;
-import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.entity.model.ModelKeyMap;
-
-import org.apache.ofbiz.base.util.UtilValidate;
-import java.util.*;
+import org.apache.ofbiz.entity.model.ModelReader;
+import org.apache.ofbiz.entity.model.ModelRelation;
+import org.apache.ofbiz.entity.model.ModelViewEntity;
 
 public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
@@ -69,7 +86,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		FIELDMAP.put("tel-number", EdmPrimitiveTypeKind.String);
 	};
 	private Delegator delegator;
-
+	
 	public OfbizEdmProvider(Delegator delegator) {
 		super();
 		this.delegator = delegator;
@@ -89,11 +106,11 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 					try {
 						ModelEntity modelEntity = reader.getModelEntity(entityName);
 						/***** 是否要包括view？ ************************
-						 if (modelEntity instanceof ModelViewEntity) {
-						 continue;
-						 }
-						 ****** 结束，是否要包括view？ ******************/
-						Debug.logInfo("------------------- adding entity -- " + entityName, module);
+						if (modelEntity instanceof ModelViewEntity) {
+							continue;
+						}
+						****** 结束，是否要包括view？ ******************/
+						// Debug.logInfo("------------------- adding entity -- " + entityName, module);
 						entityNames.add(entityName);
 					} catch (GenericEntityException e) {
 						e.printStackTrace();
@@ -132,13 +149,13 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		Iterator<ModelField> fieldIterator = modelEntity.getFieldsIterator();
 		List<CsdlProperty> propertyList = new ArrayList<CsdlProperty>();
 		while (fieldIterator.hasNext()) {
-			ModelField field = fieldIterator.next();
-			String fieldName = field.getName();
-			String fieldType = field.getType();
+		    ModelField field = fieldIterator.next();
+		    String fieldName = field.getName();
+		    String fieldType = field.getType();
 			// Debug.logInfo("got some ---------------------fieldName = " + fieldName + ", fieldType = " + fieldType, module);
-			CsdlProperty csdlProperty = new CsdlProperty().setName(fieldName)
+		    CsdlProperty csdlProperty = new CsdlProperty().setName(fieldName)
 					.setType(FIELDMAP.get(fieldType).getFullQualifiedName());
-			propertyList.add(csdlProperty);
+		    propertyList.add(csdlProperty);
 		}
 		// 最后添加外键
 		Iterator<ModelRelation> relationsIterator = modelEntity.getRelationsIterator();
@@ -177,33 +194,29 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 				FullQualifiedName fullQualifiedName = new FullQualifiedName(NAMESPACE, relEntityName);
 				CsdlNavigationProperty navProp = new CsdlNavigationProperty();
 				if (modelRelation.getType().equals("one") || modelRelation.getType().equals("one-nofk")) { // 如果是多对一，也就是简单外键关系
-					String fieldName = null;
-
 //					Iterator<ModelKeyMap> keyMapIterator = modelRelation.getKeyMapsIterator();
-//
+   				String fieldName = null;
 //					while (keyMapIterator.hasNext()) {
 //						ModelKeyMap modelKeyMap = keyMapIterator.next();
 //						fieldName = modelKeyMap.getFieldName();
 //					}
-					// OFbiz 16 Method
-					for(ModelKeyMap rowKeyMap : modelRelation.getKeyMaps() ){
+					for(ModelKeyMap rowKeyMap : modelRelation.getKeyMaps()){
 						fieldName = rowKeyMap.getFieldName();
 					}
-
 					navProp = navProp.setName(relEntityName)
-							.setType(fullQualifiedName)
-							.setPartner(entityName)
-							.setNullable(true);
+									.setType(fullQualifiedName)
+									.setPartner(entityName)
+									.setNullable(true);
 				} else {
 					navProp = navProp.setName(relEntityName)
-							.setType(fullQualifiedName)
-							.setPartner(entityName)
-							.setCollection(true);
+									.setType(fullQualifiedName)
+									.setPartner(entityName)
+									.setCollection(true);
 				}
 				navPropList.add(navProp);
 			}
 		}
-
+		
 		CsdlEntityType entityType = new CsdlEntityType();
 		entityType.setName(entityName);
 		entityType.setProperties(propertyList);
@@ -211,37 +224,37 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		if (UtilValidate.isNotEmpty(navPropList)) {
 			entityType.setNavigationProperties(navPropList);
 		}
-
+		
 		return entityType;
-
+		
 		/****
-		 // this method is called for one of the EntityTypes that are configured in the
-		 // Schema
-		 if (entityTypeName.equals(ET_INVOICE_FQN)) {
+		// this method is called for one of the EntityTypes that are configured in the
+		// Schema
+		if (entityTypeName.equals(ET_INVOICE_FQN)) {
 
-		 // create EntityType properties
-		 CsdlProperty id = new CsdlProperty().setName("invoiceId")
-		 .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-		 CsdlProperty name = new CsdlProperty().setName("partyIdFrom")
-		 .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-		 CsdlProperty description = new CsdlProperty().setName("description")
-		 .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+			// create EntityType properties
+			CsdlProperty id = new CsdlProperty().setName("invoiceId")
+					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+			CsdlProperty name = new CsdlProperty().setName("partyIdFrom")
+					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+			CsdlProperty description = new CsdlProperty().setName("description")
+					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
 
-		 // create CsdlPropertyRef for Key element
-		 CsdlPropertyRef propertyRef = new CsdlPropertyRef();
-		 propertyRef.setName("invoiceId");
+			// create CsdlPropertyRef for Key element
+			CsdlPropertyRef propertyRef = new CsdlPropertyRef();
+			propertyRef.setName("invoiceId");
 
-		 // configure EntityType
-		 CsdlEntityType entityType = new CsdlEntityType();
-		 entityType.setName(ET_INVOICE_NAME);
-		 entityType.setProperties(Arrays.asList(id, name, description));
-		 entityType.setKey(Collections.singletonList(propertyRef));
+			// configure EntityType
+			CsdlEntityType entityType = new CsdlEntityType();
+			entityType.setName(ET_INVOICE_NAME);
+			entityType.setProperties(Arrays.asList(id, name, description));
+			entityType.setKey(Collections.singletonList(propertyRef));
 
-		 return entityType;
-		 }
+			return entityType;
+		}
 
-		 return null;
-		 ****/
+		return null;
+		****/
 	}
 
 	public CsdlEntitySet getEntitySet(FullQualifiedName entityContainer, String entitySetName) {
@@ -289,7 +302,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 	}
 
 	public CsdlEntityContainer getEntityContainer() {
-
+		
 		// create EntitySets
 		List<CsdlEntitySet> entitySets = new ArrayList<CsdlEntitySet>();
 		for (String entityName: entityNames) {

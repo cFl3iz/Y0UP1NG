@@ -2,7 +2,6 @@ package main.java.com.banfftech.platformmanager.odata;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +12,11 @@ import org.apache.olingo.commons.api.edmx.EdmxReference;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataHttpHandler;
 import org.apache.olingo.server.api.ServiceMetadata;
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
-import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
+
+import main.java.com.banfftech.platformmanager.odata.ofbiz.OfbizEntityProcessor;
+import main.java.com.banfftech.platformmanager.odata.ofbiz.OfbizCollectionProcessor;
 
 public class DemoServlet extends HttpServlet {
 
@@ -26,17 +25,19 @@ public class DemoServlet extends HttpServlet {
 
 	protected void service(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
-		Delegator delegator = (Delegator) getServletContext().getAttribute("delegator");
-		LocalDispatcher dispatcher = (LocalDispatcher) getServletContext().getAttribute("dispatcher");
+        Delegator delegator = (Delegator) getServletContext().getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) getServletContext().getAttribute("dispatcher");
 
-		Storage storage = new Storage(delegator);
-		// create odata handler and configure it with OfbizEdmProvider and Processor
+        Storage storage = new Storage(delegator);
+		// create odata handler and configure it with CsdlEdmProvider and Processor
 		OData odata = OData.newInstance();
 		// ServiceMetadata edm = odata.createServiceMetadata(new DemoEdmProvider(), new ArrayList<EdmxReference>());
 		ServiceMetadata edm = odata.createServiceMetadata(new OfbizEdmProvider(delegator), new ArrayList<EdmxReference>());
 		ODataHttpHandler handler = odata.createHandler(edm);
-		handler.register(new OfbizCollectionProcessor(storage, delegator));
-		handler.register(new InvoiceEntityProcessor(storage, delegator));
+		// handler.register(new OfbizCollectionProcessor(storage, delegator));
+		// handler.register(new InvoiceEntityProcessor(storage, delegator));
+		handler.register(new OfbizCollectionProcessor(delegator));
+		handler.register(new OfbizEntityProcessor(delegator));
 		handler.register(new DemoBatchProcessor());
 
 		// let the handler do the work

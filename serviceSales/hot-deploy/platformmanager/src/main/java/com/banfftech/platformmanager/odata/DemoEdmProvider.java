@@ -1,6 +1,5 @@
 package main.java.com.banfftech.platformmanager.odata;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

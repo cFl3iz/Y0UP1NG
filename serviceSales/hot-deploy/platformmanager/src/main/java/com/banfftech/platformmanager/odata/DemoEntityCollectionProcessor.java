@@ -43,14 +43,14 @@ public class DemoEntityCollectionProcessor implements EntityCollectionProcessor 
 
 	@Override
 	public void readEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-									 ContentType responseFormat) throws ODataApplicationException, SerializerException {
+			ContentType responseFormat) throws ODataApplicationException, SerializerException {
 
 		// 1st we have retrieve the requested EntitySet from the uriInfo object
 		// (representation of the parsed service URI)
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourcePaths.get(0); // in our example, the
-		// first segment is
-		// the EntitySet
+																									// first segment is
+																									// the EntitySet
 		EdmEntitySet edmEntitySet = uriResourceEntitySet.getEntitySet();
 
 		// 2nd: fetch the data from backend for this requested EntitySetName

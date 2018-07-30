@@ -1,4 +1,4 @@
-package main.java.com.banfftech.platformmanager.odata;
+package main.java.com.banfftech.platformmanager.odata.ofbiz;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -46,31 +46,18 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 
-public class InvoiceEntityProcessor implements EntityProcessor {
+public class OfbizEntityProcessor implements EntityProcessor {
 
-	public static final String module = InvoiceEntityProcessor.class.getName();
+	public static final String module = OfbizEntityProcessor.class.getName();
 	private OData odata;
 	private ServiceMetadata serviceMetadata;
 	private Delegator delegator;
 	private Storage storage;
 	
-	
-
-	public InvoiceEntityProcessor(Storage storage) {
-		super();
-		this.storage = storage;
-		//this.storage = new Storage(delegator);
-	}
-
-	public InvoiceEntityProcessor(Storage storage, Delegator delegator) {
-		super();
-		this.storage = storage;
-		this.delegator = delegator;
-	}
-
-	public InvoiceEntityProcessor(Delegator delegator) {
+	public OfbizEntityProcessor(Delegator delegator) {
 		super();
 		this.delegator = delegator;
+		this.storage = new Storage(delegator);
 	}
 
 	@Override
@@ -96,7 +83,6 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 	@Override
 	public void readEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType responseFormat)
 			throws ODataApplicationException, ODataLibraryException {
-		Debug.logInfo("-------------------------------------------- entering InvoiceEntityProcessor.readEntity ", module);
 	    // 1. retrieve the Entity Type
 	    List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 	    // Note: only in our example we can assume that the first segment is the EntitySet
@@ -106,85 +92,45 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 	    // 2. retrieve the data from backend
 	    List<UriParameter> keyPredicates = uriResourceEntitySet.getKeyPredicates();
 	    // Entity entity = storage.readEntityData(edmEntitySet, keyPredicates);
+	    /**/
 	    GenericValue genericValue = null;
 	    genericValue = getGenericValue(edmEntitySet, keyPredicates);
-	    // Entity entity = getData(edmEntitySet, keyPredicates, genericValue);
 	    Entity entity = getData(edmEntitySet, genericValue);
-		Debug.logInfo("-------------------------------------------- after getData ", module);
+	    /**/
+	    //Entity entity = storage.readEntityData(edmEntitySet, keyPredicates);
 
 		SelectOption selectOption = uriInfo.getSelectOption();
 		/******** $expand option ***********/
-		EdmNavigationProperty edmNavigationProperty = null;
 		ExpandOption expandOption = uriInfo.getExpandOption();
-		if (expandOption != null) {
-			// List<ExpandItem> expandItems = expandOption.getExpandItems();
-			ExpandItem expandItem = expandOption.getExpandItems().get(0);
-			Debug.logInfo("-------------------------------------------- entering check expand option ", module);
-			if (expandItem.isStar()) { // will expand all the navigation items
-				// TODO
-			} else {
-				UriResource uriResource = expandItem.getResourcePath().getUriResourceParts().get(0);
-				Debug.logInfo("===============" + uriResource.getSegmentValue(), module);
-				if(uriResource instanceof UriResourceNavigation) {
-				    edmNavigationProperty = ((UriResourceNavigation) uriResource).getProperty();
-					Debug.logInfo("=============== edmNavigationProperty = " + edmNavigationProperty.getName(), module);
-				}
-			}
-			if (edmNavigationProperty != null) {
-				EdmEntityType expandEdmEntityType = edmNavigationProperty.getType();
-				String navPropName = edmNavigationProperty.getName();
-				Debug.logInfo("=============== navPropName = " + navPropName, module);
-				EntityCollection expandEntityCollection = gerRelatedEntities(genericValue, expandEdmEntityType);
-				
-				Debug.logInfo("=============== begin process link 1", module);
-				Link link = new Link();
-				link.setTitle(navPropName);
-				Debug.logInfo("=============== begin process link 2", module);
-				link.setType(Constants.ENTITY_NAVIGATION_LINK_TYPE);
-				link.setRel(Constants.NS_ASSOCIATION_LINK_REL + navPropName);
-				Debug.logInfo("=============== begin process link 3", module);
-				link.setInlineEntitySet(expandEntityCollection);
-				Debug.logInfo("=============== begin process link 4", module);
-				// link.setHref(expandEntityCollection.getId().toASCIIString());
-				Debug.logInfo("=============== begin process link 5", module);
-				entity.getNavigationLinks().add(link);
-			}
-		}
+		storage.addExpandOption(expandOption, entity, genericValue);
 		/******** End $expand option ***********/
 
-		Debug.logInfo("-------------------------------------------- 1", module);
 		// 3. serialize
 	    EdmEntityType entityType = edmEntitySet.getEntityType();
 	    String selectList = odata.createUriHelper().buildContextURLSelectList(entityType, expandOption, selectOption);
 	    InputStream entityStream = null;
 		try {
-		    Debug.logInfo("-------------------------------------------- 2", module);
 		    ContextURL contextUrl = ContextURL.with().entitySet(edmEntitySet)
 		    			.selectList(selectList)
 					.suffix(Suffix.ENTITY).build();
 		    // expand and select currently not supported
-			Debug.logInfo("-------------------------------------------- 3", module);
 		    EntitySerializerOptions options = EntitySerializerOptions.with()
 		    			.contextURL(contextUrl)
 		    			.select(selectOption)
 		    			.expand(expandOption)
 		    			.build();
 	
-			Debug.logInfo("-------------------------------------------- 4", module);
 		    ODataSerializer serializer = odata.createSerializer(responseFormat);
 		    entityType.getName();
 		    entity.getType();
 		    options.getContextURL().getKeyPath();
 		    // serviceMetadata.toString();
-			Debug.logInfo("-------------------------------------------- 5 " + entityType.getName() + ", " + entity.getType(), module);
 		    SerializerResult serializerResult = serializer.entity(serviceMetadata, entityType, entity, options);
-			Debug.logInfo("-------------------------------------------- 6", module);
 		    entityStream = serializerResult.getContent();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		Debug.logInfo("-------------------------------------------- 7", module);
 	    //4. configure the response object
 	    response.setContent(entityStream);
 	    response.setStatusCode(HttpStatusCode.OK.getStatusCode());

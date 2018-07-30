@@ -1,5 +1,11 @@
 package main.java.com.banfftech.platformmanager.odata;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Property;
@@ -15,12 +21,6 @@ import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.util.EntityQuery;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class Storage {
 	public static final String module = Storage.class.getName();
@@ -94,9 +94,9 @@ public class Storage {
      private void initSampleData(Delegator delegator){
  		List<GenericValue> invoices = null;
  		try {
- 			invoices = EntityQuery.use(delegator).from("Invoice").where().queryList();
-
-//                    delegator.findByAnd("Invoice", UtilMisc.toMap("partyIdFrom", "HANGZHOU_AGENT"));
+// 			invoices = delegator.findByAnd("Invoice", UtilMisc.toMap("partyIdFrom", "HANGZHOU_AGENT"));
+            invoices = EntityQuery.use(delegator).from(
+                     "Invoice").where("partyIdFrom", "HANGZHOU_AGENT").queryList();
  		} catch (GenericEntityException e) {
  			e.printStackTrace();
  		}

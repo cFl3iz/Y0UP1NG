@@ -66,7 +66,7 @@ public class DemoBatchProcessor implements BatchProcessor {
 		/*
 		 * OData Version 4.0 Part 1: Protocol Plus Errata 02 11.7.4 Responding to a
 		 * Batch Request
-		 *
+		 * 
 		 * All operations in a change set represent a single change unit so a service
 		 * MUST successfully process and apply all the requests in the change set or
 		 * else apply none of them. It is up to the service implementation to define
@@ -77,7 +77,7 @@ public class DemoBatchProcessor implements BatchProcessor {
 		 * individual requests in any order. The service MUST include the Content-ID
 		 * header in each response with the same value that the client specified in the
 		 * corresponding request, so clients can correlate requests and responses.
-		 *
+		 * 
 		 * To keep things simple, we dispatch the requests within the Change Set to the
 		 * other processor interfaces.
 		 */
@@ -104,7 +104,7 @@ public class DemoBatchProcessor implements BatchProcessor {
 
 					/*
 					 * In addition the response must be provided as follows:
-					 *
+					 * 
 					 * OData Version 4.0 Part 1: Protocol Plus Errata 02 11.7.4 Responding to a
 					 * Batch Request
 					 *
@@ -114,7 +114,7 @@ public class DemoBatchProcessor implements BatchProcessor {
 					 * with a value of binary, is returned that applies to all requests in the
 					 * change set and MUST be formatted according to the Error Handling defined for
 					 * the particular response format.
-					 *
+					 * 
 					 * This can be simply done by passing the response of the failed ODataRequest to
 					 * a new instance of ODataResponsePart and setting the second parameter
 					 * "isChangeSet" to false.

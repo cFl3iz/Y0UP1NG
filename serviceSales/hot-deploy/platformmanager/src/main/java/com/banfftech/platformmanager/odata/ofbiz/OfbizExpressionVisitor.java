@@ -1,4 +1,4 @@
-package main.java.com.banfftech.platformmanager.odata;
+package main.java.com.banfftech.platformmanager.odata.ofbiz;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

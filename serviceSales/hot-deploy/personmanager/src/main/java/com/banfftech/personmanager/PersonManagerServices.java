@@ -6728,7 +6728,6 @@ public class PersonManagerServices {
 
     /**
      * Create Content & DataResource &&  ASSOC Party
-     *
      * @param delegator
      * @param userLogin
      * @param dispatcher

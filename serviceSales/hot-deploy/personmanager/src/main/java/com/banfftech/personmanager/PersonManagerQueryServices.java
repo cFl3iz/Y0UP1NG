@@ -7,7 +7,6 @@ import main.java.com.banfftech.platformmanager.util.Base64Util;
 import main.java.com.banfftech.platformmanager.util.UtilTools;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.Debug;
-
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.util.EntityUtil;
@@ -3614,7 +3613,6 @@ public class PersonManagerQueryServices {
 
     /**
      * 查头像和名称
-     *
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException

@@ -75,7 +75,6 @@ public class PlatformLoginWorker {
 
     /**
      * 验证是否拥身份令牌
-     *
      * @param request
      * @param response
      * @return
@@ -87,11 +86,11 @@ public class PlatformLoginWorker {
         HttpSession session = request.getSession();
         Delegator delegator = (Delegator) request.getAttribute("delegator");
 
-        Debug.logInfo("token verify...", module);
 
         String token = request.getParameter("tarjeta");
 
-        System.out.println("*validate-tarjeta token = " + token);
+        Debug.logInfo("token verify...token:"+token, module);
+
 
         // 这种事件里面只能返回success, 后面的其它预处理事件会继续采用其它方式验证登录情况
         if (token == null) return "success";

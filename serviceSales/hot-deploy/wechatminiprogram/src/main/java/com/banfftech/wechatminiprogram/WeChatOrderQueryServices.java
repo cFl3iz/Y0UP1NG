@@ -57,10 +57,9 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
-
-
     /**
      * QuerySku
+     *
      * @param dctx
      * @param context
      * @return
@@ -420,6 +419,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * 查询小程序的应用配置内容数据等
+     *
      * @param dctx
      * @param context
      * @return
@@ -436,17 +436,15 @@ public class WeChatOrderQueryServices {
         Debug.logInfo("-> APP_ID: " + appId, module);
 
 
-
-
-        Map<String,List<String>> returnMap = new HashMap<String, List<String>>();
+        Map<String, List<String>> returnMap = new HashMap<String, List<String>>();
 
         GenericValue queryAppConfig = EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
-                        "idValue", appId).queryFirst();
+                "idValue", appId).queryFirst();
 
         // 店铺ID
         String productStoreId = queryAppConfig.getString("productStoreId");
         // 组织ID
-        String compPartyId    =  EntityQuery.use(delegator).from("ProductStore").where(
+        String compPartyId = EntityQuery.use(delegator).from("ProductStore").where(
                 "productStoreId", productStoreId).queryFirst().getString("payToPartyId");
 
 
@@ -456,7 +454,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("dataResourceId");
 
         EntityCondition findConditions = EntityCondition
-                .makeCondition("partyContentTypeId", EntityOperator.LIKE,   "MINIPROGRAM" + "%");
+                .makeCondition("partyContentTypeId", EntityOperator.LIKE, "MINIPROGRAM" + "%");
 
         EntityCondition findConditions2 = EntityCondition
                 .makeCondition("partyId", compPartyId);
@@ -464,55 +462,51 @@ public class WeChatOrderQueryServices {
                 .makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
         List<GenericValue> appContentList = delegator.findList("PartyContentAndDataResource",
-                findConditions3, fieldSet,null, null, true);
+                findConditions3, fieldSet, null, null, true);
 
 
-        if(null!= appContentList){
-            for(GenericValue content : appContentList){
+        if (null != appContentList) {
+            for (GenericValue content : appContentList) {
                 List<String> rowList = new ArrayList<String>();
 
                 String contentType = content.getString("partyContentTypeId");
 
                 String dataResourceId = content.getString("dataResourceId");
 
-                if(returnMap.containsKey(contentType)){
+                if (returnMap.containsKey(contentType)) {
                     rowList = returnMap.get(contentType);
                 }
-                if(contentType.equals("MINIPROGRAM_TBAR")){
-                   String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
+                if (contentType.equals("MINIPROGRAM_TBAR")) {
+                    String textData = EntityQuery.use(delegator).from("ElectronicText").where(
                             "dataResourceId", dataResourceId).queryFirst().getString("textData");
                     rowList.add(textData);
                 }
 
 
-                if(contentType.equals("MINIPROGRAM_HOME")){
-                    String textData =  EntityQuery.use(delegator).from("ElectronicText").where(
+                if (contentType.equals("MINIPROGRAM_HOME")) {
+                    String textData = EntityQuery.use(delegator).from("ElectronicText").where(
                             "dataResourceId", dataResourceId).queryFirst().getString("textData");
                     rowList.add(textData);
                 }
 
-                if(!contentType.equals("MINIPROGRAM_TBAR") && !contentType.equals("MINIPROGRAM_HOME")){
-                    String objectInfo =   EntityQuery.use(delegator).from("DataResource").where(
+                if (!contentType.equals("MINIPROGRAM_TBAR") && !contentType.equals("MINIPROGRAM_HOME")) {
+                    String objectInfo = EntityQuery.use(delegator).from("DataResource").where(
                             "dataResourceId", dataResourceId).queryFirst().getString("objectInfo");
                     rowList.add(objectInfo);
                 }
 
-                if(!returnMap.containsKey(contentType)){
-                    returnMap.put(contentType,rowList);
+                if (!returnMap.containsKey(contentType)) {
+                    returnMap.put(contentType, rowList);
                 }
 
             }
         }
 
 
-        resultMap.put("appContentDataResource",returnMap);
+        resultMap.put("appContentDataResource", returnMap);
 
         return resultMap;
     }
-
-
-
-
 
 
     /**
@@ -538,11 +532,11 @@ public class WeChatOrderQueryServices {
         String partyId = partyIdentification.getString("partyId");
 
         String productStoreId = "";
-        String prodCatalogId  = "";
-        String appServiceType   = "2B";
-        String isDemoStore      = "false";
-        String hasShoppingCart  = "false";
-        String groupName        = "";
+        String prodCatalogId = "";
+        String appServiceType = "2B";
+        String isDemoStore = "false";
+        String hasShoppingCart = "false";
+        String groupName = "";
 
         Debug.logInfo("-> APP_ID: " + appId, module);
 
@@ -552,11 +546,11 @@ public class WeChatOrderQueryServices {
             GenericValue queryAppConfig =
                     EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                             "idValue", appId).queryFirst();
-            appServiceType   = queryAppConfig.getString("appServiceType");
-            isDemoStore      = queryAppConfig.getString("isDemoStore");
-            hasShoppingCart  = queryAppConfig.getString("hasShoppingCart");
-            productStoreId  = queryAppConfig.getString("productStoreId");
-            groupName        = queryAppConfig.getString("groupName");
+            appServiceType = queryAppConfig.getString("appServiceType");
+            isDemoStore = queryAppConfig.getString("isDemoStore");
+            hasShoppingCart = queryAppConfig.getString("hasShoppingCart");
+            productStoreId = queryAppConfig.getString("productStoreId");
+            groupName = queryAppConfig.getString("groupName");
 
 //            // (友评2C) wx299644ef4c9afbde
 //            if (PeConstant.ZUCZUG_MINI_PROGRAM_APP_ID.equals(appId.trim())) {
@@ -581,8 +575,8 @@ public class WeChatOrderQueryServices {
         GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", partyIdentification.get("partyId"), "roleTypeId", "SALES_REP").queryFirst();
 
         // TO C 的情况下 拿自己的 ProductStoreID
-        if(!appServiceType.toUpperCase().equals("2B")){
-                productStoreId = (String) EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyId).queryFirst().get("productStoreId");
+        if (!appServiceType.toUpperCase().equals("2B")) {
+            productStoreId = (String) EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyId).queryFirst().get("productStoreId");
             if (null == role) {
                 Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
                         "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", "SALES_REP"));
@@ -590,14 +584,14 @@ public class WeChatOrderQueryServices {
             resultMap.put("isSalesRep", "true");
 
             //To C 可能有media pay
-            GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",partyId,"attrName", "media_id").queryFirst();
+            GenericValue media = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", partyId, "attrName", "media_id").queryFirst();
 
-            if(null!= media){
-                resultMap.put("pay_media","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/pay_qr_code/"+media.getString("attrValue")+".png");
+            if (null != media) {
+                resultMap.put("pay_media", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/pay_qr_code/" + media.getString("attrValue") + ".png");
             }
 
 
-        }else{
+        } else {
             if (null == role) {
                 resultMap.put("isSalesRep", "false");
             } else {
@@ -612,17 +606,13 @@ public class WeChatOrderQueryServices {
         List<GenericValue> storeList = delegator.findList("ProductStoreCatalog",
                 findConditionsStore, null,
                 UtilMisc.toList("fromDate"), null, false);
-        if(null!= storeList && storeList.size() >0){
+        if (null != storeList && storeList.size() > 0) {
 
             prodCatalogId = (String) storeList.get(0).get("prodCatalogId");
-            resultMap.put("onlineProdCatalogs",storeList);
+            resultMap.put("onlineProdCatalogs", storeList);
         }
 
         Debug.logInfo("-> storeList: " + storeList, module);
-
-
-
-
 
 
         // Query  ProductStorePromoAndAppl  & ProductPromoAction
@@ -654,7 +644,7 @@ public class WeChatOrderQueryServices {
         }
 
         resultMap.put("partyId", partyIdentification.getString("partyId"));
-        resultMap.put("prodCatalogId",prodCatalogId);
+        resultMap.put("prodCatalogId", prodCatalogId);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("storePromos", returnPromos);
 
@@ -664,24 +654,24 @@ public class WeChatOrderQueryServices {
         resultMap.put("appName", groupName);
 
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
-        "basePartyId", partyId).queryFirst();
+                "basePartyId", partyId).queryFirst();
 
-        if(null== forwardChainFact){
+        if (null == forwardChainFact) {
 
-        String fromPartyId = "NO_PARTY";
-        String basePartyId = partyId;
-        String workEffortId = "NA";
-        String partyIdTo    = "NO_PARTY";
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
-                    dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                "userLogin", admin,
-                "partyIdFrom", fromPartyId,
-                "partyIdTo", partyIdTo,
-                "workEffortId", workEffortId,
-                "basePartyId", basePartyId,
-                "firstName", userInfo.get("firstName"),
-                "objectInfo", userInfo.get("headPortrait"),
-                "createDate", new Timestamp(new Date().getTime())));
+            String fromPartyId = "NO_PARTY";
+            String basePartyId = partyId;
+            String workEffortId = "NA";
+            String partyIdTo = "NO_PARTY";
+            Map<String, String> userInfo = queryPersonBaseInfo(delegator, partyId);
+            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                    "userLogin", admin,
+                    "partyIdFrom", fromPartyId,
+                    "partyIdTo", partyIdTo,
+                    "workEffortId", workEffortId,
+                    "basePartyId", basePartyId,
+                    "firstName", userInfo.get("firstName"),
+                    "objectInfo", userInfo.get("headPortrait"),
+                    "createDate", new Timestamp(new Date().getTime())));
         }
 
         return resultMap;
@@ -689,6 +679,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * QueryCatalogProductDetail
+     *
      * @param dctx
      * @param context
      * @return
@@ -704,7 +695,7 @@ public class WeChatOrderQueryServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String productId = (String) context.get("productId");
         GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-        Map<String,Object> hiddenMap = new HashMap<String, Object>();
+        Map<String, Object> hiddenMap = new HashMap<String, Object>();
 
         Map<String, Object> allField = product.getAllFields();
 
@@ -766,7 +757,7 @@ public class WeChatOrderQueryServices {
             String rowVirId = (String) vir_product.get("productId");
 
 
-             skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
+            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
 
             Set<String> fieldSet = new HashSet<String>();
 
@@ -785,11 +776,11 @@ public class WeChatOrderQueryServices {
                 GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where("productId", rowSkuId).queryFirst();
                 // 不管怎么样 这个变形产品得有图
                 String detailImageUrl = rowProduct.getString("detailImageUrl");
-                Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
+                Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
                 //如果没有图的默认不看 针对zuczug
-                if(detailImageUrl.indexOf("DEFAULT_PRODUCT")>=0){
+                if (detailImageUrl.indexOf("DEFAULT_PRODUCT") >= 0) {
                     GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-                    hiddenMap.put(rowSkuId,rowColor.getString("productFeatureId"));
+                    hiddenMap.put(rowSkuId, rowColor.getString("productFeatureId"));
                 }
 
                 //1 查询搭配图
@@ -877,7 +868,7 @@ public class WeChatOrderQueryServices {
                 String innerDesc = gv.getString("description");
 
                 //还没有图片的变形产品 不显示该特征型号
-                if(hiddenMap != null && hiddenMap.size()>0 && isHiddenSku(productFeatureId,innerAttr,rowVirId,hiddenMap,delegator,skus)){
+                if (hiddenMap != null && hiddenMap.size() > 0 && isHiddenSku(productFeatureId, innerAttr, rowVirId, hiddenMap, delegator, skus)) {
                     continue;
                 }
 
@@ -908,12 +899,9 @@ public class WeChatOrderQueryServices {
                     }
                 }
 
-                    productFeatureList.add(innerMap);
+                productFeatureList.add(innerMap);
 
             }
-
-
-
 
 
             //图片数组
@@ -938,25 +926,38 @@ public class WeChatOrderQueryServices {
 
 
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
-        String productStoreId = category.getString("productStoreId");
-        GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
-        String prodCatalogId = prodCatalog.getString("prodCatalogId");
-        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
-        String inventoryFacilityId = store.getString("inventoryFacilityId");
-        //获得库存信息 getInventoryAvailableByFacility
-        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
-                "facilityId", inventoryFacilityId, "productId", productId));
-        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-            allField.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
-            allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+        //写死
+        String productStoreId = "ZUCZUGSTORE";
+        String prodCatalogId = "";
+        if (category != null) {
+             productStoreId = category.getString("productStoreId");
+             GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+             prodCatalogId = prodCatalog.getString("prodCatalogId");
+        }else{
+
+            GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productId).queryFirst();
+            GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("productCategoryId", productCategoryMember.getString("productCategoryId")).queryFirst();
+            prodCatalogId = prodCatalogCategory.getString("prodCatalogId");
         }
 
 
-        // 2 c 找media_id
-        GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",store.getString("payToPartyId"),"attrName", "media_id").queryFirst();
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+            String inventoryFacilityId = store.getString("inventoryFacilityId");
+            //获得库存信息 getInventoryAvailableByFacility
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", inventoryFacilityId, "productId", productId));
+            if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                allField.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+            }
 
-        if(null!= media){
-            allField.put("media_id",media.getString("attrValue"));
+
+
+        // 2 c 找media_id
+        GenericValue media = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", store.getString("payToPartyId"), "attrName", "media_id").queryFirst();
+
+        if (null != media) {
+            allField.put("media_id", media.getString("attrValue"));
         }
 
 
@@ -967,12 +968,12 @@ public class WeChatOrderQueryServices {
         String appServiceType = "2B";
         if (null != queryAppConfig) {
             appServiceType = queryAppConfig.getString("appServiceType");
-        }else{
+        } else {
             //店铺没查到数据 说明是卖家自己的店
             appServiceType = "2C";
         }
         // 2C
-        if( appServiceType.toUpperCase().equals("2C")){
+        if (appServiceType.toUpperCase().equals("2C")) {
             HashSet<String> fieldSet = new HashSet<String>();
             fieldSet.add("drObjectInfo");
             fieldSet.add("productId");
@@ -988,11 +989,11 @@ public class WeChatOrderQueryServices {
 //            rowPicMapFirst.put("contentId","308561217_784838898");
 //            morePicture.add(rowPicMapFirst);
 
-            if(null!=pictures && pictures.size()>0 ){
-                imgAttr = new String [pictures.size()+1];
+            if (null != pictures && pictures.size() > 0) {
+                imgAttr = new String[pictures.size() + 1];
                 imgAttr[0] = (String) product.get("detailImageUrl");
                 int i = 1;
-                for(GenericValue gvPic : pictures){
+                for (GenericValue gvPic : pictures) {
 
                     imgAttr[i] = gvPic.getString("drObjectInfo");
 //                    Map<String,Object> rowPicMap = gvPic.getAllFields();
@@ -1000,7 +1001,7 @@ public class WeChatOrderQueryServices {
                     i++;
                 }
                 allField.remove("imgArray");
-                Debug.logInfo(":imgAttr="+imgAttr,module);
+                Debug.logInfo(":imgAttr=" + imgAttr, module);
                 allField.put("imgArray", imgAttr);
             }
 //            rowMap.put("morePicture", morePicture);
@@ -1012,14 +1013,13 @@ public class WeChatOrderQueryServices {
         resultMap.put("prodCatalogId", prodCatalogId);
 
 
-
-
         return resultMap;
     }
 
 
     /**
      * 2C TODO PAY
+     *
      * @param dctx
      * @param context
      * @return
@@ -1041,22 +1041,20 @@ public class WeChatOrderQueryServices {
 
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
 
-        GenericValue productMedia =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",store.getString("payToPartyId"),"attrName", "media_id").queryFirst();
-        GenericValue product =  EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+        GenericValue productMedia = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", store.getString("payToPartyId"), "attrName", "media_id").queryFirst();
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
 
-        if(null!= productMedia){
-            resultMap.put("media_id",productMedia.getString("attrValue"));
+        if (null != productMedia) {
+            resultMap.put("media_id", productMedia.getString("attrValue"));
         }
-        resultMap.put("productName",product.getString("productName"));
+        resultMap.put("productName", product.getString("productName"));
         return resultMap;
     }
 
 
-
-
-
     /**
      * IS HIDDEN
+     *
      * @param productFeatureId
      * @param innerAttr
      * @param rowVirId
@@ -1066,16 +1064,16 @@ public class WeChatOrderQueryServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    private static boolean isHiddenSku(String productFeatureId, String innerAttr, String rowVirId, Map<String, Object> hiddenMap,Delegator delegator,List<GenericValue> skus)throws GenericEntityException, GenericServiceException  {
+    private static boolean isHiddenSku(String productFeatureId, String innerAttr, String rowVirId, Map<String, Object> hiddenMap, Delegator delegator, List<GenericValue> skus) throws GenericEntityException, GenericServiceException {
 
-        if(skus.size()==0){
+        if (skus.size() == 0) {
             return false;
         }
-        for(GenericValue gv : skus){
-                String productId = gv.getString("productIdTo");
-                if(hiddenMap.containsKey(productId) && hiddenMap.get(productId).equals(productFeatureId)){
-                    return true;
-                }
+        for (GenericValue gv : skus) {
+            String productId = gv.getString("productIdTo");
+            if (hiddenMap.containsKey(productId) && hiddenMap.get(productId).equals(productFeatureId)) {
+                return true;
+            }
         }
 
         return false;
@@ -1130,7 +1128,7 @@ public class WeChatOrderQueryServices {
         GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
                 "partyIdTo", partyId).queryFirst();
 
-        if(null!= forwardChainFactTemp){
+        if (null != forwardChainFactTemp) {
             forwardChainFactTemp.remove();
         }
 
@@ -1180,14 +1178,14 @@ public class WeChatOrderQueryServices {
                     if (rowVirId.equals(beforeVir)) {
 
                     } else {
-                        Debug.logInfo("detailImageUrl:"+detailImageUrl,module);
+                        Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
                         //如果没有图的默认不看 针对zuczug
-                        if(detailImageUrl.indexOf("DEFAULT_PRODUCT")<0){
-                        count++;
-                        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                        rowMap.put("price", productPrice.get("price"));
-                        returnProductList.add(rowMap);
-                        beforeVir = rowVirId;
+                        if (detailImageUrl.indexOf("DEFAULT_PRODUCT") < 0) {
+                            count++;
+                            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                            rowMap.put("price", productPrice.get("price"));
+                            returnProductList.add(rowMap);
+                            beforeVir = rowVirId;
                         }
                     }
                 } else {
@@ -1224,18 +1222,16 @@ public class WeChatOrderQueryServices {
         resultMap.put("last_page", Integer.parseInt(resourceCount + ""));
 
 
-
-
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
                 "basePartyId", partyId).queryFirst();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-        if(null== forwardChainFact){
+        if (null == forwardChainFact) {
 
             String fromPartyId = "NO_PARTY";
             String basePartyId = partyId;
             String workEffortId = "NA";
-            String partyIdTo    = "NO_PARTY";
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+            String partyIdTo = "NO_PARTY";
+            Map<String, String> userInfo = queryPersonBaseInfo(delegator, partyId);
             dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
                     "partyIdFrom", fromPartyId,
@@ -1250,10 +1246,10 @@ public class WeChatOrderQueryServices {
                 "partyIdTo", partyId).queryFirst();
 
         // 更新我的软连接
-        if(null!=myForwardChainFactTemp){
-            myForwardChainFactTemp.set("basePartyId",partyId);
+        if (null != myForwardChainFactTemp) {
+            myForwardChainFactTemp.set("basePartyId", partyId);
             myForwardChainFactTemp.store();
-            Debug.logInfo("update ... " + myForwardChainFactTemp,module);
+            Debug.logInfo("update ... " + myForwardChainFactTemp, module);
         }
         return resultMap;
     }
@@ -1343,7 +1339,7 @@ public class WeChatOrderQueryServices {
 
                 rowMap.put("partyId", partyId);
 
-                if(null!=gv.get("salesDiscontinuationDate")){
+                if (null != gv.get("salesDiscontinuationDate")) {
                     continue;
                 }
 
@@ -1500,8 +1496,6 @@ public class WeChatOrderQueryServices {
         }
 
 
-
-
 //        System.out.println("*OPENID = " + openId);
 //
         //TODO FIX ME
@@ -1518,15 +1512,13 @@ public class WeChatOrderQueryServices {
         String productCategoryId = "NA";
 
 
-
         //查看了我的资源列表，清空temp
         GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
                 "partyIdTo", partyId).queryFirst();
 
-        if(null!= forwardChainFactTemp){
+        if (null != forwardChainFactTemp) {
 //             forwardChainFactTemp.remove();
         }
-
 
 
         List<GenericValue> myResourceList = null;
@@ -1601,15 +1593,15 @@ public class WeChatOrderQueryServices {
                     List<GenericValue> pictures = delegator.findList("ProductContentAndInfo",
                             findConditions3, fieldSet,
                             null, null, false);
-                    List<Map<String,Object>> morePicture = new ArrayList<Map<String, Object>>();
-                    Map<String,Object> rowPicMapFirst = new HashMap<String, Object>();
-                    rowPicMapFirst.put("drObjectInfo",(String) gv.get("detailImageUrl"));
-                    rowPicMapFirst.put("contentId","308561217_784838898");
+                    List<Map<String, Object>> morePicture = new ArrayList<Map<String, Object>>();
+                    Map<String, Object> rowPicMapFirst = new HashMap<String, Object>();
+                    rowPicMapFirst.put("drObjectInfo", (String) gv.get("detailImageUrl"));
+                    rowPicMapFirst.put("contentId", "308561217_784838898");
                     morePicture.add(rowPicMapFirst);
-                    if(null!=pictures && pictures.size()>0 ){
+                    if (null != pictures && pictures.size() > 0) {
 
-                        for(GenericValue gvPic : pictures){
-                            Map<String,Object> rowPicMap = gvPic.getAllFields();
+                        for (GenericValue gvPic : pictures) {
+                            Map<String, Object> rowPicMap = gvPic.getAllFields();
                             morePicture.add(rowPicMap);
                         }
                     }
@@ -1663,13 +1655,13 @@ public class WeChatOrderQueryServices {
         GenericValue forwardChainFact = EntityQuery.use(delegator).from("YpForwardChainFact").where(
                 "basePartyId", partyId).queryFirst();
 
-        if(null== forwardChainFact){
+        if (null == forwardChainFact) {
 
             String fromPartyId = "NO_PARTY";
             String basePartyId = partyId;
             String workEffortId = "NA";
-            String partyIdTo    = "NO_PARTY";
-            Map<String,String> userInfo = queryPersonBaseInfo(delegator,partyId);
+            String partyIdTo = "NO_PARTY";
+            Map<String, String> userInfo = queryPersonBaseInfo(delegator, partyId);
             dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
                     "userLogin", admin,
                     "partyIdFrom", fromPartyId,
@@ -1684,10 +1676,10 @@ public class WeChatOrderQueryServices {
                 "partyIdTo", partyId).queryFirst();
 
         // 更新我的软连接
-        if(null!=myForwardChainFactTemp){
-            myForwardChainFactTemp.set("basePartyId",partyId);
+        if (null != myForwardChainFactTemp) {
+            myForwardChainFactTemp.set("basePartyId", partyId);
             myForwardChainFactTemp.store();
-            Debug.logInfo("update ... " + myForwardChainFactTemp,module);
+            Debug.logInfo("update ... " + myForwardChainFactTemp, module);
         }
         return resultMap;
     }
@@ -2065,7 +2057,6 @@ public class WeChatOrderQueryServices {
         }
 
 
-
         String queryEntity = "OrderHeaderItemAndRoles";
         queryEntity = "OrderHeaderAndRoles";
 
@@ -2118,7 +2109,7 @@ public class WeChatOrderQueryServices {
                 BigDecimal availableTotal = (BigDecimal) calcOrderTotal.get("availableReturnTotal");
                 int r = availableTotal.compareTo(BigDecimal.ZERO); //和0，Zero比较
                 //小于
-                if (r == -1 || r==0) {
+                if (r == -1 || r == 0) {
                     rowMap.put("grandTotal", "0");
                 } else {
                     rowMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
@@ -2209,13 +2200,12 @@ public class WeChatOrderQueryServices {
                     appServiceType = queryAppConfig.getString("appServiceType");
                 }
                 // 查询卖家付款二维码。
-                if( appServiceType.toUpperCase().equals("2C")){
-                    GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",payToPartyId,"attrName", "media_id").queryFirst();
-                    if(null!= media){
-                        rowMap.put("media_id",media.getString("attrValue"));
+                if (appServiceType.toUpperCase().equals("2C")) {
+                    GenericValue media = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", payToPartyId, "attrName", "media_id").queryFirst();
+                    if (null != media) {
+                        rowMap.put("media_id", media.getString("attrValue"));
                     }
                 }
-
 
 
                 rowMap.put("statusId", UtilProperties.getMessage("PersonManagerUiLabels.xml", statusId, locale));
@@ -2441,7 +2431,7 @@ public class WeChatOrderQueryServices {
                 BigDecimal availableTotal = (BigDecimal) calcOrderTotal.get("availableReturnTotal");
                 int r = availableTotal.compareTo(BigDecimal.ZERO); //和0，Zero比较
                 //小于
-                if (r == -1 || r==0) {
+                if (r == -1 || r == 0) {
                     rowMap.put("grandTotal", "0");
                 } else {
                     rowMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
@@ -2572,10 +2562,10 @@ public class WeChatOrderQueryServices {
                     appServiceType = queryAppConfig.getString("appServiceType");
                 }
                 // 查询卖家付款二维码。
-                if( appServiceType.toUpperCase().equals("2C")){
-                    GenericValue media =  EntityQuery.use(delegator).from("PartyAttribute").where("partyId",payToPartyId,"attrName", "media_id").queryFirst();
-                    if(null!= media){
-                        rowMap.put("media_id",media.getString("attrValue"));
+                if (appServiceType.toUpperCase().equals("2C")) {
+                    GenericValue media = EntityQuery.use(delegator).from("PartyAttribute").where("partyId", payToPartyId, "attrName", "media_id").queryFirst();
+                    if (null != media) {
+                        rowMap.put("media_id", media.getString("attrValue"));
                     }
                 }
 
@@ -2605,7 +2595,7 @@ public class WeChatOrderQueryServices {
 
                 Map<String, String> personAddressInfoMap = null;
 
-                if(null!=salesRep){
+                if (null != salesRep) {
                     String salesRepId = (String) salesRep.get("partyId");
                     //查询的是销售代表
                     rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, salesRepId));

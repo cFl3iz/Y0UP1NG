@@ -41,6 +41,7 @@ public class OfbizExpressionVisitor implements ExpressionVisitor<Object> {
 		COMPARISONOPERATORMAP.put(BinaryOperatorKind.GT, EntityOperator.GREATER_THAN);
 		COMPARISONOPERATORMAP.put(BinaryOperatorKind.LE, EntityOperator.LESS_THAN_EQUAL_TO);
 		COMPARISONOPERATORMAP.put(BinaryOperatorKind.LT, EntityOperator.LESS_THAN);
+		COMPARISONOPERATORMAP.put(BinaryOperatorKind.HAS, EntityOperator.LIKE);
 	};
 	public final static Map<BinaryOperatorKind, EntityJoinOperator> JOINOPERATORMAP = new HashMap<BinaryOperatorKind, EntityJoinOperator>();
 	static {
@@ -175,10 +176,24 @@ public class OfbizExpressionVisitor implements ExpressionVisitor<Object> {
 	}
 
 	@Override
-	public Object visitMethodCall(MethodKind arg0, List<Object> arg1)
+	public Object visitMethodCall(MethodKind methodCall, List<Object> parameters)
 			throws ExpressionVisitException, ODataApplicationException {
-		// TODO Auto-generated method stub
-		return null;
+		// To keep this tutorial small and simple, we implement only one method call
+		// contains(String, String) -> Boolean
+		if(methodCall == MethodKind.CONTAINS) {
+			if(parameters.get(0) instanceof String && parameters.get(1) instanceof String) {
+				String valueParam1 = (String) parameters.get(0);
+				String valueParam2 = (String) parameters.get(1);
+				return EntityCondition.makeCondition(valueParam1, EntityOperator.LIKE, "%" + valueParam2 + "%");
+			} else {
+				throw new ODataApplicationException("Contains needs two parametes of type Edm.String",
+						HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ENGLISH);
+			}
+		} else {
+			throw new ODataApplicationException("Method call " + methodCall + " not implemented",
+					HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ENGLISH);
+		}
+
 	}
 
 	@Override

@@ -32,6 +32,8 @@ import org.apache.olingo.server.api.uri.queryoption.TopOption;
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.olingo.server.api.uri.queryoption.expression.ExpressionVisitException;
 import org.apache.olingo.server.api.uri.queryoption.expression.Member;
+import org.apache.olingo.server.api.uri.queryoption.SkipOption;
+
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
@@ -41,6 +43,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
+import org.apache.ofbiz.entity.util.EntityListIterator;
 
 public class Storage {
     public static final String module = Storage.class.getName();
@@ -55,19 +58,22 @@ public class Storage {
 
     /* PUBLIC FACADE */
 
-    public EntityCollection readEntitySetData(EdmEntitySet edmEntitySet, FilterOption filterOption, TopOption topOption, OrderByOption orderByOption, ExpandOption expandOption) {
+    public EntityCollection readEntitySetData(EdmEntitySet edmEntitySet, FilterOption filterOption,SkipOption skipOption,  TopOption topOption, OrderByOption orderByOption, ExpandOption expandOption) {
 
         EdmEntityType edmEntityType = edmEntitySet.getEntityType();
         String entityName = edmEntityType.getName();
         List<GenericValue> genericValues = null;
         try {
             EntityFindOptions efo = new EntityFindOptions();
-            if (topOption != null) {
-                int topValue = topOption.getValue();
-                efo.setMaxRows(topValue);
-            } else {
-                efo.setMaxRows(MAX_ROWS);
-            }
+//            if (topOption != null) {
+//                int topValue = topOption.getValue();
+//                efo.setMaxRows(topValue);
+//            } else {
+//                efo.setMaxRows(MAX_ROWS);
+//            }
+
+            efo.setMaxRows(MAX_ROWS);
+
             EntityCondition entityCondition = null;
             if (filterOption != null) {
                 Expression filterExpression = filterOption.getExpression();
@@ -95,7 +101,20 @@ public class Storage {
                     }
                 }
             }
-            genericValues = delegator.findList(entityName, entityCondition, null, orderBy, efo, false);
+
+            EntityListIterator it = (EntityListIterator) delegator.find(entityName, entityCondition, null,null, orderBy, efo);
+
+            int start = 0;
+            if (skipOption != null) {
+                int skipNumber = skipOption.getValue();
+                if (skipNumber >= 0) {
+                    start = skipNumber;
+                }
+            }
+
+            genericValues = it.getPartialList(start+1, topOption!=null?topOption.getValue():MAX_ROWS); // list starts at '1'
+
+            it.close();
         } catch (GenericEntityException e) {
             e.printStackTrace();
         } catch (ExpressionVisitException e) {

@@ -82,6 +82,8 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		/******** End $expand option ***********/
 
 
+		SkipOption skipOption = uriInfo.getSkipOption();
+
 		if (segmentCount == 1) {
 			responseEdmEntitySet = startEdmEntitySet; // first (and only) entitySet
 			// 2nd: fetch the data from backend for this requested EntitySetName
@@ -89,7 +91,7 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 			FilterOption filterOption = uriInfo.getFilterOption();
 			TopOption topOption = uriInfo.getTopOption();
 			OrderByOption orderByOption = uriInfo.getOrderByOption();
-			responseEntityCollection = storage.readEntitySetData(startEdmEntitySet, filterOption, topOption, orderByOption,expandOption);
+			responseEntityCollection = storage.readEntitySetData(startEdmEntitySet, filterOption,skipOption, topOption, orderByOption,expandOption);
 		} else if (segmentCount == 2) {
 			UriResource lastSegment = resourceParts.get(1); // don't support more complex URIs
 			if(lastSegment instanceof UriResourceNavigation) {
@@ -104,34 +106,42 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		}
 		
 		List<Entity> entityList = responseEntityCollection.getEntities();
+		/******** $count option ***********/
 		CountOption countOption = uriInfo.getCountOption();
+		boolean isCount = false;
 		if (countOption != null) {
-			boolean isCount = countOption.getValue();
+			isCount = countOption.getValue();
 			if (isCount) {
 				responseEntityCollection.setCount(entityList.size());
 			}
 		}
+		/******** end $count option ***********/
+
+
+
 		// handle $skip
-		SkipOption skipOption = uriInfo.getSkipOption();
-		if (skipOption != null) {
-			int skipNumber = skipOption.getValue();
-			if (skipNumber >= 0) {
-				if (skipNumber <= entityList.size()) {
-					entityList = entityList.subList(skipNumber, entityList.size());
-				} else {
-					// The client skipped all entities
-					entityList.clear();
-				}
-			} else {
-				throw new ODataApplicationException("Invalid value for $skip", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
-			}
-		}
+
+//		List<Entity> skipTempList = null;
+//
+//		SkipOption skipOption = uriInfo.getSkipOption();
+//		if (skipOption != null) {
+//			int skipNumber = skipOption.getValue();
+//			if (skipNumber >= 0) {
+//				if (skipNumber <= entityList.size()) {
+//					skipTempList = entityList.subList(skipNumber, entityList.size());
+//				} else {
+//					// The client skipped all entities
+//					entityList.clear();
+//				}
+//			} else {
+//				throw new ODataApplicationException("Invalid value for $skip", HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
+//			}
+//		}
 
 
 
 		// 3rd: create a serializer based on the requested format (json)
 		ODataSerializer serializer = odata.createSerializer(responseFormat);
-
 
 
 
@@ -146,6 +156,11 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		// expand and select currently not supported
 		EntityCollectionSerializerOptions opts = EntityCollectionSerializerOptions.with().id(id).count(countOption)
 				.contextURL(contextUrl).expand(expandOption).build();
+
+		// has skip option ?
+//		responseEntityCollection = buildSkipResponseEntityCollection(skipTempList,responseEntityCollection,isCount);
+
+
 		SerializerResult serializerResult = serializer.entityCollection(serviceMetadata, edmEntityType, responseEntityCollection,
 				opts);
 		InputStream serializedContent = serializerResult.getContent();
@@ -155,6 +170,32 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		response.setContent(serializedContent);
 		response.setStatusCode(HttpStatusCode.OK.getStatusCode());
 		response.setHeader(HttpHeader.CONTENT_TYPE, responseFormat.toContentTypeString());
+	}
+
+	/**
+	 * return New EntityCollection with Skip Entities
+	 * @param skipTempList
+	 * @param oldResponseEntityCollection
+	 * @param isCount
+	 * @return
+	 */
+	private EntityCollection buildSkipResponseEntityCollection(List<Entity> skipTempList, EntityCollection oldResponseEntityCollection, boolean isCount) {
+
+		EntityCollection  newEntityCollection = new  EntityCollection();
+
+		if(null!= skipTempList){
+
+			for(Entity entity : skipTempList){
+				newEntityCollection.getEntities().add(entity);
+			}
+			// has count option
+			if(isCount){
+				newEntityCollection.setCount(oldResponseEntityCollection.getCount());
+			}
+			return newEntityCollection;
+		}
+
+		return oldResponseEntityCollection;
 	}
 
 }

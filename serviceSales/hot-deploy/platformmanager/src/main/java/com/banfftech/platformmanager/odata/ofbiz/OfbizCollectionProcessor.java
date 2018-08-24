@@ -91,7 +91,7 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 			FilterOption filterOption = uriInfo.getFilterOption();
 			TopOption topOption = uriInfo.getTopOption();
 			OrderByOption orderByOption = uriInfo.getOrderByOption();
-			responseEntityCollection = storage.readEntitySetData(startEdmEntitySet, filterOption,skipOption, topOption, orderByOption,expandOption);
+			responseEntityCollection = storage.readEntitySetData(startEdmEntitySet, filterOption,skipOption, topOption, orderByOption,expandOption,selectOption);
 		} else if (segmentCount == 2) {
 			UriResource lastSegment = resourceParts.get(1); // don't support more complex URIs
 			if(lastSegment instanceof UriResourceNavigation) {
@@ -155,10 +155,7 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		final String id = request.getRawBaseUri() + "/" + responseEdmEntitySet.getName();
 		// expand and select currently not supported
 		EntityCollectionSerializerOptions opts = EntityCollectionSerializerOptions.with().id(id).count(countOption)
-				.contextURL(contextUrl).expand(expandOption).build();
-
-		// has skip option ?
-//		responseEntityCollection = buildSkipResponseEntityCollection(skipTempList,responseEntityCollection,isCount);
+				.contextURL(contextUrl).expand(expandOption).select(selectOption).build();
 
 
 		SerializerResult serializerResult = serializer.entityCollection(serviceMetadata, edmEntityType, responseEntityCollection,

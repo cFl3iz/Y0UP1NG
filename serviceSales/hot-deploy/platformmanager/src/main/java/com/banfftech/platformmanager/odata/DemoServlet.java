@@ -32,7 +32,7 @@ public class DemoServlet extends HttpServlet {
 		// create odata handler and configure it with CsdlEdmProvider and Processor
 		OData odata = OData.newInstance();
 		// ServiceMetadata edm = odata.createServiceMetadata(new DemoEdmProvider(), new ArrayList<EdmxReference>());
-		ServiceMetadata edm = odata.createServiceMetadata(new OfbizEdmProvider(delegator), new ArrayList<EdmxReference>());
+		ServiceMetadata edm = odata.createServiceMetadata(new OfbizEdmProvider(delegator,dispatcher), new ArrayList<EdmxReference>());
 		ODataHttpHandler handler = odata.createHandler(edm);
 		// handler.register(new OfbizCollectionProcessor(storage, delegator));
 		// handler.register(new InvoiceEntityProcessor(storage, delegator));

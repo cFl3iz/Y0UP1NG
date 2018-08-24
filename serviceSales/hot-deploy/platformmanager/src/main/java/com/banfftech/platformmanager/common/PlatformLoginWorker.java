@@ -529,7 +529,15 @@ public class PlatformLoginWorker {
     }
 
 
-
+    /**
+     * WeChatLogin 2j
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
     public static Map<String, Object> weChatMiniAppLogin2(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
 
 

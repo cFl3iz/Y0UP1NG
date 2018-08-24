@@ -10,28 +10,44 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+
+
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.edm.provider.CsdlAbstractEdmProvider;
+import org.apache.olingo.commons.api.edm.provider.CsdlAction;
+import org.apache.olingo.commons.api.edm.provider.CsdlActionImport;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainer;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntityContainerInfo;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntitySet;
 import org.apache.olingo.commons.api.edm.provider.CsdlEntityType;
+import org.apache.olingo.commons.api.edm.provider.CsdlFunction;
+import org.apache.olingo.commons.api.edm.provider.CsdlFunctionImport;
 import org.apache.olingo.commons.api.edm.provider.CsdlNavigationProperty;
 import org.apache.olingo.commons.api.edm.provider.CsdlNavigationPropertyBinding;
+import org.apache.olingo.commons.api.edm.provider.CsdlParameter;
 import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
 import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
+import org.apache.olingo.commons.api.edm.provider.CsdlReturnType;
 import org.apache.olingo.commons.api.edm.provider.CsdlSchema;
+
+
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
-import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelKeyMap;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.entity.model.ModelViewEntity;
+import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.service.GenericServiceException;
+import org.apache.ofbiz.service.LocalDispatcher;
+
+import org.apache.ofbiz.service.ModelParam;
+import org.apache.ofbiz.service.ModelService;
+
 
 public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
@@ -49,6 +65,12 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 	// Entity Set Names
 	// public static final String ES_INVOICES_NAME = "Invoices";
 	private Set<String> entityNames = new HashSet<String>();
+
+	// Service Action
+	public final static Map<String, FullQualifiedName> OFBIZ_SERVICE_MAP = new HashMap<String, FullQualifiedName>();
+	private Set<String> serviceNames;
+	private static Set<String> actionNames = new HashSet<String>();
+
 
 	public final static Map<String, EdmPrimitiveTypeKind> FIELDMAP = new HashMap<String, EdmPrimitiveTypeKind>();
 	static {
@@ -85,9 +107,23 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		FIELDMAP.put("credit-card-date", EdmPrimitiveTypeKind.String);
 		FIELDMAP.put("tel-number", EdmPrimitiveTypeKind.String);
 	};
+
+
+	public final static Map<String, EdmPrimitiveTypeKind> PARAM_TYPE_MAP = new HashMap<String, EdmPrimitiveTypeKind>();
+	static {
+		PARAM_TYPE_MAP.put("String", EdmPrimitiveTypeKind.String);
+		PARAM_TYPE_MAP.put("BigDecimal", EdmPrimitiveTypeKind.Double);
+		PARAM_TYPE_MAP.put("java.math.BigDecimal", EdmPrimitiveTypeKind.Double);
+		PARAM_TYPE_MAP.put("java.sql.Timestamp", EdmPrimitiveTypeKind.Date);
+		PARAM_TYPE_MAP.put("Timestamp", EdmPrimitiveTypeKind.Date);
+		PARAM_TYPE_MAP.put("Long", EdmPrimitiveTypeKind.Int64);
+		PARAM_TYPE_MAP.put("Double", EdmPrimitiveTypeKind.Double);
+	}
+
 	private Delegator delegator;
-	
-	public OfbizEdmProvider(Delegator delegator) {
+	private LocalDispatcher dispatcher;
+
+	public OfbizEdmProvider(Delegator delegator , LocalDispatcher dispatcher) {
 		super();
 		this.delegator = delegator;
 		ModelReader reader = delegator.getModelReader();
@@ -95,6 +131,8 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		packageFilterSet.add(NAMESPACE);
 		Map<String, TreeSet<String>> packageEntities = null;
 		try {
+			/********** 获取系统所有的entity **************************************************/
+
 			// packageEntities = reader.getEntitiesByPackage(packageFilterSet, null);
 			packageEntities = reader.getEntitiesByPackage(null, null);
 			// Set<String> entityNameSet = packageEntities.get(NAMESPACE);
@@ -117,6 +155,15 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 					}
 				}
 			}
+
+
+			/********** 获取系统所有的service **************************************************/
+			serviceNames = dispatcher.getDispatchContext().getAllServiceNames();
+			for (String serviceName : serviceNames) {
+				FullQualifiedName fullQualifiedServiceName = new FullQualifiedName(NAMESPACE, serviceName);
+				OFBIZ_SERVICE_MAP.put(serviceName, fullQualifiedServiceName);
+			}
+
 		} catch (GenericEntityException e) {
 			e.printStackTrace();
 		}
@@ -309,10 +356,26 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			entitySets.add(getEntitySet(CONTAINER, entityName + "s"));
 		}
 
+		// Create function imports
+		List<CsdlFunctionImport> functionImports = new ArrayList<CsdlFunctionImport>();
+		Iterator<String> serviceNameIt = serviceNames.iterator();
+		while (serviceNameIt.hasNext()) {
+			functionImports.add(getFunctionImport(CONTAINER, serviceNameIt.next()));
+		}
+
+		// Create action imports
+		List<CsdlActionImport> actionImports = new ArrayList<CsdlActionImport>();
+		Iterator<String> actionNameIt = actionNames.iterator();
+		while (actionNameIt.hasNext()) {
+			actionImports.add(getActionImport(CONTAINER, actionNameIt.next()));
+		}
+
 		// create EntityContainer
 		CsdlEntityContainer entityContainer = new CsdlEntityContainer();
 		entityContainer.setName(CONTAINER_NAME);
 		entityContainer.setEntitySets(entitySets);
+		entityContainer.setFunctionImports(functionImports);
+		entityContainer.setActionImports(actionImports);
 
 		return entityContainer;
 	}
@@ -330,6 +393,40 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			entityTypes.add(getEntityType(fullQualifiedName));
 		}
 		schema.setEntityTypes(entityTypes);
+
+
+		// add functions
+		List<CsdlFunction> functions = new ArrayList<CsdlFunction>();
+		Iterator<String> serviceNameIt = serviceNames.iterator();
+		while (serviceNameIt.hasNext()) {
+			String serviceName = serviceNameIt.next();
+			Debug.logInfo("=> serive name :"+serviceName,module);
+			FullQualifiedName fullQualifiedServiceName = OFBIZ_SERVICE_MAP.get(serviceName);
+			List<CsdlFunction> serviceFunctions = getFunctions(fullQualifiedServiceName);
+			if (serviceFunctions == null) {
+				Debug.logInfo("=================== not a valid odata function " + serviceName, module);
+				continue;
+			}
+			functions.addAll(serviceFunctions);
+		}
+		schema.setFunctions(functions);
+
+		// add actions
+		List<CsdlAction> actions = new ArrayList<CsdlAction>();
+		Iterator<String> actionNameIt = actionNames.iterator();
+		while (actionNameIt.hasNext()) {
+			String serviceName = actionNameIt.next();
+			Debug.logInfo("=> action name :"+serviceName,module);
+			FullQualifiedName fullQualifiedServiceName = OFBIZ_SERVICE_MAP.get(serviceName);
+			List<CsdlAction> serviceActions = getActions(fullQualifiedServiceName);
+			if (serviceActions == null) {
+				Debug.logInfo("=================== not a valid odata action " + serviceName, module);
+				continue;
+			}
+			actions.addAll(serviceActions);
+		}
+		schema.setActions(actions);
+
 
 		// add EntityContainer
 		schema.setEntityContainer(getEntityContainer());
@@ -353,4 +450,196 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
 		return null;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	@Override
+	public List<CsdlFunction> getFunctions(final FullQualifiedName functionName) {
+		String serviceName = functionName.getName();
+		final List<CsdlFunction> functions = new ArrayList<CsdlFunction>();
+		ModelService modelService;
+		try {
+			Debug.logInfo("================ serviceName = " + serviceName, module);
+			modelService = dispatcher.getDispatchContext().getModelService(serviceName);
+
+			// 处理OUT参数
+			List<String> outParamNames = modelService.getParameterNames("OUT", true, false);
+			EdmPrimitiveTypeKind returnEdmType = null;
+			if (outParamNames.size() == 0) { // 没有返回参数，应该属于Action
+				Debug.logInfo("================ has no out param", module);
+				if (!actionNames.contains(serviceName)) {
+					actionNames.add(serviceName);
+				}
+				// OFBIZ_SERVICE_MAP.remove(serviceName);
+				// serviceNames.remove(serviceName);
+				return null;
+			}
+			if (outParamNames.size() == 1) { // 只有一个返回参数，符合Odata规范
+				ModelParam modelParam = modelService.getParam(outParamNames.get(0));
+				String type = modelParam.getType();
+				returnEdmType = PARAM_TYPE_MAP.get(type);
+				boolean isOptional = modelParam.isOptional();
+				if (returnEdmType == null) {
+					// OFBIZ_SERVICE_MAP.remove(serviceName);
+					// serviceNames.remove(serviceName);
+					return null;
+				}
+			} else { // 有多个返回参数，不符合Odata规范，应该咋办？
+				for (String outParamName : outParamNames) {
+					ModelParam modelParam = modelService.getParam(outParamName);
+					String type = modelParam.getType();
+					returnEdmType = PARAM_TYPE_MAP.get(type);
+					boolean isOptional = modelParam.isOptional();
+				}
+				// OFBIZ_SERVICE_MAP.remove(serviceName);
+				// serviceNames.remove(serviceName);
+				return null;
+			}
+			final CsdlReturnType returnType = new CsdlReturnType();
+			// returnType.setCollection(true);
+			returnType.setType(returnEdmType.getFullQualifiedName());
+
+			// 处理IN参数
+			List<String> paramNames = modelService.getParameterNames("IN", true, false);
+			List<CsdlParameter> parameters = new ArrayList<CsdlParameter>();
+			for (String paramName : paramNames) {
+				ModelParam modelParam = modelService.getParam(paramName);
+				String type = modelParam.getType();
+				EdmPrimitiveTypeKind edmType = PARAM_TYPE_MAP.get(type);
+				boolean isOptional = modelParam.isOptional();
+				final CsdlParameter parameter = new CsdlParameter();
+				parameter.setName(paramName);
+				parameter.setNullable(isOptional);
+				if (edmType != null) {
+					parameter.setType(edmType.getFullQualifiedName());
+				} else {
+					parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+					// Debug.logInfo("================ serviceName = " + serviceName, module);
+					Debug.logInfo("================ param = " + paramName + ", " + type + ", " + isOptional, module);
+				}
+				parameters.add(parameter);
+			}
+
+			final CsdlFunction function = new CsdlFunction();
+			function.setName(serviceName).setParameters(parameters).setReturnType(returnType);
+			functions.add(function);
+		} catch (GenericServiceException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		Debug.logInfo("================ serviceName = " + serviceName + " has successfully parsed", module);
+		return functions;
+		/*****************************************************************************
+		 * if (functionName.equals(FUNCTION_COUNT_CATEGORIES_FQN)) { // It is allowed to
+		 * overload functions, so we have to provide a list of // functions for each
+		 * function name
+		 *
+		 * // Create the parameter for the function final CsdlParameter parameterAmount
+		 * = new CsdlParameter(); parameterAmount.setName(PARAMETER_AMOUNT);
+		 * parameterAmount.setNullable(false);
+		 * parameterAmount.setType(EdmPrimitiveTypeKind.Int32.getFullQualifiedName());
+		 *
+		 * // Create the return type of the function final CsdlReturnType returnType =
+		 * new CsdlReturnType(); returnType.setCollection(true);
+		 * returnType.setType(ET_CATEGORY_FQN);
+		 *
+		 * // Create the function final CsdlFunction function = new CsdlFunction();
+		 * function.setName(FUNCTION_COUNT_CATEGORIES_FQN.getName()).setParameters(Arrays.asList(parameterAmount))
+		 * .setReturnType(returnType); functions.add(function);
+		 *
+		 * return functions; } return null;
+		 ***********************************************************************************/
+	}
+
+	@Override
+	public CsdlFunctionImport getFunctionImport(FullQualifiedName entityContainer, String functionImportName) {
+		// Debug.logInfo("-------------------------------------------- getFunctionImport", module);
+		if (entityContainer.equals(CONTAINER)) {
+			FullQualifiedName fullQualifiedName = OFBIZ_SERVICE_MAP.get(functionImportName);
+			// return new
+			// CsdlFunctionImport().setName(functionImportName).setFunction(fullQualifiedName)
+			// .setEntitySet(ES_CATEGORIES_NAME).setIncludeInServiceDocument(true);
+			return new CsdlFunctionImport().setName(functionImportName).setFunction(fullQualifiedName)
+					.setIncludeInServiceDocument(true);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<CsdlAction> getActions(final FullQualifiedName actionName) {
+		String serviceName = actionName.getName();
+		final List<CsdlAction> actions = new ArrayList<CsdlAction>();
+		ModelService modelService;
+		try {
+			Debug.logInfo("================ serviceName = " + serviceName, module);
+			modelService = dispatcher.getDispatchContext().getModelService(serviceName);
+
+			// 处理IN参数
+			List<String> paramNames = modelService.getParameterNames("IN", true, false);
+			List<CsdlParameter> parameters = new ArrayList<CsdlParameter>();
+			for (String paramName : paramNames) {
+				ModelParam modelParam = modelService.getParam(paramName);
+				String type = modelParam.getType();
+				EdmPrimitiveTypeKind edmType = PARAM_TYPE_MAP.get(type);
+				boolean isOptional = modelParam.isOptional();
+				final CsdlParameter parameter = new CsdlParameter();
+				parameter.setName(paramName);
+				parameter.setNullable(isOptional);
+				if (edmType != null) {
+					parameter.setType(edmType.getFullQualifiedName());
+				} else {
+					parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+					// Debug.logInfo("================ serviceName = " + serviceName, module);
+					Debug.logInfo("================ param = " + paramName + ", " + type + ", " + isOptional, module);
+				}
+				parameters.add(parameter);
+			}
+
+			final CsdlAction action = new CsdlAction();
+			action.setName(serviceName).setParameters(parameters);
+			actions.add(action);
+		} catch (GenericServiceException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return actions;
+	}
+
+	@Override
+	public CsdlActionImport getActionImport(FullQualifiedName entityContainer, String actionImportName) {
+		// Debug.logInfo("---------------------------------------------- getActionImport", module);
+		if (entityContainer.equals(CONTAINER) && actionNames.contains(actionImportName)) {
+			FullQualifiedName fullQualifiedName = OFBIZ_SERVICE_MAP.get(actionImportName);
+			// return new
+			// CsdlFunctionImport().setName(functionImportName).setFunction(fullQualifiedName)
+			// .setEntitySet(ES_CATEGORIES_NAME).setIncludeInServiceDocument(true);
+			return new CsdlActionImport().setName(actionImportName).setAction(fullQualifiedName);
+		}
+
+		return null;
+	}
+
+
+
 }

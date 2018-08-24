@@ -9,13 +9,65 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.base.util.UtilDateTime;
 /**
  * Created by Administrator on 2017/9/26.
  */
 public class UtilTools {
+
+
+
+
+
+    /**
+     * List Paging
+     * @param list
+     * @param viewIndex
+     * @param viewSize
+     * @param <T>
+     * @return <T>List<T>
+     */
+    public static <T>List<T> getListPaging(List<T> list,Integer viewIndex,Integer viewSize){
+        if(UtilValidate.isEmpty(list)){
+            return null;
+        }
+        if(viewIndex==null||viewSize==null){
+            return list;
+        }
+        Integer fromIndex = (viewIndex-1==-1?0:viewIndex)*viewSize;
+        Integer toIndex = (viewIndex+1)*viewSize>list.size()?list.size():(viewIndex+1)*viewSize;
+        return list.subList(fromIndex,toIndex);
+    }
+
+    /**
+     * Sub List
+     * @param genericValues
+     * @param skip
+     * @param top
+     * @return
+     */
+    public static List<GenericValue> getListPaging(List<GenericValue> genericValues,int skip, int top) {
+
+        if(skip>0){
+            if(skip>genericValues.size()){
+                return null;
+            }
+            genericValues = genericValues.subList(skip,genericValues.size());
+        }
+        if(top>0){
+            genericValues = genericValues.subList(0,top>genericValues.size()?genericValues.size():top);
+        }
+
+        return genericValues;
+    }
+
+
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static Timestamp dateStringToTimestamp(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);

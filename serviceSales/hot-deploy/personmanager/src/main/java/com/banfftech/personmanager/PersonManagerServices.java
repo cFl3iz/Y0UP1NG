@@ -4587,8 +4587,55 @@ public class PersonManagerServices {
 
 
     /**
+     * saveEventQrCode
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> saveEventQrCode(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String qrPath = (String) context.get("qrPath");
+        String pageType = (String) context.get("pageType");
+
+
+        Map<String, Object> createWorkEffortMap   = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING",
+                    "workEffortName", "引用:" + product.getString("productName"), "workEffortTypeId", "EVENT", "description", productId + salesRepId + nowPartyId,
+                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(), "percentComplete", new Long(1));
+            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                    createWorkEffortMap);
+            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+                return resultMap;
+            }
+            String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+
+
+        return resultMap;
+    }
+
+
+
+    /**
      * markOrOutMarkProduct
-     *
      * @param dctx
      * @param context
      * @return

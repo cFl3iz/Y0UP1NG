@@ -125,6 +125,7 @@
 
 
 
+
     <request-map uri="wechatReleaseResource">
         <security https="false" auth="false"/>
         <event type="service" invoke="wechatReleaseResource"/>
@@ -138,6 +139,15 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
+    <request-map uri="weChatMiniAppLogin2C">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="weChatMiniAppLogin2C"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
     <request-map uri="createCustRequestFromMiniApp">
         <security https="false" auth="false"/>

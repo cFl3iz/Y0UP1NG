@@ -595,6 +595,21 @@
     </service>
 
 
+
+
+
+    <service name="saveEventQrCode" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="saveEventQrCode" auth="false">
+    <description>saveEventQrCode</description>
+    <attribute name="qrPath" type="String" mode="INOUT"
+               optional="true"/>
+    <attribute name="pageType" type="String" mode="IN"
+               optional="true"/>
+
+    </service>
+
+
     <!-- query Resource Detail -->
     <service name="queryResourceDetailMiniProgram" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

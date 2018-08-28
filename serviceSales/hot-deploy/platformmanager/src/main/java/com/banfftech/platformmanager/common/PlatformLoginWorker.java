@@ -593,7 +593,7 @@ public class PlatformLoginWorker {
             claims.put("exp", exp);
             claims.put("iat", iat);
             String tarjeta = signer.sign(claims);
-            result.put("unioId",unioId);
+//            result.put("unioId",unioId);
             result.put("tarjeta",tarjeta);
             result.put("openId",openId);
             result.put("partyId",miniProgramIdentification.get("partyId"));

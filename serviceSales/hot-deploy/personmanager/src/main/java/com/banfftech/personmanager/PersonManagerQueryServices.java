@@ -122,7 +122,8 @@ public class PersonManagerQueryServices {
         }
 
         List<GenericValue> historyStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
-                "partyId", partyId, "roleTypeId", "CUSTOMER").orderBy("-fromDate").queryFirst();
+                "partyId", partyId, "roleTypeId", "CUSTOMER").orderBy("-fromDate").queryList();
+
 
         if(historyStore.size()>0){
             for(GenericValue gv : historyStore){

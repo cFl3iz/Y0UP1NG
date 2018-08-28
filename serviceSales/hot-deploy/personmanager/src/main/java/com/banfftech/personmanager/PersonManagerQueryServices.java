@@ -116,7 +116,7 @@ public class PersonManagerQueryServices {
             String storeName = store.getString("storeName");
             rowStore.put("productStoreId",productStoreId);
             rowStore.put("storeName",storeName);
-            rowStore.put("storeImage","/");
+            rowStore.put("storeImage",store.getString("oldHeaderLogo"));
             rowStore.put("storeAdminId",partyId);
             returnList.add(rowStore);
         }
@@ -134,7 +134,7 @@ public class PersonManagerQueryServices {
                 String storeName = store.getString("storeName");
                 rowStore.put("productStoreId",productStoreId);
                 rowStore.put("storeName",storeName);
-                rowStore.put("storeImage","/");
+                rowStore.put("storeImage", store.getString("oldHeaderLogo"));
                 rowStore.put("storeAdminId",store.getString("payToPartyId"));
                 returnList.add(rowStore);
             }

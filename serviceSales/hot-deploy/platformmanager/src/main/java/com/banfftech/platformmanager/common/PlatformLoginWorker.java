@@ -597,7 +597,7 @@ public class PlatformLoginWorker {
             result.put("tarjeta",tarjeta);
             result.put("openId",openId);
             result.put("partyId",miniProgramIdentification.get("partyId"));
-            result.put("personInfo",PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")+""));
+//            result.put("personInfo",PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")+""));
 
             return result;
         }

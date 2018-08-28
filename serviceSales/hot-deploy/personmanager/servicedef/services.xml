@@ -184,6 +184,22 @@
 
 
 
+    <service name="updatePartyInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updatePartyInfo" auth="false">
+        <description>updatePartyInfo</description>
+        <attribute name="nickName" type="String" mode="IN"  optional="true"/>
+        <attribute name="gender" type="String" mode="IN"  optional="true"/>
+        <attribute name="language" type="String" mode="IN"  optional="true"/>
+        <attribute name="avatarUrl" type="String" mode="IN"  optional="true"/>
+        <attribute name="city" type="String" mode="IN"  optional="true"/>
+        <attribute name="country" type="String" mode="IN"  optional="true"/>
+        <attribute name="province" type="String" mode="IN"  optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- 查询我浏览过的店铺、我的店铺列表 -->
     <service name="queryMyProductStoreList" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
@@ -194,6 +210,9 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+
 
 
     <!-- Create Person Store -->

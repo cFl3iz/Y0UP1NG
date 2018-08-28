@@ -6553,6 +6553,51 @@ public class PersonManagerServices {
         return result;
     }
 
+
+
+
+
+
+    public static Map<String, Object> updatePartyInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        String partyId = (String) userLogin.get("partyId");
+
+
+        String nickName = (String) context.get("nickName");
+        String language = (String) context.get("language");
+        String gender = (String) context.get("gender");
+        String city = (String) context.get("city");
+        String country = (String) context.get("country");
+        String province = (String) context.get("province");
+        String avatarUrl = (String) context.get("avatarUrl");
+
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+        if (null != gender && gender.equals("2")) {
+            gender = "F";
+        }
+        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", userLogin,
+                "partyId", partyId, "firstName", nickName, "lastName", "NA", "gender", gender ,
+                "comments","country:"+country+"|province:"+province+"|city:"+city));
+
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", avatarUrl, null);
+
+
+        delegator.createOrStore(delegator.makeValue("UserPreference",
+                UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "local", "userPrefValue", language
+                )));
+
+
+        return result;
+    }
+
     /**
      * Update PersonInfo
      *

@@ -199,6 +199,18 @@
                    optional="true"/>
     </service>
 
+    <service name="createMyStore" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createMyStore" auth="false">
+        <description>createMyStore</description>
+        <attribute name="storeName" type="String" mode="IN"  optional="true"/>
+        <attribute name="imageUrl" type="String" mode="IN"  optional="true"/>
+        <attribute name="description" type="String" mode="IN"  optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
 
     <!-- 查询我浏览过的店铺、我的店铺列表 -->
     <service name="queryMyProductStoreList" engine="java"

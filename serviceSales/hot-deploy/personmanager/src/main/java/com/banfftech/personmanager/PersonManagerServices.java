@@ -6554,7 +6554,130 @@ public class PersonManagerServices {
     }
 
 
+    /**
+     * createMyStore
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createMyStore(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
 
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        String partyId = (String) userLogin.get("partyId");
+
+        String storeName = (String) context.get("storeName");
+        String imageUrl = (String) context.get("imageUrl");
+        String description = (String) context.get("description");
+
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+
+
+
+        //创建仓库
+
+        Map<String, Object> createPersonFacilityOutMap = dispatcher.runSync("createPersonFacility", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId));
+
+        String facilityId = (String) createPersonFacilityOutMap.get("facilityId");
+
+
+        // 创建店铺
+        Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
+                "payToPartyId", partyId, "storeName", storeName ,
+                "oldHeaderLogo",imageUrl,"title",description, "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y"));
+
+        String productStoreId = (String) createPersonStoreOutMap.get("storeId");
+
+        // 创建自己送货的货运方法
+        dispatcher.runSync("createCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CARRIER", "shipmentMethodTypeId", "EXPRESS"));
+
+
+        //店铺关联货运方法顺丰
+        Map<String, Object> createProductStoreShipMethMap = dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,
+                "productStoreId", productStoreId,
+                "productStoreShipMethId", "10000",
+                "roleTypeId", "CARRIER",
+                "shipmentMethodTypeId", "EXPRESS",
+                "partyId", "SHUNFENG_EXPRESS",
+                "allowUspsAddr", "Y",
+                "requireUspsAddr", "N",
+                "allowCompanyAddr", "Y",
+                "requireCompanyAddr", "N"
+                , "includeNoChargeItems", "Y"));
+
+        // 店铺关联货运方法，自己
+        dispatcher.runSync("createProductStoreShipMeth", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId,
+                "productStoreId", productStoreId,
+                "productStoreShipMethId", "10000",
+                "roleTypeId", "CARRIER",
+                "shipmentMethodTypeId", "EXPRESS",
+                "partyId", partyId,
+                "allowUspsAddr", "Y",
+                "requireUspsAddr", "N",
+                "allowCompanyAddr", "Y",
+                "requireCompanyAddr", "N"
+                , "includeNoChargeItems", "Y"));
+
+
+        // 关联店铺角色
+        Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
+                "partyId", partyId, "productStoreId", productStoreId, "roleTypeId", "ADMIN"));
+
+
+        // CreateProd Catalog 创建目录
+        Map<String, Object> createProdCatalogInMap = new HashMap<String, Object>();
+        createProdCatalogInMap.put("userLogin", admin);
+        createProdCatalogInMap.put("catalogName", partyId);
+        Map<String, Object> createProdCatalogOutMap = dispatcher.runSync("createProdCatalog", createProdCatalogInMap);
+        String prodCatalogId = (String) createProdCatalogOutMap.get("prodCatalogId");
+
+        // createProductCategory 创建我的分类
+        Map<String, Object> createProductCategoryInMap = new HashMap<String, Object>();
+        createProductCategoryInMap.put("userLogin", admin);
+        createProductCategoryInMap.put("productCategoryTypeId", "CATALOG_CATEGORY");
+        createProductCategoryInMap.put("categoryName", partyId);
+        Map<String, Object> createProductCategoryOutMap = dispatcher.runSync("createProductCategory", createProductCategoryInMap);
+        String productCategoryId = (String) createProductCategoryOutMap.get("productCategoryId");
+
+
+        // Add ProdCatalog To Party 目录关联当事人
+        Map<String, Object> addProdCatalogToPartyInMap = new HashMap<String, Object>();
+        addProdCatalogToPartyInMap.put("userLogin", admin);
+        addProdCatalogToPartyInMap.put("prodCatalogId", prodCatalogId);
+        addProdCatalogToPartyInMap.put("partyId", partyId);
+        addProdCatalogToPartyInMap.put("roleTypeId", "ADMIN");
+        Map<String, Object> addProdCatalogToPartyOutMap = dispatcher.runSync("addProdCatalogToParty", addProdCatalogToPartyInMap);
+
+        // Create Product Store Catalog 目录关联店铺
+        Map<String, Object> createProductStoreCatalogInMap = new HashMap<String, Object>();
+        createProductStoreCatalogInMap.put("userLogin", admin);
+        createProductStoreCatalogInMap.put("prodCatalogId", prodCatalogId);
+        createProductStoreCatalogInMap.put("productStoreId", productStoreId);
+        Map<String, Object> createProductStoreCatalogOutMap = dispatcher.runSync("createProductStoreCatalog", createProductStoreCatalogInMap);
+
+        // Add Product Category To ProdCatalog 目录关联分类
+        Map<String, Object> addProductCategoryToProdCatalogInMap = new HashMap<String, Object>();
+        addProductCategoryToProdCatalogInMap.put("userLogin", admin);
+        addProductCategoryToProdCatalogInMap.put("prodCatalogCategoryTypeId", "PCCT_PURCH_ALLW");
+        addProductCategoryToProdCatalogInMap.put("prodCatalogId", prodCatalogId);
+        addProductCategoryToProdCatalogInMap.put("productCategoryId", productCategoryId);
+
+        Map<String, Object> addProductCategoryToProdCatalogOutMap = dispatcher.runSync("addProductCategoryToProdCatalog", addProductCategoryToProdCatalogInMap);
+
+
+        return result;
+    }
 
 
 
@@ -7731,6 +7854,117 @@ public class PersonManagerServices {
                     "roleTypeId", "SALES_REP");
             dispatcher.runSync("createPartyRole", createPartySALES_REPRoleMap);
         }
+
+
+        //2018-03-18 卖家本身可能就是承运人...
+        GenericValue partyRoleCarrier = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CARRIER").queryFirst();
+        if (null == partyRoleCarrier) {
+            Map<String, Object> createPartyCarrierRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "CARRIER");
+            dispatcher.runSync("createPartyRole", createPartyCarrierRoleMap);
+        }
+
+
+        //授予当事人询价角色
+        GenericValue partyRoleRequester = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_REQUESTER").queryFirst();
+        if (null == partyRoleRequester) {
+            Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REQ_REQUESTER");
+            dispatcher.runSync("createPartyRole", createPartyRoleMap);
+        }
+        //授予当事人询价接受角色
+        GenericValue partyRoleTaker = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REQ_TAKER").queryFirst();
+        if (null == partyRoleTaker) {
+            Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REQ_TAKER");
+            dispatcher.runSync("createPartyRole", createPartyRoleMap);
+        }
+
+
+        // Create Party Role 授予当事人角色,如果没有
+        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+        if (null == partyRole) {
+            Map<String, Object> createPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "ADMIN");
+            dispatcher.runSync("createPartyRole", createPartyRoleMap);
+        }
+
+
+        // 接收账单的客户是否拥有
+        GenericValue partyCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
+        if (null == partyCustRole) {
+            Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "BILL_TO_CUSTOMER");
+            dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+        }
+
+        // 收货的客户是否拥有
+        GenericValue partyCustShipRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+        if (null == partyCustShipRole) {
+            Map<String, Object> createPartyCustShipRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "SHIP_TO_CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyCustShipRoleMap);
+        }
+
+        //最终客户角色是否拥有
+        GenericValue partyEndCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "END_USER_CUSTOMER").queryFirst();
+        if (null == partyEndCustRole) {
+            Map<String, Object> createPartyEndCustRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "END_USER_CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyEndCustRoleMap);
+        }
+
+
+        GenericValue partyCUSTOMERRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();
+        if (null == partyCUSTOMERRole) {
+            Map<String, Object> createPartyCUSTOMERRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyCUSTOMERRoleMap);
+        }
+
+
+        // 发货厂家角色
+        GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
+        if (null == partyVendorRole) {
+            Map<String, Object> createVendorPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "SHIP_FROM_VENDOR");
+            dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
+        }
+
+        // 引用者角色
+        GenericValue partyReferrerRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REFERRER").queryFirst();
+        if (null == partyReferrerRole) {
+            Map<String, Object> createPartyReferrerRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "REFERRER");
+            dispatcher.runSync("createPartyRole", createPartyReferrerRoleMap);
+        }
+        // 收信人角色
+        GenericValue partyAddresseeRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "ADDRESSEE").queryFirst();
+        if (null == partyAddresseeRole) {
+            Map<String, Object> partyAddresseeRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "ADDRESSEE");
+            dispatcher.runSync("createPartyRole", partyAddresseeRoleMap);
+        }
+
+
+        //内部团体角色
+        GenericValue partyInternalOrganizatioRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO").queryFirst();
+        if (null == partyInternalOrganizatioRole) {
+            Map<String, Object> partyInternalOrganizatioRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "INTERNAL_ORGANIZATIO");
+            dispatcher.runSync("createPartyRole", partyInternalOrganizatioRoleMap);
+        }
+
+
+        //发出账单的厂家
+        GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+        if (null == partyBillVendorRole) {
+            Map<String, Object> createPartyBillVendorRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "BILL_FROM_VENDOR");
+            dispatcher.runSync("createPartyRole", createPartyBillVendorRoleMap);
+        }
+
+
 
 
         // 创建当事人

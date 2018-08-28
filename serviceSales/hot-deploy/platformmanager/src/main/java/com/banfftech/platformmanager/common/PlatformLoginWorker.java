@@ -657,26 +657,30 @@ public class PlatformLoginWorker {
         claims.put("iat", iat);
         String tarjeta = signer.sign(claims);
 
-        List<GenericValue> stores =  EntityQuery.use(delegator).from("ProductStoreRole").
-                where("partyId", partyId).queryList();
-        List<Map<String,Object>> returnStoreList =new ArrayList<Map<String, Object>>();
-        if(stores.size()>0){
-            for(GenericValue gv : stores){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
-                rowMap.put("roleTypeId",gv.getString("roleTypeId"));
-                rowMap.put("productStoreId",gv.getString("productStoreId"));
-                String prodCatalogId =  EntityQuery.use(delegator).from("ProductStoreCatalog").
-                        where("productStoreId", gv.getString("productStoreId")).queryFirst().getString("prodCatalogId");
-                rowMap.put("prodCatalogId",prodCatalogId);
-                returnStoreList.add(rowMap);
-            }
-        }
+//        GenericValue store =  EntityQuery.use(delegator).from("ProductStoreRole").
+//                where("partyId", partyId,"roleTypeId","ADMIN").queryFirst();
+//        if(null!=store){
+//            //                rowMap.put("productStoreId",gv.getString("productStoreId"));
+//            //                rowMap.put("prodCatalogId",prodCatalogId);
+//        }
+//        List<Map<String,Object>> returnStoreList =new ArrayList<Map<String, Object>>();
+//        if(stores.size()>0){
+//            for(GenericValue gv : stores){
+//                Map<String,Object> rowMap = new HashMap<String, Object>();
+//                rowMap.put("roleTypeId",gv.getString("roleTypeId"));
+//                rowMap.put("productStoreId",gv.getString("productStoreId"));
+//                String prodCatalogId =  EntityQuery.use(delegator).from("ProductStoreCatalog").
+//                        where("productStoreId", gv.getString("productStoreId")).queryFirst().getString("prodCatalogId");
+//                rowMap.put("prodCatalogId",prodCatalogId);
+//                returnStoreList.add(rowMap);
+//            }
+//        }
 
 
 
         result.put("tarjeta",tarjeta);
         result.put("partyId", partyId);
-        result.put("storeList", returnStoreList);
+//        result.put("storeList", returnStoreList);
 
         return result;
     }

@@ -98,7 +98,6 @@
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
-        <attribute name="storeList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

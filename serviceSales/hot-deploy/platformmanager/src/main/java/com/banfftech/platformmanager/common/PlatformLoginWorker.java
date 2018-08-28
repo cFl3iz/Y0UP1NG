@@ -612,7 +612,7 @@ public class PlatformLoginWorker {
         userInfoMap.put("nickname","未授权的用户");
         userInfoMap.put("sex","0");
         userInfoMap.put("language","CN");
-        userInfoMap.put("headimgurl","");
+        userInfoMap.put("headimgurl","https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/default.png");
 
         if(null != miniProgramIdentification ){
             partyId =(String) miniProgramIdentification.get("partyId");

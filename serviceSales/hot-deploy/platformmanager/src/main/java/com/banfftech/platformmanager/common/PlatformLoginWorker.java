@@ -609,10 +609,10 @@ public class PlatformLoginWorker {
 
         Map<String,String> userInfoMap = new HashMap<String, String>();
 
-        userInfoMap.put("nickname",nickName);
-        userInfoMap.put("sex",gender);
-        userInfoMap.put("language",language);
-        userInfoMap.put("headimgurl",avatarUrl);
+        userInfoMap.put("nickname","未授权的用户");
+        userInfoMap.put("sex","0");
+        userInfoMap.put("language","CN");
+        userInfoMap.put("headimgurl","");
 
         if(null != miniProgramIdentification ){
             partyId =(String) miniProgramIdentification.get("partyId");

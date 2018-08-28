@@ -166,6 +166,23 @@
     </service>
 
 
+
+    <!-- User Create -->
+    <service name="createPeUser2C" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createPeUser2C" auth="false">
+        <description>Create Simple PE 2C User</description>
+        <attribute name="uuid" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tel" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="userLoginId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- Create Person Store -->
     <service name="createPersonStore" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

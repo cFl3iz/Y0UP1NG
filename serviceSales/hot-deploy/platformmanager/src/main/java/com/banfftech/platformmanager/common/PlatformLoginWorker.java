@@ -564,11 +564,11 @@ public class PlatformLoginWorker {
         String unioId = (String) context.get("unioId");
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
-        String appId = (String) context.get("appId");
-        String nickName = (String) context.get("nickName");
-        String gender = (String) context.get("gender");
-        String language = (String) context.get("language");
-        String avatarUrl = (String) context.get("avatarUrl");
+//        String appId = (String) context.get("appId");
+//        String nickName = (String) context.get("nickName");
+//        String gender = (String) context.get("gender");
+//        String language = (String) context.get("language");
+//        String avatarUrl = (String) context.get("avatarUrl");
 
 
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
@@ -626,7 +626,7 @@ public class PlatformLoginWorker {
             createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
             createPeUserMap.put("userLogin", admin);
             createPeUserMap.put("uuid", "");
-            Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser", createPeUserMap);
+            Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser2C", createPeUserMap);
             String newUserLoginId = (String) serviceResultMap.get("userLoginId");
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
             partyId = (String)userLogin.get("partyId");
@@ -657,7 +657,7 @@ public class PlatformLoginWorker {
         claims.put("iat", iat);
         String tarjeta = signer.sign(claims);
 
-        List<GenericValue> stores=  EntityQuery.use(delegator).from("ProductStoreRole").
+        List<GenericValue> stores =  EntityQuery.use(delegator).from("ProductStoreRole").
                 where("partyId", partyId).queryList();
         List<Map<String,Object>> returnStoreList =new ArrayList<Map<String, Object>>();
         if(stores.size()>0){

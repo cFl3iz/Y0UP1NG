@@ -7576,6 +7576,133 @@ public class PersonManagerServices {
     }
 
 
+
+
+    public static Map<String, Object> createPeUser2C(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        String partyId, userLoginId = "";
+        String uuid = (String) context.get("uuid");
+        String tel = (String) context.get("tel");
+        String openId = (String) context.get("openId");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        // Create Party Block
+        int random = (int) (Math.random() * 1000000 + 1);
+        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
+                "firstName", "#" + random, "lastName", " ", "gender", "M");
+        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
+        partyId = (String) createPerson.get("partyId");
+
+
+        // Create PartyIdentification Block
+        if (!UtilValidate.isEmpty(uuid)) {
+            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        }
+
+
+        if (!UtilValidate.isEmpty(openId)) {
+            Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+        }
+
+
+        // Create UserLogin Block
+        Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                tel, "partyId", partyId, "currentPassword", "ofbiz",
+                "currentPasswordVerify", "ofbiz", "enabled", "Y");
+        Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+
+        // Search New UserLogin
+        userLoginId = (String) EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst()
+                .get("userLoginId");
+
+        // Grant Permission Block
+        Map<String, Object> userLoginSecurityGroupInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "groupId", "FULLADMIN");
+        dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
+
+        // 创建会员店铺及目录和分类 2c 后创建
+        // createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+
+
+        // Create Default Pay Method To Party
+        GenericValue newPayMethod = delegator.makeValue("PaymentMethod");
+        newPayMethod.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+        newPayMethod.set("partyId", partyId);
+        newPayMethod.set("paymentMethodTypeId", "EXT_ALIPAY");
+        newPayMethod.set("description", "支付宝");
+        newPayMethod.create();
+
+
+        GenericValue newPayMethod2 = delegator.makeValue("PaymentMethod");
+        newPayMethod2.set("paymentMethodId", delegator.getNextSeqId("PaymentMethod"));
+        newPayMethod2.set("partyId", partyId);
+        newPayMethod2.set("paymentMethodTypeId", "EXT_WXPAY");
+        newPayMethod2.set("description", "微信");
+        newPayMethod2.create();
+
+
+        // Create Party Role 授予当事人 意向客户 角色 用于mark product
+        GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PLACING_CUSTOMER").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "PLACING_CUSTOMER");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+
+
+        // Create Party Role 授予当事人 访问者 角色 用于mark product
+        partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "VISITOR").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "VISITOR");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+        // Create Party Role 授予当事人 合作伙伴 角色 用于mark product
+        partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "PARTNER").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "PARTNER");
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+
+        // 销售代表角色
+        partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SALES_REP").queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartySALES_REPRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "SALES_REP");
+            dispatcher.runSync("createPartyRole", createPartySALES_REPRoleMap);
+        }
+
+
+        // 创建当事人
+
+
+        // 创建当事人税务机关
+        Map<String, Object> createTaxAuthorityOutMap = dispatcher.runSync("createTaxAuthority",
+                UtilMisc.toMap("userLogin", admin,
+                        "includeTaxInPrice", "N",
+                        "taxAuthGeoId", "CHN",
+                        "taxAuthPartyId", partyId));
+
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        resultMap.put("userLoginId", userLoginId);
+        return resultMap;
+    }
     /**
      * Create User
      *

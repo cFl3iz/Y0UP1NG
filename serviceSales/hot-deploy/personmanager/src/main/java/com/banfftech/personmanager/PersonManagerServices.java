@@ -6595,7 +6595,7 @@ public class PersonManagerServices {
                 "payToPartyId", partyId, "storeName", storeName ,
                 "oldHeaderLogo",imageUrl,"title",description, "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y"));
 
-        String productStoreId = (String) createPersonStoreOutMap.get("storeId");
+        String productStoreId = (String) createPersonStoreOutMap.get("productStoreId");
 
         // 创建自己送货的货运方法
         dispatcher.runSync("createCarrierShipmentMethod", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CARRIER", "shipmentMethodTypeId", "EXPRESS"));

@@ -77,6 +77,14 @@ public class PersonManagerQueryServices {
     public int rowId = 1;
 
 
+
+
+
+
+
+
+
+
     /**
      * queryMyProductStoreList
      * @param dctx

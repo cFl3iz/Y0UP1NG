@@ -62,6 +62,8 @@
 
 
 
+
+
     <request-map uri="saveEventQrCode">
         <security https="false" auth="false"/>
         <event type="service" invoke="saveEventQrCode"/>

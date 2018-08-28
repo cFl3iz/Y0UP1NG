@@ -1081,6 +1081,107 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * queryStoreProducts
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryStoreProducts(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        String productStoreId = (String) context.get("productStoreId");
+
+
+        String viewIndexStr = (String) context.get("viewIndexStr");
+
+
+        int viewIndex = 0;
+        if (viewIndexStr != null) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+
+        int viewSize = 600;
+        int lowIndex = 0;
+        int highIndex = 0;
+        Long resourceCount;
+
+
+        GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",productStoreCatalog.getString("prodCatalogId") ).queryFirst();
+        String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+
+
+
+        //"isVirtual", "Y","isVariant","N"
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+        PagedList<GenericValue> myContactListPage = null;
+        myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
+                where("productCategoryId", productCategoryId).orderBy(orderBy)
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
+
+        List<GenericValue> productList = myContactListPage.getData();
+
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId).queryCount();
+
+
+        lowIndex = myContactListPage.getStartIndex();
+        highIndex = myContactListPage.getEndIndex();
+        List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        int count = 0;
+        String beforeVir = "NA";
+        Set<String> fieldSet = new HashSet<String>();
+
+        fieldSet.add("drObjectInfo");
+        fieldSet.add("contentId");
+
+        fieldSet.add("productId");
+        if (null != myContactListPage) {
+            for (GenericValue gv : myContactListPage) {
+                Map<String, Object> rowMap = gv.getAllFields();
+                //自己就是sku
+                String skuId = (String) rowMap.get("productId");
+                EntityCondition findConditions3 = EntityCondition
+                        .makeCondition("productId", EntityOperator.EQUALS, skuId);
+
+                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
+                        findConditions3, fieldSet,
+                        null, null, false);
+                int index = 0;
+                rowMap.put("rowPictures",rowPictures);
+                GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
+
+                    count++;
+                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                    rowMap.put("price", productPrice.get("price"));
+                    returnProductList.add(rowMap);
+
+            }
+        }
+
+        resultMap.put("productList", returnProductList);
+
+        //总共有多少页码
+        int countIndex = (Integer.parseInt(resourceCount + "") % viewSize);
+
+
+        resultMap.put("total", count);
+
+        resultMap.put("from", viewIndex);
+        resultMap.put("current_page", viewIndex + 1);
+        resultMap.put("last_page", Integer.parseInt(resourceCount + ""));
+        return resultMap;
+    }
+
+    /**
      * queryCatalogProduct
      *
      * @param dctx

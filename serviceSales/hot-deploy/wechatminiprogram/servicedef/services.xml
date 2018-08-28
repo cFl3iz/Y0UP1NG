@@ -173,6 +173,33 @@
     </service>
 
 
+
+
+
+
+
+    <!-- 查询目录中的资源  -->
+    <service name="queryStoreProducts" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryStoreProducts" auth="false">
+        <description>queryStoreProducts</description>
+
+        <attribute name="productStoreId" type="String" mode="IN" optional="true" />
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="productList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
+
+
     <!-- 查询小程序应用的配置 -->
     <service name="queryMiniAppConfig" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"

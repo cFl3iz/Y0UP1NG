@@ -920,7 +920,7 @@ public class WeChatMiniProgramServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        GenericValue userLogin = context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 

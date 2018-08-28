@@ -1114,7 +1114,13 @@ public class WeChatOrderQueryServices {
         Long resourceCount;
 
 
+        Debug.logInfo("*productStoreId="+productStoreId,module);
+
         GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+
+        Debug.logInfo("*productStoreCatalog="+productStoreCatalog,module);
+
+
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",productStoreCatalog.getString("prodCatalogId") ).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 

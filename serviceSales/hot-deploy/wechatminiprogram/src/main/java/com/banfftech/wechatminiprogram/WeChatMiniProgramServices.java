@@ -905,6 +905,52 @@ public class WeChatMiniProgramServices {
 
 
     /**
+     * addPartyToStoreRole
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> addPartyToStoreRole(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = context.get("userLogin");
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String productStoreId = (String) context.get("productStoreId");
+        String roleTypeId = (String) context.get("roleTypeId");
+
+
+        String partyId = (String) userLogin.get("partyId");
+
+        // is Exsits Role ?
+        GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyId, "roleTypeId", roleTypeId, "productStoreId", productStoreId).queryFirst();
+
+        if (null == productStoreRole) {
+            Map<String, Object> createProductStoreRoleMap = new HashMap<String, Object>();
+            createProductStoreRoleMap.put("partyId", partyId);
+            createProductStoreRoleMap.put("userLogin", admin);
+            createProductStoreRoleMap.put("productStoreId", productStoreId);
+            createProductStoreRoleMap.put("roleTypeId", roleTypeId);
+            Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", createProductStoreRoleMap);
+            if (!ServiceUtil.isSuccess(createProductStoreRoleOutMap)) {
+                Debug.logError("*Mother Fuck Create Product OutMap Error:" + createProductStoreRoleOutMap, module);
+                return createProductStoreRoleOutMap;
+            }
+        }
+
+        return resultMap;
+    }
+
+
+    /**
      * addRoleToStore
      *
      * @param dctx

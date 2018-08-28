@@ -76,6 +76,83 @@ public class PersonManagerQueryServices {
 
     public int rowId = 1;
 
+
+    /**
+     * queryMyProductStoreList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryMyProductStoreList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+
+        GenericValue myStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+
+
+        if(null!= myStore){
+            Map<String,Object> rowStore = new HashMap<String, Object>();
+            String productStoreId = myStore.getString("productStoreId");
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(
+                    "productStoreId", productStoreId).queryFirst();
+            String storeName = store.getString("storeName");
+            rowStore.put("productStoreId",productStoreId);
+            rowStore.put("storeName",storeName);
+            rowStore.put("storeImage","/");
+            rowStore.put("storeAdminId",partyId);
+            returnList.add(rowStore);
+        }
+
+        List<GenericValue> historyStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", partyId, "roleTypeId", "CUSTOMER").orderBy("-fromDate").queryFirst();
+
+        if(historyStore.size()>0){
+            for(GenericValue gv : historyStore){
+                Map<String,Object> rowStore = new HashMap<String, Object>();
+                String productStoreId = gv.getString("productStoreId");
+                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(
+                        "productStoreId", productStoreId).queryFirst();
+                String storeName = store.getString("storeName");
+                rowStore.put("productStoreId",productStoreId);
+                rowStore.put("storeName",storeName);
+                rowStore.put("storeImage","/");
+                rowStore.put("storeAdminId",store.getString("payToPartyId"));
+                returnList.add(rowStore);
+            }
+        }
+
+
+
+        resultMap.put("storeList",returnList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
     /**
      * 统计详情数据
      * @param dctx

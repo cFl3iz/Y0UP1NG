@@ -183,6 +183,19 @@
     </service>
 
 
+
+    <!-- 查询我浏览过的店铺、我的店铺列表 -->
+    <service name="queryMyProductStoreList" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyProductStoreList" auth="false">
+        <description>queryMyProductStoreList</description>
+        <attribute name="storeList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- Create Person Store -->
     <service name="createPersonStore" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

@@ -781,15 +781,14 @@ public class PlatformLoginWorker {
         result.put("tarjeta", tarjeta);
         result.put("partyId", partyId);
         result.put("tel", tel);
-        if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","ORIGINATOR").queryFirst()){
+        if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","MANUFACTURER").queryFirst()){
             dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
-                    ,"partyId",partyId,"roleTypeId","ORIGINATOR"));
-            if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","WORKER").queryFirst()){
+                    ,"partyId",partyId,"roleTypeId","MANUFACTURER"));
+            if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","SUPPLIER").queryFirst()){
                 dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
-                        ,"partyId",partyId,"roleTypeId","WORKER"));
+                        ,"partyId",partyId,"roleTypeId","SUPPLIER"));
             }
-            dispatcher.runSync("addPartyToFacility",UtilMisc.toMap("userLogin",admin
-                    ,"partyId",partyId,"roleTypeId","WORKER","facilityId","DC"));
+
         }
         return result;
     }

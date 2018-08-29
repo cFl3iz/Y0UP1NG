@@ -752,35 +752,38 @@ public class PlatformLoginWorker {
 
 
         Debug.logInfo("*CREATE NEW USER", module);
-
         GenericValue user = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", tel));
         if(user==null){
-//            return ServiceUtil.returnError("未被授权的用户");
-            //立即注册 让测试员先过去
             Map<String, Object> createPeUserMap = new HashMap<String, Object>();
             createPeUserMap.put("tel", tel);
             createPeUserMap.put("userLogin", admin);
             createPeUserMap.put("uuid", "");
             Map<String, Object> serviceResultMap = dispatcher.runSync("createTelUser", createPeUserMap);
             user = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", serviceResultMap.get("userLoginId")));
-
+        }else{
+            //没有openId关联但手机号是userLogin了
+              Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                user.getString("partyId"), "idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID");
+                dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+            if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", user.getString("partyId"),"roleTypeId","MANUFACTURER").queryFirst()){
+                dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                        ,"partyId",user.getString("partyId"),"roleTypeId","MANUFACTURER"));
+            }
+            String tarjeta = getToken(user.getString("userLoginId"), delegator);
+            result.put("tarjeta", tarjeta);
+            result.put("partyId", user.getString("partyId"));
+            result.put("openId", openId);
+            result.put("tel", tel);
+            return result;
         }
         String newUserLoginId = (String) user.get("userLoginId");
-//        userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
         partyId = (String) user.get("partyId");
-//        UserServices.createNewPerson(admin, partyId, delegator, openId, userInfoMap, user, dispatcher);
         main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin, partyId, delegator, openId, userInfoMap, user, dispatcher);
-        Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
-        dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
 
-        result.put("unioId", unioId);
-        result.put("openId", openId);
 
-        String tarjeta = getToken(user.getString("userLoginId"), delegator);
-        result.put("tarjeta", tarjeta);
-        result.put("partyId", partyId);
-        result.put("tel", tel);
+
+
+
         if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","MANUFACTURER").queryFirst()){
             dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
                     ,"partyId",partyId,"roleTypeId","MANUFACTURER"));
@@ -790,6 +793,14 @@ public class PlatformLoginWorker {
             }
 
         }
+
+
+
+        String tarjeta = getToken(user.getString("userLoginId"), delegator);
+        result.put("tarjeta", tarjeta);
+        result.put("partyId", partyId);
+        result.put("openId", openId);
+        result.put("tel", tel);
         return result;
     }
 

@@ -114,7 +114,7 @@ public class BoomServices {
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        GenericValue userLogin = (String) context.get("userLogin");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
         String supplierName = (String) context.get("supplierName");

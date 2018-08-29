@@ -120,8 +120,11 @@ public class BoomServices {
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
 
+        GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
+        String supplierPartyId = "";
+        if( null == exsitsUser){
 
-        String supplierPartyId = createSupplier(delegator,dispatcher,admin,supplierName,"无");
+          supplierPartyId = createSupplier(delegator,dispatcher,admin,supplierName,"无");
 
         // Create Party Block
         int random = (int) (Math.random() * 1000000 + 1);
@@ -136,6 +139,11 @@ public class BoomServices {
                 supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
                 "currentPasswordVerify", "ofbiz", "enabled", "Y");
         Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+        }else{
+            supplierPartyId=exsitsUser.getString("partyId");
+        }
+
 
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();

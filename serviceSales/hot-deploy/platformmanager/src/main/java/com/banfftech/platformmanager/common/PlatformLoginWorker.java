@@ -787,14 +787,12 @@ public class PlatformLoginWorker {
         if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","MANUFACTURER").queryFirst()){
             dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
                     ,"partyId",partyId,"roleTypeId","MANUFACTURER"));
-            if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","SUPPLIER").queryFirst()){
-                dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
-                        ,"partyId",partyId,"roleTypeId","SUPPLIER"));
-            }
-
         }
 
-
+        if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","CUSTOMER").queryFirst()){
+            dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                    ,"partyId",partyId,"roleTypeId","CUSTOMER"));
+        }
 
         String tarjeta = getToken(user.getString("userLoginId"), delegator);
         result.put("tarjeta", tarjeta);

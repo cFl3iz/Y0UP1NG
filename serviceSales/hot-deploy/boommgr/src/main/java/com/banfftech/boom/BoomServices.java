@@ -129,7 +129,7 @@ public class BoomServices {
         // Create Party Block
         int random = (int) (Math.random() * 1000000 + 1);
         Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
-                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",partyId);
+                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId);
         Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
         supplierPartyId = (String) createPerson.get("partyId");
 
@@ -147,11 +147,11 @@ public class BoomServices {
 
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-        createPartyRelationshipInMap.put("roleTypeIdFrom", "SUPPLIER");
-        createPartyRelationshipInMap.put("roleTypeIdTo","CUSTOMER");
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
+        createPartyRelationshipInMap.put("roleTypeIdTo","SUPPLIER");
         createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom", supplierPartyId);
-        createPartyRelationshipInMap.put("partyIdTo", partyId);
+        createPartyRelationshipInMap.put("partyIdFrom",partyId );
+        createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
         createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
@@ -175,6 +175,8 @@ public class BoomServices {
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "VENDOR"));
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "MANUFACTURER"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CUSTOMER"));
         return partyId;
     }
 

@@ -147,8 +147,8 @@ public class BoomServices {
 
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-        createPartyRelationshipInMap.put("roleTypeIdFrom", PeConstant.SUPPLIER);
-        createPartyRelationshipInMap.put("roleTypeIdTo", PeConstant.CUSTOMER);
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "SUPPLIER");
+        createPartyRelationshipInMap.put("roleTypeIdTo","CUSTOMER");
         createPartyRelationshipInMap.put("userLogin", admin);
         createPartyRelationshipInMap.put("partyIdFrom", supplierPartyId);
         createPartyRelationshipInMap.put("partyIdTo", partyId);

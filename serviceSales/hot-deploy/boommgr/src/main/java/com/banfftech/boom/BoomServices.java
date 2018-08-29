@@ -128,11 +128,13 @@ public class BoomServices {
 
         // Create Party Block
         int random = (int) (Math.random() * 1000000 + 1);
-        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
-                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId);
-        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
+//        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
+//                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId);
+//        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
 //        supplierPartyId = (String) createPerson.get("partyId");
-
+            delegator.createOrStore(delegator.makeValue("Person",
+                    UtilMisc.toMap("nickname", "#" + random,
+                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId)));
 
         // Create UserLogin Block
         Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",

@@ -540,6 +540,12 @@ public class PlatformLoginWorker {
     }
 
 
+
+
+
+
+
+
     /**
      * weChatMiniAppLogin2C
      * @param dctx
@@ -683,6 +689,135 @@ public class PlatformLoginWorker {
 //        result.put("storeList", returnStoreList);
 
         return result;
+    }
+
+
+    /**
+     * weChatMiniAppLoginFromTel
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> weChatMiniAppLoginFromTel(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = null;
+
+        String unioId = (String) context.get("unioId");
+        String tel = (String) context.get("tel");
+        String openId = (String) context.get("openId");
+        String appId = (String) context.get("appId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+
+
+        if (miniProgramIdentification != null) {
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
+
+            String tarjeta = getToken(userLogin.getString("userLoginId"), delegator);
+//            result.put("unioId", unioId);
+            result.put("tel", userLogin.getString("userLoginId"));
+            result.put("tarjeta", tarjeta);
+            result.put("openId", openId);
+            result.put("partyId", miniProgramIdentification.get("partyId"));
+//            result.put("userInfo", UserQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.getString("partyId")));
+//            result.put("userInfo", UserQueryServices.queryPersonWorkerInfo(delegator, miniProgramIdentification.getString("partyId")));
+            return result;
+        }
+
+
+        String partyId, token = "";
+
+
+        Map<String, String> userInfoMap = new HashMap<String, String>();
+
+        userInfoMap.put("nickname", nickName);
+        userInfoMap.put("sex", gender);
+        userInfoMap.put("language", language);
+        userInfoMap.put("headimgurl", avatarUrl);
+
+
+        Debug.logInfo("*CREATE NEW USER", module);
+
+        GenericValue user = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", tel));
+        if(user==null){
+//            return ServiceUtil.returnError("未被授权的用户");
+            //立即注册 让测试员先过去
+            Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+            createPeUserMap.put("tel", tel);
+            createPeUserMap.put("userLogin", admin);
+            createPeUserMap.put("uuid", "");
+            Map<String, Object> serviceResultMap = dispatcher.runSync("createTelUser", createPeUserMap);
+            user = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", serviceResultMap.get("userLoginId")));
+
+        }
+        String newUserLoginId = (String) user.get("userLoginId");
+//        userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+        partyId = (String) user.get("partyId");
+        UserServices.createNewPerson(admin, partyId, delegator, openId, userInfoMap, user, dispatcher);
+        Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
+        dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+
+        result.put("unioId", unioId);
+        result.put("openId", openId);
+
+        String tarjeta = getToken(user.getString("userLoginId"), delegator);
+        result.put("tarjeta", tarjeta);
+        result.put("partyId", partyId);
+        result.put("tel", tel);
+        if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","ORIGINATOR").queryFirst()){
+            dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                    ,"partyId",partyId,"roleTypeId","ORIGINATOR"));
+            if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","WORKER").queryFirst()){
+                dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                        ,"partyId",partyId,"roleTypeId","WORKER"));
+            }
+            dispatcher.runSync("addPartyToFacility",UtilMisc.toMap("userLogin",admin
+                    ,"partyId",partyId,"roleTypeId","WORKER","facilityId","DC"));
+        }
+        return result;
+    }
+
+    /**
+     * 获取票据
+     *
+     * @param userLoginId
+     * @param delegator
+     * @return
+     */
+    public static String getToken(String userLoginId, Delegator delegator) throws GenericEntityException {
+        //有效时间
+        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+        //开始时间
+        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+        //到期时间
+        final long exp = iat + expirationTime;
+        //生成
+        final JWTSigner signer = new JWTSigner(tokenSecret);
+        final HashMap<String, Object> claims = new HashMap<String, Object>();
+        claims.put("iss", iss);
+        claims.put("user", userLoginId);
+        claims.put("delegatorName", delegator.getDelegatorName());
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        return signer.sign(claims);
     }
 
     /**

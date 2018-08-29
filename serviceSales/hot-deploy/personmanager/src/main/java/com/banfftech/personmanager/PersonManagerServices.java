@@ -504,6 +504,100 @@ public class PersonManagerServices {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static Map<String, Object> createTelUser(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        String partyId, userLoginId = "";
+        String uuid = (String) context.get("uuid");
+        String tel = (String) context.get("tel");
+        String openId = (String) context.get("openId");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        // Create Party Block
+        int random = (int) (Math.random() * 1000000 + 1);
+        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
+                "firstName", "#" + random, "lastName", " ", "gender", "M");
+        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
+        partyId = (String) createPerson.get("partyId");
+
+
+        // Create PartyIdentification Block
+        if (!UtilValidate.isEmpty(uuid)) {
+            Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", uuid, "partyIdentificationTypeId", "CARD_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        }
+
+
+        if (!UtilValidate.isEmpty(openId)) {
+            Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+        }
+
+
+        // Create UserLogin Block
+        Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                tel, "partyId", partyId, "currentPassword", "ofbiz",
+                "currentPasswordVerify", "ofbiz", "enabled", "Y");
+        Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+
+        // Search New UserLogin
+        userLoginId = (String) EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst()
+                .get("userLoginId");
+
+        // Grant Permission Block
+        Map<String, Object> userLoginSecurityGroupInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "groupId", "FULLADMIN");
+        dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        resultMap.put("userLoginId", userLoginId);
+        return resultMap;
+    }
+
+
+
     /**
      * 初始化库存
      *

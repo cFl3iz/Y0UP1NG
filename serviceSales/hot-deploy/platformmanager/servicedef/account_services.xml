@@ -101,6 +101,41 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- User Create -->
+    <service name="createTelUser" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="createTelUser" auth="false">
+        <description>Create Simple DC User</description>
+        <attribute name="uuid" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="tel" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="userLoginId" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+    <service name="weChatMiniAppLoginFromTel" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatMiniAppLoginFromTel" auth="false">
+        <description>weChatMiniAppLoginFromTel</description>
+        <attribute name="unioId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="openId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="appId" type="String" mode="IN" optional="true"/>
+        <attribute name="tel" type="String" mode="IN" optional="true"/>
+        <attribute name="nickName" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+        <attribute name="language" type="String" mode="IN" optional="true"/>
+        <attribute name="avatarUrl" type="String" mode="IN" optional="true"/>
+
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
     <!-- Get Tel Captcha -->
     <service name="getTelCaptcha" engine="java"
              location="main.java.com.banfftech.platformmanager.common.SmsServices"

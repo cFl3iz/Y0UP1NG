@@ -768,7 +768,8 @@ public class PlatformLoginWorker {
         String newUserLoginId = (String) user.get("userLoginId");
 //        userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
         partyId = (String) user.get("partyId");
-        UserServices.createNewPerson(admin, partyId, delegator, openId, userInfoMap, user, dispatcher);
+//        UserServices.createNewPerson(admin, partyId, delegator, openId, userInfoMap, user, dispatcher);
+        main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
         Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
                 partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
         dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);

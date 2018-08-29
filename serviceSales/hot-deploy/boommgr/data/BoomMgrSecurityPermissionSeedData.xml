@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the BoomMgr Component." permissionId="BOOMMGR_VIEW"/>
+    <SecurityPermission description="Create operations in the BoomMgr Component." permissionId="BOOMMGR_CREATE"/>
+    <SecurityPermission description="Update operations in the BoomMgr Component." permissionId="BOOMMGR_UPDATE"/>
+    <SecurityPermission description="Delete operations in the BoomMgr Component." permissionId="BOOMMGR_DELETE"/>
+    <SecurityPermission description="ALL operations in the BoomMgr Component." permissionId="BOOMMGR_ADMIN"/>
+
+    <SecurityGroupPermission groupId="SUPER" permissionId="BOOMMGR_ADMIN"/>
+
+</entity-engine-xml>

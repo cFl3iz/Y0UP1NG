@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="BoomMgrApplication">
+        <value xml:lang="en">BoomMgr Application</value>
+        <value xml:lang="zh">BoomMgr应用程序</value>
+        <value xml:lang="zh-TW">BoomMgr應用程式</value>
+    </property>
+    <property key="BoomMgrCompanyName">
+        <value xml:lang="en">OFBiz: BoomMgr</value>
+        <value xml:lang="zh-TW">OFBiz: BoomMgr</value>
+    </property>
+    <property key="BoomMgrCompanySubtitle">
+        <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
+        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
+        <value xml:lang="zh-TW">開源軟體OFBiz的組成部�?</value>
+    </property>
+    <property key="BoomMgrViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">不允许你浏览这个页面�?</value>
+        <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
+    </property>
+</resource>

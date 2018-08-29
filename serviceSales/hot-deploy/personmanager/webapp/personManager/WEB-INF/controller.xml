@@ -5,7 +5,6 @@
          can be found in the following xml file. A component can override the
          elements found in the common-controller.xml file. -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
-
     <description>PersonManager Component Site Configuration File</description>
 
     <!-- Every Request Do Check -->

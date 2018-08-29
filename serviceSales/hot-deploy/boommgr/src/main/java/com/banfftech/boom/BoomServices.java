@@ -131,7 +131,7 @@ public class BoomServices {
         Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
                 "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId);
         Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
-        supplierPartyId = (String) createPerson.get("partyId");
+//        supplierPartyId = (String) createPerson.get("partyId");
 
 
         // Create UserLogin Block

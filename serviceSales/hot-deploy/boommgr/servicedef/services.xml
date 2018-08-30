@@ -19,7 +19,7 @@
         <attribute name="supplierName" type="String" mode="IN" optional="false"/>
         <attribute name="supplierTel" type="String" mode="IN" optional="false"/>
 
-        <attribute name="supplierInfo" type="Map" mode="OUT" optional="false"/>
+        <attribute name="supplierInfo" type="Map" mode="OUT" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

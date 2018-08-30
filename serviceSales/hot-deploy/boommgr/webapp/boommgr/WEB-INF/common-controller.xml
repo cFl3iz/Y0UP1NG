@@ -19,6 +19,15 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+    <request-map uri="createRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="queryMySupplierList">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryMySupplierList"/>

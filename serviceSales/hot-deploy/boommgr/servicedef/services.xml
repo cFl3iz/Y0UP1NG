@@ -25,6 +25,17 @@
                    optional="true"/>
     </service>
 
+    <service name="createRawMaterials" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="createRawMaterials" auth="false">
+        <description>createRawMaterials</description>
+        <attribute name="productName" type="String" mode="IN" optional="false"/>
+        <attribute name="quantityUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="imagePath" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <service name="queryQuantityUom" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

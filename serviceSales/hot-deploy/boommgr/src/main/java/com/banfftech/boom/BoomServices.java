@@ -91,6 +91,57 @@ public class BoomServices {
 
     public final static String module = BoomServices.class.getName();
 
+
+    /**
+     * createRawMaterials
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+         LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        String partyId = userLogin.getString("partyId");
+
+        String productName = (String) context.get("productName");
+        String quantityUomId = (String) context.get("quantityUomId");
+        String imagePath = (String) context.get("imagePath");
+
+        Map<String, Object> createProductInMap = new HashMap<String, Object>();
+        createProductInMap.put("userLogin", admin);
+        long ctm = System.currentTimeMillis();
+        createProductInMap.put("internalName", productName);
+        createProductInMap.put("productName", productName);
+        createProductInMap.put("productTypeId", "RAW_MATERIAL");
+//        createProductInMap.put("description", description);
+        createProductInMap.put("detailImageUrl", imagePath);
+        createProductInMap.put("smallImageUrl", imagePath);
+        createProductInMap.put("quantityUomId", quantityUomId);
+
+        Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+        if (ServiceUtil.isError(createProductOutMap)) {
+            return createProductOutMap;
+        }
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+
     /**
      * CreateMySupplier
      * @param dctx

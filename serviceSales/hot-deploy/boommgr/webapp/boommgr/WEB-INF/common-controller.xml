@@ -28,9 +28,24 @@
     </request-map>
 
 
+    <request-map uri="createMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createMyFinishedGood"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="queryMySupplierList">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryMySupplierList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyFinishedGood"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

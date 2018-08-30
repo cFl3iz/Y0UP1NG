@@ -93,6 +93,66 @@ public class BoomServices {
 
 
     /**
+     * createMyFinishedGood
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createMyFinishedGood(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String productName = (String) context.get("productName");
+//        String quantityUomId = (String) context.get("quantityUomId");
+        String imagePath = (String) context.get("imagePath");
+        String rawMaterials = (String) context.get("rawMaterials");
+
+
+        Map<String, Object> createProductInMap = new HashMap<String, Object>();
+        createProductInMap.put("userLogin", admin);
+        long ctm = System.currentTimeMillis();
+        createProductInMap.put("internalName", productName);
+        createProductInMap.put("productName", productName);
+        createProductInMap.put("productTypeId", "FINISHED_GOOD");
+//        createProductInMap.put("description", description);
+        createProductInMap.put("detailImageUrl", imagePath);
+        createProductInMap.put("smallImageUrl", imagePath);
+//        createProductInMap.put("quantityUomId", quantityUomId);
+
+        Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
+        if (ServiceUtil.isError(createProductOutMap)) {
+            return createProductOutMap;
+        }
+
+        String productId = (String) createProductOutMap.get("productId");
+
+        if(rawMaterials!=null && rawMaterials.length()>2){
+            for(String rowProduct : rawMaterials.split(",")){
+                String productIdFrom  = rowProduct.substring(0,rowProduct.indexOf(":"));
+                String count     = rowProduct.substring(rowProduct.indexOf(":")+1);
+                dispatcher.runSync("createProductAssoc",UtilMisc.toMap("userLogin",admin,"productIdTo",productId,"productIdFrom",productIdFrom
+                ,"quantity",new BigDecimal(count),"productAssocTypeId","MANUF_COMPONENT","fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+            }
+        }
+
+
+        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"roleTypeId","ADMIN","productId",productId,"partyId",partyId));
+
+        return resultMap;
+    }
+
+
+    /**
      * createRawMaterials
      * @param dctx
      * @param context

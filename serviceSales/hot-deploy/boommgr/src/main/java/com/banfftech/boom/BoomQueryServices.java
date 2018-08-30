@@ -159,6 +159,87 @@ public class BoomQueryServices {
     }
 
 
+    /**
+     * queryMyFinishedGood
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyFinishedGood(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(productList.size()>0){
+            for(GenericValue gv : productList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String productId = gv.getString("productId");
+                rowMap.put("productId",productId);
+
+
+                rowMap.put("productName",gv.getString("productName"));
+                rowMap.put("imagePath",gv.getString("detailImageUrl"));
+                rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
+//                String uomId = gv.getString("quantityUomId");
+//                rowMap.put("quantityUomId",uomId);
+
+//                GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+//                        "uomId", uomId).queryFirst();
+//
+//                String uomDescription = uom.getString("description");
+//                rowMap.put("description",uomDescription);
+//
+//                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+//                rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+
+
+                List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
+                        "productIdTo", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+
+
+                if(null!=manufComponents&&manufComponents.size()>0){
+                    for(GenericValue row : manufComponents){
+                        Map<String,Object> rowComponent = new HashMap<String, Object>();
+                        String rowProductId = row.getString("productId");
+                        String quantity  = "" + row.get("quantity");
+                        rowComponent.put("manufComponentId",rowProductId);
+                        rowComponent.put("quantity",quantity);
+                        GenericValue rowProd = EntityQuery.use(delegator).from("Product").where(
+                                "productId", rowProductId).queryFirst();
+                        rowComponent.put("manufComponentName",rowProd.getString("productName"));
+                        rowComponent.put("imagePath",rowProd.getString("detailImageUrl"));
+                        rowComponent.put("fromDate",sdf.format(row.get("fromDate")));
+
+
+                        returnList.add(rowComponent);
+                    }
+                }
+                rowMap.put("finishedGoodList",returnList);
+
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("rawMaterialsList",returnList);
+        return resultMap;
+    }
+
+
+
     public static Map<String, Object> queryQuantityUom(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head

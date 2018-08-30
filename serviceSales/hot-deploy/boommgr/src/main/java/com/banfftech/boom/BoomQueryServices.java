@@ -122,7 +122,7 @@ public class BoomQueryServices {
                 rowMap.put("description",description);
 
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
-                rowMap.put("zh_description",cndescription);
+                rowMap.put("zh_description",cndescription.indexOf("Uom.description")>-1?description:cndescription);
                 rowMap.put("abbreviation",abbreviation);
 
 

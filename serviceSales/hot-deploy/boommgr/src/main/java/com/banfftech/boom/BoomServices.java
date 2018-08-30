@@ -104,7 +104,7 @@ public class BoomServices {
 
         //Service Head
          LocalDispatcher dispatcher = dctx.getDispatcher();
-//        Delegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         // Admin Do Run Service
          GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));

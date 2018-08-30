@@ -120,6 +120,7 @@ public class BoomQueryServices {
 
                 rowMap.put("productName",product.getString("productName"));
                 rowMap.put("imagePath",product.getString("detailImageUrl"));
+                rowMap.put("createdDate",sdf.format(product.getString("createdDate")));
                 String uomId = product.getString("quantityUomId");
                 rowMap.put("quantityUomId",uomId);
 

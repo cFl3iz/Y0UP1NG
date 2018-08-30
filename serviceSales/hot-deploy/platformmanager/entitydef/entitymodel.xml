@@ -44,6 +44,20 @@
 
     </view-entity>
 
+
+    <view-entity entity-name="ProductAndRole" package-name="">
+        <member-entity entity-alias="P" entity-name="Product"/>
+        <member-entity entity-alias="PR" entity-name="ProductRole"/>
+
+        <alias-all entity-alias="P" />
+        <alias-all entity-alias="PR" />
+
+        <view-link entity-alias="P" rel-entity-alias="PR">
+            <key-map field-name="productId" rel-field-name="productId"/>
+        </view-link>
+
+    </view-entity>
+
     <!-- 某目录中的在售变形产品 -->
     <view-entity entity-name="ProductCategoryVariantMember" package-name="org.ofbiz.product.product">
         <member-entity entity-alias="ProductCategoryMember" entity-name="ProductCategoryMember"/>

@@ -105,8 +105,8 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductRole").where(
-                "partyId", partyId, "roleTypeId", "ADMIN").orderBy("-fromDate").queryList();
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","RAW_MATERIAL").orderBy("-fromDate").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,13 +115,12 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
                 rowMap.put("productId",productId);
-                GenericValue product =  EntityQuery.use(delegator).from("Product").where(
-                        "productId", productId).queryFirst();
 
-                rowMap.put("productName",product.getString("productName"));
-                rowMap.put("imagePath",product.getString("detailImageUrl"));
-                rowMap.put("createdDate",sdf.format(product.get("createdDate")));
-                String uomId = product.getString("quantityUomId");
+
+                rowMap.put("productName",gv.getString("productName"));
+                rowMap.put("imagePath",gv.getString("detailImageUrl"));
+                rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
+                String uomId = gv.getString("quantityUomId");
                 rowMap.put("quantityUomId",uomId);
 
                 GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(

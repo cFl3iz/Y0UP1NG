@@ -93,6 +93,72 @@ public class BoomQueryServices {
 
 
 
+    public static Map<String, Object> queryMyRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN").orderBy("-fromDate").queryList();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(productList.size()>0){
+            for(GenericValue gv : productList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String productId = gv.getString("productId");
+                rowMap.put("productId",productId);
+                GenericValue product =  EntityQuery.use(delegator).from("Product").where(
+                        "productId", productId).queryFirst();
+
+                rowMap.put("productName",product.getString("productName"));
+                rowMap.put("imagePath",product.getString("detailImageUrl"));
+                String uomId = product.getString("quantityUomId");
+                rowMap.put("quantityUomId",uomId);
+
+                GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+                        "uomId", uomId).queryFirst();
+
+                String uomDescription = uom.getString("description");
+                rowMap.put("description",uomDescription);
+
+                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+
+
+                List<GenericValue> suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
+                        "productId", productId).queryList();
+
+                List<Map<String,Object>> supplierList = new ArrayList<Map<String, Object>>();
+                if(null!=suppliers&&suppliers.size()>0){
+                    for(GenericValue supplier : suppliers){
+                        Map<String,Object> rowSupplier = new HashMap<String, Object>();
+                        String supplierPartyId = supplier.getString("partyId");
+                        GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
+                                "partyId", supplierPartyId).queryFirst();
+                        rowSupplier.put("supplierId",supplierPartyId);
+                        rowSupplier.put("groupName",partyGroup.getString("groupName"));
+                        supplierList.add(rowSupplier);
+                    }
+                }
+                rowMap.put("supplierList",supplierList);
+
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("rawMaterialsList",returnList);
+        return resultMap;
+    }
+
+
     public static Map<String, Object> queryQuantityUom(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -115,10 +181,11 @@ public class BoomQueryServices {
             for(GenericValue gv : uomList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String uomId = gv.getString("uomId");
-                String description = gv.getString("description");
+
                 String abbreviation = gv.getString("abbreviation");
 
                 rowMap.put("uomId",uomId);
+                String description = gv.getString("description");
                 rowMap.put("description",description);
 
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));

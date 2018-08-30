@@ -34,6 +34,18 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+    <request-map uri="queryMyRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
     <request-map uri="queryQuantityUom">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryQuantityUom"/>

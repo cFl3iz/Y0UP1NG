@@ -109,8 +109,8 @@ public class BoomServices {
         // Admin Do Run Service
          GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 //
-//        GenericValue userLogin = (GenericValue) context.get("userLogin");
-//        String partyId = userLogin.getString("partyId");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
 
         String productName = (String) context.get("productName");
         String quantityUomId = (String) context.get("quantityUomId");
@@ -147,6 +147,7 @@ public class BoomServices {
         }
 
 
+        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"roleTypeId","ADMIN","productId",productId,"partyId",partyId));
 
         return resultMap;
     }

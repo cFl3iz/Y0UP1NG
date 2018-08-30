@@ -795,6 +795,12 @@ public class PlatformLoginWorker {
                     ,"partyId",partyId,"roleTypeId","CUSTOMER"));
         }
 
+
+        if(null==EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId,"roleTypeId","ADMIN").queryFirst()){
+            dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                    ,"partyId",partyId,"roleTypeId","ADMIN"));
+        }
+
         String tarjeta = getToken(user.getString("userLoginId"), delegator);
         result.put("tarjeta", tarjeta);
         result.put("partyId", partyId);

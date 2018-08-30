@@ -115,6 +115,8 @@ public class BoomServices {
         String productName = (String) context.get("productName");
         String quantityUomId = (String) context.get("quantityUomId");
         String imagePath = (String) context.get("imagePath");
+        String suppliers = (String) context.get("suppliers");
+
 
         Map<String, Object> createProductInMap = new HashMap<String, Object>();
         createProductInMap.put("userLogin", admin);
@@ -131,6 +133,21 @@ public class BoomServices {
         if (ServiceUtil.isError(createProductOutMap)) {
             return createProductOutMap;
         }
+
+        String productId = (String) createProductOutMap.get("productId");
+
+        if(suppliers!=null && suppliers.length()>2){
+            for(String rowSupplier : suppliers.split(",")){
+                dispatcher.runSync("createSupplierProduct",
+                        UtilMisc.toMap("userLogin", admin, "productId", productId,
+                                "partyId", rowSupplier,
+                                "availableFromDate", UtilDateTime.nowTimestamp(),
+                                "currencyUomId", "CNY", "lastPrice", BigDecimal.ZERO, "minimumOrderQuantity", BigDecimal.ONE, "supplierProductId", productId));
+            }
+        }
+
+
+
         return resultMap;
     }
 

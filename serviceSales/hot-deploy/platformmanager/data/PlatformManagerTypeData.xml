@@ -107,5 +107,5 @@
 
     <!-- 首页自定义JSON数据 -->
     <PartyContentType partyContentTypeId="MINIPROGRAM_HOME" createdStamp="2018-06-11 11:56:45.0" createdTxStamp="2018-06-11 11:56:45.0" description="首页自定义JSON数据" lastUpdatedStamp="2018-06-11 11:56:45.0" lastUpdatedTxStamp="2018-06-11 11:56:45.0" parentTypeId="MINIPROGRAM"/>
-
+    <Uom createdStamp="2018-08-30 16:38:55.0" createdTxStamp="2018-08-30 16:38:55.0" description="个" lastUpdatedStamp="2018-08-30 16:38:55.0" lastUpdatedTxStamp="2018-08-30 16:38:55.0" uomId="ge" uomTypeId="OTHER_MEASURE"/>
 </entity-engine-xml>

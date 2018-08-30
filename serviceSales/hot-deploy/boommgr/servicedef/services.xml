@@ -26,6 +26,15 @@
     </service>
 
 
+    <service name="queryQuantityUom" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryQuantityUom" auth="false">
+        <description>queryQuantityUom</description>
+        <attribute name="uomList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="queryMySupplierList" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

@@ -89,6 +89,45 @@ import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.q
 public class BoomQueryServices {
 
 
+    public static final String resourceUiLabels = "CommonEntityLabels.xml";
+
+
+
+    public static Map<String, Object> queryQuantityUom(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where().orderBy("-createdStamp").queryList();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+            for(GenericValue gv : uomList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String uomId = gv.getString("uomId");
+                String description = gv.getString("description");
+                String abbreviation = gv.getString("abbreviation");
+
+                rowMap.put("uomId",uomId);
+                rowMap.put("description",description);
+
+                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                rowMap.put("zh_description",cndescription);
+                rowMap.put("abbreviation",abbreviation);
+
+
+                returnList.add(rowMap);
+            }
+
+
+        resultMap.put("uomList",returnList);
+        return resultMap;
+    }
+
+
     /**
      * queryMySupplierList
      * @param dctx

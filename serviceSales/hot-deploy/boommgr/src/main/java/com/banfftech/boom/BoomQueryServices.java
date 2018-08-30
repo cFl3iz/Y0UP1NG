@@ -234,7 +234,7 @@ public class BoomQueryServices {
             }
         }
 
-        resultMap.put("rawMaterialsList",returnList);
+        resultMap.put("finishedGoodList",returnList);
         return resultMap;
     }
 

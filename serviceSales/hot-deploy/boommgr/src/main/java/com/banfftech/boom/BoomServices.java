@@ -113,6 +113,7 @@ public class BoomServices {
 
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
+        boolean isExsitsRole = false;
 
         GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
         String supplierPartyId = "";
@@ -122,13 +123,10 @@ public class BoomServices {
 
         // Create Party Block
         int random = (int) (Math.random() * 1000000 + 1);
-//        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", "#" + random,
-//                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId);
-//        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
-//        supplierPartyId = (String) createPerson.get("partyId");
             delegator.createOrStore(delegator.makeValue("Person",
                     UtilMisc.toMap("nickname", "#" + random,
                 "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId)));
+
 
         // Create UserLogin Block
         Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
@@ -138,8 +136,13 @@ public class BoomServices {
 
         }else{
             supplierPartyId=exsitsUser.getString("partyId");
+            GenericValue hasRelation =  EntityQuery.use(delegator).from("PartyRelationship").where(
+                    "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
+            isExsitsRole = !isExsitsRole;
         }
 
+
+        if(false == isExsitsRole){
 
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
@@ -151,9 +154,15 @@ public class BoomServices {
         createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
+        resultMap.put("supplierInfo",null);
+
         if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
             return createPartyRelationshipOutMap;
         }
+        }else{
+            resultMap.put("supplierInfo",queryPersonBaseInfo(delegator,supplierPartyId));
+        }
+
 
         return resultMap;
     }

@@ -769,6 +769,7 @@ public class PlatformLoginWorker {
                 dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
                         ,"partyId",user.getString("partyId"),"roleTypeId","MANUFACTURER"));
             }
+            main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(user.getString("partyId"), delegator, admin, dispatcher, "WeChatImg", avatarUrl,null);
             String tarjeta = getToken(user.getString("userLoginId"), delegator);
             result.put("tarjeta", tarjeta);
             result.put("partyId", user.getString("partyId"));

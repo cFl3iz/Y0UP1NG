@@ -101,7 +101,7 @@ public class BoomQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-        List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where().orderBy("-createdStamp").queryList();
+        List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where("uomTypeId","WEIGHT_MEASURE").orderBy("-createdStamp").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 

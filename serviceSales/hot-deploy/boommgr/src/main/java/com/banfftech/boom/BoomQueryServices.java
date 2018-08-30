@@ -210,7 +210,7 @@ public class BoomQueryServices {
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
                         "productIdTo", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
 
-
+                List<Map<String,Object>> manuList =new ArrayList<Map<String, Object>>();
                 if(null!=manufComponents&&manufComponents.size()>0){
                     for(GenericValue row : manufComponents){
                         Map<String,Object> rowComponent = new HashMap<String, Object>();
@@ -225,10 +225,10 @@ public class BoomQueryServices {
                         rowComponent.put("fromDate",sdf.format(row.get("fromDate")));
 
 
-                        returnList.add(rowComponent);
+                        manuList.add(rowComponent);
                     }
                 }
-                rowMap.put("finishedGoodList",returnList);
+                rowMap.put("manuList",manuList);
 
                 returnList.add(rowMap);
             }

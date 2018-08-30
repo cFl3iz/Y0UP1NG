@@ -110,7 +110,7 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
 
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyId", partyId, "roleTypeIdFrom", "CUSTOMER").orderBy("-fromDate").queryList();
+                "partyIdFrom", partyId, "roleTypeIdFrom", "CUSTOMER").orderBy("-fromDate").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

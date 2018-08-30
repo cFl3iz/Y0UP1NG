@@ -101,7 +101,14 @@ public class BoomQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-        List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where("uomTypeId","WEIGHT_MEASURE").orderBy("-createdStamp").queryList();
+        List<String> types = new ArrayList<String>();
+        types.add("CURRENCY_MEASURE");
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("uomTypeId", EntityOperator.NOT_IN, types);
+
+
+        List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where(findConditions).orderBy("-createdStamp").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 

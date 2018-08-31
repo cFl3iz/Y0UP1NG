@@ -205,9 +205,9 @@ public class BoomQueryServices {
                     for(GenericValue row : manufComponents){
                         Map<String,Object> rowComponent = new HashMap<String, Object>();
                         String rowProductId = row.getString("productId");
-                        String quantity  = "" + row.get("quantity");
+                        BigDecimal quantity  = (BigDecimal)row.get("quantity");
                         rowComponent.put("manufComponentId",rowProductId);
-                        rowComponent.put("quantity",Integer.parseInt(quantity));
+                        rowComponent.put("quantity",quantity.intValue());
                         GenericValue rowProd = EntityQuery.use(delegator).from("Product").where(
                                 "productId", rowProductId).queryFirst();
                         rowComponent.put("manufComponentName",rowProd.getString("productName"));
@@ -224,7 +224,7 @@ public class BoomQueryServices {
                          String uomDescription = uom.getString("description");
                         rowComponent.put("manufComponentDescription",uomDescription);
 //
-                   String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                        String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
                         rowComponent.put("manufComponentZhDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
 
 

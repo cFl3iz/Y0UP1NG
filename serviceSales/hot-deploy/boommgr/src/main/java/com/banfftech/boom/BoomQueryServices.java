@@ -194,17 +194,7 @@ public class BoomQueryServices {
                 rowMap.put("productName",gv.getString("productName"));
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
                 rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
-//                String uomId = gv.getString("quantityUomId");
-//                rowMap.put("quantityUomId",uomId);
 
-//                GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
-//                        "uomId", uomId).queryFirst();
-//
-//                String uomDescription = uom.getString("description");
-//                rowMap.put("description",uomDescription);
-//
-//                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
-//                rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
 
 
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
@@ -217,12 +207,27 @@ public class BoomQueryServices {
                         String rowProductId = row.getString("productId");
                         String quantity  = "" + row.get("quantity");
                         rowComponent.put("manufComponentId",rowProductId);
-                        rowComponent.put("quantity",quantity);
+                        rowComponent.put("quantity",Integer.parseInt(quantity));
                         GenericValue rowProd = EntityQuery.use(delegator).from("Product").where(
                                 "productId", rowProductId).queryFirst();
                         rowComponent.put("manufComponentName",rowProd.getString("productName"));
                         rowComponent.put("imagePath",rowProd.getString("detailImageUrl"));
                         rowComponent.put("fromDate",sdf.format(row.get("fromDate")));
+
+
+                        String uomId = rowProd.getString("quantityUomId");
+                    //                rowMap.put("quantityUomId",uomId);
+
+                         GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+                                 "uomId", uomId).queryFirst();
+
+                         String uomDescription = uom.getString("description");
+                        rowComponent.put("manufComponentDescription",uomDescription);
+//
+                   String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                        rowComponent.put("manufComponentZhDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+
+
 
 
                         manuList.add(rowComponent);

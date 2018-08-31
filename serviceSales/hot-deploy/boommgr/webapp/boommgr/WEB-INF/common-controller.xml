@@ -57,6 +57,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryMyOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
 
 

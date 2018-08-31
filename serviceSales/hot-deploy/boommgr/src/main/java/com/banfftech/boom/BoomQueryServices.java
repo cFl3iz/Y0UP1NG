@@ -92,7 +92,48 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
 
+    /**
+     * Query MyOrderList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyOrderList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String orderTypeId = (String) context.get("orderTypeId");
+
+
+        List<GenericValue> orderList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "RAW_MATERIAL").orderBy("-fromDate").queryList();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
+
+        return resultMap;
+    }
+
+    /**
+     * 查询原辅料
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> queryMyRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head

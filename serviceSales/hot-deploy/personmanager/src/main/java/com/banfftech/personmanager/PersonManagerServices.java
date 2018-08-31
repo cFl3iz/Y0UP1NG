@@ -504,38 +504,14 @@ public class PersonManagerServices {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * createTelUser
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> createTelUser(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 

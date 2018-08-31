@@ -90,5 +90,17 @@
     </service>
 
 
+    <service name="queryMyOrderList" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryMyOrderList" auth="false">
+        <description>queryMyOrderList</description>
+        <attribute name="orderTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     
 </services>

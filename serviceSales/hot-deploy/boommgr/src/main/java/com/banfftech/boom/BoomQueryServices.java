@@ -220,13 +220,12 @@ public class BoomQueryServices {
 
                          GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                                  "uomId", uomId).queryFirst();
-
-                         String uomDescription = uom.getString("description");
+                        if(null!=uom){
+                        String uomDescription = uom.getString("description");
                         rowComponent.put("manufComponentDescription",uomDescription);
-//
                         String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
                         rowComponent.put("manufComponentZhDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
-
+                        }
 
 
 

@@ -267,6 +267,7 @@
         <set field="createProductStoreMap.autoApproveInvoice" value="Y"/>
         <set field="createProductStoreMap.shipIfCaptureFails" value="Y"/>
         <set field="createProductStoreMap.autoApproveOrder" value="Y"/>
+        <set field="createProductStoreMap.isDemoStore " value="N"/>
         <call-service service-name="createProductStore" in-map-name="createProductStoreMap">
             <result-to-field result-name="productStoreId" />
         </call-service>
@@ -312,7 +313,50 @@
         <set field="updateMap.hasShoppingCart" from-field="hasShoppingCart"/>
         <call-service service-name="updatePartyAppConfig" in-map-name="updateMap"/>
 
-        <set field="successMessage" value="[${appName}]应用创建成功!"/>
+
+        <set field="createProdCatalogMap" type="Map"/>
+        <set field="createProdCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProdCatalogMap.catalogName" value="${appName}目录"/>
+        <call-service service-name="createProdCatalog" in-map-name="createProdCatalogMap">
+            <result-to-field result-name="prodCatalogId" />
+        </call-service>
+        
+
+        <log level="info" message="prodCatalogId=>${prodCatalogId}"/>
+        <set field="createProductCategoryMap" type="Map"/>
+        <set field="createProductCategoryMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProductCategoryMap.productCategoryTypeId" value="CATALOG_CATEGORY"/>
+        <set field="createProductCategoryMap.categoryName" value="${appName}目录分类"/>
+        <set field="createProductCategoryMap.description " value="auto create"/>
+
+        <call-service service-name="createProductCategory" in-map-name="createProductCategoryMap">
+            <result-to-field result-name="productCategoryId" />
+        </call-service>
+
+
+        <log level="info" message="productCategoryId=>${productCategoryId}"/>
+
+
+
+
+        <set field="addProductCategoryToProdCatalogMap" type="Map"/>
+        <set field="addProductCategoryToProdCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="addProductCategoryToProdCatalogMap.prodCatalogCategoryTypeId" value="PCCT_PURCH_ALLW"/>
+        <set field="addProductCategoryToProdCatalogMap.prodCatalogId" from-field="prodCatalogId"/>
+        <set field="addProductCategoryToProdCatalogMap.productCategoryId" from-field="productCategoryId"/>
+
+        <call-service service-name="addProductCategoryToProdCatalog" in-map-name="addProductCategoryToProdCatalogMap">
+        </call-service>
+
+
+        <set field="createProductStoreCatalogMap" type="Map"/>
+        <set field="createProductStoreCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProductStoreCatalogMap.prodCatalogId" from-field="prodCatalogId"/>
+        <set field="createProductStoreCatalogMap.productStoreId" from-field="productStoreId"/>
+        <call-service service-name="createProductStoreCatalog" in-map-name="createProductStoreCatalogMap">
+        </call-service>
+
+        <set field="successMessage" value="[${appName}]=>店铺-${productStoreId}、目录-${prodCatalogId}、分类-${productCategoryId}创建成功!"/>
         <field-to-result field="successMessage" result-name="successMessage"/>
     </simple-method>
 

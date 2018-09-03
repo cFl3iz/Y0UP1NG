@@ -762,8 +762,10 @@ public class PlatformManagerServices {
         GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
 
         try {
+            String[] excelHead = excelList.get(0);
+
                 //WATERPROOF or ANKORAU_RETAIL
-            String prodCatalogId = "WATERPROOF";
+            String prodCatalogId = excelHead[0];
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
             String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
             GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();
@@ -773,7 +775,7 @@ public class PlatformManagerServices {
             for (int i = 0; i < excelList.size(); i++) {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
-                // 品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU
+                // 目录id-品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU
                 // 2018-07-25
                 // 去除了这些列特别提醒-洗涤方式-上市年份+季节-组别-备注
 
@@ -781,19 +783,20 @@ public class PlatformManagerServices {
 
                 String payToPartyId = (String) productStore.get("payToPartyId");
 
-                String internalName = excelRow[1];
-                String productVirtualId = excelRow[2];
+                String internalName = excelRow[2];
+                String productVirtualId = excelRow[3];
 
-                String colorId = excelRow[3];
-                String colorDesc = excelRow[4];
+                String colorId = excelRow[4];
+                String colorDesc = excelRow[5];
 
-                String sizeId = excelRow[5];
-                String sizeDesc = excelRow[7];
-                String listPrice = excelRow[6];
-                String productId = excelRow[8];
+                String sizeId = excelRow[6];
+                String listPrice = excelRow[7];
+
+                String sizeDesc = excelRow[8];
+                String productId = excelRow[9];
 //                String ean = excelRow[10];
 
-                String desc = excelRow[9];
+                String desc = excelRow[10];
                 String otherDesc = desc;
 //                String keyword = excelRow[14];
 

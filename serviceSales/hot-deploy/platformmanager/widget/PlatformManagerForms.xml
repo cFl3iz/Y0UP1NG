@@ -12,6 +12,9 @@
                 </entity-options>
             </drop-down>
         </field>
+        <field name="param">
+            <hidden value="123"/>
+        </field>
         <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
             <file></file>
         </field>

@@ -87,12 +87,20 @@
              location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatMiniAppLogin2B" auth="false">
         <description>weChatMiniAppLogin2B</description>
         <attribute name="unioId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="captcha" type="String" mode="IN" optional="true"/>
+        <attribute name="tel" type="String" mode="IN" optional="true"/>
+
         <attribute name="openId" type="String" mode="INOUT" optional="true"/>
         <attribute name="appId" type="String" mode="IN" optional="true"/>
         <attribute name="nickName" type="String" mode="IN" optional="true"/>
         <attribute name="gender" type="String" mode="IN" optional="true"/>
         <attribute name="language" type="String" mode="IN" optional="true"/>
         <attribute name="avatarUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="country" type="String" mode="IN" optional="true"/>
+        <attribute name="province" type="String" mode="IN" optional="true"/>
+
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>

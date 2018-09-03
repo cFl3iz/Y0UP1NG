@@ -108,4 +108,11 @@
     <!-- 首页自定义JSON数据 -->
     <PartyContentType partyContentTypeId="MINIPROGRAM_HOME" createdStamp="2018-06-11 11:56:45.0" createdTxStamp="2018-06-11 11:56:45.0" description="首页自定义JSON数据" lastUpdatedStamp="2018-06-11 11:56:45.0" lastUpdatedTxStamp="2018-06-11 11:56:45.0" parentTypeId="MINIPROGRAM"/>
     <Uom createdStamp="2018-08-30 16:38:55.0" createdTxStamp="2018-08-30 16:38:55.0" description="个" lastUpdatedStamp="2018-08-30 16:38:55.0" lastUpdatedTxStamp="2018-08-30 16:38:55.0" uomId="ge" uomTypeId="OTHER_MEASURE"/>
+
+
+
+    <RoleType createdStamp="2018-09-03 14:16:25.0" createdTxStamp="2018-09-03 14:16:25.0" description="未被确认的素然员工角色" lastUpdatedStamp="2018-09-03 14:16:25.0" lastUpdatedTxStamp="2018-09-03 14:16:25.0" roleTypeId="NP_ZUCZUG_EMP"/>
+    <RoleType createdStamp="2018-09-03 14:17:00.0" createdTxStamp="2018-09-03 14:16:59.0" description="素然员工角色" lastUpdatedStamp="2018-09-03 14:17:00.0" lastUpdatedTxStamp="2018-09-03 14:16:59.0" roleTypeId="ZUCZUG_EMP"/>
+    <RoleType createdStamp="2018-09-03 14:17:39.0" createdTxStamp="2018-09-03 14:17:39.0" description="未被确认的ankorau员工角色" lastUpdatedStamp="2018-09-03 14:17:39.0" lastUpdatedTxStamp="2018-09-03 14:17:39.0" roleTypeId="NP_ANKORAU_EMP"/>
+    <RoleType createdStamp="2018-09-03 14:18:14.0" createdTxStamp="2018-09-03 14:18:14.0" description="anKoRau员工角色" lastUpdatedStamp="2018-09-03 14:18:14.0" lastUpdatedTxStamp="2018-09-03 14:18:14.0" roleTypeId="ANKORAU_EMP"/>
 </entity-engine-xml>

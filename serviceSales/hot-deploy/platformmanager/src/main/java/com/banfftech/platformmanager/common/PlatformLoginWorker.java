@@ -709,13 +709,14 @@ public class PlatformLoginWorker {
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), module);
             Debug.logError("*CaptchaException:" + captcha, module);
-            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+           return false;
         }
 
         //NotFound Captcha
         if (UtilValidate.isEmpty(smsList)) {
             Debug.logError("*CaptchaNotExistError:" + captcha + "|tel:" + tel, module);
-            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CaptchaNotExistError", locale));
+            return false;
+
         } else {
             GenericValue sms = smsList.get(0);
             //Check Is Right
@@ -728,7 +729,8 @@ public class PlatformLoginWorker {
                     return true;
                 } catch (GenericEntityException e) {
                     Debug.logError("*InternalServiceError:" + captcha, module);
-                    return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "InternalServiceError", locale));
+                    return false;
+
                 }
             }
         }

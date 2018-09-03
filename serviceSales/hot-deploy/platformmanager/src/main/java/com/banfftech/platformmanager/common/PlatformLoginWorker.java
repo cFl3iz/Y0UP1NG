@@ -602,11 +602,16 @@ public class PlatformLoginWorker {
         }
 
 
+        Debug.logInfo("captcha=>"+captcha,module);
+
+
         if(captcha!=null && !captcha.trim().equals("")){
 
 
             boolean checkCaptcha = false;
             checkCaptcha =  checkCaptchaIsRight(delegator,captcha,userLogin,tel,locale);
+            Debug.logInfo("tel:"+tel+",checkCaptcha=>"+checkCaptcha,module);
+
             if(checkCaptcha){
 
 

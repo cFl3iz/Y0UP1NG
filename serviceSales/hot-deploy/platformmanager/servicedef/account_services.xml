@@ -100,7 +100,8 @@
         <attribute name="country" type="String" mode="IN" optional="true"/>
         <attribute name="province" type="String" mode="IN" optional="true"/>
 
-        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>

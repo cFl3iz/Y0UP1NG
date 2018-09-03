@@ -666,7 +666,7 @@ public class PlatformLoginWorker {
                 claims.put("iat", iat);
                 String tarjeta = signer.sign(claims);
 
-                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,
+                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,"firstName",nickName,
                         "comments","country:"+country+"|province:"+province+"|city:"+city));
 
 
@@ -690,6 +690,8 @@ public class PlatformLoginWorker {
 
 
                 result.put("tarjeta",tarjeta);
+                result.put("roleTypeId",roleTypeId);
+                result.put("productStoreId",productStoreId);
                 result.put("partyId", partyId);
             }
 

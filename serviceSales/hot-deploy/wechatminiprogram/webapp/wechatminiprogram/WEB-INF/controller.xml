@@ -155,6 +155,16 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+    <request-map uri="weChatMiniAppLogin2B">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="weChatMiniAppLogin2B"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
     <request-map uri="weChatMiniAppLoginFromTel">
         <security https="false" auth="false"/>
         <event type="service" invoke="weChatMiniAppLoginFromTel"/>

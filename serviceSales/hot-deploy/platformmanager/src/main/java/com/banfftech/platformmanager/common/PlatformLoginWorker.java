@@ -543,7 +543,63 @@ public class PlatformLoginWorker {
 
 
 
+    public static Map<String, Object> weChatMiniAppLogin2B(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
 
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = null;
+
+        String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
+//        String appId = (String) context.get("appId");
+//        String nickName = (String) context.get("nickName");
+//        String gender = (String) context.get("gender");
+//        String language = (String) context.get("language");
+//        String avatarUrl = (String) context.get("avatarUrl");
+
+
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
+
+
+        if(miniProgramIdentification!=null){
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
+            //有效时间
+            long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+            String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+            String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
+            //开始时间
+            final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+            //到期时间
+            final long exp = iat + expirationTime;
+            //生成
+            final JWTSigner signer = new JWTSigner(tokenSecret);
+            final HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("iss", iss);
+            claims.put("user", userLogin.get("userLoginId"));
+            claims.put("delegatorName", delegator.getDelegatorName());
+            claims.put("exp", exp);
+            claims.put("iat", iat);
+            String tarjeta = signer.sign(claims);
+//            result.put("unioId",unioId);
+            result.put("tarjeta",tarjeta);
+            result.put("openId",openId);
+            result.put("partyId",miniProgramIdentification.get("partyId"));
+
+            return result;
+        }
+
+        result.put("tarjeta",null);
+        result.put("partyId", null);
+
+        return result;
+    }
 
 
     /**

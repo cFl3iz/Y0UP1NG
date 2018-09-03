@@ -606,9 +606,13 @@ public class PlatformLoginWorker {
             String productStoreId = queryAppConfig.getString("productStoreId");
             result.put("productStoreId",productStoreId);
 
-            GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", miniProgramIdentification.getString("partyId")).queryFirst();
+            GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,
+                    "partyId", miniProgramIdentification.get("partyId")).queryFirst();
 
             result.put("roleTypeId",storeRole.getString("roleTypeId"));
+
+
+            result.put("userInfo", UserQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.getString("partyId")));
 
             return result;
         }
@@ -698,7 +702,7 @@ public class PlatformLoginWorker {
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
 
-                dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",admin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
+                dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
 
 
                 result.put("tarjeta",tarjeta);

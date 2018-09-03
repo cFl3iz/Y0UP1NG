@@ -35,6 +35,11 @@
              invoke="initialAllSkuPictureTemp" auth="false">
         <description>initialAllSkuPictureTemp</description>
         <attribute name="path" type="String" mode="IN" optional="true"/>
+
+        <attribute name="single_path" type="String" mode="IN" optional="true"/>
+        <attribute name="detail_path" type="String" mode="IN" optional="true"/>
+        <attribute name="match_path" type="String" mode="IN" optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

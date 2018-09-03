@@ -104,6 +104,7 @@
         <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="userInfo" type="Map" mode="OUT" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

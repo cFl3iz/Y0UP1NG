@@ -364,10 +364,93 @@ public class PlatformManagerServices {
         return result;
     }
 
+    public static Map<String, Object> getNeiMaiLoginCaptcha(DispatchContext dctx, Map<String, Object> context) {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        String teleNumber = (String) context.get("teleNumber");
+
+        String smsType = "LOGIN";// LOGIN 或 REGISTER
+        java.sql.Timestamp nowTimestamp = org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp();
+        int validTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe", "sms.validTime", "900", delegator));
+        int intervalTime = Integer
+                .valueOf(EntityUtilProperties.getPropertyValue("pe", "sms.intervalTime", "20", delegator));
+        boolean sendSMS = false;
+
+        // Find SmsData
+        EntityCondition captchaCondition = EntityCondition.makeCondition(
+                EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, teleNumber),
+                EntityUtil.getFilterByDateExpr(), EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"));
+
+        GenericValue sms = null;
+        try {
+            sms = EntityUtil.getFirst(delegator.findList("SmsValidateCode", captchaCondition, null,
+                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false));
+        } catch (GenericEntityException e) {
+            // TODO Sms-Ga EXCEPTION
+        }
+
+        if (UtilValidate.isEmpty(sms)) {
+            sendSMS = true;
+        } else {
+            org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  verfiy code["
+                    + sms.getString("captcha") + "], check the interval time , if we'll send new code", module);
+            // 如果已有未验证的记录存在，则检查是否过了再次重发的时间间隔，没过就忽略本次请求
+            if (org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp().after(org.apache.ofbiz.base.util.UtilDateTime
+                    .adjustTimestamp((java.sql.Timestamp) sms.get("fromDate"), Calendar.SECOND, intervalTime))) {
+                sms.set("thruDate", nowTimestamp);
+                try {
+                    sms.store();
+                } catch (GenericEntityException e) {
+
+                    // return
+                    // ServiceUtil.returnError("CloudCardInternalServiceError"));
+                }
+                org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  will get new verfiy code!",
+                        module);
+                sendSMS = true;
+            }
+        }
+
+        if (sendSMS) {
+            // 生成验证码
+            String captcha = org.apache.ofbiz.base.util.UtilFormatOut
+                    .padString(String.valueOf(Math.round((Math.random() * 10e6))), 6, false, '0');
+            Map<String, Object> smsValidateCodeMap = UtilMisc.toMap();
+            smsValidateCodeMap.put("teleNumber", teleNumber);
+            smsValidateCodeMap.put("captcha", captcha);
+            smsValidateCodeMap.put("smsType", smsType);
+            smsValidateCodeMap.put("isValid", "N");
+            smsValidateCodeMap.put("fromDate", nowTimestamp);
+            smsValidateCodeMap.put("thruDate",
+                    org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));
+            try {
+                GenericValue smstGV = delegator.makeValue("SmsValidateCode", smsValidateCodeMap);
+                smstGV.create();
+            } catch (GenericEntityException e) {
+
+                // return ServiceUtil.returnError(PeSendFailedError"));
+            }
+
+            // Send Message
+            context.put("phone", teleNumber);
+            context.put("code", captcha);
+            context.put("product", "内买小程序");
+            context.put("product", "友评");
+            //TODO FIX ME #2255
+            sendTelMessage2Wx(dctx, context);
+        }
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+
+        result.put("resultMap", inputMap);
+        return result;
+    }
 
     /**
      * Get Login Captcha
-     *
      * @param dctx
      * @param context
      * @return
@@ -468,6 +551,67 @@ public class PlatformManagerServices {
         smsFreeSignName = EntityUtilProperties.getPropertyValue("pe", "sms.smsFreeSignName", delegator);
         smsTemplateCode = EntityUtilProperties.getPropertyValue("pe", "sms.smsTemplateCode", delegator);
     }
+
+
+
+    public static Map<String, Object> sendTelMessage2Wx(DispatchContext dctx, Map<String, Object> context) {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+
+        // Scope Param
+        Locale locale = (Locale) context.get("locale");
+        String phone = (String) context.get("phone");
+        String code = (String) context.get("code");
+        String product = (String) context.get("product");
+        String smsTemplateCode = (String) context.get("smsTemplateCode");
+
+        if (null == smsTemplateCode || smsTemplateCode.trim().equals("")) {
+            smsTemplateCode = "SMS_53800008";
+        }
+
+        // Initial Message Config
+        getSmsProperty(delegator);
+
+        // 暂时先写死
+//		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23654770",
+//				"9c58a5fa366e2aabd8a62363c4c228c6");
+        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23691976",
+                "6d86dc0f2c5b3eb893142db3bbcaf2d2");
+
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        req.setExtend("");
+        req.setSmsType("normal");
+        //req.setSmsFreeSignName(smsFreeSignName);
+        req.setSmsFreeSignName("友评");
+
+        String json = "{\"code\":\"" + code + "\",\"product\":\"" + product + "\"" + "}";
+        org.apache.ofbiz.base.util.Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON=" + json, module);
+        req.setSmsParamString(json);
+        req.setRecNum(phone);
+        //req.setSmsTemplateCode(smsTemplateCode);
+        req.setSmsTemplateCode(smsTemplateCode);
+
+        AlibabaAliqinFcSmsNumSendResponse rsp = null;
+        try {
+            rsp = client.execute(req);
+        } catch (ApiException e) {
+
+        }
+        if (rsp != null && !rsp.isSuccess()) {
+            org.apache.ofbiz.base.util.Debug
+                    .logInfo("something wrong when send the short message, response body:" + rsp.getBody(), module);
+        }
+
+        // Service Foot
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+
+        result.put("resultMap", inputMap);
+        return result;
+    }
+
 
     /**
      * Send Message

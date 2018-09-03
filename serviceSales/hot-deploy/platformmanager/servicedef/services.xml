@@ -199,6 +199,18 @@
     </service>
 
 
+
+
+    <service name="getNeiMaiLoginCaptcha" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices"
+             invoke="getNeiMaiLoginCaptcha" auth="false">
+        <description>Get Captcha To Login</description>
+        <attribute name="teleNumber" type="String" mode="IN"  optional="false" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
     <service name="importProductToComp" engine="java"
              location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="importProductToComp" auth="false">
         <description>importProductToComp</description>

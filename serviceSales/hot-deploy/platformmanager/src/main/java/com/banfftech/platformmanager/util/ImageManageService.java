@@ -218,15 +218,15 @@ public class ImageManageService {
                     //更新产品首图
                     for (GenericValue matchPicture : productMatchPictures) {
                         String path = matchPicture.getString("path");
-                        if (productMatchPictures.size() == 1) {
+//                        if (productMatchPictures.size() == 1) {
                             setProductEntityImageField(delegator, (String) gv.get("productId"), path);
-                        } else {
-                            String rowSingId = matchPicture.getString("skuId");
-                            if (rowSingId.indexOf("P") > -1) {
-
-                                setProductEntityImageField(delegator, (String) gv.get("productId"), path);
-                            }
-                        }
+//                        } else {
+//                            String rowSingId = matchPicture.getString("skuId");
+//                            if (rowSingId.indexOf("P") > -1) {
+//
+//                                setProductEntityImageField(delegator, (String) gv.get("productId"), path);
+//                            }
+//                        }
                         String contentId = createNewContentForImage(dctx, path, admin);
                         if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "MATCH_PRODUCT_IMAGE").queryFirst()) {
 

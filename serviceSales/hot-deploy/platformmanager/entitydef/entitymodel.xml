@@ -9,6 +9,15 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+
+    <entity entity-name="ZuczugEmp" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
+        <field name="tel" type="id-ne"/>
+        <field name="roleTypeId" type="value"/>
+        <prim-key field="tel"/>
+    </entity>
+
+
+
     <!-- 当前店铺线上产品分类目录 -->
     <entity entity-name="ProductStoreOnlineCategory" package-name="org.ofbiz.cloudLake.ProductStore" title="ProductStoreOnlineCategory">
         <field name="productStoreId" type="id-ne"/>

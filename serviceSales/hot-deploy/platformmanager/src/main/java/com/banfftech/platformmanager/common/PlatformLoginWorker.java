@@ -704,7 +704,15 @@ public class PlatformLoginWorker {
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
 
-                dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
+                GenericValue zuczugEmp = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel, "roleTypeId",
+                        roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
+
+                if(null!=zuczugEmp){
+                    //TODO 转正
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId.indexOf("_")+1));
+                }else{
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
+                }
 
 
                 result.put("tarjeta",tarjeta);

@@ -612,12 +612,15 @@ public class PlatformLoginWorker {
             result.put("roleTypeId",storeRole.getString("roleTypeId"));
 
 
+            result.put("prodCatalogId",EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId ).queryFirst().getString("prodCatalogId"));
+
+
             result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")+""));
 
             return result;
         }
 
- 
+
 
 
         if(captcha!=null && !captcha.trim().equals("")){

@@ -102,6 +102,7 @@
 
         <attribute name="roleTypeId" type="String" mode="INOUT" optional="true"/>
         <attribute name="productStoreId" type="String" mode="OUT" optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="OUT" optional="true"/>
 
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <attribute name="userInfo" type="Map" mode="OUT" optional="true"/>

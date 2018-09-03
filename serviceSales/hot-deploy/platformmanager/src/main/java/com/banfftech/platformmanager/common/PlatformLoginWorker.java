@@ -674,14 +674,13 @@ public class PlatformLoginWorker {
 
 
 
-                Generic partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId).queryFirst();
+                GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId).queryFirst();
                 if (null == partyMarkRole) {
                     Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
                             "roleTypeId",roleTypeId);
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
-
-
+  
                 dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",admin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
 
 

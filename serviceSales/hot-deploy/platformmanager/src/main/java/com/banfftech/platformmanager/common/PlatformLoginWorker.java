@@ -612,13 +612,12 @@ public class PlatformLoginWorker {
             result.put("roleTypeId",storeRole.getString("roleTypeId"));
 
 
-            result.put("userInfo", UserQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.getString("partyId")));
+            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId")+""));
 
             return result;
         }
 
-
-        Debug.logInfo("captcha=>"+captcha,module);
+ 
 
 
         if(captcha!=null && !captcha.trim().equals("")){

@@ -680,7 +680,7 @@ public class PlatformLoginWorker {
                             "roleTypeId",roleTypeId);
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
-  
+
                 dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",admin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
 
 

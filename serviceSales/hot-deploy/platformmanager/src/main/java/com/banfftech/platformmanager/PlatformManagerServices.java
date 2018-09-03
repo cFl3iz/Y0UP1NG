@@ -438,7 +438,6 @@ public class PlatformManagerServices {
             context.put("phone", teleNumber);
             context.put("code", captcha);
             context.put("product", "内买小程序");
-            context.put("product", "友评");
             //TODO FIX ME #2255
             sendTelMessage2Wx(dctx, context);
         }

@@ -598,6 +598,18 @@ public class PlatformLoginWorker {
             result.put("openId",openId);
             result.put("partyId",miniProgramIdentification.get("partyId"));
 
+
+            GenericValue queryAppConfig =
+                    EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                            "idValue", appId).queryFirst();
+
+            String productStoreId = queryAppConfig.getString("productStoreId");
+            result.put("productStoreId",productStoreId);
+
+            GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId, "partyId", miniProgramIdentification.getString("partyId")).queryFirst();
+
+            result.put("roleTypeId",storeRole.getString("roleTypeId"));
+
             return result;
         }
 

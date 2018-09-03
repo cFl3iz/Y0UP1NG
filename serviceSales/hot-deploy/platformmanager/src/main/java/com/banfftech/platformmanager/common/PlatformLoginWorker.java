@@ -708,8 +708,11 @@ public class PlatformLoginWorker {
                 .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, tel), EntityUtil.getFilterByDateExpr(), EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"));
         List<GenericValue> smsList = new ArrayList<GenericValue>();
         try {
-            smsList = delegator.findList("SmsValidateCode", captchaConditions, null,
-                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false);
+            smsList = EntityQuery.use(delegator).from("SmsValidateCode").
+                    where("teleNumber", tel, "isValid", "N").orderBy("-fromDate").queryList();
+            Debug.logInfo("smsList:"+smsList,module);
+//                    delegator.findList("SmsValidateCode", captchaConditions, null,
+//                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false);
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), module);
             Debug.logError("*CaptchaException:" + captcha, module);

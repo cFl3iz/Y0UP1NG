@@ -666,7 +666,7 @@ public class PlatformLoginWorker {
                 claims.put("iat", iat);
                 String tarjeta = signer.sign(claims);
 
-                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,"firstName",nickName,
+                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,"firstName",nickName,"lastName"," ",
                         "comments","country:"+country+"|province:"+province+"|city:"+city));
 
 

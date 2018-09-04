@@ -3530,7 +3530,7 @@ public class PersonManagerServices {
         String productPromoId = (String) context.get("productPromoId");
 
         //过期之前所有的券
-        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("EmpPromoCode").where("partyId", partyId).queryList();
+        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("EmpProductPromoCode").where("partyId", partyId).queryList();
 
         if(null!= myPromoList && myPromoList.size()>0){
             for(GenericValue gv : myPromoList){
@@ -3548,7 +3548,7 @@ public class PersonManagerServices {
         String [] numArray = bankOfNumbers.split(",");
         for(int i = 0 ; i < numArray.length ; i ++){
            String rowPromoCodeId =  numArray[i];
-           GenericValue newGv =   delegator.makeValue("EmpPromoCode",
+           GenericValue newGv =   delegator.makeValue("EmpProductPromoCode",
                     UtilMisc.toMap("promoCodeId",rowPromoCodeId,
                             "partyId", partyId, "statusId", "EP_ENABLED"));
             newGv.create();
@@ -3651,7 +3651,7 @@ public class PersonManagerServices {
 
 
 
-        GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCode").where(
+        GenericValue epm = EntityQuery.use(delegator).from("EmpProductPromoCode").where(
                 "promoCodeId", promoCodeId).queryFirst();
 
         if(null == epm){
@@ -3665,12 +3665,12 @@ public class PersonManagerServices {
         }
 
 
-        if(EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+        if(EntityQuery.use(delegator).from("EmpProductPromoCodeRelation").where(
                 "partyIdTo", partyId).queryFirst()!=null){
-            return ServiceUtil.returnError("EXSITS EmpPromoCodeRelation Data");
+            return ServiceUtil.returnError("EXSITS EmpProductPromoCodeRelation Data");
         }
 
-        GenericValue empRela =  delegator.makeValue("EmpPromoCodeRelation",
+        GenericValue empRela =  delegator.makeValue("EmpProductPromoCodeRelation",
                 UtilMisc.toMap("promoCodeId",promoCodeId,"partyIdTo", partyId,"partyIdFrom",epm.get("partyId"),
                         "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
 

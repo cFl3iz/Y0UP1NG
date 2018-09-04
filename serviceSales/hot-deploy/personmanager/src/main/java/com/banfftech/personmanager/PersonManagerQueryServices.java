@@ -100,19 +100,19 @@ public class PersonManagerQueryServices {
 
         int useCount = 0;
 
-        List<GenericValue> empPromoCodeList = EntityQuery.use(delegator).from("EmpPromoCode").where(
+        List<GenericValue> empProductPromoCodeList = EntityQuery.use(delegator).from("EmpProductPromoCode").where(
                 "partyId", partyId).queryList();
 
-        if(null!=empPromoCodeList&& empPromoCodeList.size()>0){
-            for(GenericValue gv : empPromoCodeList){
+        if(null!=empProductPromoCodeList&& empProductPromoCodeList.size()>0){
+            for(GenericValue gv : empProductPromoCodeList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String statusId = gv.getString("statusId");
                 rowMap.put("statusId",statusId);
                 rowMap.put("promoCodeId",gv.getString("promoCodeId"));
                 if(statusId.equals("EP_DISABLED")){
-                     GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+                     GenericValue empProductPromoCodeRelation = EntityQuery.use(delegator).from("EmpProductPromoCodeRelation").where(
                             "promoCodeId", gv.getString("promoCodeId")).queryFirst();
-                    String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
+                    String partyIdTo = empProductPromoCodeRelation.getString("partyIdTo");
                     rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
                     useCount++;
                 }

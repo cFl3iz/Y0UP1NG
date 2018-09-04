@@ -156,10 +156,10 @@
     </service>
 
 
-    <service name="queryEmpPromoCode" engine="java"
+    <service name="queryEmpProductPromoCode" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryEmpPromoList" auth="false">
-        <description>queryEmpPromoCode</description>
+        <description>queryEmpProductPromoCode</description>
         <attribute name="empPromoList" type="List" mode="OUT" optional="true"/>
         <attribute name="useCount" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -3688,6 +3688,9 @@ public class PersonManagerServices {
         resultMap.put("roleTypeId","FRIEND");
 
 
+
+        userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+
         dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId","PLACING_CUSTOMER"));
 
 

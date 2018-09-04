@@ -3539,9 +3539,10 @@ public class PersonManagerServices {
         }
 
         for(int i = 0 ; i < 10 ; i ++){
-            delegator.makeValue("EmpPromoCode",
+           GenericValue newGv =   delegator.makeValue("EmpPromoCode",
                     UtilMisc.toMap("promoCodeId",delegator.getNextSeqId("EmpPromoCode"),
                             "partyId", partyId, "statusId", "EP_ENABLED"));
+            newGv.create();
         }
 
 

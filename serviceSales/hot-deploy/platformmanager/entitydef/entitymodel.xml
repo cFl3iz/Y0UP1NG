@@ -13,7 +13,7 @@
 
 
     <entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
-        <field name="promoCodeId" type="id-vlong-ne"/>
+        <field name="productPromoCodeId" type="id-vlong-ne"/>
         <field name="partyId" type="id-ne"/>
         <field name="statusId" type="id-ne"/>
         <field name="description" type="value"/>
@@ -22,19 +22,19 @@
             <key-map field-name="statusId"/>
         </relation>
         <relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">
-            <key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>
+            <key-map field-name="productPromoCodeId" rel-field-name="productPromoCodeId"/>
         </relation>
-        <prim-key field="promoCodeId"/>
+        <prim-key field="productPromoCodeId"/>
     </entity>
 
     <entity entity-name="EmpPromoCodeRelation" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
-        <field name="promoCodeId" type="id-vlong-ne"/>
+        <field name="productPromoCodeId" type="id-vlong-ne"/>
         <field name="partyIdFrom" type="id-ne"/>
         <field name="partyIdTo" type="id-ne"/>
 
         <field name="fromDate" type="date-time"></field>
 
-        <prim-key field="promoCodeId"/>
+        <prim-key field="productPromoCodeId"/>
         <prim-key field="partyIdFrom"/>
         <prim-key field="partyIdTo"/>
         <prim-key field="fromDate"/>

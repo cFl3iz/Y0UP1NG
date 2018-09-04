@@ -9,6 +9,22 @@
     <copyright></copyright>
     <version></version>
 
+
+    <entity entity-name="PromoEmp" package-name="com.banfftech.personerp"
+            title="PromoEmp">
+
+        <description>PromoEmp</description>
+        <field name="promoCodeId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="description" type="value"/>
+        <relation type="one" fk-name="PEMP_STATUS_FK" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+        </relation>
+        <prim-key field="promoCodeId"/>
+    </entity>
+
+
     <entity entity-name="Roster" package-name="com.banfftech.personerp"
             title="Roster">
 

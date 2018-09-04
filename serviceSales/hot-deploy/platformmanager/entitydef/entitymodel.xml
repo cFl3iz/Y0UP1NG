@@ -10,35 +10,35 @@
     <version>1.0</version>
 
 
-    <entity entity-name="EmpPromo" package-name="org.ofbiz.cloudLake" title="EmpPromo">
-        <field name="promoCodeId" type="value"/>
-        <field name="partyId" type="id-ne"/>
-        <field name="statusId" type="id-ne"/>
-        <field name="description" type="value"/>
+    <!--<entity entity-name="EmpPromo" package-name="org.ofbiz.cloudLake" title="EmpPromo">-->
+        <!--<field name="promoCodeId" type="value"/>-->
+        <!--<field name="partyId" type="id-ne"/>-->
+        <!--<field name="statusId" type="id-ne"/>-->
+        <!--<field name="description" type="value"/>-->
 
-        <relation type="one" fk-name="EPC_2STATUS_FK" rel-entity-name="StatusItem">
-            <key-map field-name="statusId"/>
-        </relation>
-        <!--<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">-->
-        <!--<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>-->
+        <!--<relation type="one" fk-name="EPC_2STATUS_FK" rel-entity-name="StatusItem">-->
+            <!--<key-map field-name="statusId"/>-->
         <!--</relation>-->
-        <prim-key field="promoCodeId"/>
-    </entity>
+        <!--&lt;!&ndash;<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">&ndash;&gt;-->
+        <!--&lt;!&ndash;<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</relation>&ndash;&gt;-->
+        <!--<prim-key field="promoCodeId"/>-->
+    <!--</entity>-->
 
-    <entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake" title="EmpPromoCode">
-        <field name="promoCodeId" type="id-vlong-ne"/>
-        <field name="partyId" type="id-ne"/>
-        <field name="statusId" type="id-ne"/>
-        <field name="description" type="value"/>
+    <!--<entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake" title="EmpPromoCode">-->
+        <!--<field name="promoCodeId" type="id-vlong-ne"/>-->
+        <!--<field name="partyId" type="id-ne"/>-->
+        <!--<field name="statusId" type="id-ne"/>-->
+        <!--<field name="description" type="value"/>-->
 
-        <relation type="one" fk-name="EPC_STATUS_FK" rel-entity-name="StatusItem">
-            <key-map field-name="statusId"/>
-        </relation>
-        <!--<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">-->
-            <!--<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>-->
+        <!--<relation type="one" fk-name="EPC_STATUS_FK" rel-entity-name="StatusItem">-->
+            <!--<key-map field-name="statusId"/>-->
         <!--</relation>-->
-        <prim-key field="promoCodeId"/>
-    </entity>
+        <!--&lt;!&ndash;<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">&ndash;&gt;-->
+            <!--&lt;!&ndash;<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</relation>&ndash;&gt;-->
+        <!--<prim-key field="promoCodeId"/>-->
+    <!--</entity>-->
 
     <entity entity-name="EmpPromoCodeRelation" package-name="org.ofbiz.cloudLake.promo" title="EmpPromoCodeRelation">
         <field name="promoCodeId" type="id-vlong-ne"/>

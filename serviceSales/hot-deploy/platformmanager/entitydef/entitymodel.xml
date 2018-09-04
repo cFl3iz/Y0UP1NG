@@ -12,18 +12,18 @@
 
 
 
-    <entity entity-name="EmpPromoCodeMap" package-name="org.ofbiz.cloudLake.promo" title="EmpPromoCodeMap">
+    <entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake.promo" title="EmpPromoCode">
         <field name="promoCodeId" type="id-vlong-ne"/>
-        <field name="partyId" type="value"/>
-        <field name="statusId" type="value"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
         <field name="description" type="value"/>
 
         <relation type="one" fk-name="EPC_STATUS_FK" rel-entity-name="StatusItem">
             <key-map field-name="statusId"/>
         </relation>
-        <relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">
-            <key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>
-        </relation>
+        <!--<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">-->
+            <!--<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>-->
+        <!--</relation>-->
         <prim-key field="promoCodeId"/>
     </entity>
 
@@ -492,14 +492,14 @@
     <!-- 转发信息 -->
     <!--<entity entity-name="ShareRequest" package-name="org.ofbiz.cloudLake.information" title="InformationShare">-->
         <!--<description>Information Share</description>-->
-        <!--<field name="shareId" type="id" ></field>           <!--PK-->-->
-        <!--<field name="shareTypeId" type="id"></field>        <!-- TYPE ID -->-->
-        <!--<field name="objectId" type="id"></field>        <!-- Share Obj Id -->-->
-        <!--<field name="sharePartyIdFrom" type="value"></field><!-- 转发来自当事人 -->-->
-        <!--<field name="sharePartyIdTo" type="value"></field>  <!-- 转发目标当事人 -->-->
-        <!--<field name="ownerPartyId" type="value"></field>    <!-- 转发对象拥有人 -->-->
-        <!--<field name="infoDesc" type="value"></field>        <!-- description -->-->
-        <!--<field name="fromDate" type="date-time"></field>    <!-- 转发时间 -->-->
+        <!--<field name="shareId" type="id" ></field>           &lt;!&ndash;PK&ndash;&gt;-->
+        <!--<field name="shareTypeId" type="id"></field>        &lt;!&ndash; TYPE ID &ndash;&gt;-->
+        <!--<field name="objectId" type="id"></field>        &lt;!&ndash; Share Obj Id &ndash;&gt;-->
+        <!--<field name="sharePartyIdFrom" type="value"></field>&lt;!&ndash; 转发来自当事人 &ndash;&gt;-->
+        <!--<field name="sharePartyIdTo" type="value"></field>  &lt;!&ndash; 转发目标当事人 &ndash;&gt;-->
+        <!--<field name="ownerPartyId" type="value"></field>    &lt;!&ndash; 转发对象拥有人 &ndash;&gt;-->
+        <!--<field name="infoDesc" type="value"></field>        &lt;!&ndash; description &ndash;&gt;-->
+        <!--<field name="fromDate" type="date-time"></field>    &lt;!&ndash; 转发时间 &ndash;&gt;-->
 
         <!--<prim-key field="shareId"/>-->
         <!--<prim-key field="objectId"/>-->
@@ -511,7 +511,7 @@
         <!--</relation>-->
     <!--</entity>-->
 
-    <!--<!-- 分享类型 -->-->
+    <!--&lt;!&ndash; 分享类型 &ndash;&gt;-->
     <!--<entity entity-name="ShareType" package-name="org.ofbiz.cloudLake.information" title="ShareType">-->
         <!--<description>Information Share Type</description>-->
         <!--<field name="shareTypeId" type="id"></field>-->

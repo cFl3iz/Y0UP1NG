@@ -100,7 +100,7 @@ public class PersonManagerQueryServices {
 
         int useCount = 0;
 
-        List<GenericValue> empPromoCodeList = EntityQuery.use(delegator).from("EmpPromoCodeMap").where(
+        List<GenericValue> empPromoCodeList = EntityQuery.use(delegator).from("EmpPromoCode").where(
                 "partyId", partyId).queryList();
 
         if(null!=empPromoCodeList&& empPromoCodeList.size()>0){

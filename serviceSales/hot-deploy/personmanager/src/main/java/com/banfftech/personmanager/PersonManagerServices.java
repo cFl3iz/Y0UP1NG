@@ -3530,7 +3530,7 @@ public class PersonManagerServices {
         String productPromoId = (String) context.get("productPromoId");
 
         //过期之前所有的券
-        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("EmpPromoCodeMap").where("partyId", partyId).queryList();
+        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("EmpPromoCode").where("partyId", partyId).queryList();
 
         if(null!= myPromoList && myPromoList.size()>0){
             for(GenericValue gv : myPromoList){
@@ -3548,7 +3548,7 @@ public class PersonManagerServices {
         String [] numArray = bankOfNumbers.split(",");
         for(int i = 0 ; i < numArray.length ; i ++){
            String rowPromoCodeId =  numArray[i];
-           GenericValue newGv =   delegator.makeValue("EmpPromoCodeMap",
+           GenericValue newGv =   delegator.makeValue("EmpPromoCode",
                     UtilMisc.toMap("promoCodeId",rowPromoCodeId,
                             "partyId", partyId, "statusId", "EP_ENABLED"));
             newGv.create();
@@ -3651,7 +3651,7 @@ public class PersonManagerServices {
 
 
 
-        GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCodeMap").where(
+        GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCode").where(
                 "promoCodeId", promoCodeId).queryFirst();
 
         if(null == epm){

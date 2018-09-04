@@ -13,7 +13,7 @@
 
 
     <entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
-        <field name="promoCodeId" type="id-ne"/>
+        <field name="promoCodeId" type="id-vlong-ne"/>
         <field name="partyId" type="id-ne"/>
         <field name="statusId" type="id-ne"/>
         <field name="description" type="value"/>
@@ -28,7 +28,7 @@
     </entity>
 
     <entity entity-name="EmpPromoCodeRelation" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
-        <field name="promoCodeId" type="id-ne"/>
+        <field name="promoCodeId" type="id-vlong-ne"/>
         <field name="partyIdFrom" type="id-ne"/>
         <field name="partyIdTo" type="id-ne"/>
 
@@ -42,7 +42,7 @@
 
 
     <entity entity-name="ZuczugEmp" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
-        <field name="tel" type="id-ne"/>
+        <field name="tel" type="id-vlong-ne"/>
         <field name="roleTypeId" type="value"/>
         <prim-key field="tel"/>
     </entity>

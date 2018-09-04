@@ -117,7 +117,7 @@ public class PersonManagerQueryServices {
             }
         }
 
-        resultMap.put("queryEmpPromoCode",returnList);
+        resultMap.put("empPromoList",returnList);
         return resultMap;
     }
 

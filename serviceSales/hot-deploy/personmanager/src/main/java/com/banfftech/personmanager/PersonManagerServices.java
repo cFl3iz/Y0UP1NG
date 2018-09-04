@@ -3586,11 +3586,7 @@ public class PersonManagerServices {
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
 
 
-        if(miniProgramIdentification!=null){
-
-
-
-
+        if(miniProgramIdentification==null){
 
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(

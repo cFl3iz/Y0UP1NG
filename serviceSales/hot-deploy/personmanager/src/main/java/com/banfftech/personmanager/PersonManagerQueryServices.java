@@ -98,6 +98,8 @@ public class PersonManagerQueryServices {
         String partyId = userLogin.getString("partyId");
 
 
+        int useCount = 0;
+
         List<GenericValue> empPromoCodeList = EntityQuery.use(delegator).from("EmpPromoCode").where(
                 "partyId", partyId).queryList();
 
@@ -112,12 +114,14 @@ public class PersonManagerQueryServices {
                             "promoCodeId", gv.getString("promoCodeId")).queryFirst();
                     String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
                     rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
+                    useCount++;
                 }
                 returnList.add(rowMap);
             }
         }
 
         resultMap.put("empPromoList",returnList);
+        resultMap.put("useCount",useCount+"");
         return resultMap;
     }
 

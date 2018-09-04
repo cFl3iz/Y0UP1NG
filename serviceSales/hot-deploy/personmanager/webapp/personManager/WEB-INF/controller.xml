@@ -86,7 +86,7 @@
     </request-map>
    <request-map uri="queryEmpPromoList">
         <security https="false" auth="false"/>
-        <event type="service" invoke="queryEmpProductPromoCode"/>
+        <event type="service" invoke="queryEmpPromoCode"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

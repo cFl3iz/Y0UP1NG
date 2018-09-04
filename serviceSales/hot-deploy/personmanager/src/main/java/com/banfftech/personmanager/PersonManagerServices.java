@@ -3582,17 +3582,17 @@ public class PersonManagerServices {
 
 
         GenericValue userLogin = null;
-
+        String productStoreId = "";
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
-
-
-        if(miniProgramIdentification==null){
-
         GenericValue queryAppConfig =
                 EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
                         "idValue", appId).queryFirst();
 
-        String productStoreId = queryAppConfig.getString("productStoreId");
+        productStoreId = queryAppConfig.getString("productStoreId");
+
+        if(miniProgramIdentification==null){
+
+
 
 
 
@@ -3686,6 +3686,11 @@ public class PersonManagerServices {
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
         resultMap.put("roleTypeId","FRIEND");
+
+
+        dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId","PLACING_CUSTOMER"));
+
+
 
         return resultMap;
     }

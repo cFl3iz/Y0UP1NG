@@ -3661,8 +3661,12 @@ public class PersonManagerServices {
             return ServiceUtil.returnError("EXSITS EmpPromoCodeRelation Data");
         }
 
-        delegator.makeValue("EmpPromoCodeRelation",
-                UtilMisc.toMap("promoCodeId",promoCodeId,"partyIdTo", partyId,"partyIdFrom",epm.get("partyId")) );
+        GenericValue empRela =  delegator.makeValue("EmpPromoCodeRelation",
+                UtilMisc.toMap("promoCodeId",promoCodeId,"partyIdTo", partyId,"partyIdFrom",epm.get("partyId"),
+                        "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+
+
+        empRela.create();
 
         epm.set("statusId","EP_DISABLED");
         epm.store();

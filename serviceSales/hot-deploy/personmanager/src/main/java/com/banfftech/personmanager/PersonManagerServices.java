@@ -3662,10 +3662,9 @@ public class PersonManagerServices {
         }
 
         delegator.makeValue("EmpPromoCodeRelation",
-                UtilMisc.toMap("promoCodeId",promoCodeId),
-                        "partyIdTo", partyId, "statusId", "EP_ENABLED","partyIdFrom",epm.get("partyId"));
+                UtilMisc.toMap("promoCodeId",promoCodeId,"partyIdTo", partyId, "statusId", "EP_ENABLED","partyIdFrom",epm.get("partyId")) );
 
-        epm.set("statusId","DISABLED");
+        epm.set("statusId","EP_DISABLED");
         epm.store();
 
 

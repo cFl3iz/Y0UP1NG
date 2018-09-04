@@ -167,7 +167,19 @@
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="useEmpPromo" auth="false">
         <description>useEmpPromo</description>
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
         <attribute name="promoCodeId" type="String" mode="IN" optional="true"/>
+        <attribute name="appId" type="String" mode="IN" optional="true"/>
+        <attribute name="unioid" type="String" mode="IN" optional="true"/>
+        <attribute name="nickName" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+        <attribute name="language" type="String" mode="IN" optional="true"/>
+        <attribute name="avatarUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="country" type="String" mode="IN" optional="true"/>
+        <attribute name="province" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

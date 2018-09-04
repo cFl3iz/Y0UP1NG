@@ -715,6 +715,17 @@ public class PlatformLoginWorker {
                 }
 
 
+
+                // 创建联系电话
+                Map<String, Object> inputTelecom = UtilMisc.toMap();
+                inputTelecom.put("partyId", partyId);
+                inputTelecom.put("contactNumber", tel);
+                inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+                inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+                inputTelecom.put("userLogin", admin);
+                Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+
                 result.put("tarjeta",tarjeta);
                 result.put("roleTypeId",roleTypeId);
                 result.put("productStoreId",productStoreId);

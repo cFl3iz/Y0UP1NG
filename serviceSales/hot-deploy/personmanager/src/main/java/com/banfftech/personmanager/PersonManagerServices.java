@@ -3562,13 +3562,88 @@ public class PersonManagerServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
-
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-
-        String partyId = userLogin.getString("partyId");
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String promoCodeId = (String) context.get("promoCodeId");
+        String unioid = (String) context.get("unioid");
+        String openId = (String) context.get("openId");
+        String appId = (String) context.get("appId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+
+        String country = (String) context.get("country");
+        String province = (String) context.get("province");
+        String city = (String) context.get("city");
+
+        String   partyId, token ="";
+
+
+        GenericValue userLogin = null;
+
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
+
+
+        if(miniProgramIdentification!=null){
+
+
+
+
+
+        GenericValue queryAppConfig =
+                EntityQuery.use(delegator).from("PartyStoreAppConfig").where(
+                        "idValue", appId).queryFirst();
+
+        String productStoreId = queryAppConfig.getString("productStoreId");
+
+
+
+
+        Map<String,String> userInfoMap = new HashMap<String, String>();
+
+        userInfoMap.put("nickname",nickName);
+        userInfoMap.put("sex",gender);
+        userInfoMap.put("language",language);
+        userInfoMap.put("headimgurl",avatarUrl);
+
+        Debug.logInfo("*CREATE NEW USER", module);
+        //立即注册
+        Map<String, Object> createPeUserMap = new HashMap<String, Object>();
+        createPeUserMap.put("tel",delegator.getNextSeqId("UserLogin")+"");
+        createPeUserMap.put("userLogin", admin);
+        createPeUserMap.put("uuid", "");
+        Map<String, Object> serviceResultMap = dispatcher.runSync("createPeUser2C", createPeUserMap);
+        String newUserLoginId = (String) serviceResultMap.get("userLoginId");
+        userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", newUserLoginId, "enabled", "Y").queryFirst();
+        partyId = (String)userLogin.get("partyId");
+        main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.createNewWeChatPerson2(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
+
+
+
+
+        userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
+
+
+        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,"firstName",nickName,"lastName"," ",
+                "comments","country:"+country+"|province:"+province+"|city:"+city));
+
+
+        //unioId
+        if (!UtilValidate.isEmpty(unioid)) {
+            Map<String, Object> createPartyIdentificationWxInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                    partyId, "idValue", unioid, "partyIdentificationTypeId", "WX_UNIO_ID");
+            dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
+        }
+
+
+        }else{
+            partyId = miniProgramIdentification.getString("partyId");
+        }
+
+
+
 
 
         GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCode").where(
@@ -3579,8 +3654,15 @@ public class PersonManagerServices {
         }
 
         String statusId = epm.getString("statusId");
+        String partyIdFrom = epm.getString("partyId");
         if(statusId.equals("EP_DISABLED")){
             return ServiceUtil.returnError(promoCodeId+" IS USED!");
+        }
+
+
+        if(EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+                "partyIdTo", partyId).queryFirst()!=null){
+            return ServiceUtil.returnError("EXSITS EmpPromoCodeRelation Data");
         }
 
         delegator.makeValue("EmpPromoCodeRelation",
@@ -3589,6 +3671,20 @@ public class PersonManagerServices {
 
         epm.set("statusId","DISABLED");
         epm.store();
+
+
+
+
+        // party relation ship
+        // partyIdFrom FRIEND
+        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+        createPartyRelationshipInMap.put("roleTypeIdTo","_NA_");
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("partyIdFrom",partyId );
+        createPartyRelationshipInMap.put("partyIdTo", partyIdFrom);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", "FRIEND");
+        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
         return resultMap;
     }

@@ -255,7 +255,7 @@ under the License.
         <attribute name="codeLength" type="Integer" mode="IN" optional="true" default-value="8"/>
         <attribute name="promoCodeLayout" type="String" mode="IN" optional="true" default-value="sequence"/>
 
-        <attribute name="bankOfNumbers" type="String" mode="OUT" optional="true"/>
+        <attribute name="bankOfNumbers" type="String" mode="OUT" optional="false"/>
     </service>
 
     <service name="createProductPromoCond" default-entity-name="ProductPromoCond" engine="simple"

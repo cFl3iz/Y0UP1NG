@@ -124,7 +124,7 @@ public class PromoServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         resultMap.put("bankOfNumbers",bankOfNumbers.toString());
-        return ServiceUtil.returnSuccess(bankOfNumbers.toString());
+        return resultMap;
     }
 
     public static Map<String, Object> purgeOldStoreAutoPromos(DispatchContext dctx, Map<String, ? extends Object> context) {

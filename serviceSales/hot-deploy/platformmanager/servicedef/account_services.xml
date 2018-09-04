@@ -157,7 +157,7 @@
 
     <service name="queryEmpPromoCode" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
-             invoke="queryEmpPromoCode" auth="false">
+             invoke="queryEmpPromoList" auth="false">
         <description>queryEmpPromoCode</description>
         <attribute name="empPromoList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

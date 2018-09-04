@@ -3542,7 +3542,7 @@ public class PersonManagerServices {
 
         Map<String,Object> createPromoResult =  dispatcher.runSync("createProductPromoCodeSet",
                 UtilMisc.toMap("userLogin",admin,"productPromoId",productPromoId,"promoCodeLayout","smart",
-                        "quantity",new Long(10),
+                        "quantity",new Long(10),"codeLength",Integer.parseInt("6"),
                         "useLimitPerCode",new Long(1),"useLimitPerCustomer",new Long(1),"userEntered","Y"));
         String bankOfNumbers = (String) createPromoResult.get("bankOfNumbers");
         String [] numArray = bankOfNumbers.split(",");

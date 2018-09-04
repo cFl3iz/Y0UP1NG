@@ -3549,7 +3549,7 @@ public class PersonManagerServices {
         for(int i = 0 ; i < numArray.length ; i ++){
            String rowPromoCodeId =  numArray[i];
            GenericValue newGv =   delegator.makeValue("EmpPromoCode",
-                    UtilMisc.toMap("productPromoCodeId",rowPromoCodeId,
+                    UtilMisc.toMap("promoCodeId",rowPromoCodeId,
                             "partyId", partyId, "statusId", "EP_ENABLED"));
             newGv.create();
         }
@@ -3652,7 +3652,7 @@ public class PersonManagerServices {
 
 
         GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCode").where(
-                "productPromoCodeId", promoCodeId).queryFirst();
+                "promoCodeId", promoCodeId).queryFirst();
 
         if(null == epm){
             return ServiceUtil.returnError("PROMO CODE NOT FOUND");

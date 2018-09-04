@@ -108,10 +108,10 @@ public class PersonManagerQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String statusId = gv.getString("statusId");
                 rowMap.put("statusId",statusId);
-                rowMap.put("promoCodeId",gv.getString("productPromoCodeId"));
+                rowMap.put("promoCodeId",gv.getString("promoCodeId"));
                 if(statusId.equals("EP_DISABLED")){
                      GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
-                            "productPromoCodeId", gv.getString("productPromoCodeId")).queryFirst();
+                            "promoCodeId", gv.getString("promoCodeId")).queryFirst();
                     String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
                     rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
                     useCount++;

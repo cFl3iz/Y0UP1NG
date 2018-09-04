@@ -3548,6 +3548,9 @@ public class PersonManagerServices {
         String [] numArray = bankOfNumbers.split(",");
         for(int i = 0 ; i < numArray.length ; i ++){
            String rowPromoCodeId =  numArray[i];
+            if(rowPromoCodeId.indexOf(":")>-1){
+                rowPromoCodeId = rowPromoCodeId.substring(rowPromoCodeId.indexOf(":")+1);
+            }
            GenericValue newGv =   delegator.makeValue("PromoEmp",
                     UtilMisc.toMap("promoCodeId",rowPromoCodeId,
                             "partyId", partyId, "statusId", "EP_ENABLED"));

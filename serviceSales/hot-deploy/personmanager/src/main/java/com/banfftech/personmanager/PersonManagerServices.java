@@ -3685,6 +3685,8 @@ public class PersonManagerServices {
         createPartyRelationshipInMap.put("partyRelationshipTypeId", "FRIEND");
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
+        resultMap.put("roleTypeId","FRIEND");
+
         return resultMap;
     }
 

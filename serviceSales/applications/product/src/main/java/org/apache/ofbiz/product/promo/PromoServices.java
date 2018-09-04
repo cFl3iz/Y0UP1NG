@@ -121,6 +121,9 @@ public class PromoServices {
             bankOfNumbers.append(",");
         }
 
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        resultMap.put("bankOfNumbers",bankOfNumbers.toString());
         return ServiceUtil.returnSuccess(bankOfNumbers.toString());
     }
 

@@ -3549,7 +3549,50 @@ public class PersonManagerServices {
     }
 
 
-    public static Map<String, Object> akrmOrderShipRequest(DispatchContext dctx, Map<String, Object> context)
+
+    public Map<String, Object> useEmpPromo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+        String promoCodeId = (String) context.get("promoCodeId");
+
+
+        GenericValue epm = EntityQuery.use(delegator).from("EmpPromoCode").where(
+                "promoCodeId", promoCodeId).queryFirst();
+
+        if(null == epm){
+            return ServiceUtil.returnError("PROMO CODE NOT FOUND");
+        }
+
+        String statusId = epm.getString("statusId");
+        if(statusId.equals("EP_DISABLED")){
+            return ServiceUtil.returnError(promoCodeId+" IS USED!");
+        }
+
+        delegator.makeValue("EmpPromoCodeRelation",
+                UtilMisc.toMap("promoCodeId",promoCodeId),
+                        "partyIdTo", partyId, "statusId", "EP_ENABLED","partyIdFrom",epm.get("partyId"));
+
+        epm.set("statusId","DISABLED");
+        epm.store();
+
+        return resultMap;
+    }
+
+        public static Map<String, Object> akrmOrderShipRequest(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException, Exception {
 
         // Service Head

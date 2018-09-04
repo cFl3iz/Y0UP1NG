@@ -21,9 +21,9 @@
         <relation type="one" fk-name="EPC_STATUS_FK" rel-entity-name="StatusItem">
             <key-map field-name="statusId"/>
         </relation>
-        <!--<relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">-->
-            <!--<key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>-->
-        <!--</relation>-->
+        <relation type="one" fk-name="EPC_PROMO_FK" rel-entity-name="ProductPromoCode">
+            <key-map field-name="promoCodeId" rel-field-name="productPromoCodeId"/>
+        </relation>
         <prim-key field="promoCodeId"/>
     </entity>
 

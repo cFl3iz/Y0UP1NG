@@ -84,6 +84,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+   <request-map uri="queryEmpPromoList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryEmpPromoList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <!-- 统计详细数据 -->

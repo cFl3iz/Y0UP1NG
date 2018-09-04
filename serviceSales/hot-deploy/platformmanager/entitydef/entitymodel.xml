@@ -10,6 +10,33 @@
     <version>1.0</version>
 
 
+
+
+    <entity entity-name="EmpPromoCode" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
+        <field name="promoCodeId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="description" type="value"/>
+
+        <relation type="one" fk-name="EPC_STATUS_FK" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+        </relation>
+        <prim-key field="promoCodeId"/>
+    </entity>
+
+    <entity entity-name="EmpPromoCodeRelation" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
+        <field name="promoCodeId" type="id-ne"/>
+        <field name="partyIdFrom" type="id-ne"/>
+        <field name="partyIdTo" type="id-ne"/>
+
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="promoCodeId"/>
+        <prim-key field="partyIdFrom"/>
+        <prim-key field="partyIdTo"/>
+        <prim-key field="fromDate"/>
+    </entity>
+
+
     <entity entity-name="ZuczugEmp" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
         <field name="tel" type="id-ne"/>
         <field name="roleTypeId" type="value"/>

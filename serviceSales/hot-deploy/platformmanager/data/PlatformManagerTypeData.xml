@@ -115,4 +115,12 @@
     <RoleType createdStamp="2018-09-03 14:17:00.0" createdTxStamp="2018-09-03 14:16:59.0" description="素然员工角色" lastUpdatedStamp="2018-09-03 14:17:00.0" lastUpdatedTxStamp="2018-09-03 14:16:59.0" roleTypeId="ZUCZUG_EMP"/>
     <RoleType createdStamp="2018-09-03 14:17:39.0" createdTxStamp="2018-09-03 14:17:39.0" description="未被确认的ankorau员工角色" lastUpdatedStamp="2018-09-03 14:17:39.0" lastUpdatedTxStamp="2018-09-03 14:17:39.0" roleTypeId="NP_ANKORAU_EMP"/>
     <RoleType createdStamp="2018-09-03 14:18:14.0" createdTxStamp="2018-09-03 14:18:14.0" description="anKoRau员工角色" lastUpdatedStamp="2018-09-03 14:18:14.0" lastUpdatedTxStamp="2018-09-03 14:18:14.0" roleTypeId="ANKORAU_EMP"/>
+
+
+
+
+    <StatusType createdStamp="2018-09-04 14:17:58.0" createdTxStamp="2018-09-04 14:17:58.0" description="EMP_PROMO" lastUpdatedStamp="2018-09-04 14:17:58.0" lastUpdatedTxStamp="2018-09-04 14:17:58.0" statusTypeId="EMP_PROMO"/>
+    <StatusItem createdStamp="2018-09-04 14:18:49.0" createdTxStamp="2018-09-04 14:18:49.0" lastUpdatedStamp="2018-09-04 14:18:49.0" lastUpdatedTxStamp="2018-09-04 14:18:49.0" statusId="EP_ENABLED" statusTypeId="EMP_PROMO"/>
+    <StatusItem createdStamp="2018-09-04 14:19:19.0" createdTxStamp="2018-09-04 14:19:19.0" lastUpdatedStamp="2018-09-04 14:19:19.0" lastUpdatedTxStamp="2018-09-04 14:19:19.0" statusId="EP_DISABLED" statusTypeId="EMP_PROMO"/>
+
 </entity-engine-xml>

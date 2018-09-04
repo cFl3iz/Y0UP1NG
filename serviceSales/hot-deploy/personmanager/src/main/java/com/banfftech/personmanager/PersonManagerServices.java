@@ -3499,6 +3499,56 @@ public class PersonManagerServices {
 //        }]
 //    }], login.username = omsapiaccount
 //    }
+
+
+    /**
+     * 重置我的十张优惠券
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> resetBaZhePromoCode(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String partyId = (String) context.get("partyId");
+
+
+        //过期之前所有的券
+        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("EmpPromoCode").where("partyId", partyId).queryList();
+
+        if(null!= myPromoList && myPromoList.size()>0){
+            for(GenericValue gv : myPromoList){
+                gv.set("statusId","EP_DISABLED");
+                gv.store();
+            }
+        }
+
+        for(int i = 0 ; i < 10 ; i ++){
+            delegator.makeValue("EmpPromoCode",
+                    UtilMisc.toMap("promoCodeId",delegator.getNextSeqId("EmpPromoCode"),
+                            "partyId", partyId, "statusId", "EP_ENABLED"));
+        }
+
+
+        return resultMap;
+    }
+
+
     public static Map<String, Object> akrmOrderShipRequest(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException, Exception {
 

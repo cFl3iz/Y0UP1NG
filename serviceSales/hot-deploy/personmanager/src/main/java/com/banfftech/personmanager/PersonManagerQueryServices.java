@@ -80,7 +80,46 @@ public class PersonManagerQueryServices {
 
 
 
+    public Map<String, Object> queryEmpPromoList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+
+        List<GenericValue> empPromoCodeList = EntityQuery.use(delegator).from("EmpPromoCode").where(
+                "partyId", partyId).queryList();
+
+        if(null!=empPromoCodeList&& empPromoCodeList.size()>0){
+            for(GenericValue gv : empPromoCodeList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String statusId = gv.getString("statusId");
+                rowMap.put("statusId",statusId);
+                rowMap.put("promoCodeId",gv.getString("promoCodeId"));
+                if(statusId.equals("EP_DISABLED")){
+                     GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+                            "promoCodeId", gv.getString("promoCodeId")).queryFirst();
+                    String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
+                    rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
+                }
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("queryEmpPromoCode",returnList);
+        return resultMap;
+    }
 
 
 

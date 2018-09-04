@@ -143,6 +143,28 @@
 
 
 
+
+
+    <service name="resetBaZhePromoCode" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="resetBaZhePromoCode" auth="false">
+        <description>resetBaZhePromoCode</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+    <service name="queryEmpPromoCode" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryEmpPromoCode" auth="false">
+        <description>queryEmpPromoCode</description>
+        <attribute name="empPromoList" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="weChatMiniAppLoginFromTel" engine="java"
              location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="weChatMiniAppLoginFromTel" auth="false">
         <description>weChatMiniAppLoginFromTel</description>

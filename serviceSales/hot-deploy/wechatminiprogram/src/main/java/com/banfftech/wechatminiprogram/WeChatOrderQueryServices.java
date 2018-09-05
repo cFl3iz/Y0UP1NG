@@ -1400,7 +1400,7 @@ public class WeChatOrderQueryServices {
 
         String openId = (String) context.get("openId");
         String prodCatalogId = (String) context.get("prodCatalogId");
-        DeBug.logInfo("prodCatalogId"+prodCatalogId,module);
+        Debug.logInfo("prodCatalogId"+prodCatalogId,module);
         String viewIndexStr = (String) context.get("viewIndexStr");
 
 

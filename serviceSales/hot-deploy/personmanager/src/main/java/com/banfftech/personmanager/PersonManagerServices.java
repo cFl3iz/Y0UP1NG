@@ -3036,7 +3036,6 @@ public class PersonManagerServices {
         itemProduct.set("shipBeforeDate", null);
         itemProduct.set("productCategoryId", productCategoryId);
         // Unit Price = List Price
-        itemProduct.set("unitListPrice", context.get("grandTotal"));
         itemProduct.set("shoppingListId", null);
         itemProduct.set("cancelBackOrderDate", null);
         // Desc To Order Item List
@@ -3048,9 +3047,10 @@ public class PersonManagerServices {
         GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
         if(null!=productOnePrice && neiMai!=null && neiMai.equals("true")){
             itemProduct.set("unitPrice", productOnePrice.get("price"));
+            itemProduct.set("unitListPrice", productOnePrice.get("price"));
         }else{
             itemProduct.set("unitPrice", product.get("price"));
-
+            itemProduct.set("unitListPrice", context.get("grandTotal"));
         }
 
         itemProduct.set("quantity", quantity);

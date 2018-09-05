@@ -1298,6 +1298,12 @@ public class WeChatOrderQueryServices {
                             count++;
                             GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                             rowMap.put("price", productPrice.get("price"));
+
+                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+                            if(null!=productOnePrice){
+                                rowMap.put("oneMouthPrice", productOnePrice.get("price"));
+                            }
+
                             returnProductList.add(rowMap);
                             beforeVir = rowVirId;
                         }
@@ -1306,6 +1312,12 @@ public class WeChatOrderQueryServices {
                     count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
+
+                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+                    if(null!=productOnePrice){
+                        rowMap.put("oneMouthPrice", productOnePrice.get("price"));
+                    }
+
                     returnProductList.add(rowMap);
                 }
             }

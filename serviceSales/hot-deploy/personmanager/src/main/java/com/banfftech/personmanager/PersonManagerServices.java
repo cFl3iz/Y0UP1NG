@@ -2998,6 +2998,9 @@ public class PersonManagerServices {
 
         // ProductID
         String productId = (String) context.get("productId");
+
+        //是否内买
+        String neiMai = (String) context.get("neiMai");
         //产品的分类ID
         String productCategoryId = (String) context.get("productCategoryId");
         String prodCatalogId = (String) context.get("prodCatalogId");
@@ -3041,7 +3044,15 @@ public class PersonManagerServices {
         itemProduct.set("selectedAmount", BigDecimal.ZERO);
         itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
         itemProduct.set("orderItemSeqId", "00001");
-        itemProduct.set("unitPrice", product.get("price"));
+
+        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+        if(null!=productOnePrice && neiMai!=null && neiMai.equals("true")){
+            itemProduct.set("unitPrice", productOnePrice.get("price"));
+        }else{
+            itemProduct.set("unitPrice", product.get("price"));
+
+        }
+
         itemProduct.set("quantity", quantity);
         itemProduct.set("comments", null);
         itemProduct.set("statusId", PeConstant.ORDER_ITEM_APPROVED_STATUS_ID);
@@ -3096,11 +3107,11 @@ public class PersonManagerServices {
         Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
 
         GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
+         Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes);
         if (null == orderItemShipGrpInvRes) {
             dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
                     "inventoryItemId", invItem.get("inventoryItemId")
                     , "orderId", orderId, "orderItemSeqId", "00001", "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
-
         }
 
 
@@ -8012,6 +8023,7 @@ public class PersonManagerServices {
         Map<String, Object> doCreateOrderIn = new HashMap<String, Object>();
         doCreateOrderIn.put("userLogin", admin);
         doCreateOrderIn.put("productId", productId);
+        doCreateOrderIn.put("neiMai", "true");
         doCreateOrderIn.put("salesRepPartyId", null);
         doCreateOrderIn.put("productCategoryId", category.get("productCategoryId"));
         doCreateOrderIn.put("prodCatalogId", prodCatalogId);

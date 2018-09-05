@@ -82,6 +82,9 @@
         <description>createPeOrder</description>
 
         <attribute name="productId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="neiMai" type="String" mode="IN" optional="true"/>
+
         <attribute name="salesRepPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="productCategoryId" type="String" mode="IN" optional="false"/>
         <attribute name="prodCatalogId" type="String" mode="IN" optional="false"/>

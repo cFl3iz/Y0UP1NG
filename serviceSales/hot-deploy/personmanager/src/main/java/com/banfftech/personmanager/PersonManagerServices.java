@@ -3586,8 +3586,21 @@ public class PersonManagerServices {
         GenericValue promo = EntityQuery.use(delegator).from("PromoEmp").where(
                 "promoCodeId", promoCodeId).queryFirst();
 
-        if(promo==null || !promoCodeId.trim().equals("00000")){
+        if(promo==null && (promoCodeId.trim().indexOf("00000000")<0)){
             return ServiceUtil.returnError(promoCodeId+"  IS NOT FOUND !");
+        }
+
+        //员工
+        if(promoCodeId.trim().indexOf("00000000")>0){
+            promoCodeId = promoCodeId.trim();
+            String custPartyId = promoCodeId.substring(promoCodeId.indexOf("1")+1);
+              promoCodeId = promoCodeId.substring(0,promoCodeId.indexOf("1"));
+            GenericValue empPromoHistory =  delegator.makeValue("EmpPromoHistory",
+                    UtilMisc.toMap("promoCodeId",promoCodeId,"salesPartyId", partyId,"fromPartyId",custPartyId,
+                            "custPartyId",custPartyId,
+                            "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+            empPromoHistory.create();
+            return resultMap;
         }
 
         String partyIdFrom = promo.getString("partyId");

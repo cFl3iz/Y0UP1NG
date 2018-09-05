@@ -860,7 +860,9 @@ public class WeChatOrderQueryServices {
             }
 
 
-            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
+            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId,"productFeatureCategoryId","PRODUCT_SIZE").queryList();
+
+
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
             for (GenericValue gv : gvs) {
 
@@ -892,8 +894,11 @@ public class WeChatOrderQueryServices {
                 productFeatureList.add(innerMap);
 
             }
-
-
+            GenericValue colorFeature = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId,"productFeatureCategoryId","PRODUCT_COLOR").queryFirst();
+            Map<String, Object> innerMap = new HashMap<String, Object>();
+            String innerDesc = colorFeature.getString("description");
+            innerMap.put("COLOR_DESC", innerDesc);
+            productFeatureList.add(innerMap);
             //图片数组
             allField.put("imgArray", imgAttr);
             //所有特征

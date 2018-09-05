@@ -112,9 +112,12 @@ public class PersonManagerQueryServices {
                 if(statusId.equals("EP_DISABLED")){
                      GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
                             "promoCodeId", gv.getString("promoCodeId")).queryFirst();
-                    String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
-                    rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
-                    useCount++;
+                    if(null!= empPromoCodeRelation){
+                        String partyIdTo = empPromoCodeRelation.getString("partyIdTo");
+                        rowMap.put("toPersonInfo",queryPersonBaseInfo(delegator,partyIdTo));
+                        useCount++;
+                    }
+
                 }
                 returnList.add(rowMap);
             }

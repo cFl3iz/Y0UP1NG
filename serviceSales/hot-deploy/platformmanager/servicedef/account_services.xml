@@ -165,6 +165,20 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+    <service name="scanQrPromo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="scanQrPromo" auth="false">
+        <description>scanQrPromo</description>
+
+        <attribute name="promoCodeId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="useEmpPromo" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="useEmpPromo" auth="false">

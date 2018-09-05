@@ -54,6 +54,22 @@
     </entity>
 
 
+
+    <entity entity-name="EmpPromoHistory" package-name="org.ofbiz.cloudLake" title="EmpPromoHistory">
+
+        <field name="salesPartyId" type="id-ne"/>
+        <field name="fromPartyId" type="id-ne"/>
+        <field name="custPartyId" type="id-ne"/>
+        <field name="promoCodeId" type="value"/>
+
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="salesPartyId"/>
+        <prim-key field="fromPartyId"/>
+        <prim-key field="custPartyId"/>
+        <prim-key field="fromDate"/>
+    </entity>
+
+
     <entity entity-name="ZuczugEmp" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
         <field name="tel" type="id-vlong-ne"/>
         <field name="roleTypeId" type="value"/>

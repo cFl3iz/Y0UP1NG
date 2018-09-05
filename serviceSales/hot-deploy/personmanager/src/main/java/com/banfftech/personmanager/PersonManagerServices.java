@@ -3561,7 +3561,53 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+    public Map<String, Object> scanQrPromo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+        String promoCodeId = (String) context.get("promoCodeId");
+
+
+
+        GenericValue promo = EntityQuery.use(delegator).from("PromoEmp").where(
+                "promoCodeId", promoCodeId).queryFirst();
+
+        if(promo==null || !promoCodeId.trim().equals("00000")){
+            return ServiceUtil.returnError(promoCodeId+"  IS NOT FOUND !");
+        }
+
+        String partyIdFrom = promo.getString("partyId");
+
+
+        GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+                "promoCodeId", promoCodeId).queryFirst();
+
+        GenericValue empPromoHistory =  delegator.makeValue("EmpPromoHistory",
+                UtilMisc.toMap("promoCodeId",promoCodeId,"salesPartyId", partyId,"fromPartyId",partyIdFrom,
+                        "custPartyId",empPromoCodeRelation.get("partyIdTo"),
+                        "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+
+
+        empPromoHistory.create();
+
+
+
+        return resultMap;
+    }
 
     public Map<String, Object> useEmpPromo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 

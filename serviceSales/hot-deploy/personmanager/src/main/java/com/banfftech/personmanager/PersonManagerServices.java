@@ -7983,6 +7983,11 @@ public class PersonManagerServices {
 
         // Amount
         String amount_str = (String) context.get("amount");
+
+        String yunFei = (String) context.get("yunFei");
+        if(null== yunFei||yunFei.equals("")){
+            yunFei = "0";
+        }
         // ProductID
         String productId = (String) context.get("productId");
         // ProductPrice
@@ -8074,6 +8079,14 @@ public class PersonManagerServices {
                 UtilMisc.toMap("orderId", orderId));
         resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
         resultMap.put("orderId", orderId);
+
+
+        if(!yunFei.equals("0")){
+            //创建运输费用
+            dispatcher.runSync("createOrderAdjustment",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"orderAdjustmentTypeId","SHIPPING_CHARGES"
+            ,"amount",new BigDecimal(yunFei)));
+        }
+
 
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",

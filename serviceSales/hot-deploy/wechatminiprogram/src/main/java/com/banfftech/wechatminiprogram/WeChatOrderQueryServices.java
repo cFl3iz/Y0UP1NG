@@ -1232,6 +1232,8 @@ public class WeChatOrderQueryServices {
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
         String partyId = "NA";
 
+
+
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
@@ -1398,7 +1400,7 @@ public class WeChatOrderQueryServices {
 
         String openId = (String) context.get("openId");
         String prodCatalogId = (String) context.get("prodCatalogId");
-
+        DeBug.logInfo("prodCatalogId"+prodCatalogId,module);
         String viewIndexStr = (String) context.get("viewIndexStr");
 
 

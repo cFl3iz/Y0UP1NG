@@ -141,6 +141,13 @@
                             <include-form name="ProductUploadImportForm"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
+
+                        <screenlet title="素然产品特殊价格导入">
+                            <include-form name="ProductPriceUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
                         <screenlet title="康橙产品导入">
                             <include-form name="KangChengProductUploadImportForm"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>

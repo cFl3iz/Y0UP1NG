@@ -37,6 +37,8 @@
     <request-map uri="ProductUploadImport"><security https="true" auth="true"/><response name="success" type="view" value="ProductUploadImport"/></request-map>
     <request-map uri="ProductImageUpload"><security https="true" auth="true"/><response name="success" type="view" value="ProductImageUpload"/></request-map>
     <request-map uri="ExportShareCpsToExcel"><security https="true" auth="true"/><response name="success" type="view" value="ExportShareCpsToExcel"/></request-map>
+
+
     <!-- 快速运送整个订单-->
     <request-map uri="QuickShipOrder"><security https="true" auth="true"/><response name="success" type="view" value="QuickShipOrder"/></request-map>
 
@@ -59,6 +61,11 @@
     <request-map uri="ProductUploadImportEvent">
         <security https="true" auth="true"/>
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImport"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+   <request-map uri="ProductPriceUploadImportFormEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productPriceUploadImportFormEvent"/>
         <response name="success" type="view" value="ProductUploadImport"/>
     </request-map>
 

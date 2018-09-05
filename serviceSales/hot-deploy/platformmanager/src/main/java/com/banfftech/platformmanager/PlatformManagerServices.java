@@ -880,6 +880,86 @@ public class PlatformManagerServices {
 
 
     /**
+     * 产品特殊价格更新
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String productPriceUploadImportFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
+        try {
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+
+                String[] excelRow = excelList.get(i);
+
+
+                String productName = excelRow[0];
+                String spuId = excelRow[1];
+                String colorId = excelRow[2];
+                String onePrice = excelRow[5];
+
+                EntityCondition findConditions  = EntityCondition.makeCondition("productId", EntityOperator.LIKE, spuId+"-" +colorId+"%");
+                GenericValue product = EntityQuery.use(delegator).from("Product").where(findConditions).queryFirst();
+                if(null!=product){
+
+                    String skuId = product.getString("productId");
+                    Debug.logInfo("*update product ["+skuId+"] MINIMUM_PRICE to " + onePrice);
+                    GenericValue productPrice =
+                            EntityQuery.use(delegator).from("ProductPrice").where("productId",skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+                    if(null!= productPrice){
+                        productPrice.set("price",new BigDecimal(onePrice));
+                        productPrice.store();
+                    }else{
+                        dispatcher.runSync("createProductPrice",UtilMisc.toMap("userLogin",admin,"currencyUomId","CNY",
+                                        "productId",skuId,"price",new BigDecimal(onePrice),
+                                        "productPricePurposeId","PURCHASE",
+                                        "productPriceTypeId","MINIMUM_PRICE",
+                                        "productStoreGroupId","_NA_"),
+                                "taxInPrice","Y");
+                    }
+
+
+                }
+
+                TransactionUtil.commit();
+
+            }
+        }catch (Exception e){
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+                return "error";
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+
+
+
+    /**
      * 产品数据Excel导入
      * (2018-07-25)版
      * @param request

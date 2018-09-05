@@ -1382,6 +1382,115 @@ public class WeChatOrderQueryServices {
 
 
     /**
+     * 内买专用目录产品列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryNeiMaiCatalogProduct(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String openId = (String) context.get("openId");
+        String prodCatalogId = (String) context.get("prodCatalogId");
+
+        String viewIndexStr = (String) context.get("viewIndexStr");
+
+
+        int viewIndex = 0;
+        if (viewIndexStr != null) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+
+        int viewSize = 600;
+        int lowIndex = 0;
+        int highIndex = 0;
+        Long resourceCount;
+
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
+        String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+
+        //"isVirtual", "Y","isVariant","N"
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+        PagedList<GenericValue> myContactListPage = null;
+        myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
+                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy)
+                .distinct()
+                .queryPagedList(viewIndex, viewSize);
+
+
+
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "N").queryCount();
+
+
+//        lowIndex = myContactListPage.getStartIndex();
+//        highIndex = myContactListPage.getEndIndex();
+        List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
+        int count = 0;
+        Set<String> fieldSet = new HashSet<String>();
+
+        fieldSet.add("drObjectInfo");
+        fieldSet.add("contentId");
+
+        fieldSet.add("productId");
+        if (null != myContactListPage) {
+            for (GenericValue gv : myContactListPage) {
+                Map<String, Object> rowMap = gv.getAllFields();
+                //自己就是sku
+                String skuId = (String) rowMap.get("productId");
+                int index = 0;
+
+                GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
+                if (vir_product != null) {
+                    String detailImageUrl = (String) gv.getString("detailImageUrl");
+
+                    String rowVirId = (String) vir_product.get("productId");
+
+                        Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
+                        //如果没有图的默认不看 针对zuczug
+                        if (detailImageUrl.indexOf("DEFAULT_PRODUCT") < 0) {
+                            count++;
+                            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                            rowMap.put("price", productPrice.get("price"));
+
+                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+                            if(null!=productOnePrice){
+                                rowMap.put("oneMouthPrice", productOnePrice.get("price"));
+                            }
+
+                            returnProductList.add(rowMap);
+
+                        }
+
+                }
+            }
+        }
+
+        resultMap.put("productList", returnProductList);
+
+        //总共有多少页码
+//        int countIndex = (Integer.parseInt(resourceCount + "") % viewSize);
+
+        resultMap.put("total", count);
+        resultMap.put("from", viewIndex);
+        resultMap.put("current_page", viewIndex + 1);
+        resultMap.put("last_page", Integer.parseInt(resourceCount + ""));
+        return resultMap;
+    }
+
+
+
+
+
+
+
+
+    /**
      * 查询好友的资源列表
      *
      * @param dctx

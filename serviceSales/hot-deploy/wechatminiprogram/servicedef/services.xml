@@ -251,6 +251,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
     </service>
 
+    <service name="queryNeiMaiCatalogProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryNeiMaiCatalogProduct" auth="false">
+        <description>queryNeiMaiCatalogProduct</description>
+        <attribute name="openId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productId" type="String" mode="IN"  optional="true"/>
+        <attribute name="productStoreId" type="String" mode="OUT"  optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="OUT"  optional="true"/>
+        <attribute name="productDetail" type="java.util.Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"  optional="true"/>
+    </service>
+
     <service name="querySku" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="querySku" auth="false">

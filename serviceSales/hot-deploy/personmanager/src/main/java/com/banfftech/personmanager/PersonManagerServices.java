@@ -7947,6 +7947,135 @@ public class PersonManagerServices {
 
 
     /**
+     * placeResourceOrder4NeiMai
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> placeResourceOrder4NeiMai(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Sudo
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        // StoreId
+        String productStoreId = (String) context.get("productStoreId");
+
+        // Amount
+        String amount_str = (String) context.get("amount");
+        // ProductID
+        String productId = (String) context.get("productId");
+        // ProductPrice
+        String price = (String) context.get("price");
+        // CatalogId
+        String prodCatalogId = (String) context.get("prodCatalogId");
+        // 订单备注
+        String orderReMark = (String) context.get("orderReMark");
+
+
+
+        GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where(
+                "productStoreId", productStoreId).queryFirst();
+
+
+       String  payToPartyId = productStore.getString("payToPartyId");
+
+
+
+        BigDecimal subTotal = BigDecimal.ZERO;
+        BigDecimal grandTotal = BigDecimal.ZERO;
+        BigDecimal amount = BigDecimal.ONE;
+
+
+        if (!UtilValidate.isEmpty(amount_str)) {
+            amount = new BigDecimal(amount_str);
+        }
+
+
+        if (!UtilValidate.isEmpty(price)) {
+            grandTotal = subTotal = new BigDecimal(price);
+        }
+
+
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+        GenericValue category = EntityQuery.use(delegator).from("ProductCategoryAndMember").where("productId", productId).queryFirst();
+
+        String originFacilityId = (String) facility.get("facilityId");
+
+        Map<String, Object> doCreateOrderIn = new HashMap<String, Object>();
+        doCreateOrderIn.put("userLogin", admin);
+        doCreateOrderIn.put("productId", productId);
+        doCreateOrderIn.put("salesRepPartyId", null);
+        doCreateOrderIn.put("productCategoryId", category.get("productCategoryId"));
+        doCreateOrderIn.put("prodCatalogId", prodCatalogId);
+        doCreateOrderIn.put("productStoreId", productStoreId);
+        doCreateOrderIn.put("partyId", partyId);
+        doCreateOrderIn.put("billFromVendorPartyId", payToPartyId);
+        doCreateOrderIn.put("originFacilityId", originFacilityId);
+        doCreateOrderIn.put("quantity", amount);
+        doCreateOrderIn.put("grandTotal", grandTotal);
+        Map<String, Object> doCreateOrderOut = dispatcher.runSync("createPeOrder", doCreateOrderIn);
+
+        if (!ServiceUtil.isSuccess(doCreateOrderOut)) {
+            return doCreateOrderOut;
+        }
+
+        String orderId = (String) doCreateOrderOut.get("orderId");
+
+        // 如果有备注
+        if (!UtilValidate.isEmpty(orderReMark)) {
+            Map<String, Object> createOrderNoteOut = dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "noteName", "买家备注", "note", orderReMark, "internalNote", "N"));
+            if (!ServiceUtil.isSuccess(createOrderNoteOut)) {
+                return createOrderNoteOut;
+            }
+        }
+
+
+        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", payToPartyId).queryFirst();
+
+        if (null != teleContact) {
+            String contactNumber = (String) teleContact.get("contactNumber");
+            resultMap.put("contactTel", contactNumber);
+        }
+
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        String maiJiaName = (String) person.get("firstName");
+
+        //  auto approved
+
+        Map<String, Object> changeOrderStatusOutMap = dispatcher.runSync("changeOrderStatus",
+                UtilMisc.toMap("userLogin", admin,
+                        "orderId", orderId,
+                        "statusId", PeConstant.ORDER_APPROVED_STATUS_ID));
+
+        resultMap.put("partyIdFrom", partyId);
+        resultMap.put("partyIdTo", payToPartyId);
+
+        Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
+                UtilMisc.toMap("orderId", orderId));
+        resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
+        resultMap.put("orderId", orderId);
+
+        dispatcher.runAsync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        "productId:"+productId+",quantity:"+amount_str
+                        , "title", maiJiaName + "[" + partyId + "]下单了,单号:" + orderId));
+
+        return resultMap;
+    }
+
+
+
+
+    /**
      * 资源下单
      * @param dctx
      * @param context

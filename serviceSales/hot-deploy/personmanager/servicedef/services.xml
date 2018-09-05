@@ -1333,7 +1333,39 @@
     </service>
 
 
+    <service name="placeResourceOrder4NeiMai" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="placeResourceOrder4NeiMai" auth="false">
+        <description>Place Resource Order 内买</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
 
+        <attribute name="price" type="String" mode="IN"
+                   optional="true"/>
+        <!-- 订单备注 -->
+        <attribute name="orderReMark" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="amount" type="String" mode="IN"
+                   optional="true"/>
+        <attribute name="prodCatalogId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="productStoreId" type="String" mode="IN"
+                   optional="true"/>
+
+        <attribute name="payToPartyId" type="String" mode="IN"
+                   optional="true"/>
+
+
+        <attribute name="orderId" type="String" mode="OUT"  optional="true"/>
+        <attribute name="grandTotal" type="String" mode="OUT"  optional="true"/>
+
+
+        <attribute name="contactTel" type="String" mode="OUT"
+                   optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <!-- Place Resource Order -->
     <service name="placeResourceOrder" engine="java"

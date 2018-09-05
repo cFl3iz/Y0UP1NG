@@ -3591,7 +3591,7 @@ public class PersonManagerServices {
         }
 
         //员工
-        if(promoCodeId.trim().indexOf("00-")>0){
+        if(promoCodeId.trim().indexOf("00-")>-1){
             promoCodeId = promoCodeId.trim();
             String custPartyId = promoCodeId.substring(promoCodeId.indexOf("-")+1);
               promoCodeId = promoCodeId.substring(0,promoCodeId.indexOf("-"));

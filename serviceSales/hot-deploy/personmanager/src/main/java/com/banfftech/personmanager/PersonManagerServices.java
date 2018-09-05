@@ -3032,7 +3032,6 @@ public class PersonManagerServices {
         GenericValue itemProduct = delegator.makeValue("OrderItem", UtilMisc.toMap());
 
         itemProduct.set("productId", productId);
-        itemProduct.set("isModifiedPrice", "N");
         itemProduct.set("shipBeforeDate", null);
         itemProduct.set("productCategoryId", productCategoryId);
         // Unit Price = List Price
@@ -3047,9 +3046,12 @@ public class PersonManagerServices {
         GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
         if(null!=productOnePrice && neiMai!=null && neiMai.equals("true")){
             itemProduct.set("unitPrice", productOnePrice.get("price"));
+            itemProduct.set("unitPrice", productOnePrice.get("price"));
             itemProduct.set("unitListPrice", productOnePrice.get("price"));
+            itemProduct.set("isModifiedPrice", "Y");
         }else{
             itemProduct.set("unitPrice", product.get("price"));
+            itemProduct.set("isModifiedPrice", "N");
             itemProduct.set("unitListPrice", context.get("grandTotal"));
         }
 

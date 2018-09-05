@@ -1303,6 +1303,7 @@
         <description>Place Resources Order</description>
 
         <attribute name="strList" type="String" mode="IN" optional="true"/>
+        <attribute name="yunFei" type="String" mode="IN" optional="true"/>
 
         <!-- 订单备注 -->
         <attribute name="orderReMark" type="String" mode="IN" optional="true"/>

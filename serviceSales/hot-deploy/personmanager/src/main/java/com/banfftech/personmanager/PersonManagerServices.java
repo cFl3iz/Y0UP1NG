@@ -7572,10 +7572,16 @@ public class PersonManagerServices {
         // 订单备注
         String orderReMark = (String) context.get("orderReMark");
 
+        String yunFei = (String) context.get("yunFei");
+        if(null== yunFei||yunFei.equals("")){
+            yunFei = "0";
+        }
+
         //SelectProducts
         String strList = (String) context.get("strList");
 
         String salesRepId = "";
+
 
 
         /*用户地址*/
@@ -7780,6 +7786,13 @@ public class PersonManagerServices {
                 UtilMisc.toMap("content",
                         splitOrderItemList.toString()
                         , "title", "[" + partyId + "]购物车下单,单号:" + orderId));
+
+
+        if(!yunFei.equals("0")){
+            //创建运输费用
+            dispatcher.runSync("createOrderAdjustment",UtilMisc.toMap("userLogin",admin,"orderId",orderId,"orderAdjustmentTypeId","SHIPPING_CHARGES"
+                    ,"amount",new BigDecimal(yunFei)));
+        }
 
         return resultMap;
     }

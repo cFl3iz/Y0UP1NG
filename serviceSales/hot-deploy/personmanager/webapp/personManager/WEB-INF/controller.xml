@@ -100,6 +100,14 @@
     </request-map>
 
 
+    <request-map uri="queryEmpPromoRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryEmpPromoRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <!-- 统计详细数据 -->
     <request-map uri="queryProductCpsReportDetail">
         <security https="false" auth="false"/>

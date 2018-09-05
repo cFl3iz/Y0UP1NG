@@ -167,6 +167,18 @@
     </service>
 
 
+
+
+    <service name="queryEmpPromoRelation" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryEmpPromoRelation" auth="false">
+        <description>queryEmpPromoRelation</description>
+        <attribute name="empPromoRelation" type="Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="scanQrPromo" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="scanQrPromo" auth="false">

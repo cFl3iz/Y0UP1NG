@@ -77,6 +77,48 @@ public class PersonManagerQueryServices {
     public int rowId = 1;
 
 
+    /**
+     * queryEmpPromoRelation
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryEmpPromoRelation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+        GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
+                "partyIdTo", partyId).queryFirst();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(null!= empPromoCodeRelation){
+
+            resultMap.put("empPromoRelation",UtilMisc.toMap(
+                    "promoCodeId",empPromoCodeRelation.get("promoCodeId"),
+                    "partyIdFrom",empPromoCodeRelation.get("partyIdFrom"),
+                    "fromDate",sdf.format(empPromoCodeRelation.get("fromDate"))
+            ));
+
+        }
+
+
+        return resultMap;
+    }
 
 
 

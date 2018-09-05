@@ -8064,7 +8064,7 @@ public class PersonManagerServices {
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         "productId:"+productId+",quantity:"+amount_str
-                        , "title", maiJiaName + "[" + partyId + "]购买了内购产品,单号:<a href='#'>" + orderId+"</a>"));
+                        , "title", maiJiaName + "[" + partyId + "]购买了内购产品,单号: [" + orderId+"] "));
 
         return resultMap;
     }

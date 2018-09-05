@@ -215,6 +215,14 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+
+    <request-map uri="queryNeiMaiCatalogProductDetail">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryNeiMaiCatalogProductDetail"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
     <request-map uri="queryNeiMaiCatalogProduct">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryNeiMaiCatalogProduct"/>

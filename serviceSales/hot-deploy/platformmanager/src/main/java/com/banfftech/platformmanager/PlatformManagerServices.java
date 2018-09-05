@@ -933,8 +933,8 @@ public class PlatformManagerServices {
                                         "productId",skuId,"price",new BigDecimal(onePrice),
                                         "productPricePurposeId","PURCHASE",
                                         "productPriceTypeId","MINIMUM_PRICE",
-                                        "productStoreGroupId","_NA_"),
-                                "taxInPrice","Y");
+                                        "productStoreGroupId","_NA_", "taxInPrice","Y")
+                               );
                     }
 
 

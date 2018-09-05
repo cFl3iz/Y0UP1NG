@@ -922,7 +922,7 @@ public class PlatformManagerServices {
                 if(null!=product){
 
                     String skuId = product.getString("productId");
-                    Debug.logInfo("*update product ["+skuId+"] MINIMUM_PRICE to " + onePrice);
+                    Debug.logInfo("*update product ["+skuId+"] MINIMUM_PRICE to " + onePrice,module);
                     GenericValue productPrice =
                             EntityQuery.use(delegator).from("ProductPrice").where("productId",skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
                     if(null!= productPrice){

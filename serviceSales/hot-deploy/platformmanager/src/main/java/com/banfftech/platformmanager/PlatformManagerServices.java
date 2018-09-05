@@ -916,11 +916,12 @@ public class PlatformManagerServices {
                 String spuId = excelRow[1];
                 String colorId = excelRow[2];
                 String onePrice = excelRow[5];
-
+                Debug.logInfo("*productName:"+productName+"|spuId:"+spuId+"|colorId:"+colorId,module);
                 EntityCondition findConditions  = EntityCondition.makeCondition("productId", EntityOperator.LIKE, spuId+"-" +colorId+"%");
-                GenericValue product = EntityQuery.use(delegator).from("Product").where(findConditions).queryFirst();
-                if(null!=product){
-
+                List<GenericValue> products = EntityQuery.use(delegator).from("Product").where(findConditions).queryList();
+                Debug.logInfo("*products:"+products,module);
+                if(null!=products && products.size()>0){
+                    for(GenericValue product : products){
                     String skuId = product.getString("productId");
                     Debug.logInfo("*update product ["+skuId+"] MINIMUM_PRICE to " + onePrice,module);
                     GenericValue productPrice =
@@ -937,7 +938,7 @@ public class PlatformManagerServices {
                                );
                     }
 
-
+                    }
                 }
 
                 TransactionUtil.commit();

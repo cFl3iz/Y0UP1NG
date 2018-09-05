@@ -677,6 +677,267 @@ public class WeChatOrderQueryServices {
         return resultMap;
     }
 
+
+
+
+
+    public static Map<String, Object> queryNeiMaiCatalogProductDetail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String productId = (String) context.get("productId");
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+        Map<String, Object> hiddenMap = new HashMap<String, Object>();
+
+        Map<String, Object> allField = product.getAllFields();
+
+        String desc = (String) allField.get("description");
+
+        List<GenericValue> skus = new ArrayList<GenericValue>();
+
+        if (null != desc && !desc.equals("")) {
+            desc = desc.replaceAll("/", "\n/");
+        }
+        allField.put("description", desc);
+
+        //用虚拟产品随便找一个sku变形去拿价格 , fix 其实自己就是sku
+        String vir_productId = (String) product.get("productId");
+        // GenericValue sku_product   = EntityQuery.use(delegator).from("ProductAssoc").where("productId",vir_productId).queryFirst();
+        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId).queryFirst();
+        allField.put("price", productPrice.get("price"));
+
+
+        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+        if(null!=productOnePrice){
+            allField.put("oneMouthPrice", productOnePrice.get("price"));
+        }
+
+
+        GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryFirst();
+        String[] imgAttr = new String[]{
+                product.getString("detailImageUrl")};
+
+        Map<String, String> isExsitsPath = new HashMap<String, String>();
+
+        if (vir_product != null) {
+
+            //获取SPU的尺码规格
+            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
+            Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
+            Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
+            List<String> spuSpecTitleList = new ArrayList<String>();
+            List<Map<String, String>> spuSpecRowList = new ArrayList<Map<String, String>>();
+            if (null != productContentAndElectronicText) {
+                String textData = productContentAndElectronicText.getString("textData");
+                String title = textData.substring(0, textData.indexOf("-"));
+                String rowData = textData.substring(textData.indexOf("-") + 1);
+                String[] titleArray = title.split(",");
+                String[] rowDataArray = rowData.split(",");
+                for (String strTitle : titleArray) {
+                    spuSpecTitleList.add(strTitle);
+                }
+                int titleLen = spuSpecTitleList.size();
+                int rowCount = 1;
+                Map<String, String> rowDataMap = new HashMap<String, String>();
+                for (String strRow : rowDataArray) {
+                    if (rowCount == titleLen) {
+                        rowDataMap.put("code" + rowCount, strRow);
+                        spuSpecRowList.add(rowDataMap);
+                        //初始化
+                        rowCount = 1;
+                        rowDataMap = new HashMap<String, String>();
+                    } else {
+                        rowDataMap.put("code" + rowCount, strRow);
+                        rowCount++;
+                    }
+                }
+            }
+
+            String rowVirId = (String) vir_product.get("productId");
+
+
+            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId,"productIdTo",productId).queryList();
+
+            Set<String> fieldSet = new HashSet<String>();
+
+            fieldSet.add("drObjectInfo");
+            fieldSet.add("productId");
+            fieldSet.add("productContentTypeId");
+
+
+            List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
+
+
+            Map<String, Map<String, Object>> featureMap = new HashMap<String, Map<String, Object>>();
+
+            for (GenericValue rowSku : skus) {
+                String rowSkuId = rowSku.getString("productIdTo");
+                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where("productId", rowSkuId).queryFirst();
+                // 不管怎么样 这个变形产品得有图
+                String detailImageUrl = rowProduct.getString("detailImageUrl");
+                Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
+                //如果没有图的默认不看 针对zuczug
+                if (detailImageUrl.indexOf("DEFAULT_PRODUCT") >= 0) {
+                    GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+                    hiddenMap.put(rowSkuId, rowColor.getString("productFeatureId"));
+                }
+
+                //1 查询搭配图
+                EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, rowSkuId);
+                EntityCondition matchTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "MATCH_PRODUCT_IMAGE");
+                EntityCondition matchCondition = EntityCondition.makeCondition(genericProductConditions, EntityOperator.AND, matchTypeConditions);
+                List<GenericValue> matchPictures = delegator.findList("ProductContentAndInfo", matchCondition, fieldSet,
+                        null, null, false);
+                if (matchPictures != null && matchPictures.size() > 0) {
+                    for (GenericValue pict : matchPictures) {
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        if (!isExsitsPath.containsKey(drObjectInfo)) {
+                            isExsitsPath.put(drObjectInfo, "");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                        }
+                    }
+                }
+                //2 查询单品图
+                EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, fieldSet,
+                        null, null, false);
+                GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
+
+                if (singlePictures != null && singlePictures.size() > 0) {
+                    int sigleIndex = 0;
+                    for (GenericValue pict : singlePictures) {
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        if (!isExsitsPath.containsKey(drObjectInfo)) {
+                            isExsitsPath.put(drObjectInfo, "");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                            if (sigleIndex == 0) {
+                                featureMap.put(rowColor.get("description") + "", rowMap);
+                                sigleIndex++;
+                            }
+                        }
+
+                    }
+                } else {
+                    featureMap.put(rowColor == null ? "普通" : rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
+                }
+
+                //3 查询细节图
+                EntityCondition detailTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "DETAIL_PRODUCT_IMAGE");
+                EntityCondition detailCondition = EntityCondition.makeCondition(detailTypeConditions, EntityOperator.AND, genericProductConditions);
+                List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo", detailCondition, fieldSet,
+                        null, null, false);
+                if (detailPictures != null && detailPictures.size() > 0) {
+                    for (GenericValue pict : detailPictures) {
+                        Map<String, Object> rowMap = new HashMap<String, Object>();
+                        String drObjectInfo = (String) pict.get("drObjectInfo");
+                        if (!isExsitsPath.containsKey(drObjectInfo)) {
+                            isExsitsPath.put(drObjectInfo, "");
+                            rowMap.put("drObjectInfo", drObjectInfo);
+                            pictures.add(rowMap);
+                        }
+                    }
+                }
+
+            }
+
+            Debug.logInfo("QUERY DETAIL pictures:" + pictures, module);
+            if (pictures != null && pictures.size() > 0) {
+                imgAttr = new String[pictures.size()];
+                int index = 0;
+                for (Map<String, Object> productContent : pictures) {
+                    String drObjectInfo = (String) productContent.get("drObjectInfo");
+                    imgAttr[index] = drObjectInfo;
+                    index++;
+                }
+            }
+
+
+            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
+            List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
+            for (GenericValue gv : gvs) {
+
+                Map<String, Object> innerMap = new HashMap<String, Object>();
+                String productFeatureId = gv.getString("productFeatureId");
+                String innerAttr = gv.getString("productFeatureTypeId");
+                String innerDesc = gv.getString("description");
+
+                //还没有图片的变形产品 不显示该特征型号
+                if (hiddenMap != null && hiddenMap.size() > 0 && isHiddenSku(productFeatureId, innerAttr, rowVirId, hiddenMap, delegator, skus)) {
+                    continue;
+                }
+
+
+                switch (innerAttr) {
+                    case "COLOR": {
+                        innerMap.put("COLOR_DESC", innerDesc);
+                        break;
+                    }
+                    case "SIZE": {
+                        innerMap.put("SIZE_DESC", innerDesc);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+
+                productFeatureList.add(innerMap);
+
+            }
+
+
+            //图片数组
+            allField.put("imgArray", imgAttr);
+            //所有特征
+            allField.put("features", productFeatureList);
+            //特征切换图片
+            allField.put("featureMap", featureMap);
+
+
+            allField.put("spuSpecTitleList", spuSpecTitleList);
+            allField.put("spuSpecRowList", spuSpecRowList);
+        }
+
+
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+        //写死
+        String productStoreId = "ZUCZUGSTORE";
+        String prodCatalogId = "";
+
+            productStoreId = category.getString("productStoreId");
+            GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+            prodCatalogId = prodCatalog.getString("prodCatalogId");
+
+
+
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                "facilityId", inventoryFacilityId, "productId", productId));
+        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+            allField.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+            allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+        }
+
+
+
+        resultMap.put("productDetail", allField);
+        resultMap.put("productStoreId", productStoreId);
+        resultMap.put("prodCatalogId", prodCatalogId);
+
+
+        return resultMap;
+    }
+
     /**
      * QueryCatalogProductDetail
      *

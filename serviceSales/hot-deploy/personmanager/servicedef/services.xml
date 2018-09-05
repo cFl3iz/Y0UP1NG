@@ -1304,6 +1304,7 @@
 
         <attribute name="strList" type="String" mode="IN" optional="true"/>
         <attribute name="yunFei" type="String" mode="IN" optional="true"/>
+        <attribute name="neiMai" type="String" mode="IN" optional="true"/>
 
         <!-- 订单备注 -->
         <attribute name="orderReMark" type="String" mode="IN" optional="true"/>
@@ -1323,18 +1324,12 @@
         <attribute name="detailInfo" type="String" mode="IN" optional="true"/>
         <attribute name="nationalCode" type="String" mode="IN" optional="true"/>
         <attribute name="telNumber" type="String" mode="IN" optional="true"/>
-
-
         <attribute name="orderId" type="String" mode="OUT" optional="true"/>
         <attribute name="grandTotal" type="String" mode="OUT" optional="true"/>
-
-
-
-
-
-
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+
 
 
     <service name="placeResourceOrder4NeiMai" engine="java"

@@ -7542,6 +7542,8 @@ public class PersonManagerServices {
     }
 
 
+
+
     /**
      * 购物车下单
      *
@@ -7573,6 +7575,7 @@ public class PersonManagerServices {
         String orderReMark = (String) context.get("orderReMark");
 
         String yunFei = (String) context.get("yunFei");
+        String neiMai = (String) context.get("neiMai");
         if(null== yunFei||yunFei.equals("")){
             yunFei = "0";
         }
@@ -7714,20 +7717,35 @@ public class PersonManagerServices {
             GenericValue product = EntityQuery.use(delegator).from("ProductAndPriceView").where("productId", productId).queryFirst();
             GenericValue itemProduct = delegator.makeValue("OrderItem", UtilMisc.toMap());
             itemProduct.set("productId", productId);
-            itemProduct.set("isModifiedPrice", "N");
+//            itemProduct.set("isModifiedPrice", "N");
             itemProduct.set("shipBeforeDate", null);
             itemProduct.set("productCategoryId", category.getString("productCategoryId"));
             // Unit Price = List Price
-            itemProduct.set("unitListPrice", new BigDecimal(product.get("price") + ""));
+//            itemProduct.set("unitListPrice", new BigDecimal(product.get("price") + ""));
             itemProduct.set("shoppingListId", null);
             itemProduct.set("cancelBackOrderDate", null);
             // Desc To Order Item List
 
+
+            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
+            if(null!=productOnePrice && neiMai!=null && neiMai.equals("true")){
+                itemProduct.set("unitPrice", productOnePrice.get("price"));
+                itemProduct.set("unitListPrice", productOnePrice.get("price"));
+                itemProduct.set("isModifiedPrice", "Y");
+            }else{
+                itemProduct.set("unitPrice", new BigDecimal(product.get("price") + ""));
+                itemProduct.set("isModifiedPrice", "N");
+                itemProduct.set("unitListPrice", new BigDecimal(product.get("price") + ""));
+            }
+
+
+
+            // neiMai
             itemProduct.set("itemDescription", product.get("productName"));
             itemProduct.set("selectedAmount", BigDecimal.ZERO);
             itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
             itemProduct.set("orderItemSeqId", "0000" + index);
-            itemProduct.set("unitPrice", product.get("price"));
+//            itemProduct.set("unitPrice", product.get("price"));
             itemProduct.set("quantity", new BigDecimal(amount));
             itemProduct.set("comments", null);
             itemProduct.set("statusId", PeConstant.ORDER_ITEM_APPROVED_STATUS_ID);

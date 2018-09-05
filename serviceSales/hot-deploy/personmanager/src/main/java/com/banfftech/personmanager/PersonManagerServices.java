@@ -3107,7 +3107,7 @@ public class PersonManagerServices {
         Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
 
         GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
-         Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes);
+         Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes,module);
         if (null == orderItemShipGrpInvRes) {
             dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
                     "inventoryItemId", invItem.get("inventoryItemId")

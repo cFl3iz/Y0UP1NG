@@ -200,8 +200,29 @@ public class BoomServices {
                 userInfoMap.put("headimgurl",avatarUrl);
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
-                result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
 
+
+
+
+
+
+
+
+
+                //  邮政地址
+                String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+                Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                        UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city",city, "address1", province + "-" +country,"address2",city, "postalCode", PeConstant.DEFAULT_POST_CODE,
+                                "contactMechPurposeTypeId", contactMechPurposeTypeId));
+                String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+                if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                    return createPartyPostalAddressOutMap;
+                }
+
+
+
+
+                result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
                 result.put("partyId", partyId);
                 result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,partyId));
             } else {
@@ -397,10 +418,20 @@ public class BoomServices {
 
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
+
+        String provinceName = (String) context.get("provinceName");
+        String cityName = (String) context.get("cityName");
+        String countyName = (String) context.get("countyName");
+        String detailInfo = (String) context.get("detailInfo");
+
+
+
         boolean isExsitsRole = false;
 
         GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
+
         String supplierPartyId = "";
+
         if (null == exsitsUser) {
 
             supplierPartyId = createSupplier(delegator, dispatcher, admin, supplierName, "无");
@@ -437,6 +468,19 @@ public class BoomServices {
             createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
             createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
             Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+
+
+            //  邮政地址"address1", province + "-" +country,"address2",city
+            String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "attnName",partyId,"toName", supplierName, "partyId", supplierPartyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,
+                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE,
+                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                return createPartyPostalAddressOutMap;
+            }
 
             resultMap.put("supplierInfo", null);
 

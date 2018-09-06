@@ -18,9 +18,13 @@
         <description>createMySupplier</description>
         <attribute name="supplierName" type="String" mode="IN" optional="false"/>
         <attribute name="supplierTel" type="String" mode="IN" optional="false"/>
+        <attribute name="provinceName" type="String" mode="IN" optional="false"/>
+        <attribute name="cityName" type="String" mode="IN" optional="false"/>
+        <attribute name="countyName" type="String" mode="IN" optional="false"/>
+        <attribute name="detailInfo" type="String" mode="IN" optional="false"/>
+
 
         <attribute name="supplierInfo" type="Map" mode="OUT" optional="true"/>
-
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

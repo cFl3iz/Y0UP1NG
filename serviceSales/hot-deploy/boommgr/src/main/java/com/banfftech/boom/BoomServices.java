@@ -1,5 +1,6 @@
 package main.java.com.banfftech.boom;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -80,6 +81,7 @@ import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizDataFromOrder;
@@ -90,6 +92,43 @@ public class BoomServices {
 
 
     public final static String module = BoomServices.class.getName();
+
+
+
+
+    /**
+     * boomUserLogin
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws java.io.UnsupportedEncodingException
+     */
+    public static Map<String, Object> boomUserLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = null;
+        String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
+        if(miniProgramIdentification!=null){
+            userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
+            String tarjeta = getToken(userLogin.get("userLoginId"));
+            result.put("tarjeta",tarjeta);
+            result.put("userInfo",queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")));
+            result.put("openId",openId);
+            return result;
+        }
+
+        result.put("tarjeta",null);
+        result.put("userInfo",null);
+
+        return result;
+    }
 
 
     /**

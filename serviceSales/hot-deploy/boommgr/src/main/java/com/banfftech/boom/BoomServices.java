@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -119,7 +120,7 @@ public class BoomServices {
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
             String tarjeta = getToken(userLogin.get("userLoginId"));
             result.put("tarjeta",tarjeta);
-            result.put("userInfo",queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")));
+            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")));
             result.put("openId",openId);
             return result;
         }

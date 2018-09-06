@@ -122,11 +122,13 @@ public class BoomServices {
             result.put("tarjeta",tarjeta);
             result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")+""));
             result.put("openId",openId);
+            result.put("partyId",miniProgramIdentification.get("partyId")+"");
             return result;
         }
 
         result.put("tarjeta",null);
         result.put("userInfo",null);
+        result.put("partyId",null);
 
         return result;
     }

@@ -154,15 +154,21 @@ public class WeChatMiniProgramServices {
         String productId = (String) context.get("productId");
         String amount = (String) context.get("amount");
         String price = (String) context.get("price");
+        String neiMai = (String) context.get("neiMai");
 
-        //检查价格
-        GenericValue productPrice = EntityQuery.use(delegator).from("ProductAndPriceView").where(UtilMisc.toMap("productId", productId)).queryFirst();
-        String priceStr = productPrice.get("price") + "";
-        if (!priceStr.equals(price)) {
-            msg = productPrice.getString("productName") + "的价格已经调整!";
-            resultMap.put("msg", msg);
-            return resultMap;
+        if(null!=neiMai && neiMai.equals("true")){
+            //TODO 暂时不效验价格
+        }else{
+            //检查价格
+            GenericValue productPrice = EntityQuery.use(delegator).from("ProductAndPriceView").where(UtilMisc.toMap("productId", productId)).queryFirst();
+            String priceStr = productPrice.get("price") + "";
+            if (!priceStr.equals(price)) {
+                msg = productPrice.getString("productName") + "的价格已经调整!";
+                resultMap.put("msg", msg);
+                return resultMap;
+            }
         }
+
         GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
         String productStoreId = category.getString("productStoreId");
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();

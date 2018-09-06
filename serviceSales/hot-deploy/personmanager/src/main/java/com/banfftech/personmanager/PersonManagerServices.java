@@ -8391,7 +8391,10 @@ public class PersonManagerServices {
         dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
 
         // 创建会员店铺及目录和分类 2c 后创建
-       createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+//       createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+
+
+
 
 
         // Create Default Pay Method To Party

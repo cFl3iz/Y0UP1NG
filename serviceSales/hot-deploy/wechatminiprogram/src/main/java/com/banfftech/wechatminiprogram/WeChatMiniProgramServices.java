@@ -177,8 +177,9 @@ public class WeChatMiniProgramServices {
         Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                 "facilityId", inventoryFacilityId, "productId", productId));
         if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "";
-            if (Integer.parseInt(availableToPromiseTotal) < Integer.parseInt(amount)) {
+            BigDecimal atpt = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+//            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "";
+            if (atpt.intValue() < Integer.parseInt(amount)) {
                 msg = productPrice.getString("productName") + "的库存不足!";
                 resultMap.put("msg", msg);
                 return resultMap;

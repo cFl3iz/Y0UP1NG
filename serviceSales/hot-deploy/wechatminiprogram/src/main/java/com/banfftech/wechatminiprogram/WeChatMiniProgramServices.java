@@ -164,7 +164,7 @@ public class WeChatMiniProgramServices {
             String priceStr = productPrice.get("price") + "";
             if (!priceStr.equals(price)) {
                 msg = productPrice.getString("productName") + "的价格已经调整!";
-                resultMap.put("msg", msg);
+                resultMap.put("checkMsg", msg);
                 return resultMap;
             }
         }
@@ -181,7 +181,7 @@ public class WeChatMiniProgramServices {
 //            String availableToPromiseTotal = getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "";
             if (atpt.intValue() < Integer.parseInt(amount)) {
                 msg = productPrice.getString("productName") + "的库存不足!";
-                resultMap.put("msg", msg);
+                resultMap.put("checkMsg", msg);
                 return resultMap;
             }
         }

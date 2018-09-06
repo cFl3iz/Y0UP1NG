@@ -62,6 +62,31 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <service name="register" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="register" auth="false">
+        <description>register</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="tel" type="String" mode="IN" optional="true"/>
+        <attribute name="captcha" type="String" mode="IN" optional="true"/>
+        <attribute name="nickName" type="String" mode="IN" optional="true"/>
+        <attribute name="organizationName" type="String" mode="IN" optional="true"/>
+        <attribute name="name" type="String" mode="IN" optional="true"/>
+        <attribute name="gender" type="String" mode="IN" optional="true"/>
+        <attribute name="language" type="String" mode="IN" optional="true"/>
+        <attribute name="avatarUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="country" type="String" mode="IN" optional="true"/>
+        <attribute name="province" type="String" mode="IN" optional="true"/>
+
+
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="userInfo" type="Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <service name="queryQuantityUom" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

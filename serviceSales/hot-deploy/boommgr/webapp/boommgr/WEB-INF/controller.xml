@@ -27,6 +27,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <request-map uri="register">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="register"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://boommgr/widget/BoomMgrScreens.xml#main"/>
 </site-conf>

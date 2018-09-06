@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
+import main.java.com.banfftech.personmanager.PersonManagerServices;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -61,7 +62,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 
-
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,10 +82,12 @@ import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.checkCaptchaIsRight;
 import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizDataFromOrder;
+
 /**
  * Created by S on 2018/8/29.
  */
@@ -94,11 +96,129 @@ public class BoomServices {
 
     public final static String module = BoomServices.class.getName();
 
+    private static String createGroup(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String vender, String venderLocal) throws GenericEntityException, GenericServiceException {
+        String partyId = "";
+        Map<String, Object> serviceResultByCreatePartyMap = dispatcher.runSync("createPartyGroup",
+                UtilMisc.toMap("userLogin", admin, "groupName", vender, "groupNameLocal", venderLocal));
+        partyId = (String) serviceResultByCreatePartyMap.get("partyId");
+        //Grant Role
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "MANUFACTURER"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "VENDOR"));
+        return partyId;
+    }
+
+    /**
+     * 企业Bom注册
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> register(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = null;
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Locale locale = (Locale) context.get("locale");
+
+        String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
+        String captcha = (String) context.get("captcha");
+        String tel = (String) context.get("tel");
+
+        String appId = (String) context.get("appId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+        String city = (String) context.get("city");
+        String country = (String) context.get("country");
+        String province = (String) context.get("province");
+
+        String organizationName = (String) context.get("organizationName");
+        String name = (String) context.get("name");
 
 
+        if (captcha != null && !captcha.trim().equals("")) {
+            boolean checkCaptcha = false;
+            checkCaptcha = checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
+            Debug.logInfo("tel:" + tel + ",checkCaptcha=>" + checkCaptcha, module);
+
+            if (checkCaptcha) {
+
+
+                userLogin = PersonManagerServices.justCreatePartyPersonUserLogin(delegator, dispatcher, name, nickName);
+
+                String partyId = (String) userLogin.getString("partyId");
+
+                // 角色
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "OWNER"));
+
+
+                String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
+
+
+                Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                createPartyRelationshipInMap.put("partyIdFrom", partyId);
+                createPartyRelationshipInMap.put("partyIdTo", groupId);
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "OWNER");
+                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                    return createPartyRelationshipOutMap;
+                }
+
+
+                // 创建联系电话
+                Map<String, Object> inputTelecom = UtilMisc.toMap();
+                inputTelecom.put("partyId", partyId);
+                inputTelecom.put("contactNumber", tel);
+                inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+                inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+                inputTelecom.put("userLogin", admin);
+                Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+                Map<String,String> userInfoMap = new HashMap<String, String>();
+                userInfoMap.put("nickname",nickName);
+                userInfoMap.put("sex",gender);
+                userInfoMap.put("language",language);
+                userInfoMap.put("headimgurl",avatarUrl);
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
+
+                result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
+
+                result.put("partyId", partyId);
+
+                result.put("partyId", partyId);
+
+                result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,partyId));
+            } else {
+                return ServiceUtil.returnError("check fail");
+            }
+        }
+
+
+        return result;
+    }
 
     /**
      * boomUserLogin
+     *
      * @param dctx
      * @param context
      * @return
@@ -115,20 +235,20 @@ public class BoomServices {
         String unioId = (String) context.get("unioId");
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
-        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
-        if(miniProgramIdentification!=null){
+        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+        if (miniProgramIdentification != null) {
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
-            String tarjeta = getToken(userLogin.get("userLoginId")+"",delegator);
-            result.put("tarjeta",tarjeta);
-            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")+""));
-            result.put("openId",openId);
-            result.put("partyId",miniProgramIdentification.get("partyId")+"");
+            String tarjeta = getToken(userLogin.get("userLoginId") + "", delegator);
+            result.put("tarjeta", tarjeta);
+            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, miniProgramIdentification.get("partyId") + ""));
+            result.put("openId", openId);
+            result.put("partyId", miniProgramIdentification.get("partyId") + "");
             return result;
         }
 
-        result.put("tarjeta",null);
-        result.put("userInfo",null);
-        result.put("partyId",null);
+        result.put("tarjeta", null);
+        result.put("userInfo", null);
+        result.put("partyId", null);
 
         return result;
     }
@@ -136,6 +256,7 @@ public class BoomServices {
 
     /**
      * createMyFinishedGood
+     *
      * @param dctx
      * @param context
      * @return
@@ -178,17 +299,17 @@ public class BoomServices {
 
         String productId = (String) createProductOutMap.get("productId");
 
-        if(rawMaterials!=null && rawMaterials.length()>2){
-            for(String rowProduct : rawMaterials.split(",")){
-                String productIdFrom  = rowProduct.substring(0,rowProduct.indexOf(":"));
-                String count     = rowProduct.substring(rowProduct.indexOf(":")+1);
-                dispatcher.runSync("createProductAssoc",UtilMisc.toMap("userLogin",admin,"productIdTo",productId,"productId",productIdFrom
-                ,"quantity",new BigDecimal(count),"productAssocTypeId","MANUF_COMPONENT","fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+        if (rawMaterials != null && rawMaterials.length() > 2) {
+            for (String rowProduct : rawMaterials.split(",")) {
+                String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
+                String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
+                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productId, "productId", productIdFrom
+                        , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
             }
         }
 
 
-        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"roleTypeId","ADMIN","productId",productId,"partyId",partyId));
+        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
 
         return resultMap;
     }
@@ -196,6 +317,7 @@ public class BoomServices {
 
     /**
      * createRawMaterials
+     *
      * @param dctx
      * @param context
      * @return
@@ -205,11 +327,11 @@ public class BoomServices {
     public static Map<String, Object> createRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
-         LocalDispatcher dispatcher = dctx.getDispatcher();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         // Admin Do Run Service
-         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 //
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
@@ -238,8 +360,8 @@ public class BoomServices {
 
         String productId = (String) createProductOutMap.get("productId");
 
-        if(suppliers!=null && suppliers.length()>2){
-            for(String rowSupplier : suppliers.split(",")){
+        if (suppliers != null && suppliers.length() > 2) {
+            for (String rowSupplier : suppliers.split(",")) {
                 dispatcher.runSync("createSupplierProduct",
                         UtilMisc.toMap("userLogin", admin, "productId", productId,
                                 "partyId", rowSupplier,
@@ -249,21 +371,15 @@ public class BoomServices {
         }
 
 
-        dispatcher.runSync("addProductRole",UtilMisc.toMap("userLogin",admin,"roleTypeId","ADMIN","productId",productId,"partyId",partyId));
+        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
 
         return resultMap;
     }
 
 
-
-
-
-
-
-
-
     /**
      * CreateMySupplier
+     *
      * @param dctx
      * @param context
      * @return
@@ -288,50 +404,50 @@ public class BoomServices {
 
         GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
         String supplierPartyId = "";
-        if( null == exsitsUser){
+        if (null == exsitsUser) {
 
-          supplierPartyId = createSupplier(delegator,dispatcher,admin,supplierName,"无");
+            supplierPartyId = createSupplier(delegator, dispatcher, admin, supplierName, "无");
 
-        // Create Party Block
-        int random = (int) (Math.random() * 1000000 + 1);
+            // Create Party Block
+            int random = (int) (Math.random() * 1000000 + 1);
             delegator.createOrStore(delegator.makeValue("Person",
                     UtilMisc.toMap("nickname", "#" + random,
-                "firstName", supplierName, "lastName", " ", "gender", "M","partyId",supplierPartyId)));
+                            "firstName", supplierName, "lastName", " ", "gender", "M", "partyId", supplierPartyId)));
 
 
-        // Create UserLogin Block
-        Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
-                supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
-                "currentPasswordVerify", "ofbiz", "enabled", "Y");
-        Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+            // Create UserLogin Block
+            Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                    supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
+                    "currentPasswordVerify", "ofbiz", "enabled", "Y");
+            Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
 
-        }else{
-            supplierPartyId=exsitsUser.getString("partyId");
-            GenericValue hasRelation =  EntityQuery.use(delegator).from("PartyRelationship").where(
+        } else {
+            supplierPartyId = exsitsUser.getString("partyId");
+            GenericValue hasRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
                     "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
             isExsitsRole = !isExsitsRole;
         }
 
 
-        if(false == isExsitsRole){
+        if (false == isExsitsRole) {
 
 
-        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-        createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
-        createPartyRelationshipInMap.put("roleTypeIdTo","SUPPLIER");
-        createPartyRelationshipInMap.put("userLogin", admin);
-        createPartyRelationshipInMap.put("partyIdFrom",partyId );
-        createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
-        createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
-        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
+            createPartyRelationshipInMap.put("roleTypeIdTo", "SUPPLIER");
+            createPartyRelationshipInMap.put("userLogin", admin);
+            createPartyRelationshipInMap.put("partyIdFrom", partyId);
+            createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
+            Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
-        resultMap.put("supplierInfo",null);
+            resultMap.put("supplierInfo", null);
 
-        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-            return createPartyRelationshipOutMap;
-        }
-        }else{
-            resultMap.put("supplierInfo",queryPersonBaseInfo(delegator,supplierPartyId));
+            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                return createPartyRelationshipOutMap;
+            }
+        } else {
+            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
         }
 
 

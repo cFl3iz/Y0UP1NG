@@ -342,6 +342,34 @@ public class PlatformLoginWorker {
         }
     }
 
+
+    public static  void updatePersonAndIdentificationLanguage(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
+        Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
+                partyId, "idValue",unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+        dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
+        //头像数据
+        main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"),null);
+        //将微信名称更新过来
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        //微信中的用户性别,如果真的什么都没默认男。
+        String gender = "M";
+        if(null != weChatUserInfo.get("sex") && (weChatUserInfo.get("sex").equals("2"))){
+            gender ="F";
+        }
+        person.set("gender", gender);
+        person.store();
+        String language = (String) weChatUserInfo.get("language");
+        //配置用户本地语言环境
+        Debug.logInfo("PE-LOG====================userLoginId = " + userLogin.get("userLoginId"), module);
+        Debug.logInfo("PE-LOG====================language = " + language, module);
+        if (language != null) {
+            GenericValue userPreference = delegator.createOrStore(delegator.makeValue("UserPreference",
+                    UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "userPrefTypeId", "local", "userPrefValue", language
+                    )));
+        }
+    }
+
     public static String getEncoding(String str) {
         String encode[] = new String[]{
                 "UTF-8",

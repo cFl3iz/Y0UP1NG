@@ -8332,6 +8332,43 @@ public class PersonManagerServices {
     }
 
 
+    public static GenericValue  justCreatePartyPersonUserLogin(Delegator delegator,LocalDispatcher dispatcher,String firstName,
+                                                         String nickName)
+            throws GenericEntityException, GenericServiceException {
+
+        String partyId = "";
+        String openId = (String) context.get("openId");
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+
+        // Create Party Block
+        int random = (int) (Math.random() * 1000000 + 1);
+        Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", nickName,
+                "firstName", firstName, "lastName", " ", "gender", "M");
+        Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
+        partyId = (String) createPerson.get("partyId");
+
+
+
+
+String userLoginId = delegator.getNextSeqId("UserLogin");
+        // Create UserLogin Block
+        Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "partyId", partyId, "currentPassword", "ofbiz",
+                "currentPasswordVerify", "ofbiz", "enabled", "Y");
+        Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+
+        // Grant Permission Block
+        Map<String, Object> userLoginSecurityGroupInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "groupId", "FULLADMIN");
+        dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
+
+        return  EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+    }
+
 
 
     public static Map<String, Object> createPeUser2C(DispatchContext dctx, Map<String, Object> context)

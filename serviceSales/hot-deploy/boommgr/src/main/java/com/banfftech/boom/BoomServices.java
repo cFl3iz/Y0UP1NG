@@ -203,9 +203,6 @@ public class BoomServices {
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
 
                 result.put("partyId", partyId);
-
-                result.put("partyId", partyId);
-
                 result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,partyId));
             } else {
                 return ServiceUtil.returnError("check fail");

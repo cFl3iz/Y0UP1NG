@@ -118,9 +118,9 @@ public class BoomServices {
         GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId,"partyIdentificationTypeId","WX_MINIPRO_OPEN_ID").queryFirst();
         if(miniProgramIdentification!=null){
             userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", miniProgramIdentification.get("partyId"), "enabled", "Y").queryFirst();
-            String tarjeta = getToken(userLogin.get("userLoginId"));
+            String tarjeta = getToken(userLogin.get("userLoginId")+"",delegator);
             result.put("tarjeta",tarjeta);
-            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")));
+            result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,miniProgramIdentification.get("partyId")+""));
             result.put("openId",openId);
             return result;
         }

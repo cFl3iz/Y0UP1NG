@@ -7,6 +7,7 @@ import java.util.*;
 
 import main.java.com.banfftech.personmanager.PersonManagerQueryServices;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
+import main.java.com.banfftech.platformmanager.common.PlatformLoginWorker;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -82,7 +83,6 @@ import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
-import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.checkCaptchaIsRight;
 import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
@@ -152,7 +152,7 @@ public class BoomServices {
 
         if (captcha != null && !captcha.trim().equals("")) {
             boolean checkCaptcha = false;
-            checkCaptcha = checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
+            checkCaptcha = PlatformLoginWorker.checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
             Debug.logInfo("tel:" + tel + ",checkCaptcha=>" + checkCaptcha, module);
 
             if (checkCaptcha) {

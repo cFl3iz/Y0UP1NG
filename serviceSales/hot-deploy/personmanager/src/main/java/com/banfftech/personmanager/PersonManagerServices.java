@@ -8337,7 +8337,6 @@ public class PersonManagerServices {
             throws GenericEntityException, GenericServiceException {
 
         String partyId = "";
-        String openId = (String) context.get("openId");
 
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));

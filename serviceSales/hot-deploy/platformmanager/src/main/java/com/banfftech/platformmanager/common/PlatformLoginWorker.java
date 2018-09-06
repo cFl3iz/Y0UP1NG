@@ -767,7 +767,7 @@ public class PlatformLoginWorker {
         return result;
     }
 
-    private static boolean checkCaptchaIsRight(Delegator delegator, String captcha, GenericValue userLogin,String tel,Locale locale)throws GenericEntityException{
+    public static boolean checkCaptchaIsRight(Delegator delegator, String captcha, GenericValue userLogin,String tel,Locale locale)throws GenericEntityException{
 
 
         //Captcha Is Exsits

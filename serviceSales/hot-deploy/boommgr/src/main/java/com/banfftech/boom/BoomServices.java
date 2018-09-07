@@ -453,7 +453,10 @@ public class BoomServices {
             supplierPartyId = exsitsUser.getString("partyId");
             GenericValue hasRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
                     "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
-            isExsitsRole = !isExsitsRole;
+            if(null != hasRelation){
+                isExsitsRole = !isExsitsRole;
+
+            }
         }
 
 

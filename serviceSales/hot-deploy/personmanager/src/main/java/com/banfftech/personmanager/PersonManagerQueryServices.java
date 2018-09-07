@@ -3825,7 +3825,7 @@ public class PersonManagerQueryServices {
             personInfo.put("lastName", (String) person.get("lastName"));
 
             GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
-            personInfo.put("userLoginId",userLogin.getString("userLoginId"));
+            personInfo.put("userLoginId",userLogin==null?"": userLogin.getString("userLoginId"));
         }
         return personInfo;
     }

@@ -421,79 +421,114 @@ public class BoomServices {
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
 
+        String firstName = supplierName;
+        String lastName = " ";
+
+        if(supplierName.length()>=4){
+            firstName = supplierName.substring(0,2);
+            lastName = supplierName.substring(2+1);
+        }
+        if(supplierName.length()<=3){
+            lastName = supplierName.substring(0,1);
+            firstName = supplierName.substring(1+1);
+        }
+
+
+
+
         String provinceName = (String) context.get("provinceName");
         String cityName = (String) context.get("cityName");
         String countyName = (String) context.get("countyName");
         String detailInfo = (String) context.get("detailInfo");
 
 
+        Map<String,Object> createLeadMap = new HashMap<String, Object>();
 
-        boolean isExsitsRole = false;
-
-        GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
-
-        String supplierPartyId = "";
-
-        if (null == exsitsUser) {
-
-            supplierPartyId = createSupplier(delegator, dispatcher, admin, supplierName, "无");
-
-            // Create Party Block
-            int random = (int) (Math.random() * 1000000 + 1);
-            delegator.createOrStore(delegator.makeValue("Person",
-                    UtilMisc.toMap("nickname", "#" + random,
-                            "firstName", supplierName, "lastName", " ", "gender", "M", "partyId", supplierPartyId)));
+        createLeadMap.put("userLogin",userLogin);
+        createLeadMap.put("firstName ",firstName );
+        createLeadMap.put("lastName ",lastName );
+        createLeadMap.put("countryGeoId","CHN");
+        createLeadMap.put("city",cityName);
+        createLeadMap.put("address1",countyName+" "+provinceName+" "+cityName+" "+detailInfo);
+        createLeadMap.put("countryCode","86");
+        createLeadMap.put("postalCode","200000");
+        createLeadMap.put("contactNumber",supplierTel);
 
 
-            // Create UserLogin Block
-            Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
-                    supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
-                    "currentPasswordVerify", "ofbiz", "enabled", "Y");
-            Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
-
-        } else {
-            supplierPartyId = exsitsUser.getString("partyId");
-            GenericValue hasRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                    "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
-            if(null != hasRelation){
-                isExsitsRole = !isExsitsRole;
-
-            }
-        }
+        Map<String, Object> createLeadOutMap = dispatcher.runSync("createLead", createLeadMap);
 
 
-        if (false == isExsitsRole) {
-
-
-            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-            createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
-            createPartyRelationshipInMap.put("roleTypeIdTo", "SUPPLIER");
-            createPartyRelationshipInMap.put("userLogin", admin);
-            createPartyRelationshipInMap.put("partyIdFrom", partyId);
-            createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
-            createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
-            Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-
-
-
-            //  邮政地址"address1", province + "-" +country,"address2",city
-            String contactMechPurposeTypeId = "POSTAL_ADDRESS";
-            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                    UtilMisc.toMap("userLogin", admin, "attnName",partyId,"toName", supplierName, "partyId", supplierPartyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,
-                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE ));
-            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
-            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
-                return createPartyPostalAddressOutMap;
+            if (ServiceUtil.isError(createLeadOutMap)) {
+                return createLeadOutMap;
             }
 
-            resultMap.put("supplierInfo", null);
 
-            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-                return createPartyRelationshipOutMap;
-            }
-        } else {
-            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
-        }
+//        boolean isExsitsRole = false;
+//
+//        GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
+//
+//        String supplierPartyId = "";
+//
+//        if (null == exsitsUser) {
+//
+//            supplierPartyId = createSupplier(delegator, dispatcher, admin, supplierName, "无");
+//
+//            // Create Party Block
+//            int random = (int) (Math.random() * 1000000 + 1);
+//            delegator.createOrStore(delegator.makeValue("Person",
+//                    UtilMisc.toMap("nickname", "#" + random,
+//                            "firstName", supplierName, "lastName", " ", "gender", "M", "partyId", supplierPartyId)));
+//
+//
+//            // Create UserLogin Block
+//            Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+//                    supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
+//                    "currentPasswordVerify", "ofbiz", "enabled", "Y");
+//            Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+//
+//        } else {
+//            supplierPartyId = exsitsUser.getString("partyId");
+//            GenericValue hasRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                    "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
+//            if(null != hasRelation){
+//                isExsitsRole = !isExsitsRole;
+//
+//            }
+//        }
+//
+//
+//        if (false == isExsitsRole) {
+//
+//
+//            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+//            createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
+//            createPartyRelationshipInMap.put("roleTypeIdTo", "SUPPLIER");
+//            createPartyRelationshipInMap.put("userLogin", admin);
+//            createPartyRelationshipInMap.put("partyIdFrom", partyId);
+//            createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
+//            createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
+//            Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//
+//
+//
+//            //  邮政地址"address1", province + "-" +country,"address2",city
+//            String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+//            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+//                    UtilMisc.toMap("userLogin", admin, "attnName",partyId,"toName", supplierName, "partyId", supplierPartyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,
+//                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE ));
+//            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+//            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+//                return createPartyPostalAddressOutMap;
+//            }
+//
+//            resultMap.put("supplierInfo", null);
+//
+//            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+//                return createPartyRelationshipOutMap;
+//            }
+//        } else {
+//            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
+//        }
 
 
         return resultMap;

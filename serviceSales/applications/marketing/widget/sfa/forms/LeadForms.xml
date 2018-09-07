@@ -157,6 +157,7 @@ under the License.
     <form name="FindLeads" target="${currentUrl}" extends="FindAccounts" extends-resource="component://marketing/widget/sfa/forms/AccountForms.xml">
         <field name="firstName" title="${uiLabelMap.PartyFirstName}"><text-find/></field>
         <field name="lastName" title="${uiLabelMap.PartyLastName}"><text-find/></field>
+
         <sort-order>
             <sort-field name="all"/>
             <sort-field name="groupName"/>
@@ -169,6 +170,7 @@ under the License.
             <sort-field name="contactMechContainer"/>
             <sort-field name="submitButton"/>
         </sort-order>
+
     </form>
 
     <form name="listLeads" paginate-target="${currentUrl}"

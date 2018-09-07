@@ -363,8 +363,8 @@ public class BoomQueryServices {
 
 
 
-        List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "roleTypeIdFrom", "CUSTOMER").orderBy("-fromDate").queryList();
+        List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
+                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
 
 
 //PartyRoleAndContactMechDetail
@@ -385,7 +385,7 @@ public class BoomQueryServices {
 //            }
 //        }
 
-//        resultMap.put("supplierList",returnList);
+      resultMap.put("supplierList",relationList);
         return resultMap;
     }
 

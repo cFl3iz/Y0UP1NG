@@ -43,6 +43,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryMyInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="queryMyFinishedGood">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryMyFinishedGood"/>

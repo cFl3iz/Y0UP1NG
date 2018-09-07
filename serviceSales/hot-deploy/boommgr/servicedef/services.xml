@@ -103,6 +103,17 @@
                    optional="true"/>
     </service>
 
+
+    <service name="queryMyInfo" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryMyInfo" auth="false">
+        <description>queryMyInfo</description>
+        <attribute name="userInfo" type="Map" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <service name="queryMySupplierList" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomQueryServices"

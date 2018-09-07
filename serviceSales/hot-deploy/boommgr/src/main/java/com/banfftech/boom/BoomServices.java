@@ -167,6 +167,8 @@ public class BoomServices {
                 // 角色
                 dispatcher.runSync("createPartyRole",
                         UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "OWNER"));
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ADMIN"));
 
 
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
@@ -389,6 +391,7 @@ public class BoomServices {
                                 "currencyUomId", "CNY", "lastPrice", BigDecimal.ZERO, "minimumOrderQuantity", BigDecimal.ONE, "supplierProductId", productId));
             }
         }
+
 
 
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));

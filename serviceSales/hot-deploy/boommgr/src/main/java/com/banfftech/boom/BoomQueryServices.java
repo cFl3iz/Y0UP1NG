@@ -93,6 +93,58 @@ public class BoomQueryServices {
 
 
     /**
+     * queryMyInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        Map<String,Object> returnMap =new HashMap<String, Object>();
+
+        GenericValue teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where("partyId", partyId).queryFirst();
+
+
+        if (null != teleContact) {
+            String contactNumber = (String) teleContact.get("contactNumber");
+            returnMap.put("contactTel", contactNumber);
+        }
+
+
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+        String partyGroupId = relation.getString("partyIdTo");
+
+        GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
+                "partyId", partyGroupId).queryFirst();
+
+        String groupName = partyGroup.getString("groupName");
+
+        returnMap.put("partyGroupId",partyGroupId);
+        returnMap.put("groupName",groupName);
+        returnMap.put("roleType","OWNER");
+
+        resultMap.put("userInfo",returnMap);
+        return resultMap;
+    }
+
+
+
+
+    /**
      * Query MyOrderList
      * @param dctx
      * @param context

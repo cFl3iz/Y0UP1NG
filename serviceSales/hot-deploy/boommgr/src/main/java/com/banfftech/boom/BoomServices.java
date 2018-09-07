@@ -160,6 +160,11 @@ public class BoomServices {
             if (checkCaptcha) {
 
 
+                // Check is Exsit Contact Number ?..
+                List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
+                        "contactNumber", tel,"roleTypeIdTo","LEAD","partyRelationshipTypeId","LEAD_OWNER","contactMechTypeId","TELECOM_NUMBER").queryList();
+
+
                 userLogin = PersonManagerServices.justCreatePartyPersonUserLogin(delegator, dispatcher, name, nickName);
 
                 String partyId = (String) userLogin.getString("partyId");
@@ -172,6 +177,26 @@ public class BoomServices {
 
 
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
+
+
+                // Create Emp to PartyGroup From Lead
+                if(teleContact.size()>0){
+                    for(GenericValue row:teleContact){
+                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                        createPartyRelationshipInMap.put("userLogin", admin);
+                        //createPartyRelationship to Group
+                        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+                        createPartyRelationshipInMap.put("roleTypeIdFrom", "ACCOUNT_LEAD");
+                        createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
+                        createPartyRelationshipInMap.put("partyIdTo",groupId);
+                        createPartyRelationshipInMap.put("partyIdFrom",row.getString("partyId"));
+
+                        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                            return createPartyRelationshipOutMap;
+                        }
+                    }
+                }
 
 
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
@@ -205,12 +230,7 @@ public class BoomServices {
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
 
-
-
-
-
-
-
+ 
 
 
                 //  邮政地址

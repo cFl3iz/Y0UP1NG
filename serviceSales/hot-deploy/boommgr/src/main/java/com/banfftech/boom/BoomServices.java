@@ -108,6 +108,8 @@ public class BoomServices {
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "MANUFACTURER"));
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "VENDOR"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CUSTOMER"));
         return partyId;
     }
 
@@ -212,8 +214,8 @@ public class BoomServices {
                 //  邮政地址
                 String contactMechPurposeTypeId = "POSTAL_ADDRESS";
                 Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                        UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city",city, "address1", province + "-" +country,"address2",city, "postalCode", PeConstant.DEFAULT_POST_CODE,
-                                "contactMechPurposeTypeId", contactMechPurposeTypeId));
+                        UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city",city, "address1", province + "-" +country,"address2",city, "postalCode", PeConstant.DEFAULT_POST_CODE
+                                ));
                 String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
                 if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                     return createPartyPostalAddressOutMap;
@@ -478,8 +480,7 @@ public class BoomServices {
             String contactMechPurposeTypeId = "POSTAL_ADDRESS";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "attnName",partyId,"toName", supplierName, "partyId", supplierPartyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,
-                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE,
-                            "contactMechPurposeTypeId", contactMechPurposeTypeId));
+                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE ));
             String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
             if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                 return createPartyPostalAddressOutMap;

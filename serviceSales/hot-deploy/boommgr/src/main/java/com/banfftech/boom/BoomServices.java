@@ -113,9 +113,13 @@ public class BoomServices {
         return partyId;
     }
 
+
+
+
+
+
     /**
      * 企业Bom注册
-     *
      * @param dctx
      * @param context
      * @return
@@ -175,6 +179,9 @@ public class BoomServices {
                 dispatcher.runSync("createPartyRole",
                         UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ADMIN"));
 
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "WORKER"));
+
 
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
 
@@ -230,7 +237,7 @@ public class BoomServices {
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
 
- 
+
 
 
                 //  邮政地址
@@ -358,8 +365,45 @@ public class BoomServices {
 
 
     /**
+     * empJoinPartyGroup
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> empJoinPartyGroup(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        String roleTypeIdFrom = (String) context.get("roleTypeIdFrom");
+        String partyGroupId = (String) context.get("partyGroupId");
+
+        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+        createPartyRelationshipInMap.put("roleTypeIdFrom",roleTypeIdFrom);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
+        createPartyRelationshipInMap.put("partyIdTo",partyGroupId);
+        createPartyRelationshipInMap.put("partyIdFrom",partyId);
+
+        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+            return createPartyRelationshipOutMap;
+        }
+
+        return resultMap;
+    }
+
+    /**
      * createRawMaterials
-     *
      * @param dctx
      * @param context
      * @return

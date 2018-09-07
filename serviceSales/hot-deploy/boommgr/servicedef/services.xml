@@ -65,6 +65,16 @@
         <attribute name="userInfo" type="Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <service name="empJoinPartyGroup" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="empJoinPartyGroup" auth="false">
+        <description>empJoinPartyGroup</description>
+        <attribute name="partyGroupId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeIdFrom" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <service name="register" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

@@ -348,24 +348,13 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-        String   roleTypeIdFrom = "OWNER";
-        String   roleTypeIdTo = "LEAD";
-        String   relatedCompanyRoleTypeIdTo = "LEAD";
-        String   relatedCompanyRoleTypeIdFrom = "ACCOUNT_LEAD";
-        String   relatedCompanyRelationshipTypeId = "EMPLOYMENT";
-        String   statusId = "PARTY_DISABLED";
-        String   statusId_op = "notEqual";
-        String   partyRelationshipTypeId = "LEAD_OWNER";
-        String   roleTypeId = "LEAD_OWNER";
 
 
-
-
-
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
-
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(relationList.size()>0){
               for(GenericValue gv : relationList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();

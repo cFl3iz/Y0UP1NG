@@ -389,7 +389,7 @@ public class BoomQueryServices {
 //            }
 //        }
 
-      resultMap.put("supplierList",relationList);
+      resultMap.put("supplierList",returnList);
         return resultMap;
     }
 

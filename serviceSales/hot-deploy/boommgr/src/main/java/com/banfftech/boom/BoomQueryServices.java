@@ -366,7 +366,22 @@ public class BoomQueryServices {
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
 
-
+        if(relationList.size()>0){
+              for(GenericValue gv : relationList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                String partyIdTo = gv.getString("partyIdTo");
+                Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
+                rowMap.put("name",supplierInfo.get("lastName")+supplierInfo.get("firstName"));
+                rowMap.put("partyId",partyIdTo);
+                rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                rowMap.put("paAddress1", gv.getString("paAddress1"));
+//                rowMap.put("tel",supplierInfo.get("userLoginId"));
+                rowMap.put("avatar",supplierInfo.get("headPortrait"));
+                rowMap.put("orderSize","0");
+                rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
+                returnList.add(rowMap);
+            }
+        }
 //PartyRoleAndContactMechDetail
 //        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 //        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

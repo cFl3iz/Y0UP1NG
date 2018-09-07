@@ -3822,6 +3822,7 @@ public class PersonManagerQueryServices {
                         "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
             }
             personInfo.put("firstName", (String) person.get("firstName"));
+            personInfo.put("lastName", (String) person.get("lastName"));
 
             GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
             personInfo.put("userLoginId",userLogin.getString("userLoginId"));

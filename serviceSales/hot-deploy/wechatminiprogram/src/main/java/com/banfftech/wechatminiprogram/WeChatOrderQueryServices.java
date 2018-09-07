@@ -1217,13 +1217,15 @@ public class WeChatOrderQueryServices {
             GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
             String inventoryFacilityId = store.getString("inventoryFacilityId");
             //获得库存信息 getInventoryAvailableByFacility
+        if(null!=inventoryFacilityId){
+
             Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                     "facilityId", inventoryFacilityId, "productId", productId));
             if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
                 allField.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
                 allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
             }
-
+        }
 
 
         // 2 c 找media_id

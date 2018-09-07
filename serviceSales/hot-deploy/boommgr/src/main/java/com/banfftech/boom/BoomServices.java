@@ -430,7 +430,7 @@ public class BoomServices {
         }
         if(supplierName.length()<=3){
             lastName = supplierName.substring(0,1);
-            firstName = supplierName.substring(1+1);
+            firstName = supplierName.substring(1);
         }
 
 

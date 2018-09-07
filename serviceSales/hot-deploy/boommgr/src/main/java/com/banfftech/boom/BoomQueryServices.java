@@ -348,25 +348,42 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        String   roleTypeIdFrom = "OWNER";
+        String   roleTypeIdTo = "LEAD";
+        String   relatedCompanyRoleTypeIdTo = "LEAD";
+        String   relatedCompanyRoleTypeIdFrom = "ACCOUNT_LEAD";
+        String   relatedCompanyRelationshipTypeId = "EMPLOYMENT";
+        String   statusId = "PARTY_DISABLED";
+        String   statusId_op = "notEqual";
+        String   partyRelationshipTypeId = "LEAD_OWNER";
+        String   roleTypeId = "LEAD_OWNER";
+
+
+
+
+
+
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdFrom", partyId, "roleTypeIdFrom", "CUSTOMER").orderBy("-fromDate").queryList();
 
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(relationList.size()>0){
-            for(GenericValue gv : relationList){
-                Map<String,Object> rowMap = new HashMap<String, Object>();
-                String partyIdTo = gv.getString("partyIdTo");
-                Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
-                rowMap.put("name",supplierInfo.get("firstName"));
-                rowMap.put("partyId",partyIdTo);
-                rowMap.put("tel",supplierInfo.get("userLoginId"));
-                rowMap.put("avatar",supplierInfo.get("headPortrait"));
-                rowMap.put("orderSize","0");
-                rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
-                returnList.add(rowMap);
-            }
-        }
+
+//PartyRoleAndContactMechDetail
+//        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+//        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        if(relationList.size()>0){
+//            for(GenericValue gv : relationList){
+//                Map<String,Object> rowMap = new HashMap<String, Object>();
+//                String partyIdTo = gv.getString("partyIdTo");
+//                Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
+//                rowMap.put("name",supplierInfo.get("firstName"));
+//                rowMap.put("partyId",partyIdTo);
+//                rowMap.put("tel",supplierInfo.get("userLoginId"));
+//                rowMap.put("avatar",supplierInfo.get("headPortrait"));
+//                rowMap.put("orderSize","0");
+//                rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
+//                returnList.add(rowMap);
+//            }
+//        }
 
         resultMap.put("supplierList",returnList);
         return resultMap;

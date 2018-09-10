@@ -334,22 +334,23 @@ public class BoomServices {
 
         GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", productId));
 
+        String workEffortName = product.getString("productName");
         // Create Routing
-        Map<String,Object> createRoutingMap = dispatcher.runSync("createWorkEffort", UtilMisc.toMap("userLogin", userLogin,
-                "workEffortName", "routing-" + product.getString("productName"), "workEffortTypeId", "ROUTING", "currentStatusId", "ROU_ACTIVE"
-                , "quantityToProduce", new BigDecimal(quantity)));
-
-        String routingId = (String) createRoutingMap.get("workEffortId");
+//        Map<String,Object> createRoutingMap = dispatcher.runSync("createWorkEffort", UtilMisc.toMap("userLogin", userLogin,
+//                "workEffortName", "routing-" + product.getString("productName"), "workEffortTypeId", "ROUTING", "currentStatusId", "ROU_ACTIVE"
+//                , "quantityToProduce", new BigDecimal(quantity)));
+//
+//        String routingId = (String) createRoutingMap.get("workEffortId");
 
 //        createProductionRun
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
                 "ownerPartyId", partyId  ).queryFirst();
         String facilityId = facility.getString("facilityId");
         BigDecimal pRQuantity = new BigDecimal(quantity);
-
+//"routingId",routingId,
         Map<String,Object> createProductionRunMap  = dispatcher.runSync("createProductionRunsForProductBom",UtilMisc.toMap("userLogin",userLogin,
-                "facilityId",facilityId,"quantity",pRQuantity
-        ,"productId",productId,"routingId",routingId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+                "facilityId",facilityId,"quantity",pRQuantity,"workEffortName",workEffortName
+                ,"productId",productId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
 //        String productionRunId = (String) createProductionRunMap.get("productionRunId");
 
         //createProductionRunsForProductBom

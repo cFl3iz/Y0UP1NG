@@ -19,6 +19,7 @@
 
 package org.apache.ofbiz.manufacturing.bom;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -500,10 +501,12 @@ public class BOMNode {
     public Map<String, Object> createManufacturingOrder(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipGroupSeqId, String shipmentId, boolean useSubstitute, boolean ignoreSupplierProducts) throws GenericEntityException {
         String productionRunId = null;
         Timestamp endDate = null;
+        System.out.println("isManufactured(ignoreSupplierProducts)="+isManufactured(ignoreSupplierProducts));
         if (isManufactured(ignoreSupplierProducts)) {
             BOMNode oneChildNode = null;
             List<String> childProductionRuns = new LinkedList<String>();
             Timestamp maxEndDate = null;
+            
             for (int i = 0; i < childrenNodes.size(); i++) {
                 oneChildNode = childrenNodes.get(i);
                 if (oneChildNode != null) {

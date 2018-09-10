@@ -108,7 +108,7 @@
         <alias-all entity-alias="PR" />
 
         <view-link entity-alias="TNAPV" rel-entity-alias="PR">
-            <key-map field-name="partyId" />
+            <key-map field-name="partyId" rel-field-name="partyIdTo" />
         </view-link>
 
     </view-entity>

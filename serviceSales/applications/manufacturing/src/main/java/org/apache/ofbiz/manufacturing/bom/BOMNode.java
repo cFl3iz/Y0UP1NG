@@ -411,7 +411,7 @@ public class BOMNode {
         Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> depth "+depth,module);
         Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> excludeWIPs "+excludeWIPs,module);
         Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> this.productAssoc "+this.productAssoc,module);
-        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> this.productAssoc.getString(\"estimateCalcMethod\") "+this.productAssoc.getString("estimateCalcMethod"),module);
+//        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> this.productAssoc.getString(\"estimateCalcMethod\") "+this.productAssoc.getString("estimateCalcMethod"),module);
 
         if (this.productAssoc != null && this.productAssoc.getString("estimateCalcMethod") != null) {
             try {

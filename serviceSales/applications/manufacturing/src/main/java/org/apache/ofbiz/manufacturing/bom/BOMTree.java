@@ -19,6 +19,7 @@
 
 package org.apache.ofbiz.manufacturing.bom;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
@@ -346,8 +347,10 @@ public class BOMTree {
                 }
             }
             Map<String, Object> tmpMap = root.createManufacturingOrder(facilityId, date, workEffortName, description, routingId, orderId, orderItemSeqId, shipGroupSeqId, shipmentId, true, true);
+            System.out.println(">>>>>>>>>>>>>>>>>>>tmpMap:"+tmpMap);
             workEffortId = (String)tmpMap.get("productionRunId");
         }
+        
         return workEffortId;
     }
 

@@ -43,6 +43,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="createProductionRouting">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createProductionRouting"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
     <request-map uri="empJoinPartyGroup">
         <security https="false" auth="false"/>
         <event type="service" invoke="empJoinPartyGroup"/>

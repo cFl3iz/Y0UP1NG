@@ -249,6 +249,12 @@ public class BoomServices {
                 if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                     return createPartyPostalAddressOutMap;
                 }
+// Create Facility
+                Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
+                        "ownerPartyId", partyId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
+                if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
+                    return createFacilityOutMap;
+                }
 
 
 
@@ -301,6 +307,55 @@ public class BoomServices {
 
         return result;
     }
+
+
+    /**
+     * createProductionRouting
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createProductionRouting(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String productId = (String) context.get("productId");
+        String quantity = (String) context.get("quantity");
+
+        GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", "productId"));
+
+        // Create Routing
+        Map<String,Object> createRoutingMap = dispatcher.runSync("createWorkEffort", UtilMisc.toMap("userLogin", userLogin,
+                "workEffortName", "routing-" + product.getString("productName"), "workEffortTypeId", "ROUTING", "currentStatusId", "ROU_ACTIVE"
+                , "quantityToProduce", new BigDecimal(quantity)));
+
+        String routingId = (String) createRoutingMap.get("workEffortId");
+
+//        createProductionRun
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyId  ).queryFirst();
+        String facilityId = facility.getString("facilityId");
+        BigDecimal pRQuantity = new BigDecimal(quantity);
+
+        dispatcher.runSync("createProductionRun",UtilMisc.toMap("userLogin",userLogin,"facilityId",facilityId,"pRQuantity",pRQuantity
+        ,"productId",productId,"routingId",routingId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+
+
+        return resultMap;
+    }
+
+
+
 
 
     /**

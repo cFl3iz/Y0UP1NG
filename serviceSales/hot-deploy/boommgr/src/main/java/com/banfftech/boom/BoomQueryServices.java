@@ -415,6 +415,7 @@ public class BoomQueryServices {
                 if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
                     rowMap = returnList.get(returnList.size()-1);
                     rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                    returnList.remove(returnList.size()-1);
                     returnList.add(rowMap);
                     continue;
                 }

@@ -506,7 +506,7 @@ public class BOMNode {
             BOMNode oneChildNode = null;
             List<String> childProductionRuns = new LinkedList<String>();
             Timestamp maxEndDate = null;
-            
+
             for (int i = 0; i < childrenNodes.size(); i++) {
                 oneChildNode = childrenNodes.get(i);
                 if (oneChildNode != null) {
@@ -655,6 +655,11 @@ public class BOMNode {
             Debug.logError("Problem in BOMNode.isManufactured()", module);
         }
         supplierProducts = EntityUtil.filterByDate(supplierProducts, UtilDateTime.nowTimestamp(), "availableFromDate", "availableThruDate", true);
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>> childrenNodes.size() "+childrenNodes.size());
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>> ignoreSupplierProducts "+ignoreSupplierProducts);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>> supplierProducts "+supplierProducts);
+
         return childrenNodes.size() > 0 && (ignoreSupplierProducts || UtilValidate.isEmpty(supplierProducts));
     }
 

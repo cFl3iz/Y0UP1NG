@@ -112,7 +112,6 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-        Map<String, Object> returnMap = new HashMap<String, Object>();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
@@ -139,7 +138,7 @@ public class BoomQueryServices {
         rowMap.put("supplierProductList",supplierProductList);
 
         returnList.add(rowMap);
-        returnMap.put("productionRunList",returnList);
+        resultMap.put("productionRunList",returnList);
         return resultMap;
     }
 

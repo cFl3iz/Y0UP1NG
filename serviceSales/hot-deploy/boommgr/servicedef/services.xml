@@ -150,7 +150,7 @@
              location="main.java.com.banfftech.boom.BoomQueryServices"
              invoke="queryProductionRouting" auth="false">
         <description>queryProductionRouting</description>
-        <attribute name="productionRunList" type="List" mode="OUT" optional="false"/>
+        <attribute name="productionRunList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

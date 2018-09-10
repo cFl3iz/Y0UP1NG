@@ -556,6 +556,13 @@ public class BoomServices {
             firstName = supplierName.substring(1);
         }
 
+        //是否已经添加过
+
+        Long hasData = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
+                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","tnContactNumber",supplierTel).queryCount();
+        if(hasData>0){
+            return ServiceUtil.returnError(supplierTel+" Is Exsits Lead From "+partyId);
+        }
 
 
 

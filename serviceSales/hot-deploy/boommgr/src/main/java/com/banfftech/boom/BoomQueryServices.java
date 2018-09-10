@@ -407,20 +407,27 @@ public class BoomQueryServices {
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String beforePartyId = null;
         if(relationList.size()>0){
               for(GenericValue gv : relationList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String partyIdTo = gv.getString("partyIdTo");
+                if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
+                    rowMap = returnList.get(returnList.size()-1);
+                    rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                    returnList.add(rowMap);
+                }
+
                 Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
                 rowMap.put("name",supplierInfo.get("lastName")+supplierInfo.get("firstName"));
                 rowMap.put("partyId",partyIdTo);
-                rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
                 rowMap.put("paAddress1", gv.getString("paAddress1"));
 //                rowMap.put("tel",supplierInfo.get("userLoginId"));
                 rowMap.put("avatar",supplierInfo.get("headPortrait"));
                 rowMap.put("orderSize","0");
                 rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
                 returnList.add(rowMap);
+                  beforePartyId=partyIdTo;
             }
         }
 //PartyRoleAndContactMechDetail

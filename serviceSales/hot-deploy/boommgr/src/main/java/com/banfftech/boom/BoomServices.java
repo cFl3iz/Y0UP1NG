@@ -347,9 +347,15 @@ public class BoomServices {
         String facilityId = facility.getString("facilityId");
         BigDecimal pRQuantity = new BigDecimal(quantity);
 
-        dispatcher.runSync("createProductionRun",UtilMisc.toMap("userLogin",userLogin,"facilityId",facilityId,"pRQuantity",pRQuantity
+        Map<String,Object> createProductionRunMap  = dispatcher.runSync("createProductionRunsForProductBom",UtilMisc.toMap("userLogin",userLogin,
+                "facilityId",facilityId,"quantity",pRQuantity
         ,"productId",productId,"routingId",routingId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+//        String productionRunId = (String) createProductionRunMap.get("productionRunId");
 
+        //createProductionRunsForProductBom
+//
+//        dispatcher.runSync("addProductionRunRoutingTask",UtilMisc.toMap("userLogin",userLogin,
+//                "productionRunId",productionRunId,"routingTaskId",routingId,"priority",new Long(1)));
 
         return resultMap;
     }

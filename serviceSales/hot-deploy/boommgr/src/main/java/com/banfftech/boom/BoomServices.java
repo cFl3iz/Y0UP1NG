@@ -332,7 +332,7 @@ public class BoomServices {
         String productId = (String) context.get("productId");
         String quantity = (String) context.get("quantity");
 
-        GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", "productId"));
+        GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", productId));
 
         // Create Routing
         Map<String,Object> createRoutingMap = dispatcher.runSync("createWorkEffort", UtilMisc.toMap("userLogin", userLogin,

@@ -561,7 +561,7 @@ public class BoomServices {
         Long hasData = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","tnContactNumber",supplierTel).queryCount();
         if(hasData>0){
-            return ServiceUtil.returnError(supplierTel+" Is Exsits Lead From "+partyId);
+            return ServiceUtil.returnError("已经存在的线索");
         }
 
 

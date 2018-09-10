@@ -355,12 +355,6 @@ public class BoomServices {
         GenericValue product = delegator.findOne("Product", false, UtilMisc.toMap("productId", productId));
 
         String workEffortName = product.getString("productName");
-        // Create Routing
-//        Map<String,Object> createRoutingMap = dispatcher.runSync("createWorkEffort", UtilMisc.toMap("userLogin", userLogin,
-//                "workEffortName", "routing-" + product.getString("productName"), "workEffortTypeId", "ROUTING", "currentStatusId", "ROU_ACTIVE"
-//                , "quantityToProduce", new BigDecimal(quantity)));
-//
-//        String routingId = (String) createRoutingMap.get("workEffortId");
 
 //        createProductionRun
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
@@ -368,15 +362,19 @@ public class BoomServices {
         String facilityId = facility.getString("facilityId");
         BigDecimal pRQuantity = new BigDecimal(quantity);
 //"routingId",routingId,
-        Map<String,Object> createProductionRunMap  = dispatcher.runSync("createProductionRunsForProductBom",UtilMisc.toMap("userLogin",userLogin,
-                "facilityId",facilityId,"quantity",pRQuantity,"workEffortName",workEffortName
-                ,"productId",productId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+//        Map<String,Object> createProductionRunMap  = dispatcher.runSync("createProductionRunsForProductBom",UtilMisc.toMap("userLogin",userLogin,
+//                "facilityId",facilityId,"quantity",pRQuantity,"workEffortName",workEffortName
+//                ,"productId",productId,"startDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
 //        String productionRunId = (String) createProductionRunMap.get("productionRunId");
 
         //createProductionRunsForProductBom
 //
 //        dispatcher.runSync("addProductionRunRoutingTask",UtilMisc.toMap("userLogin",userLogin,
 //                "productionRunId",productionRunId,"routingTaskId",routingId,"priority",new Long(1)));
+
+        dispatcher.runSync("createRequirement",UtilMisc.toMap("userLogin",userLogin,"requirementTypeId","INTERNAL_REQUIREMENT"
+        ,"facilityId",facilityId,"productId",productId,"statusId","REQ_APPROVED","requirementStartDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+                "quantity",new BigDecimal(quantity)));
 
         return resultMap;
     }

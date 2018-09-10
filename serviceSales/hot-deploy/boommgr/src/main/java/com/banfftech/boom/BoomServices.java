@@ -192,6 +192,12 @@ public class BoomServices {
                         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                         createPartyRelationshipInMap.put("userLogin", admin);
                         //createPartyRelationship to Group
+
+                        dispatcher.runSync("createPartyRole",
+                                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "LEAD"));
+                        dispatcher.runSync("createPartyRole",
+                                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
+
                         createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
                         createPartyRelationshipInMap.put("roleTypeIdFrom", "ACCOUNT_LEAD");
                         createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");

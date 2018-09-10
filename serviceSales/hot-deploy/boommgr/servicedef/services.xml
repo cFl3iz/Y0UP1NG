@@ -11,11 +11,29 @@
         </description>
     </service>
 
-    <service name="createMySupplier" engine="java"
+
+
+    <service name="addEmp" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"
-             invoke="createMySupplier" auth="false">
-        <description>createMySupplier</description>
+             invoke="addEmp" auth="false">
+        <description>addEmp</description>
+        <attribute name="tel" type="String" mode="IN" optional="false"/>
+        <attribute name="partyGroupId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+
+
+    <service name="createMyLead" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="createMyLead" auth="false">
+        <description>createMyLead</description>
         <attribute name="supplierName" type="String" mode="IN" optional="false"/>
         <attribute name="supplierTel" type="String" mode="IN" optional="false"/>
         <attribute name="provinceName" type="String" mode="IN" optional="false"/>
@@ -24,7 +42,7 @@
         <attribute name="detailInfo" type="String" mode="IN" optional="false"/>
 
 
-        <attribute name="supplierInfo" type="Map" mode="OUT" optional="true"/>
+        <attribute name="leadInfo" type="Map" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

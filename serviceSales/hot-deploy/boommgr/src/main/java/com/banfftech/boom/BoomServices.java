@@ -473,7 +473,7 @@ public class BoomServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> createMySupplier(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> createMyLead(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -515,8 +515,10 @@ public class BoomServices {
         createLeadMap.put("firstName",firstName );
         createLeadMap.put("lastName",lastName );
         createLeadMap.put("countryGeoId","CHN");
-        createLeadMap.put("city",cityName);
+        createLeadMap.put("city",cityName==null?"":cityName);
+        if(null != countyName && null != provinceName && null != detailInfo){
         createLeadMap.put("address1",countyName+" "+provinceName+" "+cityName+" "+detailInfo);
+        }
         createLeadMap.put("countryCode","86");
         createLeadMap.put("postalCode","200000");
         createLeadMap.put("contactNumber",supplierTel);
@@ -525,9 +527,11 @@ public class BoomServices {
         Map<String, Object> createLeadOutMap = dispatcher.runSync("createLead", createLeadMap);
 
 
+
             if (ServiceUtil.isError(createLeadOutMap)) {
                 return createLeadOutMap;
             }
+        String resultPartyId = (String) createLeadOutMap.get("partyId");
 
 
 //        boolean isExsitsRole = false;
@@ -597,7 +601,7 @@ public class BoomServices {
 //            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
 //        }
 
-
+        resultMap.put("leadInfo",UtilMisc.toMap("partyId",resultPartyId));
         return resultMap;
     }
 

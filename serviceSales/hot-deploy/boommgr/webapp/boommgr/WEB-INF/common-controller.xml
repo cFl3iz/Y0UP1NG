@@ -13,9 +13,17 @@
 
 
 
-    <request-map uri="createMySupplier">
+
+    <request-map uri="addEmp">
         <security https="false" auth="false"/>
-        <event type="service" invoke="createMySupplier"/>
+        <event type="service" invoke="addEmp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createMyLead">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createMyLead"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

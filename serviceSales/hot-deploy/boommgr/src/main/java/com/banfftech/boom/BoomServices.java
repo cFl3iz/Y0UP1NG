@@ -256,6 +256,8 @@ public class BoomServices {
 
 
 
+                if(city!=null && !city.equals("") && province!=null){
+
 
                 //  邮政地址
                 String contactMechPurposeTypeId = "POSTAL_ADDRESS";
@@ -265,6 +267,7 @@ public class BoomServices {
                 String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
                 if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
                     return createPartyPostalAddressOutMap;
+                }
                 }
 // Create Facility
                 Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,

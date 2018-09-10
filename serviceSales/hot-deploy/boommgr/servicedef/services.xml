@@ -88,6 +88,7 @@
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="empJoinPartyGroup" auth="false">
         <description>empJoinPartyGroup</description>
+        <attribute name="empId" type="String" mode="IN" optional="true"/>
         <attribute name="partyGroupId" type="String" mode="IN" optional="true"/>
         <attribute name="roleTypeIdFrom" type="String" mode="IN" optional="true"/>
 

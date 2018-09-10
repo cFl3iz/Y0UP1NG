@@ -385,6 +385,7 @@ public class BoomServices {
         String partyId = userLogin.getString("partyId");
         String roleTypeIdFrom = (String) context.get("roleTypeIdFrom");
         String partyGroupId = (String) context.get("partyGroupId");
+        String empId        = (String) context.get("empId");
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
         createPartyRelationshipInMap.put("userLogin", admin);
@@ -392,7 +393,7 @@ public class BoomServices {
         createPartyRelationshipInMap.put("roleTypeIdFrom",roleTypeIdFrom);
         createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
         createPartyRelationshipInMap.put("partyIdTo",partyGroupId);
-        createPartyRelationshipInMap.put("partyIdFrom",partyId);
+        createPartyRelationshipInMap.put("partyIdFrom",empId);
 
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
         if (ServiceUtil.isError(createPartyRelationshipOutMap)) {

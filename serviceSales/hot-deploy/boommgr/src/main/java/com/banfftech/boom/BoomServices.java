@@ -425,7 +425,7 @@ public class BoomServices {
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
                 "ownerPartyId", partyId  ).queryFirst();
         String facilityId = facility.getString("facilityId");
-    createProductInMap.put("facilityId ", facilityId );
+    createProductInMap.put("facilityId", facilityId );
 
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
         if (ServiceUtil.isError(createProductOutMap)) {

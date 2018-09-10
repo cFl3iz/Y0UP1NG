@@ -93,6 +93,58 @@ public class BoomQueryServices {
 
 
     /**
+     * queryProductionRouting
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryProductionRouting(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        Map<String,Object> rowMap = new HashMap<String, Object>();
+
+        List<Map<String,Object>> supplierProductList = new ArrayList<Map<String, Object>>();
+
+        Map<String,Object> rowProductMap = new HashMap<String, Object>();
+
+        rowProductMap.put("supplierName","三星");
+        rowProductMap.put("productName","原辅料1");
+        rowProductMap.put("quantity","1");
+        supplierProductList.add(rowProductMap);
+
+        rowProductMap = new HashMap<String, Object>();
+
+        rowProductMap.put("supplierName","华为");
+        rowProductMap.put("productName","原辅料2");
+        rowProductMap.put("quantity","2");
+        supplierProductList.add(rowProductMap);
+
+        rowMap.put("productionDate","2018-08-30");
+        rowMap.put("workEffortName","第三次生产计划");
+        rowMap.put("supplierProductList",supplierProductList);
+
+        returnList.add(rowMap);
+        returnMap.put("productionRunList",returnList);
+        return resultMap;
+    }
+
+
+    /**
      * queryMyInfo
      * @param dctx
      * @param context

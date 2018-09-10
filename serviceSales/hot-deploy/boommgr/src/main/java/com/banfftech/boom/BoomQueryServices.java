@@ -236,8 +236,17 @@ public class BoomQueryServices {
                         String supplierPartyId = supplier.getString("partyId");
                         GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
                                 "partyId", supplierPartyId).queryFirst();
-                        rowSupplier.put("supplierId",supplierPartyId);
-                        rowSupplier.put("groupName",partyGroup.getString("groupName"));
+                        //说明该线索人还没登录验证过
+                        if(null ==partyGroup){
+                            GenericValue person =  EntityQuery.use(delegator).from("Person").where(
+                                    "partyId", supplierPartyId).queryFirst();
+                            rowSupplier.put("supplierId",supplierPartyId);
+                            rowSupplier.put("groupName",person.getString("lastName")+person.getString("firstName"));
+                        }else{
+                            rowSupplier.put("supplierId",supplierPartyId);
+                            rowSupplier.put("groupName",partyGroup.getString("groupName"));
+                        }
+
                         supplierList.add(rowSupplier);
                     }
                 }

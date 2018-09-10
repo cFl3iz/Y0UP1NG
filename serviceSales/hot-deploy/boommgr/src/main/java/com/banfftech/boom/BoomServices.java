@@ -414,7 +414,7 @@ public class BoomServices {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
-                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productId, "productId", productIdFrom
+                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo",productIdFrom , "productId", productId
                         , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
             }
         }

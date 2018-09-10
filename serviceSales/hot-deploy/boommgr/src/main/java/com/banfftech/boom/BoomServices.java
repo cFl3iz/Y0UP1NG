@@ -186,7 +186,10 @@ public class BoomServices {
 
                 dispatcher.runSync("createPartyRole",
                         UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "WORKER"));
-
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "LEAD"));
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
 
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
 
@@ -198,12 +201,13 @@ public class BoomServices {
                         createPartyRelationshipInMap.put("userLogin", admin);
                         //createPartyRelationship to Group
 
-                        dispatcher.runSync("createPartyRole",
-                                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "LEAD"));
-                        dispatcher.runSync("createPartyRole",
-                                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
-                        dispatcher.runSync("createPartyRole",
-                                UtilMisc.toMap("userLogin", admin, "partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD"));
+
+
+                        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD").queryFirst();
+                        if (null == partyRole) {
+                            dispatcher.runSync("createPartyRole",
+                                    UtilMisc.toMap("userLogin", admin, "partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD"));
+                        }
 
                         createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
                         createPartyRelationshipInMap.put("roleTypeIdFrom", "ACCOUNT_LEAD");

@@ -416,6 +416,7 @@ public class BoomQueryServices {
                     rowMap = returnList.get(returnList.size()-1);
                     rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
                     returnList.add(rowMap);
+                    continue;
                 }
 
                 Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);

@@ -422,13 +422,27 @@ public class BoomServices {
         createProductInMap.put("detailImageUrl", imagePath);
         createProductInMap.put("smallImageUrl", imagePath);
 //        createProductInMap.put("quantityUomId", quantityUomId);
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyId  ).queryFirst();
+        String facilityId = facility.getString("facilityId");
+    createProductInMap.put("facilityId ", facilityId );
 
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
         if (ServiceUtil.isError(createProductOutMap)) {
             return createProductOutMap;
         }
 
+
+
+
+
+
         String productId = (String) createProductOutMap.get("productId");
+
+
+        dispatcher.runSync("createProductFacility",UtilMisc.toMap("userLogin",userLogin,
+                "productId",productId,"facilityId",facilityId,"minimumStock",BigDecimal.ZERO,"reorderQuantity",new BigDecimal("10000"),"daysToShip",new Long(10)));
+
 
         if (rawMaterials != null && rawMaterials.length() > 2) {
             for (String rowProduct : rawMaterials.split(",")) {

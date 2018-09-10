@@ -757,6 +757,8 @@ public class PlatformLoginWorker {
                 result.put("tarjeta",tarjeta);
                 result.put("roleTypeId",roleTypeId);
                 result.put("productStoreId",productStoreId);
+                result.put("prodCatalogId",EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId ).queryFirst().getString("prodCatalogId"));
+
                 result.put("partyId", partyId);
             }
 

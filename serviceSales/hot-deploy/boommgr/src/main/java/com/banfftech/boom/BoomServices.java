@@ -110,6 +110,11 @@ public class BoomServices {
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "VENDOR"));
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "CUSTOMER"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "LEAD"));
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
+
         return partyId;
     }
 

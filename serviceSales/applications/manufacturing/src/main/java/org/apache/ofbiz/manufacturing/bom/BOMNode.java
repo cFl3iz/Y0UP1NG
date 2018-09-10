@@ -406,9 +406,15 @@ public class BOMNode {
         // in this breakdown.
         this.depth = depth;
         String serviceName = null;
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> arr "+arr,module);
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> quantity "+quantity,module);
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> depth "+depth,module);
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> excludeWIPs "+excludeWIPs,module);
+
         if (this.productAssoc != null && this.productAssoc.getString("estimateCalcMethod") != null) {
             try {
                 GenericValue genericService = productAssoc.getRelatedOne("CustomMethod", false);
+                Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> genericService "+genericService,module);
                 if (genericService != null && genericService.getString("customMethodName") != null) {
                     serviceName = genericService.getString("customMethodName");
                 }
@@ -501,7 +507,8 @@ public class BOMNode {
     public Map<String, Object> createManufacturingOrder(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipGroupSeqId, String shipmentId, boolean useSubstitute, boolean ignoreSupplierProducts) throws GenericEntityException {
         String productionRunId = null;
         Timestamp endDate = null;
-        System.out.println("isManufactured(ignoreSupplierProducts)="+isManufactured(ignoreSupplierProducts));
+//        System.out.println("isManufactured(ignoreSupplierProducts)="+isManufactured(ignoreSupplierProducts));
+        Debug.logInfo("isManufactured(ignoreSupplierProducts)="+isManufactured(ignoreSupplierProducts),module);
         if (isManufactured(ignoreSupplierProducts)) {
             BOMNode oneChildNode = null;
             List<String> childProductionRuns = new LinkedList<String>();
@@ -656,10 +663,12 @@ public class BOMNode {
         }
         supplierProducts = EntityUtil.filterByDate(supplierProducts, UtilDateTime.nowTimestamp(), "availableFromDate", "availableThruDate", true);
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>> childrenNodes.size() "+childrenNodes.size());
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>> ignoreSupplierProducts "+ignoreSupplierProducts);
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>> supplierProducts "+supplierProducts);
-
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>> childrenNodes.size() "+childrenNodes.size());
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>> ignoreSupplierProducts "+ignoreSupplierProducts);
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>> supplierProducts "+supplierProducts);
+        Debug.logInfo(  ">>>>>>>>>>>>>>>>>>>>>>childrenNodes.size()"+childrenNodes.size(),module);
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> ignoreSupplierProducts "+ignoreSupplierProducts,module);
+        Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>> supplierProducts "+supplierProducts,module);
         return childrenNodes.size() > 0 && (ignoreSupplierProducts || UtilValidate.isEmpty(supplierProducts));
     }
 

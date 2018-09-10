@@ -165,7 +165,7 @@ public class BoomServices {
 
 
                 // Check is Exsit Contact Number ?..
-                List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
+                List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
                         "contactNumber", tel,"roleTypeIdTo","LEAD","partyRelationshipTypeId","LEAD_OWNER","contactMechTypeId","TELECOM_NUMBER").queryList();
 
 

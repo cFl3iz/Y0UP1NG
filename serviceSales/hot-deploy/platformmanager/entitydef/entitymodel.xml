@@ -99,6 +99,22 @@
     </entity>
 
 
+
+    <view-entity entity-name="TelecomNumberAndPartyAndRelationshipView" package-name="">
+        <member-entity entity-alias="TNAPV" entity-name="TelecomNumberAndPartyView"/>
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+
+        <alias-all entity-alias="TNAPV" />
+        <alias-all entity-alias="PR" />
+
+        <view-link entity-alias="TNAPV" rel-entity-alias="PR">
+            <key-map field-name="partyId" />
+        </view-link>
+
+    </view-entity>
+
+
+
     <!-- 产品店铺的促销规则视图 -->
     <view-entity entity-name="StorePromoAndAction" package-name="">
         <member-entity entity-alias="PSP" entity-name="ProductStorePromoAndAppl"/>

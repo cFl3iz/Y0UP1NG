@@ -82,7 +82,9 @@
     <field-type name="derby" loader="fieldfile" location="fieldtypederby.xml"/>
     <field-type name="daffodil" loader="fieldfile" location="fieldtypedaffodil.xml"/>
     <field-type name="axion" loader="fieldfile" location="fieldtypeaxion.xml"/>
-    <field-type name="mysql" loader="fieldfile" location="fieldtypemysql.xml"/>
+
+    <field-type name="mysql" loader="fieldfile" location="fieldtypemysql_utf8mb4.xml"/>
+
     <field-type name="postgres" loader="fieldfile" location="fieldtypepostgres.xml"/>
     <field-type name="oracle" loader="fieldfile" location="fieldtypeoracle.xml"/>
     <field-type name="sapdb" loader="fieldfile" location="fieldtypesapdb.xml"/>
@@ -314,7 +316,7 @@
                 alias-view-columns="false"
                 drop-fk-use-foreign-key-keyword="true"
                 table-type="InnoDB"
-              	character-set="utf8mb4"
+                character-set="utf8mb4"
                 collate="utf8mb4_general_ci">
         <read-data reader-name="tenant"/>
         <read-data reader-name="seed"/>
@@ -325,9 +327,9 @@
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/personerp?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="root"
-                jdbc-password="root"
+                jdbc-uri="jdbc:mysql://rm-bp126un48l22uaw6b.mysql.rds.aliyuncs.com/youp?autoReconnect=true&amp;characterEncoding=UTF-8"
+                jdbc-username="ypwork"
+                jdbc-password="i1%!lsf*!^(1ig"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"
@@ -358,9 +360,10 @@
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/personERPolap?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="root"
-                jdbc-password="root"
+                jdbc-uri="jdbc:mysql://rm-bp126un48l22uaw6b.mysql.rds.aliyuncs.com/youpolap?
+autoReconnect=true&amp;characterEncoding=UTF-8"
+                jdbc-username="ypwork"
+                jdbc-password="i1%!lsf*!^(1ig"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"
@@ -391,9 +394,10 @@
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/personERPtenant?autoReconnect=true&amp;characterEncoding=UTF-8"
-                jdbc-username="root"
-                jdbc-password="root"
+                jdbc-uri="jdbc:mysql://rm-bp126un48l22uaw6b.mysql.rds.aliyuncs.com/youptenant?
+autoReconnect=true&amp;characterEncoding=UTF-8"
+                jdbc-username="ypwork"
+                jdbc-password="i1%!lsf*!^(1ig"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"

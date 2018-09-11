@@ -297,7 +297,7 @@ public class BoomServices {
             checkCaptcha = PlatformLoginWorker.checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
             Debug.logInfo("tel:" + tel + ",checkCaptcha=>" + checkCaptcha, module);
 
-            if (checkCaptcha || captcha.equals("123456") ) {
+            if (checkCaptcha ) {
 
 
                 // Check is Exsit Contact Number ?..

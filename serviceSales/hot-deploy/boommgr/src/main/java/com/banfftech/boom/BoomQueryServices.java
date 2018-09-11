@@ -191,7 +191,27 @@ public class BoomQueryServices {
                         if(null!= partyGroup){
                             rowProductMap.put("supplierName",partyGroup.getString("groupName"));
                             rowProductMap.put("supplierPartyId",supplierPartyId);
+                        }else{
+                            GenericValue person =  EntityQuery.use(delegator).from("Person").where(
+                                    "partyId", supplierPartyId).queryFirst();
+                            if(null!=person){
+                                rowProductMap.put("supplierName",person.getString("lastName")+person.getString("firstName"));
+                                rowProductMap.put("supplierPartyId",supplierPartyId);
+                            }
                         }
+
+
+
+
+
+
+                        String uomId = childProduct.getString("quantityUomId");
+                        GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+                                "uomId", uomId).queryFirst();
+                        String uomDescription = uom.getString("description");
+                        String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                        rowProductMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+
 
                         supplierProductList.add(rowProductMap);
                     }

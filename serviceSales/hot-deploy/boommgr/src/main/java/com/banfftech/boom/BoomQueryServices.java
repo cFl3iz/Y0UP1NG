@@ -151,8 +151,8 @@ public class BoomQueryServices {
                 String currentStatusId  = gv.getString("currentStatusId");
                 String sdfDate = sdf.format(gv.get("createdDate"));
                 //生产数量
-                BigDecimal estimatedQuantity = gv.get("estimatedQuantity");
-                BigDecimal quantityToProduce = gv.get("quantityToProduce");
+                BigDecimal estimatedQuantity = (BigDecimal) gv.get("estimatedQuantity");
+                BigDecimal quantityToProduce = (BigDecimal) gv.get("quantityToProduce");
 
                 rowMap.put("productionDate",sdfDate);
                 rowMap.put("workEffortName",workEffortName+"生产["+productionProductName+"] "+estimatedQuantity+" ");
@@ -161,7 +161,8 @@ public class BoomQueryServices {
 
                 GenericValue workEffort = EntityQuery.use(delegator).from("WorkEffort").where(
                         "workEffortId",workEffortId).queryFirst();
-                GenericValue childWorkEffort  = workEffort.getRelated("ChildWorkEffort", UtilMisc.toMap("workEffortTypeId", "PROD_ORDER_TASK"), UtilMisc.toList("priority"), false);
+                List<GenericValue> childWorkEfforts  = workEffort.getRelated("ChildWorkEffort", UtilMisc.toMap("workEffortTypeId", "PROD_ORDER_TASK"), UtilMisc.toList("priority"), false);
+                GenericValue  childWorkEffort = childWorkEfforts.get(0);
                 String childWorkEffortId = childWorkEffort.getString("workEffortId");
 
                 List<GenericValue> childWorkEffortGoods = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
@@ -173,7 +174,7 @@ public class BoomQueryServices {
                         String childProductId = childGoods.getString("productId");
                         detailImageUrl =   childGoods.getString("detailImageUrl");
                         GenericValue childProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId",childProductId));
-                        BigDecimal childEstimatedQuantity = childGoods.get("estimatedQuantity");
+                        BigDecimal childEstimatedQuantity = (BigDecimal) childGoods.get("estimatedQuantity");
                         rowProductMap.put("compProductId",childProductId);
                         rowProductMap.put("productName",childProduct.getString("productName"));
                         rowProductMap.put("estimatedQuantity",childEstimatedQuantity);
@@ -202,16 +203,6 @@ public class BoomQueryServices {
                 returnList.add(rowMap);
             }
         }
-
-
-
-
-        rowProductMap = new HashMap<String, Object>();
-
-        rowProductMap.put("supplierName","华为");
-        rowProductMap.put("productName","原辅料2");
-        rowProductMap.put("quantity","2");
-        supplierProductList.add(rowProductMap);
 
 
         resultMap.put("productionRunList",returnList);

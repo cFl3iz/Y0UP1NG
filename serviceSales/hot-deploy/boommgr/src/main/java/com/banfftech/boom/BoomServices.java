@@ -465,6 +465,9 @@ public class BoomServices {
 
 
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
+        dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin,"costComponentTypeId","GEN_COST","costUomId","CNY", "productId", productId, "partyId", partyId));
+
+
 
         return resultMap;
     }

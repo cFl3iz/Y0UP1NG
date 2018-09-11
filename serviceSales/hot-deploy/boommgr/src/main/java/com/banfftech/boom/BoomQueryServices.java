@@ -159,7 +159,19 @@ public class BoomQueryServices {
 
                 rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, partyId));
 
-                 returnList.add(rowMap);
+
+
+
+                String uomId = product.getString("quantityUomId");
+                GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+                        "uomId", uomId).queryFirst();
+                String uomDescription = uom.getString("description");
+                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+
+
+
+                returnList.add(rowMap);
             }
         }
 
@@ -227,7 +239,12 @@ public class BoomQueryServices {
                 rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,partyId ));
 
                 rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, custId));
-
+                String uomId = product.getString("quantityUomId");
+                GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+                        "uomId", uomId).queryFirst();
+                String uomDescription = uom.getString("description");
+                String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
 
                 returnList.add(rowMap);
             }

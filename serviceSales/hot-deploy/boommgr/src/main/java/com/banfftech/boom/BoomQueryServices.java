@@ -126,8 +126,6 @@ public class BoomQueryServices {
         fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
-        fieldSet.add("productStoreId");
-        fieldSet.add("payToPartyId");
 
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
@@ -150,6 +148,16 @@ public class BoomQueryServices {
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
 
                 String statusId = (String) order.get("statusId");
+
+                String orderId = order.getString("orderId");
+
+                GenericValue custOrderRole = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
+
+                String payToPartyId =custOrderRole.getString("partyId");
+
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
+
+                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, partyId));
 
                  returnList.add(rowMap);
             }
@@ -187,8 +195,6 @@ public class BoomQueryServices {
         fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
-        fieldSet.add("productStoreId");
-        fieldSet.add("payToPartyId");
 
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
@@ -211,6 +217,17 @@ public class BoomQueryServices {
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
 
                 String statusId = (String) order.get("statusId");
+
+                String orderId = order.getString("orderId");
+
+                GenericValue custOrderRole = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
+
+                String custId =custOrderRole.getString("partyId");
+
+                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,partyId ));
+
+                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, custId));
+
 
                 returnList.add(rowMap);
             }

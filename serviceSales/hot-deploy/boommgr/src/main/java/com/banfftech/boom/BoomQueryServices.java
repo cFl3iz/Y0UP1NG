@@ -341,13 +341,12 @@ public class BoomQueryServices {
             for(GenericValue gv : productList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
-                rowMap.put("productId",productId);
 
+                rowMap.put("productId",productId);
 
                 rowMap.put("productName",gv.getString("productName"));
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
                 rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
-
 
 
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
@@ -357,7 +356,7 @@ public class BoomQueryServices {
                 if(null!=manufComponents&&manufComponents.size()>0){
                     for(GenericValue row : manufComponents){
                         Map<String,Object> rowComponent = new HashMap<String, Object>();
-                        String rowProductId = row.getString("productId");
+                        String rowProductId = row.getString("productIdTo");
                         BigDecimal quantity  = (BigDecimal)row.get("quantity");
                         rowComponent.put("manufComponentId",rowProductId);
                         rowComponent.put("quantity",quantity.intValue());

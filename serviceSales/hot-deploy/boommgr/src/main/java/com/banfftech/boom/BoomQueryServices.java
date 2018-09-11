@@ -194,7 +194,7 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
         Set<String> fieldSet = new HashSet<String>();
@@ -300,7 +300,7 @@ public class BoomQueryServices {
 
         String workEffortName = null;
         String workEffortId   = null;
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String beforeWorkEffort = null;
 
 

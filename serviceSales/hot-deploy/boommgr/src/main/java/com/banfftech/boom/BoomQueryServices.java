@@ -132,7 +132,7 @@ public class BoomQueryServices {
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
-        List<GenericValue> queryOrderList = delegator.findList("OrderHeaderItemAndRoles",
+        List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 genericCondition, fieldSet,
                 null, null, false);
         if(queryOrderList.size()>0){
@@ -193,7 +193,7 @@ public class BoomQueryServices {
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
-        List<GenericValue> queryOrderList = delegator.findList("OrderHeaderItemAndRoles",
+        List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 genericCondition, fieldSet,
                 null, null, false);
         if(queryOrderList.size()>0){

@@ -120,7 +120,129 @@ public class BoomServices {
     }
 
 
+    /**
+     * create PurchaseOrder
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> createPurchaseOrder(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
+        Locale locale = (Locale) context.get("locale");
+
+        String itemArray = (String) context.get("itemArray");
+
+        //下单的当事人,创建服务会检查他有没有创建权限等。
+        String partyId = (String) userLogin.get("partyId");
+
+        if(null!= itemArray){
+            for(String rowStr : itemArray.split(",")){
+                String productId = rowStr.substring(0,rowStr.indexOf(":"));
+                String quantityStr = rowStr.substring(rowStr.indexOf(":")+1,rowStr.lastIndexOf(":"));
+                String supplierPartyId = rowStr.substring(rowStr.lastIndexOf(":")+1);
+                //供应商产品仓库暂无
+//                String originFacilityId = (String) context.get("originFacilityId");
+
+                //供应商
+                String billFromVendorPartyId = supplierPartyId;
+                // Quantity  Amount
+                BigDecimal quantity = new BigDecimal(quantityStr);
+
+                //最终客户、收货客户、意向客户等客户当事人
+                String billToCustomerPartyId, endUserCustomerPartyId, placingCustomerPartyId, shipToCustomerPartyId = partyId;
+                //发货人就是供应商
+                String   shipFromVendorPartyId = billFromVendorPartyId;
+
+                //StoreOrderMap
+                Map<String, Object> createOrderServiceIn = new HashMap<String, Object>();
+
+                //Order Items
+                List<GenericValue> orderItemList = new ArrayList<GenericValue>();
+
+                GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+                GenericValue itemProduct = delegator.makeValue("OrderItem", UtilMisc.toMap());
+
+                itemProduct.set("productId", productId);
+                itemProduct.set("shipBeforeDate", null);
+//        itemProduct.set("productCategoryId", productCategoryId);
+                // Unit Price = List Price
+                itemProduct.set("shoppingListId", null);
+                itemProduct.set("cancelBackOrderDate", null);
+                // Desc To Order Item List
+                itemProduct.set("itemDescription", product.get("productName"));
+                itemProduct.set("selectedAmount", BigDecimal.ZERO);
+                itemProduct.set("orderItemTypeId", PeConstant.ORDER_ITEM_TYPE);
+                itemProduct.set("orderItemSeqId", "00001");
+
+
+                itemProduct.set("unitPrice", BigDecimal.ZERO);
+                itemProduct.set("isModifiedPrice", "N");
+                itemProduct.set("unitListPrice", BigDecimal.ZERO);
+
+
+                itemProduct.set("quantity", quantity);
+                itemProduct.set("comments", null);
+                itemProduct.set("statusId", PeConstant.ORDER_ITEM_APPROVED_STATUS_ID);
+                itemProduct.set("quoteItemSeqId", null);
+                itemProduct.set("externalId", null);
+                itemProduct.set("supplierProductId", null);
+//        itemProduct.set("prodCatalogId", prodCatalogId);
+
+
+                System.out.println("->itemProduct:" + itemProduct);
+
+                orderItemList.add(itemProduct);
+
+                createOrderServiceIn.put("currencyUom", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+                createOrderServiceIn.put("orderName", "PURCHASE_" + partyId + "_TO_" + billFromVendorPartyId + "_BUY_" + productId);
+                createOrderServiceIn.put("orderItems", orderItemList);
+                createOrderServiceIn.put("orderTypeId", PeConstant.PURCHASE_ORDER);
+                createOrderServiceIn.put("partyId", partyId);
+                createOrderServiceIn.put("billFromVendorPartyId", billFromVendorPartyId);
+//                createOrderServiceIn.put("productStoreId", productStoreId);
+//                createOrderServiceIn.put("originFacilityId", originFacilityId);
+
+                createOrderServiceIn.put("billToCustomerPartyId", partyId);
+                createOrderServiceIn.put("endUserCustomerPartyId", partyId);
+                createOrderServiceIn.put("placingCustomerPartyId", partyId);
+                createOrderServiceIn.put("shipToCustomerPartyId", partyId);
+
+                createOrderServiceIn.put("supplierPartyId", billFromVendorPartyId);
+                createOrderServiceIn.put("shipFromVendorPartyId", billFromVendorPartyId);
+                createOrderServiceIn.put("userLogin", admin);
+
+
+                //Do Run Service
+                Map<String, Object> createOrderOut = dispatcher.runSync("storeOrder", createOrderServiceIn);
+
+                if (!ServiceUtil.isSuccess(createOrderOut)) {
+                    return createOrderOut;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+//        String orderId = (String) createOrderOut.get("orderId");
+
+
+
+        return result;
+    }
 
 
 

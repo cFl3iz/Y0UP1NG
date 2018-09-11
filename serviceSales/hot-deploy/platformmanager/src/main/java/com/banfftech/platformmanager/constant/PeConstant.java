@@ -95,6 +95,7 @@ public class PeConstant {
      * 就是销售订单
      */
     public static final String SALES_ORDER = "SALES_ORDER";
+    public static final String PURCHASE_ORDER = "PURCHASE_ORDER";
 
 
     /**

@@ -183,7 +183,7 @@ public class BoomQueryServices {
 
 
                         GenericValue  suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
-                                "productId", productId).queryFirst();
+                                "productId", childProductId).queryFirst();
                         String supplierPartyId = suppliers.getString("partyId");
                         GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
                                 "partyId", supplierPartyId).queryFirst();

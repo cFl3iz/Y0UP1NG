@@ -694,10 +694,6 @@ under the License.
     </view-link>
 
 
-    <view-link entity-alias="OH" rel-entity-alias="PS">
-      <key-map field-name="productStoreId"/>
-    </view-link>
-
     <relation type="one-nofk" rel-entity-name="OrderType">
       <key-map field-name="orderTypeId"/>
     </relation>

@@ -360,9 +360,14 @@ public class BoomServices {
 
         String workEffortName = product.getString("productName");
 
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+        String partyGroupId = relation.getString("partyIdTo");
+
 //        createProductionRun
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyId  ).queryFirst();
+                "ownerPartyId", partyGroupId  ).queryFirst();
         String facilityId = facility.getString("facilityId");
         BigDecimal pRQuantity = new BigDecimal(quantity);
 //"routingId",routingId,

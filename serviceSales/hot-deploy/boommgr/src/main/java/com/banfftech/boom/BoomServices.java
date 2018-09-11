@@ -148,7 +148,9 @@ public class BoomServices {
             for(String rowStr : itemArray.split(",")){
                 String productId = rowStr.substring(0,rowStr.indexOf(":"));
                 String quantityStr = rowStr.substring(rowStr.indexOf(":")+1,rowStr.lastIndexOf(":"));
-                String supplierPartyId = rowStr.substring(rowStr.lastIndexOf(":")+1);
+                String supplierPartyId = rowStr.substring(rowStr.lastIndexOf(":")+1,rowStr.indexOf("/"));
+                String beiZhu    = rowStr.substring(rowStr.indexOf("/")+1);
+
                 //供应商产品仓库暂无
 //                String originFacilityId = (String) context.get("originFacilityId");
 
@@ -227,6 +229,10 @@ public class BoomServices {
                 if (!ServiceUtil.isSuccess(createOrderOut)) {
                     return createOrderOut;
                 }
+
+
+                Map<String, Object> createOrderNoteOut = dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId",
+                        createOrderOut.get("orderId"), "noteName", "采购商备注", "note", beiZhu, "internalNote", "N"));
             }
         }
 

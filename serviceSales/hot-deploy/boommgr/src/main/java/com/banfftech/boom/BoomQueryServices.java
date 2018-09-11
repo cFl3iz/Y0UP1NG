@@ -115,6 +115,46 @@ public class BoomQueryServices {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
 
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("statusId");
+        fieldSet.add("currencyUom");
+        fieldSet.add("grandTotal");
+        fieldSet.add("productId");
+        fieldSet.add("quantity");
+        fieldSet.add("unitPrice");
+        fieldSet.add("roleTypeId");
+        fieldSet.add("orderDate");
+        fieldSet.add("productStoreId");
+        fieldSet.add("payToPartyId");
+
+        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+        List<GenericValue> queryOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                genericCondition, fieldSet,
+                null, null, false);
+        if(queryOrderList.size()>0){
+            for(GenericValue order : queryOrderList){
+                Map<String, Object> rowMap = new HashMap<String, Object>();
+
+                rowMap = order.getAllFields();
+
+                String productId = (String) order.get("productId");
+
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
+                rowMap.put("productName", "" + product.get("productName"));
+
+                rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+
+                String statusId = (String) order.get("statusId");
+
+                 returnList.add(rowMap);
+            }
+        }
+
 
         resultMap.put("orderList",returnList);
         return resultMap;
@@ -135,6 +175,46 @@ public class BoomQueryServices {
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
+
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("orderId");
+        fieldSet.add("partyId");
+        fieldSet.add("statusId");
+        fieldSet.add("currencyUom");
+        fieldSet.add("grandTotal");
+        fieldSet.add("productId");
+        fieldSet.add("quantity");
+        fieldSet.add("unitPrice");
+        fieldSet.add("roleTypeId");
+        fieldSet.add("orderDate");
+        fieldSet.add("productStoreId");
+        fieldSet.add("payToPartyId");
+
+        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+        List<GenericValue> queryOrderList = delegator.findList("OrderHeaderItemAndRoles",
+                genericCondition, fieldSet,
+                null, null, false);
+        if(queryOrderList.size()>0){
+            for(GenericValue order : queryOrderList){
+                Map<String, Object> rowMap = new HashMap<String, Object>();
+
+                rowMap = order.getAllFields();
+
+                String productId = (String) order.get("productId");
+
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
+                rowMap.put("productName", "" + product.get("productName"));
+
+                rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
+
+                String statusId = (String) order.get("statusId");
+
+                returnList.add(rowMap);
+            }
+        }
 
 
         resultMap.put("orderList",returnList);

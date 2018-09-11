@@ -351,7 +351,7 @@ public class BoomQueryServices {
 
 
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
-                        "productIdFrom", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+                        "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
 
                 List<Map<String,Object>> manuList =new ArrayList<Map<String, Object>>();
                 if(null!=manufComponents&&manufComponents.size()>0){

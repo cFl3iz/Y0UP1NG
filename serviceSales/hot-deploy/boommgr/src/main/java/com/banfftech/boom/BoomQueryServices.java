@@ -302,6 +302,10 @@ public class BoomQueryServices {
                 String detailImageUrl =   parentProduct.getString("detailImageUrl");
                 String statusId  = gv.getString("statusId");
                 String currentStatusId  = gv.getString("currentStatusId");
+
+                rowMap.put("statusId",statusId);
+                rowMap.put("currentStatusId",currentStatusId);
+
                 String sdfDate = sdf.format(gv.get("createdDate"));
                 //生产数量
                 Double estimatedQuantity = (Double) gv.get("estimatedQuantity");

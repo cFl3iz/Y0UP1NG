@@ -126,7 +126,7 @@ public class BoomQueryServices {
         fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
-
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
@@ -169,7 +169,7 @@ public class BoomQueryServices {
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
                 rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
 
-
+                rowMap.put("orderDate", sdf.format(order.get("orderDate")));
 
                 returnList.add(rowMap);
             }
@@ -194,6 +194,7 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 
         Set<String> fieldSet = new HashSet<String>();
@@ -245,7 +246,7 @@ public class BoomQueryServices {
                 String uomDescription = uom.getString("description");
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
                 rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
-
+                rowMap.put("orderDate", sdf.format(order.get("orderDate")));
                 returnList.add(rowMap);
             }
         }

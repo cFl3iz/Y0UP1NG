@@ -31,6 +31,7 @@
              invoke="createPurchaseOrder" auth="false">
         <description>createPurchaseOrder</description>
         <attribute name="itemArray" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

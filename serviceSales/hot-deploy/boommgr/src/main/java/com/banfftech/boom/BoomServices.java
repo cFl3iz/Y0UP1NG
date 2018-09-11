@@ -141,6 +141,8 @@ public class BoomServices {
 
         String itemArray = (String) context.get("itemArray");
 
+        String workEffortId = (String) context.get("workEffortId");
+
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
@@ -242,7 +244,7 @@ public class BoomServices {
 
 
 
-
+        dispatcher.runSync("changeProductionRunStatus",UtilMisc.toMap("userLogin",admin,"productionRunId",workEffortId,"statusId","PRUN_DOC_PRINTED"));
 //        String orderId = (String) createOrderOut.get("orderId");
 
 

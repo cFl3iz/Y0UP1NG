@@ -207,7 +207,7 @@ public class ImageManageService {
                 //取款号+色号
                 skuId = skuId.substring(0, skuId.lastIndexOf("-"));
 
-                EntityCondition matchConditions = EntityCondition.makeCondition("skuId", EntityOperator.LIKE, skuId + "%");
+                EntityCondition matchConditions = EntityCondition.makeCondition("skuId", EntityOperator.LIKE, "%"+skuId + "%");
                 EntityCondition matchConditions3 = EntityCondition.makeCondition("contentType", EntityOperator.EQUALS, "MATCH_PRODUCT_IMAGE");
                 EntityCondition matchCondition = EntityCondition.makeCondition(matchConditions, EntityOperator.AND, matchConditions3);
                 List<GenericValue> productMatchPictures = delegator.findList("ProductImagesTemp",

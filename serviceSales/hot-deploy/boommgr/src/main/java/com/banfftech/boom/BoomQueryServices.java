@@ -151,7 +151,7 @@ public class BoomQueryServices {
                 String currentStatusId  = gv.getString("currentStatusId");
                 String sdfDate = sdf.format(gv.get("createdDate"));
                 //生产数量
-                BigDecimal estimatedQuantity = (BigDecimal) gv.get("estimatedQuantity");
+                Double estimatedQuantity = (Double) gv.get("estimatedQuantity");
                 BigDecimal quantityToProduce = (BigDecimal) gv.get("quantityToProduce");
 
                 rowMap.put("productionDate",sdfDate);
@@ -174,7 +174,7 @@ public class BoomQueryServices {
                         String childProductId = childGoods.getString("productId");
                         detailImageUrl =   childGoods.getString("detailImageUrl");
                         GenericValue childProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId",childProductId));
-                        BigDecimal childEstimatedQuantity = (BigDecimal) childGoods.get("estimatedQuantity");
+                        Double childEstimatedQuantity = (Double) childGoods.get("estimatedQuantity");
                         rowProductMap.put("compProductId",childProductId);
                         rowProductMap.put("productName",childProduct.getString("productName"));
                         rowProductMap.put("estimatedQuantity",childEstimatedQuantity);

@@ -82,6 +82,21 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <request-map uri="queryMyPurchaseOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyPurchaseOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMySalesOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMySalesOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="queryMyInfo">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryMyInfo"/>

@@ -93,6 +93,55 @@ public class BoomQueryServices {
 
 
     /**
+     * queryMyPurchaseOrderList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyPurchaseOrderList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+
+        resultMap.put("orderList",returnList);
+        return resultMap;
+    }
+
+
+    public static Map<String, Object> queryMySalesOrderList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+
+        resultMap.put("orderList",returnList);
+        return resultMap;
+    }
+
+    /**
      * queryProductionRouting
      * @param dctx
      * @param context

@@ -153,6 +153,24 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="queryMyPurchaseOrderList" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryMyPurchaseOrderList" auth="false">
+        <description>queryMyPurchaseOrderList</description>
+        <attribute name="orderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <service name="queryMySalesOrderList" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryMySalesOrderList" auth="false">
+        <description>queryMySalesOrderList</description>
+        <attribute name="orderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
 

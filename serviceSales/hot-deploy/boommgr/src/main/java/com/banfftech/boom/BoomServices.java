@@ -314,6 +314,39 @@ public class BoomServices {
                 dispatcher.runSync("createPartyRole",
                         UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
 
+
+                // 接收账单的客户是否拥有
+                GenericValue partyCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
+                if (null == partyCustRole) {
+                    Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "BILL_TO_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+                }
+
+                // 收货的客户是否拥有
+                GenericValue partyCustShipRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+                if (null == partyCustShipRole) {
+                    Map<String, Object> createPartyCustShipRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "SHIP_TO_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyCustShipRoleMap);
+                }
+
+                //最终客户角色是否拥有
+                GenericValue partyEndCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "END_USER_CUSTOMER").queryFirst();
+                if (null == partyEndCustRole) {
+                    Map<String, Object> createPartyEndCustRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "END_USER_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyEndCustRoleMap);
+                }
+                GenericValue partyCUSTOMERRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();
+                if (null == partyCUSTOMERRole) {
+                    Map<String, Object> createPartyCUSTOMERRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyCUSTOMERRoleMap);
+                }
+
+
+
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
 
                 dispatcher.runSync("createPartyAcctgPreference",UtilMisc.toMap("userLogin", admin

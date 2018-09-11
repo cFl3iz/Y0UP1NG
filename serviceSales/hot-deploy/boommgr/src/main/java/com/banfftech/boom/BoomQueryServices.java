@@ -113,18 +113,98 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
 
 
+
+
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyId  ).queryFirst();
+        String facilityId = facility.getString("facilityId");
+
+        List<GenericValue> productionList = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
+                "workEffortTypeId", "PROD_ORDER_HEADER","facilityId",facilityId).orderBy("-createdDate").queryList();
+
+
+
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        Map<String,Object> rowMap = new HashMap<String, Object>();
 
-        List<Map<String,Object>> supplierProductList = new ArrayList<Map<String, Object>>();
+        String workEffortName = null;
+        String workEffortId   = null;
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String beforeWorkEffort = null;
 
-        Map<String,Object> rowProductMap = new HashMap<String, Object>();
 
-        rowProductMap.put("supplierName","三星");
-        rowProductMap.put("productName","原辅料1");
-        rowProductMap.put("quantity","1");
-        supplierProductList.add(rowProductMap);
+
+
+        if(productionList.size()>0){
+            for(GenericValue gv : productionList){
+
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                List<Map<String,Object>> supplierProductList = new ArrayList<Map<String, Object>>();
+
+                workEffortId = gv.getString("workEffortId");
+
+                String productId = gv.getString("productId");
+                GenericValue parentProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId",productId));
+                String productionProductName = parentProduct.getString("productName");
+                String detailImageUrl =   parentProduct.getString("detailImageUrl");
+                String statusId  = gv.getString("statusId");
+                String currentStatusId  = gv.getString("currentStatusId");
+                String sdfDate = sdf.format(gv.get("createdDate"));
+                //生产数量
+                BigDecimal estimatedQuantity = gv.get("estimatedQuantity");
+                BigDecimal quantityToProduce = gv.get("quantityToProduce");
+
+                rowMap.put("productionDate",sdfDate);
+                rowMap.put("workEffortName",workEffortName+"生产["+productionProductName+"] "+estimatedQuantity+" ");
+                rowMap.put("productName",productionProductName);
+                rowMap.put("detailImageUrl",detailImageUrl);
+
+                GenericValue workEffort = EntityQuery.use(delegator).from("WorkEffort").where(
+                        "workEffortId",workEffortId).queryFirst();
+                GenericValue childWorkEffort  = workEffort.getRelated("ChildWorkEffort", UtilMisc.toMap("workEffortTypeId", "PROD_ORDER_TASK"), UtilMisc.toList("priority"), false);
+                String childWorkEffortId = childWorkEffort.getString("workEffortId");
+
+                List<GenericValue> childWorkEffortGoods = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
+                        "workEffortId",childWorkEffortId).orderBy("-createdDate").queryList();
+                if(childWorkEffortGoods.size()>0){
+                    for(GenericValue childGoods : childWorkEffortGoods){
+
+                        Map<String,Object> rowProductMap = new HashMap<String, Object>();
+                        String childProductId = childGoods.getString("productId");
+                        detailImageUrl =   childGoods.getString("detailImageUrl");
+                        GenericValue childProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId",childProductId));
+                        BigDecimal childEstimatedQuantity = childGoods.get("estimatedQuantity");
+                        rowProductMap.put("compProductId",childProductId);
+                        rowProductMap.put("productName",childProduct.getString("productName"));
+                        rowProductMap.put("estimatedQuantity",childEstimatedQuantity);
+                        rowProductMap.put("detailImageUrl",detailImageUrl);
+
+
+                        GenericValue  suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
+                                "productId", productId).queryFirst();
+                        String supplierPartyId = suppliers.getString("partyId");
+                        GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
+                                "partyId", supplierPartyId).queryFirst();
+
+                        if(null!= partyGroup){
+                            rowProductMap.put("supplierName",partyGroup.getString("groupName"));
+                            rowProductMap.put("supplierPartyId",supplierPartyId);
+                        }
+
+                        supplierProductList.add(rowProductMap);
+                    }
+                }
+
+
+
+
+
+                returnList.add(rowMap);
+            }
+        }
+
+
+
 
         rowProductMap = new HashMap<String, Object>();
 
@@ -133,11 +213,7 @@ public class BoomQueryServices {
         rowProductMap.put("quantity","2");
         supplierProductList.add(rowProductMap);
 
-        rowMap.put("productionDate","2018-08-30");
-        rowMap.put("workEffortName","第三次生产计划");
-        rowMap.put("supplierProductList",supplierProductList);
 
-        returnList.add(rowMap);
         resultMap.put("productionRunList",returnList);
         return resultMap;
     }

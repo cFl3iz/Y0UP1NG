@@ -723,6 +723,11 @@ public class BoomServices {
 //            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
 //        }
 
+
+
+        dispatcher.runSync("createPartyRole",
+                UtilMisc.toMap("userLogin", admin, "partyId", resultPartyId, "roleTypeId", "SUPPLIER"));
+
         resultMap.put("leadInfo",UtilMisc.toMap("partyId",resultPartyId));
         return resultMap;
     }

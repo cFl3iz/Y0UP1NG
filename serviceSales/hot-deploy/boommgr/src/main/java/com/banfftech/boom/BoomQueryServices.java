@@ -324,6 +324,7 @@ public class BoomQueryServices {
                 rowMap.put("statusId",statusId);
 
                 rowMap.put("currentStatusId",currentStatusId);
+                rowMap.put("workEffortId",workEffortId);
 
                 String sdfDate = sdf.format(gv.get("createdDate"));
                 //生产数量
@@ -357,6 +358,7 @@ public class BoomQueryServices {
                         detailImageUrl =   childProduct.getString("detailImageUrl");
 
                         rowProductMap.put("compProductId",childProductId);
+                        rowProductMap.put("childWorkEffortId",childWorkEffortId);
                         rowProductMap.put("productName",childProduct.getString("productName"));
                         rowProductMap.put("estimatedQuantity",childEstimatedQuantity);
                         rowProductMap.put("detailImageUrl",detailImageUrl);

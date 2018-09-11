@@ -195,7 +195,7 @@ public class BoomServices {
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
 
                 dispatcher.runSync("createPartyAcctgPreference",UtilMisc.toMap("userLogin", admin
-                ,"partyId",groupId));
+                ,"partyId",groupId,"baseCurrencyUomId","CNY"));
 
 
                 // Create Emp to PartyGroup From Lead

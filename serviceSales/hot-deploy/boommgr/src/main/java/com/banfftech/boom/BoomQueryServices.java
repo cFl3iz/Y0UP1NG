@@ -172,9 +172,10 @@ public class BoomQueryServices {
 
                         Map<String,Object> rowProductMap = new HashMap<String, Object>();
                         String childProductId = childGoods.getString("productId");
-                        detailImageUrl =   childGoods.getString("detailImageUrl");
                         GenericValue childProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId",childProductId));
                         Double childEstimatedQuantity = (Double) childGoods.get("estimatedQuantity");
+                        detailImageUrl =   childProduct.getString("detailImageUrl");
+
                         rowProductMap.put("compProductId",childProductId);
                         rowProductMap.put("productName",childProduct.getString("productName"));
                         rowProductMap.put("estimatedQuantity",childEstimatedQuantity);

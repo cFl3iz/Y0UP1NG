@@ -155,7 +155,7 @@ public class BoomQueryServices {
                 BigDecimal quantityToProduce = (BigDecimal) gv.get("quantityToProduce");
 
                 rowMap.put("productionDate",sdfDate);
-                rowMap.put("workEffortName",workEffortName+"生产["+productionProductName+"] "+estimatedQuantity+" ");
+                rowMap.put("workEffortName", "生产["+productionProductName+"] X ("+estimatedQuantity+") ");
                 rowMap.put("productName",productionProductName);
                 rowMap.put("detailImageUrl",detailImageUrl);
 
@@ -199,7 +199,7 @@ public class BoomQueryServices {
 
 
 
-
+                rowMap.put("supplierProductList",supplierProductList);
 
                 returnList.add(rowMap);
             }

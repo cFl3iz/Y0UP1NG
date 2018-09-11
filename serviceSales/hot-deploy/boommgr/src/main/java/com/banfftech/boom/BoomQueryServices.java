@@ -304,6 +304,7 @@ public class BoomQueryServices {
                 String currentStatusId  = gv.getString("currentStatusId");
 
                 rowMap.put("statusId",statusId);
+
                 rowMap.put("currentStatusId",currentStatusId);
 
                 String sdfDate = sdf.format(gv.get("createdDate"));

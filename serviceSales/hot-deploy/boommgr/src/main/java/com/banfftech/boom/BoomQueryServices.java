@@ -126,7 +126,7 @@ public class BoomQueryServices {
         fieldSet.add("unitPrice");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);

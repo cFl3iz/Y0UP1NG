@@ -115,6 +115,7 @@ public class BoomServices {
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
 
+
         return partyId;
     }
 
@@ -192,6 +193,9 @@ public class BoomServices {
                         UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
 
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
+
+                dispatcher.runSync("createPartyAcctgPreference",UtilMisc.toMap("userLogin", admin
+                ,"partyId",groupId));
 
 
                 // Create Emp to PartyGroup From Lead
@@ -271,7 +275,7 @@ public class BoomServices {
                 }
 // Create Facility
                 Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
-                        "ownerPartyId", partyId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
+                        "ownerPartyId", groupId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
                 if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
                     return createFacilityOutMap;
                 }

@@ -113,11 +113,18 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
 
 
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
 
+        String partyGroupId = relation.getString("partyIdTo");
 
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyId  ).queryFirst();
+                "ownerPartyId", partyGroupId ).queryFirst();
+
         String facilityId = facility.getString("facilityId");
+
+
+
 
         List<GenericValue> productionList = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
                 "workEffortTypeId", "PROD_ORDER_HEADER","facilityId",facilityId).orderBy("-createdDate").queryList();

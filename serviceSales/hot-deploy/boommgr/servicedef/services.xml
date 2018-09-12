@@ -11,7 +11,15 @@
         </description>
     </service>
 
-
+    <service name="approveOrder" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="approveOrder" auth="false">
+        <description>approveOrder</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="addEmp" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

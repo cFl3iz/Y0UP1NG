@@ -212,8 +212,14 @@ public class BoomQueryServices {
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+        EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_APPROVED");
+
+        EntityCondition genericCondition2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+
+
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
-                genericCondition, fieldSet,
+                genericCondition2, fieldSet,
                 null, null, false);
         if(queryOrderList.size()>0){
             for(GenericValue order : queryOrderList){

@@ -121,6 +121,30 @@ public class BoomServices {
     }
 
 
+    public static Map<String, Object> approveOrder(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Locale locale = (Locale) context.get("locale");
+
+        String orderId = (String) context.get("orderId");
+
+        //下单的当事人,创建服务会检查他有没有创建权限等。
+        String partyId = (String) userLogin.get("partyId");
+
+
+        dispatcher.runSync("updateOrderHeader",UtilMisc.toMap("userLogin",userLogin,
+                "orderId",orderId,"statusId","ORDER_APPROVED" ));
+
+        return result;
+    }
+
+
+
     /**
      * create PurchaseOrder
      * @param dctx

@@ -642,8 +642,14 @@ public class PlatformLoginWorker {
 
             GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,
                     "partyId", miniProgramIdentification.get("partyId")).queryFirst();
-
+            String productStoreRole = storeRole.getString("roleTypeId");
             result.put("roleTypeId",storeRole.getString("roleTypeId"));
+
+            //针对素然内买逻辑
+            if(roleTypeId.indexOf("_EMP")>-1 && productStoreRole.equals("PLACING_CUSTOMER")){
+                    //check is store cust
+                storeRole.remove();
+            }
 
 
             result.put("prodCatalogId",EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId ).queryFirst().getString("prodCatalogId"));

@@ -1721,6 +1721,10 @@ public class WeChatOrderQueryServices {
 
                     String rowVirId = (String) vir_product.get("productId");
 
+                    GenericValue productFeatureAndAppl = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where(
+                            "productId", skuId,"productFeatureTypeId","COLOR").queryFirst();
+                    String colorDesc = productFeatureAndAppl.getString("description");
+                    rowMap.put("productName",rowMap.get("productName")+"-"+colorDesc);
                         Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
                         //如果没有图的默认不看 针对zuczug
                         if (detailImageUrl.indexOf("DEFAULT_PRODUCT") < 0) {

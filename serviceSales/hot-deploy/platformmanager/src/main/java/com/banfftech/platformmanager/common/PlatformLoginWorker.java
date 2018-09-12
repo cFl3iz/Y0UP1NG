@@ -642,6 +642,10 @@ public class PlatformLoginWorker {
 
             GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,
                     "partyId", miniProgramIdentification.get("partyId")).queryFirst();
+
+            if(null!= storeRole){
+
+
             String productStoreRole = storeRole.getString("roleTypeId");
             result.put("roleTypeId",storeRole.getString("roleTypeId"));
 
@@ -650,7 +654,7 @@ public class PlatformLoginWorker {
                     //check is store cust
                 storeRole.remove();
             }
-
+            }
 
             result.put("prodCatalogId",EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId ).queryFirst().getString("prodCatalogId"));
 

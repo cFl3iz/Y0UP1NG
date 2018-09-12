@@ -659,7 +659,7 @@ public class PlatformLoginWorker {
                             "roleTypeId",roleTypeId);
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                     dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
-
+                    result.put("roleTypeId",roleTypeId);
                 }
             }
             }

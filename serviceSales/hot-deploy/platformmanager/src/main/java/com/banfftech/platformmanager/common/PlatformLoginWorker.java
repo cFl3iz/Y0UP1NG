@@ -743,7 +743,7 @@ public class PlatformLoginWorker {
 
                 if(null!=zuczugEmp){
                     //TODO 转正
-                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId, "productStoreId",productStoreId,"roleTypeId",roleTypeId.indexOf("_")+1));
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,  "productStoreId",productStoreId,"roleTypeId",roleTypeId.indexOf("_")+1));
 
                     dispatcher.runSync("resetBaZhePromoCode",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId,"productPromoId","EMP_FRIEND"));
 

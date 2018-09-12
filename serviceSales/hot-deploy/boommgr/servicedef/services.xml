@@ -11,12 +11,13 @@
         </description>
     </service>
 
-    <service name="approveOrder" engine="java"
+    <service name="updateOrderStatus" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"
-             invoke="approveOrder" auth="false">
-        <description>approveOrder</description>
+             invoke="updateOrderStatus" auth="false">
+        <description>updateOrderStatus</description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

@@ -12,9 +12,9 @@
     </preprocessor>
 
 
-    <request-map uri="approveOrder">
+    <request-map uri="updateOrderStatus">
         <security https="false" auth="false"/>
-        <event type="service" invoke="approveOrder"/>
+        <event type="service" invoke="updateOrderStatus"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

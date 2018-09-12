@@ -84,6 +84,7 @@ import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
+import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.module;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizDataFromOrder;
@@ -97,7 +98,7 @@ public class BoomServices {
     public final static String module = BoomServices.class.getName();
 
     private static String createGroup(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String vender, String venderLocal) throws GenericEntityException, GenericServiceException {
-        String partyId = "";
+        String partyId = (String) delegator.getNextSeqId("Party");
         Map<String, Object> serviceResultByCreatePartyMap = dispatcher.runSync("createPartyGroup",
                 UtilMisc.toMap("userLogin", admin, "groupName", vender, "groupNameLocal", venderLocal));
         partyId = (String) serviceResultByCreatePartyMap.get("partyId");
@@ -361,31 +362,35 @@ public class BoomServices {
                 ,"partyId",groupId,"baseCurrencyUomId","CNY"));
 
 
+                // ToDo Merge Party、Person、UserLogin Relationship ....
                 // Create Emp to PartyGroup From Lead
                 if(teleContact.size()>0){
                     for(GenericValue row:teleContact){
-                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                        createPartyRelationshipInMap.put("userLogin", admin);
-                        //createPartyRelationship to Group
+
+                        String beforePartyId = row.getString("partyId");
+//PARTYIDTO
+
+                        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                                "partyIdTo", beforePartyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                        String partyIdFrom = relation.getString("partyIdFrom");
+
+
+//                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+//                        createPartyRelationshipInMap.put("userLogin", admin);
+//                        //createPartyRelationship to Group
+//                        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD").queryFirst();
+//                        if (null == partyRole) {
+//                            dispatcher.runSync("createPartyRole",
+//                                    UtilMisc.toMap("userLogin", admin, "partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD"));
+//                        }
+
+
+                        mergeChangeRelation(delegator,dispatcher,admin,partyIdFrom,beforePartyId,partyId);
+                        relation.remove();
+                        mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
 
 
 
-                        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD").queryFirst();
-                        if (null == partyRole) {
-                            dispatcher.runSync("createPartyRole",
-                                    UtilMisc.toMap("userLogin", admin, "partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD"));
-                        }
-
-                        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
-                        createPartyRelationshipInMap.put("roleTypeIdFrom", "ACCOUNT_LEAD");
-                        createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
-                        createPartyRelationshipInMap.put("partyIdTo",groupId);
-                        createPartyRelationshipInMap.put("partyIdFrom",row.getString("partyId"));
-
-                        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-                        if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-                            return createPartyRelationshipOutMap;
-                        }
                     }
                 }
 
@@ -457,6 +462,47 @@ public class BoomServices {
 
         return result;
     }
+
+    private static void mergeChangeRelation(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId)  throws GenericEntityException, GenericServiceException{
+        Debug.logInfo("Now Meger Relation before:"+beforePartyId+" to=> " +partyId +" from : " + partyIdFrom,module);
+                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                        createPartyRelationshipInMap.put("userLogin", admin);
+                        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+                        createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
+                        createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
+                        createPartyRelationshipInMap.put("partyIdTo",partyId);
+                        createPartyRelationshipInMap.put("partyIdFrom",partyIdFrom);
+                        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+    }
+
+    private static void mergeChangeOrder(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
+        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyIdFrom);
+        EntityCondition custCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+
+        EntityCondition venderCondition1 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
+        EntityCondition venderCondition2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, beforePartyId);
+        EntityCondition venderCondition = EntityCondition.makeCondition(venderCondition1, EntityOperator.AND, venderCondition2);
+
+        EntityCondition allCondition = EntityCondition.makeCondition(custCondition, EntityOperator.AND, venderCondition);
+
+        List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
+                allCondition, null,
+                null, null, false);
+        if(queryOrderList.size()>0){
+            for(GenericValue order : queryOrderList) {
+               String orderId = order.getString("orderId");
+                Debug.logInfo("Now Meger Order Role => " + order, module);
+                dispatcher.runSync("removeOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId,"partyId",beforePartyId,"roleTypeId","SHIP_FROM_VENDOR"));
+                dispatcher.runSync("removeOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",beforePartyId,"roleTypeId","BILL_FROM_VENDOR"));
+                dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","SHIP_FROM_VENDOR"));
+                dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","BILL_FROM_VENDOR"));
+            }
+        }
+    }
+
 
     /**
      * boomUserLogin

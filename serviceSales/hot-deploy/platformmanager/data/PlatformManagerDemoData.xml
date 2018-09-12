@@ -472,6 +472,8 @@
     <PartyAttribute partyId="YP_DEMO" attrName="NEED_SHOPPING_CART" attrValue="true"/>
 
 
-
+    <ProductPromo createdStamp="2018-09-12 14:03:14.0" createdTxStamp="2018-09-12 14:03:14.0"
+                  lastUpdatedStamp="2018-09-12 14:03:14.0" lastUpdatedTxStamp="2018-09-12 14:03:14.0"
+                  productPromoId="EMP_FRIEND" promoName="全素然员工朋友八折(含AnKoRau)" requireCode="Y" userEntered="Y"/>
 
 </entity-engine-xml>

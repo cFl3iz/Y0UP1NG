@@ -568,9 +568,15 @@ public class PlatformLoginWorker {
     }
 
 
-
-
-
+    /**
+     * weChatMiniAppLogin2B
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
     public static Map<String, Object> weChatMiniAppLogin2B(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
 
 
@@ -731,13 +737,16 @@ public class PlatformLoginWorker {
                             "roleTypeId",roleTypeId);
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
-
+                //从这个数据表中找素然员工或者ankorau员工数据，如果有，直接转正发 朋友优惠券十张
                 GenericValue zuczugEmp = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel, "roleTypeId",
                         roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
 
                 if(null!=zuczugEmp){
                     //TODO 转正
-                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId.indexOf("_")+1));
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId, "productStoreId",productStoreId,"roleTypeId",roleTypeId.indexOf("_")+1));
+
+                    dispatcher.runSync("resetBaZhePromoCode",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId,"productPromoId","EMP_FRIEND"));
+
                 }else{
                     dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
                 }
@@ -752,6 +761,7 @@ public class PlatformLoginWorker {
                 inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
                 inputTelecom.put("userLogin", admin);
                 Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
 
 
                 result.put("tarjeta",tarjeta);

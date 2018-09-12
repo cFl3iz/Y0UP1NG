@@ -661,6 +661,7 @@ public class PlatformLoginWorker {
                     dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
                     result.put("roleTypeId",roleTypeId);
                 }
+
             }
             }
 

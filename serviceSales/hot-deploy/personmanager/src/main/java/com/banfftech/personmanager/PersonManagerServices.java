@@ -3602,7 +3602,7 @@ public class PersonManagerServices {
 
 
         GenericValue promo = EntityQuery.use(delegator).from("PromoEmp").where(
-                "promoCodeId", promoCodeId).queryFirst();
+                "promoCodeId", promoCodeId.substring(0,promoCodeId.indexOf("-"))).queryFirst();
 
         if(promo==null && (promoCodeId.trim().indexOf("00-")<0)){
             return ServiceUtil.returnError(promoCodeId+"  IS NOT FOUND !");

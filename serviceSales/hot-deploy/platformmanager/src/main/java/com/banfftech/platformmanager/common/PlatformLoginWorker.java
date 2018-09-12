@@ -653,6 +653,14 @@ public class PlatformLoginWorker {
             if(roleTypeId.indexOf("_EMP")>-1 && productStoreRole.equals("PLACING_CUSTOMER")){
                     //check is store cust
                 storeRole.remove();
+                GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", miniProgramIdentification.get("partyId"), "roleTypeId",roleTypeId).queryFirst();
+                if (null == partyMarkRole) {
+                    Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", miniProgramIdentification.get("partyId"),
+                            "roleTypeId",roleTypeId);
+                    dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,"productStoreId",productStoreId,"roleTypeId",roleTypeId));
+
+                }
             }
             }
 

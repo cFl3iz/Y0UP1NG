@@ -3273,6 +3273,11 @@ public class PersonManagerServices {
 
         }
 
+        GenericValue orderAdjustment = EntityQuery.use(delegator).from("OrderAdjustment").where("orderId", orderId).queryFirst();
+        if(null!= orderAdjustment){
+            orderAdjustment.remove();
+        }
+
         return resultMap;
     }
 

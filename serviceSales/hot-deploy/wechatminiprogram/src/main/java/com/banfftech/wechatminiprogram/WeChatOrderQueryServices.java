@@ -90,8 +90,10 @@ public class WeChatOrderQueryServices {
             Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                     "facilityId", inventoryFacilityId, "productId", productId));
             if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
-                resultMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal") + "");
-                resultMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "");
+                BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+                BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+                resultMap.put("quantityOnHandTotal", quantityOnHandTotal.intValue() + "");
+                resultMap.put("availableToPromiseTotal", availableToPromiseTotal.intValue() + "");
             }
 
             resultMap.put("sku", productId);

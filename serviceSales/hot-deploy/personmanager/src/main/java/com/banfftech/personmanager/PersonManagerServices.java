@@ -765,10 +765,16 @@ public class PersonManagerServices {
         String partyId = (String) context.get("partyId");
         String productStoreId = (String) context.get("productStoreId");
         String roleTypeId = (String) context.get("roleTypeId");
-
+        Debug.logInfo("partyId:"+partyId,module);
+        Debug.logInfo("productStoreId:"+productStoreId,module);
+        Debug.logInfo("roleTypeId:"+roleTypeId,module);
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
 
         GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
+        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId).queryFirst();
+        if(null!=partyRole){
+            partyRole.remove();
+        }
         if (null == partyMarkRole) {
             Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
                     "roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1));

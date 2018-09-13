@@ -147,6 +147,10 @@
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
 
+                        <screenlet title="素然员工导入">
+                            <include-form name="ZugZugEmpUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
 
                         <screenlet title="康橙产品导入">
                             <include-form name="KangChengProductUploadImportForm"

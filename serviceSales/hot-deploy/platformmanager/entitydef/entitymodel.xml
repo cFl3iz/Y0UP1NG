@@ -73,6 +73,7 @@
     <entity entity-name="ZuczugEmp" package-name="org.ofbiz.cloudLake" title="ZuczugEmp">
         <field name="tel" type="id-vlong-ne"/>
         <field name="roleTypeId" type="value"/>
+        <field name="name" type="value"/>
         <prim-key field="tel"/>
     </entity>
 

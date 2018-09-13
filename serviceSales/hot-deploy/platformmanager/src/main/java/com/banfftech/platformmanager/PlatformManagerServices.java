@@ -879,6 +879,54 @@ public class PlatformManagerServices {
     }
 
 
+    public static String zugZugEmpUploadImportFormEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
+        try {
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+
+                String[] excelRow = excelList.get(i);
+
+
+                String tel = excelRow[0];
+                String dept = excelRow[1];
+                String name = excelRow[2];
+
+                GenericValue zuczugEmp = delegator.makeValue("ZuczugEmp", UtilMisc.toMap("tel", tel));
+                zuczugEmp.set("roleTypeId", dept);
+                zuczugEmp.set("name", name);
+                zuczugEmp.create();
+
+                TransactionUtil.commit();
+            }
+        }catch (Exception e){
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+                return "error";
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+
+        return "success";
+    }
+
     /**
      * 产品特殊价格更新
      * @param request

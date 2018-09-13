@@ -450,7 +450,7 @@ public class BoomServices {
                 userInfoMap.put("sex",gender);
                 userInfoMap.put("language",language);
                 userInfoMap.put("headimgurl",avatarUrl);
-                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(appId, admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
 
 
@@ -856,6 +856,7 @@ public class BoomServices {
 
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
+        String appId = (String) context.get("appId");
             //已经存在系统中的供应商,增加一个线索关联就行
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
                "contactNumber",supplierTel).queryList();

@@ -343,9 +343,9 @@ public class PlatformLoginWorker {
     }
 
 
-    public static  void updatePersonAndIdentificationLanguage(GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
+    public static  void updatePersonAndIdentificationLanguage(String appId,GenericValue admin,String partyId,Delegator delegator,String unioId,Map<String,String> weChatUserInfo,GenericValue userLogin,LocalDispatcher dispatcher) throws GenericServiceException,GenericEntityException{
         Map<String, Object> createPartyIdentificationInMap = UtilMisc.toMap("userLogin", admin, "partyId",
-                partyId, "idValue",unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y");
+                partyId, "idValue",unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID","enabled","Y","appId",appId);
         dispatcher.runSync("createPartyIdentification", createPartyIdentificationInMap);
         //头像数据
         main.java.com.banfftech.personmanager.PersonManagerServices.createContentAndDataResource(partyId, delegator, admin, dispatcher, "WeChatImg", weChatUserInfo.get("headimgurl"),null);

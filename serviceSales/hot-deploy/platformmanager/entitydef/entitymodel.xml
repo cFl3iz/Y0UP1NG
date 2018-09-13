@@ -309,6 +309,13 @@
         <field name="sequenceNum" type="numeric"></field>
     </extend-entity>
 
+
+
+    <extend-entity entity-name="PartyIdentification">
+        <field name="appId" type="value"></field>
+    </extend-entity>
+
+
     <view-entity entity-name="ProductAssocViewWithVariant"
                  package-name="org.ofbiz.product.catalog"
                  title="Product Assoc BOM Feature View">

@@ -865,7 +865,7 @@ public class BoomServices {
 
            for(GenericValue gv : hasUser){
                 String oldPartyId = (String) gv.getString("partyId");
-               GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+               GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("appId",appId,"partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
                if (miniProgramIdentification != null) {
 
                    // LEAD是否拥有

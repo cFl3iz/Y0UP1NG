@@ -860,10 +860,21 @@ public class BoomServices {
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
                "contactNumber",supplierTel).queryList();
         if(hasUser.size()>0){
+
+
            for(GenericValue gv : hasUser){
                 String oldPartyId = (String) gv.getString("partyId");
                GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
                if (miniProgramIdentification != null) {
+
+                   // LEAD是否拥有
+                   GenericValue partyLeadRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", oldPartyId, "roleTypeId", "LEAD").queryFirst();
+                   if (null == partyLeadRole) {
+                       Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", oldPartyId,
+                               "roleTypeId", "LEAD");
+                       dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+                   }
+
                 String idValue = (String) miniProgramIdentification.get("idValue");
                    if(null!=idValue && !idValue.equals("")){
                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();

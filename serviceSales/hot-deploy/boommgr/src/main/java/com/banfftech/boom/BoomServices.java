@@ -856,6 +856,30 @@ public class BoomServices {
 
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
+            //已经存在系统中的供应商,增加一个线索关联就行
+        List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
+               "contactNumber",supplierTel).queryList();
+        if(hasUser.size()>0){
+           for(GenericValue gv : hasUser){
+                String oldPartyId = gv.getString("partyId");
+               GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+               if (miniProgramIdentification != null) {
+                String idValue = miniProgramIdentification.get("idValue");
+                   if(null!=idValue && !idValue.equals("")){
+                       Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                       createPartyRelationshipInMap.put("userLogin", admin);
+                       createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+                       createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
+                       createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
+                       createPartyRelationshipInMap.put("partyIdTo",oldPartyId);
+                       createPartyRelationshipInMap.put("partyIdFrom",partyId);
+                       Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                       return resultMap;
+                   }
+               }
+           }
+        }
+
 
         String firstName = supplierName;
         String lastName = " ";
@@ -875,6 +899,7 @@ public class BoomServices {
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","tnContactNumber",supplierTel).queryCount();
         if(hasData>0){
             return ServiceUtil.returnError("已经存在的线索");
+
         }
 
 
@@ -908,74 +933,6 @@ public class BoomServices {
                 return createLeadOutMap;
             }
         String resultPartyId = (String) createLeadOutMap.get("partyId");
-
-
-//        boolean isExsitsRole = false;
-//
-//        GenericValue exsitsUser = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", supplierTel));
-//
-//        String supplierPartyId = "";
-//
-//        if (null == exsitsUser) {
-//
-//            supplierPartyId = createSupplier(delegator, dispatcher, admin, supplierName, "无");
-//
-//            // Create Party Block
-//            int random = (int) (Math.random() * 1000000 + 1);
-//            delegator.createOrStore(delegator.makeValue("Person",
-//                    UtilMisc.toMap("nickname", "#" + random,
-//                            "firstName", supplierName, "lastName", " ", "gender", "M", "partyId", supplierPartyId)));
-//
-//
-//            // Create UserLogin Block
-//            Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
-//                    supplierTel, "partyId", supplierPartyId, "currentPassword", "ofbiz",
-//                    "currentPasswordVerify", "ofbiz", "enabled", "Y");
-//            Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
-//
-//        } else {
-//            supplierPartyId = exsitsUser.getString("partyId");
-//            GenericValue hasRelation = EntityQuery.use(delegator).from("PartyRelationship").where(
-//                    "partyIdFrom", partyId, "partyIdTo", supplierPartyId, "roleTypeIdTo", "SUPPLIER", "roleTypeIdFrom", "CUSTOMER").queryFirst();
-//            if(null != hasRelation){
-//                isExsitsRole = !isExsitsRole;
-//
-//            }
-//        }
-//
-//
-//        if (false == isExsitsRole) {
-//
-//
-//            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-//            createPartyRelationshipInMap.put("roleTypeIdFrom", "CUSTOMER");
-//            createPartyRelationshipInMap.put("roleTypeIdTo", "SUPPLIER");
-//            createPartyRelationshipInMap.put("userLogin", admin);
-//            createPartyRelationshipInMap.put("partyIdFrom", partyId);
-//            createPartyRelationshipInMap.put("partyIdTo", supplierPartyId);
-//            createPartyRelationshipInMap.put("partyRelationshipTypeId", PeConstant.SUPPLIER);
-//            Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-//
-//
-//
-//            //  邮政地址"address1", province + "-" +country,"address2",city
-//            String contactMechPurposeTypeId = "POSTAL_ADDRESS";
-//            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-//                    UtilMisc.toMap("userLogin", admin, "attnName",partyId,"toName", supplierName, "partyId", supplierPartyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY,
-//                            "city",cityName, "address1", provinceName+"-"+countyName+"-"+cityName+"-"+detailInfo ,"postalCode", PeConstant.DEFAULT_POST_CODE ));
-//            String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
-//            if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
-//                return createPartyPostalAddressOutMap;
-//            }
-//
-//            resultMap.put("supplierInfo", null);
-//
-//            if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-//                return createPartyRelationshipOutMap;
-//            }
-//        } else {
-//            resultMap.put("supplierInfo", queryPersonBaseInfo(delegator, supplierPartyId));
-//        }
 
 
 

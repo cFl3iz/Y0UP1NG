@@ -110,7 +110,7 @@ public class PersonManagerQueryServices {
 
         List<GenericValue> partyRoleList = EntityQuery.use(delegator).from("PartyRole").where(
                 roleTypeLike).queryList();
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat sdf = new SimpleDateFormat("MM-dd");
         if(null!= partyRoleList && partyRoleList.size()>0){
 
             for(GenericValue gv : partyRoleList){
@@ -140,7 +140,7 @@ public class PersonManagerQueryServices {
 
 
                 rowMap.put("partyId",partyId);
-                rowMap.put("fromDate",gv.get("createdStamp"));
+                rowMap.put("fromDate",sdf.format(gv.get("createdStamp")));
 
 
                 returnList.add(rowMap);

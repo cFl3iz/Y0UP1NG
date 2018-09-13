@@ -78,6 +78,27 @@ public class WeChatOrderQueryServices {
         String productId = (String) context.get("productId");
         String color = (String) context.get("color");
         String size = (String) context.get("size");
+
+        if(color==null && size==null){
+            //说明是SKU查自己库存 , 就不需要往下进行
+
+            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+            String productStoreId = category.getString("productStoreId");
+            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+            String inventoryFacilityId = store.getString("inventoryFacilityId");
+            //获得库存信息 getInventoryAvailableByFacility
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", inventoryFacilityId, "productId", productId));
+            if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                resultMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal") + "");
+                resultMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal") + "");
+            }
+
+            resultMap.put("sku", productId);
+
+
+        }
+
         Debug.logInfo("productId: " + productId, module);
         String virId = productId.substring(0, productId.indexOf("-"));
         Debug.logInfo("virId: " + virId, module);

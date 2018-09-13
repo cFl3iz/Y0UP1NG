@@ -3720,13 +3720,17 @@ public class PersonManagerServices {
         GenericValue empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where(
                 "promoCodeId", promoCodeId.substring(0, promoCodeId.indexOf("-"))).queryFirst();
 
-        GenericValue empPromoHistory =  delegator.makeValue("EmpPromoHistory",
-                UtilMisc.toMap("promoCodeId",promoCodeId.substring(0,promoCodeId.indexOf("-")),"salesPartyId", partyId,"fromPartyId",partyIdFrom,
-                        "custPartyId",empPromoCodeRelation.get("partyIdTo"),
-                        "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+        if(null!= empPromoCodeRelation && empPromoCodeRelation.get("partyIdTo")!=null){
+            GenericValue empPromoHistory =  delegator.makeValue("EmpPromoHistory",
+                    UtilMisc.toMap("promoCodeId",promoCodeId.substring(0,promoCodeId.indexOf("-")),"salesPartyId", partyId,"fromPartyId",partyIdFrom,
+                            "custPartyId",empPromoCodeRelation.get("partyIdTo"),
+                            "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+            empPromoHistory.create();
+        }
 
 
-        empPromoHistory.create();
+
+
 
 
 

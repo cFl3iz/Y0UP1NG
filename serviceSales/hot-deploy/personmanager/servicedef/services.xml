@@ -1031,6 +1031,7 @@
              invoke="akrmOrderShipRequest" auth="false">
         <description>请求素然发货,生成素然订单</description>
         <attribute name="orderId" type="String" mode="IN"/>
+        <attribute name="zuczugStoreId" type="String" mode="IN" optional="true"/>
     </service>
 
 
@@ -1043,6 +1044,7 @@
         <attribute name="orderId" type="String" mode="IN"   optional="true"/>
         <!-- 如果传过来openid,说明是小程序调用的收款 -->
         <attribute name="openId" type="String" mode="IN"   optional="true"/>
+
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

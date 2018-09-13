@@ -14,6 +14,7 @@
     <service name="syncZuczugInventory" engine="java" invoke="syncZuczugInventory"
              location="main.java.com.banfftech.platformmanager.PlatformInventoryServices">
         <description>syncZuczugInventory</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
     </service>
 
 

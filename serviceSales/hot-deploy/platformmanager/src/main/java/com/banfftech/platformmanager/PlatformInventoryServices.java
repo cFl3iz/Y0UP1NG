@@ -80,8 +80,14 @@ public class PlatformInventoryServices {
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Map<String, Object> returnResult = ServiceUtil.returnSuccess();
 
+
+        String productStoreId = (String) context.get("productStoreId");
+        if(null==productStoreId){
+            productStoreId = "ZUCZUGSTORE";
+        }
         //店铺线上产品分类目录
-        GenericValue productStoreOnlineCategory = EntityQuery.use(delegator).from("ProductStoreOnlineCategory").where("productStoreId", "ZUCZUGSTORE").queryFirst();
+//        GenericValue productStoreOnlineCategory = EntityQuery.use(delegator).from("ProductStoreOnlineCategory").where("productStoreId", "ZUCZUGSTORE").queryFirst();
+        GenericValue productStoreOnlineCategory = EntityQuery.use(delegator).from("ProductStoreOnlineCategory").where("productStoreId",productStoreId).queryFirst();
 
         EntityCondition findCondition = EntityCondition.makeCondition(
                 UtilMisc.toMap("productCategoryId", productStoreOnlineCategory.getString("productCategoryId")));

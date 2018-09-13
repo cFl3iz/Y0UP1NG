@@ -3458,10 +3458,16 @@ public class PersonManagerServices {
 
         String productStoreId = (String) orderHeader.getString("productStoreId");
 
+        //素然AnkoRau
         if("ZUCZUGSTORE".equals(productStoreId)){
             // Async To Zuczug
-            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId));
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","10020"));
+        }else{
+            //默认其他店铺发货是指内买
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","10020"));
         }
+
+
 
         Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);
 
@@ -3888,6 +3894,7 @@ public class PersonManagerServices {
 
 
         String orderId   = (String) context.get("orderId");
+        String zuczugStoreId   = (String) context.get("zuczugStoreId");
 
 
         GenericValue orderHeader =  EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
@@ -3898,6 +3905,7 @@ public class PersonManagerServices {
         Map<String,Object> orderMap = new HashMap<String, Object>();
 
         orderMap.put("akrmOrderId",orderId);
+        orderMap.put("productStoreId",zuczugStoreId);
         orderMap.put("externalId",orderId);
 
         Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
@@ -3987,13 +3995,17 @@ public class PersonManagerServices {
                 Debug.logInfo("SUCCESS SYNC ORDER",module);
             }
         }
-
+            String titleName = "";
+            if(zuczugStoreId.equals("10020")){
+                titleName = "[AnKoRau小程序]"+ "正式付款下单!" + orderId;
+            }else{
+                titleName = "[素然内买]"+ "正式付款下单!" + orderId;
+            }
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         "订单:"+orderId+
-                                "|已通知素然长宁工作机产生订单。请求报文:"+orderListStr.toString()+"。素然回馈结果为["+resultMsg+"]"
-                        , "title", "[正式]" + orderMap.get("toName") + "用户付款下单!" + orderId));
-
+                                "|已通知素然长宁工作机[店铺:"+zuczugStoreId+"]生成订单。请求报文:"+orderListStr.toString()+"。素然回馈结果为["+resultMsg+"]"
+                        , "title",titleName));
 
 
         return resultMap;

@@ -122,7 +122,7 @@ public class PersonManagerQueryServices {
                 GenericValue partyRoleNoPass = EntityQuery.use(delegator).from("PartyRole").where(
                         singleCondition).queryFirst();
                 if(partyRoleNoPass!=null){
-                    String role = partyRole.getString("roleTypeId");
+                    String role = partyRoleNoPass.getString("roleTypeId");
                     rowMap.put("pass","N");
                     rowMap.put("role",role);
                 }

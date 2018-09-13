@@ -772,6 +772,14 @@ public class PersonManagerServices {
 
         GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
         GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId).queryFirst();
+
+
+        GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,
+                "partyId",partyId,"roleTypeId",roleTypeId).queryFirst();
+        if(null != storeRole){
+            storeRole.remove();
+        }
+
         if(null!=partyRole){
             partyRole.remove();
         }

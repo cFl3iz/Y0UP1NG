@@ -140,7 +140,7 @@ public class PersonManagerQueryServices {
 
 
                 rowMap.put("partyId",partyId);
-                rowMap.put("fromDate",gv.get("fromDate"));
+                rowMap.put("fromDate",gv.get("createdStamp"));
 
 
                 returnList.add(rowMap);

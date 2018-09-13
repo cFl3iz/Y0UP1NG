@@ -169,7 +169,7 @@ public class BoomQueryServices {
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
                 rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
 
-                rowMap.put("orderDate", sdf.format(order.get("orderDate")));
+                rowMap.put("orderDate", sdf.format((Timestamp)order.get("orderDate")));
 
                 returnList.add(rowMap);
             }

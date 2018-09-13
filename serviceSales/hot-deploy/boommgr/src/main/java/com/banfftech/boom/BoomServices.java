@@ -398,7 +398,7 @@ public class BoomServices {
 //PARTYIDTO
 
                         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                                "partyIdTo", beforePartyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                                "partyIdTo", beforePartyId, "partyRelationshipTypeId", "LEAD_OWNER" ).queryFirst();
                         String partyIdFrom = relation.getString("partyIdFrom");
 
 

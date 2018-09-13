@@ -140,7 +140,11 @@ public class PersonManagerQueryServices {
 
 
                 rowMap.put("partyId",partyId);
-                rowMap.put("fromDate",sdf.format(gv.get("createdStamp")));
+
+                String month = sdf.format(gv.get("createdStamp")).subString(0,sdf.format(gv.get("createdStamp")).indexOf("-"));
+                String day = sdf.format(gv.get("createdStamp")).subString(sdf.format(gv.get("createdStamp")).indexOf("-")+1);
+                rowMap.put("month",month);
+                rowMap.put("day",day);
 
 
                 returnList.add(rowMap);

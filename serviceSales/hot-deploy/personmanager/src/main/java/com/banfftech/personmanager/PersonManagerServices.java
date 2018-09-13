@@ -3464,7 +3464,7 @@ public class PersonManagerServices {
             dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","10020"));
         }else{
             //默认其他店铺发货是指内买
-            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","10020"));
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","AKR002"));
         }
 
 

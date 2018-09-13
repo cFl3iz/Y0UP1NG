@@ -520,11 +520,28 @@ public class BoomServices {
                 null, null, false);
         Debug.logInfo("*merge oder:"+queryOrderList,module);
         if(queryOrderList.size()>0){
+            // 发货厂家角色
+            GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
+            if (null == partyVendorRole) {
+                Map<String, Object> createVendorPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                        "roleTypeId", "SHIP_FROM_VENDOR");
+                dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
+            }
+            //发出账单的厂家
+            GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+            if (null == partyBillVendorRole) {
+                Map<String, Object> createPartyBillVendorRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                        "roleTypeId", "BILL_FROM_VENDOR");
+                dispatcher.runSync("createPartyRole", createPartyBillVendorRoleMap);
+            }
+
+
             for(GenericValue order : queryOrderList) {
                String orderId = order.getString("orderId");
                 Debug.logInfo("Now Meger Order Role => " + order, module);
                 dispatcher.runSync("removeOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId,"partyId",beforePartyId,"roleTypeId","SHIP_FROM_VENDOR"));
                 dispatcher.runSync("removeOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",beforePartyId,"roleTypeId","BILL_FROM_VENDOR"));
+
                 dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","SHIP_FROM_VENDOR"));
                 dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","BILL_FROM_VENDOR"));
             }

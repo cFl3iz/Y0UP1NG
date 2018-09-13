@@ -8665,6 +8665,14 @@ String userLoginId = delegator.getNextSeqId("UserLogin");
                     "roleTypeId", "SHIP_FROM_VENDOR");
             dispatcher.runSync("createPartyRole", createVendorPartyRoleMap);
         }
+        //发出账单的厂家
+        GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+        if (null == partyBillVendorRole) {
+            Map<String, Object> createPartyBillVendorRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "BILL_FROM_VENDOR");
+            dispatcher.runSync("createPartyRole", createPartyBillVendorRoleMap);
+        }
+
 
         // 引用者角色
         GenericValue partyReferrerRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "REFERRER").queryFirst();
@@ -8691,13 +8699,7 @@ String userLoginId = delegator.getNextSeqId("UserLogin");
         }
 
 
-        //发出账单的厂家
-        GenericValue partyBillVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
-        if (null == partyBillVendorRole) {
-            Map<String, Object> createPartyBillVendorRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
-                    "roleTypeId", "BILL_FROM_VENDOR");
-            dispatcher.runSync("createPartyRole", createPartyBillVendorRoleMap);
-        }
+
 
 
 

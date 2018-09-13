@@ -231,6 +231,16 @@
                    optional="true"/>
     </service>
 
+    <service name="queryZuczugEmp" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryZuczugEmp" auth="false">
+        <description>queryZuczugEmp</description>
+        <attribute name="empList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
 
 

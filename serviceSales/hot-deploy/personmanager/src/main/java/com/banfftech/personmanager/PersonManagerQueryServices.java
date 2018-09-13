@@ -78,6 +78,64 @@ public class PersonManagerQueryServices {
 
 
     /**
+     * queryZuczugEmp
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryZuczugEmp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        EntityCondition roleTypeLike = EntityCondition.makeCondition("roleTypeId", EntityOperator.LIKE, "%_EMP");
+        EntityCondition roleTypeLikeNoPass = EntityCondition.makeCondition("roleTypeId", EntityOperator.LIKE, "NP_%");
+//        EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+//        EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+
+        List<GenericValue> partyRoleList = EntityQuery.use(delegator).from("PartyRole").where(
+                roleTypeLike).queryList();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(null!= partyRoleList && partyRoleList.size()>0){
+
+            for(GenericValue gv : partyRoleList){
+                Map<String,Object> rowMap =new HashMap<String, Object>();
+                String partyId = gv.getString("partyId");
+                EntityCondition roleTypeParty = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
+                EntityCondition singleCondition = EntityCondition.makeCondition(roleTypeLikeNoPass, EntityOperator.AND, roleTypeParty);
+                rowMap.put("userInfo",queryPersonBaseInfo(delegator,partyId));
+                GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where(
+                        singleCondition).queryFirst();
+                if(partyRole!=null){
+                    rowMap.put("pass","N");
+                }
+                returnList.add(rowMap);
+            }
+
+        }
+        resultMap.put("empList",returnList);
+
+        return resultMap;
+    }
+
+
+
+
+
+
+
+    /**
      * queryEmpPromoRelation
      * @param dctx
      * @param context

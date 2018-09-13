@@ -241,6 +241,14 @@
                    optional="true"/>
     </service>
 
+    <service name="passEmp" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="passEmp" auth="false">
+        <description>passEmp</description>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
 
 

@@ -101,6 +101,10 @@ public class PersonManagerQueryServices {
 
         EntityCondition roleTypeLike = EntityCondition.makeCondition("roleTypeId", EntityOperator.LIKE, "%_EMP");
         EntityCondition roleTypeLikeNoPass = EntityCondition.makeCondition("roleTypeId", EntityOperator.LIKE, "NP_%");
+        EntityCondition roleTypeLikePass = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ANKORAU_EMP");
+        EntityCondition roleTypeLikePass2 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ZUCZUG_EMP");
+        EntityCondition passCondition = EntityCondition.makeCondition(roleTypeLikePass, EntityOperator.OR, roleTypeLikePass2);
+
 //        EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
 //        EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
 
@@ -115,11 +119,26 @@ public class PersonManagerQueryServices {
                 EntityCondition roleTypeParty = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
                 EntityCondition singleCondition = EntityCondition.makeCondition(roleTypeLikeNoPass, EntityOperator.AND, roleTypeParty);
                 rowMap.put("userInfo",queryPersonBaseInfo(delegator,partyId));
-                GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where(
+                GenericValue partyRoleNoPass = EntityQuery.use(delegator).from("PartyRole").where(
                         singleCondition).queryFirst();
-                if(partyRole!=null){
+                if(partyRoleNoPass!=null){
+                    String role = partyRole.getString("roleTypeId");
                     rowMap.put("pass","N");
+                    rowMap.put("role",role);
                 }
+
+                EntityCondition single2Condition = EntityCondition.makeCondition(passCondition, EntityOperator.AND, roleTypeParty);
+
+                GenericValue partyRolePass = EntityQuery.use(delegator).from("PartyRole").where(
+                        single2Condition).queryFirst();
+                if(partyRolePass!=null){
+                    String role = partyRolePass.getString("roleTypeId");
+                    rowMap.put("pass","Y");
+                    rowMap.put("role",role);
+                }
+
+
+                rowMap.put("partyId",partyId);
                 returnList.add(rowMap);
             }
 

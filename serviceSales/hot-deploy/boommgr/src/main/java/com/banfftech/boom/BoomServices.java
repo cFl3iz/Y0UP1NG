@@ -861,10 +861,10 @@ public class BoomServices {
                "contactNumber",supplierTel).queryList();
         if(hasUser.size()>0){
            for(GenericValue gv : hasUser){
-                String oldPartyId = gv.getString("partyId");
+                String oldPartyId = (String) gv.getString("partyId");
                GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
                if (miniProgramIdentification != null) {
-                String idValue = miniProgramIdentification.get("idValue");
+                String idValue = (String) miniProgramIdentification.get("idValue");
                    if(null!=idValue && !idValue.equals("")){
                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                        createPartyRelationshipInMap.put("userLogin", admin);

@@ -78,14 +78,18 @@ public class WeChatOrderQueryServices {
         String productId = (String) context.get("productId");
         String color = (String) context.get("color");
         String size = (String) context.get("size");
-
+        Debug.logInfo("productId: " + productId, module);
         String virId = productId.substring(0, productId.indexOf("-"));
+        Debug.logInfo("virId: " + virId, module);
+
         //0181BA04-44-F
         List<GenericValue> skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", virId).queryList();
+        Debug.logInfo("skus: " + skus, module);
+
         String skuId = "";
         if (skus != null && skus.size() > 0) {
             for (GenericValue sku : skus) {
-
+                Debug.logInfo("Row SKU : " + sku, module);
                 GenericValue isExsitsColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "COLOR", "description", color).queryFirst();
                 GenericValue isExsitsSize = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", sku.getString("productIdTo"), "productFeatureTypeId", "SIZE", "description", size).queryFirst();
 

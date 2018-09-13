@@ -245,6 +245,21 @@
              location="main.java.com.banfftech.personmanager.PersonManagerServices"
              invoke="passEmp" auth="false">
         <description>passEmp</description>
+        <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
+        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN"  optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <service name="removeEmp" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="removeEmp" auth="false">
+        <description>removeEmp</description>
+        <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
+        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN"  optional="true"/>
+
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

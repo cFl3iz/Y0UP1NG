@@ -763,12 +763,59 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         String partyId = (String) context.get("partyId");
+        String productStoreId = (String) context.get("productStoreId");
+        String roleTypeId = (String) context.get("roleTypeId");
 
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+
+        GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
+        if (null == partyMarkRole) {
+            Map<String, Object> createPartyMarkRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1));
+            dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
+        }
+
+        //TODO 转正
+        dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,  "productStoreId",productStoreId,"roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1)));
+
+        dispatcher.runSync("resetBaZhePromoCode",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId,"productPromoId","EMP_FRIEND"));
 
 
         return resultMap;
     }
 
+
+
+    public static Map<String, Object> removeEmp(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String partyId = (String) context.get("partyId");
+        String productStoreId = (String) context.get("productStoreId");
+        String roleTypeId = (String) context.get("roleTypeId");
+
+        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+
+        GenericValue storeRole = EntityQuery.use(delegator).from("ProductStoreRole").where("productStoreId", productStoreId,
+                "partyId",partyId,"roleTypeId",roleTypeId).queryFirst();
+        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where(
+                "partyId",partyId,"roleTypeId",roleTypeId).queryFirst();
+
+        if(null!= storeRole){
+            storeRole.remove();
+        }
+        if(null!=partyRole){
+            partyRole.remove();
+        }
+
+        return resultMap;
+    }
 
     /**
      * doRemoveProductFromCategory

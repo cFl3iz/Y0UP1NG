@@ -40,6 +40,11 @@
         <event type="service" invoke="passEmp"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
+    </request-map>   <request-map uri="removeEmp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeEmp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
     </request-map>
 
 

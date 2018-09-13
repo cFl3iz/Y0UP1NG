@@ -116,6 +116,7 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : partyRoleList){
                 Map<String,Object> rowMap =new HashMap<String, Object>();
                 String partyId = gv.getString("partyId");
+
                 EntityCondition roleTypeParty = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
                 EntityCondition singleCondition = EntityCondition.makeCondition(roleTypeLikeNoPass, EntityOperator.AND, roleTypeParty);
                 rowMap.put("userInfo",queryPersonBaseInfo(delegator,partyId));
@@ -139,6 +140,9 @@ public class PersonManagerQueryServices {
 
 
                 rowMap.put("partyId",partyId);
+                rowMap.put("fromDate",gv.get("fromDate"));
+
+
                 returnList.add(rowMap);
             }
 

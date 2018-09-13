@@ -79,7 +79,7 @@ public class WeChatOrderQueryServices {
         String color = (String) context.get("color");
         String size = (String) context.get("size");
 
-        if(color==null && size==null){
+        if(color==null && size==null || color.trim().equals("") && size.trim().equals("")){
             //说明是SKU查自己库存 , 就不需要往下进行
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();

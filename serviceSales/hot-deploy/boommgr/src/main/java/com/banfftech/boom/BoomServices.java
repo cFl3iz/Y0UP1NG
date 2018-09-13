@@ -504,9 +504,9 @@ public class BoomServices {
     }
 
     private static void mergeChangeOrder(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
-        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
-        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyIdFrom);
-        EntityCondition custCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+//        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
+//        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyIdFrom);
+//        EntityCondition custCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
 
         EntityCondition venderCondition1 = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
@@ -516,8 +516,9 @@ public class BoomServices {
         EntityCondition allCondition = EntityCondition.makeCondition(custCondition, EntityOperator.AND, venderCondition);
 
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
-                allCondition, null,
+                venderCondition, null,
                 null, null, false);
+        Debug.logInfo("*merge oder:"+queryOrderList,module);
         if(queryOrderList.size()>0){
             for(GenericValue order : queryOrderList) {
                String orderId = order.getString("orderId");

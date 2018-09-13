@@ -399,22 +399,14 @@ public class BoomServices {
 
                         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
                                 "partyIdTo", beforePartyId, "partyRelationshipTypeId", "LEAD_OWNER" ).queryFirst();
-                        String partyIdFrom = relation.getString("partyIdFrom");
+                        if(relation!=null){
+                            String partyIdFrom = relation.getString("partyIdFrom");
 
+                            mergeChangeRelation(delegator,dispatcher,admin,partyIdFrom,beforePartyId,partyId);
+                            relation.remove();
+                            mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
+                        }
 
-//                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-//                        createPartyRelationshipInMap.put("userLogin", admin);
-//                        //createPartyRelationship to Group
-//                        GenericValue partyRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD").queryFirst();
-//                        if (null == partyRole) {
-//                            dispatcher.runSync("createPartyRole",
-//                                    UtilMisc.toMap("userLogin", admin, "partyId", row.getString("partyId"), "roleTypeId", "ACCOUNT_LEAD"));
-//                        }
-
-
-                        mergeChangeRelation(delegator,dispatcher,admin,partyIdFrom,beforePartyId,partyId);
-                        relation.remove();
-                        mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
 
 
 

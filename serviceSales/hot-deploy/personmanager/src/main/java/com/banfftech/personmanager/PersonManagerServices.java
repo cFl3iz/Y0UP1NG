@@ -762,7 +762,7 @@ public class PersonManagerServices {
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String partyId = (String) context.get("partyId");
+        String partyId = (String) context.get("empId");
         String productStoreId = (String) context.get("productStoreId");
         String roleTypeId = (String) context.get("roleTypeId");
         Debug.logInfo("partyId:"+partyId,module);
@@ -802,7 +802,7 @@ public class PersonManagerServices {
 
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
-        String partyId = (String) context.get("partyId");
+        String partyId = (String) context.get("empId");
         String productStoreId = (String) context.get("productStoreId");
         String roleTypeId = (String) context.get("roleTypeId");
 

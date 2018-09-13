@@ -246,7 +246,7 @@
              invoke="passEmp" auth="false">
         <description>passEmp</description>
         <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
-        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="empId" type="String" mode="IN"  optional="true"/>
         <attribute name="roleTypeId" type="String" mode="IN"  optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
@@ -257,7 +257,7 @@
              invoke="removeEmp" auth="false">
         <description>removeEmp</description>
         <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
-        <attribute name="partyId" type="String" mode="IN"  optional="true"/>
+        <attribute name="empId" type="String" mode="IN"  optional="true"/>
         <attribute name="roleTypeId" type="String" mode="IN"  optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

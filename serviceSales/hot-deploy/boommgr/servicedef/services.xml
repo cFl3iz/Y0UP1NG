@@ -134,6 +134,7 @@
         <description>register</description>
 
         <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="appId" type="String" mode="IN" optional="true"/>
         <attribute name="tel" type="String" mode="IN" optional="true"/>
         <attribute name="captcha" type="String" mode="IN" optional="true"/>
         <attribute name="nickName" type="String" mode="IN" optional="true"/>

@@ -673,6 +673,7 @@ under the License.
         <permission-service service-name="partyBasePermissionCheck" main-action="CREATE"/>
         <auto-attributes mode="IN" include="pk"/>
         <auto-attributes mode="IN" optional="true" include="nonpk"/>
+        <attribute name="appId" type="String" mode="IN"/>
     </service>
     <service name="updatePartyIdentification" engine="entity-auto" default-entity-name="PartyIdentification" invoke="update">
         <description>update PartyIdentification entity</description>

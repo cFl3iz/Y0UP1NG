@@ -442,6 +442,7 @@ public class BoomServices {
                 userInfoMap.put("sex",gender);
                 userInfoMap.put("language",language);
                 userInfoMap.put("headimgurl",avatarUrl);
+                //注册后端流程
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(appId, admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
 

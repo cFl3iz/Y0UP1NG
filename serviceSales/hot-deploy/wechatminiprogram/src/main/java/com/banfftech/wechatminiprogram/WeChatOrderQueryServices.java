@@ -96,7 +96,7 @@ public class WeChatOrderQueryServices {
 
             resultMap.put("sku", productId);
 
-
+            return resultMap;
         }
 
         Debug.logInfo("productId: " + productId, module);

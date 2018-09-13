@@ -513,7 +513,7 @@ public class BoomServices {
         EntityCondition venderCondition2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, beforePartyId);
         EntityCondition venderCondition = EntityCondition.makeCondition(venderCondition1, EntityOperator.AND, venderCondition2);
 
-        EntityCondition allCondition = EntityCondition.makeCondition(custCondition, EntityOperator.AND, venderCondition);
+//        EntityCondition allCondition = EntityCondition.makeCondition(custCondition, EntityOperator.AND, venderCondition);
 
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 venderCondition, null,

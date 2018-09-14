@@ -7896,7 +7896,7 @@ public class PersonManagerServices {
             resultMap.put("orderId", orderId);
 
             //占货去
-            List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("InventoryItem").where("orderId", orderId).queryList();
+            List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
 
             for(GenericValue rowItem : rowOrderItems){
                 String productId = rowItem.getString("productId");
@@ -7927,7 +7927,7 @@ public class PersonManagerServices {
 
 
                 //占货去
-                List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("InventoryItem").where("orderId", rowOrderId).queryList();
+                List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("OrderItem").where("orderId", rowOrderId).queryList();
 
                 for(GenericValue rowItem : rowOrderItems){
                     String productId = rowItem.getString("productId");

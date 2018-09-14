@@ -111,12 +111,17 @@ public class PersonManagerQueryServices {
         List<GenericValue> partyRoleList = EntityQuery.use(delegator).from("PartyRole").where(
                 roleTypeLike).queryList();
         DateFormat sdf = new SimpleDateFormat("MM-dd");
+
+        Map<String,String> keyMap =new HashMap<String, String>();
         if(null!= partyRoleList && partyRoleList.size()>0){
 
             for(GenericValue gv : partyRoleList){
                 Map<String,Object> rowMap =new HashMap<String, Object>();
                 String partyId = gv.getString("partyId");
-
+                if(keyMap.containsKey(partyId)){
+                   continue;
+                }
+                keyMap.put(partyId,partyId);
                 EntityCondition roleTypeParty = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS,partyId);
                 EntityCondition singleCondition = EntityCondition.makeCondition(roleTypeLikeNoPass, EntityOperator.AND, roleTypeParty);
                 rowMap.put("userInfo",queryPersonBaseInfo(delegator,partyId));

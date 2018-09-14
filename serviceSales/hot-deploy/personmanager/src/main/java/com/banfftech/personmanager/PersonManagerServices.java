@@ -7894,6 +7894,29 @@ public class PersonManagerServices {
                     UtilMisc.toMap("orderId", orderId));
             resultMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
             resultMap.put("orderId", orderId);
+
+            //占货去
+            List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("InventoryItem").where("orderId", orderId).queryList();
+
+            for(GenericValue rowItem : rowOrderItems){
+                String productId = rowItem.getString("productId");
+                String orderItemSeqId = rowItem.getString("orderItemSeqId");
+                BigDecimal quantity = (BigDecimal)rowItem.get("quantity");
+
+                GenericValue invItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+                Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
+
+                GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
+                Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes,module);
+                if (null == orderItemShipGrpInvRes) {
+                    dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
+                            "inventoryItemId", invItem.get("inventoryItemId")
+                            , "orderId", orderId, "orderItemSeqId", orderItemSeqId, "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
+                }
+            }
+
+
+
         } else {
             String[] orderArray = orderIds.split(",");
             Double count = 0.0;
@@ -7901,6 +7924,29 @@ public class PersonManagerServices {
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId", rowOrderId));
                 count += Double.parseDouble(calcOrderTotal.get("availableReturnTotal") + "");
+
+
+                //占货去
+                List<GenericValue> rowOrderItems = EntityQuery.use(delegator).from("InventoryItem").where("orderId", rowOrderId).queryList();
+
+                for(GenericValue rowItem : rowOrderItems){
+                    String productId = rowItem.getString("productId");
+                    String orderItemSeqId = rowItem.getString("orderItemSeqId");
+                    BigDecimal quantity = (BigDecimal)rowItem.get("quantity");
+
+                    GenericValue invItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+                    Debug.logInfo("createOrderItemShipGrpInvRes:quantity:" + quantity, module);
+
+                    GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
+                    Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes,module);
+                    if (null == orderItemShipGrpInvRes) {
+                        dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
+                                "inventoryItemId", invItem.get("inventoryItemId")
+                                , "orderId", orderId, "orderItemSeqId", orderItemSeqId, "quantity", quantity, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
+                    }
+                }
+
+
             }
             resultMap.put("grandTotal", count + "");
             resultMap.put("orderId", orderId);

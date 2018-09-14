@@ -757,12 +757,14 @@ public class PlatformLoginWorker {
                     dispatcher.runSync("createPartyRole", createPartyMarkRoleMap);
                 }
                 //从这个数据表中找素然员工或者ankorau员工数据，如果有，直接转正发 朋友优惠券十张
-                GenericValue zuczugEmp = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel, "roleTypeId",
-                        roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
-
+//                GenericValue zuczugEmp = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel, "roleTypeId",
+//                        roleTypeId.substring(roleTypeId.indexOf("_")+1)).queryFirst();
+                GenericValue zuczugEmp = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel).queryFirst();
                 if(null!=zuczugEmp){
+
                     //TODO 转正
-                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,  "productStoreId",productStoreId,"roleTypeId",roleTypeId.substring(roleTypeId.indexOf("_")+1)));
+                    dispatcher.runSync("addPartyToStoreRole",UtilMisc.toMap("userLogin",userLogin,  "productStoreId",productStoreId,"roleTypeId",
+                            zuczugEmp.getString("roleTypeId")));
 
                     dispatcher.runSync("resetBaZhePromoCode",UtilMisc.toMap("userLogin",userLogin,"partyId",partyId,"productPromoId","EMP_FRIEND"));
 

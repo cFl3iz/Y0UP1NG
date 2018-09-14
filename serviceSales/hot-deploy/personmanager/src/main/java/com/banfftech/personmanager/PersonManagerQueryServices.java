@@ -3916,9 +3916,20 @@ public class PersonManagerQueryServices {
 
                     GenericValue telecomNumber = EntityUtil.getFirst(
                 EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
-              if (UtilValidate.isNotEmpty(telecomNumber)) {
-                    personInfo.put("contactNumber", telecomNumber.getString("contactNumber"));
+              String tel = null;
+                if (UtilValidate.isNotEmpty(telecomNumber)) {
+                    tel = telecomNumber.getString("contactNumber");
                }
+                personInfo.put("contactNumber",tel);
+                GenericValue zuczugEmpInfo = EntityQuery.use(delegator).from("ZuczugEmp").where(UtilMisc.toMap("tel", tel)).queryFirst();
+                if(null  != zuczugEmpInfo){
+                        //说明有素然员工信息
+
+                        personInfo.put("empName",zuczugEmpInfo.getString("empName"));
+                        personInfo.put("dept",zuczugEmpInfo.getString("dept"));
+
+                }
+
         }
         return personInfo;
     }

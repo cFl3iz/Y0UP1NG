@@ -901,9 +901,9 @@ public class PlatformManagerServices {
                 String[] excelRow = excelList.get(i);
 
 
-                String tel = excelRow[0];
-                String dept = excelRow[1];
-                String name = excelRow[2];
+                String tel = excelRow[2];
+                String dept = excelRow[0];
+                String name = excelRow[1];
                 if(null == tel || UtilValidate.isEmpty(tel)){
                     continue;
                 }
@@ -911,7 +911,7 @@ public class PlatformManagerServices {
                     continue;
                 }
                 String roleTypeId = "ZUCZUG_EMP";
-                if(dept.trim().indexOf("Rau")>-1){
+                if(dept.trim().indexOf("Rau")>-1 || dept.trim().equals("董事会")){
                     roleTypeId = "ANKORAU_EMP";
                 }
                 GenericValue zuczugEmp = delegator.makeValue("ZuczugEmp", UtilMisc.toMap("tel", tel));

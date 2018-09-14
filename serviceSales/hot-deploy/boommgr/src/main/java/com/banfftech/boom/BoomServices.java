@@ -850,6 +850,7 @@ public class BoomServices {
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String appId = (String) context.get("appId");
+        Debug.logInfo("create my lead appid:"+appId,module);
             //已经存在系统中的供应商,增加一个线索关联就行
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
                "contactNumber",supplierTel).queryList();

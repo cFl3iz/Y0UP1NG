@@ -470,6 +470,16 @@ public class BoomServices {
 
 
 
+                //其实自己也是自己的供应商
+                 createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
+                createPartyRelationshipInMap.put("partyIdTo",partyId);
+                createPartyRelationshipInMap.put("partyIdFrom",partyId);
+                createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
 
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
                 result.put("partyId", partyId);

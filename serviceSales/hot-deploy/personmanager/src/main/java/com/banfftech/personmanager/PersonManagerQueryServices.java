@@ -3925,7 +3925,7 @@ public class PersonManagerQueryServices {
                 if(null  != zuczugEmpInfo){
                         //说明有素然员工信息
 
-                        personInfo.put("empName",zuczugEmpInfo.getString("empName"));
+                        personInfo.put("empName",zuczugEmpInfo.getString("name"));
                         personInfo.put("dept",zuczugEmpInfo.getString("dept"));
 
                 }

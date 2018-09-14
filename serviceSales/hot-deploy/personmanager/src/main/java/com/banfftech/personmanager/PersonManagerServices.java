@@ -7920,6 +7920,9 @@ public class PersonManagerServices {
                     ,"amount",new BigDecimal(yunFei)));
         }
 
+
+
+
         return resultMap;
     }
 
@@ -8014,6 +8017,7 @@ public class PersonManagerServices {
                 orderId = orderId + "," + (String) createOrderOut.get("orderId");
             } else {
                 orderId = (String) createOrderOut.get("orderId");
+
             }
 
         }
@@ -8231,6 +8235,21 @@ public class PersonManagerServices {
                 UtilMisc.toMap("content",
                         "productId:"+productId+",quantity:"+amount_str
                         , "title", maiJiaName + "[" + partyId + "]购买了内购产品,单号: [" + orderId+"] "));
+
+
+
+
+        GenericValue invItem = EntityQuery.use(delegator).from("InventoryItem").where("productId", productId).queryFirst();
+
+
+
+        GenericValue orderItemShipGrpInvRes = EntityQuery.use(delegator).from("OrderItemShipGrpInvRes").where("orderId", orderId).queryFirst();
+        Debug.logInfo("orderItemShipGrpInvRes:"+orderItemShipGrpInvRes,module);
+        if (null == orderItemShipGrpInvRes) {
+            dispatcher.runSync("createOrderItemShipGrpInvRes", UtilMisc.toMap("userLogin", admin,
+                    "inventoryItemId", invItem.get("inventoryItemId")
+                    , "orderId", orderId, "orderItemSeqId", "00001", "quantity", amount, "quantityNotAvailable", BigDecimal.ZERO, "shipGroupSeqId", "00001"));
+        }
 
         return resultMap;
     }

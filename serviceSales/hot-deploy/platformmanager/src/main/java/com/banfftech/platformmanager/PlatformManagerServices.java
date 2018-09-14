@@ -904,9 +904,19 @@ public class PlatformManagerServices {
                 String tel = excelRow[0];
                 String dept = excelRow[1];
                 String name = excelRow[2];
-
+                if(null == tel || UtilValidate.isEmpty(tel)){
+                    continue;
+                }
+                if(null !=  EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel).queryFirst() ){
+                    continue;
+                }
+                String roleTypeId = "ZUCZUG_EMP";
+                if(dept.trim().indexOf("Rau")>-1){
+                    roleTypeId = "ANKORAU_EMP";
+                }
                 GenericValue zuczugEmp = delegator.makeValue("ZuczugEmp", UtilMisc.toMap("tel", tel));
-                zuczugEmp.set("roleTypeId", dept);
+                zuczugEmp.set("roleTypeId", roleTypeId);
+                zuczugEmp.set("dept", dept);
                 zuczugEmp.set("name", name);
                 zuczugEmp.create();
 

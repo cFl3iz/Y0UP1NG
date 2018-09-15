@@ -202,6 +202,7 @@ public class PlatformInventoryServices {
             Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) > 0), module);
             Debug.logInfo("*update resource quantityOnHandTotal.compareTo(quantity)>0 = " + (quantityOnHandTotal.compareTo(quantityOnHandTotalZuczug) > 0), module);
 
+            //todo mark 2018 09 15 if <zuczug no update
             //说明现库存比要设置的库存大,需要做差异减法
             if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) > 0) {
                 int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
@@ -209,8 +210,9 @@ public class PlatformInventoryServices {
                 Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
                 Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
 
-                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+                //createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                //createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+                //createInventoryItemDetailMap = null;
             }
             //说明现库存比要设置的库存小,需要做差异加法
             if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) < 0) {
@@ -220,15 +222,16 @@ public class PlatformInventoryServices {
                 Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
                 createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
                 createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
-            }
-            //一模一样的库存我还差异个屁?
-            if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) == 0) {
+                //一模一样的库存我还差异个屁?
+                if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) == 0) {
 
-            } else {
-                //3.2 Do create
-                Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
+                } else {
+                    //3.2 Do create
+                    Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
+                }
             }
+
 
             //再来一遍
             //说明现库存比要设置的库存大,需要做差异减法

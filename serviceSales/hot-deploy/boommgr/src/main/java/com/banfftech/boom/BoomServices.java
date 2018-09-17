@@ -913,8 +913,10 @@ public class BoomServices {
                 where(genericCondition).queryFirst();
         String addressContactId = partyAddressContactMech.getString("contactMechId");
 
+        String postalCode= "200000";
+
         dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
-              "firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
+              "postalCode",postalCode,"firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
 
         dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
 

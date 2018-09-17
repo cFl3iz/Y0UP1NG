@@ -412,7 +412,73 @@ public class ImageManagementServices {
             return ServiceUtil.returnError(errMsg);
         }
     }
-   
+
+    public static Map<String, Object> createContentAndDataResource(  LocalDispatcher dispatcher, Delegator delegator , GenericValue userLogin, String filenameToUse, String imageUrl, String contentId, String fileContentType){
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        Map<String, Object> dataResourceCtx = new HashMap<String, Object>();
+
+        dataResourceCtx.put("objectInfo", imageUrl);
+        dataResourceCtx.put("dataResourceName", filenameToUse);
+        dataResourceCtx.put("userLogin", userLogin);
+        dataResourceCtx.put("dataResourceTypeId", "IMAGE_OBJECT");
+        dataResourceCtx.put("mimeTypeId", fileContentType);
+        dataResourceCtx.put("isPublic", "Y");
+
+        Map<String, Object> dataResourceResult = new HashMap<String, Object>();
+        try {
+            dataResourceResult = dispatcher.runSync("createDataResource", dataResourceCtx);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        String dataResourceId = (String) dataResourceResult.get("dataResourceId");
+        result.put("dataResourceFrameId", dataResourceId);
+        result.put("dataResourceId", dataResourceId);
+
+        Map<String, Object> contentUp = new HashMap<String, Object>();
+        contentUp.put("contentId", contentId);
+        contentUp.put("dataResourceId", dataResourceResult.get("dataResourceId"));
+        contentUp.put("contentName", filenameToUse);
+        contentUp.put("userLogin", userLogin);
+        try {
+            dispatcher.runSync("updateContent", contentUp);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        GenericValue content = null;
+        try {
+            content = EntityQuery.use(delegator).from("Content").where("contentId", contentId).queryOne();
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        if (content != null) {
+            GenericValue dataResource = null;
+            try {
+                dataResource = content.getRelatedOne("DataResource", false);
+            } catch (GenericEntityException e) {
+                Debug.logError(e, module);
+                return ServiceUtil.returnError(e.getMessage());
+            }
+
+            if (dataResource != null) {
+                dataResourceCtx.put("dataResourceId", dataResource.getString("dataResourceId"));
+                try {
+                    dispatcher.runSync("updateDataResource", dataResourceCtx);
+                } catch (GenericServiceException e) {
+                    Debug.logError(e, module);
+                    return ServiceUtil.returnError(e.getMessage());
+                }
+            }
+        }
+        return result;
+    }
+
     public static Map<String, Object> createContentAndDataResource(DispatchContext dctx, GenericValue userLogin, String filenameToUse, String imageUrl, String contentId, String fileContentType){
         Map<String, Object> result = new HashMap<String, Object>();
         LocalDispatcher dispatcher = dctx.getDispatcher();

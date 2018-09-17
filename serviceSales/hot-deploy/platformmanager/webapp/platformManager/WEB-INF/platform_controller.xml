@@ -63,6 +63,15 @@
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImport"/>
         <response name="success" type="view" value="ProductUploadImport"/>
     </request-map>
+
+    <request-map uri="ProductUploadImportNewEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImportNewEvent"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
+
+
    <request-map uri="ProductPriceUploadImportFormEvent">
         <security https="true" auth="true"/>
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productPriceUploadImportFormEvent"/>

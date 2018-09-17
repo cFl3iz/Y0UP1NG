@@ -136,11 +136,16 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+                        <screenlet title="(新)素然产品导入">
+                            <include-form name="ProductUploadImportFormNew"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
                         <!--<include-menu name="platformmanagerTabBar" location="component://platformmanager/widget/platformmanagerMenus.xml"/>-->
                         <screenlet title="素然产品导入">
                             <include-form name="ProductUploadImportForm"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>
+
 
                         <screenlet title="素然产品特殊价格导入">
                             <include-form name="ProductPriceUploadImportForm"

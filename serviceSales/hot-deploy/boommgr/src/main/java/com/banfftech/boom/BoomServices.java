@@ -888,13 +888,13 @@ public class BoomServices {
 
 //        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
 //        ,"firstName",firstName,"lastName",lastName));
-        GenericValue person = EntityQuery.use(delegator).from("Person").where(
-                "partyId", partyId).queryFirst();
-        Debug.logInfo("firstName:" + firstName, module);
-        Debug.logInfo("lastName:" + lastName, module);
-        person.set("firstName", firstName);
-        person.set("lastName", lastName);
-        person.store();
+//        GenericValue person = EntityQuery.use(delegator).from("Person").where(
+//                "partyId", partyId).queryFirst();
+//        Debug.logInfo("firstName:" + firstName, module);
+//        Debug.logInfo("lastName:" + lastName, module);
+//        person.set("firstName", firstName);
+//        person.set("lastName", lastName);
+//        person.store();
 
         GenericValue partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
                 "partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE").queryFirst();
@@ -914,7 +914,7 @@ public class BoomServices {
         String addressContactId = partyAddressContactMech.getString("contactMechId");
 
         dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
-                "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
+              ,"firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
 
         dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
 

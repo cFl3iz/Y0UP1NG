@@ -802,6 +802,9 @@ public class BoomServices {
 
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where(
                 "partyId", partyId,"productId",productId,"roleTypeId","ADMIN").queryFirst();
+        Debug.logInfo("partyId:"+partyId,module);
+        Debug.logInfo("productId:"+productId,module);
+        Debug.logInfo("productRole:"+productRole,module);
         if(productRole!=null){
             productRole.remove();
         }
@@ -809,6 +812,57 @@ public class BoomServices {
         return resultMap;
     }
 
+
+
+    public static Map<String, Object> updateRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String productName = (String) context.get("productName");
+        String quantityUomId = (String) context.get("quantityUomId");
+        String imagePath = (String) context.get("imagePath");
+        String suppliers = (String) context.get("suppliers");
+        String productId = (String) context.get("productId");
+
+
+        GenericValue product  =  EntityQuery.use(delegator).from("Product").where(
+                "productId", productId).queryFirst();
+        product.set("productName",productName);
+        product.set("detailImageUrl",imagePath!=null?imagePath:"");
+        product.set("smallImageUrl",imagePath!=null?imagePath:"");
+        product.set("quantityUomId",quantityUomId);
+
+
+        List<GenericValue> supplierProducts =  EntityQuery.use(delegator).from("SupplierProduct").where(
+                "productId", productId).queryFirst();
+        if(null!= supplierProducts && supplierProducts.size()>0){
+            for(GenericValue supplierRow : supplierProducts){
+                        supplierRow.remove();
+            }
+        }
+
+
+
+        if (suppliers != null && suppliers.length() > 2) {
+            for (String rowSupplier : suppliers.split(",")) {
+                dispatcher.runSync("createSupplierProduct",
+                        UtilMisc.toMap("userLogin", admin, "productId", productId,
+                                "partyId", rowSupplier,
+                                "availableFromDate", UtilDateTime.nowTimestamp(),
+                                "currencyUomId", "CNY", "lastPrice", BigDecimal.ZERO, "minimumOrderQuantity", BigDecimal.ONE, "supplierProductId", productId));
+            }
+        }
+
+        return resultMap;
+    }
 
 
     /**
@@ -845,8 +899,8 @@ public class BoomServices {
         createProductInMap.put("productName", productName);
         createProductInMap.put("productTypeId", "RAW_MATERIAL");
 //        createProductInMap.put("description", description);
-        createProductInMap.put("detailImageUrl", imagePath);
-        createProductInMap.put("smallImageUrl", imagePath);
+        createProductInMap.put("detailImageUrl", imagePath!=null?imagePath:"");
+        createProductInMap.put("smallImageUrl", imagePath!=null?imagePath:"");
         createProductInMap.put("quantityUomId", quantityUomId);
 
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);

@@ -119,10 +119,24 @@
         <description>createRawMaterials</description>
         <attribute name="productName" type="String" mode="IN" optional="false"/>
         <attribute name="quantityUomId" type="String" mode="IN" optional="false"/>
-        <attribute name="imagePath" type="String" mode="IN" optional="false"/>
+        <attribute name="imagePath" type="String" mode="IN" optional="true"/>
         <attribute name="suppliers" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+    <service name="updateRawMaterials" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="updateRawMaterials" auth="false">
+        <description>updateRawMaterials</description>
+        <attribute name="productName" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantityUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="imagePath" type="String" mode="IN" optional="true"/>
+        <attribute name="suppliers" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <service name="createMyFinishedGood" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

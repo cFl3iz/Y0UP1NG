@@ -80,6 +80,31 @@
                    optional="true"/>
     </service>
 
+    <service name="updateMyLead" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="updateMyLead" auth="false">
+        <description>updateMyLead</description>
+        <attribute name="supplierName" type="String" mode="IN" optional="false"/>
+        <attribute name="leadId" type="String" mode="IN" optional="false"/>
+        <attribute name="supplierTel" type="String" mode="IN" optional="false"/>
+        <attribute name="provinceName" type="String" mode="IN" optional="false"/>
+        <attribute name="cityName" type="String" mode="IN" optional="false"/>
+        <attribute name="countyName" type="String" mode="IN" optional="false"/>
+        <attribute name="detailInfo" type="String" mode="IN" optional="false"/>
+
+        <attribute name="leadInfo" type="Map" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
+
+
+
+
     <service name="createRawMaterials" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"

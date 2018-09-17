@@ -140,10 +140,10 @@ public class BoomServices {
 
 
        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", leadId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",partyId).queryFirst();
+                "partyIdFrom",partyId , "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",leadId).queryFirst();
         if(null!=relation){
             dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
-                    "partyIdFrom",leadId,"partyIdTo ",partyId,"fromDate",relation.get("fromDate "),"roleTypeIdTo", "LEAD"));
+                    "partyIdFrom",partyId,"partyIdTo ",leadId,"fromDate",relation.get("fromDate "),"roleTypeIdTo", "LEAD"));
         }
 
 
@@ -866,6 +866,78 @@ public class BoomServices {
 
         return resultMap;
     }
+
+
+    /**
+     * updateMyLead
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> updateMyLead(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String supplierName = (String) context.get("supplierName");
+        String supplierTel = (String) context.get("supplierTel");
+        String leadId = (String) context.get("leadId");
+        String provinceName = (String) context.get("provinceName");
+        String cityName = (String) context.get("cityName");
+        String countyName = (String) context.get("countyName");
+        String detailInfo = (String) context.get("detailInfo");
+
+        String firstName = supplierName;
+        String lastName = " ";
+
+        if(supplierName.length()>=4){
+            firstName = supplierName.substring(0,2);
+            lastName = supplierName.substring(2+1);
+        }
+        if(supplierName.length()<=3){
+            lastName = supplierName.substring(0,1);
+            firstName = supplierName.substring(1);
+        }
+
+        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
+        ,"firstName",firstName,"lastName",lastName));
+
+
+         GenericValue  partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
+                "partyId",partyId,"contactMechPurposeTypeId","PHONE_MOBILE").queryFirst();
+        String telContactId = partyTelContactMech.getString("contactMechId");
+
+        List<String> types = new ArrayList<String>();
+        types.add(telContactId);
+
+                EntityCondition findConditions = EntityCondition
+                .makeCondition("contactMechId", EntityOperator.NOT_IN, types);
+                  EntityCondition partyConditions = EntityCondition
+                .makeCondition("partyId", EntityOperator.EQUALS, leadId);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, partyConditions);
+
+        GenericValue  partyAddressContactMech = EntityQuery.use(delegator).from("PartyContactMech").
+                where(genericCondition).queryFirst();
+        String addressContactId = partyAddressContactMech.getString("contactMechId");
+
+        dispatcher.runSync("createUpdateAddress",UtilMisc.toMap("userLogin",admin,"partyId",leadId,"city",cityName==null?"":cityName,
+                "address1",countyName+" "+provinceName+" "+cityName+" "+detailInfo ,"contactMechId",addressContactId ));
+
+        dispatcher.runSync("updateTelecomNumber",UtilMisc.toMap("userLogin",admin,"contactNumber",supplierTel,"contactMechId",telContactId));
+
+        resultMap.put("leadInfo",UtilMisc.toMap("partyId",leadId));
+        return resultMap;
+    }
+
 
 
     /**

@@ -142,8 +142,9 @@ public class BoomServices {
        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdFrom",partyId , "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",leadId).queryFirst();
         if(null!=relation){
-            dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
-                    "partyIdFrom",partyId,"partyIdTo",leadId,"fromDate",relation.get("fromDate"),"roleTypeIdTo", "LEAD"));
+            relation.remove();
+//            dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
+//                    "partyIdFrom",partyId,"partyIdTo",leadId,"fromDate",relation.get("fromDate"),"roleTypeIdTo", "LEAD"));
         }
 
 

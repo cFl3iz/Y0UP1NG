@@ -645,11 +645,11 @@ public class BoomQueryServices {
                         Map<String,Object> rowComponent = new HashMap<String, Object>();
                         String rowProductId = row.getString("productIdTo");
                         BigDecimal quantity  = (BigDecimal)row.get("quantity");
-                        rowComponent.put("manufComponentId",rowProductId);
+                        rowComponent.put("productId",rowProductId);
                         rowComponent.put("quantity",quantity.intValue());
                         GenericValue rowProd = EntityQuery.use(delegator).from("Product").where(
                                 "productId", rowProductId).queryFirst();
-                        rowComponent.put("manufComponentName",rowProd.getString("productName"));
+                        rowComponent.put("productName",rowProd.getString("productName"));
                         rowComponent.put("imagePath",rowProd.getString("detailImageUrl"));
                         rowComponent.put("fromDate",sdf.format(row.get("fromDate")));
 

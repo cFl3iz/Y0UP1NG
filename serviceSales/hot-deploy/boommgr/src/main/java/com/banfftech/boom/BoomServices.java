@@ -889,12 +889,12 @@ public class BoomServices {
         GenericValue product  =  EntityQuery.use(delegator).from("Product").where(
                 "productId", productId).queryFirst();
         Debug.logInfo("productNameL"+productName,module);
-        product.set("productName",productName);
+        product.set("productName", productName);
         product.set("detailImageUrl",imagePath!=null?imagePath:"");
         product.set("smallImageUrl",imagePath!=null?imagePath:"");
         product.set("quantityUomId",quantityUomId);
 
-
+        product.store();
         List<GenericValue> supplierProducts =  EntityQuery.use(delegator).from("SupplierProduct").where(
                 "productId", productId).queryList();
         if(null!= supplierProducts && supplierProducts.size()>0){

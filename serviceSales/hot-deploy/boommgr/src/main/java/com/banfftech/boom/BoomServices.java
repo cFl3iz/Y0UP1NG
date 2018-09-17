@@ -842,7 +842,7 @@ public class BoomServices {
 
 
         List<GenericValue> supplierProducts =  EntityQuery.use(delegator).from("SupplierProduct").where(
-                "productId", productId).queryFirst();
+                "productId", productId).queryList();
         if(null!= supplierProducts && supplierProducts.size()>0){
             for(GenericValue supplierRow : supplierProducts){
                         supplierRow.remove();

@@ -1100,6 +1100,7 @@ public class PlatformManagerServices {
 
 
 
+
                     //导入的表存在虚拟产品Id
                     if (UtilValidate.isNotEmpty(productVirtualId)) {
                         GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
@@ -1109,7 +1110,11 @@ public class PlatformManagerServices {
                             newVirtualProduct.set("description", desc);
 //                            newVirtualProduct.set("comments", keyword);
                             //默认图片
-                            newVirtualProduct.set("detailImageUrl", UtilValidate.isEmpty(metchOne)==true?singleOne:metchOne);
+                            if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
+                                newVirtualProduct.set("detailImageUrl",  singleOne);
+                            }else{
+                                newVirtualProduct.set("detailImageUrl",  metchOne);
+                            }
                             if (UtilValidate.isNotEmpty(internalName)) {
                                 newVirtualProduct.set("internalName", internalName);
                                 newVirtualProduct.set("productName", internalName);
@@ -1120,7 +1125,7 @@ public class PlatformManagerServices {
 
 
                             //模特图
-                            if(!UtilValidate.isEmpty(metchOne)){
+                            if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
                                 String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1134,7 +1139,7 @@ public class PlatformManagerServices {
                                     dispatcher.runSync("createProductContent", productContentCtx);
 
                             }
-                            if(!UtilValidate.isEmpty(metchTwo)){
+                            if(!UtilValidate.isEmpty(metchTwo)  && !metchTwo.equals("无")){
                                 Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
 
@@ -1224,7 +1229,13 @@ public class PlatformManagerServices {
                             newVariantProduct.set("description", desc);
 //                            newVariantProduct.set("comments", keyword);
                             //默认图片
-                            newVariantProduct.set("detailImageUrl", UtilValidate.isEmpty(metchOne)==true?singleOne:metchOne);
+                            //默认图片
+                            if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
+                                newVariantProduct.set("detailImageUrl",  singleOne);
+                            }else{
+                                newVariantProduct.set("detailImageUrl",  metchOne);
+                            }
+//                            newVariantProduct.set("detailImageUrl", UtilValidate.isEmpty(metchOne)==true?singleOne:metchOne);
                             if (UtilValidate.isNotEmpty(internalName)) {
                                 newVariantProduct.set("internalName", internalName);
                                 newVariantProduct.set("productName", internalName);
@@ -1236,7 +1247,7 @@ public class PlatformManagerServices {
 
 
                             //模特图
-                            if(!UtilValidate.isEmpty(metchOne)){
+                            if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
                                 String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
 
                                 Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1250,7 +1261,7 @@ public class PlatformManagerServices {
                                 dispatcher.runSync("createProductContent", productContentCtx);
 
                             }
-                            if(!UtilValidate.isEmpty(metchTwo)){
+                            if(!UtilValidate.isEmpty(metchTwo)&& !metchTwo.equals("无")){
                                 Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
 

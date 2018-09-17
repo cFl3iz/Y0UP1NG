@@ -103,7 +103,14 @@
 
 
 
-
+    <service name="removeMyRawMaterials" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="removeMyRawMaterials" auth="false">
+        <description>removeMyRawMaterials</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <service name="createRawMaterials" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

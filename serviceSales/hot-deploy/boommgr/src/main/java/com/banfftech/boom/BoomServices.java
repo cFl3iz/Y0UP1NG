@@ -783,6 +783,34 @@ public class BoomServices {
         return resultMap;
     }
 
+
+
+
+    public static Map<String, Object> removeMyRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String productId = (String) context.get("productId");
+
+        GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where(
+                "partyId", partyId,"productId",productId,"roleTypeId","ADMIN").queryFirst();
+        if(productRole!=null){
+            productRole.remove();
+        }
+
+        return resultMap;
+    }
+
+
+
     /**
      * createRawMaterials
      *

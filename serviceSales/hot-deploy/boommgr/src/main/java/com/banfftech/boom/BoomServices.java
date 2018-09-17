@@ -143,7 +143,7 @@ public class BoomServices {
                 "partyIdFrom",partyId , "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",leadId).queryFirst();
         if(null!=relation){
             dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
-                    "partyIdFrom",partyId,"partyIdTo ",leadId,"fromDate",relation.get("fromDate "),"roleTypeIdTo", "LEAD"));
+                    "partyIdFrom",partyId,"partyIdTo ",leadId,"fromDate",relation.get("fromDate"),"roleTypeIdTo", "LEAD"));
         }
 
 

@@ -121,8 +121,6 @@ public class BoomServices {
     }
 
 
-
-
     public static Map<String, Object> removeMyLead(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -138,10 +136,9 @@ public class BoomServices {
         String partyId = (String) userLogin.get("partyId");
 
 
-
-       GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom",partyId , "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",leadId).queryFirst();
-        if(null!=relation){
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "partyIdTo", leadId).queryFirst();
+        if (null != relation) {
             relation.remove();
 //            dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
 //                    "partyIdFrom",partyId,"partyIdTo",leadId,"fromDate",relation.get("fromDate"),"roleTypeIdTo", "LEAD"));
@@ -150,8 +147,6 @@ public class BoomServices {
 
         return result;
     }
-
-
 
 
     public static Map<String, Object> updateOrderStatus(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
@@ -168,21 +163,20 @@ public class BoomServices {
         String statusId = (String) context.get("statusId");
 
 
-
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
 
-        dispatcher.runSync("updateOrderHeader",UtilMisc.toMap("userLogin",userLogin,
-                "orderId",orderId,"statusId",statusId ));
+        dispatcher.runSync("updateOrderHeader", UtilMisc.toMap("userLogin", userLogin,
+                "orderId", orderId, "statusId", statusId));
 
         return result;
     }
 
 
-
     /**
      * create PurchaseOrder
+     *
      * @param dctx
      * @param context
      * @return
@@ -207,12 +201,12 @@ public class BoomServices {
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
-        if(null!= itemArray){
-            for(String rowStr : itemArray.split(",")){
-                String productId = rowStr.substring(0,rowStr.indexOf(":"));
-                String quantityStr = rowStr.substring(rowStr.indexOf(":")+1,rowStr.lastIndexOf(":"));
-                String supplierPartyId = rowStr.substring(rowStr.lastIndexOf(":")+1,rowStr.indexOf("/"));
-                String beiZhu    = rowStr.substring(rowStr.indexOf("/")+1);
+        if (null != itemArray) {
+            for (String rowStr : itemArray.split(",")) {
+                String productId = rowStr.substring(0, rowStr.indexOf(":"));
+                String quantityStr = rowStr.substring(rowStr.indexOf(":") + 1, rowStr.lastIndexOf(":"));
+                String supplierPartyId = rowStr.substring(rowStr.lastIndexOf(":") + 1, rowStr.indexOf("/"));
+                String beiZhu = rowStr.substring(rowStr.indexOf("/") + 1);
 
                 //供应商产品仓库暂无
 //                String originFacilityId = (String) context.get("originFacilityId");
@@ -225,7 +219,7 @@ public class BoomServices {
                 //最终客户、收货客户、意向客户等客户当事人
                 String billToCustomerPartyId, endUserCustomerPartyId, placingCustomerPartyId, shipToCustomerPartyId = partyId;
                 //发货人就是供应商
-                String   shipFromVendorPartyId = billFromVendorPartyId;
+                String shipFromVendorPartyId = billFromVendorPartyId;
 
                 //StoreOrderMap
                 Map<String, Object> createOrderServiceIn = new HashMap<String, Object>();
@@ -300,23 +294,17 @@ public class BoomServices {
         }
 
 
-
-
-
-
-
-        dispatcher.runSync("changeProductionRunStatus",UtilMisc.toMap("userLogin",admin,"productionRunId",workEffortId,"statusId","PRUN_DOC_PRINTED"));
+        dispatcher.runSync("changeProductionRunStatus", UtilMisc.toMap("userLogin", admin, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
 //        String orderId = (String) createOrderOut.get("orderId");
-
 
 
         return result;
     }
 
 
-
     /**
      * 企业Bom注册
+     *
      * @param dctx
      * @param context
      * @return
@@ -358,12 +346,12 @@ public class BoomServices {
             checkCaptcha = PlatformLoginWorker.checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
             Debug.logInfo("tel:" + tel + ",checkCaptcha=>" + checkCaptcha, module);
 
-            if (checkCaptcha ) {
+            if (checkCaptcha) {
 
 
                 // Check is Exsit Contact Number ?..
                 List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
-                        "contactNumber", tel,"roleTypeIdTo","LEAD","partyRelationshipTypeId","LEAD_OWNER","contactMechTypeId","TELECOM_NUMBER").queryList();
+                        "contactNumber", tel, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "contactMechTypeId", "TELECOM_NUMBER").queryList();
 
 
                 userLogin = PersonManagerServices.justCreatePartyPersonUserLogin(delegator, dispatcher, name, nickName);
@@ -415,32 +403,29 @@ public class BoomServices {
                 }
 
 
-
                 String groupId = createGroup(delegator, dispatcher, admin, organizationName, "");
 
-                dispatcher.runSync("createPartyAcctgPreference",UtilMisc.toMap("userLogin", admin
-                ,"partyId",groupId,"baseCurrencyUomId","CNY"));
+                dispatcher.runSync("createPartyAcctgPreference", UtilMisc.toMap("userLogin", admin
+                        , "partyId", groupId, "baseCurrencyUomId", "CNY"));
 
 
                 // ToDo Merge Party、Person、UserLogin Relationship ....
                 // Create Emp to PartyGroup From Lead
-                if(teleContact.size()>0){
-                    for(GenericValue row:teleContact){
+                if (teleContact.size() > 0) {
+                    for (GenericValue row : teleContact) {
 
                         String beforePartyId = row.getString("partyId");
 //PARTYIDTO
 
                         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                                "partyIdTo", beforePartyId, "partyRelationshipTypeId", "LEAD_OWNER" ).queryFirst();
-                        if(relation!=null){
+                                "partyIdTo", beforePartyId, "partyRelationshipTypeId", "LEAD_OWNER").queryFirst();
+                        if (relation != null) {
                             String partyIdFrom = relation.getString("partyIdFrom");
 
-                            mergeChangeRelation(delegator,dispatcher,admin,partyIdFrom,beforePartyId,partyId);
+                            mergeChangeRelation(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
                             relation.remove();
                             mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
                         }
-
-
 
 
                     }
@@ -470,29 +455,27 @@ public class BoomServices {
                 inputTelecom.put("userLogin", admin);
                 Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
 
-                Map<String,String> userInfoMap = new HashMap<String, String>();
-                userInfoMap.put("nickname",nickName);
-                userInfoMap.put("sex",gender);
-                userInfoMap.put("language",language);
-                userInfoMap.put("headimgurl",avatarUrl);
+                Map<String, String> userInfoMap = new HashMap<String, String>();
+                userInfoMap.put("nickname", nickName);
+                userInfoMap.put("sex", gender);
+                userInfoMap.put("language", language);
+                userInfoMap.put("headimgurl", avatarUrl);
                 //注册后端流程
                 main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(appId, admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
 
 
+                if (city != null && !city.equals("") && province != null) {
 
 
-                if(city!=null && !city.equals("") && province!=null){
-
-
-                //  邮政地址
-                String contactMechPurposeTypeId = "POSTAL_ADDRESS";
-                Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
-                        UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city",city, "address1", province + "-" +country,"address2",city, "postalCode", PeConstant.DEFAULT_POST_CODE
-                                ));
-                String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
-                if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
-                    return createPartyPostalAddressOutMap;
-                }
+                    //  邮政地址
+                    String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+                    Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                            UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", city, "address1", province + "-" + country, "address2", city, "postalCode", PeConstant.DEFAULT_POST_CODE
+                            ));
+                    String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+                    if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                        return createPartyPostalAddressOutMap;
+                    }
                 }
 // Create Facility
                 Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
@@ -502,21 +485,20 @@ public class BoomServices {
                 }
 
 
-
                 //其实自己也是自己的供应商
-                 createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
-                createPartyRelationshipInMap.put("partyIdTo",partyId);
-                createPartyRelationshipInMap.put("partyIdFrom",partyId);
+                createPartyRelationshipInMap.put("partyIdTo", partyId);
+                createPartyRelationshipInMap.put("partyIdFrom", partyId);
                 createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
 
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
                 result.put("partyId", partyId);
-                result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator,partyId));
+                result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));
             } else {
                 return ServiceUtil.returnError("check fail");
             }
@@ -526,16 +508,16 @@ public class BoomServices {
         return result;
     }
 
-    private static void mergeChangeRelation(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId)  throws GenericEntityException, GenericServiceException{
-        Debug.logInfo("Now Meger Relation before:"+beforePartyId+" to=> " +partyId +" from : " + partyIdFrom,module);
-                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                        createPartyRelationshipInMap.put("userLogin", admin);
-                        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
-                        createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
-                        createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
-                        createPartyRelationshipInMap.put("partyIdTo",partyId);
-                        createPartyRelationshipInMap.put("partyIdFrom",partyIdFrom);
-                        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+    private static void mergeChangeRelation(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
+        Debug.logInfo("Now Meger Relation before:" + beforePartyId + " to=> " + partyId + " from : " + partyIdFrom, module);
+        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+        createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
+        createPartyRelationshipInMap.put("partyIdTo", partyId);
+        createPartyRelationshipInMap.put("partyIdFrom", partyIdFrom);
+        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
     }
 
@@ -554,8 +536,8 @@ public class BoomServices {
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 venderCondition, null,
                 null, null, false);
-        Debug.logInfo("*merge oder:"+queryOrderList,module);
-        if(queryOrderList.size()>0){
+        Debug.logInfo("*merge oder:" + queryOrderList, module);
+        if (queryOrderList.size() > 0) {
             // 发货厂家角色
             GenericValue partyVendorRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
             if (null == partyVendorRole) {
@@ -572,14 +554,14 @@ public class BoomServices {
             }
 
 
-            for(GenericValue order : queryOrderList) {
-               String orderId = order.getString("orderId");
+            for (GenericValue order : queryOrderList) {
+                String orderId = order.getString("orderId");
                 Debug.logInfo("Now Meger Order Role => " + order, module);
-                dispatcher.runSync("removeOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId,"partyId",beforePartyId,"roleTypeId","SHIP_FROM_VENDOR"));
-                dispatcher.runSync("removeOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",beforePartyId,"roleTypeId","BILL_FROM_VENDOR"));
+                dispatcher.runSync("removeOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "partyId", beforePartyId, "roleTypeId", "SHIP_FROM_VENDOR"));
+                dispatcher.runSync("removeOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "partyId", beforePartyId, "roleTypeId", "BILL_FROM_VENDOR"));
 
-                dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","SHIP_FROM_VENDOR"));
-                dispatcher.runSync("addOrderRole",UtilMisc.toMap("userLogin",admin,"orderId",orderId ,"partyId",partyId,"roleTypeId","BILL_FROM_VENDOR"));
+                dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "partyId", partyId, "roleTypeId", "SHIP_FROM_VENDOR"));
+                dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "partyId", partyId, "roleTypeId", "BILL_FROM_VENDOR"));
             }
         }
     }
@@ -625,6 +607,7 @@ public class BoomServices {
 
     /**
      * createProductionRouting
+     *
      * @param dctx
      * @param context
      * @return
@@ -651,13 +634,13 @@ public class BoomServices {
         String workEffortName = product.getString("productName");
 
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
 
         String partyGroupId = relation.getString("partyIdTo");
 
 //        createProductionRun
-        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyGroupId  ).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
         String facilityId = facility.getString("facilityId");
         BigDecimal pRQuantity = new BigDecimal(quantity);
 //"routingId",routingId,
@@ -671,15 +654,12 @@ public class BoomServices {
 //        dispatcher.runSync("addProductionRunRoutingTask",UtilMisc.toMap("userLogin",userLogin,
 //                "productionRunId",productionRunId,"routingTaskId",routingId,"priority",new Long(1)));
 
-        dispatcher.runSync("createRequirement",UtilMisc.toMap("userLogin",userLogin,"requirementTypeId","INTERNAL_REQUIREMENT"
-        ,"facilityId",facilityId,"productId",productId,"statusId","REQ_APPROVED","requirementStartDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
-                "quantity",new BigDecimal(quantity)));
+        dispatcher.runSync("createRequirement", UtilMisc.toMap("userLogin", userLogin, "requirementTypeId", "INTERNAL_REQUIREMENT"
+                , "facilityId", facilityId, "productId", productId, "statusId", "REQ_APPROVED", "requirementStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+                "quantity", new BigDecimal(quantity)));
 
         return resultMap;
     }
-
-
-
 
 
     /**
@@ -722,15 +702,15 @@ public class BoomServices {
 
 
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
 
         String partyGroupId = relation.getString("partyIdTo");
 
 
-        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyGroupId  ).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
         String facilityId = facility.getString("facilityId");
-    createProductInMap.put("facilityId", facilityId );
+        createProductInMap.put("facilityId", facilityId);
 
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
         if (ServiceUtil.isError(createProductOutMap)) {
@@ -738,30 +718,25 @@ public class BoomServices {
         }
 
 
-
-
-
-
         String productId = (String) createProductOutMap.get("productId");
 
 
-        dispatcher.runSync("createProductFacility",UtilMisc.toMap("userLogin",userLogin,
-                "productId",productId,"facilityId",facilityId,"minimumStock",BigDecimal.ZERO,"reorderQuantity",new BigDecimal("10000"),"daysToShip",new Long(10)));
+        dispatcher.runSync("createProductFacility", UtilMisc.toMap("userLogin", userLogin,
+                "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal("10000"), "daysToShip", new Long(10)));
 
 
         if (rawMaterials != null && rawMaterials.length() > 2) {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
-                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo",productIdFrom , "productId", productId
+                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId
                         , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
             }
         }
 
 
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
-        dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin,"costComponentTypeId","GEN_COST","costUomId","CNY", "productId", productId, "partyId", partyId));
-
+        dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin, "costComponentTypeId", "GEN_COST", "costUomId", "CNY", "productId", productId, "partyId", partyId));
 
 
         return resultMap;
@@ -770,6 +745,7 @@ public class BoomServices {
 
     /**
      * empJoinPartyGroup
+     *
      * @param dctx
      * @param context
      * @return
@@ -789,15 +765,15 @@ public class BoomServices {
         String partyId = userLogin.getString("partyId");
         String roleTypeIdFrom = (String) context.get("roleTypeIdFrom");
         String partyGroupId = (String) context.get("partyGroupId");
-        String empId        = (String) context.get("empId");
+        String empId = (String) context.get("empId");
 
         Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
         createPartyRelationshipInMap.put("userLogin", admin);
         createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
-        createPartyRelationshipInMap.put("roleTypeIdFrom",roleTypeIdFrom);
+        createPartyRelationshipInMap.put("roleTypeIdFrom", roleTypeIdFrom);
         createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
-        createPartyRelationshipInMap.put("partyIdTo",partyGroupId);
-        createPartyRelationshipInMap.put("partyIdFrom",empId);
+        createPartyRelationshipInMap.put("partyIdTo", partyGroupId);
+        createPartyRelationshipInMap.put("partyIdFrom", empId);
 
         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
         if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
@@ -809,6 +785,7 @@ public class BoomServices {
 
     /**
      * createRawMaterials
+     *
      * @param dctx
      * @param context
      * @return
@@ -862,7 +839,6 @@ public class BoomServices {
         }
 
 
-
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
 
         return resultMap;
@@ -871,6 +847,7 @@ public class BoomServices {
 
     /**
      * updateMyLead
+     *
      * @param dctx
      * @param context
      * @return
@@ -900,49 +877,50 @@ public class BoomServices {
         String firstName = supplierName;
         String lastName = " ";
 
-        if(supplierName.length()>=4){
-            firstName = supplierName.substring(0,2);
-            lastName = supplierName.substring(2+1);
+        if (supplierName.length() >= 4) {
+            firstName = supplierName.substring(0, 2);
+            lastName = supplierName.substring(2 + 1);
         }
-        if(supplierName.length()<=3){
-            lastName = supplierName.substring(0,1);
+        if (supplierName.length() <= 3) {
+            lastName = supplierName.substring(0, 1);
             firstName = supplierName.substring(1);
         }
 
 //        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
 //        ,"firstName",firstName,"lastName",lastName));
-        GenericValue  person = EntityQuery.use(delegator).from("Person").where(
-                "partyId",partyId).queryFirst();
-        person.set("firstName",firstName);
-        person.set("lastName",lastName);
+        GenericValue person = EntityQuery.use(delegator).from("Person").where(
+                "partyId", partyId).queryFirst();
+        Debug.logInfo("firstName:" + firstName, module);
+        Debug.logInfo("lastName:" + lastName, module);
+        person.set("firstName", firstName);
+        person.set("lastName", lastName);
         person.store();
 
-         GenericValue  partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
-                "partyId",partyId,"contactMechPurposeTypeId","PHONE_MOBILE").queryFirst();
+        GenericValue partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
+                "partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE").queryFirst();
         String telContactId = partyTelContactMech.getString("contactMechId");
 
         List<String> types = new ArrayList<String>();
         types.add(telContactId);
 
-                EntityCondition findConditions = EntityCondition
+        EntityCondition findConditions = EntityCondition
                 .makeCondition("contactMechId", EntityOperator.NOT_IN, types);
-                  EntityCondition partyConditions = EntityCondition
+        EntityCondition partyConditions = EntityCondition
                 .makeCondition("partyId", EntityOperator.EQUALS, leadId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, partyConditions);
 
-        GenericValue  partyAddressContactMech = EntityQuery.use(delegator).from("PartyContactMech").
+        GenericValue partyAddressContactMech = EntityQuery.use(delegator).from("PartyContactMech").
                 where(genericCondition).queryFirst();
         String addressContactId = partyAddressContactMech.getString("contactMechId");
 
-        dispatcher.runSync("createUpdateAddress",UtilMisc.toMap("userLogin",admin,"partyId",leadId,"city",cityName==null?"":cityName,
-                "address1",countyName+" "+provinceName+" "+cityName+" "+detailInfo ,"contactMechId",addressContactId ));
+        dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
+                "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
 
-        dispatcher.runSync("updateTelecomNumber",UtilMisc.toMap("userLogin",admin,"contactNumber",supplierTel,"contactMechId",telContactId));
+        dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
 
-        resultMap.put("leadInfo",UtilMisc.toMap("partyId",leadId));
+        resultMap.put("leadInfo", UtilMisc.toMap("partyId", leadId));
         return resultMap;
     }
-
 
 
     /**
@@ -969,64 +947,63 @@ public class BoomServices {
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String appId = (String) context.get("appId");
-        Debug.logInfo("create my lead appid:"+appId,module);
-            //已经存在系统中的供应商,增加一个线索关联就行
+        Debug.logInfo("create my lead appid:" + appId, module);
+        //已经存在系统中的供应商,增加一个线索关联就行
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
-               "contactNumber",supplierTel).queryList();
-        if(hasUser.size()>0){
+                "contactNumber", supplierTel).queryList();
+        if (hasUser.size() > 0) {
 
 
-           for(GenericValue gv : hasUser){
+            for (GenericValue gv : hasUser) {
                 String oldPartyId = (String) gv.getString("partyId");
-               GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("appId",appId,"partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
-               if (miniProgramIdentification != null) {
+                GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("appId", appId, "partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+                if (miniProgramIdentification != null) {
 
-                   // LEAD是否拥有
-                   GenericValue partyLeadRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", oldPartyId, "roleTypeId", "LEAD").queryFirst();
-                   if (null == partyLeadRole) {
-                       Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", oldPartyId,
-                               "roleTypeId", "LEAD");
-                       dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
-                   }
+                    // LEAD是否拥有
+                    GenericValue partyLeadRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", oldPartyId, "roleTypeId", "LEAD").queryFirst();
+                    if (null == partyLeadRole) {
+                        Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", oldPartyId,
+                                "roleTypeId", "LEAD");
+                        dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+                    }
 
-                String idValue = (String) miniProgramIdentification.get("idValue");
-                   if(null!=idValue && !idValue.equals("")){
-                       Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                       createPartyRelationshipInMap.put("userLogin", admin);
-                       createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
-                       createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
-                       createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
-                       createPartyRelationshipInMap.put("partyIdTo",oldPartyId);
-                       createPartyRelationshipInMap.put("partyIdFrom",partyId);
-                       Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-                       return resultMap;
-                   }
-               }
-           }
+                    String idValue = (String) miniProgramIdentification.get("idValue");
+                    if (null != idValue && !idValue.equals("")) {
+                        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+                        createPartyRelationshipInMap.put("userLogin", admin);
+                        createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
+                        createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
+                        createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
+                        createPartyRelationshipInMap.put("partyIdTo", oldPartyId);
+                        createPartyRelationshipInMap.put("partyIdFrom", partyId);
+                        Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                        return resultMap;
+                    }
+                }
+            }
         }
 
 
         String firstName = supplierName;
         String lastName = " ";
 
-        if(supplierName.length()>=4){
-            firstName = supplierName.substring(0,2);
-            lastName = supplierName.substring(2+1);
+        if (supplierName.length() >= 4) {
+            firstName = supplierName.substring(0, 2);
+            lastName = supplierName.substring(2 + 1);
         }
-        if(supplierName.length()<=3){
-            lastName = supplierName.substring(0,1);
+        if (supplierName.length() <= 3) {
+            lastName = supplierName.substring(0, 1);
             firstName = supplierName.substring(1);
         }
 
         //是否已经添加过
 
         Long hasData = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
-                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","tnContactNumber",supplierTel).queryCount();
-        if(hasData>0){
+                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "tnContactNumber", supplierTel).queryCount();
+        if (hasData > 0) {
             return ServiceUtil.returnError("已经存在的线索");
 
         }
-
 
 
         String provinceName = (String) context.get("provinceName");
@@ -1035,36 +1012,34 @@ public class BoomServices {
         String detailInfo = (String) context.get("detailInfo");
 
 
-        Map<String,Object> createLeadMap = new HashMap<String, Object>();
+        Map<String, Object> createLeadMap = new HashMap<String, Object>();
 
-        createLeadMap.put("userLogin",userLogin);
-        createLeadMap.put("firstName",firstName );
-        createLeadMap.put("lastName",lastName );
-        createLeadMap.put("countryGeoId","CHN");
-        createLeadMap.put("city",cityName==null?"":cityName);
-        if(null != countyName && null != provinceName && null != detailInfo){
-        createLeadMap.put("address1",countyName+" "+provinceName+" "+cityName+" "+detailInfo);
+        createLeadMap.put("userLogin", userLogin);
+        createLeadMap.put("firstName", firstName);
+        createLeadMap.put("lastName", lastName);
+        createLeadMap.put("countryGeoId", "CHN");
+        createLeadMap.put("city", cityName == null ? "" : cityName);
+        if (null != countyName && null != provinceName && null != detailInfo) {
+            createLeadMap.put("address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo);
         }
-        createLeadMap.put("countryCode","86");
-        createLeadMap.put("postalCode","200000");
-        createLeadMap.put("contactNumber",supplierTel);
+        createLeadMap.put("countryCode", "86");
+        createLeadMap.put("postalCode", "200000");
+        createLeadMap.put("contactNumber", supplierTel);
 
 
         Map<String, Object> createLeadOutMap = dispatcher.runSync("createLead", createLeadMap);
 
 
-
-            if (ServiceUtil.isError(createLeadOutMap)) {
-                return createLeadOutMap;
-            }
+        if (ServiceUtil.isError(createLeadOutMap)) {
+            return createLeadOutMap;
+        }
         String resultPartyId = (String) createLeadOutMap.get("partyId");
-
 
 
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", resultPartyId, "roleTypeId", "SUPPLIER"));
 
-        resultMap.put("leadInfo",UtilMisc.toMap("partyId",resultPartyId));
+        resultMap.put("leadInfo", UtilMisc.toMap("partyId", resultPartyId));
         return resultMap;
     }
 

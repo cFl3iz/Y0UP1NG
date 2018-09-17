@@ -121,6 +121,38 @@ public class BoomServices {
     }
 
 
+
+
+    public static Map<String, Object> removeMyLead(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Locale locale = (Locale) context.get("locale");
+
+        String leadId = (String) context.get("leadId");
+
+        String partyId = (String) userLogin.get("partyId");
+
+
+
+       GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", leadId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER","partyIdTo",partyId).queryFirst();
+        if(null!=relation){
+            dispatcher.runSync("deletePartyRelationship",UtilMisc.toMap("userLogin",userLogin,
+                    "partyIdFrom",leadId,"partyIdTo ",partyId,"fromDate",relation.get("fromDate "),"roleTypeIdTo", "LEAD"));
+        }
+
+
+        return result;
+    }
+
+
+
+
     public static Map<String, Object> updateOrderStatus(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

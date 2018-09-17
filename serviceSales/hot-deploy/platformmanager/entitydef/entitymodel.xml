@@ -427,6 +427,8 @@
         <alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
         <alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
         <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="CM" name="contactMechId" field="contactMechId"/>
+
         <alias entity-alias="TN" name="contactNumber" field="contactNumber"/>
         <view-link entity-alias="PCM" rel-entity-alias="PCMP">
             <key-map field-name="partyId" rel-field-name="partyId"/>

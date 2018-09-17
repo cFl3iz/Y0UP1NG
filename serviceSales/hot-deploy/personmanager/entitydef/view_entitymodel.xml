@@ -15,12 +15,13 @@
         <member-entity entity-alias="CM" entity-name="ContactMech"/>
         <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
         <alias entity-alias="PCM" name="partyId" field="partyId"/>
-        <alias entity-alias="PCM" name="contactMechId" field="contactMechId"/>
         <alias entity-alias="PCM" name="fromDate" field="fromDate"/>
         <alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
         <alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
         <alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
         <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="CM" name="contactMechId" field="contactMechId"/>
+
         <alias entity-alias="TN" name="contactNumber" field="contactNumber"/>
         <view-link entity-alias="PCM" rel-entity-alias="PCMP">
             <key-map field-name="partyId" rel-field-name="partyId"/>

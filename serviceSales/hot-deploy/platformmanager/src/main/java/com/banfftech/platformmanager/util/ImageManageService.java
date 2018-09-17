@@ -392,44 +392,44 @@ public class ImageManageService {
     }
 
 
-    public static String createNewContentForImage( LocalDispatcher dispatcher,Delegator delegator , String objectInfo, GenericValue userLogin) {
-
-        String contentId = null;
-
-        try {
-            //先根据路径去dataResource里面找，如果找到了，就直接返回，避免重复
-            GenericValue dr = EntityUtil.getFirst(EntityQuery.use(delegator).from("DataResource").where("objectInfo", objectInfo).queryList());
-            if (UtilValidate.isNotEmpty(dr)) {
-                GenericValue content = EntityUtil.getFirst(EntityQuery.use(delegator).from("Content").where("dataResourceId", dr.getString("dataResourceId")).queryList());
-                return content.getString("contentId");
-            }
-
-            Map<String, Object> contentCtx = new HashMap<String, Object>();
-            contentCtx.put("contentTypeId", "DOCUMENT");
-            contentCtx.put("userLogin", userLogin);
-            Map<String, Object> contentResult = new HashMap<String, Object>();
-            contentResult = dispatcher.runSync("createContent", contentCtx);
-            contentId = (String) contentResult.get("contentId");
-
-            //获取MIME TYPE
-            String fileContentType = "";
-            if (objectInfo.lastIndexOf(".") > -1) {
-                String fileExtension = objectInfo.substring(objectInfo.lastIndexOf(".") + 1);
-                GenericValue fileExt = delegator.findOne("FileExtension", true, UtilMisc.toMap("fileExtensionId", fileExtension));
-                if (UtilValidate.isNotEmpty(fileExt)) {
-                    fileContentType = fileExt.getString("mimeTypeId");
-                }
-            }
-            ImageManagementServices.createContentAndDataResource(dispatcher, delegator, userLogin, "", objectInfo, contentId, fileContentType);
-        } catch (GenericServiceException e) {
-            Debug.log("创建图片的Content失败");
-            return null;
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return contentId;
-    }
+//    public static String createNewContentForImage( LocalDispatcher dispatcher,Delegator delegator , String objectInfo, GenericValue userLogin) {
+//
+//        String contentId = null;
+//
+//        try {
+//            //先根据路径去dataResource里面找，如果找到了，就直接返回，避免重复
+//            GenericValue dr = EntityUtil.getFirst(EntityQuery.use(delegator).from("DataResource").where("objectInfo", objectInfo).queryList());
+//            if (UtilValidate.isNotEmpty(dr)) {
+//                GenericValue content = EntityUtil.getFirst(EntityQuery.use(delegator).from("Content").where("dataResourceId", dr.getString("dataResourceId")).queryList());
+//                return content.getString("contentId");
+//            }
+//
+//            Map<String, Object> contentCtx = new HashMap<String, Object>();
+//            contentCtx.put("contentTypeId", "DOCUMENT");
+//            contentCtx.put("userLogin", userLogin);
+//            Map<String, Object> contentResult = new HashMap<String, Object>();
+//            contentResult = dispatcher.runSync("createContent", contentCtx);
+//            contentId = (String) contentResult.get("contentId");
+//
+//            //获取MIME TYPE
+//            String fileContentType = "";
+//            if (objectInfo.lastIndexOf(".") > -1) {
+//                String fileExtension = objectInfo.substring(objectInfo.lastIndexOf(".") + 1);
+//                GenericValue fileExt = delegator.findOne("FileExtension", true, UtilMisc.toMap("fileExtensionId", fileExtension));
+//                if (UtilValidate.isNotEmpty(fileExt)) {
+//                    fileContentType = fileExt.getString("mimeTypeId");
+//                }
+//            }
+//            ImageManagementServices.createContentAndDataResource(dispatcher, delegator, userLogin, "", objectInfo, contentId, fileContentType);
+//        } catch (GenericServiceException e) {
+//            Debug.log("创建图片的Content失败");
+//            return null;
+//        } catch (GenericEntityException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        return contentId;
+//    }
 
     /**
      * 把第一个单品图放到Product字段中去

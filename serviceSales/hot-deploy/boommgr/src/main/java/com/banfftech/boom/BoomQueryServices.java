@@ -81,6 +81,7 @@ import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 
 /**
@@ -777,13 +778,16 @@ public class BoomQueryServices {
 
                   String contactMechTypeId = gv.getString("contactMechTypeId");
 
+                Debug.logInfo("PartyRelationshipAndContactMechDetail=>:"+gv,module);
 
-
-
-
-
-
-                if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
+                  if(beforePartyId==null ){
+                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
+                          String tnContactNumber = gv.getString("tnContactNumber");
+                          if(null!=tnContactNumber){
+                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                          }
+                      }
+                  }else if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
                     rowMap = returnList.get(returnList.size()-1);
                     String tnContactNumber = gv.getString("tnContactNumber");
                     if(null!=tnContactNumber){
@@ -794,14 +798,7 @@ public class BoomQueryServices {
                     continue;
                 }
 
-                  if(beforePartyId==null ){
-                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
-                          String tnContactNumber = gv.getString("tnContactNumber");
-                          if(null!=tnContactNumber){
-                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
-                          }
-                      }
-                  }
+
 
 
                 Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
@@ -819,23 +816,6 @@ public class BoomQueryServices {
                   beforePartyId=partyIdTo;
             }
         }
-//PartyRoleAndContactMechDetail
-//        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-//        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        if(relationList.size()>0){
-//            for(GenericValue gv : relationList){
-//                Map<String,Object> rowMap = new HashMap<String, Object>();
-//                String partyIdTo = gv.getString("partyIdTo");
-//                Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
-//                rowMap.put("name",supplierInfo.get("firstName"));
-//                rowMap.put("partyId",partyIdTo);
-//                rowMap.put("tel",supplierInfo.get("userLoginId"));
-//                rowMap.put("avatar",supplierInfo.get("headPortrait"));
-//                rowMap.put("orderSize","0");
-//                rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
-//                returnList.add(rowMap);
-//            }
-//        }
 
       resultMap.put("supplierList",returnList);
         return resultMap;

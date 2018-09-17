@@ -909,9 +909,13 @@ public class BoomServices {
             firstName = supplierName.substring(1);
         }
 
-        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
-        ,"firstName",firstName,"lastName",lastName));
-
+//        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
+//        ,"firstName",firstName,"lastName",lastName));
+        GenericValue  person = EntityQuery.use(delegator).from("Person").where(
+                "partyId",partyId).queryFirst();
+        person.set("firstName",firstName);
+        person.set("lastName",lastName);
+        person.store();
 
          GenericValue  partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
                 "partyId",partyId,"contactMechPurposeTypeId","PHONE_MOBILE").queryFirst();

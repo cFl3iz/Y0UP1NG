@@ -629,7 +629,7 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
 
-                String uomParentId = rowProd.getString("quantityUomId");
+                String uomParentId = gv.getString("quantityUomId");
 
 
                 GenericValue uomParent =  EntityQuery.use(delegator).from("Uom").where(

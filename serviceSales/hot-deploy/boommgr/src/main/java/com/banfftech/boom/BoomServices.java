@@ -707,6 +707,9 @@ public class BoomServices {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
+                if(count.trim().equals("0")){
+                    continue;
+                }
                 dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId,"productAssocTypeId", "MANUF_COMPONENT",
                          "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
             }

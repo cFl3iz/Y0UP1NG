@@ -145,6 +145,7 @@
              invoke="updateMyFinishedGood" auth="false">
         <description>updateMyFinishedGood</description>
         <attribute name="productName" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="quantityUomId" type="String" mode="IN" optional="true"/>
         <attribute name="imagePath" type="String" mode="IN" optional="false"/>
         <attribute name="rawMaterials" type="String" mode="IN" optional="true"/>

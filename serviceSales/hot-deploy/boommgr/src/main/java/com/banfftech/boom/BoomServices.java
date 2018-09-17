@@ -700,7 +700,7 @@ public class BoomServices {
                 "productId", productId,"productAssocTypeId", "MANUF_COMPONENT").queryList();
         if(null!= productAssoc && productAssoc.size()>0){
             for(GenericValue assoc : productAssoc){
-                supplierRow.remove();
+                assoc.remove();
             }
         }
         if (rawMaterials != null && rawMaterials.length() > 2) {

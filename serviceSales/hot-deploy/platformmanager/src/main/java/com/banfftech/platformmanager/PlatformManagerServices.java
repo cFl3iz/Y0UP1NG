@@ -1051,17 +1051,13 @@ public class PlatformManagerServices {
             GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();
             String productStoreId = (String) productStoreCatalog.get("productStoreId");
             GenericValue productStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+            String payToPartyId = (String) productStore.get("payToPartyId");
 
             for (int i = 0; i < excelList.size(); i++) {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
-                // 目录id-品牌-商品名称-款号-色号-颜色说明-尺码-吊牌价-详细尺寸-商品编码-商品描述-条码SKU
-                // 2018-07-25
-                // 去除了这些列特别提醒-洗涤方式-上市年份+季节-组别-备注
-
                 String[] excelRow = excelList.get(i);
-
-                String payToPartyId = (String) productStore.get("payToPartyId");
+                Debug.logInfo("excelRow:"+excelRow,module);
 
                 String internalName = excelRow[2];
                 String productVirtualId = excelRow[3];
@@ -1079,14 +1075,26 @@ public class PlatformManagerServices {
                 String desc = excelRow[10];
                 String otherDesc = desc;
 //                String keyword = excelRow[14];
+                String metchOne = null;
+                String metchTwo = null;
+                String singleOne = null;
+                String singleTwo = null;
+                String detailOne = null;
+                String detailTwo = null;
+                String detailThree = null;
+                 try{
+                       metchOne = excelRow[11];
+                       metchTwo = excelRow[12];
+                       singleOne = excelRow[13];
+                       singleTwo = excelRow[14];
+                       detailOne = excelRow[15];
+                       detailTwo = excelRow[16];
+                       detailThree = excelRow[17];
+                 }catch (ArrayIndexOutOfBoundsException e){
 
-                String metchOne = excelRow[11];
-                String metchTwo = excelRow[12];
-                String singleOne = excelRow[13];
-                String singleTwo = excelRow[14];
-                String detailOne = excelRow[15];
-                String detailTwo = excelRow[16];
-                String detailThree = excelRow[17];
+                 }
+
+
 
 
 

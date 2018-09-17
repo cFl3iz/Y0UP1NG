@@ -774,18 +774,43 @@ public class BoomQueryServices {
               for(GenericValue gv : relationList){
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String partyIdTo = gv.getString("partyIdTo");
+
+                  String contactMechTypeId = gv.getString("contactMechTypeId");
+
+
+
+
+
+
+
                 if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
                     rowMap = returnList.get(returnList.size()-1);
-                    rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                    String tnContactNumber = gv.getString("tnContactNumber");
+                    if(null!=tnContactNumber){
+                        rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                    }
                     returnList.remove(returnList.size()-1);
                     returnList.add(rowMap);
                     continue;
                 }
 
+                  if(beforePartyId==null ){
+                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
+                          String tnContactNumber = gv.getString("tnContactNumber");
+                          if(null!=tnContactNumber){
+                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                          }
+                      }
+                  }
+
+
                 Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
                 rowMap.put("name",supplierInfo.get("lastName")+supplierInfo.get("firstName"));
                 rowMap.put("partyId",partyIdTo);
-                rowMap.put("paAddress1", gv.getString("paAddress1"));
+                  String paAddress1 =  gv.getString("paAddress1");
+                  if(null!=paAddress1){
+                      rowMap.put("paAddress1",paAddress1);
+                  }
 //                rowMap.put("tel",supplierInfo.get("userLoginId"));
                 rowMap.put("avatar",supplierInfo.get("headPortrait"));
                 rowMap.put("orderSize","0");

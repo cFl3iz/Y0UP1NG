@@ -1144,8 +1144,7 @@ public class PlatformManagerServices {
                             //单品图
                             if(!UtilValidate.isEmpty(singleOne)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "SINGLE_PRODUCT_IMAGE").queryFirst()) {
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId",productVirtualId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
@@ -1153,12 +1152,11 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
                             if(!UtilValidate.isEmpty(singleTwo)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "SINGLE_PRODUCT_IMAGE").queryFirst()) {
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
@@ -1166,13 +1164,11 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
                             }
 
                             //细节图
                             if(!UtilValidate.isEmpty(detailOne)){
                                 String   contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productVirtualId);
@@ -1182,11 +1178,10 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
                             if(!UtilValidate.isEmpty(detailTwo)){
                                 String   contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productVirtualId);
@@ -1197,10 +1192,8 @@ public class PlatformManagerServices {
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
                                 }
-                            }
                             if(!UtilValidate.isEmpty(detailThree)){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productVirtualId);
@@ -1210,7 +1203,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
 
 
@@ -1267,8 +1260,7 @@ public class PlatformManagerServices {
                             //单品图
                             if(!UtilValidate.isEmpty(singleOne)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "SINGLE_PRODUCT_IMAGE").queryFirst()) {
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
@@ -1276,12 +1268,11 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
                             if(!UtilValidate.isEmpty(singleTwo)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "SINGLE_PRODUCT_IMAGE").queryFirst()) {
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
@@ -1289,13 +1280,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
 
                             //细节图
                             if(!UtilValidate.isEmpty(detailOne)){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
@@ -1305,11 +1295,10 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
                             if(!UtilValidate.isEmpty(detailTwo)){
                                String  contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
@@ -1319,11 +1308,10 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
                             if(!UtilValidate.isEmpty(detailThree)){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
-                                if (null == EntityQuery.use(delegator).from("ProductContent").where("contentId", contentId, "productId", (String) gv.get("productId"), "productContentTypeId", "DETAIL_PRODUCT_IMAGE").queryFirst()) {
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
@@ -1333,7 +1321,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
                                     dispatcher.runSync("createProductContent", productContentCtx);
-                                }
+
                             }
 
                         }

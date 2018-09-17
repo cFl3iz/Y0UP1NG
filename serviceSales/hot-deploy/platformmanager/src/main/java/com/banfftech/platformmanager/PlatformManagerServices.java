@@ -1135,7 +1135,7 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1151,7 +1151,7 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
-                                productContentCtx.put("statusId", "IM_PENDING");
+//                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1167,7 +1167,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1180,7 +1180,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1196,7 +1196,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1210,7 +1210,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1225,7 +1225,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1269,7 +1269,7 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
-                                productContentCtx.put("statusId", "IM_PENDING");
+//                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1285,7 +1285,7 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
-                                productContentCtx.put("statusId", "IM_PENDING");
+//                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1300,7 +1300,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1313,7 +1313,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1329,7 +1329,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1343,7 +1343,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
@@ -1357,7 +1357,7 @@ public class PlatformManagerServices {
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
-                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
 
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );

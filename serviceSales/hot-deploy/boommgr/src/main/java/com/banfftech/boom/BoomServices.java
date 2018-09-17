@@ -888,37 +888,58 @@ public class BoomServices {
 
 //        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
 //        ,"firstName",firstName,"lastName",lastName));
-//        GenericValue person = EntityQuery.use(delegator).from("Person").where(
-//                "partyId", partyId).queryFirst();
-//        Debug.logInfo("firstName:" + firstName, module);
-//        Debug.logInfo("lastName:" + lastName, module);
-//        person.set("firstName", firstName);
-//        person.set("lastName", lastName);
-//        person.store();
+        GenericValue person = EntityQuery.use(delegator).from("Person").where(
+                "partyId", partyId).queryFirst();
+        Debug.logInfo("firstName:" + firstName, module);
+        Debug.logInfo("lastName:" + lastName, module);
+        person.set("firstName", firstName);
+        person.set("lastName", lastName);
+        person.store();
+        GenericValue telecomNumberAndPartyView = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
+                "partyId", partyId).queryFirst();
+        if(null!= telecomNumberAndPartyView){
+            String contactMechId = telecomNumberAndPartyView.getString("contactMechId");
+            GenericValue telecomNumber= EntityQuery.use(delegator).from("TelecomNumber").where(
+                    "contactMechId", contactMechId).queryFirst();
+            telecomNumber.set("contactNumber",supplierTel);
+            telecomNumber.store();
+        }else{
+            String contactMechId = (String) delegator.getNextSeqId("ContactMech");
+            dispatcher.runSync("createPartyTelecomNumber",UtilMisc.toMap("contactNumber",supplierTel,
+                    "userLogin",admin,"contactMechId",contactMechId,"partyId",leadId));
+        }
+        GenericValue partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where(
+                "partyId", partyId,"contactMechTypeId","POSTAL_ADDRESS").queryFirst();
+        if(null!=partyAndPostalAddress){
+            String contactMechId = partyAndPostalAddress.getString("contactMechId");
+            GenericValue postalAddress= EntityQuery.use(delegator).from("PostalAddress").where(
+                    "contactMechId", contactMechId).queryFirst();
+            postalAddress.set("address1",provinceName + " " + cityName + " "+countyName + " " + detailInfo);
+            postalAddress.store();
+        }else{
+            String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+            Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                    UtilMisc.toMap("userLogin", admin, "toName", supplierName, "partyId", leadId, "countryGeoId",
+                            PeConstant.DEFAULT_GEO_COUNTRY, "city", cityName, "address1", provinceName + " " + cityName + " "+countyName + " " + detailInfo, "postalCode", PeConstant.DEFAULT_POST_CODE
+                    ));
+        }
 
-        GenericValue partyTelContactMech = EntityQuery.use(delegator).from("PartyContactMechPurpose").where(
-                "partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE").queryFirst();
-        String telContactId = partyTelContactMech.getString("contactMechId");
-
-        List<String> types = new ArrayList<String>();
-        types.add(telContactId);
-
-        EntityCondition findConditions = EntityCondition
-                .makeCondition("contactMechId", EntityOperator.NOT_IN, types);
-        EntityCondition partyConditions = EntityCondition
-                .makeCondition("partyId", EntityOperator.EQUALS, leadId);
-        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, partyConditions);
-
-        GenericValue partyAddressContactMech = EntityQuery.use(delegator).from("PartyContactMech").
-                where(genericCondition).queryFirst();
-        String addressContactId = partyAddressContactMech.getString("contactMechId");
-
-        String postalCode= "200000";
-
-        dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
-              "postalCode",postalCode,"firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
-
-        dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition("contactMechId", EntityOperator.NOT_IN, types);
+//        EntityCondition partyConditions = EntityCondition
+//                .makeCondition("partyId", EntityOperator.EQUALS, leadId);
+//        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, partyConditions);
+//
+//        GenericValue partyAddressContactMech = EntityQuery.use(delegator).from("PartyContactMech").
+//                where(genericCondition).queryFirst();
+//        String addressContactId = partyAddressContactMech.getString("contactMechId");
+//
+//        String postalCode= "200000";
+//
+//        dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
+//              "postalCode",postalCode,"firstName", firstName,"lastName", lastName,  "address1",  provinceName + " " + cityName + " "+countyName + " " + detailInfo, "contactMechId", addressContactId));
+//
+//        dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
 
         resultMap.put("leadInfo", UtilMisc.toMap("partyId", leadId));
         return resultMap;
@@ -1022,7 +1043,7 @@ public class BoomServices {
         createLeadMap.put("countryGeoId", "CHN");
         createLeadMap.put("city", cityName == null ? "" : cityName);
         if (null != countyName && null != provinceName && null != detailInfo) {
-            createLeadMap.put("address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo);
+            createLeadMap.put("address1", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
         }
         createLeadMap.put("countryCode", "86");
         createLeadMap.put("postalCode", "200000");

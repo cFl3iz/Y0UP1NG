@@ -629,6 +629,21 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
 
+                String uomParentId = rowProd.getString("quantityUomId");
+
+
+                GenericValue uomParent =  EntityQuery.use(delegator).from("Uom").where(
+                        "uomId", uomParentId).queryFirst();
+                if(null!=uomParent){
+                    String uomDescription = uomParent.getString("description");
+                    rowMap.put("description",uomDescription);
+                    rowMap.put("uomId",uomParentId);
+                    String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomParentId, new Locale("zh"));
+                    rowMap.put("zh_description",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+                }
+
+
+
                 rowMap.put("productId",productId);
 
                 rowMap.put("productName",gv.getString("productName"));
@@ -655,7 +670,7 @@ public class BoomQueryServices {
 
 
                         String uomId = rowProd.getString("quantityUomId");
-                    //                rowMap.put("quantityUomId",uomId);
+
 
                          GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                                  "uomId", uomId).queryFirst();

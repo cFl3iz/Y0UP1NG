@@ -138,12 +138,26 @@
     </service>
 
 
+
+    <service name="updateMyFinishedGood" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="updateMyFinishedGood" auth="false">
+        <description>updateMyFinishedGood</description>
+        <attribute name="productName" type="String" mode="IN" optional="false"/>
+        <attribute name="quantityUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="imagePath" type="String" mode="IN" optional="false"/>
+        <attribute name="rawMaterials" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
     <service name="createMyFinishedGood" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="createMyFinishedGood" auth="false">
         <description>createMyFinishedGood</description>
         <attribute name="productName" type="String" mode="IN" optional="false"/>
+        <attribute name="quantityUomId" type="String" mode="IN" optional="true"/>
 
         <attribute name="imagePath" type="String" mode="IN" optional="false"/>
         <attribute name="rawMaterials" type="String" mode="IN" optional="true"/>

@@ -661,10 +661,63 @@ public class BoomServices {
         return resultMap;
     }
 
+    /**
+     * updateMyFinishedGood
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> updateMyFinishedGood(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+//
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        String productName = (String) context.get("productName");
+        String quantityUomId = (String) context.get("quantityUomId");
+        String imagePath = (String) context.get("imagePath");
+        String rawMaterials = (String) context.get("rawMaterials");
+        String productId = (String) context.get("productId");
+
+
+        GenericValue product  =  EntityQuery.use(delegator).from("Product").where(
+                "productId", productId).queryFirst();
+        product.set("productName",productName);
+        product.set("detailImageUrl",imagePath!=null?imagePath:"");
+        product.set("smallImageUrl",imagePath!=null?imagePath:"");
+        product.set("quantityUomId",quantityUomId);
+        product.store();
+
+        List<GenericValue> productAssoc =  EntityQuery.use(delegator).from("ProductAssoc").where(
+                "productId", productId,"productAssocTypeId", "MANUF_COMPONENT").queryList();
+        if(null!= productAssoc && productAssoc.size()>0){
+            for(GenericValue assoc : productAssoc){
+                supplierRow.remove();
+            }
+        }
+        if (rawMaterials != null && rawMaterials.length() > 2) {
+            for (String rowProduct : rawMaterials.split(",")) {
+                String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
+                String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
+                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId,"productAssocTypeId", "MANUF_COMPONENT",
+                         "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+            }
+        }
+
+        return resultMap;
+    }
+
 
     /**
      * createMyFinishedGood
-     *
      * @param dctx
      * @param context
      * @return
@@ -684,7 +737,7 @@ public class BoomServices {
         String partyId = userLogin.getString("partyId");
 
         String productName = (String) context.get("productName");
-//        String quantityUomId = (String) context.get("quantityUomId");
+        String quantityUomId = (String) context.get("quantityUomId");
         String imagePath = (String) context.get("imagePath");
         String rawMaterials = (String) context.get("rawMaterials");
 
@@ -698,7 +751,7 @@ public class BoomServices {
 //        createProductInMap.put("description", description);
         createProductInMap.put("detailImageUrl", imagePath);
         createProductInMap.put("smallImageUrl", imagePath);
-//        createProductInMap.put("quantityUomId", quantityUomId);
+        createProductInMap.put("quantityUomId", quantityUomId);
 
 
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(

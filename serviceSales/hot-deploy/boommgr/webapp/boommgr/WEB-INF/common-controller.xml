@@ -88,6 +88,19 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+
+
+    <request-map uri="updateMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateMyFinishedGood"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
     <request-map uri="createProductionRouting">
         <security https="false" auth="false"/>
         <event type="service" invoke="createProductionRouting"/>

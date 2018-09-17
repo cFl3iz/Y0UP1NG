@@ -577,17 +577,17 @@ public class BoomQueryServices {
                         if(null ==partyGroup){
                             GenericValue person =  EntityQuery.use(delegator).from("Person").where(
                                     "partyId", supplierPartyId).queryFirst();
-                            rowSupplier.put("supplierId",supplierPartyId);
+                            rowSupplier.put("partyId",supplierPartyId);
                             rowSupplier.put("name",person.getString("lastName")+person.getString("firstName"));
                         }else{
-                            rowSupplier.put("supplierId",supplierPartyId);
+                            rowSupplier.put("partyId",supplierPartyId);
                             rowSupplier.put("name",partyGroup.getString("groupName"));
                         }
 
                         supplierList.add(rowSupplier);
                     }
                 }
-                
+
                 rowMap.put("supplierList",supplierList);
 
                 returnList.add(rowMap);

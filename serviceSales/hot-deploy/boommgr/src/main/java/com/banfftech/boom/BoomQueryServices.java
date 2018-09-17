@@ -690,12 +690,13 @@ public class BoomQueryServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
 
-        List<String> types = new ArrayList<String>();
-        types.add("CURRENCY_MEASURE");
-
+//        List<String> types = new ArrayList<String>();
+//        types.add("CURRENCY_MEASURE");
+//
+//        EntityCondition findConditions = EntityCondition
+//                .makeCondition("uomTypeId", EntityOperator.NOT_IN, types);
         EntityCondition findConditions = EntityCondition
-                .makeCondition("uomTypeId", EntityOperator.NOT_IN, types);
-
+                .makeCondition("uomTypeId", EntityOperator.EQUALS, "BOM_MEASURE");
 
         List<GenericValue> uomList = EntityQuery.use(delegator).from("Uom").where(findConditions).orderBy("-createdStamp").queryList();
 

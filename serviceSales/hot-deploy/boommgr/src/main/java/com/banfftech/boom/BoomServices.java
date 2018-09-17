@@ -425,6 +425,8 @@ public class BoomServices {
                             mergeChangeRelation(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
                             relation.remove();
                             mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
+                            mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,partyId);
+
                         }
 
 
@@ -506,6 +508,24 @@ public class BoomServices {
 
 
         return result;
+    }
+
+    private static void mergeProductsSupplier(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
+
+        List<GenericValue>  suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
+                "partyId", beforePartyId).queryList();
+        if(suppliers.size()>0){
+            for(GenericValue rowSupplier : suppliers){
+                    String productId = rowSupplier.getString("productId");
+                rowSupplier.remove();
+                dispatcher.runSync("createSupplierProduct",
+                        UtilMisc.toMap("userLogin", admin, "productId", productId,
+                                "partyId", partyId,
+                                "availableFromDate", UtilDateTime.nowTimestamp(),
+                                "currencyUomId", "CNY", "lastPrice", BigDecimal.ZERO, "minimumOrderQuantity", BigDecimal.ONE, "supplierProductId", productId));
+            }
+        }
+
     }
 
     private static void mergeChangeRelation(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String partyIdFrom, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {

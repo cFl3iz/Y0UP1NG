@@ -780,14 +780,8 @@ public class BoomQueryServices {
 
                 Debug.logInfo("PartyRelationshipAndContactMechDetail=>:"+gv,module);
 
-                  if(beforePartyId==null ){
-                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
-                          String tnContactNumber = gv.getString("tnContactNumber");
-                          if(null!=tnContactNumber){
-                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
-                          }
-                      }
-                  }else if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
+
+                if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
                     rowMap = returnList.get(returnList.size()-1);
                     String tnContactNumber = gv.getString("tnContactNumber");
                     if(null!=tnContactNumber){
@@ -798,7 +792,14 @@ public class BoomQueryServices {
                     continue;
                 }
 
-
+                  if(beforePartyId!=null   && !beforePartyId.equals(partyIdTo)){
+                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
+                          String tnContactNumber = gv.getString("tnContactNumber");
+                          if(null!=tnContactNumber){
+                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+                          }
+                      }
+                  }
 
 
                 Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);

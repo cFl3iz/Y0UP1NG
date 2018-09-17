@@ -914,7 +914,7 @@ public class BoomServices {
         String addressContactId = partyAddressContactMech.getString("contactMechId");
 
         dispatcher.runSync("createUpdateAddress", UtilMisc.toMap("userLogin", admin, "partyId", leadId, "city", cityName == null ? "" : cityName,
-              ,"firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
+              "firstName", firstName,"lastName", lastName,  "address1", countyName + " " + provinceName + " " + cityName + " " + detailInfo, "contactMechId", addressContactId));
 
         dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
 

@@ -889,14 +889,14 @@ public class BoomServices {
 //        dispatcher.runSync("updatePerson",UtilMisc.toMap("userLogin",admin,"partyId",leadId
 //        ,"firstName",firstName,"lastName",lastName));
         GenericValue person = EntityQuery.use(delegator).from("Person").where(
-                "partyId", partyId).queryFirst();
+                "partyId", leadId).queryFirst();
         Debug.logInfo("firstName:" + firstName, module);
         Debug.logInfo("lastName:" + lastName, module);
         person.set("firstName", firstName);
         person.set("lastName", lastName);
         person.store();
         GenericValue telecomNumberAndPartyView = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
-                "partyId", partyId).queryFirst();
+                "partyId", leadId).queryFirst();
         if(null!= telecomNumberAndPartyView){
             String contactMechId = telecomNumberAndPartyView.getString("contactMechId");
             GenericValue telecomNumber= EntityQuery.use(delegator).from("TelecomNumber").where(
@@ -909,7 +909,7 @@ public class BoomServices {
                     "userLogin",admin,"contactMechId",contactMechId,"partyId",leadId));
         }
         GenericValue partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where(
-                "partyId", partyId,"contactMechTypeId","POSTAL_ADDRESS").queryFirst();
+                "partyId", leadId,"contactMechTypeId","POSTAL_ADDRESS").queryFirst();
         if(null!=partyAndPostalAddress){
             String contactMechId = partyAndPostalAddress.getString("contactMechId");
             GenericValue postalAddress= EntityQuery.use(delegator).from("PostalAddress").where(

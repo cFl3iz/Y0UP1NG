@@ -1132,12 +1132,13 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(metchTwo)  && !metchTwo.equals("无")){
                                 Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1147,12 +1148,15 @@ public class PlatformManagerServices {
                                 productContentCtx.put("productId", productVirtualId);
                                 productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                                 productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                productContentCtx.put("userLogin", admin);
+//                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
                                 productContentCtx.put("statusId", "IM_PENDING");
-                                dispatcher.runSync("createProductContent", productContentCtx);
+//                                dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
+
 
                             //单品图
                             if(!UtilValidate.isEmpty(singleOne)) {
@@ -1161,11 +1165,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId",productVirtualId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(singleTwo)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
@@ -1173,10 +1178,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
 
                             //细节图
@@ -1187,11 +1194,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(detailTwo)){
                                 String   contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
@@ -1200,11 +1208,14 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                                 }
+
                             if(!UtilValidate.isEmpty(detailThree)){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
 
@@ -1212,11 +1223,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productVirtualId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
 
 
@@ -1254,12 +1266,13 @@ public class PlatformManagerServices {
                                 productContentCtx.put("productId", productId);
                                 productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                                 productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                productContentCtx.put("userLogin", admin);
+//                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
                                 productContentCtx.put("statusId", "IM_PENDING");
-                                dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(metchTwo)&& !metchTwo.equals("无")){
                                 Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1269,11 +1282,13 @@ public class PlatformManagerServices {
                                 productContentCtx.put("productId", productId);
                                 productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                                 productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                productContentCtx.put("userLogin", admin);
+//                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
                                 productContentCtx.put("contentId", contentId);
                                 productContentCtx.put("statusId", "IM_PENDING");
-                                dispatcher.runSync("createProductContent", productContentCtx);
+//                                dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
 
                             //单品图
@@ -1283,11 +1298,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(singleTwo)) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
@@ -1295,11 +1311,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
 
                             //细节图
@@ -1310,11 +1327,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(detailTwo)){
                                String  contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
@@ -1323,11 +1341,12 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
-
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
                             }
                             if(!UtilValidate.isEmpty(detailThree)){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
@@ -1336,10 +1355,13 @@ public class PlatformManagerServices {
                                     productContentCtx.put("productId", productId);
                                     productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                                     productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-                                    productContentCtx.put("userLogin", admin);
+//                                    productContentCtx.put("userLogin", admin);
                                     productContentCtx.put("contentId", contentId);
                                     productContentCtx.put("statusId", "IM_PENDING");
-                                    dispatcher.runSync("createProductContent", productContentCtx);
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+
+                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                                productContent.create();
 
                             }
 
@@ -1508,7 +1530,10 @@ public class PlatformManagerServices {
     }
 
 
+public String createProuctContent(){
 
+    return "";
+}
 
     /**
      * 产品数据Excel导入

@@ -112,16 +112,36 @@ public class PlatformInventoryServices {
                 }
             }
         }
+        //查询当前店铺需要同步的场所列表
+        List<GenericValue> productStoreOnlineFacility = EntityQuery.use(delegator).from("ProductStoreOnlineFacility").where(
+                "productStoreId",productStoreId).queryList();
+        List<String> facilityList = null;
+        if(null != productStoreOnlineFacility && productStoreOnlineFacility.size()>0){
+                facilityList = new ArrayList<String>();
+                for(GenericValue onlineFacility : productStoreOnlineFacility){
+                    String facilityId = onlineFacility.getString("facilityId");
+                    facilityList.add(facilityId);
+                }
+        }
+
+
+
         if (null != toFormatList && toFormatList.size()>0) {
 
             JSONObject json = new JSONObject();
             json.put("login.username","omsapiaccount");
             json.put("login.password","1qazZAQ!");
             json.put("skus",toFormatList);
+            json.put("facilitys",facilityList);
             String strSku = json.getString("skus");
+            String strFacilitys = null;
+            if(null != facilityList){
+               strFacilitys = json.getString("facilitys");
+            }
+
             //准备发送报文给长宁获取库存数据
             String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypSyncOfInventory",
-                    "login.username=omsapiaccount&login.password=1qazZAQ!&skus=" + strSku);
+                    "login.username=omsapiaccount&login.password=1qazZAQ!&skus=" + strSku+"&facilitys="+strFacilitys);
 
             if(UtilValidate.isNotEmpty(postResult)){
                 JSONObject returnJson = JSONObject.fromObject(postResult);

@@ -193,6 +193,7 @@ public class BoomQueryServices {
     public static Map<String, Object> quickQueryCount(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue userLogin = (GenericValue) context.get("userLogin");

@@ -3808,7 +3808,7 @@ public class PersonManagerServices {
         userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId, "enabled", "Y").queryFirst();
 
 
-        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,"partyId",partyId,"firstName",nickName,"lastName"," ",
+        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"firstName",nickName,"lastName"," ",
                 "comments","country:"+country+"|province:"+province+"|city:"+city));
 
 
@@ -7412,7 +7412,7 @@ public class PersonManagerServices {
                     "partyId", partyId, "note", noteInfo, "noteName", "个人说明"));
         }
 
-        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", admin,
+        dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", userLogin,
                 "partyId", partyId, "firstName", firstName, "lastName", "NA", "gender", gender));
 
 

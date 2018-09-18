@@ -3916,11 +3916,8 @@ public class PersonManagerQueryServices {
 
             GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
             personInfo.put("userLoginId",userLogin==null?"": userLogin.getString("userLoginId"));
-
-
-
-                    GenericValue telecomNumber = EntityUtil.getFirst(
-                EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).queryList());
+            GenericValue telecomNumber = EntityUtil.getFirst(
+                            EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).orderBy("-fromDate").queryList());
               String tel = null;
                 if (UtilValidate.isNotEmpty(telecomNumber)) {
                     tel = telecomNumber.getString("contactNumber");

@@ -93,14 +93,18 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = userLogin.getString("partyId");
-        String prodCatalogId = userLogin.getString("prodCatalogId");
+        String prodCatalogId = (String) context.get("prodCatalogId");
 
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",prodCatalogId).queryFirst();
         String productCategoryId = prodCatalogCategory.getString("productCategoryId");
 
         GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
+        if(null!=empBuyHistory){
+            resultMap.put("map",empBuyHistory.getAllFields());
 
-        resultMap.put("map",empBuyHistory.getAllFields());
+        }else{
+            resultMap.put("map",null);
+        }
 
         return resultMap;
     }

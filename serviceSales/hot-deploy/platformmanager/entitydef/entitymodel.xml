@@ -88,10 +88,10 @@
     </entity>
     <!-- 当前店铺同步的场所 -->
     <entity entity-name="ProductStoreOnlineFacility" package-name="org.ofbiz.cloudLake.ProductStore" title="ProductStoreOnlineFacility">
-        <field name="productStoreId" type="id-ne"/>
-        <field name="facilityId" type="id-ne"/>
-        <prim-key field="productStoreId"/>
-        <prim-key field="facilityId"/>
+        <field name="onlineId" type="id-ne"/>
+        <field name="productStoreId" type="value"/>
+        <field name="facilityId" type="value"/>
+        <prim-key field="onlineId"/>
     </entity>
 
 

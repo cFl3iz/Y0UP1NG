@@ -1159,7 +1159,7 @@ public class PlatformManagerServices {
 
 
                             //单品图
-                            if(!UtilValidate.isEmpty(singleOne)) {
+                            if(!UtilValidate.isEmpty(singleOne)&& !singleOne.equals("无")) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
                                      Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId",productVirtualId);
@@ -1172,7 +1172,7 @@ public class PlatformManagerServices {
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
                             }
-                            if(!UtilValidate.isEmpty(singleTwo)) {
+                            if(!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
                                      Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productVirtualId);
@@ -1187,7 +1187,7 @@ public class PlatformManagerServices {
                             }
 
                             //细节图
-                            if(!UtilValidate.isEmpty(detailOne)){
+                            if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
                                 String   contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1201,7 +1201,7 @@ public class PlatformManagerServices {
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
                             }
-                            if(!UtilValidate.isEmpty(detailTwo)){
+                            if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
                                 String   contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1216,7 +1216,7 @@ public class PlatformManagerServices {
                                 productContent.create();
                                 }
 
-                            if(!UtilValidate.isEmpty(detailThree)){
+                            if(!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1292,7 +1292,7 @@ public class PlatformManagerServices {
                             }
 
                             //单品图
-                            if(!UtilValidate.isEmpty(singleOne)) {
+                            if(!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
                                      Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
@@ -1305,7 +1305,7 @@ public class PlatformManagerServices {
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
                             }
-                            if(!UtilValidate.isEmpty(singleTwo)) {
+                            if(!UtilValidate.isEmpty(singleTwo)  && !singleTwo.equals("无")) {
                                 String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
                                      Map<String, Object> productContentCtx = new HashMap<String, Object>();
                                     productContentCtx.put("productId", productId);
@@ -1320,7 +1320,7 @@ public class PlatformManagerServices {
                             }
 
                             //细节图
-                            if(!UtilValidate.isEmpty(detailOne)){
+                            if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1334,7 +1334,7 @@ public class PlatformManagerServices {
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
                             }
-                            if(!UtilValidate.isEmpty(detailTwo)){
+                            if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
                                String  contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -1348,7 +1348,7 @@ public class PlatformManagerServices {
                                 GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                                 productContent.create();
                             }
-                            if(!UtilValidate.isEmpty(detailThree)){
+                            if(!UtilValidate.isEmpty(detailThree)&& !detailThree.equals("无")){
                                 String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
 
                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();

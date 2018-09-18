@@ -55,6 +55,26 @@
 
 
 
+
+
+
+
+    <entity entity-name="AliasForg" package-name="org.ofbiz.cloudLake.ProductStore" title="Person AliasForg">
+        <field name="aliasId" type="id-ne"/>
+        <field name="partyIdFrom" type="value"/>
+        <field name="partyIdTo" type="value"/>
+        <field name="aliasName" type="value"/>
+        <field name="aliasAddress" type="value"/>
+        <prim-key field="aliasId"/>
+    </entity>
+
+
+
+
+
+
+
+
     <entity entity-name="EmpPromoHistory" package-name="org.ofbiz.cloudLake" title="EmpPromoHistory">
 
         <field name="salesPartyId" type="id-ne"/>

@@ -427,6 +427,8 @@ public class BoomServices {
                             mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
                             mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,partyId);
 
+                            //TODO mergeAliasFetch();
+
                         }
 
 

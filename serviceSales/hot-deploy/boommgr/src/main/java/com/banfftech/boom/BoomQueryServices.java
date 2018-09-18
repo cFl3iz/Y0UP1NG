@@ -218,12 +218,27 @@ public class BoomQueryServices {
         Long purchaseOrderCount = EntityQuery.use(delegator).from("PurchaseOrderHeaderItemAndRoles").where(
                 genericCondition3).queryCount();
 
+
+        //生产计划
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+        String partyGroupId = relation.getString("partyIdTo");
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId ).queryFirst();
+        String facilityId = facility.getString("facilityId");
+        Long productionsCount = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
+                "workEffortTypeId", "PROD_ORDER_HEADER", "facilityId", facilityId).queryCount();
+
+
+
+
         Map<String,Object> queryCountMap = new HashMap<String, Object>();
         queryCountMap.put("supplierCount",supplierCount.intValue());
         queryCountMap.put("rawMaterialsCount",rawMaterialsCount.intValue());
         queryCountMap.put("finishGoodCount",finishGoodCount.intValue());
         queryCountMap.put("salesOrderCount",salesOrderCount.intValue());
         queryCountMap.put("purchaseOrderCount",purchaseOrderCount.intValue());
+        queryCountMap.put("productionsCount",productionsCount.intValue());
 
         resultMap.put("queryCountMap",queryCountMap);
         return resultMap;

@@ -139,9 +139,12 @@ public class PlatformInventoryServices {
                strFacilitys = json.getString("facilitys");
             }
 
+            Debug.logInfo("本次同步仓库:"+strFacilitys,module);
+
             //准备发送报文给长宁获取库存数据
             String postResult = HttpHelper.sendPost("http://114.215.180.140:9191/zuczugopen/control/ypSyncOfInventory",
                     "login.username=omsapiaccount&login.password=1qazZAQ!&skus=" + strSku+"&facilitys="+strFacilitys);
+
 
             if(UtilValidate.isNotEmpty(postResult)){
                 JSONObject returnJson = JSONObject.fromObject(postResult);

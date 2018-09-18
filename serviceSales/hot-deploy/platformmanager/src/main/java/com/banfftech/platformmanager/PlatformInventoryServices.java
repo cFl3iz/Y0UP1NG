@@ -113,7 +113,7 @@ public class PlatformInventoryServices {
             }
         }
         //查询当前店铺需要同步的场所列表
-        List<GenericValue> productStoreOnlineFacility = EntityQuery.use(delegator).from("ProductStoreOnlineFacility").where(
+        List<GenericValue> productStoreOnlineFacility = EntityQuery.use(delegator).from("ProductStoreOnlineFacilityInv").where(
                 "productStoreId",productStoreId).queryList();
         List<String> facilityList = null;
         if(null != productStoreOnlineFacility && productStoreOnlineFacility.size()>0){

@@ -182,6 +182,55 @@ public class BoomQueryServices {
     }
 
 
+    /**
+     * quickQueryCount
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> quickQueryCount(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        Long supplierCount = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER" ).queryCount();
+        Long rawMaterialsCount = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "RAW_MATERIAL").queryCount();
+        Long finishGoodCount = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD").queryCount();
+
+        EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+        EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_APPROVED");
+        EntityCondition genericCondition2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+        Long salesOrderCount = EntityQuery.use(delegator).from("PurchaseOrderHeaderItemAndRoles").where(
+                genericCondition2).queryCount();
+        EntityCondition findConditionsCust = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
+        EntityCondition genericCondition3 = EntityCondition.makeCondition(findConditionsCust, EntityOperator.AND, findConditions2);
+        Long purchaseOrderCount = EntityQuery.use(delegator).from("PurchaseOrderHeaderItemAndRoles").where(
+                genericCondition3).queryCount();
+
+        Map<String,Object> queryCountMap = new HashMap<String, Object>();
+        queryCountMap.put("supplierCount",supplierCount.intValue());
+        queryCountMap.put("rawMaterialsCount",rawMaterialsCount.intValue());
+        queryCountMap.put("finishGoodCount",finishGoodCount.intValue());
+        queryCountMap.put("salesOrderCount",salesOrderCount.intValue());
+        queryCountMap.put("purchaseOrderCount",purchaseOrderCount.intValue());
+
+        resultMap.put("queryCountMap",queryCountMap);
+        return resultMap;
+    }
+
+
+
+
     public static Map<String, Object> queryMySalesOrderList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head

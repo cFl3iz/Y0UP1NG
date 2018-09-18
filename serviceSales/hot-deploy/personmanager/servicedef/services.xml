@@ -1167,7 +1167,15 @@
     </service>
 
 
-
+    <service name="queryEmpBuyHistory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryEmpBuyHistory" auth="false">
+        <description>queryEmpBuyHistory</description>
+        <attribute name="prodCatalogId" type="String" mode="IN"  optional="true"/>
+        <attribute name="map" type="Map" mode="OUT"   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
     <!-- queryCustSalesReport -->

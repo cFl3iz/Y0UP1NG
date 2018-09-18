@@ -77,6 +77,35 @@ public class PersonManagerQueryServices {
     public int rowId = 1;
 
 
+
+
+    public Map<String, Object> queryEmpBuyHistory(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+        String prodCatalogId = userLogin.getString("prodCatalogId");
+
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",prodCatalogId).queryFirst();
+        String productCategoryId = prodCatalogCategory.getString("productCategoryId");
+
+        GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
+
+        resultMap.put("map",empBuyHistory.getAllFields());
+
+        return resultMap;
+    }
+
+
     /**
      * queryZuczugEmp
      * @param dctx

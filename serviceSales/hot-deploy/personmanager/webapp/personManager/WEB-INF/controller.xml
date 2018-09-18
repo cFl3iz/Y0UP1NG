@@ -78,7 +78,12 @@
 
 
 
-
+    <request-map uri="queryEmpBuyHistory">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryEmpBuyHistory"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
 

@@ -58,7 +58,7 @@
 
 
 
-
+    <!-- Lead More -->
     <entity entity-name="AliasForg" package-name="org.ofbiz.cloudLake.ProductStore" title="Person AliasForg">
         <field name="aliasId" type="id-ne"/>
         <field name="partyIdFrom" type="value"/>
@@ -70,7 +70,13 @@
 
 
 
-
+    <entity entity-name="EmpBuyHistory" package-name="org.ofbiz.cloudLake.ProductStore" title="EmpBuyHistory">
+        <field name="hId" type="id-ne"/>
+        <field name="partyId" type="value"/>
+        <field name="productCategoryId" type="value"/>
+        <field name="count" type="value"/>
+        <prim-key field="hId"/>
+    </entity>
 
 
 

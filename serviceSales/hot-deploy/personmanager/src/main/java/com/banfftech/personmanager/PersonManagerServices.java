@@ -3439,7 +3439,7 @@ public class PersonManagerServices {
         //找到买家
         GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
         GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
-
+        String productCategoryId = null;
         String payFromPartyId = (String) orderCust.get("partyId");
         if(orderSalesRep!=null){
             String salesRepId = (String) orderSalesRep.get("partyId");
@@ -3447,6 +3447,11 @@ public class PersonManagerServices {
             List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
             for (GenericValue item : items) {
                 String innerProductId = (String) item.get("productId");
+                if(productCategoryId == null){
+                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", innerProductId).queryFirst();
+                    productCategoryId = productCategoryMember.getString("productCategoryId");
+                }
+
                 updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
             }
         }
@@ -3470,6 +3475,17 @@ public class PersonManagerServices {
 
 
         Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);
+
+        GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
+        if(empBuyHistory!=null){
+            empBuyHistory.set("count",(Integer.parseInt(empBuyHistory.get("count")+"")+1)+"");
+            empBuyHistory.store();
+        }else{
+            GenericValue newEmpBuyHistory =   delegator.makeValue("EmpBuyHistory",
+                    UtilMisc.toMap("partyId",partyId,"hId",delegator.getNextSeqId("EmpBuyHistory")+"",
+                            "count", "0", "productCategoryId",productCategoryId));
+            newEmpBuyHistory.create();
+        }
 
 
         return resultMap;

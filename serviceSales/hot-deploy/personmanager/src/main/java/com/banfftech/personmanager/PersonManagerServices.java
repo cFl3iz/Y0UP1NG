@@ -8110,7 +8110,11 @@ public class PersonManagerServices {
                 "contactMechId", contactMechId, "shipmentMethod", "EXPRESS@" + "SHUNFENG_EXPRESS", "shipGroupSeqId", "00001"));
 
 
-        if (null != telNumber && !telNumber.trim().equals("")) {
+
+       GenericValue  partyAndTelecomNumber =
+               EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId", partyId, "contactNumber",telNumber).queryFirst();
+
+        if (partyAndTelecomNumber == null && null != telNumber && !telNumber.trim().equals("")) {
             // 创建联系电话
             Map<String, Object> inputTelecom = UtilMisc.toMap();
             inputTelecom.put("partyId", partyId);

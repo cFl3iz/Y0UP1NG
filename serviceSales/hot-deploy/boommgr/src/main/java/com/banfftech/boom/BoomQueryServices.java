@@ -445,20 +445,26 @@ public class BoomQueryServices {
                                 Map<String,Object> rowSupplier = new HashMap<String, Object>();
 
                                 String supplierPartyId = supplier.getString("partyId");
-                                GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
-                                        "partyId", supplierPartyId).queryFirst();
 
-                                if(null!= partyGroup){
-                                    rowSupplier.put("supplierName",partyGroup.getString("groupName"));
-                                    rowSupplier.put("supplierPartyId",supplierPartyId);
-                                }else{
-                                    GenericValue person =  EntityQuery.use(delegator).from("Person").where(
-                                            "partyId", supplierPartyId).queryFirst();
-                                    if(null!=person){
-                                        rowSupplier.put("supplierName",person.getString("lastName")+person.getString("firstName"));
-                                        rowSupplier.put("supplierPartyId",supplierPartyId);
-                                    }
-                                }
+                                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyId);
+                                rowSupplier.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
+                                rowSupplier.put("supplierInfo", supplierInfo);
+                                rowSupplier.put("partyId",supplierPartyId);
+
+//                                GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
+//                                        "partyId", supplierPartyId).queryFirst();
+//
+//                                if(null!= partyGroup){
+//                                    rowSupplier.put("supplierName",partyGroup.getString("groupName"));
+//                                    rowSupplier.put("supplierPartyId",supplierPartyId);
+//                                }else{
+//                                    GenericValue person =  EntityQuery.use(delegator).from("Person").where(
+//                                            "partyId", supplierPartyId).queryFirst();
+//                                    if(null!=person){
+//                                        rowSupplier.put("supplierName",person.getString("lastName")+person.getString("firstName"));
+//                                        rowSupplier.put("supplierPartyId",supplierPartyId);
+//                                    }
+//                                }
 
                                 supplierList.add(rowSupplier);
                             }

@@ -154,6 +154,10 @@ public class BoomQueryServices {
 
                 String statusId = (String) order.get("statusId");
 
+                if(statusId.equals("ORDER_APPROVED") && null!=isViewed&&isViewed.equals("Y")){
+                    rowMap.put("statusId","ORDER_VIEWED");
+                }
+
                 String orderId = order.getString("orderId");
 
                 GenericValue custOrderRole = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
@@ -309,6 +313,11 @@ public class BoomQueryServices {
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
 
                 String statusId = (String) order.get("statusId");
+
+
+                if(statusId.equals("ORDER_APPROVED") && null!=isViewed&&isViewed.equals("Y")){
+                    rowMap.put("statusId","ORDER_VIEWED");
+                }
 
                 String orderId = order.getString("orderId");
 

@@ -880,6 +880,9 @@ public class BoomQueryServices {
                 rowMap.put("avatar",supplierInfo.get("headPortrait"));
                 rowMap.put("orderSize","0");
                 rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
+                  if(UtilValidate.isEmpty(rowMap.get("tnContactNumber"))){
+                      rowMap.put("tnContactNumber", supplierInfo.get("contactNumber"));
+                  }
                 returnList.add(rowMap);
                   beforePartyId=partyIdTo;
             }

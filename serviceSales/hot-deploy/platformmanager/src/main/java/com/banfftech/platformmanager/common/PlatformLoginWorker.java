@@ -737,9 +737,15 @@ public class PlatformLoginWorker {
                 claims.put("iat", iat);
                 String tarjeta = signer.sign(claims);
 
-                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", userLogin,"firstName",nickName,"lastName"," ",
-                        "comments","country:"+country+"|province:"+province+"|city:"+city));
-
+                GenericValue nowPerson = EntityQuery.use(delegator).from("Person").where("partyId", partyId ).queryFirst();
+//                dispatcher.runSync("updatePerson", UtilMisc.toMap("userLogin", userLogin,"firstName",nickName,"lastName"," ",
+//                        "comments","country:"+country+"|province:"+province+"|city:"+city));
+               if(nowPerson!=null){
+                   nowPerson.set("firstName",nickName);
+                   nowPerson.set( "lastName"," ");
+                   nowPerson.set( "comments","country:"+country+"|province:"+province+"|city:"+city);
+                   nowPerson.store();
+               }
 
                 //unioId
                 if (!UtilValidate.isEmpty(unioId)) {

@@ -774,11 +774,11 @@ public class BoomServices {
                 "quantity", new BigDecimal(quantity)));
 
         List<GenericValue> productAssocList =   EntityQuery.use(delegator).from("ProductAssoc").where(
-                "productIdTo", productId).queryList();
+                "productId", productId).queryList();
         if(productAssocList.size()>0){
             for(GenericValue rowAssoc : productAssocList){
                 BigDecimal rowQuantity = (BigDecimal) rowAssoc.get("quantity");
-                String rowProductId = (String) rowAssoc.get("productId");
+                String rowProductId = (String) rowAssoc.get("productIdTo");
                 GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
                         "productId", rowProductId,"facilityId",facilityId).queryFirst();
                  if(productionTemp!=null){

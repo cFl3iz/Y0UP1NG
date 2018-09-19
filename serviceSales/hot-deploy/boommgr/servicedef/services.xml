@@ -27,7 +27,7 @@
              invoke="productionTemp" auth="false">
         <description>productionTemp</description>
         <attribute name="type" type="String" mode="IN" optional="false"/>
-        <attribute name="productList" type="String" mode="IN" optional="true"/>
+        <attribute name="productList" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

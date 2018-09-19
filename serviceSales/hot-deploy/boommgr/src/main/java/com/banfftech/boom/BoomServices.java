@@ -778,7 +778,7 @@ public class BoomServices {
         if(productAssocList.size()>0){
             for(GenericValue rowAssoc : productAssocList){
                 BigDecimal rowQuantity = (BigDecimal) rowAssoc.get("quantity");
-                String rowProductId = rowAssoc.get("productId");
+                String rowProductId = (String) rowAssoc.get("productId");
                 GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
                         "productId", rowProductId,"facilityId",facilityId).queryFirst();
                  if(productionTemp!=null){

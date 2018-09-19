@@ -719,6 +719,31 @@ public class BoomServices {
                 , "facilityId", facilityId, "productId", productId, "statusId", "REQ_APPROVED", "requirementStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
                 "quantity", new BigDecimal(quantity)));
 
+        List<GenericValue> productAssocList =   EntityQuery.use(delegator).from("ProductAssoc").where(
+                "productIdTo", productId).queryList();
+        if(productAssocList.size()>0){
+            for(GenericValue rowAssoc : productAssocList){
+                BigDecimal rowQuantity = rowAssoc.get("quantity");
+                BigDecimal rowProductId = rowAssoc.get("productId");
+                GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
+                        "productId", rowProductId,"facilityId",facilityId).queryFirst();
+                 if(productionTemp!=null){
+                     productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ (rowQuantity.intValue()* Integer.parseInt(quantity)))+"" );
+                    productionTemp.store();
+                 }else{
+                     productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+                     productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
+                     productionTemp.set("productId",rowProductId);
+                     productionTemp.set("facilityId",facilityId);
+                     productionTemp.set("detailImage",product.getString("detailImageUrl"));
+                     productionTemp.create();
+                 }
+            }
+
+        }
+
+
+
         return resultMap;
     }
 

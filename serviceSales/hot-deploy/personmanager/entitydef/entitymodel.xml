@@ -9,6 +9,17 @@
     <copyright></copyright>
     <version></version>
 
+    <entity entity-name="ProductionTemp" package-name="com.banfftech.personerp"
+            title="ProductionTemp">
+        <description>ProductionTemp</description>
+        <field name="tempId" type="id-ne"/>
+        <field name="facilityId" type="value"/>
+        <field name="productId" type="value"/>
+        <field name="count" type="value"/>
+        <field name="detailImage" type="value"/>
+        <prim-key field="tempId"/>
+    </entity>
+
 
     <entity entity-name="PromoEmp" package-name="com.banfftech.personerp"
             title="PromoEmp">

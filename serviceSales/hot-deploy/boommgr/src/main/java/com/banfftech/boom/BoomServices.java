@@ -788,12 +788,12 @@ public class BoomServices {
                     productionTemp.store();
                  }else{
                      productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
-
+                     GenericValue rowProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId", rowProductId));
                      productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
                      productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
                      productionTemp.set("productId",rowProductId);
                      productionTemp.set("facilityId",facilityId);
-                     productionTemp.set("productName",product.getString("productName"));
+                     productionTemp.set("productName",rowProduct.getString("productName"));
                      productionTemp.set("type","MANUF_COMPONENT");
                      productionTemp.set("detailImage",product.getString("detailImageUrl"));
                      productionTemp.create();

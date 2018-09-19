@@ -135,7 +135,7 @@ public class BoomQueryServices {
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 genericCondition, fieldSet,
-                null, null, false);
+                UtilMisc.toList("orderDate DESC"), null, false);
         if(queryOrderList.size()>0){
             for(GenericValue order : queryOrderList){
                 Map<String, Object> rowMap = new HashMap<String, Object>();
@@ -290,7 +290,7 @@ public class BoomQueryServices {
 
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 genericCondition2, fieldSet,
-                null, null, false);
+                UtilMisc.toList("orderDate DESC"), null, false);
         if(queryOrderList.size()>0){
             for(GenericValue order : queryOrderList){
                 Map<String, Object> rowMap = new HashMap<String, Object>();

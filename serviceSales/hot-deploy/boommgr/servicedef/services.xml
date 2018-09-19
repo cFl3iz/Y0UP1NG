@@ -21,6 +21,27 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="productionTemp" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="productionTemp" auth="false">
+        <description>productionTemp</description>
+        <attribute name="type" type="String" mode="IN" optional="false"/>
+        <attribute name="productList" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+    <service name="addProductionTemp" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="addProductionTemp" auth="false">
+        <description>addProductionTemp</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
     <service name="updateOrderStatus" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

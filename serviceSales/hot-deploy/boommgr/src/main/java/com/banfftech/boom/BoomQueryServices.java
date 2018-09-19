@@ -94,6 +94,36 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
 
+    public static Map<String, Object> productionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+        String partyGroupId = relation.getString("partyIdTo");
+
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId ).queryFirst();
+
+        String facilityId = facility.getString("facilityId");
+
+        String type = (String) context.get("type");
+
+        resultMap.put("productList",EntityQuery.use(delegator).from("ProductionTemp").where(
+                "facilityId", facilityId ,"type",type).queryList());
+
+        return resultMap;
+    }
+
+
     /**
      * queryMyPurchaseOrderList
      * @param dctx

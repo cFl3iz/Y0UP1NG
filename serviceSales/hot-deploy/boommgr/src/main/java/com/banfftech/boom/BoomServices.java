@@ -121,6 +121,60 @@ public class BoomServices {
     }
 
 
+    public static Map<String, Object> addProductionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Locale locale = (Locale) context.get("locale");
+
+        String orderId = (String) context.get("orderId");
+
+        String partyId = userLogin.getString("partyId");
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+        String partyGroupId = relation.getString("partyIdTo");
+
+        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId ).queryFirst();
+
+        String facilityId = facility.getString("facilityId");
+
+
+        List<GenericValue> orderItems =  EntityQuery.use(delegator).from("OrderItem").where(
+                "orderId", orderId).queryFirst();
+
+        for(GenericValue item : orderItems){
+            String productId = item.getString("productId");
+            GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+            BigDecimal quantity = (BigDecimal) item.get("quantity");
+
+            GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
+                    "productId", product,"facilityId",facilityId).queryFirst();
+            if(productionTemp!=null){
+                productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
+                productionTemp.store();
+            }else{
+                productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+                productionTemp.set("count",quantity.intValue()+"");
+                productionTemp.set("productId",productId);
+                productionTemp.set("facilityId",facilityId);
+                productionTemp.set("type","FINISHED_GOOD");
+                productionTemp.set("detailImage",product.getString("detailImageUrl"));
+                productionTemp.create();
+            }
+
+
+        }
+
+
+        return result;
+    }
+
+
     public static Map<String, Object> removeMyLead(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

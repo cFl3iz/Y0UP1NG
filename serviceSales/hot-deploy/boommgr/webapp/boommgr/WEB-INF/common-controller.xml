@@ -26,8 +26,18 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
-
-
+    <request-map uri="productionTemp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="productionTemp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="addProductionTemp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addProductionTemp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="removeMyLead">
         <security https="false" auth="false"/>

@@ -804,7 +804,7 @@ public class BoomServices {
 
 
                 GenericValue  productionTempFinnish =   EntityQuery.use(delegator).from("ProductionTemp").where(
-                        "productId", product,"facilityId",facilityId).queryFirst();
+                        "productId", productId,"facilityId",facilityId).queryFirst();
                 if(productionTempFinnish!=null){
                     productionTempFinnish.set("count",(Integer.parseInt(""+productionTempFinnish.get("count"))+  Integer.parseInt(quantity))+"" );
                     productionTempFinnish.store();
@@ -812,7 +812,7 @@ public class BoomServices {
                     productionTempFinnish = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
                     productionTempFinnish.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
                     productionTempFinnish.set("count", Integer.parseInt(quantity)+"" );
-                    productionTempFinnish.set("productId",product);
+                    productionTempFinnish.set("productId",productId);
                     productionTempFinnish.set("facilityId",facilityId);
                     productionTempFinnish.set("productName",product.getString("productName"));
                     productionTempFinnish.set("type","FINISHED_GOOD");

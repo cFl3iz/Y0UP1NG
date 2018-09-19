@@ -158,6 +158,7 @@ public class BoomServices {
                 productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
                 productionTemp.store();
             }else{
+                productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
                 productionTemp.set("tempId",facilityId+productId);
                 productionTemp.set("count",quantity.intValue()+"");
                 productionTemp.set("productId",productId);
@@ -786,6 +787,8 @@ public class BoomServices {
                      productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ (rowQuantity.intValue()* Integer.parseInt(quantity)))+"" );
                     productionTemp.store();
                  }else{
+                     productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
+
                      productionTemp.set("tempId",facilityId+productId);
                      productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
                      productionTemp.set("productId",rowProductId);

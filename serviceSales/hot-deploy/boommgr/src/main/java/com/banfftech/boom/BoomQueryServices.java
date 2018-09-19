@@ -643,7 +643,7 @@ public class BoomQueryServices {
                         Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyId);
                         rowSupplier.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
                         rowSupplier.put("supplierInfo", supplierInfo);
-
+                        rowSupplier.put("partyId",supplierPartyId);
 //                        GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
 //                                "partyId", supplierPartyId).queryFirst();
 //                        //说明该线索人还没登录验证过

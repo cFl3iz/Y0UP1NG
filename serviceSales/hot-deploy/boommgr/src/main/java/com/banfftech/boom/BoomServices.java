@@ -145,7 +145,7 @@ public class BoomServices {
 
 
         List<GenericValue> orderItems =  EntityQuery.use(delegator).from("OrderItem").where(
-                "orderId", orderId).queryFirst();
+                "orderId", orderId).queryList();
 
         for(GenericValue item : orderItems){
             String productId = item.getString("productId");
@@ -777,8 +777,8 @@ public class BoomServices {
                 "productIdTo", productId).queryList();
         if(productAssocList.size()>0){
             for(GenericValue rowAssoc : productAssocList){
-                BigDecimal rowQuantity = rowAssoc.get("quantity");
-                BigDecimal rowProductId = rowAssoc.get("productId");
+                BigDecimal rowQuantity = (BigDecimal) rowAssoc.get("quantity");
+                String rowProductId = rowAssoc.get("productId");
                 GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
                         "productId", rowProductId,"facilityId",facilityId).queryFirst();
                  if(productionTemp!=null){

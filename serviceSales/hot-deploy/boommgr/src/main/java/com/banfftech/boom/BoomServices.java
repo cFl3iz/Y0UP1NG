@@ -1045,6 +1045,7 @@ public class BoomServices {
         String cityName = (String) context.get("cityName");
         String countyName = (String) context.get("countyName");
         String detailInfo = (String) context.get("detailInfo");
+        String companyName = (String) context.get("companyName");
 
         String firstName = supplierName;
         String lastName = " ";
@@ -1112,6 +1113,14 @@ public class BoomServices {
 //              "postalCode",postalCode,"firstName", firstName,"lastName", lastName,  "address1",  provinceName + " " + cityName + " "+countyName + " " + detailInfo, "contactMechId", addressContactId));
 //
 //        dispatcher.runSync("updateTelecomNumber", UtilMisc.toMap("userLogin", admin, "contactNumber", supplierTel, "contactMechId", telContactId));
+
+
+        GenericValue aliasForg = EntityQuery.use(delegator).from("AliasForg").where(
+                "partyIdTo", leadId,"partyIdFrom",partyId).queryFirst();
+
+        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
+        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+        aliasForg.store();
 
         resultMap.put("leadInfo", UtilMisc.toMap("partyId", leadId));
         return resultMap;

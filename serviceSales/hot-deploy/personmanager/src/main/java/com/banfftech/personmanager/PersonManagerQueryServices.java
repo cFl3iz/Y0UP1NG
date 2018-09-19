@@ -4032,7 +4032,8 @@ public class PersonManagerQueryServices {
                         "partyId", partyGroupId).queryFirst();
 
                 String groupName = partyGroup.getString("groupName");
-                personInfo.put("aliasName", (String) person.get("lastName")+(String) person.get("firstName"));
+                String myName = (String) person.get("lastName")+(String) person.get("firstName");
+                personInfo.put("aliasName", myName.trim());
                 personInfo.put("aliasCompanyName", groupName);
                 personInfo.put("aliasAddress","");
             }

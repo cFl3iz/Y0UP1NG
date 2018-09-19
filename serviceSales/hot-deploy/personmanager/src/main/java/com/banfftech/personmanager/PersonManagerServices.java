@@ -3441,12 +3441,15 @@ public class PersonManagerServices {
         GenericValue orderSalesRep = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SALES_REP").queryFirst();
         String productCategoryId = null;
         String payFromPartyId = (String) orderCust.get("partyId");
+        int buyCount = 0;
         if(orderSalesRep!=null){
             String salesRepId = (String) orderSalesRep.get("partyId");
 
             List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
             for (GenericValue item : items) {
                 String innerProductId = (String) item.get("productId");
+                BigDecimal quantity = (BigDecimal) item.get("quantity");
+                buyCount+= quantity.intValue();
                 updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
             }
         }
@@ -3481,12 +3484,12 @@ public class PersonManagerServices {
 
         GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
         if(empBuyHistory!=null){
-            empBuyHistory.set("count",(Integer.parseInt(empBuyHistory.get("count")+"")+1)+"");
+            empBuyHistory.set("count",(Integer.parseInt(empBuyHistory.get("count")+"")+buyCount)+"");
             empBuyHistory.store();
         }else{
             GenericValue newEmpBuyHistory =   delegator.makeValue("EmpBuyHistory",
                     UtilMisc.toMap("partyId",partyId,"hId",delegator.getNextSeqId("EmpBuyHistory")+"",
-                            "count", "0", "productCategoryId",productCategoryId));
+                            "count", buyCount+"", "productCategoryId",productCategoryId));
             newEmpBuyHistory.create();
         }
 

@@ -4019,8 +4019,8 @@ public class PersonManagerQueryServices {
             GenericValue  aliasForg =  EntityQuery.use(delegator).from("AliasForg").
                     where("partyIdTo", partyId, "partyIdFrom", partyIdFrom).queryFirst();
             if(null!=aliasForg){
-                personInfo.put("aliasName",aliasForg.getString("aliasName").substring(0,aliasForg.getString("aliasName").indexOf("-")));
-                personInfo.put("aliasCompanyName",aliasForg.getString("aliasName").substring(aliasForg.getString("aliasName").indexOf("-")+1));
+                personInfo.put("aliasName",aliasForg.getString("aliasName").substring(aliasForg.getString("aliasName").indexOf("-")+1));
+                personInfo.put("aliasCompanyName",aliasForg.getString("aliasName").substring(0,aliasForg.getString("aliasName").indexOf("-")));
                 personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
             }else{
                 GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(

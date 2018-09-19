@@ -276,6 +276,7 @@ public class BoomQueryServices {
         fieldSet.add("productId");
         fieldSet.add("quantity");
         fieldSet.add("unitPrice");
+        fieldSet.add("isViewed");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
 
@@ -298,10 +299,12 @@ public class BoomQueryServices {
                 rowMap = order.getAllFields();
 
                 String productId = (String) order.get("productId");
+                String isViewed = (String) order.get("isViewed");
 
                 GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
 
                 rowMap.put("productName", "" + product.get("productName"));
+                rowMap.put("isViewed",isViewed);
 
                 rowMap.put("detailImageUrl", (String) product.get("detailImageUrl"));
 

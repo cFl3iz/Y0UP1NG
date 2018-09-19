@@ -638,18 +638,24 @@ public class BoomQueryServices {
                     for(GenericValue supplier : suppliers){
                         Map<String,Object> rowSupplier = new HashMap<String, Object>();
                         String supplierPartyId = supplier.getString("partyId");
-                        GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
-                                "partyId", supplierPartyId).queryFirst();
-                        //说明该线索人还没登录验证过
-                        if(null ==partyGroup){
-                            GenericValue person =  EntityQuery.use(delegator).from("Person").where(
-                                    "partyId", supplierPartyId).queryFirst();
-                            rowSupplier.put("partyId",supplierPartyId);
-                            rowSupplier.put("name",person.getString("lastName")+person.getString("firstName"));
-                        }else{
-                            rowSupplier.put("partyId",supplierPartyId);
-                            rowSupplier.put("name",partyGroup.getString("groupName"));
-                        }
+
+
+                        Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyId);
+                        rowSupplier.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
+                        rowSupplier.put("supplierInfo", supplierInfo);
+
+//                        GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
+//                                "partyId", supplierPartyId).queryFirst();
+//                        //说明该线索人还没登录验证过
+//                        if(null ==partyGroup){
+//                            GenericValue person =  EntityQuery.use(delegator).from("Person").where(
+//                                    "partyId", supplierPartyId).queryFirst();
+//                            rowSupplier.put("partyId",supplierPartyId);
+//                            rowSupplier.put("name",person.getString("lastName")+person.getString("firstName"));
+//                        }else{
+//                            rowSupplier.put("partyId",supplierPartyId);
+//                            rowSupplier.put("name",partyGroup.getString("groupName"));
+//                        }
 
                         supplierList.add(rowSupplier);
                     }
@@ -880,7 +886,7 @@ public class BoomQueryServices {
                 rowMap.put("avatar",supplierInfo.get("headPortrait"));
                 rowMap.put("orderSize","0");
                 rowMap.put("fromDate",sdf.format(gv.get("fromDate")));
-                  if(UtilValidate.isEmpty(rowMap.get("tnContactNumber"))){
+                  if (UtilValidate.isEmpty(rowMap.get("tnContactNumber"))){
                       rowMap.put("tnContactNumber", supplierInfo.get("contactNumber"));
                   }
                 returnList.add(rowMap);

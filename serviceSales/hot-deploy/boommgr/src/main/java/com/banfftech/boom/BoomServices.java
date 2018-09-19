@@ -795,7 +795,7 @@ public class BoomServices {
                      productionTemp.set("facilityId",facilityId);
                      productionTemp.set("productName",rowProduct.getString("productName"));
                      productionTemp.set("type","MANUF_COMPONENT");
-                     productionTemp.set("detailImage",product.getString("detailImageUrl"));
+                     productionTemp.set("detailImage",rowProduct.getString("detailImageUrl"));
                      productionTemp.create();
                  }
             }

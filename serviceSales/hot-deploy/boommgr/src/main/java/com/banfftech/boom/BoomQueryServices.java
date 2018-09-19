@@ -243,11 +243,12 @@ public class BoomQueryServices {
                 "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "RAW_MATERIAL").queryCount();
         Long finishGoodCount = EntityQuery.use(delegator).from("ProductAndRole").where(
                 "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD").queryCount();
-
+        List<String> types = new ArrayList<String>();
+        types.add("ORDER_CREATED");
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
-        EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_APPROVED");
+        EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, types);
         EntityCondition genericCondition2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         Long salesOrderCount = EntityQuery.use(delegator).from("PurchaseOrderHeaderItemAndRoles").where(
                 genericCondition2).queryCount();

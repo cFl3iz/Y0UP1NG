@@ -3447,11 +3447,6 @@ public class PersonManagerServices {
             List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
             for (GenericValue item : items) {
                 String innerProductId = (String) item.get("productId");
-                if(productCategoryId == null){
-                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", innerProductId).queryFirst();
-                    productCategoryId = productCategoryMember.getString("productCategoryId");
-                }
-
                 updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
             }
         }
@@ -3472,9 +3467,17 @@ public class PersonManagerServices {
             dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","AKR002"));
         }
 
+        GenericValue nowCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId",productStoreId).queryFirst();
+
+        String prodCatalogId = (String) nowCatalog.get("prodCatalogId");
+
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",prodCatalogId).queryFirst();
+
+        productCategoryId = prodCatalogCategory.getString("productCategoryId");
 
 
-        Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId, module);
+
+        Debug.logInfo("*akrmOrderShipRequest order_id:" + orderId +"|productCategoryId="+productCategoryId, module);
 
         GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
         if(empBuyHistory!=null){

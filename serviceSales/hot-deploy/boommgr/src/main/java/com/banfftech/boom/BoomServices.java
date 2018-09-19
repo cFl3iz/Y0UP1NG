@@ -147,30 +147,30 @@ public class BoomServices {
         List<GenericValue> orderItems =  EntityQuery.use(delegator).from("OrderItem").where(
                 "orderId", orderId).queryList();
 
-        for(GenericValue item : orderItems){
-            String productId = item.getString("productId");
-            GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-            BigDecimal quantity = (BigDecimal) item.get("quantity");
-
-            GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
-                    "productId", productId,"facilityId",facilityId).queryFirst();
-            if(productionTemp!=null){
-                productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
-                productionTemp.store();
-            }else{
-                productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
-                productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
-                productionTemp.set("count",quantity.intValue()+"");
-                productionTemp.set("productId",productId);
-                productionTemp.set("facilityId",facilityId);
-                productionTemp.set("productName",product.getString("productName"));
-                productionTemp.set("type","FINISHED_GOOD");
-                productionTemp.set("detailImage",product.getString("detailImageUrl"));
-                productionTemp.create();
-            }
-
-
-        }
+//        for(GenericValue item : orderItems){
+//            String productId = item.getString("productId");
+//            GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+//            BigDecimal quantity = (BigDecimal) item.get("quantity");
+//
+//            GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
+//                    "productId", productId,"facilityId",facilityId).queryFirst();
+//            if(productionTemp!=null){
+//                productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
+//                productionTemp.store();
+//            }else{
+//                productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
+//                productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+//                productionTemp.set("count",quantity.intValue()+"");
+//                productionTemp.set("productId",productId);
+//                productionTemp.set("facilityId",facilityId);
+//                productionTemp.set("productName",product.getString("productName"));
+//                productionTemp.set("type","FINISHED_GOOD");
+//                productionTemp.set("detailImage",product.getString("detailImageUrl"));
+//                productionTemp.create();
+//            }
+//
+//
+//        }
 
 
         return result;
@@ -798,6 +798,27 @@ public class BoomServices {
                      productionTemp.set("detailImage",rowProduct.getString("detailImageUrl"));
                      productionTemp.create();
                  }
+
+
+
+
+
+                GenericValue  productionTempFinnish =   EntityQuery.use(delegator).from("ProductionTemp").where(
+                        "productId", product,"facilityId",facilityId).queryFirst();
+                if(productionTempFinnish!=null){
+                    productionTempFinnish.set("count",(Integer.parseInt(""+productionTempFinnish.get("count"))+  Integer.parseInt(quantity))+"" );
+                    productionTempFinnish.store();
+                }else{
+                    productionTempFinnish = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
+                    productionTempFinnish.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+                    productionTempFinnish.set("count", Integer.parseInt(quantity)+"" );
+                    productionTempFinnish.set("productId",product);
+                    productionTempFinnish.set("facilityId",facilityId);
+                    productionTempFinnish.set("productName",product.getString("productName"));
+                    productionTempFinnish.set("type","FINISHED_GOOD");
+                    productionTempFinnish.set("detailImage",product.getString("detailImageUrl"));
+                    productionTempFinnish.create();
+                }
             }
 
         }

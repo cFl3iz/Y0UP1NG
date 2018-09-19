@@ -159,7 +159,7 @@ public class BoomServices {
                 productionTemp.store();
             }else{
                 productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
-                productionTemp.set("tempId",facilityId+productId);
+                productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
                 productionTemp.set("count",quantity.intValue()+"");
                 productionTemp.set("productId",productId);
                 productionTemp.set("facilityId",facilityId);
@@ -789,7 +789,7 @@ public class BoomServices {
                  }else{
                      productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
 
-                     productionTemp.set("tempId",facilityId+productId);
+                     productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
                      productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
                      productionTemp.set("productId",rowProductId);
                      productionTemp.set("facilityId",facilityId);

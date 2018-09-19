@@ -4010,12 +4010,12 @@ public class PersonManagerQueryServices {
                 tel = telecomNumber.getString("contactNumber");
             }
             personInfo.put("contactNumber",tel);
-            GenericValue zuczugEmpInfo = EntityQuery.use(delegator).from("ZuczugEmp").where(UtilMisc.toMap("tel", tel)).queryFirst();
-            if(null  != zuczugEmpInfo){
-                //说明有素然员工信息
-                personInfo.put("empName",zuczugEmpInfo.getString("name"));
-                personInfo.put("dept",zuczugEmpInfo.getString("dept"));
-            }
+//            GenericValue zuczugEmpInfo = EntityQuery.use(delegator).from("ZuczugEmp").where(UtilMisc.toMap("tel", tel)).queryFirst();
+//            if(null  != zuczugEmpInfo){
+//                //说明有素然员工信息
+//                personInfo.put("empName",zuczugEmpInfo.getString("name"));
+//                personInfo.put("dept",zuczugEmpInfo.getString("dept"));
+//            }
             GenericValue  aliasForg =  EntityQuery.use(delegator).from("AliasForg").
                     where("partyIdTo", partyId, "partyIdFrom", partyIdFrom).queryFirst();
             if(null!=aliasForg){

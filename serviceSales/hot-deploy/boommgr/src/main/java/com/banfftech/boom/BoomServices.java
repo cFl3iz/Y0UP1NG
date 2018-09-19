@@ -158,10 +158,11 @@ public class BoomServices {
                 productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
                 productionTemp.store();
             }else{
-                productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+                productionTemp.set("tempId",facilityId+productId);
                 productionTemp.set("count",quantity.intValue()+"");
                 productionTemp.set("productId",productId);
                 productionTemp.set("facilityId",facilityId);
+                productionTemp.set("productName",product.getString("productName"));
                 productionTemp.set("type","FINISHED_GOOD");
                 productionTemp.set("detailImage",product.getString("detailImageUrl"));
                 productionTemp.create();
@@ -785,10 +786,11 @@ public class BoomServices {
                      productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ (rowQuantity.intValue()* Integer.parseInt(quantity)))+"" );
                     productionTemp.store();
                  }else{
-                     productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
+                     productionTemp.set("tempId",facilityId+productId);
                      productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
                      productionTemp.set("productId",rowProductId);
                      productionTemp.set("facilityId",facilityId);
+                     productionTemp.set("productName",product.getString("productName"));
                      productionTemp.set("type","MANUF_COMPONENT");
                      productionTemp.set("detailImage",product.getString("detailImageUrl"));
                      productionTemp.create();

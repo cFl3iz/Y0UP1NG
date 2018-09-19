@@ -14,6 +14,7 @@
         <description>ProductionTemp</description>
         <field name="tempId" type="id-ne"/>
         <field name="facilityId" type="value"/>
+        <field name="productName" type="value"/>
         <field name="productId" type="value"/>
         <field name="count" type="value"/>
         <field name="type" type="value"/>

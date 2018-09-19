@@ -73,6 +73,7 @@
         <attribute name="cityName" type="String" mode="IN" optional="false"/>
         <attribute name="countyName" type="String" mode="IN" optional="false"/>
         <attribute name="detailInfo" type="String" mode="IN" optional="false"/>
+        <attribute name="companyName" type="String" mode="IN" optional="true"/>
 
 
         <attribute name="leadInfo" type="Map" mode="OUT" optional="true"/>

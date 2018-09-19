@@ -3912,6 +3912,8 @@ public class PersonManagerQueryServices {
     }
 
 
+
+
     /**
      * 查头像和名称
      * @return
@@ -3959,16 +3961,71 @@ public class PersonManagerQueryServices {
                 GenericValue zuczugEmpInfo = EntityQuery.use(delegator).from("ZuczugEmp").where(UtilMisc.toMap("tel", tel)).queryFirst();
                 if(null  != zuczugEmpInfo){
                         //说明有素然员工信息
-
                         personInfo.put("empName",zuczugEmpInfo.getString("name"));
                         personInfo.put("dept",zuczugEmpInfo.getString("dept"));
-
                 }
 
         }
         return personInfo;
     }
 
+
+
+
+    public static Map<String, String> queryBomPersonBaseInfo(Delegator delegator, String partyId,String partyIdFrom) throws GenericEntityException, GenericServiceException {
+
+        Map<String, String> personInfo = new HashMap<String, String>();
+
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);
+
+        if (person != null) {
+
+            List<GenericValue> contentsList =
+                    EntityQuery.use(delegator).from("PartyContentAndDataResource").
+                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+
+
+            GenericValue partyContent = null;
+            if (null != contentsList && contentsList.size() > 0) {
+                partyContent = contentsList.get(0);
+            }
+
+            if (UtilValidate.isNotEmpty(partyContent)) {
+                String contentId = partyContent.getString("contentId");
+                personInfo.put("headPortrait",
+                        partyContent.getString("objectInfo"));
+            } else {
+                personInfo.put("headPortrait",
+                        "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/images/defaultHead.png");
+            }
+            personInfo.put("firstName", (String) person.get("firstName"));
+            personInfo.put("lastName", (String) person.get("lastName"));
+
+            GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
+            personInfo.put("userLoginId",userLogin==null?"": userLogin.getString("userLoginId"));
+            GenericValue telecomNumber = EntityUtil.getFirst(
+                    EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).orderBy("-fromDate").queryList());
+            String tel = null;
+            if (UtilValidate.isNotEmpty(telecomNumber)) {
+                tel = telecomNumber.getString("contactNumber");
+            }
+            personInfo.put("contactNumber",tel);
+            GenericValue zuczugEmpInfo = EntityQuery.use(delegator).from("ZuczugEmp").where(UtilMisc.toMap("tel", tel)).queryFirst();
+            if(null  != zuczugEmpInfo){
+                //说明有素然员工信息
+                personInfo.put("empName",zuczugEmpInfo.getString("name"));
+                personInfo.put("dept",zuczugEmpInfo.getString("dept"));
+            }
+            GenericValue  aliasForg =  EntityQuery.use(delegator).from("AliasForg").
+                    where("partyIdTo", partyId, "partyIdFrom", partyIdFrom).queryFirst();
+            if(null!=aliasForg){
+                personInfo.put("aliasName",aliasForg.getString("aliasName"));
+                personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
+            }
+
+        }
+        return personInfo;
+    }
 
     /**
      * queryResourceDetailFrom PeMiniProgram

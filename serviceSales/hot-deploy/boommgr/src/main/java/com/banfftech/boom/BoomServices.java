@@ -427,8 +427,7 @@ public class BoomServices {
                             mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
                             mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,partyId);
 
-                            //TODO mergeAliasFetch();
-
+                            mergeAliasForg(delegator, partyIdFrom,beforePartyId,partyId);
                         }
 
 
@@ -510,6 +509,18 @@ public class BoomServices {
 
 
         return result;
+    }
+
+    private static void mergeAliasForg(Delegator delegator, String partyIdFrom, String beforePartyId, String partyId)throws GenericEntityException {
+        //别人给我取的别名
+        List<GenericValue> aliasForg = EntityQuery.use(delegator).from("AliasForg").where(
+                "partyIdTo", beforePartyId).queryList();
+        if(null!=aliasForg && aliasForg.size()>0){
+            for(GenericValue storeRow : aliasForg){
+                storeRow.set("partyIdTo",partyId);
+                storeRow.store();
+            }
+        }
     }
 
     private static void mergeProductsSupplier(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
@@ -1131,6 +1142,7 @@ public class BoomServices {
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String appId = (String) context.get("appId");
+        String companyName = (String) context.get("companyName");
         Debug.logInfo("create my lead appid:" + appId, module);
         //已经存在系统中的供应商,增加一个线索关联就行
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
@@ -1222,6 +1234,18 @@ public class BoomServices {
 
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", resultPartyId, "roleTypeId", "SUPPLIER"));
+
+
+        // Create Alias
+
+        GenericValue aliasForg = delegator.makeValue("AliasForg", UtilMisc.toMap());
+
+        aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
+        aliasForg.set("partyIdFrom", partyId);
+        aliasForg.set("partyIdTo", resultPartyId);
+        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
+        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+        aliasForg.create();
 
         resultMap.put("leadInfo", UtilMisc.toMap("partyId", resultPartyId));
         return resultMap;

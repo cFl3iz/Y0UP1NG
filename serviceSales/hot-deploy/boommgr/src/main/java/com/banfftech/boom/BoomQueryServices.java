@@ -82,6 +82,7 @@ import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
+import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryBomPersonBaseInfo;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 
 /**
@@ -156,9 +157,9 @@ public class BoomQueryServices {
 
                 String payToPartyId =custOrderRole.getString("partyId");
 
-                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
+                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, payToPartyId,partyId));
 
-                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, partyId));
+                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
 
 
 
@@ -309,9 +310,9 @@ public class BoomQueryServices {
 
                 String custId =custOrderRole.getString("partyId");
 
-                rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator,partyId ));
+                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
 
-                rowMap.put("custPersonInfoMap", queryPersonBaseInfo(delegator, custId));
+                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, custId, partyId));
                 String uomId = product.getString("quantityUomId");
                 GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                         "uomId", uomId).queryFirst();
@@ -867,7 +868,7 @@ public class BoomQueryServices {
                   }
 
 
-                Map<String,String> supplierInfo =  queryPersonBaseInfo(delegator,partyIdTo);
+                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, partyIdTo, partyId);
                 rowMap.put("name",supplierInfo.get("lastName")+supplierInfo.get("firstName"));
                 rowMap.put("partyId",partyIdTo);
                   String paAddress1 =  gv.getString("paAddress1");

@@ -4021,6 +4021,9 @@ public class PersonManagerQueryServices {
             if(null!=aliasForg){
                 personInfo.put("aliasName",aliasForg.getString("aliasName"));
                 personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
+            }else{
+                personInfo.put("aliasName", (String) person.get("lastName")+(String) person.get("firstName"));
+                personInfo.put("aliasAddress","我的地址");
             }
 
         }

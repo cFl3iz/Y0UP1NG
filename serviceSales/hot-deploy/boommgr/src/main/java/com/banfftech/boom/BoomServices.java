@@ -153,7 +153,7 @@ public class BoomServices {
             BigDecimal quantity = (BigDecimal) item.get("quantity");
 
             GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
-                    "productId", product,"facilityId",facilityId).queryFirst();
+                    "productId", productId,"facilityId",facilityId).queryFirst();
             if(productionTemp!=null){
                 productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ quantity.intValue())+"" );
                 productionTemp.store();

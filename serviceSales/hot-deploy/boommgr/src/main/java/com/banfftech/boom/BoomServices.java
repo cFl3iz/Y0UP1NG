@@ -1147,6 +1147,22 @@ public class BoomServices {
         //已经存在系统中的供应商,增加一个线索关联就行
         List<GenericValue> hasUser = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where(
                 "contactNumber", supplierTel).queryList();
+        String provinceName = (String) context.get("provinceName");
+        String cityName = (String) context.get("cityName");
+        String countyName = (String) context.get("countyName");
+        String detailInfo = (String) context.get("detailInfo");
+        String firstName = supplierName;
+        String lastName = " ";
+
+        if (supplierName.length() >= 4) {
+            firstName = supplierName.substring(0, 2);
+            lastName = supplierName.substring(2 + 1);
+        }
+        if (supplierName.length() <= 3) {
+            lastName = supplierName.substring(0, 1);
+            firstName = supplierName.substring(1);
+        }
+
         if (hasUser.size() > 0) {
 
 
@@ -1173,6 +1189,16 @@ public class BoomServices {
                         createPartyRelationshipInMap.put("partyIdTo", oldPartyId);
                         createPartyRelationshipInMap.put("partyIdFrom", partyId);
                         Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+
+                        // Create Alias
+                        GenericValue aliasForg = delegator.makeValue("AliasForg", UtilMisc.toMap());
+                        aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
+                        aliasForg.set("partyIdFrom", partyId);
+                        aliasForg.set("partyIdTo", oldPartyId);
+                        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
+                        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+                        aliasForg.create();
+
                         return resultMap;
                     }
                 }
@@ -1180,17 +1206,7 @@ public class BoomServices {
         }
 
 
-        String firstName = supplierName;
-        String lastName = " ";
 
-        if (supplierName.length() >= 4) {
-            firstName = supplierName.substring(0, 2);
-            lastName = supplierName.substring(2 + 1);
-        }
-        if (supplierName.length() <= 3) {
-            lastName = supplierName.substring(0, 1);
-            firstName = supplierName.substring(1);
-        }
 
         //是否已经添加过
 
@@ -1202,10 +1218,7 @@ public class BoomServices {
         }
 
 
-        String provinceName = (String) context.get("provinceName");
-        String cityName = (String) context.get("cityName");
-        String countyName = (String) context.get("countyName");
-        String detailInfo = (String) context.get("detailInfo");
+
 
 
         Map<String, Object> createLeadMap = new HashMap<String, Object>();

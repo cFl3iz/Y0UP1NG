@@ -8142,17 +8142,18 @@ public class PersonManagerServices {
        GenericValue  partyAndTelecomNumber =
                EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId", partyId, "contactNumber",telNumber).queryFirst();
 
-        if (partyAndTelecomNumber == null && null != telNumber && !telNumber.trim().equals("")) {
-            // 创建联系电话
-            Map<String, Object> inputTelecom = UtilMisc.toMap();
-            inputTelecom.put("partyId", partyId);
-            inputTelecom.put("contactNumber", telNumber);
-            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
-            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
-            inputTelecom.put("userLogin", admin);
-            Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-
-        }
+        //都不再加
+//        if (partyAndTelecomNumber == null && null != telNumber && !telNumber.trim().equals("")) {
+//            // 创建联系电话
+//            Map<String, Object> inputTelecom = UtilMisc.toMap();
+//            inputTelecom.put("partyId", partyId);
+//            inputTelecom.put("contactNumber", telNumber);
+//            inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+//            inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+//            inputTelecom.put("userLogin", admin);
+//            Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+//
+//        }
     }
 
 

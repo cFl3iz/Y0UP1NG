@@ -3452,6 +3452,12 @@ public class PersonManagerServices {
                 buyCount+= quantity.intValue();
                 updateProductBizDataFromOrder(salesRepId, ((BigDecimal) item.get("quantity")).intValue(), delegator, dispatcher, admin, partyId, innerProductId, orderId, "BUY_PRODUCT");
             }
+        }else{
+            List<GenericValue> items = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryList();
+            for (GenericValue item : items) {
+                BigDecimal quantity = (BigDecimal) item.get("quantity");
+                buyCount+= quantity.intValue();
+            }
         }
 
         //应用收款支付.....

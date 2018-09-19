@@ -735,6 +735,7 @@ public class BoomServices {
                      productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
                      productionTemp.set("productId",rowProductId);
                      productionTemp.set("facilityId",facilityId);
+                     productionTemp.set("type","MANUF_COMPONENT");
                      productionTemp.set("detailImage",product.getString("detailImageUrl"));
                      productionTemp.create();
                  }

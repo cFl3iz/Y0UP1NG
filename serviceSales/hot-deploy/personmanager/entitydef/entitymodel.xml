@@ -16,6 +16,7 @@
         <field name="facilityId" type="value"/>
         <field name="productId" type="value"/>
         <field name="count" type="value"/>
+        <field name="type" type="value"/>
         <field name="detailImage" type="value"/>
         <prim-key field="tempId"/>
     </entity>

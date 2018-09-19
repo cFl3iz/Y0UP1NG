@@ -4019,7 +4019,8 @@ public class PersonManagerQueryServices {
             GenericValue  aliasForg =  EntityQuery.use(delegator).from("AliasForg").
                     where("partyIdTo", partyId, "partyIdFrom", partyIdFrom).queryFirst();
             if(null!=aliasForg){
-                personInfo.put("aliasName",aliasForg.getString("aliasName"));
+                personInfo.put("aliasName",aliasForg.getString("aliasName").substring(0,aliasForg.getString("aliasName").indexOf("-")));
+                personInfo.put("aliasCompanyName",aliasForg.getString("aliasName").substring(aliasForg.getString("aliasName").indexOf("-")+1));
                 personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
             }else{
                 GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
@@ -4031,7 +4032,8 @@ public class PersonManagerQueryServices {
                         "partyId", partyGroupId).queryFirst();
 
                 String groupName = partyGroup.getString("groupName");
-                personInfo.put("aliasName", groupName +" "+(String) person.get("lastName")+(String) person.get("firstName"));
+                personInfo.put("aliasName", (String) person.get("lastName")+(String) person.get("firstName"));
+                personInfo.put("aliasCompanyName", groupName);
                 personInfo.put("aliasAddress","");
             }
 

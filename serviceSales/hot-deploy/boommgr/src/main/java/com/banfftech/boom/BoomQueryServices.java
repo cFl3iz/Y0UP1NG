@@ -126,6 +126,7 @@ public class BoomQueryServices {
         fieldSet.add("productId");
         fieldSet.add("quantity");
         fieldSet.add("unitPrice");
+        fieldSet.add("isViewed");
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -140,10 +141,12 @@ public class BoomQueryServices {
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
                 rowMap = order.getAllFields();
-
+//isViewed
                 String productId = (String) order.get("productId");
-
+                String isViewed  = (String) order.get("isViewed");
                 GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+
+                rowMap.put("isViewed",isViewed);
 
                 rowMap.put("productName", "" + product.get("productName"));
 

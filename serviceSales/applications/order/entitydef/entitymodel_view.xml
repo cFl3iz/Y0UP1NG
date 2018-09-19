@@ -655,6 +655,7 @@ under the License.
     <member-entity entity-alias="OI" entity-name="OrderItem"/>
     <alias entity-alias="OH" name="orderName"/>
     <alias entity-alias="OH" name="internalCode"/>
+    <alias entity-alias="OH" name="isViewed"/>
 
     <alias entity-alias="OH" name="orderId"/>
     <alias entity-alias="OT" name="partyId"/>

@@ -4022,8 +4022,17 @@ public class PersonManagerQueryServices {
                 personInfo.put("aliasName",aliasForg.getString("aliasName"));
                 personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
             }else{
-                personInfo.put("aliasName", (String) person.get("lastName")+(String) person.get("firstName"));
-                personInfo.put("aliasAddress","我的地址");
+                GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                        "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+                String partyGroupId = relation.getString("partyIdTo");
+
+                GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
+                        "partyId", partyGroupId).queryFirst();
+
+                String groupName = partyGroup.getString("groupName");
+                personInfo.put("aliasName", groupName +" "+(String) person.get("lastName")+(String) person.get("firstName"));
+                personInfo.put("aliasAddress","");
             }
 
         }

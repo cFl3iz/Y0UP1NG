@@ -121,6 +121,39 @@ public class BoomServices {
     }
 
 
+
+    public static Map<String, Object> addEmp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Locale locale = (Locale) context.get("locale");
+
+        String tel = (String) context.get("tel");
+
+        String partyId = userLogin.getString("partyId");
+
+
+        // Check is Exsit Contact Number ?..
+        List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
+                "contactNumber", tel, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "contactMechTypeId", "TELECOM_NUMBER").queryList();
+//        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("appId", appId, "partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
+//        if (miniProgramIdentification != null) {
+        if(teleContact!=null && teleContact.size()>0){
+            for(GenericValue gv :teleContact){
+                    //TODO FIX ME
+            }
+        }
+
+        return result;
+    }
+
+
+
+
+
     public static Map<String, Object> addProductionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

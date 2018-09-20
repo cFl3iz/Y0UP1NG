@@ -3983,7 +3983,16 @@ public class PersonManagerServices {
         orderMap.put("invoiceAmount","0");
         orderMap.put("invoiceTitle","");
         orderMap.put("invoiceContent","");
-        orderMap.put("shippingAmount","0.0000");
+            // TODO FIX ME 检查一下是否带运费
+            GenericValue orderAdjustment = EntityQuery.use(delegator).from("OrderAdjustment").where(
+                    "orderId", orderId,"orderAdjustmentTypeId","SHIPPING_CHARGES").queryFirst();
+            Debug.logInfo("ORDER_ID:"+orderId+"|orderAdjustment:"+orderAdjustment,module);
+            if(null!= orderAdjustment){
+                BigDecimal shippingAmount  = (BigDecimal) orderAdjustment.get("amount");
+                orderMap.put("shippingAmount",(shippingAmount.intValue()+""));
+            }else{
+                orderMap.put("shippingAmount","0.0000");
+            }
         List<Map<String,String>> items = new ArrayList<Map<String, String>>();
         for(GenericValue item : orderItems){
             Map<String,String> itemOrder = new HashMap<String, String>();

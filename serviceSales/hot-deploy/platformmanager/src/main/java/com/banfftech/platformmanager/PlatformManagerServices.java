@@ -160,7 +160,7 @@ public class PlatformManagerServices {
                 orderHeader.store();
                 Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId));
                 GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", ypOrderId).queryFirst();
-                Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", ypOrderId, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
+                Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
 
                 dispatcher.runSync("sendEmailNotification",
                         UtilMisc.toMap("content",

@@ -149,9 +149,9 @@ public class PlatformManagerServices {
             String ypOrderId = (String) orderObj.get("ypOrderId");
             String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
             String trackingIdNumber = "";
-
-            if(orderObj.get("trackingIdNumber")!=null){
-                trackingIdNumber = (String) orderObj.get("trackingIdNumber");
+            net.sf.json.JSONObject objson = orderObj.get("trackingIdNumber");
+            if(objson!=null){
+                trackingIdNumber = objson + "";
             }
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", ypOrderId), false);
             String orderStatusId = orderHeader.getString("statusId");

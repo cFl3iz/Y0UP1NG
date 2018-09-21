@@ -142,6 +142,10 @@ public class PlatformManagerServices {
 
         for (Object obj : jsonArray) {
             Map<String, Object> orderObj = (Map) obj;
+            Debug.logInfo("->syncCompletedOrder ypOrderId:"+ orderObj.get("ypOrderId"),module);
+            Debug.logInfo("->syncCompletedOrder zuczugOrderId:"+orderObj.get("zuczugOrderId"),module);
+            Debug.logInfo("->syncCompletedOrder trackingIdNumber:"+orderObj.get("trackingIdNumber"),module);
+
             String ypOrderId = (String) orderObj.get("ypOrderId");
             String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
             String trackingIdNumber = (String) orderObj.get("trackingIdNumber");

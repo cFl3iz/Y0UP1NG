@@ -149,7 +149,7 @@ public class PlatformManagerServices {
             String ypOrderId = (String) orderObj.get("ypOrderId");
             String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
             String trackingIdNumber = "";
-            net.sf.json.JSONObject objson = orderObj.get("trackingIdNumber");
+            net.sf.json.JSONObject objson =(net.sf.json.JSONObject) orderObj.get("trackingIdNumber");
             if(objson!=null){
                 trackingIdNumber = objson + "";
             }

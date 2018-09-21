@@ -157,9 +157,12 @@ public class PlatformManagerServices {
             String orderStatusId = orderHeader.getString("statusId");
             if(!orderStatusId.equals("ORDER_COMPLETED") && !orderStatusId.equals("ORDER_CANCELLED") ){
                 orderHeader.set("internalCode",zuczugOrderId);
-                Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId));
-                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", ypOrderId).queryFirst();
-                Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
+                if(null ==EntityQuery.use(delegator).from("OrderShipment").where("orderId", ypOrderId).queryFirst() ){
+                    Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId));
+                    GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", ypOrderId).queryFirst();
+                    Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
+                }
+
                 orderHeader.set("statusId","ORDER_COMPLETED");
                 orderHeader.store();
                 dispatcher.runSync("sendEmailNotification",

@@ -148,7 +148,11 @@ public class PlatformManagerServices {
 
             String ypOrderId = (String) orderObj.get("ypOrderId");
             String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
-            String trackingIdNumber = (String) orderObj.get("trackingIdNumber");
+            String trackingIdNumber = "";
+
+            if(orderObj.get("trackingIdNumber")!=null){
+                trackingIdNumber = (String) orderObj.get("trackingIdNumber");
+            }
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", ypOrderId), false);
             String orderStatusId = orderHeader.getString("statusId");
             if(!orderStatusId.equals("ORDER_COMPLETED") && !orderStatusId.equals("ORDER_CANCELLED") ){

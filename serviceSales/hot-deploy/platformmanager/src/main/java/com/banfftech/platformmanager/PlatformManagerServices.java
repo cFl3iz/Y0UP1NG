@@ -85,6 +85,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
+import net.sf.json.JSONArray;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,6 +115,56 @@ public class PlatformManagerServices {
     private static String secret = null;
     private static String smsFreeSignName = null;
     private static String smsTemplateCode = null;
+
+
+    /**
+     * 素然向友评同步已发货的订单
+     * @param ctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> syncCompletedOrder(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException {
+
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        String orderLists = (String) context.get("orderList");
+
+        if (UtilValidate.isEmpty(orderLists)) {
+            return ServiceUtil.returnError("订单数据不能为空");
+        }
+        JSONArray jsonArray = JSONArray.fromObject(orderLists);
+
+        for (Object obj : jsonArray) {
+            Map<String, Object> orderObj = (Map) obj;
+            String ypOrderId = (String) orderObj.get("ypOrderId");
+            String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
+            String trackingIdNumber = (String) orderObj.get("trackingIdNumber");
+            GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", ypOrderId), false);
+            String orderStatusId = orderHeader.getString("statusId");
+            if(!orderStatusId.equals("ORDER_COMPLETED") && !orderStatusId.equals("ORDER_CANCELLED") ){
+                orderHeader.set("internalCode",zuczugOrderId);
+                orderHeader.store();
+                Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId));
+                GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", ypOrderId).queryFirst();
+                Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", ypOrderId, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
+
+                dispatcher.runSync("sendEmailNotification",
+                        UtilMisc.toMap("content",
+                                "友评订单号:["+ypOrderId+
+                                        "],在素然单号:["+zuczugOrderId+"]已分拣发货,联动友评主机成功! 产生的运单号为:"+trackingIdNumber
+                                , "title","[长宁通知友评素然订单已发货]"));
+            }
+
+        }
+        return result;
+    }
+
 
 
     /**

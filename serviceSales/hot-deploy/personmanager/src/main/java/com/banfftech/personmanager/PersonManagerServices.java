@@ -71,6 +71,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import net.sf.json.JSONObject;
 import org.apache.ofbiz.service.ModelService;
@@ -3912,6 +3914,24 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+
+    /**
+     * 省
+     */
+    private static final String PROVINCE = "省";
+    /**
+     * 市
+     */
+    private static final String CITY = "市";
+    /**
+     * 区
+     */
+    private static final String REGION_1 = "区";
+    /**
+     * 县
+     */
+    private static final String REGION_2 = "县";
+
         public static Map<String, Object> akrmOrderShipRequest(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException, Exception {
 
@@ -3963,16 +3983,47 @@ public class PersonManagerServices {
         orderMap.put("postalCode",orderHeaderAndShipGroups.getString("postalCode"));
         GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();
         orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
-        orderMap.put("stateProvinceGeoId",orderHeaderAndShipGroups.getString("stateProvinceGeoId"));
 
-        orderMap.put("city",orderHeaderAndShipGroups.getString("city"));
+
+
         String address = orderHeaderAndShipGroups.getString("address1");
+
+            String formatAddress = address.replaceAll(" ","");
+            if(formatAddress.indexOf("市")>-1){
+                formatAddress = formatAddress.replaceFirst("市","");
+            }
+
+            List<Map<String,String>> addressList = addressResolution(formatAddress);
+
+            if(null!=addressList&& addressList.size()>0){
+                Map<String,String> rowMap = addressList.get(0);
+                String province = rowMap.get("province");
+                String city   = rowMap.get("city");
+                String county   = rowMap.get("county");
+                String village     = rowMap.get("village");
+                if(province==null || province.equals("")){
+                    orderMap.put("stateProvince",city);
+                    orderMap.put("stateProvinceGeoId",city);
+
+                }else{
+                    orderMap.put("stateProvince",province);
+                    orderMap.put("stateProvinceGeoId",province);
+                }
+                orderMap.put("city",city);
+                orderMap.put("county",county);
+
+            }else{
+                orderMap.put("stateProvince",address.substring(0,address.indexOf(" ")));
+                orderMap.put("city",address.substring(address.indexOf(" ")));
+                orderMap.put("county",address.substring(address.lastIndexOf(" ")));
+            }
+
         //湖北省 武汉市 江岸区 江岸大啊到
-        try{
-            orderMap.put("county",address.substring(address.indexOf("市")+1,address.lastIndexOf(" ")));
-        }catch (StringIndexOutOfBoundsException e){
-            // ...
-        }
+//        try{
+//            orderMap.put("county",address.substring(address.indexOf("市")+1,address.lastIndexOf(" ")));
+//        }catch (StringIndexOutOfBoundsException e){
+//            // ...
+//        }
 //        orderMap.put("countyGeoId",orderHeaderAndShipGroups.getString("countryGeoId"));
         orderMap.put("address1",orderHeaderAndShipGroups.getString("address1"));
         orderMap.put("internalNote","");
@@ -4051,6 +4102,34 @@ public class PersonManagerServices {
 
         return resultMap;
     }
+
+
+
+
+
+    public static List<Map<String,String>> addressResolution(String address){
+        String regex="((?<province>[^省]+省|.+自治区)|上海|北京|天津|重庆)(?<city>[^市]+市|.+自治州)(?<county>[^县]+县|.+区|.+镇|.+局)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
+        Matcher m= Pattern.compile(regex).matcher(address);
+        String province=null,city=null,county=null,town=null,village=null;
+        List<Map<String,String>> table=new ArrayList<Map<String,String>>();
+        Map<String,String> row=null;
+        while(m.find()){
+            row=new LinkedHashMap<String,String>();
+            province=m.group("province");
+            row.put("province", province==null?"":province.trim());
+            city=m.group("city");
+            row.put("city", city==null?"":city.trim());
+            county=m.group("county");
+            row.put("county", county==null?"":county.trim());
+            town=m.group("town");
+            row.put("town", town==null?"":town.trim());
+            village=m.group("village");
+            row.put("village", village==null?"":village.trim());
+            table.add(row);
+        }
+        return table;
+    }
+
 
     /**
      * 收到款项

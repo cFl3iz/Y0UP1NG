@@ -29,6 +29,12 @@
 
 
 
+    <service name="syncCompletedOrder" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="syncCompletedOrder" auth="false">
+        <attribute name="orderList" type="String" mode="IN"/>
+    </service>
+
+
     <service name="createProductSizeContentAndInfo" engine="simple" invoke="createProductSizeContentAndInfo"
              location="component://platformmanager/minilang/com/zuczug/contentcenter/ContentCenterServices.xml">
         <description>create product size content and info</description>

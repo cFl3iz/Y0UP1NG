@@ -235,8 +235,8 @@ public class PlatformInventoryServices {
                 Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
                 Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
 
-                //createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-                //createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
                 //createInventoryItemDetailMap = null;
             }
             //说明现库存比要设置的库存小,需要做差异加法

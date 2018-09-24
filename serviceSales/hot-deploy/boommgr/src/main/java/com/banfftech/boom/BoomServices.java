@@ -412,6 +412,29 @@ public class BoomServices {
 
 
                 if(autoApproveOrder!=null && autoApproveOrder.equals("Y")){
+                    GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", createOrderOut.get("orderId")+""), false);
+
+                    GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                            "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                    String partyGroupId = relation.getString("partyIdTo");
+                    GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyGroupId, "roleTypeId", "ADMIN").queryFirst();
+                    if(null == productStoreRole){
+                        //create
+                        // 创建店铺
+                        Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
+                                "payToPartyId", partyId, "storeName", partyGroupId+"Store"
+                                ,"title","autoCreateFrom Order", "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y"));
+                        String productStoreId = (String) createPersonStoreOutMap.get("productStoreId");
+                        // 关联店铺角色
+                        Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
+                                "partyId", partyGroupId, "productStoreId", productStoreId, "roleTypeId", "ADMIN"));
+                        orderHeader.set("productStoreId",""+productStoreId);
+                    }else{
+                        orderHeader.set("productStoreId",""+productStoreRole.get("productStoreId"));
+                    }
+                    orderHeader.store();
+
+
                     OrderChangeHelper.approveOrder(dispatcher, userLogin, createOrderOut.get("orderId")+"");
                 }
 

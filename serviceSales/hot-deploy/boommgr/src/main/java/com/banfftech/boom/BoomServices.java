@@ -466,10 +466,12 @@ public class BoomServices {
                 }
 
             }
+
+            Map<String,Object> changeStatusRun =  dispatcher.runSync("changeProductionRunStatus", UtilMisc.toMap("userLogin", admin, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
+            Debug.logInfo("changeStatusRun=>"+changeStatusRun,module);
         }
 
 
-        dispatcher.runSync("changeProductionRunStatus", UtilMisc.toMap("userLogin", admin, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
 //        String orderId = (String) createOrderOut.get("orderId");
 
 

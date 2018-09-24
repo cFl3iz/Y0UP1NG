@@ -461,8 +461,10 @@ public class BoomServices {
                     }
                     orderHeader.store();
 
+                    dispatcher.runSync("updateOrderHeader", UtilMisc.toMap("userLogin", userLogin,
+                            "orderId", createOrderOut.get("orderId")+"", "statusId", "ORDER_APPROVED"));
+//                    OrderChangeHelper.approveOrder(dispatcher, userLogin, createOrderOut.get("orderId")+"");
 
-                    OrderChangeHelper.approveOrder(dispatcher, userLogin, createOrderOut.get("orderId")+"");
                 }
 
             }

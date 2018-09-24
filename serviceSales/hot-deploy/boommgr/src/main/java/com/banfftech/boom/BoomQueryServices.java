@@ -192,12 +192,12 @@ public class BoomQueryServices {
 
 
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
-                        where("orderId", orderId,"noteName", "供应商行为", "note", "ACCEP").queryFirst();
+                        where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "ACCEP").queryFirst();
                 if(null!=orderNote){
                     rowMap.put("statusId","ACCEP");
                 }
                 GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
-                        where("orderId", orderId,"noteName", "供应商行为", "note", "FAHUO").queryFirst();
+                        where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "FAHUO").queryFirst();
                 if(null!=orderNote2){
                     rowMap.put("statusId","FAHUO");
                 }
@@ -379,12 +379,12 @@ public class BoomQueryServices {
                 String orderId = order.getString("orderId");
 
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
-                        where("orderId", orderId,"noteName", "供应商行为", "note", "ACCEP").queryFirst();
+                        where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "ACCEP").queryFirst();
                 if(null!=orderNote){
                     rowMap.put("statusId","ACCEP");
                 }
                 GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
-                        where("orderId", orderId,"noteName", "供应商行为", "note", "FAHUO").queryFirst();
+                        where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "FAHUO").queryFirst();
                 if(null!=orderNote2){
                     rowMap.put("statusId","FAHUO");
                 }

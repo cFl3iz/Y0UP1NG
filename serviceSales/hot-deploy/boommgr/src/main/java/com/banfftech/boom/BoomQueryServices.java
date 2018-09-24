@@ -210,9 +210,7 @@ public class BoomQueryServices {
 
                 rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
 
-                if(){
 
-                }
 
 
 

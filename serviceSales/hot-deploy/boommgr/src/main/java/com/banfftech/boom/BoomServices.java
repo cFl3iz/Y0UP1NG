@@ -315,6 +315,8 @@ public class BoomServices {
 
         String workEffortId = (String) context.get("workEffortId");
 
+        String autoApproveOrder = (String) context.get("autoApproveOrder");
+
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
@@ -407,6 +409,12 @@ public class BoomServices {
 
                 Map<String, Object> createOrderNoteOut = dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId",
                         createOrderOut.get("orderId"), "noteName", "采购商备注", "note", beiZhu, "internalNote", "N"));
+
+
+                if(autoApproveOrder!=null && autoApproveOrder.equals("Y")){
+                    OrderChangeHelper.approveOrder(dispatcher, userLogin, createOrderOut.get("orderId")+"");
+                }
+
             }
         }
 

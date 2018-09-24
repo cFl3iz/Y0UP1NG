@@ -190,6 +190,18 @@ public class BoomQueryServices {
 
                 String orderId = order.getString("orderId");
 
+
+                GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", orderId,"noteName", "供应商行为", "note", "ACCEP").queryFirst();
+                if(null!=orderNote){
+                    rowMap.put("statusId","ACCEP");
+                }
+                GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", orderId,"noteName", "供应商行为", "note", "FAHUO").queryFirst();
+                if(null!=orderNote2){
+                    rowMap.put("statusId","FAHUO");
+                }
+
                 GenericValue custOrderRole = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_FROM_VENDOR").queryFirst();
 
                 String payToPartyId =custOrderRole.getString("partyId");
@@ -198,6 +210,9 @@ public class BoomQueryServices {
 
                 rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
 
+                if(){
+
+                }
 
 
 
@@ -284,8 +299,14 @@ public class BoomQueryServices {
     }
 
 
-
-
+    /**
+     * 我的销售订单?
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
     public static Map<String, Object> queryMySalesOrderList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -317,6 +338,7 @@ public class BoomQueryServices {
 
                 List<String> types = new ArrayList<String>();
         types.add("ORDER_CREATED");
+        types.add("ORDER_APPROVED");
 
 //        EntityCondition findConditions = EntityCondition
 //                .makeCondition("uomTypeId", EntityOperator.NOT_IN, types);
@@ -357,6 +379,18 @@ public class BoomQueryServices {
                 }
 
                 String orderId = order.getString("orderId");
+
+                GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", orderId,"noteName", "供应商行为", "note", "ACCEP").queryFirst();
+                if(null!=orderNote){
+                    rowMap.put("statusId","ACCEP");
+                }
+                GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", orderId,"noteName", "供应商行为", "note", "FAHUO").queryFirst();
+                if(null!=orderNote2){
+                    rowMap.put("statusId","FAHUO");
+                }
+
 
                 GenericValue custOrderRole = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
 

@@ -19,6 +19,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="addedOrderNote">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addedOrderNote"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
     <request-map uri="viewedOrder">
         <security https="false" auth="false"/>

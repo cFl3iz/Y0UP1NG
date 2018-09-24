@@ -151,7 +151,34 @@ public class BoomServices {
     }
 
 
+    /**
+     * addedOrderNote
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> addedOrderNote(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
 
+        String orderId = (String) context.get("orderId");
+        String note = (String) context.get("note");
+
+        String partyId = userLogin.getString("partyId");
+
+        Map<String, Object> createOrderNoteOut = dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId",
+                orderId, "noteName", "供应商行为", "note", note, "internalNote", "N"));
+
+        return result;
+    }
 
 
     public static Map<String, Object> addProductionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {

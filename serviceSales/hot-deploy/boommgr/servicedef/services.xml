@@ -44,6 +44,18 @@
     </service>
 
 
+    <service name="addedOrderNote" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="addedOrderNote" auth="false">
+        <description>addedOrderNote</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="note" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="updateOrderStatus" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"

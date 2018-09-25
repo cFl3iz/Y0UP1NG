@@ -388,10 +388,7 @@ public class ImageManageService {
                 }
             }
             ImageManagementServices.createContentAndDataResource(dispatcher,delegator, userLogin, "", objectInfo, contentId, fileContentType);
-        } catch (GenericServiceException e) {
-            Debug.log("创建图片的Content失败");
-            return null;
-        } catch (GenericEntityException e) {
+        }  catch (GenericEntityException e) {
             e.printStackTrace();
             return null;
         }

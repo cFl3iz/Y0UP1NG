@@ -677,6 +677,14 @@ public class BoomServices {
                 createPartyRelationshipInMap.put("partyIdFrom", partyId);
                 createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
+                //自己给自己的备注
+                GenericValue aliasForg = delegator.makeValue("AliasForg", UtilMisc.toMap());
+                aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
+                aliasForg.set("partyIdFrom", partyId);
+                aliasForg.set("partyIdTo", partyId);
+                aliasForg.set("aliasName", "自有仓库"+"-"+name);
+                aliasForg.set("aliasAddress", province + " " + city + " "+country );
+                aliasForg.create();
 
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
                 result.put("partyId", partyId);

@@ -966,9 +966,9 @@ public class BoomQueryServices {
 
                 Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, partyIdTo, partyId);
                  rowMap.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
-                  if(partyId.equals(partyIdTo)){
-                      rowMap.put("name","自有仓库"+"-"+supplierInfo.get("aliasName") );
-                  }
+//                  if(partyId.equals(partyIdTo)){
+//                      rowMap.put("name","自有仓库"+"-"+supplierInfo.get("aliasName") );
+//                  }
                 rowMap.put("supplierInfo",supplierInfo);
                 rowMap.put("partyId",partyIdTo);
                   String paAddress1 =  gv.getString("paAddress1");

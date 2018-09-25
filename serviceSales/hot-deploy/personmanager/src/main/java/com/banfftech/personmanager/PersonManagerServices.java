@@ -3978,12 +3978,19 @@ public class PersonManagerServices {
         String orderCustPartyId = orderHeaderAndRoles.getString("partyId");
         GenericValue custPerson = EntityQuery.use(delegator).from("Person").where("partyId",orderCustPartyId).queryFirst();
         GenericValue orderHeaderAndShipGroups = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").where("orderId", orderId).queryFirst();
-        orderMap.put("nickName","YP_"+custPerson.getString("firstName"));
-        orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
+
         orderMap.put("postalCode",orderHeaderAndShipGroups.getString("postalCode"));
         GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();
         orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
+            GenericValue empInfo =   EntityQuery.use(delegator).from("ZuczugEmp").where("tel", telAndParty.getString("contactNumber")).queryFirst();
 
+            if(null!=empInfo){
+                orderMap.put("nickName",empInfo.getString("dept")+"_"+empInfo.getString("name") + "/" + custPerson.getString("firstName"));
+                orderMap.put("toName",empInfo.getString("name") + "/" + custPerson.getString("firstName"));
+            }else{
+                orderMap.put("nickName","YP_"+custPerson.getString("firstName"));
+                orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
+            }
 
 
         String address = orderHeaderAndShipGroups.getString("address1");

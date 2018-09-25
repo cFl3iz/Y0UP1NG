@@ -258,6 +258,7 @@ public class BoomQueryServices {
                 "partyId", partyId, "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD").queryCount();
         List<String> types = new ArrayList<String>();
         types.add("ORDER_CREATED");
+        types.add("ORDER_APPROVED");
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
         EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);

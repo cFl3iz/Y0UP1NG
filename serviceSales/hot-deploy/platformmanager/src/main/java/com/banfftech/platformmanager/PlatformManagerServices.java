@@ -1242,7 +1242,7 @@ public class PlatformManagerServices {
                             GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                             productContent.create();
                         }//4
-                        if(!UtilValidate.isEmpty(metchFoo)  && !metchTwo.equals("无")){
+                        if(!UtilValidate.isEmpty(metchFoo)  && !metchFoo.equals("无")){
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             String  contentId = createNewContentForImage(dispatcher,delegator, metchFoo, admin);
 
@@ -1433,7 +1433,7 @@ public class PlatformManagerServices {
                             GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                             productContent.create();
                         }//4
-                        if(!UtilValidate.isEmpty(metchFoo)  && !metchTwo.equals("无")){
+                        if(!UtilValidate.isEmpty(metchFoo)  && !metchFoo.equals("无")){
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             String  contentId = createNewContentForImage(dispatcher,delegator, metchFoo, admin);
 

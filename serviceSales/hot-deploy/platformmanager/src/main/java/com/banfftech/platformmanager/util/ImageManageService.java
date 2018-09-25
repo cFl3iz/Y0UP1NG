@@ -364,12 +364,19 @@ public class ImageManageService {
                 return content.getString("contentId");
             }
 
+
+
+
             Map<String, Object> contentCtx = new HashMap<String, Object>();
             contentCtx.put("contentTypeId", "DOCUMENT");
-            contentCtx.put("userLogin", userLogin);
-            Map<String, Object> contentResult = new HashMap<String, Object>();
-            contentResult = dispatcher.runSync("createContent", contentCtx);
-            contentId = (String) contentResult.get("contentId");
+            contentCtx.put("contentId",  delegator.getNextSeqId("contentId"));
+
+            GenericValue content = delegator.makeValue("Content",contentCtx );
+            content.create();
+
+//            Map<String, Object> contentResult = new HashMap<String, Object>();
+//            contentResult = dispatcher.runSync("createContent", contentCtx);
+            contentId = (String) content.get("contentId");
 
             //获取MIME TYPE
             String fileContentType = "";

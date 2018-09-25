@@ -1409,6 +1409,11 @@ public class BoomServices {
             firstName = supplierName.substring(1);
         }
 
+        if(supplierName.length()<2){
+            lastName = " ";
+            firstName = supplierName;
+        }
+
         if (hasUser.size() > 0) {
 
 

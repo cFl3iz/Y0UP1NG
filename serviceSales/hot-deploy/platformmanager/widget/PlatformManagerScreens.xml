@@ -136,7 +136,13 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <screenlet title="(新)素然产品导入">
+
+                        <screenlet title="(Extra-One4模特图)产品导入">
+                            <include-form name="ProductUploadImportFormExtraOne"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+                        <screenlet title="(新)素然产品(2x2x2)导入">
                             <include-form name="ProductUploadImportFormNew"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>
                         </screenlet>

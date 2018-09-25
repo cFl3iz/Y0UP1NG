@@ -25,6 +25,27 @@
     </form>
 
 
+    <form name="ProductUploadImportFormExtraOne" type="upload" target="ProductUploadImportFormExtraOne"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+        <field name="prodCatalogId" title="ExtraOne产品导入" widget-style="selectBox">
+            <drop-down>
+                <entity-options entity-name="ProdCatalog" description="${catalogName}">
+                    <!--<entity-constraint name="roleTypeId" value="ADMIN"/>-->
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="param">
+            <hidden value="123"/>
+        </field>
+        <field name="returnInventoryFile" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
     <form name="ProductUploadImportFormNew" type="upload" target="ProductUploadImportNewEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
         <field name="prodCatalogId" title="最新产品导入" widget-style="selectBox">

@@ -198,7 +198,7 @@ public class BoomQueryServices {
                 }
                 GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "FAHUO").queryFirst();
-                if(null!=orderNote2){
+                if(null!=orderNote2 && !statusId.equals("ORDER_COMPLETED")){
                     rowMap.put("statusId","FAHUO");
                 }
 
@@ -385,7 +385,7 @@ public class BoomQueryServices {
                 }
                 GenericValue orderNote2 = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", orderId,"noteName", "供应商行为", "noteInfo", "FAHUO").queryFirst();
-                if(null!=orderNote2){
+                if(null!=orderNote2 && !statusId.equals("ORDER_COMPLETED")){
                     rowMap.put("statusId","FAHUO");
                 }
 

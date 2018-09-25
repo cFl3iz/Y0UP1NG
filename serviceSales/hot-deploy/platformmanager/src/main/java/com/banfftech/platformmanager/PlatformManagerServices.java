@@ -1422,7 +1422,7 @@ public class PlatformManagerServices {
                             String contentId = createNewContentForImage(dispatcher,delegator, metchThree, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
@@ -1438,7 +1438,7 @@ public class PlatformManagerServices {
                             String  contentId = createNewContentForImage(dispatcher,delegator, metchFoo, admin);
 
                             productContentCtx = new HashMap<String, Object>();
-                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                productContentCtx.put("userLogin", admin);

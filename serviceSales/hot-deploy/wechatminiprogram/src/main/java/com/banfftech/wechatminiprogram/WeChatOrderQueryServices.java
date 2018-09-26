@@ -1572,6 +1572,28 @@ public class WeChatOrderQueryServices {
                 Map<String, Object> rowMap = gv.getAllFields();
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
+
+
+
+                //有单品图就拿单品图,否则就拿首图
+                HashSet<String>  imgFieldSet = new HashSet<String>();
+                imgFieldSet.add("drObjectInfo");
+                imgFieldSet.add("productId");
+                imgFieldSet.add("productContentTypeId");
+                EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, skuId);
+                EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
+                List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, imgFieldSet,
+                        null, null, false);
+                if (singlePictures != null && singlePictures.size() > 0) {
+                    rowMap.put("showImageUrl", singlePictures.get(0).get("drObjectInfo") + "");
+                } else {
+                    rowMap.put("showImageUrl", "无");
+                }
+
+
+
+
                 EntityCondition findConditions3 = EntityCondition
                         .makeCondition("productId", EntityOperator.EQUALS, skuId);
 

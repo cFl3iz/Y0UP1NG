@@ -1197,6 +1197,12 @@
         <description>每月1号零点清空一口价购买限制</description>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <service name="resetAllBaZhePromoCode" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="resetAllBaZhePromoCode" auth="false">
+        <description>每年1月1号零点清空所有员工朋友八折券</description>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
 
 

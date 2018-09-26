@@ -3767,9 +3767,8 @@ public class PersonManagerServices {
 //    }], login.username = omsapiaccount
 //    }
 
-
     /**
-     * 重置我的十张优惠券
+     * resetAllBaZhePromoCode
      * @param dctx
      * @param context
      * @return
@@ -3777,6 +3776,52 @@ public class PersonManagerServices {
      * @throws GenericServiceException
      * @throws Exception
      */
+    public static Map<String, Object> resetAllBaZhePromoCode(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("PromoEmp").where( ).queryList();
+        if(null!= myPromoList && myPromoList.size()>0){
+            for(GenericValue gv : myPromoList){
+                gv.set("statusId","EP_DISABLED");
+                gv.store();
+            }
+        }
+        List<GenericValue> empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where().queryList();
+        int relationSize = empPromoCodeRelation.size();
+        if(null!= empPromoCodeRelation && empPromoCodeRelation.size()>0){
+            for(GenericValue gv : empPromoCodeRelation){
+                gv.remove();
+            }
+        }
+
+        dispatcher.runSync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        "所有员工朋友八折优惠券已清除,共:"+relationSize+"次分享。所有员工十张空券已重新发放。"
+                        , "title","[自然年优惠券重置]"));
+
+        return resultMap;
+    }
+        /**
+         * 重置我的十张优惠券
+         * @param dctx
+         * @param context
+         * @return
+         * @throws GenericEntityException
+         * @throws GenericServiceException
+         * @throws Exception
+         */
     public static Map<String, Object> resetBaZhePromoCode(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException, Exception {
 

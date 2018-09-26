@@ -23,7 +23,7 @@
 
     <service name="sendEmailNotification" engine="java"
              location="main.java.com.banfftech.platformmanager.util.EmailService" invoke="sendEmailNotification" auth="false">
-        <attribute name="content" type="String" mode="IN"/>
+        <attribute name="content" type="String" mode="IN" allow-html="any" />
         <attribute name="title" type="String" mode="IN"/>
     </service>
 

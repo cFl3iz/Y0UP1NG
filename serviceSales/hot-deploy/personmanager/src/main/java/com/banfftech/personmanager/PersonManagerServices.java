@@ -515,7 +515,7 @@ public class PersonManagerServices {
         calendar.setTime(new Date());//设置当前日期
         calendar.add(Calendar.MONTH, -1);//月份减一
 
-        String titleName = ""+calendar.getTime() + "内买汇总月报";
+        String titleName ="[自然月购物限制重置]";
         sb.append("--------------------------------");
                     sb.append("                             <br/>总计:"+countSize+"件<br/>");
                     sb.append("<br/>所有员工购买限制已于"+calendar.getTime()+"清零。");

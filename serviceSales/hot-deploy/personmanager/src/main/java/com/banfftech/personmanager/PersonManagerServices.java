@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -465,6 +466,65 @@ public class PersonManagerServices {
 
         return "未知";
     }
+
+
+
+
+
+
+
+
+
+    /**
+     * resetEmpBuyHistory
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> resetEmpBuyHistory(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+
+        List<GenericValue> empBuyHistorys = EntityQuery.use(delegator).from("EmpBuyHistory").where().queryList();
+
+        int countSize = 0;
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(" 用户ID            购买数量<br/>");
+        sb.append("--------------------------------");
+        if(null!= empBuyHistorys && empBuyHistorys.size()>0){
+              for(GenericValue gv : empBuyHistorys){
+
+                    String partyId = gv.getString("partyId");
+                    String count = gv.getString("count");
+                    countSize += Integer.parseInt(count);
+                    sb.append(" "+partyId+"            "+count+" 件<br/>");
+                    gv.remove();
+              }
+        }
+        Calendar calendar = Calendar.getInstance();//日历对象
+        calendar.setTime(new Date());//设置当前日期
+        calendar.add(Calendar.MONTH, -1);//月份减一
+
+        String titleName = "------"+calendar.getTime() + "内买汇总月报------";
+        sb.append("--------------------------------");
+                    sb.append("                             总计:"+countSize+"件<br/>");
+                    sb.append("所有员工购买限制已清零。");
+        dispatcher.runSync("sendEmailNotification",
+                UtilMisc.toMap("content",
+                        sb.toString()
+                        , "title",titleName));
+
+
+        return resultMap;
+    }
+
 
 
     /**

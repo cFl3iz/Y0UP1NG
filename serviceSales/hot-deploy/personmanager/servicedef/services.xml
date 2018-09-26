@@ -1190,6 +1190,16 @@
     </service>
 
 
+
+    <service name="resetEmpBuyHistory" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="resetEmpBuyHistory" auth="false">
+        <description>每月1号零点清空一口价购买限制</description>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
     <!-- queryCustSalesReport -->
     <service name="queryCustSalesReport" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"

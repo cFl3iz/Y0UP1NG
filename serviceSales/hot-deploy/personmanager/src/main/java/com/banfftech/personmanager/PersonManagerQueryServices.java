@@ -101,7 +101,6 @@ public class PersonManagerQueryServices {
         GenericValue empBuyHistory = EntityQuery.use(delegator).from("EmpBuyHistory").where("partyId",partyId,"productCategoryId",productCategoryId).queryFirst();
         if(null!=empBuyHistory){
             resultMap.put("map",empBuyHistory.getAllFields());
-
         }else{
             resultMap.put("map",null);
         }

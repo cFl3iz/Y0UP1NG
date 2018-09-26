@@ -56,6 +56,18 @@
                    optional="true"/>
     </service>
 
+    <service name="copyCategoryProducts" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="copyCategoryProducts" auth="false">
+        <description>copyCategoryProducts</description>
+        <attribute name="productIds" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
 
     <!-- 加入商店招募 -->
     <service name="recruitingPartyToParty" engine="java"

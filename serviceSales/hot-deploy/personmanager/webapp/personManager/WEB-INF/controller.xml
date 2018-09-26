@@ -38,6 +38,14 @@
     </request-map>
 
 
+
+    <request-map uri="copyCategoryProducts">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="copyCategoryProducts"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="addPartyToStoreRole">
         <security https="false" auth="false"/>
         <event type="service" invoke="addPartyToStoreRole"/>

@@ -468,8 +468,67 @@ public class PersonManagerServices {
 
 
     /**
+     * copyCategoryProducts
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> copyCategoryProducts(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String productIds = (String) context.get("productIds");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+
+        GenericValue myStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+
+
+        String storeId = myStore.getString("productStoreId");
+
+
+        GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where(
+                "productStoreId",storeId  ).queryFirst();
+
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", productStoreCatalog.getString("prodCatalogId")).queryFirst();
+        String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
+
+        if(null!= productIds){
+            for(String rowProductId : productIds.split(",")){
+                if(null == EntityQuery.use(delegator).from("ProductCategoryMember").where(
+                        "productId",rowProductId,"productCategoryId",productCategoryId).queryFirst()){
+                //产品关联分类
+                    Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                    addProductToCategoryInMap.put("userLogin", admin);
+                    addProductToCategoryInMap.put("productId", rowProductId);
+                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                    Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                        return addProductToCategoryServiceResultMap;
+                    }
+                }
+            }
+        }
+
+        return resultMap;
+
+    }
+
+
+
+    /**
      * validate OrderStatus
-     *
      * @param dctx
      * @param context
      * @return

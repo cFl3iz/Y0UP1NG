@@ -3792,10 +3792,15 @@ public class PersonManagerServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         List<GenericValue> myPromoList =  EntityQuery.use(delegator).from("PromoEmp").where( ).queryList();
+        List<String> empList = new ArrayList<String>();
         if(null!= myPromoList && myPromoList.size()>0){
             for(GenericValue gv : myPromoList){
-                gv.set("statusId","EP_DISABLED");
-                gv.store();
+                String partyId = gv.getString("partyId");
+                String promoCodeId = gv.getString("promoCodeId");
+                dispatcher.runSync("resetBaZhePromoCode",UtilMisc.toMap("userLogin",admin,"partyId",partyId,
+                        "productPromoId","EMP_FRIEND"));
+//                gv.set("statusId","EP_DISABLED");
+//                gv.store();
             }
         }
         List<GenericValue> empPromoCodeRelation = EntityQuery.use(delegator).from("EmpPromoCodeRelation").where().queryList();

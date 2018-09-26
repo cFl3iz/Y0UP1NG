@@ -495,9 +495,12 @@ public class PersonManagerServices {
 
         int countSize = 0;
         StringBuffer sb = new StringBuffer();
-
+        sb.append("<html>");
+        sb.append("<head><style>body{background-color: black;color: white;}</style>");
+        sb.append("</head>");
+        sb.append("<body>");
         sb.append(" 用户ID            购买数量<br/>");
-        sb.append("--------------------------------");
+        sb.append("--------------------------------<br/>");
         if(null!= empBuyHistorys && empBuyHistorys.size()>0){
               for(GenericValue gv : empBuyHistorys){
 
@@ -512,10 +515,14 @@ public class PersonManagerServices {
         calendar.setTime(new Date());//设置当前日期
         calendar.add(Calendar.MONTH, -1);//月份减一
 
-        String titleName = "------"+calendar.getTime() + "内买汇总月报------";
+        String titleName = ""+calendar.getTime() + "内买汇总月报";
         sb.append("--------------------------------");
-                    sb.append("                             总计:"+countSize+"件<br/>");
-                    sb.append("所有员工购买限制已清零。");
+                    sb.append("                             <br/>总计:"+countSize+"件<br/>");
+                    sb.append("<br/>所有员工购买限制已于"+calendar.getTime()+"清零。");
+
+
+        sb.append("</body>");
+        sb.append("</html>");
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         sb.toString()

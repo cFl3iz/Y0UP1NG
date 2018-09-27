@@ -1524,24 +1524,9 @@ public class WeChatOrderQueryServices {
         int highIndex = 0;
         Long resourceCount;
 
-        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
-        String partyId = "NA";
-
-
-
-        if (UtilValidate.isNotEmpty(partyIdentification)) {
-            partyId = (String) partyIdentification.get("partyId");
-        }
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
-        //查看了列表，清空temp
-        GenericValue forwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                "partyIdTo", partyId).queryFirst();
-
-        if (null != forwardChainFactTemp) {
-            forwardChainFactTemp.remove();
-        }
 
         //"isVirtual", "Y","isVariant","N"
         List<String> orderBy = UtilMisc.toList("-createdDate");
@@ -1553,7 +1538,7 @@ public class WeChatOrderQueryServices {
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "N").queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "Y").queryCount();
 
 
         lowIndex = myContactListPage.getStartIndex();
@@ -1565,14 +1550,15 @@ public class WeChatOrderQueryServices {
 
         fieldSet.add("drObjectInfo");
         fieldSet.add("contentId");
-
         fieldSet.add("productId");
+
+        Debug.logInfo("=>myContactListPage="+myContactListPage,module);
+
         if (null != myContactListPage) {
             for (GenericValue gv : myContactListPage) {
                 Map<String, Object> rowMap = gv.getAllFields();
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
-
 
                 //有单品图就拿单品图,否则就拿首图
                 HashSet<String>  imgFieldSet = new HashSet<String>();
@@ -1590,25 +1576,21 @@ public class WeChatOrderQueryServices {
                     rowMap.put("showImageUrl", "无");
                 }
 
-
-
-
-                EntityCondition findConditions3 = EntityCondition
-                        .makeCondition("productId", EntityOperator.EQUALS, skuId);
-
-                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
-                        findConditions3, fieldSet,
-                        null, null, false);
-
+//                EntityCondition findConditions3 = EntityCondition
+//                        .makeCondition("productId", EntityOperator.EQUALS, skuId);
+//
+//                List<GenericValue> rowPictures = delegator.findList("ProductContentAndInfo",
+//                        findConditions3, fieldSet,
+//                        null, null, false);
 
                     count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                    rowMap.put("price", productPrice.get("price"));
-
-                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                    if(null!=productOnePrice){
-                        rowMap.put("oneMouthPrice", productOnePrice.get("price"));
+                    if(null!=productPrice){
+                        rowMap.put("price", productPrice.get("price"));
+                    }else{
+                        Debug.logInfo("can't find price productId:"+skuId,module);
                     }
+
 
                     returnProductList.add(rowMap);
 

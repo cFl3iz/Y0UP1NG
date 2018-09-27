@@ -1148,6 +1148,8 @@ public class PlatformManagerServices {
                 String detailOne = null;
                 String detailTwo = null;
                 String detailThree = null;
+                String detailFoo = null;
+                String detailFive = null;
                 try{
                     metchOne = excelRow[11];
                     metchTwo = excelRow[12];
@@ -1159,6 +1161,8 @@ public class PlatformManagerServices {
                     detailOne = excelRow[17];
                     detailTwo = excelRow[18];
                     detailThree = excelRow[19];
+                    detailFoo = excelRow[20];
+                    detailFive = excelRow[21];
                 }catch (ArrayIndexOutOfBoundsException e){
 
                 }
@@ -1345,19 +1349,38 @@ public class PlatformManagerServices {
 
                         if(!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")){
                             String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
-
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
                             productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                             productContent.create();
                         }
 
+
+                        //4
+                        if(!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")){
+                            String contentId = createNewContentForImage(dispatcher,delegator,detailFoo, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx.put("contentId", contentId);
+                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            productContent.create();
+                        }
+                        //5
+                        if(!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")){
+                            String contentId = createNewContentForImage(dispatcher,delegator,detailFive, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx.put("contentId", contentId);
+                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            productContent.create();
+                        }
 
                     }
                     //创建变形产品
@@ -1521,8 +1544,31 @@ public class PlatformManagerServices {
 
                             GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
                             productContent.create();
-
                         }
+
+                        //4
+                        if(!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")){
+                            String contentId = createNewContentForImage(dispatcher,delegator,detailFoo, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx.put("contentId", contentId);
+                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            productContent.create();
+                        }
+                        //5
+                        if(!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")){
+                            String contentId = createNewContentForImage(dispatcher,delegator,detailFive, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx.put("contentId", contentId);
+                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            productContent.create();
+                        }
+
 
                     }
                     //创建产品关联

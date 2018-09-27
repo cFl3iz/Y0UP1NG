@@ -3742,9 +3742,14 @@ public class PersonManagerServices {
         if("ZUCZUGSTORE".equals(productStoreId)){
             // Async To Zuczug
             dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","10020"));
-        }else{
+        }
+        if("11140".equals(productStoreId)){
             //默认其他店铺发货是指内买
             dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","AKR002"));
+        }
+        if("11260".equals(productStoreId)){
+            //ex 1
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","P01"));
         }
 
         GenericValue nowCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId",productStoreId).queryFirst();
@@ -4415,14 +4420,20 @@ public class PersonManagerServices {
         }
             String titleName = "";
             if(zuczugStoreId.equals("10020")){
-                titleName = "[AnKoRau小程序]"+ "正式付款下单!" + orderId;
-            }else{
+                titleName = "[AnKoRau小程序]"+ "正式付款下单!" + orderId;}
+
+            if(zuczugStoreId.equals("AKR002")){
                 titleName = "[素然内买]"+ "正式付款下单!" + orderId;
+            }
+
+            if(zuczugStoreId.equals("P01")){
+                titleName = "[Extra-One]"+ "正式付款下单!" + orderId;
             }
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",
-                        "订单:"+orderId+
-                                "|已通知素然长宁工作机[店铺:"+zuczugStoreId+"]生成订单。请求报文:"+orderListStr.toString()+"。素然回馈结果为["+resultMsg+"]"
+                        "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:["+orderId+
+                                "]已通知素然长宁工作机[店铺:"+zuczugStoreId+"]生成订单。<br/>请求报文:"+orderListStr.toString()+
+                                "。<br/>素然回馈结果为[<span style=\"color:green;\">"+resultMsg+"</span>]</div>"
                         , "title",titleName));
 
 

@@ -149,6 +149,17 @@
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <service name="baseWeChatMiniAppLogin" engine="java"
+             location="main.java.com.banfftech.platformmanager.common.PlatformLoginWorker" invoke="baseWeChatMiniAppLogin" auth="false">
+        <description>baseWeChatMiniAppLogin</description>
+
+        <attribute name="openId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="appId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <!-- User Create -->
     <service name="createTelUser" engine="java"

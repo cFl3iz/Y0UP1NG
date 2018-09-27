@@ -870,19 +870,24 @@ public class WeChatOrderQueryServices {
                 List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo", detailCondition, fieldSet,
                         null, null, false);
                 if (detailPictures != null && detailPictures.size() > 0) {
+                    List<Map<String,Object>> detailList = new ArrayList<Map<String, Object>>();
                     for (GenericValue pict : detailPictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
+
                         if(drObjectInfo.indexOf("end.jpg")>-1){
                             allField.put("endImage",drObjectInfo);
-                        }
-                        if (!isExsitsPath.containsKey(drObjectInfo)) {
-                            isExsitsPath.put(drObjectInfo, "");
+                        }else{
                             rowMap.put("drObjectInfo", drObjectInfo);
-                            pictures.add(rowMap);
+                            detailList.add(rowMap);
                         }
+//                        if (!isExsitsPath.containsKey(drObjectInfo)) {
+//                            isExsitsPath.put(drObjectInfo, "");
+//                            rowMap.put("drObjectInfo", drObjectInfo);
+//                            pictures.add(rowMap);
+//                        }
                     }
-                    allField.put("detailPictures",detailPictures);
+                    allField.put("detailPictures",detailList);
                 }
 
             }

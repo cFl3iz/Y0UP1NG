@@ -152,6 +152,24 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true" />
     </service>
+    <service name="queryCatalogSkuProduct" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryCatalogSkuProduct" auth="false">
+        <description>queryCatalogSkuProduct</description>
+
+        <attribute name="openId" type="String" mode="IN" optional="true" />
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="true" />
+        <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
+        <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="from" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="current_page" type="java.lang.Integer" mode="OUT" optional="true" />
+        <attribute name="last_page" type="java.lang.Integer" mode="OUT" optional="true" />
+
+        <attribute name="productList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
 
     <!-- 查询目录中的资源  -->
     <service name="queryCatalogProduct" engine="java"

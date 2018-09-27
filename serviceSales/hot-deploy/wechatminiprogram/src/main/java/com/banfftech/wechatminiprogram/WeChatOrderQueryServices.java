@@ -1532,11 +1532,11 @@ public class WeChatOrderQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId, "isVirtual", "Y").orderBy(orderBy).queryPagedList(viewIndex, viewSize);
+                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy).queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "Y").queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "N").queryCount();
 
 
         lowIndex = myContactListPage.getStartIndex();

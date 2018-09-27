@@ -219,6 +219,15 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+
+    <request-map uri="queryCatalogSkuProductDetail">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryCatalogSkuProductDetail"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="queryCatalogProduct">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryCatalogProduct"/>

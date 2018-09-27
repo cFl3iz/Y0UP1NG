@@ -8234,9 +8234,14 @@ public class PersonManagerServices {
         //一个店->一个订单->多个订单项目
         Map<String, List<GenericValue>> splitOrderItemList = new HashMap<String, List<GenericValue>>();
 
+        StringBuffer sb = new StringBuffer();
+        sb.append("<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">");
 
         int index = 1;
         System.out.println("->productsArray:" + productsArray.toString());
+        sb.append("<span style=\"color:red;\">下单人:" + userName + "|" + partyId + "<br/>");
+        sb.append(provinceName+" "+cityName+" "+countyName +" "+detailInfo+ "</span><br/>");
+        sb.append("-------------------------------------<br/>");
         for (String rowProduct : productsArray) {
 
             //Order Items
@@ -8250,6 +8255,8 @@ public class PersonManagerServices {
             }
 
             String amount = rowProduct.substring(rowProduct.indexOf(":") + 1);
+
+            sb.append("产品:"+productId+"&nbsp;"+"数量:"+amount+"<br/>");
 
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
@@ -8396,9 +8403,16 @@ public class PersonManagerServices {
 
         resultMap.put("orderId", orderId);
 
+
+
+        sb.append("</div><br/>");
+
+        String url = "https://www.yo-pe.com:3401/ordermgr/control/orderview?orderId=";
+
+        sb.append("<a  style=\"color:red;\"  href=\"  "+ url+orderId +" \">查看订单</a>");
         dispatcher.runAsync("sendEmailNotification",
                 UtilMisc.toMap("content",
-                        splitOrderItemList.toString()
+                        sb.toString()
                         , "title", "[" + partyId + "]购物车下单,单号:" + orderId));
 
 

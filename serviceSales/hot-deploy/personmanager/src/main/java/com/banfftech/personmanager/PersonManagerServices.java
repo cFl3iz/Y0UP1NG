@@ -600,7 +600,7 @@ public class PersonManagerServices {
                 }
 // Create Facility
                 Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
-                        "ownerPartyId", groupId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
+                        "ownerPartyId", partyId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
                 if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
                     return createFacilityOutMap;
                 }

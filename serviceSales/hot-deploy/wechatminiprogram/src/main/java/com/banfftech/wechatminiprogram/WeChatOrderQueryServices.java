@@ -833,6 +833,7 @@ public class WeChatOrderQueryServices {
                             pictures.add(rowMap);
                         }
                     }
+                    allField.put("matchPictures",matchPictures);
                 }
                 //2 查询单品图
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
@@ -857,6 +858,8 @@ public class WeChatOrderQueryServices {
                         }
 
                     }
+                    allField.put("singlePictures",singlePictures);
+
                 } else {
                     featureMap.put(rowColor == null ? "普通" : rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
                 }
@@ -876,6 +879,7 @@ public class WeChatOrderQueryServices {
                             pictures.add(rowMap);
                         }
                     }
+                    allField.put("detailPictures",detailPictures);
                 }
 
             }

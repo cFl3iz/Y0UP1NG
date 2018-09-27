@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import main.java.com.banfftech.platformmanager.common.PlatformLoginWorker;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -92,6 +93,7 @@ import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
+import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
 import static main.java.com.banfftech.platformmanager.wechat.WeChatUtil.getAccessToken;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizData;
 import static main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices.updateProductBizDataFromOrder;
@@ -473,7 +475,148 @@ public class PersonManagerServices {
 
 
 
+    public static Map<String, Object> registerDk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = null;
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
+        Locale locale = (Locale) context.get("locale");
+
+        String unioId = (String) context.get("unioId");
+        //小程序的OPEN ID 也要存
+        String openId = (String) context.get("openId");
+        String captcha = (String) context.get("captcha");
+        String tel = (String) context.get("tel");
+
+        String appId = (String) context.get("appId");
+        String nickName = (String) context.get("nickName");
+        String gender = (String) context.get("gender");
+        String language = (String) context.get("language");
+        String avatarUrl = (String) context.get("avatarUrl");
+        String city = (String) context.get("city");
+        String country = (String) context.get("country");
+        String province = (String) context.get("province");
+
+        String name = (String) context.get("name");
+
+
+        if (captcha != null && !captcha.trim().equals("")) {
+            boolean checkCaptcha = false;
+            checkCaptcha = PlatformLoginWorker.checkCaptchaIsRight(delegator, captcha, userLogin, tel, locale);
+            Debug.logInfo("tel:" + tel + ",checkCaptcha=>" + checkCaptcha, module);
+
+            if (checkCaptcha) {
+
+
+
+                userLogin = PersonManagerServices.justCreatePartyPersonUserLogin(delegator, dispatcher, name, nickName);
+
+                String partyId = (String) userLogin.getString("partyId");
+
+                // 角色
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "OWNER"));
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ADMIN"));
+
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "WORKER"));
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "LEAD"));
+                dispatcher.runSync("createPartyRole",
+                        UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACCOUNT_LEAD"));
+
+
+                // 接收账单的客户是否拥有
+                GenericValue partyCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "BILL_TO_CUSTOMER").queryFirst();
+                if (null == partyCustRole) {
+                    Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "BILL_TO_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+                }
+
+                // 收货的客户是否拥有
+                GenericValue partyCustShipRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+                if (null == partyCustShipRole) {
+                    Map<String, Object> createPartyCustShipRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "SHIP_TO_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyCustShipRoleMap);
+                }
+
+                //最终客户角色是否拥有
+                GenericValue partyEndCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "END_USER_CUSTOMER").queryFirst();
+                if (null == partyEndCustRole) {
+                    Map<String, Object> createPartyEndCustRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "END_USER_CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyEndCustRoleMap);
+                }
+                GenericValue partyCUSTOMERRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();
+                if (null == partyCUSTOMERRole) {
+                    Map<String, Object> createPartyCUSTOMERRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                            "roleTypeId", "CUSTOMER");
+                    dispatcher.runSync("createPartyRole", createPartyCUSTOMERRoleMap);
+                }
+
+
+
+
+
+                // 创建联系电话
+                Map<String, Object> inputTelecom = UtilMisc.toMap();
+                inputTelecom.put("partyId", partyId);
+                inputTelecom.put("contactNumber", tel);
+                inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+                inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+                inputTelecom.put("userLogin", admin);
+                Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+                Map<String, String> userInfoMap = new HashMap<String, String>();
+                userInfoMap.put("nickname", nickName);
+                userInfoMap.put("sex", gender);
+                userInfoMap.put("language", language);
+                userInfoMap.put("headimgurl", avatarUrl);
+                //注册后端流程
+                main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(appId, admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
+
+
+                // 创建会员店铺及目录和分类 2c 后创建
+                createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+
+                if (city != null && !city.equals("") && province != null) {
+
+
+                    //  邮政地址
+                    String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+                    Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                            UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", city, "address1", province + "-" + country, "address2", city, "postalCode", PeConstant.DEFAULT_POST_CODE
+                            ));
+                    String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+                    if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                        return createPartyPostalAddressOutMap;
+                    }
+                }
+// Create Facility
+                Map<String, Object> createFacilityOutMap = dispatcher.runSync("createFacility", UtilMisc.toMap("userLogin", admin,
+                        "ownerPartyId", groupId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
+                if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
+                    return createFacilityOutMap;
+                }
+
+
+                result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
+                result.put("partyId", partyId);
+                result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));
+            } else {
+                return ServiceUtil.returnError("check fail");
+            }
+        }
+
+
+        return result;
+    }
 
     /**
      * resetEmpBuyHistory
@@ -8885,7 +9028,8 @@ String userLoginId = delegator.getNextSeqId("UserLogin");
                     partyId, "idValue", openId, "partyIdentificationTypeId", "WX_UNIO_ID");
             dispatcher.runSync("createPartyIdentification", createPartyIdentificationWxInMap);
         }
-
+        // 创建会员店铺及目录和分类 2c 后创建
+//       createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
 
         // Create UserLogin Block
         Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
@@ -8903,8 +9047,7 @@ String userLoginId = delegator.getNextSeqId("UserLogin");
                 userLoginId, "groupId", "FULLADMIN");
         dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
 
-        // 创建会员店铺及目录和分类 2c 后创建
-//       createPersonStoreAndCatalogAndCategory(locale, admin, delegator, dispatcher, partyId);
+
 
 
 

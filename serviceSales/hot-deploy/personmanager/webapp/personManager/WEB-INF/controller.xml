@@ -37,6 +37,12 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="registerDk">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="registerDk"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="copyCategoryProducts">

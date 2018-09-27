@@ -873,6 +873,9 @@ public class WeChatOrderQueryServices {
                     for (GenericValue pict : detailPictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
+                        if(drObjectInfo.indexOf("end.jpg")>-1){
+                            allField.put("endImage",drObjectInfo);
+                        }
                         if (!isExsitsPath.containsKey(drObjectInfo)) {
                             isExsitsPath.put(drObjectInfo, "");
                             rowMap.put("drObjectInfo", drObjectInfo);

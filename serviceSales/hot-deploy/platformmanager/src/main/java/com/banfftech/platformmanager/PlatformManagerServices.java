@@ -1106,7 +1106,7 @@ public class PlatformManagerServices {
 
         try {
             String[] excelHead = excelList.get(0);
-
+            Debug.logInfo("=>productUploadImportFormExtraOne="+excelHead,module);
             //WATERPROOF or ANKORAU_RETAIL
             String prodCatalogId = excelHead[0];
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();

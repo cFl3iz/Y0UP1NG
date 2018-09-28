@@ -158,6 +158,7 @@ public class BoomQueryServices {
             for(GenericValue gv : colleaguesList){
                     String partyIdTo  = gv.getString("partyIdTo");
                    Map<String,String> personInfo =    queryPersonBaseInfo(delegator,partyIdTo);
+                personInfo.put("partyId",partyIdTo);
                 returnList.add(personInfo);
             }
         }

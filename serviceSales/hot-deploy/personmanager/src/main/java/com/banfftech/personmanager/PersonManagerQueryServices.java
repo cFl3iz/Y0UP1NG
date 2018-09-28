@@ -59,6 +59,7 @@ import java.util.Date;
 import main.java.com.banfftech.platformmanager.util.GZIP;
 import sun.net.www.content.text.Generic;
 
+import static main.java.com.banfftech.boom.BoomQueryServices.getMyGroup;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import static main.java.com.banfftech.platformmanager.util.UtilTools.dateToStr;
 
@@ -4023,10 +4024,14 @@ public class PersonManagerQueryServices {
                 personInfo.put("aliasCompanyName",aliasForg.getString("aliasName").substring(0,aliasForg.getString("aliasName").indexOf("-")));
                 personInfo.put("aliasAddress",aliasForg.getString("aliasAddress"));
             }else{
-                GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                        "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//                GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                        "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//
+//                String partyGroupId = relation.getString("partyIdTo");
 
-                String partyGroupId = relation.getString("partyIdTo");
+                Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+                String partyGroupId = (String) myGroup.get("partyId");
+                partyId = partyGroupId;
 
                 GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
                         "partyId", partyGroupId).queryFirst();

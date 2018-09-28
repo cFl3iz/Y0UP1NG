@@ -905,7 +905,7 @@ public class BoomServices {
             result.put("partyId", miniProgramIdentification.get("partyId") + "");
 
 
-            Map<String,Object> myGroup = getMyGroup(delegator,miniProgramIdentification.get("partyId"));
+            Map<String,Object> myGroup = getMyGroup(delegator,""+miniProgramIdentification.get("partyId"));
             if(null!=myGroup){
                 String partyGroupId = (String) myGroup.get("partyId");
                 result.put("partyGroupId", partyGroupId);

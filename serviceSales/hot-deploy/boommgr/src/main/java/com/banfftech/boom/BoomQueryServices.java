@@ -209,9 +209,9 @@ public class BoomQueryServices {
 
                 String payToPartyId =custOrderRole.getString("partyId");
 
-                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, payToPartyId,partyId));
+                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, payToPartyId,partyGroupId));
 
-                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
+                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyGroupId,partyGroupId));
 
 
 
@@ -404,9 +404,9 @@ public class BoomQueryServices {
 
                 String custId =custOrderRole.getString("partyId");
 
-                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyId));
+                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, partyGroupId,partyGroupId));
 
-                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, custId, partyId));
+                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, custId, partyGroupId));
                 String uomId = product.getString("quantityUomId");
                 GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                         "uomId", uomId).queryFirst();

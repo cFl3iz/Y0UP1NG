@@ -83,7 +83,6 @@
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="addEmp" auth="false">
         <description>addEmp</description>
-        <attribute name="tel" type="String" mode="IN" optional="false"/>
         <attribute name="partyGroupId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
@@ -255,6 +254,7 @@
         <description>register</description>
 
         <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyGroupId" type="String" mode="IN" optional="true"/>
         <attribute name="appId" type="String" mode="IN" optional="true"/>
         <attribute name="tel" type="String" mode="IN" optional="true"/>
         <attribute name="captcha" type="String" mode="IN" optional="true"/>

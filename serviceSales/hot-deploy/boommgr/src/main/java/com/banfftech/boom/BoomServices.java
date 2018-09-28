@@ -151,21 +151,24 @@ public class BoomServices {
 
         Locale locale = (Locale) context.get("locale");
 
-        String tel = (String) context.get("tel");
+        String partyGroupId = (String) context.get("partyGroupId");
 
         String partyId = userLogin.getString("partyId");
 
+        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+        createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+        createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+//                createPartyRelationshipInMap.put("userLogin", admin);
+        createPartyRelationshipInMap.put("partyIdFrom", partyGroupId);
+        createPartyRelationshipInMap.put("partyIdTo",partyId );
+        createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+        createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
-        // Check is Exsit Contact Number ?..
-        List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
-                "contactNumber", tel, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "contactMechTypeId", "TELECOM_NUMBER").queryList();
-//        GenericValue miniProgramIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("appId", appId, "partyId", oldPartyId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
-//        if (miniProgramIdentification != null) {
-        if(teleContact!=null && teleContact.size()>0){
-            for(GenericValue gv :teleContact){
-                    //TODO FIX ME
-            }
-        }
+
+        GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+
+        partyRelationship.create();
+
 
         return result;
     }
@@ -534,6 +537,7 @@ public class BoomServices {
         Locale locale = (Locale) context.get("locale");
 
         String unioId = (String) context.get("unioId");
+        String fromPartyGroupId = (String) context.get("partyGroupId");
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
         String captcha = (String) context.get("captcha");
@@ -681,11 +685,6 @@ public class BoomServices {
                 createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
                 createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
-//                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-//
-//                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-//                    return createPartyRelationshipOutMap;
-//                }
 
                 GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
 
@@ -729,6 +728,20 @@ public class BoomServices {
                         "ownerPartyId", groupId, "facilityTypeId", "WAREHOUSE", "facilityName", partyId, "defaultInventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
                 if (!ServiceUtil.isSuccess(createFacilityOutMap)) {
                     return createFacilityOutMap;
+                }
+
+
+                if(null!=fromPartyGroupId&&!fromPartyGroupId.trim().equals("")){
+                    createPartyRelationshipInMap = new HashMap<String, Object>();
+                    createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                    createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+                    createPartyRelationshipInMap.put("partyIdFrom", fromPartyGroupId);
+                    createPartyRelationshipInMap.put("partyIdTo",partyId );
+                    createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+                    createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                      partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+                    partyRelationship.create();
+
                 }
 
 
@@ -1463,7 +1476,7 @@ public class BoomServices {
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
-        userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId",partyId).queryFirst();
+        userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
 
         String supplierName = (String) context.get("supplierName");

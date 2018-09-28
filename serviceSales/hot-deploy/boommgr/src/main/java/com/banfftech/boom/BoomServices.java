@@ -122,6 +122,21 @@ public class BoomServices {
         dispatcher.runSync("createPartyRole",
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ADMIN"));
 
+
+
+        String userLoginId = delegator.getNextSeqId("UserLogin");
+        // Create UserLogin Block
+        Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "partyId", partyId, "currentPassword", "ofbiz",
+                "currentPasswordVerify", "ofbiz", "enabled", "Y");
+        Map<String, Object> createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+
+        // Grant Permission Block
+        Map<String, Object> userLoginSecurityGroupInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
+                userLoginId, "groupId", "FULLADMIN");
+        dispatcher.runSync("addUserLoginToSecurityGroup", userLoginSecurityGroupInMap);
+
         return partyId;
     }
 
@@ -1448,6 +1463,9 @@ public class BoomServices {
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
+        userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId",partyId).queryFirst();
+
+
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String appId = (String) context.get("appId");

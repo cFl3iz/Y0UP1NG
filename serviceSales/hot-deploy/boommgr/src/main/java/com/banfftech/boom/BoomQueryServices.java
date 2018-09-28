@@ -279,11 +279,9 @@ public class BoomQueryServices {
 
 
         //生产计划
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
-        String partyGroupId = relation.getString("partyIdTo");
+
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyGroupId ).queryFirst();
+                "ownerPartyId", partyId ).queryFirst();
         String facilityId = facility.getString("facilityId");
         Long productionsCount = EntityQuery.use(delegator).from("WorkEffortAndGoods").where(
                 "workEffortTypeId", "PROD_ORDER_HEADER", "facilityId", facilityId).queryCount();

@@ -445,6 +445,8 @@ public class BoomQueryServices {
 
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
+
+
 //        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
 //                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
 //
@@ -541,25 +543,11 @@ public class BoomQueryServices {
 
                                 String supplierPartyId = supplier.getString("partyId");
 
-                                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyId);
+                                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyGroupId);
                                 rowSupplier.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
                                 rowSupplier.put("supplierInfo", supplierInfo);
                                 rowSupplier.put("partyId",supplierPartyId);
 
-//                                GenericValue partyGroup =  EntityQuery.use(delegator).from("PartyGroup").where(
-//                                        "partyId", supplierPartyId).queryFirst();
-//
-//                                if(null!= partyGroup){
-//                                    rowSupplier.put("supplierName",partyGroup.getString("groupName"));
-//                                    rowSupplier.put("supplierPartyId",supplierPartyId);
-//                                }else{
-//                                    GenericValue person =  EntityQuery.use(delegator).from("Person").where(
-//                                            "partyId", supplierPartyId).queryFirst();
-//                                    if(null!=person){
-//                                        rowSupplier.put("supplierName",person.getString("lastName")+person.getString("firstName"));
-//                                        rowSupplier.put("supplierPartyId",supplierPartyId);
-//                                    }
-//                                }
 
                                 supplierList.add(rowSupplier);
                             }

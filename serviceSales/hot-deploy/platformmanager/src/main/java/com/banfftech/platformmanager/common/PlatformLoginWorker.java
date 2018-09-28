@@ -54,6 +54,7 @@ import net.sf.json.JSONObject;
 import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
 
+import static main.java.com.banfftech.boom.BoomQueryServices.getMyGroup;
 import static main.java.com.banfftech.platformmanager.util.HttpHelper.sendGet;
 import main.java.com.banfftech.platformmanager.util.EmojiFilter;
 import main.java.com.banfftech.platformmanager.util.EmojiHandler;
@@ -1143,6 +1144,14 @@ public class PlatformLoginWorker {
         }
 
         String tarjeta = getToken(user.getString("userLoginId"), delegator);
+
+
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        if(null!=myGroup){
+            String partyGroupId = (String) myGroup.get("partyId");
+            result.put("partyGroupId", partyGroupId);
+        }
+
         result.put("tarjeta", tarjeta);
         result.put("partyId", partyId);
         result.put("openId", openId);

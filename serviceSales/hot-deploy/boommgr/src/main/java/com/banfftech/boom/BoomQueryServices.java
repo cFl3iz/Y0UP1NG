@@ -635,6 +635,8 @@ public class BoomQueryServices {
 
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdTo", partyId, "partyRelationshipTypeId", "EMPLOYMENT" ).queryFirst();
+        if(null!=relation){
+
 
         String partyGroupId = relation.getString("partyIdFrom");
 
@@ -642,7 +644,9 @@ public class BoomQueryServices {
                 "partyId", partyGroupId).queryFirst();
 
         goupMap = partyGroup.getAllFields();
-
+        }else{
+            return null;
+        }
         return goupMap;
     }
 

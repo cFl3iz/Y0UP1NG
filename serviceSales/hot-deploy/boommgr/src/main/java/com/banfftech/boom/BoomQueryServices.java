@@ -761,7 +761,7 @@ public class BoomQueryServices {
                         String supplierPartyId = supplier.getString("partyId");
 
 
-                        Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyId);
+                        Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, supplierPartyId, partyGroupId);
                         rowSupplier.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
                         rowSupplier.put("supplierInfo", supplierInfo);
                         rowSupplier.put("partyId",supplierPartyId);

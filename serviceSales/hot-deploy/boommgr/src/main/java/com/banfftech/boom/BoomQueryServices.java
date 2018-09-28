@@ -259,6 +259,9 @@ public class BoomQueryServices {
                 rowMap.put("custPersonInfoMap", myGroup);
 
 
+                rowMap.put("partyGroupId", payToPartyId);
+
+
 
 
 
@@ -280,7 +283,7 @@ public class BoomQueryServices {
 
 
         resultMap.put("orderList",returnList);
-        resultMap.put("partyGroupId",partyGroupId);
+//        resultMap.put("partyGroupId",partyGroupId);
         return resultMap;
     }
 

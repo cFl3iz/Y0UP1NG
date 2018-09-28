@@ -661,8 +661,8 @@ public class BoomServices {
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
 //                createPartyRelationshipInMap.put("userLogin", admin);
-                createPartyRelationshipInMap.put("partyIdFrom", partyId);
-              createPartyRelationshipInMap.put("partyIdTo", groupId);
+                createPartyRelationshipInMap.put("partyIdFrom", groupId);
+              createPartyRelationshipInMap.put("partyIdTo",partyId );
                 createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
                 createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
@@ -1445,7 +1445,9 @@ public class BoomServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
-
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+        partyId = partyGroupId;
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String appId = (String) context.get("appId");

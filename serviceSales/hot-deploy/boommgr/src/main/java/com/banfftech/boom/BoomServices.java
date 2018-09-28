@@ -454,8 +454,8 @@ public class BoomServices {
 //                            "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
 //                    String partyGroupId = relation.getString("partyIdTo");
 
-                    Map<String,Object> myGroup = getMyGroup(delegator,partyId);
-                    String partyGroupId = (String) myGroup.get("partyId");
+//                    Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+//                    String partyGroupId = (String) myGroup.get("partyId");
 
                     GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyGroupId, "roleTypeId", "ADMIN").queryFirst();
                     if(null == productStoreRole){

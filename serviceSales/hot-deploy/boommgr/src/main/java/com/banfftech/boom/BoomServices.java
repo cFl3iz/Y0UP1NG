@@ -1435,7 +1435,8 @@ public class BoomServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
-
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
         String leadId = (String) context.get("leadId");
@@ -1514,7 +1515,7 @@ public class BoomServices {
 
 
         GenericValue aliasForg = EntityQuery.use(delegator).from("AliasForg").where(
-                "partyIdTo", leadId,"partyIdFrom",partyId).queryFirst();
+                "partyIdTo", leadId,"partyIdFrom",partyGroupId).queryFirst();
 
         aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
         aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);

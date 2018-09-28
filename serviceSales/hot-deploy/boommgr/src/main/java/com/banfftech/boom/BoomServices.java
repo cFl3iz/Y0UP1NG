@@ -637,6 +637,47 @@ public class BoomServices {
 
                     GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
                     partyRelationship.create();
+
+
+
+
+                    // 创建联系电话
+                    Map<String, Object> inputTelecom = UtilMisc.toMap();
+                    inputTelecom.put("partyId", partyId);
+                    inputTelecom.put("contactNumber", tel);
+                    inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+                    inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
+                    inputTelecom.put("userLogin", admin);
+                    Map<String, Object> createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
+
+                    Map<String, String> userInfoMap = new HashMap<String, String>();
+                    userInfoMap.put("nickname", nickName);
+                    userInfoMap.put("sex", gender);
+                    userInfoMap.put("language", language);
+                    userInfoMap.put("headimgurl", avatarUrl);
+                    //注册后端流程
+                    main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.updatePersonAndIdentificationLanguage(appId, admin, partyId, delegator, openId, userInfoMap, userLogin, dispatcher);
+
+
+                    if (city != null && !city.equals("") && province != null) {
+
+
+                        //  邮政地址
+                        String contactMechPurposeTypeId = "POSTAL_ADDRESS";
+                        Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
+                                UtilMisc.toMap("userLogin", admin, "toName", name, "partyId", partyId, "countryGeoId", PeConstant.DEFAULT_GEO_COUNTRY, "city", city, "address1", province + "-" + country, "address2", city, "postalCode", PeConstant.DEFAULT_POST_CODE
+                                ));
+                        String contactMechId = (String) createPartyPostalAddressOutMap.get("contactMechId");
+                        if (!ServiceUtil.isSuccess(createPartyPostalAddressOutMap)) {
+                            return createPartyPostalAddressOutMap;
+                        }
+                    }
+                    result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
+                    result.put("partyId", partyId);
+                    result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));
+
+                    result.put("partyGroupId", fromPartyGroupId);
+
                     return result;
                 }
 

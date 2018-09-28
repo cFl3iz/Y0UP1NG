@@ -814,6 +814,9 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+        partyId = partyGroupId;
         List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
                 "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
 

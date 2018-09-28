@@ -449,7 +449,7 @@ public class BoomQueryServices {
 
                 String custId =custOrderRole.getString("partyId");
 
-                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, partyGroupId,partyGroupId));
+                rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, partyId,partyGroupId));
 
                 rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, custId, partyGroupId));
                 String uomId = product.getString("quantityUomId");

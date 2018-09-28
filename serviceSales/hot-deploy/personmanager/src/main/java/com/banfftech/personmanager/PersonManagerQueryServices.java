@@ -3973,7 +3973,7 @@ public class PersonManagerQueryServices {
 
 
     public static Map<String, String> queryBomPersonBaseInfo(Delegator delegator, String partyId,String partyIdFrom) throws GenericEntityException, GenericServiceException {
-
+        Debug.logInfo("queryBomPersonBaseInfo,partyId:"+partyId+"|partyIdFrom:"+partyIdFrom,module);
         Map<String, String> personInfo = new HashMap<String, String>();
 
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", partyId), false);

@@ -1016,27 +1016,27 @@ public class BoomQueryServices {
                 Debug.logInfo("PartyRelationshipAndContactMechDetail=>:"+gv,module);
 
 
-                if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
-                    rowMap = returnList.get(returnList.size()-1);
-                    String tnContactNumber = gv.getString("tnContactNumber");
-                    if(null!=tnContactNumber){
-                        rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
-                    }
-                    returnList.remove(returnList.size()-1);
-                    returnList.add(rowMap);
-                    continue;
-                }
+//                if(beforePartyId!=null && beforePartyId.equals(partyIdTo)){
+//                    rowMap = returnList.get(returnList.size()-1);
+//                    String tnContactNumber = gv.getString("tnContactNumber");
+//                    if(null!=tnContactNumber){
+//                        rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+//                    }
+//                    returnList.remove(returnList.size()-1);
+//                    returnList.add(rowMap);
+//                    continue;
+//                }
 
-                  if(beforePartyId!=null   && !beforePartyId.equals(partyIdTo)){
-                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
-                          String tnContactNumber = gv.getString("tnContactNumber");
-                          if(null!=tnContactNumber){
-                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
-                          }
-                      }
-                  }
+//                  if(beforePartyId!=null   && !beforePartyId.equals(partyIdTo)){
+//                      if(contactMechTypeId.equals("TELECOM_NUMBER")){
+//                          String tnContactNumber = gv.getString("tnContactNumber");
+//                          if(null!=tnContactNumber){
+//                              rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
+//                          }
+//                      }
+//                  }
 
-
+                  rowMap.put("tnContactNumber", gv.getString("tnContactNumber"));
                 Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, partyIdTo, partyGroupId);
                  rowMap.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
 //                  if(partyId.equals(partyIdTo)){

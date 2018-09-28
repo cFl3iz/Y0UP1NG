@@ -601,7 +601,7 @@ public class BoomQueryServices {
         Map<String,Object> goupMap = new HashMap<String, Object>();
 
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+                "partyIdTo", partyId, "partyRelationshipTypeId", "EMPLOYMENT" ).queryFirst();
 
         String partyGroupId = relation.getString("partyIdTo");
 

@@ -303,6 +303,7 @@
              invoke="queryMyPurchaseOrderList" auth="false">
         <description>queryMyPurchaseOrderList</description>
         <attribute name="orderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="partyGroupId" type="String" mode="OUT" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

@@ -271,12 +271,16 @@ public class BoomQueryServices {
 
                 rowMap.put("orderDate", sdf.format((Timestamp)order.get("orderDate")));
 
+
+
+
                 returnList.add(rowMap);
             }
         }
 
 
         resultMap.put("orderList",returnList);
+        resultMap.put("partyGroupId",partyGroupId);
         return resultMap;
     }
 

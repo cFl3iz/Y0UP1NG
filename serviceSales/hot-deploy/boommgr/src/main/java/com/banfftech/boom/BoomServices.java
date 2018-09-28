@@ -564,6 +564,13 @@ public class BoomServices {
             if (checkCaptcha) {
 
 
+
+
+
+
+
+
+
                 // Check is Exsit Contact Number ?..
                 List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
                         "contactNumber", tel, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "contactMechTypeId", "TELECOM_NUMBER").queryList();
@@ -615,6 +622,22 @@ public class BoomServices {
                     Map<String, Object> createPartyCUSTOMERRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
                             "roleTypeId", "CUSTOMER");
                     dispatcher.runSync("createPartyRole", createPartyCUSTOMERRoleMap);
+                }
+
+                //是通过转发进来的
+                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3&& !fromPartyGroupId.trim().equals("null")){
+                    Map<String,Object>   createPartyRelationshipInMap = new HashMap<String, Object>();
+                    createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                    createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+                    createPartyRelationshipInMap.put("partyIdFrom", fromPartyGroupId);
+                    createPartyRelationshipInMap.put("partyIdTo",partyId );
+                    createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+                    createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                    Debug.logInfo("createPartyRelationshipInMap:"+createPartyRelationshipInMap,module);
+
+                    GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+                    partyRelationship.create();
+                    return result;
                 }
 
 
@@ -730,19 +753,7 @@ public class BoomServices {
                     return createFacilityOutMap;
                 }
 
-                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3&& !fromPartyGroupId.trim().equals("null")){
-                    createPartyRelationshipInMap = new HashMap<String, Object>();
-                    createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
-                    createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
-                    createPartyRelationshipInMap.put("partyIdFrom", fromPartyGroupId);
-                    createPartyRelationshipInMap.put("partyIdTo",partyId );
-                    createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
-                    createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                    Debug.logInfo("createPartyRelationshipInMap:"+createPartyRelationshipInMap,module);
 
-                    partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
-                    partyRelationship.create();
-                }
 
 
                 //其实自己也是自己的供应商

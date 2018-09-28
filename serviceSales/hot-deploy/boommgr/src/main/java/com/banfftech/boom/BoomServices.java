@@ -82,6 +82,7 @@ import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
 import sun.security.krb5.Config;
 
+import static main.java.com.banfftech.boom.BoomQueryServices.getMyGroup;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonBaseInfo;
 import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.getToken;
 import static main.java.com.banfftech.platformmanager.common.PlatformLoginWorker.module;
@@ -193,10 +194,13 @@ public class BoomServices {
         String orderId = (String) context.get("orderId");
 
         String partyId = userLogin.getString("partyId");
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//
+//        String partyGroupId = relation.getString("partyIdTo");
 
-        String partyGroupId = relation.getString("partyIdTo");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
                 "ownerPartyId", partyGroupId ).queryFirst();
@@ -347,6 +351,11 @@ public class BoomServices {
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
+
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+        partyId = partyGroupId;
+
         if (null != itemArray) {
             for (String rowStr : itemArray.split(",")) {
                 String productId = rowStr.substring(0, rowStr.indexOf(":"));
@@ -441,9 +450,13 @@ public class BoomServices {
                 if(autoApproveOrder!=null && autoApproveOrder.equals("Y")){
                     GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", createOrderOut.get("orderId")+""), false);
 
-                    GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                            "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
-                    String partyGroupId = relation.getString("partyIdTo");
+//                    GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                            "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//                    String partyGroupId = relation.getString("partyIdTo");
+
+                    Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+                    String partyGroupId = (String) myGroup.get("partyId");
+
                     GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyGroupId, "roleTypeId", "ADMIN").queryFirst();
                     if(null == productStoreRole){
                         //create
@@ -601,12 +614,11 @@ public class BoomServices {
                         if (relation != null) {
                             String partyIdFrom = relation.getString("partyIdFrom");
 
-                            mergeChangeRelation(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
+                            mergeChangeRelation(delegator, dispatcher, admin, partyIdFrom, beforePartyId, groupId);
                             relation.remove();
-                            mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, partyId);
-                            mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,partyId);
-
-                            mergeAliasForg(delegator, partyIdFrom,beforePartyId,partyId);
+                            mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, groupId);
+                            mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,groupId);
+                            mergeAliasForg(delegator, partyIdFrom,beforePartyId,groupId);
                         }
 
 
@@ -627,6 +639,19 @@ public class BoomServices {
                     return createPartyRelationshipOutMap;
                 }
 
+                //EMPLOYMENT
+                createPartyRelationshipInMap = new HashMap<String, Object>();
+
+                createPartyRelationshipInMap.put("userLogin", admin);
+                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                createPartyRelationshipInMap.put("partyIdFrom", partyId);
+                createPartyRelationshipInMap.put("partyIdTo", groupId);
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
+                  createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+                    return createPartyRelationshipOutMap;
+                }
 
                 // 创建联系电话
                 Map<String, Object> inputTelecom = UtilMisc.toMap();
@@ -673,15 +698,15 @@ public class BoomServices {
                 createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
-                createPartyRelationshipInMap.put("partyIdTo", partyId);
-                createPartyRelationshipInMap.put("partyIdFrom", partyId);
+                createPartyRelationshipInMap.put("partyIdTo",groupId );
+                createPartyRelationshipInMap.put("partyIdFrom", groupId);
                 createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
                 //自己给自己的备注
                 GenericValue aliasForg = delegator.makeValue("AliasForg", UtilMisc.toMap());
                 aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
-                aliasForg.set("partyIdFrom", partyId);
-                aliasForg.set("partyIdTo", partyId);
+                aliasForg.set("partyIdFrom", groupId);
+                aliasForg.set("partyIdTo", groupId);
                 aliasForg.set("aliasName", "自有仓库"+"-"+name);
                 aliasForg.set("aliasAddress", province + " " + city + " "+country );
                 aliasForg.create();
@@ -853,10 +878,13 @@ public class BoomServices {
 
         String workEffortName = product.getString("productName");
 
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
+//        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
+//
+//        String partyGroupId = relation.getString("partyIdTo");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
-        String partyGroupId = relation.getString("partyIdTo");
 
 //        createProductionRun
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
@@ -1026,11 +1054,12 @@ public class BoomServices {
         createProductInMap.put("smallImageUrl", imagePath);
         createProductInMap.put("quantityUomId", quantityUomId);
 
-
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
-
-        String partyGroupId = relation.getString("partyIdTo");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+//        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
+//
+//        String partyGroupId = relation.getString("partyIdTo");
 
 
         GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
@@ -1061,7 +1090,7 @@ public class BoomServices {
         }
 
 
-        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
+        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyGroupId));
         dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin, "costComponentTypeId", "GEN_COST", "costUomId", "CNY", "productId", productId, "partyId", partyId));
 
 
@@ -1209,9 +1238,15 @@ public class BoomServices {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         // Admin Do Run Service
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
-//
+
+
+
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
+
+
+        Map<String,Object> myGroup =  getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
         String productName = (String) context.get("productName");
         String quantityUomId = (String) context.get("quantityUomId");
@@ -1248,7 +1283,8 @@ public class BoomServices {
         }
 
 
-        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyId));
+        dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId,
+                "partyId", partyGroupId));
 
         return resultMap;
     }

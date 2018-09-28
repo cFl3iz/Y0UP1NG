@@ -147,6 +147,9 @@ public class BoomQueryServices {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
 
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
         Set<String> fieldSet = new HashSet<String>();
         fieldSet.add("orderId");
         fieldSet.add("partyId");
@@ -161,7 +164,7 @@ public class BoomQueryServices {
         fieldSet.add("orderDate");
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER");
-        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyGroupId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
         List<GenericValue> queryOrderList = delegator.findList("PurchaseOrderHeaderItemAndRoles",
                 genericCondition, fieldSet,
@@ -318,6 +321,11 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -343,7 +351,7 @@ public class BoomQueryServices {
 //                .makeCondition("uomTypeId", EntityOperator.NOT_IN, types);
 
         EntityCondition findConditions = EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SHIP_FROM_VENDOR");
-        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyGroupId);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
         EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN,types);
@@ -434,11 +442,12 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
-
-        String partyGroupId = relation.getString("partyIdTo");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+//        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//
+//        String partyGroupId = relation.getString("partyIdTo");
 
         GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
                 "ownerPartyId", partyGroupId ).queryFirst();
@@ -587,6 +596,23 @@ public class BoomQueryServices {
     }
 
 
+    public static Map<String,Object> getMyGroup (Delegator delegator,String partyId) throws GenericEntityException{
+
+        Map<String,Object> goupMap = new HashMap<String, Object>();
+
+        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+
+        String partyGroupId = relation.getString("partyIdTo");
+
+        GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
+                "partyId", partyGroupId).queryFirst();
+
+        goupMap = partyGroup.getAllFields();
+
+        return goupMap;
+    }
+
     /**
      * queryMyInfo
      * @param dctx
@@ -693,8 +719,12 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
         List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","RAW_MATERIAL").orderBy("-fromDate").queryList();
+                "partyId", partyGroupId, "roleTypeId", "ADMIN","productTypeId","RAW_MATERIAL").orderBy("-fromDate").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -926,12 +956,13 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
         List<GenericValue> relationList = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
-                "partyIdFrom", partyId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
+                "partyIdFrom", partyGroupId, "roleTypeIdTo", "LEAD","partyRelationshipTypeId","LEAD_OWNER").orderBy("-fromDate").queryList();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String beforePartyId = null;
         if(relationList.size()>0){
@@ -965,7 +996,7 @@ public class BoomQueryServices {
                   }
 
 
-                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, partyIdTo, partyId);
+                Map<String,String> supplierInfo =  queryBomPersonBaseInfo(delegator, partyIdTo, partyGroupId);
                  rowMap.put("name",supplierInfo.get("aliasCompanyName")+"-"+supplierInfo.get("aliasName") );
 //                  if(partyId.equals(partyIdTo)){
 //                      rowMap.put("name","自有仓库"+"-"+supplierInfo.get("aliasName") );

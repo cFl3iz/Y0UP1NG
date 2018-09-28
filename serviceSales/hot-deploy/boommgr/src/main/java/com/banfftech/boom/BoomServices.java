@@ -644,18 +644,39 @@ public class BoomServices {
                 }
 
                 //EMPLOYMENT
-                createPartyRelationshipInMap = new HashMap<String, Object>();
+//                createPartyRelationshipInMap = new HashMap<String, Object>();
+//
+//                createPartyRelationshipInMap.put("userLogin", admin);
+//                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+//                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+//                createPartyRelationshipInMap.put("partyIdFrom", partyId);
+//                createPartyRelationshipInMap.put("partyIdTo", groupId);
+//                createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
+//                  createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+//                    return createPartyRelationshipOutMap;
+//                }
 
-                createPartyRelationshipInMap.put("userLogin", admin);
-                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+             createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+//                createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", partyId);
-                createPartyRelationshipInMap.put("partyIdTo", groupId);
-                createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
-                  createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
-                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
-                    return createPartyRelationshipOutMap;
-                }
+              createPartyRelationshipInMap.put("partyIdTo", groupId);
+                createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+                createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+
+//                Map<String, Object> createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
+//
+//                if (ServiceUtil.isError(createPartyRelationshipOutMap)) {
+//                    return createPartyRelationshipOutMap;
+//                }
+
+                GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+
+                partyRelationship.create();
+
+
 
                 // 创建联系电话
                 Map<String, Object> inputTelecom = UtilMisc.toMap();

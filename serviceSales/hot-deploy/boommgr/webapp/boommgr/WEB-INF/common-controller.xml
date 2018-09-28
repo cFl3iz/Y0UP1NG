@@ -152,6 +152,14 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+
+    <request-map uri="queryMyColleagues">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyColleagues"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="queryProductionRouting">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryProductionRouting"/>

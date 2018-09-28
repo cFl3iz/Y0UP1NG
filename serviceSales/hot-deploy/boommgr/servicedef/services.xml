@@ -336,6 +336,15 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="queryMyColleagues" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryMyColleagues" auth="false">
+        <description>queryMyColleagues</description>
+        <attribute name="colleaguesList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="queryMySupplierList" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

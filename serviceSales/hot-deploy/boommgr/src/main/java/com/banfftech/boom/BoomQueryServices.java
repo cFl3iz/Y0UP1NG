@@ -125,6 +125,50 @@ public class BoomQueryServices {
 
 
     /**
+     * 我的同事
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryMyColleagues(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+
+        List<Map<String, String>> returnList = new ArrayList<Map<String, String>>();
+
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
+        List<GenericValue> colleaguesList = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyGroupId, "partyRelationshipTypeId", "EMPLOYMENT" ).queryList();
+
+
+        if(colleaguesList.size()>0){
+            for(GenericValue gv : colleaguesList){
+                    String partyIdTo  = gv.getString("partyIdTo");
+                   Map<String,String> personInfo =    queryPersonBaseInfo(delegator,partyIdTo);
+                returnList.add(personInfo);
+            }
+        }
+
+        resultMap.put("colleaguesList",returnList);
+        return resultMap;
+    }
+
+
+
+    /**
      * queryMyPurchaseOrderList
      * @param dctx
      * @param context

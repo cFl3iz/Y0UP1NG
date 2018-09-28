@@ -730,7 +730,7 @@ public class BoomServices {
                     return createFacilityOutMap;
                 }
 
-                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3){
+                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3&& !fromPartyGroupId.trim().equals("null")){
                     createPartyRelationshipInMap = new HashMap<String, Object>();
                     createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
                     createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");

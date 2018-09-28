@@ -603,7 +603,7 @@ public class BoomQueryServices {
         GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdTo", partyId, "partyRelationshipTypeId", "EMPLOYMENT" ).queryFirst();
 
-        String partyGroupId = relation.getString("partyIdTo");
+        String partyGroupId = relation.getString("partyIdFrom");
 
         GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
                 "partyId", partyGroupId).queryFirst();

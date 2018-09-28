@@ -4030,17 +4030,24 @@ public class PersonManagerQueryServices {
 //                String partyGroupId = relation.getString("partyIdTo");
 
                 Map<String,Object> myGroup = getMyGroup(delegator,partyId);
-                String partyGroupId = (String) myGroup.get("partyId");
-                partyId = partyGroupId;
+                if(null!=myGroup){
+                    String partyGroupId = (String) myGroup.get("partyId");
+                    partyId = partyGroupId;
 
-                GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
-                        "partyId", partyGroupId).queryFirst();
+                    GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
+                            "partyId", partyGroupId).queryFirst();
 
-                String groupName = partyGroup.getString("groupName");
-                String myName = (String) person.get("lastName")+(String) person.get("firstName");
-                personInfo.put("aliasName", myName.trim());
-                personInfo.put("aliasCompanyName", groupName);
-                personInfo.put("aliasAddress","");
+                    String groupName = partyGroup.getString("groupName");
+                    String myName = (String) person.get("lastName")+(String) person.get("firstName");
+                    personInfo.put("aliasName", myName.trim());
+                    personInfo.put("aliasCompanyName", groupName);
+                    personInfo.put("aliasAddress","");
+                }else{
+                    personInfo.put("aliasName", "老数据");
+                    personInfo.put("aliasCompanyName","老数据");
+                    personInfo.put("aliasAddress","老数据");
+                }
+
             }
 
         }else{

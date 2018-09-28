@@ -253,6 +253,9 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+        partyId= partyGroupId;
         Long supplierCount = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdFrom", partyId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER" ).queryCount();
         Long rawMaterialsCount = EntityQuery.use(delegator).from("ProductAndRole").where(

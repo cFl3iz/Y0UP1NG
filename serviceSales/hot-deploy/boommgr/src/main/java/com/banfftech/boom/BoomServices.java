@@ -1275,11 +1275,14 @@ public class BoomServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
         String productId = (String) context.get("productId");
 
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where(
-                "partyId", partyId,"productId",productId,"roleTypeId","ADMIN").queryFirst();
-        Debug.logInfo("partyId:"+partyId,module);
+                "partyId", partyGroupId,"productId",productId,"roleTypeId","ADMIN").queryFirst();
+        Debug.logInfo("partyGroupId:"+partyGroupId,module);
         Debug.logInfo("productId:"+productId,module);
         Debug.logInfo("productRole:"+productRole,module);
         if(productRole!=null){

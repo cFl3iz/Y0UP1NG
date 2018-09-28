@@ -255,7 +255,7 @@ public class BoomQueryServices {
 
                 rowMap.put("salesPersonInfoMap", queryBomPersonBaseInfo(delegator, payToPartyId,partyGroupId));
 
-                rowMap.put("custPersonInfoMap", queryBomPersonBaseInfo(delegator, partyGroupId,partyGroupId));
+                rowMap.put("custPersonInfoMap", myGroup);
 
 
 

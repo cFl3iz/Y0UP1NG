@@ -652,8 +652,8 @@ public class BoomServices {
                 Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
 
                 createPartyRelationshipInMap.put("userLogin", admin);
-                createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
-                createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+                createPartyRelationshipInMap.put("roleTypeIdTo", "ADMIN");
+                createPartyRelationshipInMap.put("roleTypeIdFrom", "ADMIN");
                 createPartyRelationshipInMap.put("partyIdFrom", partyId);
                 createPartyRelationshipInMap.put("partyIdTo", groupId);
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "OWNER");
@@ -730,8 +730,7 @@ public class BoomServices {
                     return createFacilityOutMap;
                 }
 
-
-                if(null!=fromPartyGroupId&&!fromPartyGroupId.trim().equals("")){
+                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3){
                     createPartyRelationshipInMap = new HashMap<String, Object>();
                     createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
                     createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
@@ -739,9 +738,10 @@ public class BoomServices {
                     createPartyRelationshipInMap.put("partyIdTo",partyId );
                     createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
                     createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                      partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
-                    partyRelationship.create();
+                    Debug.logInfo("createPartyRelationshipInMap:"+createPartyRelationshipInMap,module);
 
+                    partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+                    partyRelationship.create();
                 }
 
 

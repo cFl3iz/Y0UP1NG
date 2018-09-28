@@ -8997,7 +8997,7 @@ public class PersonManagerServices {
 
 
 
-String userLoginId = delegator.getNextSeqId("UserLogin");
+         String userLoginId = delegator.getNextSeqId("UserLogin");
         // Create UserLogin Block
         Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
                 userLoginId, "partyId", partyId, "currentPassword", "ofbiz",

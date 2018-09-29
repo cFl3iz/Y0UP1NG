@@ -1111,6 +1111,12 @@ public class PlatformManagerServices {
                 String price = excelRow[6];
                 String beiZhu = excelRow[7];
 
+
+                if(null != EntityQuery.use(delegator).from("Product").where(
+                        "comments", code).queryFirst() ){
+                    continue;
+                }
+
                 if (UtilValidate.isNotEmpty(uom)) {
                     GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
                             "description", uom).queryFirst();

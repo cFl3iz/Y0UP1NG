@@ -137,6 +137,12 @@
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
 
+                        <screenlet title="导入诸法原辅料">
+                            <include-form name="RawProductUploadImportFormZhuFa"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
                         <screenlet title="(Extra-One4模特图)产品导入">
                             <include-form name="ProductUploadImportFormExtraOne"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>

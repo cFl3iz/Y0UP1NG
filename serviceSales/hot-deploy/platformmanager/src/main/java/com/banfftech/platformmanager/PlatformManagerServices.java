@@ -1079,6 +1079,130 @@ public class PlatformManagerServices {
         return "success";
     }
 
+    /**
+     * rawProductUploadImportFormZhuFa
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String rawProductUploadImportFormZhuFa(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        FileItem fileItem = getFileItem(request);
+        List<String[]> excelList = excelToList(fileItem);
+
+        try {
+            String[] excelHead = excelList.get(0);
+            String partyGroupId = excelHead[0];
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                String[] excelRow = excelList.get(i);
+                Debug.logInfo("excelRow:" + excelRow, module);
+                String code = excelRow[1];
+                String productName = excelRow[2];
+                String spec = excelRow[3];
+                String color = excelRow[4];
+                String uom = excelRow[5];
+                String price = excelRow[6];
+                String beiZhu = excelRow[7];
+
+
+                GenericValue rowUom =  EntityQuery.use(delegator).from("Uom").where(
+                        "uomId", uom).queryFirst();
+                if(null== rowUom){
+                    GenericValue newUom = delegator.makeValue("Uom",
+                            UtilMisc.toMap("uomId", uom, "description","uom","uomTypeId","BOM_MEASURE"));
+                    newUom.create();
+                }
+
+
+                //CreateProduct
+                Map<String, Object> createProductInMap = new HashMap<String, Object>();
+                long ctm = System.currentTimeMillis();
+                String productId = (String) delegator.getNextSeqId("productId");
+                createProductInMap.put("productId", productId);
+                createProductInMap.put("internalName", productName);
+                createProductInMap.put("productName", productName);
+                createProductInMap.put("productTypeId", "RAW_MATERIAL");
+                createProductInMap.put("description", beiZhu);
+                createProductInMap.put("comments", code);
+                createProductInMap.put("quantityUomId", uom);
+                GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
+                newProduct.create();
+
+                // 价格
+                GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                newProductVariantPrice.set("price", new BigDecimal(price));
+                newProductVariantPrice.create();
+
+
+
+                    GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + color, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                    String featureId = "";
+                    //没找到这个特征
+                    if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                        //创建该特征
+                        Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", color, "productFeatureId",
+                                "COLOR_" + color, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", color));
+                        featureId = (String) createProductFetureMap.get("productFeatureId");
+                    } else {
+                        featureId = (String) productColorFeature.get("productFeatureId");
+                    }
+
+
+                    //创建 虚拟 颜色特征
+                    GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+
+
+                    //创建 变形 颜色特征
+                    GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                    if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+                        GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                        newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                        newVariantProductColorFeatureAppl.create();
+                    }
+
+
+                GenericValue newAttribute = delegator.makeValue("ProductAtt", UtilMisc.toMap("productId", productId,
+                        "attrName", "spec", "attrValue",spec));
+                newAttribute.create();
+                GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                        "partyId", partyGroupId,"roleTypeId","ADMIN","fromDate",UtilDateTime.nowTimestamp()));
+                newAttribute.create();
+
+
+                TransactionUtil.commit();
+                //循环结束
+            }
+
+      } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+
+
+
+
+
+
+
 
     /**
      * ProductUploadImportFormExtraOne

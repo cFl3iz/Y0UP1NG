@@ -14,6 +14,20 @@
             <submit button-type="button"/>
         </field>
     </form>
+
+    <form name="RawProductUploadImportFormZhuFa" type="upload" target="RawProductUploadImportFormZhuFa"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+        <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+
+
     <form name="ZugZugEmpUploadImportForm" type="upload" target="ZugZugEmpUploadImportFormEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
         <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">

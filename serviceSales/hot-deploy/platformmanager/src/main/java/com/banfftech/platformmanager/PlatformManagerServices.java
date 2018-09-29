@@ -1121,8 +1121,10 @@ public class PlatformManagerServices {
                             "description", uom).queryFirst();
                     if(null== rowUom){
                         GenericValue newUom = delegator.makeValue("Uom",
-                                UtilMisc.toMap("uomId", uom, "description",uom,"uomTypeId","BOM_MEASURE"));
+                                UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description",uom,"uomTypeId","BOM_MEASURE"));
                         newUom.create();
+                    }else{
+                        uom = rowUom.getString("uomId");
                     }
                 }
 

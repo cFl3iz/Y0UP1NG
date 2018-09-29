@@ -110,6 +110,29 @@ public class PersonManagerQueryServices {
     }
 
 
+    public Map<String, Object> queryMyProductStore(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+        GenericValue myStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+
+        resultMap.put("storeInfo",myStore.getAllFields());
+        return resultMap;
+    }
+
+
     /**
      * queryZuczugEmp
      * @param dctx

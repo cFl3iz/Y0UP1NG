@@ -243,6 +243,18 @@
                    optional="true"/>
     </service>
 
+
+
+    <service name="queryMyProductStore" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryMyProductStore" auth="false">
+        <description>queryMyProductStore</description>
+        <attribute name="storeInfo" type="Map" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <service name="queryZuczugEmp" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryZuczugEmp" auth="false">

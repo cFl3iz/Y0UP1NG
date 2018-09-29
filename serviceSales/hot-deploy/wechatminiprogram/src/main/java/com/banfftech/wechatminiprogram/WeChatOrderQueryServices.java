@@ -1713,13 +1713,13 @@ public class WeChatOrderQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId).orderBy(orderBy)
+                where("productCategoryId", productCategoryId,"isVariant","Y").orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId).queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId,"isVariant","Y").queryCount();
 
 
         lowIndex = myContactListPage.getStartIndex();
@@ -1731,10 +1731,9 @@ public class WeChatOrderQueryServices {
 
         fieldSet.add("drObjectInfo");
         fieldSet.add("contentId");
-
         fieldSet.add("productId");
-        if (null != myContactListPage) {
-            for (GenericValue gv : myContactListPage) {
+        if (null != productList) {
+            for (GenericValue gv : productList) {
                 Map<String, Object> rowMap = gv.getAllFields();
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");

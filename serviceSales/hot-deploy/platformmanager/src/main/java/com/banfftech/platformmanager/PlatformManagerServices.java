@@ -1116,14 +1116,16 @@ public class PlatformManagerServices {
                 String price = excelRow[6];
                 String beiZhu = excelRow[7];
 
-
-                GenericValue rowUom =  EntityQuery.use(delegator).from("Uom").where(
-                        "uomId", uom).queryFirst();
-                if(null== rowUom){
-                    GenericValue newUom = delegator.makeValue("Uom",
-                            UtilMisc.toMap("uomId", uom, "description","uom","uomTypeId","BOM_MEASURE"));
-                    newUom.create();
+                if(null != uom){
+                    GenericValue rowUom =  EntityQuery.use(delegator).from("Uom").where(
+                            "description", uom).queryFirst();
+                    if(null== rowUom){
+                        GenericValue newUom = delegator.makeValue("Uom",
+                                UtilMisc.toMap("uomId", uom, "description",uom,"uomTypeId","BOM_MEASURE"));
+                        newUom.create();
+                    }
                 }
+
 
 
                 //CreateProduct

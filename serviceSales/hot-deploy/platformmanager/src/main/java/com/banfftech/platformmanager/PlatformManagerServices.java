@@ -1130,7 +1130,7 @@ public class PlatformManagerServices {
                 Map<String, Object> createProductInMap = new HashMap<String, Object>();
                 long ctm = System.currentTimeMillis();
                 String productId = "ZF_"+ (String) delegator.getNextSeqId("productId") ;
-                createProductInMap.put("productId", productId+code);
+                createProductInMap.put("productId", productId);
                 createProductInMap.put("internalName", productName);
                 createProductInMap.put("productName", productName);
                 createProductInMap.put("productTypeId", "RAW_MATERIAL");

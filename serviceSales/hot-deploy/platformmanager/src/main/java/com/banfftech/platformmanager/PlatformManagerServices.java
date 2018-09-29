@@ -1108,6 +1108,7 @@ public class PlatformManagerServices {
                 String[] excelRow = excelList.get(i);
                 Debug.logInfo("excelRow:" + excelRow, module);
                 String code = excelRow[1];
+                code  = code.trim();
                 String productName = excelRow[2];
                 String spec = excelRow[3];
                 String color = excelRow[4];
@@ -1128,7 +1129,7 @@ public class PlatformManagerServices {
                 //CreateProduct
                 Map<String, Object> createProductInMap = new HashMap<String, Object>();
                 long ctm = System.currentTimeMillis();
-                String productId = (String) delegator.getNextSeqId("productId")+code.substring(0,code.indexOf("."));
+                String productId = "ZF_"+ (String) delegator.getNextSeqId("productId") ;
                 createProductInMap.put("productId", productId+code);
                 createProductInMap.put("internalName", productName);
                 createProductInMap.put("productName", productName);

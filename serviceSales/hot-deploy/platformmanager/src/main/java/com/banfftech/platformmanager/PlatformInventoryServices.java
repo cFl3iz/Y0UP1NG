@@ -247,16 +247,17 @@ public class PlatformInventoryServices {
                 Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
                 createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
                 createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
-                //一模一样的库存我还差异个屁?
-                if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) == 0) {
 
-                } else {
-                    //3.2 Do create
-                    Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
-
-                }
             }
 
+            //一模一样的库存我还差异个屁?
+            if (availableToPromiseTotal.compareTo(availableToPromiseTotalZuczug) == 0) {
+
+            } else {
+                //3.2 Do create
+                Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+            }
 
             //再来一遍
             //说明现库存比要设置的库存大,需要做差异减法

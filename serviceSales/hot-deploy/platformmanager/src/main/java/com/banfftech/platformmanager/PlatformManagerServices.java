@@ -1172,7 +1172,7 @@ public class PlatformManagerServices {
                     }
 
 
-                GenericValue newAttribute = delegator.makeValue("ProductAtt", UtilMisc.toMap("productId", productId,
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
                         "attrName", "spec", "attrValue",spec));
                 newAttribute.create();
                 GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,

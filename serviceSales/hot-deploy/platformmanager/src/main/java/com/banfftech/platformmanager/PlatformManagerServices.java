@@ -86,6 +86,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
 import net.sf.json.JSONArray;
+
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -119,13 +120,14 @@ public class PlatformManagerServices {
 
     /**
      * 素然向友评同步已发货的订单
+     *
      * @param ctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> syncCompletedOrder(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException {
+    public static Map<String, Object> syncCompletedOrder(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
@@ -142,34 +144,34 @@ public class PlatformManagerServices {
 
         for (Object obj : jsonArray) {
             Map<String, Object> orderObj = (Map) obj;
-            Debug.logInfo("->syncCompletedOrder ypOrderId:"+ orderObj.get("ypOrderId"),module);
-            Debug.logInfo("->syncCompletedOrder zuczugOrderId:"+orderObj.get("zuczugOrderId"),module);
-            Debug.logInfo("->syncCompletedOrder trackingIdNumber:"+orderObj.get("trackingIdNumber"),module);
+            Debug.logInfo("->syncCompletedOrder ypOrderId:" + orderObj.get("ypOrderId"), module);
+            Debug.logInfo("->syncCompletedOrder zuczugOrderId:" + orderObj.get("zuczugOrderId"), module);
+            Debug.logInfo("->syncCompletedOrder trackingIdNumber:" + orderObj.get("trackingIdNumber"), module);
 
             String ypOrderId = (String) orderObj.get("ypOrderId");
             String zuczugOrderId = (String) orderObj.get("zuczugOrderId");
             String trackingIdNumber = "";
 
-            if(orderObj.get("trackingIdNumber")!=null){
+            if (orderObj.get("trackingIdNumber") != null) {
                 trackingIdNumber = orderObj.get("trackingIdNumber") + "";
             }
             GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", ypOrderId), false);
             String orderStatusId = orderHeader.getString("statusId");
-            if(!orderStatusId.equals("ORDER_COMPLETED") && !orderStatusId.equals("ORDER_CANCELLED") ){
-                orderHeader.set("internalCode",zuczugOrderId);
-                if(null ==EntityQuery.use(delegator).from("OrderShipment").where("orderId", ypOrderId).queryFirst() ){
+            if (!orderStatusId.equals("ORDER_COMPLETED") && !orderStatusId.equals("ORDER_CANCELLED")) {
+                orderHeader.set("internalCode", zuczugOrderId);
+                if (null == EntityQuery.use(delegator).from("OrderShipment").where("orderId", ypOrderId).queryFirst()) {
                     Map<String, Object> quickResult = dispatcher.runSync("quickShipEntireOrder", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId));
                     GenericValue orderItemShipGroup = EntityQuery.use(delegator).from("OrderItemShipGroup").where("orderId", ypOrderId).queryFirst();
                     Map<String, Object> updateResult = dispatcher.runSync("updateOrderItemShipGroup", UtilMisc.toMap("userLogin", admin, "orderId", ypOrderId, "shipGroupSeqId", orderItemShipGroup.getString("shipGroupSeqId"), "trackingNumber", trackingIdNumber));
                 }
 
-                orderHeader.set("statusId","ORDER_COMPLETED");
+                orderHeader.set("statusId", "ORDER_COMPLETED");
                 orderHeader.store();
                 dispatcher.runSync("sendEmailNotification",
                         UtilMisc.toMap("content",
-                                "友评订单号:["+ypOrderId+
-                                        "],在素然单号:["+zuczugOrderId+"]已分拣发货,联动友评主机成功! 产生的运单号为:"+trackingIdNumber
-                                , "title","[长宁通知友评素然订单已发货]"));
+                                "友评订单号:[" + ypOrderId +
+                                        "],在素然单号:[" + zuczugOrderId + "]已分拣发货,联动友评主机成功! 产生的运单号为:" + trackingIdNumber
+                                , "title", "[长宁通知友评素然订单已发货]"));
             }
 
         }
@@ -177,16 +179,16 @@ public class PlatformManagerServices {
     }
 
 
-
     /**
      * 初始化用户应用标记
+     *
      * @param ctx
      * @param context
      * @return
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> initAppUser(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException {
+    public static Map<String, Object> initAppUser(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
@@ -197,18 +199,9 @@ public class PlatformManagerServices {
         String sc = (String) context.get("sc");
 
 
-
-
         Map<String, Object> result = ServiceUtil.returnSuccess();
         return result;
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -218,7 +211,7 @@ public class PlatformManagerServices {
      * @param context
      * @return
      */
-    public static Map<String, Object> deleteProductContentEvent(DispatchContext ctx, Map<String, Object> context)throws  GenericEntityException, GenericServiceException{
+    public static Map<String, Object> deleteProductContentEvent(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
@@ -513,6 +506,7 @@ public class PlatformManagerServices {
 
     /**
      * Get Login Captcha
+     *
      * @param dctx
      * @param context
      * @return
@@ -613,7 +607,6 @@ public class PlatformManagerServices {
         smsFreeSignName = EntityUtilProperties.getPropertyValue("pe", "sms.smsFreeSignName", delegator);
         smsTemplateCode = EntityUtilProperties.getPropertyValue("pe", "sms.smsTemplateCode", delegator);
     }
-
 
 
     public static Map<String, Object> sendTelMessage2Wx(DispatchContext dctx, Map<String, Object> context) {
@@ -967,14 +960,14 @@ public class PlatformManagerServices {
                 String tel = excelRow[2];
                 String dept = excelRow[0];
                 String name = excelRow[1];
-                if(null == tel || UtilValidate.isEmpty(tel)){
+                if (null == tel || UtilValidate.isEmpty(tel)) {
                     continue;
                 }
-                if(null !=  EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel).queryFirst() ){
+                if (null != EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel).queryFirst()) {
                     continue;
                 }
                 String roleTypeId = "ZUCZUG_EMP";
-                if(dept.trim().indexOf("Rau")>-1 || dept.trim().equals("董事会")){
+                if (dept.trim().indexOf("Rau") > -1 || dept.trim().equals("董事会")) {
                     roleTypeId = "ANKORAU_EMP";
                 }
                 GenericValue zuczugEmp = delegator.makeValue("ZuczugEmp", UtilMisc.toMap("tel", tel));
@@ -985,7 +978,7 @@ public class PlatformManagerServices {
 
                 TransactionUtil.commit();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 TransactionUtil.rollback();
             } catch (GenericTransactionException e1) {
@@ -1002,6 +995,7 @@ public class PlatformManagerServices {
 
     /**
      * 产品特殊价格更新
+     *
      * @param request
      * @param response
      * @return
@@ -1037,27 +1031,27 @@ public class PlatformManagerServices {
                 String spuId = excelRow[1];
                 String colorId = excelRow[2];
                 String onePrice = excelRow[5];
-                Debug.logInfo("*productName:"+productName+"|spuId:"+spuId+"|colorId:"+colorId,module);
-                EntityCondition findConditions  = EntityCondition.makeCondition("productId", EntityOperator.LIKE, spuId+"-" +colorId+"%");
+                Debug.logInfo("*productName:" + productName + "|spuId:" + spuId + "|colorId:" + colorId, module);
+                EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, spuId + "-" + colorId + "%");
                 List<GenericValue> products = EntityQuery.use(delegator).from("Product").where(findConditions).queryList();
-                Debug.logInfo("*products:"+products,module);
-                if(null!=products && products.size()>0){
-                    for(GenericValue product : products){
-                    String skuId = product.getString("productId");
-                    Debug.logInfo("*update product ["+skuId+"] MINIMUM_PRICE to " + onePrice,module);
-                    GenericValue productPrice =
-                            EntityQuery.use(delegator).from("ProductPrice").where("productId",skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                    if(null!= productPrice){
-                        productPrice.set("price",new BigDecimal(onePrice));
-                        productPrice.store();
-                    }else{
-                        dispatcher.runSync("createProductPrice",UtilMisc.toMap("userLogin",admin,"currencyUomId","CNY",
-                                        "productId",skuId,"price",new BigDecimal(onePrice),
-                                        "productPricePurposeId","PURCHASE",
-                                        "productPriceTypeId","MINIMUM_PRICE",
-                                        "productStoreGroupId","_NA_", "taxInPrice","Y")
-                               );
-                    }
+                Debug.logInfo("*products:" + products, module);
+                if (null != products && products.size() > 0) {
+                    for (GenericValue product : products) {
+                        String skuId = product.getString("productId");
+                        Debug.logInfo("*update product [" + skuId + "] MINIMUM_PRICE to " + onePrice, module);
+                        GenericValue productPrice =
+                                EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                        if (null != productPrice) {
+                            productPrice.set("price", new BigDecimal(onePrice));
+                            productPrice.store();
+                        } else {
+                            dispatcher.runSync("createProductPrice", UtilMisc.toMap("userLogin", admin, "currencyUomId", "CNY",
+                                            "productId", skuId, "price", new BigDecimal(onePrice),
+                                            "productPricePurposeId", "PURCHASE",
+                                            "productPriceTypeId", "MINIMUM_PRICE",
+                                            "productStoreGroupId", "_NA_", "taxInPrice", "Y")
+                            );
+                        }
 
                     }
                 }
@@ -1065,7 +1059,7 @@ public class PlatformManagerServices {
                 TransactionUtil.commit();
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 TransactionUtil.rollback();
             } catch (GenericTransactionException e1) {
@@ -1081,6 +1075,7 @@ public class PlatformManagerServices {
 
     /**
      * rawProductUploadImportFormZhuFa
+     *
      * @param request
      * @param response
      * @return
@@ -1108,7 +1103,7 @@ public class PlatformManagerServices {
                 String[] excelRow = excelList.get(i);
                 Debug.logInfo("excelRow:" + excelRow, module);
                 String code = excelRow[1];
-                code  = code.trim();
+                code = code.trim();
                 String productName = excelRow[2];
                 String spec = excelRow[3];
                 String color = excelRow[4];
@@ -1116,73 +1111,82 @@ public class PlatformManagerServices {
                 String price = excelRow[6];
                 String beiZhu = excelRow[7];
 
-                if(null != uom){
-                    GenericValue rowUom =  EntityQuery.use(delegator).from("Uom").where(
+                if (UtilValidate.isNotEmpty(uom)) {
+                    GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
                             "description", uom).queryFirst();
-                    if(null== rowUom){
+                    if (null == rowUom) {
                         GenericValue newUom = delegator.makeValue("Uom",
-                                UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description",uom,"uomTypeId","BOM_MEASURE"));
+                                UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description", uom, "uomTypeId", "BOM_MEASURE"));
                         newUom.create();
-                    }else{
+                    } else {
                         uom = rowUom.getString("uomId");
                     }
-                }
+                }else{
 
+                }
 
 
                 //CreateProduct
                 Map<String, Object> createProductInMap = new HashMap<String, Object>();
                 long ctm = System.currentTimeMillis();
-                String productId = "ZF_"+ (String) delegator.getNextSeqId("productId") ;
+                String productId = "ZF_" + (String) delegator.getNextSeqId("productId");
                 createProductInMap.put("productId", productId);
                 createProductInMap.put("internalName", productName);
                 createProductInMap.put("productName", productName);
                 createProductInMap.put("productTypeId", "RAW_MATERIAL");
                 createProductInMap.put("description", beiZhu);
                 createProductInMap.put("comments", code);
+                if (UtilValidate.isNotEmpty(uom)) {
                 createProductInMap.put("quantityUomId", uom);
+                }
                 GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
                 newProduct.create();
 
-                // 价格
-                GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
-                newProductVariantPrice.set("price", new BigDecimal(price));
-                newProductVariantPrice.create();
+                if (UtilValidate.isNotEmpty(price)) {
+                    // 价格
+                    GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                    newProductVariantPrice.set("price", new BigDecimal(price));
+                    newProductVariantPrice.create();
+                }
 
+                if (UtilValidate.isNotEmpty(color)) {
+                    GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                            "attrName", "fuzhu", "attrValue", color));
+                    newAttribute.create();
+//                    GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + color, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+//                    String featureId = "";
+//                    //没找到这个特征
+//                    if (!UtilValidate.isNotEmpty(productColorFeature)) {
+//                        //创建该特征
+//                        Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", color, "productFeatureId",
+//                                "COLOR_" + color, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", color));
+//                        featureId = (String) createProductFetureMap.get("productFeatureId");
+//                    } else {
+//                        featureId = (String) productColorFeature.get("productFeatureId");
+//                    }
+//
+//
+//                    //创建 虚拟 颜色特征
+//                    GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+//
+//
+//                    //创建 变形 颜色特征
+//                    GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+//                    if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+//                        GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+//                        newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+//                        newVariantProductColorFeatureAppl.create();
+//                    }
+                }
 
-
-                    GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + color, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
-                    String featureId = "";
-                    //没找到这个特征
-                    if (!UtilValidate.isNotEmpty(productColorFeature)) {
-                        //创建该特征
-                        Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", color, "productFeatureId",
-                                "COLOR_" + color, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", color));
-                        featureId = (String) createProductFetureMap.get("productFeatureId");
-                    } else {
-                        featureId = (String) productColorFeature.get("productFeatureId");
-                    }
-
-
-                    //创建 虚拟 颜色特征
-                    GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
-
-
-                    //创建 变形 颜色特征
-                    GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
-                    if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
-                        GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                        newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
-                        newVariantProductColorFeatureAppl.create();
-                    }
-
-
-                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
-                        "attrName", "spec", "attrValue",spec));
-                newAttribute.create();
+                if (UtilValidate.isNotEmpty(spec)) {
+                    GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                            "attrName", "spec", "attrValue", spec));
+                    newAttribute.create();
+                }
 
                 GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
-                        "partyId", partyGroupId,"roleTypeId","ADMIN","fromDate",UtilDateTime.nowTimestamp()));
+                        "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
                 newProductRole.create();
 
 
@@ -1190,7 +1194,7 @@ public class PlatformManagerServices {
                 //循环结束
             }
 
-      } catch (Exception e) {
+        } catch (Exception e) {
             try {
                 TransactionUtil.rollback();
             } catch (GenericTransactionException e1) {
@@ -1204,14 +1208,9 @@ public class PlatformManagerServices {
     }
 
 
-
-
-
-
-
-
     /**
      * ProductUploadImportFormExtraOne
+     *
      * @param request
      * @param response
      * @return
@@ -1238,8 +1237,8 @@ public class PlatformManagerServices {
             String[] excelHead = excelList.get(0);
             //WATERPROOF or ANKORAU_RETAIL
             String prodCatalogId = excelHead[0];
-            Debug.logInfo("=>productUploadImportFormExtraOne="+excelHead.toString(),module);
-            Debug.logInfo("=>productUploadImportFormExtraOne="+prodCatalogId,module);
+            Debug.logInfo("=>productUploadImportFormExtraOne=" + excelHead.toString(), module);
+            Debug.logInfo("=>productUploadImportFormExtraOne=" + prodCatalogId, module);
 
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
             String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
@@ -1252,7 +1251,7 @@ public class PlatformManagerServices {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
                 String[] excelRow = excelList.get(i);
-                Debug.logInfo("excelRow:"+excelRow,module);
+                Debug.logInfo("excelRow:" + excelRow, module);
 
                 String internalName = excelRow[2];
                 String productVirtualId = excelRow[3];
@@ -1282,7 +1281,7 @@ public class PlatformManagerServices {
                 String detailThree = null;
                 String detailFoo = null;
                 String detailFive = null;
-                try{
+                try {
                     metchOne = excelRow[11];
                     metchTwo = excelRow[12];
                     metchThree = excelRow[13];
@@ -1295,15 +1294,9 @@ public class PlatformManagerServices {
                     detailThree = excelRow[19];
                     detailFoo = excelRow[20];
                     detailFive = excelRow[21];
-                }catch (ArrayIndexOutOfBoundsException e){
+                } catch (ArrayIndexOutOfBoundsException e) {
 
                 }
-
-
-
-
-
-
 
 
                 //导入的表存在虚拟产品Id
@@ -1315,10 +1308,10 @@ public class PlatformManagerServices {
                         newVirtualProduct.set("description", desc);
 //                            newVirtualProduct.set("comments", keyword);
                         //默认图片
-                        if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
-                            newVirtualProduct.set("detailImageUrl",  singleOne);
-                        }else{
-                            newVirtualProduct.set("detailImageUrl",  metchOne);
+                        if (metchOne.equals("无") || UtilValidate.isEmpty(metchOne) == true) {
+                            newVirtualProduct.set("detailImageUrl", singleOne);
+                        } else {
+                            newVirtualProduct.set("detailImageUrl", metchOne);
                         }
                         if (UtilValidate.isNotEmpty(internalName)) {
                             newVirtualProduct.set("internalName", internalName);
@@ -1330,8 +1323,8 @@ public class PlatformManagerServices {
 
 
                         //模特图
-                        if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
+                        if (!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchOne, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1342,12 +1335,12 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(metchTwo)  && !metchTwo.equals("无")){
+                        if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchTwo, admin);
 
                             productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1358,13 +1351,13 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
                         //模特图3
-                        if(!UtilValidate.isEmpty(metchThree) && !metchThree.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator, metchThree, admin);
+                        if (!UtilValidate.isEmpty(metchThree) && !metchThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchThree, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1375,12 +1368,12 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }//4
-                        if(!UtilValidate.isEmpty(metchFoo)  && !metchFoo.equals("无")){
+                        if (!UtilValidate.isEmpty(metchFoo) && !metchFoo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            String  contentId = createNewContentForImage(dispatcher,delegator, metchFoo, admin);
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchFoo, admin);
 
                             productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1391,52 +1384,14 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                         //单品图
-                        if(!UtilValidate.isEmpty(singleOne)&& !singleOne.equals("无")) {
-                            String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
-                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            productContentCtx.put("productId",productVirtualId);
-                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
-                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                            productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                            productContent.create();
-                        }
-                        if(!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
-                            String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
+                        if (!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleOne, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
                             productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
@@ -1445,13 +1400,26 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
                         //细节图
-                        if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
-                            String   contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
+                        if (!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailOne, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1461,11 +1429,11 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
-                            String   contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
+                        if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
@@ -1475,42 +1443,42 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
-                        if(!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
+                        if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailThree, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
                             productContentCtx.put("contentId", contentId);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
 
                         //4
-                        if(!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailFoo, admin);
+                        if (!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailFoo, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
                             productContentCtx.put("contentId", contentId);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
                         //5
-                        if(!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailFive, admin);
+                        if (!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailFive, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productVirtualId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
                             productContentCtx.put("contentId", contentId);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
@@ -1524,10 +1492,10 @@ public class PlatformManagerServices {
 //                            newVariantProduct.set("comments", keyword);
                         //默认图片
                         //默认图片
-                        if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
-                            newVariantProduct.set("detailImageUrl",  singleOne);
-                        }else{
-                            newVariantProduct.set("detailImageUrl",  metchOne);
+                        if (metchOne.equals("无") || UtilValidate.isEmpty(metchOne) == true) {
+                            newVariantProduct.set("detailImageUrl", singleOne);
+                        } else {
+                            newVariantProduct.set("detailImageUrl", metchOne);
                         }
 //                            newVariantProduct.set("detailImageUrl", UtilValidate.isEmpty(metchOne)==true?singleOne:metchOne);
                         if (UtilValidate.isNotEmpty(internalName)) {
@@ -1541,8 +1509,8 @@ public class PlatformManagerServices {
 
 
                         //模特图
-                        if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
+                        if (!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchOne, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1553,12 +1521,12 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(metchTwo)&& !metchTwo.equals("无")){
+                        if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchTwo, admin);
 
                             productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1569,12 +1537,12 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
                         //模特图3
-                        if(!UtilValidate.isEmpty(metchThree) && !metchThree.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator, metchThree, admin);
+                        if (!UtilValidate.isEmpty(metchThree) && !metchThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchThree, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1585,12 +1553,12 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }//4
-                        if(!UtilValidate.isEmpty(metchFoo)  && !metchFoo.equals("无")){
+                        if (!UtilValidate.isEmpty(metchFoo) && !metchFoo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                            String  contentId = createNewContentForImage(dispatcher,delegator, metchFoo, admin);
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchFoo, admin);
 
                             productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1601,13 +1569,13 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
                         //单品图
-                        if(!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
-                            String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
+                        if (!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleOne, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
@@ -1616,11 +1584,11 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(singleTwo)  && !singleTwo.equals("无")) {
-                            String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
+                        if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
@@ -1629,13 +1597,13 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
                         //细节图
-                        if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
+                        if (!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailOne, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1645,11 +1613,11 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
-                            String  contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
+                        if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1659,11 +1627,11 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
-                        if(!UtilValidate.isEmpty(detailThree)&& !detailThree.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
+                        if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailThree, admin);
 
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
@@ -1674,30 +1642,30 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
 
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
                         //4
-                        if(!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailFoo, admin);
+                        if (!UtilValidate.isEmpty(detailFoo) && !detailFoo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailFoo, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
                             productContentCtx.put("contentId", contentId);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
                         //5
-                        if(!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")){
-                            String contentId = createNewContentForImage(dispatcher,delegator,detailFive, admin);
+                        if (!UtilValidate.isEmpty(detailFive) && !detailFive.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailFive, admin);
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
                             productContentCtx.put("productId", productId);
                             productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
                             productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
                             productContentCtx.put("contentId", contentId);
-                            GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
                             productContent.create();
                         }
 
@@ -1848,7 +1816,6 @@ public class PlatformManagerServices {
                 }
 
 
-
                 TransactionUtil.commit();
                 //循环结束
             }
@@ -1869,6 +1836,7 @@ public class PlatformManagerServices {
 
     /**
      * productUploadImportNewEvent 最新 带图片地址的
+     *
      * @param request
      * @param response
      * @return
@@ -1907,7 +1875,7 @@ public class PlatformManagerServices {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
                 String[] excelRow = excelList.get(i);
-                Debug.logInfo("excelRow:"+excelRow,module);
+                Debug.logInfo("excelRow:" + excelRow, module);
 
                 String internalName = excelRow[2];
                 String productVirtualId = excelRow[3];
@@ -1932,434 +1900,427 @@ public class PlatformManagerServices {
                 String detailOne = null;
                 String detailTwo = null;
                 String detailThree = null;
-                 try{
-                       metchOne = excelRow[11];
-                       metchTwo = excelRow[12];
-                       singleOne = excelRow[13];
-                       singleTwo = excelRow[14];
-                       detailOne = excelRow[15];
-                       detailTwo = excelRow[16];
-                       detailThree = excelRow[17];
-                 }catch (ArrayIndexOutOfBoundsException e){
+                try {
+                    metchOne = excelRow[11];
+                    metchTwo = excelRow[12];
+                    singleOne = excelRow[13];
+                    singleTwo = excelRow[14];
+                    detailOne = excelRow[15];
+                    detailTwo = excelRow[16];
+                    detailThree = excelRow[17];
+                } catch (ArrayIndexOutOfBoundsException e) {
 
-                 }
-
-
+                }
 
 
-
-
-
-
-                    //导入的表存在虚拟产品Id
-                    if (UtilValidate.isNotEmpty(productVirtualId)) {
-                        GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
-                        if (UtilValidate.isEmpty(productVirtual)) {
-                            GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
-                            newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
-                            newVirtualProduct.set("description", desc);
+                //导入的表存在虚拟产品Id
+                if (UtilValidate.isNotEmpty(productVirtualId)) {
+                    GenericValue productVirtual = EntityQuery.use(delegator).from("Product").where("productId", productVirtualId).queryFirst();
+                    if (UtilValidate.isEmpty(productVirtual)) {
+                        GenericValue newVirtualProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productVirtualId));
+                        newVirtualProduct.set("productTypeId", "FINISHED_GOOD");
+                        newVirtualProduct.set("description", desc);
 //                            newVirtualProduct.set("comments", keyword);
-                            //默认图片
-                            if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
-                                newVirtualProduct.set("detailImageUrl",  singleOne);
-                            }else{
-                                newVirtualProduct.set("detailImageUrl",  metchOne);
-                            }
-                            if (UtilValidate.isNotEmpty(internalName)) {
-                                newVirtualProduct.set("internalName", internalName);
-                                newVirtualProduct.set("productName", internalName);
-                            }
-                            newVirtualProduct.set("isVirtual", "Y");
-                            newVirtualProduct.set("isVariant", "N");
-                            newVirtualProduct.create();
+                        //默认图片
+                        if (metchOne.equals("无") || UtilValidate.isEmpty(metchOne) == true) {
+                            newVirtualProduct.set("detailImageUrl", singleOne);
+                        } else {
+                            newVirtualProduct.set("detailImageUrl", metchOne);
+                        }
+                        if (UtilValidate.isNotEmpty(internalName)) {
+                            newVirtualProduct.set("internalName", internalName);
+                            newVirtualProduct.set("productName", internalName);
+                        }
+                        newVirtualProduct.set("isVirtual", "Y");
+                        newVirtualProduct.set("isVariant", "N");
+                        newVirtualProduct.create();
 
 
-                            //模特图
-                            if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
-                                String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
+                        //模特图
+                        if (!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchOne, admin);
 
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                    productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
-                                    productContentCtx.put("contentId", contentId);
+                            productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(metchTwo)  && !metchTwo.equals("无")){
-                                Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                               String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchTwo, admin);
 
-                                productContentCtx = new HashMap<String, Object>();
-                                productContentCtx.put("productId", productVirtualId);
-                                productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
-                                productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
-                                productContentCtx.put("contentId", contentId);
+                            productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-
-
-                            //单品图
-                            if(!UtilValidate.isEmpty(singleOne)&& !singleOne.equals("无")) {
-                                String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
-                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId",productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
-                                String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
-                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-
-                            //细节图
-                            if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
-                                String   contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
-                                String   contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                                }
-
-                            if(!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")){
-                                String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productVirtualId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-
-
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
                         }
-                        //创建变形产品
-                        GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
-                        if (UtilValidate.isEmpty(productVariant)) {
-                            GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
-                            newVariantProduct.set("productTypeId", "FINISHED_GOOD");
-                            newVariantProduct.set("description", desc);
+
+
+                        //单品图
+                        if (!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleOne, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+
+                        //细节图
+                        if (!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailOne, admin);
+
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
+
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+
+                        if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailThree, admin);
+
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productVirtualId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+
+
+                    }
+                    //创建变形产品
+                    GenericValue productVariant = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                    if (UtilValidate.isEmpty(productVariant)) {
+                        GenericValue newVariantProduct = delegator.makeValue("Product", UtilMisc.toMap("productId", productId));
+                        newVariantProduct.set("productTypeId", "FINISHED_GOOD");
+                        newVariantProduct.set("description", desc);
 //                            newVariantProduct.set("comments", keyword);
-                            //默认图片
-                            //默认图片
-                            if(metchOne.equals("无")|| UtilValidate.isEmpty(metchOne)==true){
-                                newVariantProduct.set("detailImageUrl",  singleOne);
-                            }else{
-                                newVariantProduct.set("detailImageUrl",  metchOne);
-                            }
+                        //默认图片
+                        //默认图片
+                        if (metchOne.equals("无") || UtilValidate.isEmpty(metchOne) == true) {
+                            newVariantProduct.set("detailImageUrl", singleOne);
+                        } else {
+                            newVariantProduct.set("detailImageUrl", metchOne);
+                        }
 //                            newVariantProduct.set("detailImageUrl", UtilValidate.isEmpty(metchOne)==true?singleOne:metchOne);
-                            if (UtilValidate.isNotEmpty(internalName)) {
-                                newVariantProduct.set("internalName", internalName);
-                                newVariantProduct.set("productName", internalName);
-                            }
-                            newVariantProduct.set("isVirtual", "N");
-                            newVariantProduct.set("isVariant", "Y");
-                            newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
-                            newVariantProduct.create();
+                        if (UtilValidate.isNotEmpty(internalName)) {
+                            newVariantProduct.set("internalName", internalName);
+                            newVariantProduct.set("productName", internalName);
+                        }
+                        newVariantProduct.set("isVirtual", "N");
+                        newVariantProduct.set("isVariant", "Y");
+                        newVariantProduct.set("virtualVariantMethodEnum", "VV_FEATURETREE");
+                        newVariantProduct.create();
 
 
-                            //模特图
-                            if(!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")){
-                                String contentId = createNewContentForImage(dispatcher,delegator, metchOne, admin);
+                        //模特图
+                        if (!UtilValidate.isEmpty(metchOne) && !metchOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchOne, admin);
 
-                                Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                productContentCtx.put("productId", productId);
-                                productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
-                                productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
-                                productContentCtx.put("contentId", contentId);
+                            productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(metchTwo)&& !metchTwo.equals("无")){
-                                Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                               String  contentId = createNewContentForImage(dispatcher,delegator, metchTwo, admin);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            String contentId = createNewContentForImage(dispatcher, delegator, metchTwo, admin);
 
-                                productContentCtx = new HashMap<String, Object>();
-                                productContentCtx.put("productId", productId);
-                                productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
-                                productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                            productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "MATCH_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
 //                                productContentCtx.put("userLogin", admin);
 //                        productContentCtx.put("sequenceNum", Long.parseLong(sequenceNum));
-                                productContentCtx.put("contentId", contentId);
+                            productContentCtx.put("contentId", contentId);
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-
-                            //单品图
-                            if(!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
-                                String contentId = createNewContentForImage(dispatcher,delegator, singleOne, admin);
-                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productId);
-                                    productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(singleTwo)  && !singleTwo.equals("无")) {
-                                String contentId = createNewContentForImage(dispatcher,delegator, singleTwo, admin);
-                                     Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productId);
-                                    productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-
-                            //细节图
-                            if(!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")){
-                                String contentId = createNewContentForImage(dispatcher,delegator,detailOne, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")){
-                               String  contentId = createNewContentForImage(dispatcher,delegator,detailTwo, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-                            }
-                            if(!UtilValidate.isEmpty(detailThree)&& !detailThree.equals("无")){
-                                String contentId = createNewContentForImage(dispatcher,delegator,detailThree, admin);
-
-                                    Map<String, Object> productContentCtx = new HashMap<String, Object>();
-                                    productContentCtx.put("productId", productId);
-                                    productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
-                                    productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
-//                                    productContentCtx.put("userLogin", admin);
-                                    productContentCtx.put("contentId", contentId);
-//                                    productContentCtx.put("statusId", "IM_PENDING");
-//                                    dispatcher.runSync("createProductContent", productContentCtx);
-
-                                GenericValue productContent = delegator.makeValue("ProductContent",productContentCtx );
-                                productContent.create();
-
-                            }
-
-                        }
-                        //创建产品关联
-                        GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
-                        if (UtilValidate.isEmpty(productAssoc)) {
-                            GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
-                            newAssoc.create();
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
                         }
 
-                        //创建缺省价格
-                        if (UtilValidate.isNotEmpty(listPrice)) {
-                            GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
-                            newProductVariantPrice.set("price", new BigDecimal(listPrice));
-                            newProductVariantPrice.create();
+                        //单品图
+                        if (!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleOne, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "SINGLE_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
                         }
 
+                        //细节图
+                        if (!UtilValidate.isEmpty(detailOne) && !detailOne.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailOne, admin);
 
-                        //找到仓库
-                        GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
 
-                        //为产品创建库存量
-                        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
-                                "facilityId", (String) facility.get("facilityId"),
-                                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
-                                "productId", productId,
-                                "description ", "卖家发布产品时的录入库存",
-                                "quantityAccepted", new BigDecimal("15"),
-                                "quantityRejected", BigDecimal.ZERO,
-                                "unitCost", new BigDecimal(listPrice),
-                                "ownerPartyId", payToPartyId,
-                                "partyId", payToPartyId,
-                                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
-                                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+                        }
+                        if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
+                            String contentId = createNewContentForImage(dispatcher, delegator, detailThree, admin);
 
-                        Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
-                        );
-                        if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
-                            Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
-                            //return receiveInventoryProductOut;
-                            return "error";
+                            Map<String, Object> productContentCtx = new HashMap<String, Object>();
+                            productContentCtx.put("productId", productId);
+                            productContentCtx.put("productContentTypeId", "DETAIL_PRODUCT_IMAGE");
+                            productContentCtx.put("fromDate", UtilDateTime.nowTimestamp());
+//                                    productContentCtx.put("userLogin", admin);
+                            productContentCtx.put("contentId", contentId);
+//                                    productContentCtx.put("statusId", "IM_PENDING");
+//                                    dispatcher.runSync("createProductContent", productContentCtx);
+
+                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+                            productContent.create();
+
                         }
 
-                        //SKU关联分类
-                        Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
-                        addProductToCategoryInMap.put("userLogin", admin);
-                        addProductToCategoryInMap.put("productId", productId);
-                        addProductToCategoryInMap.put("productCategoryId", productCategoryId);
-                        Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
-                        if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
-                            Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
-                            // return addProductToCategoryServiceResultMap;
-                            return "error";
-                        }
+                    }
+                    //创建产品关联
+                    GenericValue productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT").queryFirst();
+                    if (UtilValidate.isEmpty(productAssoc)) {
+                        GenericValue newAssoc = delegator.makeValue("ProductAssoc", UtilMisc.toMap("productId", productVirtualId, "productIdTo", productId, "productAssocTypeId", "PRODUCT_VARIANT", "fromDate", UtilDateTime.nowTimestamp()));
+                        newAssoc.create();
+                    }
+
+                    //创建缺省价格
+                    if (UtilValidate.isNotEmpty(listPrice)) {
+                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                        newProductVariantPrice.set("price", new BigDecimal(listPrice));
+                        newProductVariantPrice.create();
+                    }
+
+
+                    //找到仓库
+                    GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+
+                    //为产品创建库存量
+                    Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                            "facilityId", (String) facility.get("facilityId"),
+                            "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                            "productId", productId,
+                            "description ", "卖家发布产品时的录入库存",
+                            "quantityAccepted", new BigDecimal("15"),
+                            "quantityRejected", BigDecimal.ZERO,
+                            "unitCost", new BigDecimal(listPrice),
+                            "ownerPartyId", payToPartyId,
+                            "partyId", payToPartyId,
+                            "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                            "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                    Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                    );
+                    if (!ServiceUtil.isSuccess(receiveInventoryProductOut)) {
+                        Debug.logError("*Mother Fuck Receive Inventory Product Error:" + receiveInventoryProductOut, module);
+                        //return receiveInventoryProductOut;
+                        return "error";
+                    }
+
+                    //SKU关联分类
+                    Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                    addProductToCategoryInMap.put("userLogin", admin);
+                    addProductToCategoryInMap.put("productId", productId);
+                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                    Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                        // return addProductToCategoryServiceResultMap;
+                        return "error";
+                    }
 
 //                    //虚拟产品关联分类
 
-                        GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
+                    GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productVirtualId, "productCategoryId", productCategoryId).queryFirst();
 
-                        if (UtilValidate.isEmpty(productCategoryMember)) {
-                            GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
-                            newProductCategoryMember.create();
-                        }
+                    if (UtilValidate.isEmpty(productCategoryMember)) {
+                        GenericValue newProductCategoryMember = delegator.makeValue("ProductCategoryMember", UtilMisc.toMap("productId", productVirtualId, "productCategoryId", productCategoryId, "fromDate", UtilDateTime.nowTimestamp()));
+                        newProductCategoryMember.create();
+                    }
 
 
 //TODO 开始搞特征 -------------------------------------------------------------------------------------------------------------------------
 
 
-                        //创建颜色特征
-                        if (UtilValidate.isNotEmpty(colorId)) {
+                    //创建颜色特征
+                    if (UtilValidate.isNotEmpty(colorId)) {
 
 
-                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
-                            String featureId = "";
-                            //没找到这个特征
-                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
-                                //创建该特征
-                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
-                                featureId = (String) createProductFetureMap.get("productFeatureId");
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "COLOR_" + colorId, "productFeatureTypeId", "COLOR", "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
+                        String featureId = "";
+                        //没找到这个特征
+                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                            //创建该特征
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("idCode", colorDesc, "productFeatureId", "COLOR_" + colorId, "productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
+                            featureId = (String) createProductFetureMap.get("productFeatureId");
 //                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","COLOR_" + colorId,"productFeatureCategoryId", "PRODUCT_COLOR", "productFeatureTypeId", "COLOR", "description", colorDesc));
 //                            newProductFeture.create();
-                            } else {
-                                featureId = (String) productColorFeature.get("productFeatureId");
-                            }
-
-
-                            //创建 虚拟 颜色特征
-                            GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
-
-                            if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
-                                GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                                newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
-                                newVirtualProductColorFeatureAppl.create();
-                            }
-                            //创建 变形 颜色特征
-                            GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
-                            if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
-                                GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                                newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
-                                newVariantProductColorFeatureAppl.create();
-                            }
-                            //颜色特征模块结束
+                        } else {
+                            featureId = (String) productColorFeature.get("productFeatureId");
                         }
 
 
-                        //创建尺码特征
-                        if (UtilValidate.isNotEmpty(sizeId)) {
+                        //创建 虚拟 颜色特征
+                        GenericValue productVirtualColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
 
-                            GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
-                            String featureId = "";
-                            //没找到这个特征
-                            if (!UtilValidate.isNotEmpty(productColorFeature)) {
-                                //创建该特征
-                                Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
-                                featureId = (String) createProductFetureMap.get("productFeatureId");
-//                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
-//                            newProductFeture.create();
-                            } else {
-                                featureId = (String) productColorFeature.get("productFeatureId");
-                            }
-
-
-                            //创建 虚拟 尺码特征
-                            GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
-                            if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
-                                GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                                newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
-                                newVirtualProductSizeFeatureAppl.create();
-                            }
-                            //创建 变形 尺码特征
-                            GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
-
-                            if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
-                                GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
-                                newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
-                                newVariantProductSizeFeatureAppl.create();
-                            }
-
-
-                            //尺码特征结束
+                        if (UtilValidate.isEmpty(productVirtualColorFeatureAppl)) {
+                            GenericValue newVirtualProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVirtualProductColorFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                            newVirtualProductColorFeatureAppl.create();
                         }
-
-
-                        //判断是否存在导入的虚拟产品ID结构结束
-
+                        //创建 变形 颜色特征
+                        GenericValue productVariantColorFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+                        if (UtilValidate.isEmpty(productVariantColorFeatureAppl)) {
+                            GenericValue newVariantProductColorFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVariantProductColorFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                            newVariantProductColorFeatureAppl.create();
+                        }
+                        //颜色特征模块结束
                     }
 
+
+                    //创建尺码特征
+                    if (UtilValidate.isNotEmpty(sizeId)) {
+
+                        GenericValue productColorFeature = EntityQuery.use(delegator).from("ProductFeature").where("productFeatureId", "SIZE_" + sizeId, "productFeatureTypeId", "SIZE", "productFeatureCategoryId", "PRODUCT_SIZE").queryFirst();
+                        String featureId = "";
+                        //没找到这个特征
+                        if (!UtilValidate.isNotEmpty(productColorFeature)) {
+                            //创建该特征
+                            Map<String, Object> createProductFetureMap = dispatcher.runSync("createProductFeatureInertPk", UtilMisc.toMap("productFeatureId", "SIZE_" + sizeId, "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeDesc, "idCode", sizeId));
+                            featureId = (String) createProductFetureMap.get("productFeatureId");
+//                            GenericValue newProductFeture = delegator.makeValue("ProductFeature", UtilMisc.toMap("productFeatureId","SIZE_" + sizeId,  "productFeatureCategoryId", "PRODUCT_SIZE", "productFeatureTypeId", "SIZE", "description", sizeId,"idCode",sizeDesc));
+//                            newProductFeture.create();
+                        } else {
+                            featureId = (String) productColorFeature.get("productFeatureId");
+                        }
+
+
+                        //创建 虚拟 尺码特征
+                        GenericValue productVirtualSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productVirtualId, "productFeatureId", featureId).queryFirst();
+                        if (UtilValidate.isEmpty(productVirtualSizeFeatureAppl)) {
+                            GenericValue newVirtualProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productVirtualId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVirtualProductSizeFeatureAppl.set("productFeatureApplTypeId", "SELECTABLE_FEATURE");
+                            newVirtualProductSizeFeatureAppl.create();
+                        }
+                        //创建 变形 尺码特征
+                        GenericValue productVariantSizeFeatureAppl = EntityQuery.use(delegator).from("ProductFeatureAppl").where("productId", productId, "productFeatureId", featureId).queryFirst();
+
+                        if (UtilValidate.isEmpty(productVariantSizeFeatureAppl)) {
+                            GenericValue newVariantProductSizeFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", featureId, "fromDate", UtilDateTime.nowTimestamp()));
+                            newVariantProductSizeFeatureAppl.set("productFeatureApplTypeId", "STANDARD_FEATURE");
+                            newVariantProductSizeFeatureAppl.create();
+                        }
+
+
+                        //尺码特征结束
+                    }
+
+
+                    //判断是否存在导入的虚拟产品ID结构结束
+
+                }
 
 
                 TransactionUtil.commit();
@@ -2380,14 +2341,15 @@ public class PlatformManagerServices {
     }
 
 
-public String createProuctContent(){
+    public String createProuctContent() {
 
-    return "";
-}
+        return "";
+    }
 
     /**
      * 产品数据Excel导入
      * (2018-07-25)版
+     *
      * @param request
      * @param response
      * @return
@@ -2413,7 +2375,7 @@ public String createProuctContent(){
         try {
             String[] excelHead = excelList.get(0);
 
-                //WATERPROOF or ANKORAU_RETAIL
+            //WATERPROOF or ANKORAU_RETAIL
             String prodCatalogId = excelHead[0];
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
             String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");

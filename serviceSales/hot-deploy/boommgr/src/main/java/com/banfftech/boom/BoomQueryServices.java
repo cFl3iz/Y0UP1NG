@@ -782,8 +782,12 @@ public class BoomQueryServices {
 
                 rowMap.put("productName",gv.getString("productName"));
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
-                rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
-                String uomId = gv.getString("quantityUomId");
+                try{
+                rowMap.put("createdDate",sdf.format(gv.get("fromDate")));
+                }catch (Exception e){
+
+                }
+                    String uomId = gv.getString("quantityUomId");
                 rowMap.put("quantityUomId",uomId);
 
                 GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(

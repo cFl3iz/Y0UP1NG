@@ -1735,6 +1735,11 @@ public class WeChatOrderQueryServices {
         if (null != productList) {
             for (GenericValue gv : productList) {
                 Map<String, Object> rowMap = gv.getAllFields();
+
+                if (null != gv.get("salesDiscontinuationDate")) {
+                    continue;
+                }
+
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
                 EntityCondition findConditions3 = EntityCondition

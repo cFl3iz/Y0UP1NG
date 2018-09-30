@@ -606,6 +606,18 @@ public class PersonManagerServices {
                 }
 
 
+
+
+
+                GenericValue myStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                        "partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
+                String storeId = myStore.getString("productStoreId");
+                GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(
+                        "productStoreId", storeId).queryFirst();
+                store.set("storeName",nickName);
+                store.set("oldHeaderLogo",avatarUrl);
+                store.store();
+
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
                 result.put("partyId", partyId);
                 result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));

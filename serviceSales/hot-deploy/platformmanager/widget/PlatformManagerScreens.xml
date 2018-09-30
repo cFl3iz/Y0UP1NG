@@ -136,7 +136,10 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-
+                        <screenlet title="导入诸法成品">
+                            <include-form name="FinishGoodUploadImportFormZhuFa"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
 
                         <screenlet title="导入诸法供应商">
                             <include-form name="SupplierUploadImportFormZhuFa"

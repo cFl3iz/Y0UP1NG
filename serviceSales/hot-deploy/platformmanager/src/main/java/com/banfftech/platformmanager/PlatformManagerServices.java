@@ -1073,6 +1073,53 @@ public class PlatformManagerServices {
         return "success";
     }
 
+    /**
+     * finishGoodUploadImportFormZhuFa
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String finishGoodUploadImportFormZhuFa(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        FileItem fileItem = getFileItem(request);
+        List<String[]> excelList = excelToList(fileItem);
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        try {
+            String[] excelHead = excelList.get(0);
+            String partyGroupId = excelHead[0];
+            GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyGroupId).queryFirst();
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                String[] excelRow = excelList.get(i);
+                String productName = excelRow[1];
+
+
+
+                TransactionUtil.commit();
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+
 
     /**
      * supplierUploadImportFormZhuFa

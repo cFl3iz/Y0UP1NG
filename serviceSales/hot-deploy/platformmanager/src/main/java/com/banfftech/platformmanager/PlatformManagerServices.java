@@ -1073,6 +1073,108 @@ public class PlatformManagerServices {
         return "success";
     }
 
+
+    /**
+     * supplierUploadImportFormZhuFa
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String supplierUploadImportFormZhuFa(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        FileItem fileItem = getFileItem(request);
+        List<String[]> excelList = excelToList(fileItem);
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        try {
+            String[] excelHead = excelList.get(0);
+            String partyGroupId = excelHead[0];
+            GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyGroupId).queryFirst();
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                String[] excelRow = excelList.get(i);
+                String companyName = excelRow[1];
+                String supplierName = excelRow[2];
+                String supplierTel = excelRow[3];
+                String firstName = supplierName;
+                String lastName = " ";
+                Long hasData = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
+                        "partyIdFrom", partyGroupId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "tnContactNumber", supplierTel).queryCount();
+                if (hasData > 0) {
+                   continue;
+                }
+                if (supplierName.length() >= 4) {
+                    firstName = supplierName.substring(0, 2);
+                    lastName = supplierName.substring(2 + 1);
+                }
+                if (supplierName.length() <= 3) {
+                    lastName = supplierName.substring(0, 1);
+                    firstName = supplierName.substring(1);
+                }
+
+                if(supplierName.length()<2){
+                    lastName = " ";
+                    firstName = supplierName;
+                }
+
+                Map<String, Object> createLeadMap = new HashMap<String, Object>();
+
+                createLeadMap.put("userLogin", admin);
+                createLeadMap.put("firstName", firstName);
+                createLeadMap.put("lastName", lastName);
+                createLeadMap.put("countryGeoId", "CHN");
+                createLeadMap.put("city", "无");
+                createLeadMap.put("address1","无");
+                createLeadMap.put("countryCode", "86");
+                createLeadMap.put("postalCode", "200000");
+                createLeadMap.put("contactNumber", supplierTel);
+                Map<String, Object> createLeadOutMap = dispatcher.runSync("createLead", createLeadMap);
+
+                String resultPartyId = (String) createLeadOutMap.get("partyId");
+
+
+                GenericValue newPartyRole = delegator.makeValue("PartyRole",
+                        UtilMisc.toMap("partyId", resultPartyId,"roleTypeId", "SUPPLIER"));
+                newPartyRole.create();
+
+
+                GenericValue aliasForg = delegator.makeValue("AliasForg", UtilMisc.toMap());
+
+                aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
+                aliasForg.set("partyIdFrom", partyGroupId);
+                aliasForg.set("partyIdTo", resultPartyId);
+                aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
+                aliasForg.set("aliasAddress", "无");
+                aliasForg.create();
+
+
+                TransactionUtil.commit();
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+
+
+
+
     /**
      * rawProductUploadImportFormZhuFa
      *

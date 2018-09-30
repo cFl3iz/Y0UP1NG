@@ -89,7 +89,11 @@
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="rawProductUploadImportFormZhuFa"/>
         <response name="success" type="view" value="ProductUploadImport"/>
     </request-map>
-
+    <request-map uri="SupplierUploadImportFormZhuFa">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="supplierUploadImportFormZhuFa"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
 
     <request-map uri="ZugZugEmpUploadImportFormEvent">
         <security https="true" auth="true"/>

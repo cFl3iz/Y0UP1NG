@@ -4238,6 +4238,42 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+    public static boolean containsEmoji(String source) {
+        int len = source.length();
+        boolean isEmoji = false;
+        for (int i = 0; i < len; i++) {
+            char hs = source.charAt(i);
+            if (0xd800 <= hs && hs <= 0xdbff) {
+                if (source.length() > 1) {
+                    char ls = source.charAt(i+1);
+                    int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                    if (0x1d000 <= uc && uc <= 0x1f77f) {
+                        return true;
+                    }
+                }
+            } else {
+                // non surrogate
+                if (0x2100 <= hs && hs <= 0x27ff && hs != 0x263b) {
+                    return true;
+                } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                    return true;
+                } else if (0x2934 <= hs && hs <= 0x2935) {
+                    return true;
+                } else if (0x3297 <= hs && hs <= 0x3299) {
+                    return true;
+                } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50|| hs == 0x231a ) {
+                    return true;
+                }
+                if (!isEmoji && source.length() > 1 && i < source.length() -1) {
+                    char ls = source.charAt(i+1);
+                    if (ls == 0x20e3) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return  isEmoji;
+    }
 
     /**
      * 省
@@ -4312,7 +4348,19 @@ public class PersonManagerServices {
                 orderMap.put("nickName",empInfo.getString("dept")+"_"+empInfo.getString("name") + "/" + custPerson.getString("firstName"));
                 orderMap.put("toName",empInfo.getString("name") + "/" + custPerson.getString("firstName"));
             }else{
-                orderMap.put("nickName","YP_"+custPerson.getString("firstName"));
+                try{
+                //is emoji
+                  if(containsEmoji(custPerson.getString("firstName"))){
+                      //取 to name
+                      orderMap.put("nickName","YP_"+orderHeaderAndShipGroups.getString("toName"));
+                 }else{
+                    orderMap.put("nickName","YP_"+custPerson.getString("firstName"));
+                  }
+                }catch (Exception e){
+                    //放过
+                    orderMap.put("nickName","YP_"+orderHeaderAndShipGroups.getString("toName"));
+                }
+
                 orderMap.put("toName",orderHeaderAndShipGroups.getString("toName"));
             }
 
@@ -4429,11 +4477,17 @@ public class PersonManagerServices {
             if(zuczugStoreId.equals("P01")){
                 titleName = "[Extra-One]"+ "正式付款下单!" + orderId;
             }
+            String errorInfo = "";
+            String responseColorSpan = "[<span style=\"color:green;\">";
+            if(resultMsg.trim().indexOf("error")>-1){
+                responseColorSpan = "[<span style=\"color:red;\">";
+                errorInfo = "系统将在稍后再次尝试推送该订单...";
+            }
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",
                         "<div style=\"background-color:rgb(64, 64, 64);color:#09CCD9;\">订单:["+orderId+
                                 "]已通知素然长宁工作机[店铺:"+zuczugStoreId+"]生成订单。<br/>请求报文:"+orderListStr.toString()+
-                                "。<br/>素然回馈结果为[<span style=\"color:green;\">"+resultMsg+"</span>]</div>"
+                                "。<br/>素然回馈结果为"+responseColorSpan+resultMsg+"</span>]</div>"+errorInfo
                         , "title",titleName));
 
 

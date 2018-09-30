@@ -7075,6 +7075,7 @@ public class PersonManagerServices {
         long ctm = System.currentTimeMillis();
         createProductInMap.put("internalName", partyId + "_" + ctm);
         createProductInMap.put("productName", productName);
+        createProductInMap.put("isVariant", "Y");
         createProductInMap.put("productTypeId", PeConstant.PRODUCT_TYPE_ID);
         createProductInMap.put("description", description);
 

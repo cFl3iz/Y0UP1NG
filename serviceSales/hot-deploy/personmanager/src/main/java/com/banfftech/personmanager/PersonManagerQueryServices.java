@@ -361,6 +361,7 @@ public class PersonManagerQueryServices {
             rowStore.put("roleTypeId","ADMIN");
             rowStore.put("storeImage",store.getString("oldHeaderLogo"));
             rowStore.put("description",store.getString("title"));
+            rowStore.put("lastUpdatedStamp", store.get("lastUpdatedStamp"));
             rowStore.put("storeAdminId",partyId);
             returnList.add(rowStore);
         }

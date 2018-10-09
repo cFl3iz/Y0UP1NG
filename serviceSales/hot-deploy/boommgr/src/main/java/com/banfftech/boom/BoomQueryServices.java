@@ -614,9 +614,14 @@ public class BoomQueryServices {
                         String uomId = childProduct.getString("quantityUomId");
                         GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                                 "uomId", uomId).queryFirst();
-                        String uomDescription = uom.getString("description");
-                        String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
-                        rowProductMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+                        if(uom!=null){
+                            String uomDescription = uom.getString("description");
+                            String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
+                            rowProductMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+                        }else{
+                            rowProductMap.put("uomDescription","");
+                        }
+
 
 
                         supplierProductList.add(rowProductMap);

@@ -32,10 +32,16 @@ public class OfbizPrimitiveProcessor implements PrimitiveProcessor {
 	private Delegator delegator;
 	private Storage storage;
 
-	public OfbizPrimitiveProcessor(Delegator delegator, LocalDispatcher dispatcher) {
+//	public OfbizPrimitiveProcessor(Delegator delegator, LocalDispatcher dispatcher) {
+//		super();
+//		this.delegator = delegator;
+//		this.storage = new Storage(delegator, dispatcher);
+//	}
+
+	public OfbizPrimitiveProcessor(Delegator delegator, LocalDispatcher dispatcher, Storage storage) {
 		super();
 		this.delegator = delegator;
-		this.storage = new Storage(delegator, dispatcher);
+		this.storage = storage;
 	}
 
 	@Override

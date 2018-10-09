@@ -1,6 +1,9 @@
 package main.java.com.banfftech.platformmanager.odata;
 
+
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-
 
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
@@ -30,47 +31,32 @@ import org.apache.olingo.commons.api.edm.provider.CsdlProperty;
 import org.apache.olingo.commons.api.edm.provider.CsdlPropertyRef;
 import org.apache.olingo.commons.api.edm.provider.CsdlReturnType;
 import org.apache.olingo.commons.api.edm.provider.CsdlSchema;
-
-
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelKeyMap;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.model.ModelRelation;
-import org.apache.ofbiz.entity.model.ModelViewEntity;
-import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
-
 import org.apache.ofbiz.service.ModelParam;
 import org.apache.ofbiz.service.ModelService;
-
 
 public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
 	public static final String module = OfbizEdmProvider.class.getName();
-	// Service Namespace
 	public static final String NAMESPACE = "org.ofbiz";
-
-	// EDM Container
 	public static final String CONTAINER_NAME = "Container";
 	public static final FullQualifiedName CONTAINER = new FullQualifiedName(NAMESPACE, CONTAINER_NAME);
-
-	// public static final String ET_INVOICE_NAME = "Invoice";
-	// public static final FullQualifiedName ET_INVOICE_FQN = new FullQualifiedName(NAMESPACE, ET_INVOICE_NAME);
-
-	// Entity Set Names
-	// public static final String ES_INVOICES_NAME = "Invoices";
-	private Set<String> entityNames = new HashSet<String>();
-
-	// Service Action
-	public final static Map<String, FullQualifiedName> OFBIZ_SERVICE_MAP = new HashMap<String, FullQualifiedName>();
-	private Set<String> serviceNames;
-	private static Set<String> actionNames = new HashSet<String>();
-
+	public static final Set<String> entityNames = new HashSet<String>();
+	public static final Map<String, FullQualifiedName> OFBIZ_SERVICE_MAP = new HashMap<String, FullQualifiedName>();
+	public static Set<String> serviceNames = null;
+	public static final Set<String> possibleActionNames = new HashSet<String>();
+	public static final Set<String> actionNames = new HashSet<String>();
+	public static final Set<String> functionNames = new HashSet<String>();
 
 	public final static Map<String, EdmPrimitiveTypeKind> FIELDMAP = new HashMap<String, EdmPrimitiveTypeKind>();
 	static {
@@ -107,65 +93,52 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		FIELDMAP.put("credit-card-date", EdmPrimitiveTypeKind.String);
 		FIELDMAP.put("tel-number", EdmPrimitiveTypeKind.String);
 	};
-
-
 	public final static Map<String, EdmPrimitiveTypeKind> PARAM_TYPE_MAP = new HashMap<String, EdmPrimitiveTypeKind>();
 	static {
 		PARAM_TYPE_MAP.put("String", EdmPrimitiveTypeKind.String);
+		PARAM_TYPE_MAP.put("java.lang.String", EdmPrimitiveTypeKind.String);
 		PARAM_TYPE_MAP.put("BigDecimal", EdmPrimitiveTypeKind.Double);
 		PARAM_TYPE_MAP.put("java.math.BigDecimal", EdmPrimitiveTypeKind.Double);
 		PARAM_TYPE_MAP.put("java.sql.Timestamp", EdmPrimitiveTypeKind.Date);
 		PARAM_TYPE_MAP.put("Timestamp", EdmPrimitiveTypeKind.Date);
+		PARAM_TYPE_MAP.put("java.sql.Date", EdmPrimitiveTypeKind.Date);
 		PARAM_TYPE_MAP.put("Long", EdmPrimitiveTypeKind.Int64);
 		PARAM_TYPE_MAP.put("Double", EdmPrimitiveTypeKind.Double);
+		PARAM_TYPE_MAP.put("Boolean", EdmPrimitiveTypeKind.Boolean);
+		PARAM_TYPE_MAP.put("Integer", EdmPrimitiveTypeKind.Int64);
+		PARAM_TYPE_MAP.put("java.sql.Time", EdmPrimitiveTypeKind.Date);
 	}
 
 	private Delegator delegator;
 	private LocalDispatcher dispatcher;
 
-	public OfbizEdmProvider(Delegator delegator , LocalDispatcher dispatcher) {
+	public OfbizEdmProvider(Delegator delegator, LocalDispatcher dispatcher) {
 		super();
 		this.delegator = delegator;
-		ModelReader reader = delegator.getModelReader();
-		Set<String> packageFilterSet = new HashSet<String>();
-		packageFilterSet.add(NAMESPACE);
-		Map<String, TreeSet<String>> packageEntities = null;
-		try {
-			/********** 获取系统所有的entity **************************************************/
-
-			// packageEntities = reader.getEntitiesByPackage(packageFilterSet, null);
-			packageEntities = reader.getEntitiesByPackage(null, null);
-			// Set<String> entityNameSet = packageEntities.get(NAMESPACE);
-			Collection collectionEntityNameSet = packageEntities.values();
-			Iterator it = collectionEntityNameSet.iterator();
-			while (it.hasNext()) {
-				Set<String> entityNameSet = (Set) it.next();
-				for (String entityName: entityNameSet) {
-					try {
-						ModelEntity modelEntity = reader.getModelEntity(entityName);
-						/***** 是否要包括view？ ************************
-						if (modelEntity instanceof ModelViewEntity) {
-							continue;
-						}
-						****** 结束，是否要包括view？ ******************/
-						// Debug.logInfo("------------------- adding entity -- " + entityName, module);
-						entityNames.add(entityName);
-					} catch (GenericEntityException e) {
-						e.printStackTrace();
-					}
+		this.dispatcher = dispatcher;
+		if (entityNames.isEmpty()) {
+			ModelReader reader = delegator.getModelReader();
+			Map<String, TreeSet<String>> packageEntities = null;
+			try {
+				/********** 获取系统所有的entity **************************************************/
+				packageEntities = reader.getEntitiesByPackage(null, null);
+				Collection collectionEntityNameSet = packageEntities.values();
+				Iterator it = collectionEntityNameSet.iterator();
+				while (it.hasNext()) {
+					Set<String> entityNameSet = (Set) it.next();
+					entityNames.addAll(entityNameSet);
 				}
+			} catch (GenericEntityException e) {
+				e.printStackTrace();
 			}
-
-
+		}
+		if (serviceNames == null) {
 			/********** 获取系统所有的service **************************************************/
 			serviceNames = dispatcher.getDispatchContext().getAllServiceNames();
 			for (String serviceName : serviceNames) {
 				FullQualifiedName fullQualifiedServiceName = new FullQualifiedName(NAMESPACE, serviceName);
 				OFBIZ_SERVICE_MAP.put(serviceName, fullQualifiedServiceName);
 			}
-
-		} catch (GenericEntityException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -196,13 +169,14 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		Iterator<ModelField> fieldIterator = modelEntity.getFieldsIterator();
 		List<CsdlProperty> propertyList = new ArrayList<CsdlProperty>();
 		while (fieldIterator.hasNext()) {
-		    ModelField field = fieldIterator.next();
-		    String fieldName = field.getName();
-		    String fieldType = field.getType();
-			// Debug.logInfo("got some ---------------------fieldName = " + fieldName + ", fieldType = " + fieldType, module);
-		    CsdlProperty csdlProperty = new CsdlProperty().setName(fieldName)
+			ModelField field = fieldIterator.next();
+			String fieldName = field.getName();
+			String fieldType = field.getType();
+			// Debug.logInfo("got some ---------------------fieldName = " + fieldName + ",
+			// fieldType = " + fieldType, module);
+			CsdlProperty csdlProperty = new CsdlProperty().setName(fieldName)
 					.setType(FIELDMAP.get(fieldType).getFullQualifiedName());
-		    propertyList.add(csdlProperty);
+			propertyList.add(csdlProperty);
 		}
 		// 最后添加外键
 		Iterator<ModelRelation> relationsIterator = modelEntity.getRelationsIterator();
@@ -211,7 +185,8 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			while (relationsIterator.hasNext()) {
 				// Debug.logInfo("got some relations from " + entityName, module);
 				ModelRelation modelRelation = relationsIterator.next();
-				// Debug.logInfo("got some relations type = " + modelRelation.getType(), module);
+				// Debug.logInfo("got some relations type = " + modelRelation.getType(),
+				// module);
 				String relEntityName = modelRelation.getRelEntityName();
 				if (entityName.equals(relEntityName)) { // 这种是父子关系，例如PartyIdentificationType.parentTypeId
 					continue;
@@ -237,33 +212,46 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 				if (!foundPartner) { // 没有partner，这个relation就不要体现在odata上了
 					continue;
 				}
-				/***** 结束，处理反向关系，odata好像必须要两个entity都有互相的relation，也就是odata里的partner *************/
+				/*****
+				 * 结束，处理反向关系，odata好像必须要两个entity都有互相的relation，也就是odata里的partner
+				 *************/
 				FullQualifiedName fullQualifiedName = new FullQualifiedName(NAMESPACE, relEntityName);
 				CsdlNavigationProperty navProp = new CsdlNavigationProperty();
+
+				String navPropName;
+				if (modelRelation.getTitle() == null || modelRelation.getTitle().isEmpty()) {
+					navPropName = relEntityName;
+				} else {
+					navPropName = modelRelation.getTitle() + relEntityName;
+				}
 				if (modelRelation.getType().equals("one") || modelRelation.getType().equals("one-nofk")) { // 如果是多对一，也就是简单外键关系
-//					Iterator<ModelKeyMap> keyMapIterator = modelRelation.getKeyMapsIterator();
-   				String fieldName = null;
+					//TODO FIX ME
+		//			Iterator<ModelKeyMap> keyMapIterator = modelRelation.getKeyMapsIterator();
+					String fieldName = null;
 //					while (keyMapIterator.hasNext()) {
 //						ModelKeyMap modelKeyMap = keyMapIterator.next();
 //						fieldName = modelKeyMap.getFieldName();
 //					}
-					for(ModelKeyMap rowKeyMap : modelRelation.getKeyMaps()){
-						fieldName = rowKeyMap.getFieldName();
+					for(ModelKeyMap modelKeyMap : modelRelation.getKeyMaps() ){
+						fieldName = modelKeyMap.getFieldName();
 					}
-					navProp = navProp.setName(relEntityName)
-									.setType(fullQualifiedName)
-									.setPartner(entityName)
-									.setNullable(true);
+
+					//navProp = navProp.setName(relEntityName).setType(fullQualifiedName).setPartner(entityName)
+					//		.setNullable(true);
+					//navProp = navProp.setName(navPropName).setType(fullQualifiedName).setPartner(entityName)
+					//		.setNullable(true);
+					navProp = navProp.setName(navPropName).setType(fullQualifiedName).setNullable(true);
 				} else {
-					navProp = navProp.setName(relEntityName)
-									.setType(fullQualifiedName)
-									.setPartner(entityName)
-									.setCollection(true);
+					//navProp = navProp.setName(relEntityName).setType(fullQualifiedName).setPartner(entityName)
+					//		.setCollection(true);
+					//navProp = navProp.setName(navPropName).setType(fullQualifiedName).setPartner(entityName)
+					//		.setCollection(true);
+					navProp = navProp.setName(navPropName).setType(fullQualifiedName).setCollection(true);
 				}
 				navPropList.add(navProp);
 			}
 		}
-		
+
 		CsdlEntityType entityType = new CsdlEntityType();
 		entityType.setName(entityName);
 		entityType.setProperties(propertyList);
@@ -271,42 +259,41 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		if (UtilValidate.isNotEmpty(navPropList)) {
 			entityType.setNavigationProperties(navPropList);
 		}
-		
+
 		return entityType;
-		
+
 		/****
-		// this method is called for one of the EntityTypes that are configured in the
-		// Schema
-		if (entityTypeName.equals(ET_INVOICE_FQN)) {
-
-			// create EntityType properties
-			CsdlProperty id = new CsdlProperty().setName("invoiceId")
-					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-			CsdlProperty name = new CsdlProperty().setName("partyIdFrom")
-					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-			CsdlProperty description = new CsdlProperty().setName("description")
-					.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-
-			// create CsdlPropertyRef for Key element
-			CsdlPropertyRef propertyRef = new CsdlPropertyRef();
-			propertyRef.setName("invoiceId");
-
-			// configure EntityType
-			CsdlEntityType entityType = new CsdlEntityType();
-			entityType.setName(ET_INVOICE_NAME);
-			entityType.setProperties(Arrays.asList(id, name, description));
-			entityType.setKey(Collections.singletonList(propertyRef));
-
-			return entityType;
-		}
-
-		return null;
-		****/
+		 * // this method is called for one of the EntityTypes that are configured in
+		 * the // Schema if (entityTypeName.equals(ET_INVOICE_FQN)) {
+		 *
+		 * // create EntityType properties CsdlProperty id = new
+		 * CsdlProperty().setName("invoiceId")
+		 * .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()); CsdlProperty
+		 * name = new CsdlProperty().setName("partyIdFrom")
+		 * .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName()); CsdlProperty
+		 * description = new CsdlProperty().setName("description")
+		 * .setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
+		 *
+		 * // create CsdlPropertyRef for Key element CsdlPropertyRef propertyRef = new
+		 * CsdlPropertyRef(); propertyRef.setName("invoiceId");
+		 *
+		 * // configure EntityType CsdlEntityType entityType = new CsdlEntityType();
+		 * entityType.setName(ET_INVOICE_NAME);
+		 * entityType.setProperties(Arrays.asList(id, name, description));
+		 * entityType.setKey(Collections.singletonList(propertyRef));
+		 *
+		 * return entityType; }
+		 *
+		 * return null;
+		 ****/
 	}
 
 	public CsdlEntitySet getEntitySet(FullQualifiedName entityContainer, String entitySetName) {
 
 		String entityName = entitySetName.substring(0, entitySetName.length() - 1);
+		if (!entityNames.contains(entityName)) {
+			return null;
+		}
 		// Debug.logInfo("in getEntitySet, entityName = " + entityName, module);
 		if (entityContainer.equals(CONTAINER)) {
 			// Debug.logInfo("got some ---------------------1 " + entityName, module);
@@ -332,10 +319,18 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 					// Debug.logInfo("got some relations from " + entityName, module);
 					ModelRelation modelRelation = relationsIterator.next();
 					String relEntityName = modelRelation.getRelEntityName();
+					String bindingPath;
+					if (modelRelation.getTitle() == null) {
+						bindingPath = relEntityName;
+					} else {
+						bindingPath = modelRelation.getTitle() + relEntityName;
+					}
 					CsdlNavigationPropertyBinding navPropBinding = new CsdlNavigationPropertyBinding();
-					// Debug.logInfo("------------- seting binding path = " + relEntityName + ", and target = " + relEntityName + "s", module);
-					navPropBinding.setPath(relEntityName); // the path from entity type to navigation property
-					navPropBinding.setTarget(relEntityName + "s"); //target entitySet, where the nav prop points to
+					// Debug.logInfo("------------- seting binding path = " + relEntityName + ", and
+					// target = " + relEntityName + "s", module);
+					// navPropBinding.setPath(relEntityName); // the path from entity type to navigation property
+					navPropBinding.setPath(bindingPath);
+					navPropBinding.setTarget(relEntityName + "s"); // target entitySet, where the nav prop points to
 					navPropBindingList.add(navPropBinding);
 				}
 				entitySet.setNavigationPropertyBindings(navPropBindingList);
@@ -344,67 +339,77 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			return entitySet;
 		}
 		// Debug.logInfo("got some ---------------------4 " + entityName, module);
-
 		return null;
 	}
 
 	public CsdlEntityContainer getEntityContainer() {
-		
-		// create EntitySets
-		List<CsdlEntitySet> entitySets = new ArrayList<CsdlEntitySet>();
-		for (String entityName: entityNames) {
-			entitySets.add(getEntitySet(CONTAINER, entityName + "s"));
+		Debug.logInfo("+++++++++++++++++++++++++ entering into getEntityContainer()", module);
+		try {
+			// create EntitySets
+			List<CsdlEntitySet> entitySets = new ArrayList<CsdlEntitySet>();
+			for (String entityName : entityNames) {
+				entitySets.add(getEntitySet(CONTAINER, entityName + "s"));
+			}
+
+			// Create function imports
+			List<CsdlFunctionImport> functionImports = new ArrayList<CsdlFunctionImport>();
+			Iterator<String> serviceNameIt = functionNames.iterator();
+			while (serviceNameIt.hasNext()) {
+				functionImports.add(getFunctionImport(CONTAINER, serviceNameIt.next()));
+			}
+
+			// Create action imports
+			List<CsdlActionImport> actionImports = new ArrayList<CsdlActionImport>();
+			Iterator<String> actionNameIt = actionNames.iterator();
+			while (actionNameIt.hasNext()) {
+				actionImports.add(getActionImport(CONTAINER, actionNameIt.next()));
+			}
+
+			// create EntityContainer
+			CsdlEntityContainer entityContainer = new CsdlEntityContainer();
+			entityContainer.setName(CONTAINER_NAME);
+			entityContainer.setEntitySets(entitySets);
+			entityContainer.setFunctionImports(functionImports);
+			entityContainer.setActionImports(actionImports);
+
+
+			return entityContainer;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		// Create function imports
-		List<CsdlFunctionImport> functionImports = new ArrayList<CsdlFunctionImport>();
-		Iterator<String> serviceNameIt = serviceNames.iterator();
-		while (serviceNameIt.hasNext()) {
-			functionImports.add(getFunctionImport(CONTAINER, serviceNameIt.next()));
-		}
-
-		// Create action imports
-		List<CsdlActionImport> actionImports = new ArrayList<CsdlActionImport>();
-		Iterator<String> actionNameIt = actionNames.iterator();
-		while (actionNameIt.hasNext()) {
-			actionImports.add(getActionImport(CONTAINER, actionNameIt.next()));
-		}
-
-		// create EntityContainer
-		CsdlEntityContainer entityContainer = new CsdlEntityContainer();
-		entityContainer.setName(CONTAINER_NAME);
-		entityContainer.setEntitySets(entitySets);
-		entityContainer.setFunctionImports(functionImports);
-		entityContainer.setActionImports(actionImports);
-
-		return entityContainer;
+		return null;
 	}
 
 	public List<CsdlSchema> getSchemas() {
-
+		Debug.logInfo("+++++++++++++++++++++++++ entering into getSchemas()", module);
 		// create Schema
 		CsdlSchema schema = new CsdlSchema();
 		schema.setNamespace(NAMESPACE);
 
 		// add EntityTypes
 		List<CsdlEntityType> entityTypes = new ArrayList<CsdlEntityType>();
-		for (String entityName: entityNames) {
+		for (String entityName : entityNames) {
 			FullQualifiedName fullQualifiedName = new FullQualifiedName(NAMESPACE, entityName);
 			entityTypes.add(getEntityType(fullQualifiedName));
 		}
 		schema.setEntityTypes(entityTypes);
 
-
 		// add functions
 		List<CsdlFunction> functions = new ArrayList<CsdlFunction>();
-		Iterator<String> serviceNameIt = serviceNames.iterator();
-		while (serviceNameIt.hasNext()) {
-			String serviceName = serviceNameIt.next();
-			Debug.logInfo("=> serive name :"+serviceName,module);
+		Iterator<String> nameIt;
+		if (functionNames.isEmpty()) { // 第一次运行，还不清楚哪些service可以用到odata的function，所以遍历所有service
+			nameIt = serviceNames.iterator();
+		} else {
+			nameIt = functionNames.iterator();
+		}
+		// Iterator<String> nameIt = serviceNames.iterator();
+		while (nameIt.hasNext()) {
+			String serviceName = nameIt.next();
 			FullQualifiedName fullQualifiedServiceName = OFBIZ_SERVICE_MAP.get(serviceName);
 			List<CsdlFunction> serviceFunctions = getFunctions(fullQualifiedServiceName);
 			if (serviceFunctions == null) {
-				Debug.logInfo("=================== not a valid odata function " + serviceName, module);
+				// Debug.logInfo("=================== not a valid odata function " +
+				// serviceName, module);
 				continue;
 			}
 			functions.addAll(serviceFunctions);
@@ -413,20 +418,20 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
 		// add actions
 		List<CsdlAction> actions = new ArrayList<CsdlAction>();
-		Iterator<String> actionNameIt = actionNames.iterator();
+		Iterator<String> actionNameIt = possibleActionNames.iterator();
 		while (actionNameIt.hasNext()) {
 			String serviceName = actionNameIt.next();
-			Debug.logInfo("=> action name :"+serviceName,module);
 			FullQualifiedName fullQualifiedServiceName = OFBIZ_SERVICE_MAP.get(serviceName);
 			List<CsdlAction> serviceActions = getActions(fullQualifiedServiceName);
 			if (serviceActions == null) {
-				Debug.logInfo("=================== not a valid odata action " + serviceName, module);
+				// Debug.logInfo("=================== not a valid odata action " + serviceName,
+				// module);
 				continue;
 			}
 			actions.addAll(serviceActions);
+			actionNames.add(serviceName);
 		}
 		schema.setActions(actions);
-
 
 		// add EntityContainer
 		schema.setEntityContainer(getEntityContainer());
@@ -434,11 +439,11 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		// finally
 		List<CsdlSchema> schemas = new ArrayList<CsdlSchema>();
 		schemas.add(schema);
-
 		return schemas;
 	}
 
 	public CsdlEntityContainerInfo getEntityContainerInfo(FullQualifiedName entityContainerName) {
+		Debug.logInfo("+++++++++++++++++++++++++ entering into getEntityContainerInfo()", module);
 
 		// This method is invoked when displaying the Service Document at e.g.
 		// http://localhost:8080/DemoService/DemoService.svc
@@ -451,38 +456,24 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		return null;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	@Override
 	public List<CsdlFunction> getFunctions(final FullQualifiedName functionName) {
+		// Debug.logInfo("-------------------------------------- entering getFunctions, functionname = " + functionName.getName(), module);
 		String serviceName = functionName.getName();
 		final List<CsdlFunction> functions = new ArrayList<CsdlFunction>();
 		ModelService modelService;
+		// 以下代码，if else太多，可能会造成看代码人的不适，请谨慎阅读！
 		try {
-			Debug.logInfo("================ serviceName = " + serviceName, module);
 			modelService = dispatcher.getDispatchContext().getModelService(serviceName);
 
 			// 处理OUT参数
 			List<String> outParamNames = modelService.getParameterNames("OUT", true, false);
+			boolean hasValidReturn = false;
 			EdmPrimitiveTypeKind returnEdmType = null;
 			if (outParamNames.size() == 0) { // 没有返回参数，应该属于Action
-				Debug.logInfo("================ has no out param", module);
-				if (!actionNames.contains(serviceName)) {
-					actionNames.add(serviceName);
+				// Debug.logInfo("================ has no out param", module);
+				if (!possibleActionNames.contains(serviceName)) {
+					possibleActionNames.add(serviceName);
 				}
 				// OFBIZ_SERVICE_MAP.remove(serviceName);
 				// serviceNames.remove(serviceName);
@@ -491,12 +482,22 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			if (outParamNames.size() == 1) { // 只有一个返回参数，符合Odata规范
 				ModelParam modelParam = modelService.getParam(outParamNames.get(0));
 				String type = modelParam.getType();
+				if (type.equals("org.ofbiz.entity.GenericValue")) { // GenericValue稍后处理，需要人工猜到底是什么entity
+					hasValidReturn = true;
+				}
 				returnEdmType = PARAM_TYPE_MAP.get(type);
+				if (returnEdmType != null) {
+					hasValidReturn = true;
+				}
 				boolean isOptional = modelParam.isOptional();
-				if (returnEdmType == null) {
+				if (!hasValidReturn) {
 					// OFBIZ_SERVICE_MAP.remove(serviceName);
 					// serviceNames.remove(serviceName);
+					Debug.logVerbose("================ serviceName = " + serviceName + ", outtype = " + type
+							+ ", outname = " + outParamNames.get(0), module);
 					return null;
+				} else {
+					functionNames.add(serviceName); // 符合odata规范，可以作为一个function
 				}
 			} else { // 有多个返回参数，不符合Odata规范，应该咋办？
 				for (String outParamName : outParamNames) {
@@ -507,29 +508,38 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 				}
 				// OFBIZ_SERVICE_MAP.remove(serviceName);
 				// serviceNames.remove(serviceName);
+				Debug.logVerbose("================ serviceName = " + serviceName + " has more than one out parameter", module);
 				return null;
 			}
 			final CsdlReturnType returnType = new CsdlReturnType();
-			// returnType.setCollection(true);
-			returnType.setType(returnEdmType.getFullQualifiedName());
+			if (returnEdmType != null) {
+				// returnType.setCollection(true);
+				returnType.setType(returnEdmType.getFullQualifiedName());
+			} else { // 否则就是GenericValue，需要找到对应的entity
+				FullQualifiedName fqn = getFullQualifiedNameByParamName(outParamNames.get(0));
+				if (fqn != null) { // 虽然是GenericValue，但是还是有可能不属于任何ofbiz的entity
+					returnType.setType(fqn);
+				} else {
+					return null;
+				}
+			}
 
-			// 处理IN参数
+			// 如果OUT这里都通过了，没有被return null弹回去，就继续处理IN参数
 			List<String> paramNames = modelService.getParameterNames("IN", true, false);
 			List<CsdlParameter> parameters = new ArrayList<CsdlParameter>();
 			for (String paramName : paramNames) {
 				ModelParam modelParam = modelService.getParam(paramName);
-				String type = modelParam.getType();
-				EdmPrimitiveTypeKind edmType = PARAM_TYPE_MAP.get(type);
-				boolean isOptional = modelParam.isOptional();
+				FullQualifiedName fqn = getFullQualifiedNameByServiceParam(modelParam);
+				if (fqn == null) {
+					return null;
+				}
 				final CsdlParameter parameter = new CsdlParameter();
+				parameter.setType(fqn);
 				parameter.setName(paramName);
+				boolean isOptional = modelParam.isOptional();
 				parameter.setNullable(isOptional);
-				if (edmType != null) {
-					parameter.setType(edmType.getFullQualifiedName());
-				} else {
-					parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-					// Debug.logInfo("================ serviceName = " + serviceName, module);
-					Debug.logInfo("================ param = " + paramName + ", " + type + ", " + isOptional, module);
+				if (modelParam.getType().equals("List")) {
+					parameter.setCollection(true);
 				}
 				parameters.add(parameter);
 			}
@@ -544,7 +554,8 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			e.printStackTrace();
 			return null;
 		}
-		Debug.logInfo("================ serviceName = " + serviceName + " has successfully parsed", module);
+		// Debug.logInfo("================ serviceName = " + serviceName + " has
+		// successfully parsed", module);
 		return functions;
 		/*****************************************************************************
 		 * if (functionName.equals(FUNCTION_COUNT_CATEGORIES_FQN)) { // It is allowed to
@@ -568,9 +579,22 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		 ***********************************************************************************/
 	}
 
+	private FullQualifiedName getFullQualifiedNameByParamName(String paramName) {
+		String entityName = paramName;
+		// 把首字符变成大写，因为所有的entityName，首字符都是大写
+		if (Character.isLowerCase(paramName.charAt(0))) {
+			entityName = (new StringBuilder()).append(Character.toUpperCase(paramName.charAt(0))).append(paramName.substring(1)).toString();
+		}
+		if (entityNames.contains(entityName)) {
+			return new FullQualifiedName(NAMESPACE, entityName);
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public CsdlFunctionImport getFunctionImport(FullQualifiedName entityContainer, String functionImportName) {
-		// Debug.logInfo("-------------------------------------------- getFunctionImport", module);
+		//Debug.logInfo("--------------------------------------------entering getFunctionImport", module);
 		if (entityContainer.equals(CONTAINER)) {
 			FullQualifiedName fullQualifiedName = OFBIZ_SERVICE_MAP.get(functionImportName);
 			// return new
@@ -589,7 +613,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		final List<CsdlAction> actions = new ArrayList<CsdlAction>();
 		ModelService modelService;
 		try {
-			Debug.logInfo("================ serviceName = " + serviceName, module);
+			// Debug.logInfo("================ serviceName = " + serviceName, module);
 			modelService = dispatcher.getDispatchContext().getModelService(serviceName);
 
 			// 处理IN参数
@@ -597,18 +621,17 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			List<CsdlParameter> parameters = new ArrayList<CsdlParameter>();
 			for (String paramName : paramNames) {
 				ModelParam modelParam = modelService.getParam(paramName);
-				String type = modelParam.getType();
-				EdmPrimitiveTypeKind edmType = PARAM_TYPE_MAP.get(type);
-				boolean isOptional = modelParam.isOptional();
+				FullQualifiedName fqn = getFullQualifiedNameByServiceParam(modelParam);
+				if (fqn == null) {
+					return null;
+				}
 				final CsdlParameter parameter = new CsdlParameter();
+				parameter.setType(fqn);
 				parameter.setName(paramName);
+				boolean isOptional = modelParam.isOptional();
 				parameter.setNullable(isOptional);
-				if (edmType != null) {
-					parameter.setType(edmType.getFullQualifiedName());
-				} else {
-					parameter.setType(EdmPrimitiveTypeKind.String.getFullQualifiedName());
-					// Debug.logInfo("================ serviceName = " + serviceName, module);
-					Debug.logInfo("================ param = " + paramName + ", " + type + ", " + isOptional, module);
+				if (modelParam.getType().equals("List")) {
+					parameter.setCollection(true);
 				}
 				parameters.add(parameter);
 			}
@@ -628,7 +651,8 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 
 	@Override
 	public CsdlActionImport getActionImport(FullQualifiedName entityContainer, String actionImportName) {
-		// Debug.logInfo("---------------------------------------------- getActionImport", module);
+		// Debug.logInfo("----------------------------------------------
+		// getActionImport", module);
 		if (entityContainer.equals(CONTAINER) && actionNames.contains(actionImportName)) {
 			FullQualifiedName fullQualifiedName = OFBIZ_SERVICE_MAP.get(actionImportName);
 			// return new
@@ -640,6 +664,33 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		return null;
 	}
 
+	private FullQualifiedName getFullQualifiedNameByServiceParam(ModelParam modelParam) {
+		String paramName = modelParam.getName();
+		String type = modelParam.getType();
+		EdmPrimitiveTypeKind edmType = PARAM_TYPE_MAP.get(type);
+		if (edmType != null) { // 直接就是Primitive Type，也就是Integer，String之类的，简单，返回
+			return edmType.getFullQualifiedName();
+		} else {
+			/*****/
+			if (type.equals("org.ofbiz.entity.GenericValue")) { // 如果是GenericValue，就要检查一下，是不是ofbiz已经定义的entity
+				return getFullQualifiedNameByParamName(paramName);// 参数是GenericValue，但是也有可能不属于任何entity，将会被抛弃，返回null！
+			} else if (type.equals("List")) { // 传入参数是List，那就要搞清楚这个List里是什么类型的对象
+				String modelParamDescription = modelParam.description; // ofbiz的service定义里，attribute的description里就是collection里的对象。这个不是ofbiz的标准，是我给出的狗血解决方案
+				EdmPrimitiveTypeKind collectionEdmType = PARAM_TYPE_MAP.get(modelParamDescription);
+				//Debug.logInfo("--------------- the field " + paramName + ", description " + modelParamDescription + ", serviceName " + serviceName, module);
+				if (collectionEdmType != null) {
+					return collectionEdmType.getFullQualifiedName();
+				} else {
+					if (entityNames.contains(modelParamDescription)) {
+						return new FullQualifiedName(NAMESPACE, modelParamDescription);
+					} else {
+						return null;
+					}
+				}
+			} else { // 传入参数是一个非Odata类型的参数，怎么办？抛弃吧！
+				return null;
+			}
 
-
+		}
+	}
 }

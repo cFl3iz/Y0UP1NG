@@ -1506,7 +1506,7 @@ public class WeChatOrderQueryServices {
         }
 
 
-        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
+        GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).orderBy("fromDate").queryFirst();
         //写死
         String productStoreId = "ZUCZUGSTORE";
         String prodCatalogId = "";
@@ -1515,7 +1515,6 @@ public class WeChatOrderQueryServices {
              GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
              prodCatalogId = prodCatalog.getString("prodCatalogId");
         }else{
-
             GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productId).queryFirst();
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("productCategoryId", productCategoryMember.getString("productCategoryId")).queryFirst();
             prodCatalogId = prodCatalogCategory.getString("prodCatalogId");

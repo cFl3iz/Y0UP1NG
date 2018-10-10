@@ -4500,6 +4500,7 @@ public class PersonManagerServices {
             if(resultMsg.trim().indexOf("error")>-1){
                 responseColorSpan = "[<span style=\"color:red;\">";
                 errorInfo = "系统将在稍后再次尝试推送该订单...";
+                titleName= "*推送失败*"+titleName;
             }
         dispatcher.runSync("sendEmailNotification",
                 UtilMisc.toMap("content",

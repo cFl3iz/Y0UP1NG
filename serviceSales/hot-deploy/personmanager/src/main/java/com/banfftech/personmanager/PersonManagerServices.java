@@ -2055,6 +2055,56 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+
+    /**
+     * updateProductInfo
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public static Map<String, Object> updateProductInfo(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        String productId = (String) context.get("productId");
+        String productName = (String) context.get("productName");
+        String price = (String) context.get("price");
+
+
+        GenericValue product
+                = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+
+        GenericValue productRoleAdmin
+                = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,
+                "roleTypeId", "ADMIN", "productId", productId).queryFirst();
+        if(null != productRoleAdmin){
+            product.set("productName",productName);
+            product.store();
+            GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
+            productPriceEntity.set("price", new BigDecimal(price));
+            productPriceEntity.store();
+        }else{
+            GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                    "productId", productId,"payToPartyId",partyId)).queryFirst();
+            if (null != productAndCategoryMember) {
+                productAndCategoryMember.set("priceDetailText",price);
+                productAndCategoryMember.store();
+            }
+        }
+
+
+
+        return resultMap;
+    }
+
     /**
      * updateWeChatResource(小程序)
      *

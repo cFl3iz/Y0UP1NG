@@ -1543,6 +1543,18 @@
     </service>
 
 
+    <service name="updateProductInfo" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="updateProductInfo" auth="false">
+        <description>updateProductInfo</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <!-- salesDiscontinuation 销售终止-->
     <service name="salesDiscontinuation" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerServices"

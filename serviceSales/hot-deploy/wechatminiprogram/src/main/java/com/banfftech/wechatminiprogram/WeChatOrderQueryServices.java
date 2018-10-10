@@ -1755,6 +1755,7 @@ public class WeChatOrderQueryServices {
                     count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
+                    rowMap.put("wholesalePrice",""+gv.get("priceDetailText"));
                     returnProductList.add(rowMap);
 
             }

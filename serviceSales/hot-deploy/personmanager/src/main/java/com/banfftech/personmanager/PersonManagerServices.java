@@ -2077,6 +2077,7 @@ public class PersonManagerServices {
         String productId = (String) context.get("productId");
         String productName = (String) context.get("productName");
         String price = (String) context.get("price");
+        String top = (String) context.get("top");
 
 
         GenericValue product
@@ -2087,11 +2088,20 @@ public class PersonManagerServices {
                 "roleTypeId", "ADMIN", "productId", productId).queryFirst();
         if(null != productRoleAdmin){
             product.set("productName",productName);
+            if(top!=null && top.toUpperCase().equals("Y")){
+                product.set("createdStamp",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            }
             product.store();
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
             productPriceEntity.set("price", new BigDecimal(price));
             productPriceEntity.store();
         }else{
+
+
+            if(top!=null && top.toUpperCase().equals("Y")){
+                product.set("createdStamp",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                product.store();
+            }
             GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
                     "productId", productId,"payToPartyId",partyId)).queryFirst();
             if (null != productAndCategoryMember) {

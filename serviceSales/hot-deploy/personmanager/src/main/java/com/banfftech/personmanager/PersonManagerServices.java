@@ -3519,7 +3519,15 @@ public class PersonManagerServices {
 
 
         //销售代表角色
+        Debug.logInfo(">>>salesRepPartyId:"+salesRepPartyId,module);
         if (null != salesRepPartyId && (!salesRepPartyId.trim().equals(""))) {
+            GenericValue partyMarkRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", salesRepPartyId, "roleTypeId", "SALES_REP").queryFirst();
+            if (null == partyMarkRole) {
+                Map<String, Object> createPartySALES_REPRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", salesRepPartyId,
+                        "roleTypeId", "SALES_REP");
+                dispatcher.runSync("createPartyRole", createPartySALES_REPRoleMap);
+            }
+
             dispatcher.runSync("addOrderRole", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "roleTypeId", "SALES_REP", "partyId", salesRepPartyId));
         }
 

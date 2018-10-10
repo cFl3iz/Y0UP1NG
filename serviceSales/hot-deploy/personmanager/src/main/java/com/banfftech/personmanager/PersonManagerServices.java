@@ -4355,10 +4355,16 @@ public class PersonManagerServices {
         GenericValue telAndParty = EntityQuery.use(delegator).from("PartyAndTelecomNumber").where("partyId",orderCustPartyId).orderBy("-fromDate").queryFirst();
         orderMap.put("phoneNumber",telAndParty.getString("contactNumber"));
             GenericValue empInfo =   EntityQuery.use(delegator).from("ZuczugEmp").where("tel", telAndParty.getString("contactNumber")).queryFirst();
-
+                // FIX EMOJI
             if(null!=empInfo){
-                orderMap.put("nickName",empInfo.getString("dept")+"_"+empInfo.getString("name") + "/" + custPerson.getString("firstName"));
-                orderMap.put("toName",empInfo.getString("name") + "/" + custPerson.getString("firstName"));
+                if(containsEmoji(custPerson.getString("firstName"))){
+                    orderMap.put("nickName",empInfo.getString("dept")+"_"+empInfo.getString("name") );
+                    orderMap.put("toName",empInfo.getString("name") );
+                }else{
+                    orderMap.put("nickName",empInfo.getString("dept")+"_"+empInfo.getString("name") + "/" + custPerson.getString("firstName"));
+                    orderMap.put("toName",empInfo.getString("name") + "/" + custPerson.getString("firstName"));
+                }
+
             }else{
                 try{
                 //is emoji

@@ -1131,16 +1131,17 @@ public class PersonManagerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
+        // 当前登录用户
+        String partyId = (String) userLogin.get("partyId");
         String productId = (String) context.get("productId");
 
-        GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap("productId", productId)).queryFirst();
+        GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                "productId", productId,"payToPartyId",partyId)).queryFirst();
 
         if (null != productAndCategoryMember) {
-
-
             Map<String, Object> removeProductFromCategoryInMap = new HashMap<String, Object>();
             removeProductFromCategoryInMap.put("userLogin", admin);
             removeProductFromCategoryInMap.put("productId", productId);

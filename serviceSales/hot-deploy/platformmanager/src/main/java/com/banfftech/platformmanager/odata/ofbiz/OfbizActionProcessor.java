@@ -72,16 +72,18 @@ public class OfbizActionProcessor implements ActionVoidProcessor {
 	    }
 	    
 	    final ODataDeserializer deserializer = odata.createDeserializer(requestFormat);
+		try{
 	    final Map<String, Parameter> actionParameters = deserializer.actionParameters(request.getBody(), edmAction)
 	        .getActionParameters();
-	    Debug.logInfo("-------------------------- edmAction.getName() = " + edmAction.getName(), module);
+			Debug.logInfo("-------------------------- edmAction.getName() = " + edmAction.getName(), module);
 	    // final Parameter parameterAmount = actionParameter.get(DemoEdmProvider.PARAMETER_AMOUNT);
 
-		try {
 			storage.processActionVoid(uriResourceAction, actionParameters);
 		} catch (GenericServiceException e) {
 			e.printStackTrace();
 		} catch (GenericEntityException e) {
+			e.printStackTrace();
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 

@@ -61,6 +61,7 @@
              invoke="copyCategoryProducts" auth="false">
         <description>copyCategoryProducts</description>
         <attribute name="productIds" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

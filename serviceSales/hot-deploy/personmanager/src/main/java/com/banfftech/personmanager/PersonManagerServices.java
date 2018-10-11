@@ -712,6 +712,17 @@ public class PersonManagerServices {
 
         String partyId = userLogin.getString("partyId");
 
+        String fromProductStoreId  = (String) context.get("productStoreId");
+
+        GenericValue fromProductStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where(
+                "productStoreId",fromProductStoreId  ).queryFirst();
+
+        GenericValue fromProdCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",
+                fromProductStoreCatalog.getString("prodCatalogId")).queryFirst();
+        String fromProductCategoryId = (String) fromProdCatalogCategory.get("productCategoryId");
+
+
+
 
         GenericValue myStore = EntityQuery.use(delegator).from("ProductStoreRole").where(
                 "partyId", partyId, "roleTypeId", "ADMIN").queryFirst();
@@ -726,20 +737,41 @@ public class PersonManagerServices {
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", productStoreCatalog.getString("prodCatalogId")).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
+
+
+
+
+
         if(null!= productIds){
             for(String rowProductId : productIds.split(",")){
-                if(null == EntityQuery.use(delegator).from("ProductCategoryMember").where(
-                        "productId",rowProductId,"productCategoryId",productCategoryId).queryFirst()){
-                //产品关联分类
+
+                //找到上家的ID
+                GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                        "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();
+                if(null == productAndCategoryMember){
+                    String payToPartyId = productAndCategoryMember.getString("payToPartyId");
+
+                    //产品关联分类
                     Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
                     addProductToCategoryInMap.put("userLogin", admin);
                     addProductToCategoryInMap.put("productId", rowProductId);
                     addProductToCategoryInMap.put("productCategoryId", productCategoryId);
                     Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
+
+                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
+                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
+                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
+                        myProductAndCategoryMember.store();
+                    }
+
+
+
                     if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
                         Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
                         return addProductToCategoryServiceResultMap;
                     }
+
                 }
             }
         }

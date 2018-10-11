@@ -5,11 +5,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.ContextURL.Suffix;
 import org.apache.olingo.commons.api.data.Entity;
@@ -56,7 +51,7 @@ import org.apache.olingo.server.api.uri.queryoption.apply.AggregateExpression.St
 import org.apache.olingo.server.api.uri.queryoption.expression.Expression;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
-// import org.ofbiz.widget.tree.ModelTree.ModelNode.Link;
+// import org.apache.ofbiz.widget.tree.ModelTree.ModelNode.Link;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 public class OfbizCollectionProcessor implements EntityCollectionProcessor {
@@ -86,7 +81,7 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 
 	@Override
 	public void readEntityCollection(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-									 ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
+			ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
 		Debug.logInfo("+++++++++++++++++++++++++ entering into readEntityCollection()", module);
 
 		EdmEntitySet responseEdmEntitySet = null; // for building ContextURL
@@ -96,10 +91,10 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 		// (representation of the parsed service URI)
 		List<UriResource> resourceParts = uriInfo.getUriResourceParts();
 		int segmentCount = resourceParts.size();
-		if(!(resourceParts.get(0) instanceof UriResourceEntitySet)) {
-			Debug.logInfo("====================== in readEntityCollection, it's not UriResourceEntitySet", module);
-			return;
-		}
+	    if(!(resourceParts.get(0) instanceof UriResourceEntitySet)) {
+	    		Debug.logInfo("====================== in readEntityCollection, it's not UriResourceEntitySet", module);
+	    		return;
+	    }
 		UriResourceEntitySet uriResourceEntitySet = (UriResourceEntitySet) resourceParts.get(0); // first segment is the EntitySet
 		EdmEntitySet startEdmEntitySet = uriResourceEntitySet.getEntitySet();
 
@@ -146,14 +141,14 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 				responseEntityCollection = storage.getRelatedEntityCollection(keyPredicates, edmNavigationProperty, filterOption,skipOption, topOption, orderByOption,expandOption,selectOption);
 			}
 		} else{ // this would be the case for e.g. Products(1)/Category/Products
-			throw new ODataApplicationException("Not supported", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(),Locale.ROOT);
+		    throw new ODataApplicationException("Not supported", HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(),Locale.ROOT);
 		}
-
+		
 		List<Entity> entityList = responseEntityCollection.getEntities();
 		CountOption countOption = uriInfo.getCountOption();
 		boolean isCount = false;
 		if (countOption != null) {
-			isCount = countOption.getValue();
+			 isCount = countOption.getValue();
 			if (isCount) {
 				responseEntityCollection.setCount(entityList.size());
 			}
@@ -188,7 +183,7 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 	}
 
 	private void readEntityCollectionWithApply(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-											   EdmEntitySet edmEntitySet, ApplyOption applyOption, ContentType responseFormat) throws SerializerException {
+			EdmEntitySet edmEntitySet, ApplyOption applyOption, ContentType responseFormat) throws SerializerException {
 		Debug.logInfo("============================ get into apply option", module);
 		List<ApplyItem> applyItems = applyOption.getApplyItems();
 		BigDecimal sumValue = BigDecimal.ZERO; // 这个变量定义不太好，搞得好像进入这里一定是sum似的。不过目前先解决sum吧

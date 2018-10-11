@@ -53,8 +53,8 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 	private ServiceMetadata serviceMetadata;
 	private Delegator delegator;
 	private Storage storage;
-	
-	
+
+
 
 	public InvoiceEntityProcessor(Storage storage) {
 		super();
@@ -135,7 +135,7 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 				String navPropName = edmNavigationProperty.getName();
 				Debug.logInfo("=============== navPropName = " + navPropName, module);
 				EntityCollection expandEntityCollection = gerRelatedEntities(genericValue, expandEdmEntityType);
-				
+
 				Debug.logInfo("=============== begin process link 1", module);
 				Link link = new Link();
 				link.setTitle(navPropName);
@@ -169,7 +169,7 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 		    			.select(selectOption)
 		    			.expand(expandOption)
 		    			.build();
-	
+
 			Debug.logInfo("-------------------------------------------- 4", module);
 		    ODataSerializer serializer = odata.createSerializer(responseFormat);
 		    entityType.getName();
@@ -240,7 +240,7 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private GenericValue getGenericValue(EdmEntitySet edmEntitySet, List<UriParameter> keyPredicates) {
 		GenericValue genericValue = null;
 		Map<String, Object> pk = new HashMap<String, Object>();
@@ -254,12 +254,12 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 		String entityName = edmEntitySet.getEntityType().getName();
 		Debug.logInfo("==================== begin to get entity from delegator, entityName = " + entityName, module);
 		// GenericValue genericValue = delegator.findByPrimaryKey(entityName, pk);
-		try {
-			genericValue = delegator.findOne(entityName, pk,false);
-		} catch (GenericEntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			genericValue = null;
+//		} catch (GenericEntityException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return genericValue;
 	}
 
@@ -306,7 +306,7 @@ public class InvoiceEntityProcessor implements EntityProcessor {
 		try {
 			Debug.logInfo("==================== begin to get entity from delegator, entityName = " + entityName, module);
 			// GenericValue genericValue = delegator.findByPrimaryKey(entityName, pk);
-			genericValue = delegator.findOne(entityName, pk,false);
+			genericValue = null;
 			/************* use genericValue **************/
 			Entity e1 = new Entity();
 			ModelReader reader = delegator.getModelReader();

@@ -1,12 +1,19 @@
 package main.java.com.banfftech.platformmanager.odata.ofbiz;
 
+import java.util.Locale;
+
 import org.apache.olingo.commons.api.data.ContextURL;
 import org.apache.olingo.commons.api.data.Property;
 import org.apache.olingo.commons.api.edm.EdmPrimitiveType;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
-import org.apache.olingo.server.api.*;
+import org.apache.olingo.server.api.OData;
+import org.apache.olingo.server.api.ODataApplicationException;
+import org.apache.olingo.server.api.ODataLibraryException;
+import org.apache.olingo.server.api.ODataRequest;
+import org.apache.olingo.server.api.ODataResponse;
+import org.apache.olingo.server.api.ServiceMetadata;
 import org.apache.olingo.server.api.processor.PrimitiveProcessor;
 import org.apache.olingo.server.api.serializer.ODataSerializer;
 import org.apache.olingo.server.api.serializer.PrimitiveSerializerOptions;
@@ -21,8 +28,6 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-import java.util.Locale;
-
 public class OfbizPrimitiveProcessor implements PrimitiveProcessor {
 
 	public static final String module = OfbizPrimitiveProcessor.class.getName();
@@ -31,12 +36,6 @@ public class OfbizPrimitiveProcessor implements PrimitiveProcessor {
 	private LocalDispatcher dispatcher;
 	private Delegator delegator;
 	private Storage storage;
-
-//	public OfbizPrimitiveProcessor(Delegator delegator, LocalDispatcher dispatcher) {
-//		super();
-//		this.delegator = delegator;
-//		this.storage = new Storage(delegator, dispatcher);
-//	}
 
 	public OfbizPrimitiveProcessor(Delegator delegator, LocalDispatcher dispatcher, Storage storage) {
 		super();

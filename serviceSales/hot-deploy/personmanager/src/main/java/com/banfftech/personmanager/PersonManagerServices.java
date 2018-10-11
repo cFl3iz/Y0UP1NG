@@ -2089,7 +2089,9 @@ public class PersonManagerServices {
         if(null != productRoleAdmin){
             product.set("productName",productName);
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("createdStamp",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                product.set("comments","Y");
+            }else{
+                product.set("comments","N");
             }
             product.store();
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
@@ -2099,7 +2101,10 @@ public class PersonManagerServices {
 
 
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("createdStamp",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                product.set("comments", "Y");
+                product.store();
+            }else{
+                product.set("comments", "N");
                 product.store();
             }
             GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(

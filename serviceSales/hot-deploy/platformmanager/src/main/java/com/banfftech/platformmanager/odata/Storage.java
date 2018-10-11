@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.apache.ofbiz.entity.util.EntityQuery;
+
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Property;
@@ -93,13 +93,11 @@ public class Storage {
      /* HELPER */
      private void initSampleData(Delegator delegator){
  		List<GenericValue> invoices = null;
- 		try {
-// 			invoices = delegator.findByAnd("Invoice", UtilMisc.toMap("partyIdFrom", "HANGZHOU_AGENT"));
-            invoices = EntityQuery.use(delegator).from(
-                     "Invoice").where("partyIdFrom", "HANGZHOU_AGENT").queryList();
- 		} catch (GenericEntityException e) {
- 			e.printStackTrace();
- 		}
+// 		try {
+// 			invoices = null;
+// 		} catch (GenericEntityException e) {
+// 			e.printStackTrace();
+// 		}
  		// EntityCollection invoiceCollection = new EntityCollection();
  		// check for which EdmEntitySet the data is requested
 		// invoiceList = invoiceCollection.getEntities();

@@ -193,7 +193,6 @@ public class OfbizExpressionVisitor implements ExpressionVisitor<Object> {
 			throw new ODataApplicationException("Method call " + methodCall + " not implemented",
 					HttpStatusCode.NOT_IMPLEMENTED.getStatusCode(), Locale.ENGLISH);
 		}
-
 	}
 
 	@Override

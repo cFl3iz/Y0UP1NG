@@ -1,6 +1,5 @@
 package main.java.com.banfftech.platformmanager.odata.ofbiz;
 
-
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,6 +47,7 @@ import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
+import org.apache.ofbiz.entity.util.EntityQuery;
 
 public class OfbizEntityProcessor implements EntityProcessor {
 
@@ -73,7 +73,7 @@ public class OfbizEntityProcessor implements EntityProcessor {
 
 	@Override
 	public void createEntity(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType requestFormat,
-							 ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
+			ContentType responseFormat) throws ODataApplicationException, ODataLibraryException {
 		// 1. Retrieve the entity type from the URI
 		EdmEntitySet edmEntitySet = Util.getEdmEntitySet(uriInfo);
 		EdmEntityType edmEntityType = edmEntitySet.getEntityType();
@@ -95,10 +95,10 @@ public class OfbizEntityProcessor implements EntityProcessor {
 		// 3. serialize the response (we have to return the created entity)
 		ContextURL contextUrl = ContextURL.with().entitySet(edmEntitySet).build();
 		EntitySerializerOptions options = EntitySerializerOptions.with().contextURL(contextUrl).build(); // expand and
-		// select
-		// currently
-		// not
-		// supported
+																											// select
+																											// currently
+																											// not
+																											// supported
 
 		ODataSerializer serializer = this.odata.createSerializer(responseFormat);
 		SerializerResult serializedResponse = serializer.entity(serviceMetadata, edmEntityType, createdEntity, options);
@@ -135,7 +135,7 @@ public class OfbizEntityProcessor implements EntityProcessor {
 	}
 
 	private void readEntityInternal(ODataRequest request, ODataResponse response, UriInfo uriInfo,
-									ContentType responseFormat) throws ODataApplicationException, SerializerException {
+			ContentType responseFormat) throws ODataApplicationException, SerializerException {
 		// 1. retrieve the Entity Type
 		List<UriResource> resourcePaths = uriInfo.getUriResourceParts();
 		// Note: only in our example we can assume that the first segment is the
@@ -231,7 +231,7 @@ public class OfbizEntityProcessor implements EntityProcessor {
 	}
 
 	private void readFunctionImportInternal(final ODataRequest request, final ODataResponse response,
-											final UriInfo uriInfo, final ContentType responseFormat)
+			final UriInfo uriInfo, final ContentType responseFormat)
 			throws ODataApplicationException, SerializerException {
 
 		// 1st step: Analyze the URI and fetch the entity returned by the function
@@ -293,8 +293,8 @@ public class OfbizEntityProcessor implements EntityProcessor {
 		Debug.logInfo("==================== begin to get entity from delegator, entityName = " + entityName, module);
 		// GenericValue genericValue = delegator.findByPrimaryKey(entityName, pk);
 		try {
-//			genericValue = delegator.findByPrimaryKey(entityName, pk);
-			genericValue = delegator.findOne(entityName, pk,false);
+			genericValue = EntityQuery.use(delegator).from(entityName).where(pk).queryFirst();
+//					delegator.findByPrimaryKey(entityName, pk);
 		} catch (GenericEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -348,9 +348,8 @@ public class OfbizEntityProcessor implements EntityProcessor {
 			Debug.logInfo("==================== begin to get entity from delegator, entityName = " + entityName,
 					module);
 			// GenericValue genericValue = delegator.findByPrimaryKey(entityName, pk);
-//			genericValue = delegator.findByPrimaryKey(entityName, pk);
-			genericValue = delegator.findOne(entityName, pk,false);
-
+			genericValue = EntityQuery.use(delegator).from(entityName).where(pk).queryFirst();
+//					delegator.findByPrimaryKey(entityName, pk);
 			/************* use genericValue **************/
 			Entity e1 = new Entity();
 			ModelReader reader = delegator.getModelReader();

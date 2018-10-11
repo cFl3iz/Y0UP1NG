@@ -52,6 +52,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
+import org.apache.ofbiz.entity.util.EntityQuery;
 // import org.apache.ofbiz.widget.tree.ModelTree.ModelNode.Link;
 
 public class OfbizCollectionProcessor implements EntityCollectionProcessor {
@@ -237,7 +238,8 @@ public class OfbizCollectionProcessor implements EntityCollectionProcessor {
 			pkFields.put(keyName, keyText);
 		}
 		try {
-			genericValue = delegator.findOne(entityName, pkFields,false);
+			genericValue = EntityQuery.use(delegator).from(entityName).where(pkFields).queryFirst();
+//					delegator.findByPrimaryKey(entityName, pkFields);
 			if (genericValue == null) {
 				Debug.logInfo("------------------ didn't find by primarykey", module);
 			} else {

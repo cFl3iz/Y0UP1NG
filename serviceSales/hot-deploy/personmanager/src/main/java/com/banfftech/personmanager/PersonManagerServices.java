@@ -756,20 +756,25 @@ public class PersonManagerServices {
                     addProductToCategoryInMap.put("userLogin", admin);
                     addProductToCategoryInMap.put("productId", rowProductId);
                     addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+
+                    Debug.logInfo("=>addProductToCategoryInMap:"+addProductToCategoryInMap,module);
+
                     Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
 
-                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
-                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
-                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
-                        myProductAndCategoryMember.store();
-                    }
+
 
 
 
                     if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
                         Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
                         return addProductToCategoryServiceResultMap;
+                    }
+
+                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
+                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
+                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
+                        myProductAndCategoryMember.store();
                     }
 
                 }

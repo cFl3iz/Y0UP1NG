@@ -40,6 +40,7 @@ public class OfbizActionProcessor implements ActionVoidProcessor {
 		this.serviceMetadata = serviceMetadata;
 	}
 
+	//TODO FIX POST NO JSON DATA
 	@Override
 	public void processActionVoid(ODataRequest request, ODataResponse response, UriInfo uriInfo, ContentType requestFormat)
 			throws ODataApplicationException, ODataLibraryException {
@@ -56,18 +57,20 @@ public class OfbizActionProcessor implements ActionVoidProcessor {
 	      throw new ODataApplicationException("The content type has not been set in the request.",
 	          HttpStatusCode.BAD_REQUEST.getStatusCode(), Locale.ROOT);
 	    }
-	    
+	    try{
 	    final ODataDeserializer deserializer = odata.createDeserializer(requestFormat);
+			System.out.println("request.getBody():"+request.getBody());
 	    final Map<String, Parameter> actionParameters = deserializer.actionParameters(request.getBody(), edmAction)
 	        .getActionParameters();
 	    Debug.logInfo("-------------------------- edmAction.getName() = " + edmAction.getName(), module);
 	    // final Parameter parameterAmount = actionParameter.get(DemoEdmProvider.PARAMETER_AMOUNT);
 
-		try {
 			storage.processActionVoid(uriResourceAction, actionParameters);
 		} catch (GenericServiceException e) {
 			e.printStackTrace();
 		} catch (GenericEntityException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

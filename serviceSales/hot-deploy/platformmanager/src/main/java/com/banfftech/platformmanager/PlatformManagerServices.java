@@ -368,7 +368,7 @@ public class PlatformManagerServices {
         return "success";
     }
 
-    public static Map<String, Object> testMail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, UnknownHostException {
+    public static Map<String, Object> testChangeEmp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, UnknownHostException {
 
         // Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -377,6 +377,12 @@ public class PlatformManagerServices {
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
+        String tel = (String) context.get("tel");
+        String name = (String) context.get("name");
+
+        GenericValue empInfo =   EntityQuery.use(delegator).from("ZuczugEmp").where("tel",tel).queryFirst();
+        empInfo.set("name",name);
+        empInfo.store();
         return result;
     }
 

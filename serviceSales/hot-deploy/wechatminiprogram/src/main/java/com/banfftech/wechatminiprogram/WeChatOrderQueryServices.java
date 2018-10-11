@@ -3218,7 +3218,11 @@ public class WeChatOrderQueryServices {
                         continue;
                     }
                 }
-
+                GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", gv.get("orderId")).queryFirst();
+                if(null!= orderNote){
+                    rowMap.put("orderNote",orderNote.getAllFields());
+                }
 
                 List<Map<String, Object>> orderItemList = new ArrayList<Map<String, Object>>();
                 List<GenericValue> orderItems = EntityQuery.use(delegator).from("OrderItem").where("orderId", rowMap.get("orderId")).queryList();
@@ -3324,6 +3328,7 @@ public class WeChatOrderQueryServices {
                 rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
 
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
+
 
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).orderBy("-createdStamp").queryFirst();
@@ -3533,7 +3538,11 @@ public class WeChatOrderQueryServices {
                 } else {
                     rowMap.put("grandTotal", calcOrderTotal.get("availableReturnTotal") + "");
                 }
-
+                GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
+                        where("orderId", gv.get("orderId")).queryFirst();
+                if(null!= orderNote){
+                    rowMap.put("orderNote",orderNote.getAllFields());
+                }
 
                 //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)
 

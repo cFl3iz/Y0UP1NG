@@ -71,7 +71,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		FIELDMAP.put("currency-precise", EdmPrimitiveTypeKind.Double);
 		FIELDMAP.put("currency-amount", EdmPrimitiveTypeKind.Double);
 		FIELDMAP.put("fixed-point", EdmPrimitiveTypeKind.Double);
-		FIELDMAP.put("date-time", EdmPrimitiveTypeKind.Date);
+		FIELDMAP.put("date-time", EdmPrimitiveTypeKind.String);
 		FIELDMAP.put("date", EdmPrimitiveTypeKind.Date);
 		FIELDMAP.put("indicator", EdmPrimitiveTypeKind.String);
 		FIELDMAP.put("floating-point", EdmPrimitiveTypeKind.Double);
@@ -172,8 +172,7 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 			ModelField field = fieldIterator.next();
 			String fieldName = field.getName();
 			String fieldType = field.getType();
-			// Debug.logInfo("got some ---------------------fieldName = " + fieldName + ",
-			// fieldType = " + fieldType, module);
+			Debug.logInfo("got some ---------------------fieldName = " + fieldName + ",fieldType = " + fieldType, module);
 			CsdlProperty csdlProperty = new CsdlProperty().setName(fieldName)
 					.setType(FIELDMAP.get(fieldType).getFullQualifiedName());
 			propertyList.add(csdlProperty);
@@ -296,12 +295,12 @@ public class OfbizEdmProvider extends CsdlAbstractEdmProvider {
 		}
 		// Debug.logInfo("in getEntitySet, entityName = " + entityName, module);
 		if (entityContainer.equals(CONTAINER)) {
-			// Debug.logInfo("got some ---------------------1 " + entityName, module);
+			Debug.logInfo("got some ---------------------1 " + entityName, module);
 			CsdlEntitySet entitySet = new CsdlEntitySet();
-			// Debug.logInfo("got some ---------------------2 " + entityName, module);
+			Debug.logInfo("got some ---------------------2 " + entityName, module);
 			entitySet.setName(entitySetName);
 			entitySet.setType(new FullQualifiedName(NAMESPACE, entityName));
-			// Debug.logInfo("got some ---------------------3 " + entityName, module);
+			Debug.logInfo("got some ---------------------3 " + entityName, module);
 
 			/*********** 处理navigation *******************/
 			ModelReader reader = delegator.getModelReader();

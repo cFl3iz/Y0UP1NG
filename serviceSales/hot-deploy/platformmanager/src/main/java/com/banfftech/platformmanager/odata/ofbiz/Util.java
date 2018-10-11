@@ -123,7 +123,7 @@ public class Util {
 
         return true;
     }
-
+    //TODO FIX DATE TIME ...
 	public static URI createId(String entitySetName, GenericValue genericValue) {
 		String entityId;
 		ModelEntity modelEntity = genericValue.getModelEntity();
@@ -135,7 +135,7 @@ public class Util {
 			int i = 0;
 			for (String pkName: pkNames) {
 				String value = genericValue.getString(pkName);
-				sb.append(pkName).append("='").append(value).append("'");
+				sb.append(pkName).append("='").append(value.replaceAll(" ","").replaceAll(":","")).append("'");
 				i++;
 				if (pkNames.size() > i) {
 					sb.append(",");
@@ -143,9 +143,10 @@ public class Util {
 			}
 			entityId = sb.toString();
 		}
-		
+		String uriEntityStr = entitySetName + "(" + entityId.trim() + ")";
+
 		try {
-			return new URI(entitySetName + "(" + entityId + ")");
+			return new URI(uriEntityStr);
 		} catch (URISyntaxException e) {
 			throw new ODataRuntimeException("Unable to create id for entity: " + entitySetName, e);
 		}

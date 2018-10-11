@@ -143,9 +143,9 @@ public class Util {
 			}
 			entityId = sb.toString();
 		}
-		
+		String uriEntity = entitySetName + "(" + entityId + ")";
 		try {
-			return new URI(entitySetName + "(" + entityId + ")");
+			return new URI(uriEntity);
 		} catch (URISyntaxException e) {
 			throw new ODataRuntimeException("Unable to create id for entity: " + entitySetName, e);
 		}

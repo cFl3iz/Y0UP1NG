@@ -15,9 +15,10 @@
 
 
 
-    <service name="testMail" engine="java"
-             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="testMail" auth="false">
-
+    <service name="testChangeEmp" engine="java"
+             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="testChangeEmp" auth="false">
+        <attribute name="tel" type="String" mode="IN"/>
+        <attribute name="name" type="String" mode="IN"/>
     </service>
 
 

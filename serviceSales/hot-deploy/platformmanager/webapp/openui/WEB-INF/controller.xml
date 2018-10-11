@@ -24,55 +24,55 @@
 
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
-    <request-map uri="ReportBuilderSelectStarSchema">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="ReportBuilderSelectStarSchema"/>
-    </request-map>
-    <request-map uri="ReportBuilderSelectStarSchemaFields">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="ReportBuilderSelectStarSchemaFields"/>
-    </request-map>
-    <request-map uri="ReportBuilderRenderStarSchemaReport">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="ReportBuilderRenderStarSchemaReport"/>
-    </request-map>
-    
-    <request-map uri="storeOrderListReport"><security https="true" auth="true"/>
-        <response name="success" type="view" value="storeOrderListReport"/>
-    </request-map>
-    <request-map uri="requestProductReport"><security https="true" auth="true"/>
-        <response name="success" type="view" value="requestProductReport"/>
-    </request-map>    
-    <request-map uri="requestProductList"><security https="true" auth="true"/>
-        <response name="success" type="view" value="requestProductList"/>
-    </request-map>    
-    <request-map uri="requestCustomerReport"><security https="true" auth="true"/>
-        <response name="success" type="view" value="requestCustomerReport"/>
-    </request-map>    
-    <request-map uri="requestCustomerList"><security https="true" auth="true"/>
-        <response name="success" type="view" value="requestCustomerList"/>
-    </request-map>    
-    <request-map uri="requestCustomerStoreReport"><security https="true" auth="true"/>
-        <response name="success" type="view" value="requestCustomerStoreReport"/>
-    </request-map>    
+    <!--<request-map uri="ReportBuilderSelectStarSchema">-->
+        <!--<security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="ReportBuilderSelectStarSchema"/>-->
+    <!--</request-map>-->
+    <!--<request-map uri="ReportBuilderSelectStarSchemaFields">-->
+        <!--<security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="ReportBuilderSelectStarSchemaFields"/>-->
+    <!--</request-map>-->
+    <!--<request-map uri="ReportBuilderRenderStarSchemaReport">-->
+        <!--<security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="ReportBuilderRenderStarSchemaReport"/>-->
+    <!--</request-map>-->
+    <!---->
+    <!--<request-map uri="storeOrderListReport"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="storeOrderListReport"/>-->
+    <!--</request-map>-->
+    <!--<request-map uri="requestProductReport"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="requestProductReport"/>-->
+    <!--</request-map>    -->
+    <!--<request-map uri="requestProductList"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="requestProductList"/>-->
+    <!--</request-map>    -->
+    <!--<request-map uri="requestCustomerReport"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="requestCustomerReport"/>-->
+    <!--</request-map>    -->
+    <!--<request-map uri="requestCustomerList"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="requestCustomerList"/>-->
+    <!--</request-map>    -->
+    <!--<request-map uri="requestCustomerStoreReport"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="requestCustomerStoreReport"/>-->
+    <!--</request-map>    -->
 
-    <request-map uri="customerOrderListReport"><security https="true" auth="true"/>
-        <response name="success" type="view" value="customerOrderListReport"/>
-    </request-map>    
+    <!--<request-map uri="customerOrderListReport"><security https="true" auth="true"/>-->
+        <!--<response name="success" type="view" value="customerOrderListReport"/>-->
+    <!--</request-map>    -->
 
-	<!-- json request -->
-    <request-map uri="loadCustomerInventoryDailyFact">
-        <security https="false" auth="false"/>
-        <event type="service" invoke="loadCustomerInventoryDailyFact"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-    <request-map uri="loadAllCustomerInventoryDailyFact">
-        <security https="false" auth="false"/>
-        <event type="service" invoke="loadAllCustomerInventoryDailyFact"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
+	<!--&lt;!&ndash; json request &ndash;&gt;-->
+    <!--<request-map uri="loadCustomerInventoryDailyFact">-->
+        <!--<security https="false" auth="false"/>-->
+        <!--<event type="service" invoke="loadCustomerInventoryDailyFact"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
+    <!--<request-map uri="loadAllCustomerInventoryDailyFact">-->
+        <!--<security https="false" auth="false"/>-->
+        <!--<event type="service" invoke="loadAllCustomerInventoryDailyFact"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
 
     <request-map uri="DemoService.svc">
         <security https="false" auth="false"/>
@@ -82,16 +82,16 @@
     </request-map>
 
     <!-- View Mappings -->
-	<view-map name="storeOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#storeOrderListReport"/>
-	<view-map name="requestProductReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductReport"/>
-	<view-map name="requestProductList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductList"/>
-	<view-map name="requestCustomerReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerReport"/>
-	<view-map name="requestCustomerList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerList"/>
-	<view-map name="requestCustomerStoreReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerStoreReport"/>
-    <view-map name="customerOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#customerOrderListReport"/>
+	<!--<view-map name="storeOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#storeOrderListReport"/>-->
+	<!--<view-map name="requestProductReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductReport"/>-->
+	<!--<view-map name="requestProductList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestProductList"/>-->
+	<!--<view-map name="requestCustomerReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerReport"/>-->
+	<!--<view-map name="requestCustomerList" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerList"/>-->
+	<!--<view-map name="requestCustomerStoreReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#requestCustomerStoreReport"/>-->
+    <!--<view-map name="customerOrderListReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#customerOrderListReport"/>-->
 
     <view-map name="main" type="screen" page="component://platformmanager/widget/PlatformManagerScreens.xml#main"/>
-    <view-map name="ReportBuilderSelectStarSchema" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchema"/>
-    <view-map name="ReportBuilderSelectStarSchemaFields" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchemaFields"/>
-    <view-map name="ReportBuilderRenderStarSchemaReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderRenderStarSchemaReport"/>
+    <!--<view-map name="ReportBuilderSelectStarSchema" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchema"/>-->
+    <!--<view-map name="ReportBuilderSelectStarSchemaFields" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderSelectStarSchemaFields"/>-->
+    <!--<view-map name="ReportBuilderRenderStarSchemaReport" type="screen" page="component://zuczugetl/widget/ZuczugEtlScreens.xml#ReportBuilderRenderStarSchemaReport"/>-->
 </site-conf>

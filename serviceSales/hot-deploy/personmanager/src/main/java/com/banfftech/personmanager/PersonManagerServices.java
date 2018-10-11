@@ -488,6 +488,7 @@ public class PersonManagerServices {
         String unioId = (String) context.get("unioId");
         //小程序的OPEN ID 也要存
         String openId = (String) context.get("openId");
+        result.put("openId",openId);
         String captcha = (String) context.get("captcha");
         String tel = (String) context.get("tel");
 

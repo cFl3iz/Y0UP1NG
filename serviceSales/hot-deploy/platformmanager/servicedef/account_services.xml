@@ -17,7 +17,7 @@
              invoke="registerDk" auth="false">
         <description>registerDk</description>
 
-        <attribute name="openId" type="String" mode="IN" optional="true"/>
+        <attribute name="openId" type="String" mode="INOUT" optional="true"/>
         <attribute name="appId" type="String" mode="IN" optional="true"/>
         <attribute name="tel" type="String" mode="IN" optional="true"/>
         <attribute name="captcha" type="String" mode="IN" optional="true"/>

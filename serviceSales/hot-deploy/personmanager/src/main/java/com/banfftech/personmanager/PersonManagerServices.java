@@ -748,7 +748,8 @@ public class PersonManagerServices {
                 //找到上家的ID
                 GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
                         "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();
-                if(null == productAndCategoryMember){
+                if(null == EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+                        "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst()){
                     String payToPartyId = productAndCategoryMember.getString("payToPartyId");
 
                     //产品关联分类

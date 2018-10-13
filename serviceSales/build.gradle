@@ -82,8 +82,10 @@ configurations {
 
 dependencies {
 
-
-
+    compile group: 'org.apache.olingo', name: 'odata-commons-core', version: '4.5.0'
+    compile group: 'org.apache.olingo', name: 'odata-commons-api', version: '4.5.0'
+    compile group: 'org.apache.olingo', name: 'odata-server-core', version: '4.5.0'
+    compile group: 'org.apache.olingo', name: 'odata-server-api', version: '4.5.0'
 
     //狗腿伪静态包
 //    compile 'org.apache.servicemix.bundles:org.apache.servicemix.bundles.urlrewritefilter:4.0.4_1'

@@ -3874,7 +3874,7 @@ public class PersonManagerServices {
         }
         if("11260".equals(productStoreId)){
             //ex 1
-            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","P01"));
+            dispatcher.runAsync("akrmOrderShipRequest", UtilMisc.toMap("orderId", orderId,"zuczugStoreId","P02"));
         }
 
         GenericValue nowCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId",productStoreId).queryFirst();
@@ -4605,7 +4605,7 @@ public class PersonManagerServices {
                 titleName = "[素然内买]"+ "正式付款下单!" + orderId;
             }
 
-            if(zuczugStoreId.equals("P01")){
+            if(zuczugStoreId.equals("P02")){
                 titleName = "[Extra-One]"+ "正式付款下单!" + orderId;
             }
             String errorInfo = "";

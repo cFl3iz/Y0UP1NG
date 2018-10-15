@@ -1753,7 +1753,7 @@ public class WeChatOrderQueryServices {
 
                 GenericValue pkey
                         = EntityQuery.use(delegator).from("ProductKeyword").where("keyword","RM"+nowPartyId,
-                        "keywordTypeId","Tag","productId",skuId,"statusId","KW_APPROVED").queryFirst();
+                        "keywordTypeId","KWT_TAG","productId",skuId,"statusId","KW_APPROVED").queryFirst();
                 if(null!=pkey){
                     rowMap.put("reMai","Y");
                 }

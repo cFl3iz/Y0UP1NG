@@ -937,6 +937,15 @@ public class WeChatMiniProgramServices {
 
         String partyId = (String) userLogin.get("partyId");
 
+
+        // 客户是否拥有
+        GenericValue partyCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();
+        if (null == partyCustRole) {
+            Map<String, Object> createCustPartyRoleMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                    "roleTypeId", "CUSTOMER");
+            dispatcher.runSync("createPartyRole", createCustPartyRoleMap);
+        }
+
         // is Exsits Role ?
         GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyId, "roleTypeId", roleTypeId, "productStoreId", productStoreId).queryFirst();
 

@@ -3690,71 +3690,71 @@ public class PersonManagerServices {
 //            return changeOrderStatusMap;
 //        }
         Map<String, Object> changeOrderStatusMap =
-                dispatcher.runSync("cancelOrderItem", UtilMisc.toMap("userLogin", admin, "orderId", orderId));
+                dispatcher.runSync("updateOrderStatus", UtilMisc.toMap("userLogin", admin, "orderId", orderId,"statusId","ORDER_CANCELLED"));
         if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
             return changeOrderStatusMap;
         }
 
-        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
-        String productId = (String) orderItem.get("productId");
-        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
-
-        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
-        GenericValue orderSales = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
-
-        String payFromPartyId = (String) orderCust.get("partyId");
-        String payToPartyId = (String) orderSales.get("partyId");
-        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", payFromPartyId).queryFirst();
-
-        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payFromPartyId);
-
-        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
-
-
-        if (null != partyIdentifications && partyIdentifications.size() > 0) {
-            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
-            String jpushId = (String) partyIdentification.getString("idValue");
-            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
-            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:" + orderId + "[" + product.get("productName") + "]" + "已被卖家取消。", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
-        }
-
-        //推送微信
-        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
-        //   pushMsgBase(orderId,payToPartyId ,payFromPartyId , delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
-
-
-        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", payFromPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
-
-
-        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
-
-
-            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
-
-            Date date = new Date();
-
-            SimpleDateFormat formatter;
-
-            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            String pushDate = "" + formatter.format(date);
-
-            pushWeChatMessageInfoMap.put("date", pushDate);
-
-            String openId = (String) partyIdentificationList.get(0).get("idValue");
-
-            pushWeChatMessageInfoMap.put("openId", openId);
-
-            pushWeChatMessageInfoMap.put("productId", productId);
-            pushWeChatMessageInfoMap.put("firstName", "友评");
-            pushWeChatMessageInfoMap.put("message", "订单:" + orderId + "[" + product.get("productName") + "]" + "已被卖家取消。");
-
-            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
-
-            //推微信
-            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
-
-        }
+//        GenericValue orderItem = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderId).queryFirst();
+//        String productId = (String) orderItem.get("productId");
+//        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+//
+//        GenericValue orderCust = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "SHIP_TO_CUSTOMER").queryFirst();
+//        GenericValue orderSales = EntityQuery.use(delegator).from("OrderRole").where("orderId", orderId, "roleTypeId", "BILL_FROM_VENDOR").queryFirst();
+//
+//        String payFromPartyId = (String) orderCust.get("partyId");
+//        String payToPartyId = (String) orderSales.get("partyId");
+//        GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", payFromPartyId).queryFirst();
+//
+//        EntityCondition pConditions = EntityCondition.makeCondition("partyId", payFromPartyId);
+//
+//        List<GenericValue> partyIdentifications = delegator.findList("PartyIdentification", pConditions, null, UtilMisc.toList("-createdStamp"), null, false);
+//
+//
+//        if (null != partyIdentifications && partyIdentifications.size() > 0) {
+//            GenericValue partyIdentification = (GenericValue) partyIdentifications.get(0);
+//            String jpushId = (String) partyIdentification.getString("idValue");
+//            String partyIdentificationTypeId = (String) partyIdentification.get("partyIdentificationTypeId");
+//            dispatcher.runSync("pushNotifOrMessage", UtilMisc.toMap("userLogin", admin, "message", "order", "content", "订单:" + orderId + "[" + product.get("productName") + "]" + "已被卖家取消。", "regId", jpushId, "deviceType", partyIdentificationTypeId, "sendType", "", "objectId", orderId));
+//        }
+//
+//        //推送微信
+//        Map<String, Object> pushWeChatMessageInfoMap = new HashMap<String, Object>();
+//        //   pushMsgBase(orderId,payToPartyId ,payFromPartyId , delegator, dispatcher, userLogin, "订单:+" + orderId  +"["+product.get("productName")+"]已被卖家取消。", pushWeChatMessageInfoMap, admin, new HashMap<String, Object>(), "TEXT");
+//
+//
+//        List<GenericValue> partyIdentificationList = EntityQuery.use(delegator).from("PartyIdentification").where("partyId", payFromPartyId, "partyIdentificationTypeId", "WX_GZ_OPEN_ID").queryList();
+//
+//
+//        if (null != partyIdentificationList && partyIdentificationList.size() > 0) {
+//
+//
+//            System.out.println("*PUSH WE CHAT GONG ZHONG PLATFORM !!!!!!!!!!!!!!!!!!!!!!!");
+//
+//            Date date = new Date();
+//
+//            SimpleDateFormat formatter;
+//
+//            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//            String pushDate = "" + formatter.format(date);
+//
+//            pushWeChatMessageInfoMap.put("date", pushDate);
+//
+//            String openId = (String) partyIdentificationList.get(0).get("idValue");
+//
+//            pushWeChatMessageInfoMap.put("openId", openId);
+//
+//            pushWeChatMessageInfoMap.put("productId", productId);
+//            pushWeChatMessageInfoMap.put("firstName", "友评");
+//            pushWeChatMessageInfoMap.put("message", "订单:" + orderId + "[" + product.get("productName") + "]" + "已被卖家取消。");
+//
+//            pushWeChatMessageInfoMap.put("payToPartyId", payToPartyId);
+//
+//            //推微信
+//            dispatcher.runSync("pushWeChatMessageInfo", pushWeChatMessageInfoMap);
+//
+//        }
 
         GenericValue orderAdjustment = EntityQuery.use(delegator).from("OrderAdjustment").where("orderId", orderId).queryFirst();
         if(null!= orderAdjustment){

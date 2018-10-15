@@ -55,4 +55,15 @@
     <Uom uomId="ke" uomTypeId="BOM_MEASURE" description="克" createdStamp="2018-08-30 16:38:55.0" createdTxStamp="2018-08-30 16:38:55.0"  lastUpdatedStamp="2018-08-30 16:38:55.0" lastUpdatedTxStamp="2018-08-30 16:38:55.0" />
     <Uom uomId="anbe" uomTypeId="BOM_MEASURE" description="安培-电流" createdStamp="2018-08-30 16:38:55.0" createdTxStamp="2018-08-30 16:38:55.0"  lastUpdatedStamp="2018-08-30 16:38:55.0" lastUpdatedTxStamp="2018-08-30 16:38:55.0" />
 
+
+
+    <EnumerationType createdStamp="2018-10-15 19:16:18.0" createdTxStamp="2018-10-15 19:16:18.0" description="中国销售渠道" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 19:16:18.0" lastUpdatedTxStamp="2018-10-15 19:16:18.0" parentTypeId="ORDER_SALES_CHANNEL"/>
+
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="天猫渠道" enumCode="TMALL" enumId="TMALL" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="1"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="京东渠道" enumCode="JD" enumId="JD" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="2"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="拼多多渠道" enumCode="PDD" enumId="PDD" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="3"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="亚马逊渠道" enumCode="AMAZON" enumId="AMAZON" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="4"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="淘宝" enumCode="TAOBAO" enumId="TAOBAO" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="5"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="海外" enumCode="NO_CHN" enumId="NO_CHN" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="6"/>
+
 </entity-engine-xml>

@@ -1735,12 +1735,30 @@ public class WeChatOrderQueryServices {
             for (GenericValue gv : productList) {
                 Map<String, Object> rowMap = gv.getAllFields();
 
+
+
+
+
 //                if (null != gv.get("salesDiscontinuationDate")) {
 //                    continue;
 //                }
 
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
+
+
+                GenericValue productRoleAdmin
+                        = EntityQuery.use(delegator).from("ProductRole").where(
+                        "roleTypeId", "ADMIN", "productId", skuId).queryFirst();
+                if(productRoleAdmin!=null){
+                    String partyId = productRoleAdmin.getString("partyId");
+                    GenericValue productStoreRole
+                            = EntityQuery.use(delegator).from("ProductStore").where(
+                            "payToPartyId", partyId).queryFirst();
+                    String fromStoreId = productStoreRole.getString("productStoreId");
+                    rowMap.put("baseStoreId",fromStoreId);
+                }
+
                 EntityCondition findConditions3 = EntityCondition
                         .makeCondition("productId", EntityOperator.EQUALS, skuId);
 

@@ -2125,11 +2125,22 @@ public class PersonManagerServices {
         GenericValue productRoleAdmin
                 = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,
                 "roleTypeId", "ADMIN", "productId", productId).queryFirst();
+
+
+
+
+
         if(null != productRoleAdmin){
             product.set("productName",productName);
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("comments",product.get("comments")+""+partyId+",");
+
+//                createProductKeyword
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","Tag","productId",productId,"statusId","KW_APPROVED")));
+//                product.set("comments",product.get("comments")+""+partyId+",");
             }else{
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","Tag","productId",productId,"statusId","KW_DISAPPROVED")));
             }
             product.store();
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
@@ -2139,11 +2150,14 @@ public class PersonManagerServices {
 
 
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("comments",product.get("comments")+""+partyId+",");
-                product.store();
+
+//                createProductKeyword
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","Tag","productId",productId,"statusId","KW_APPROVED")));
+//                product.set("comments",product.get("comments")+""+partyId+",");
             }else{
-                product.set("comments", "N");
-                product.store();
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","Tag","productId",productId,"statusId","KW_DISAPPROVED")));
             }
             GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
                     "productId", productId,"payToPartyId",partyId)).queryFirst();

@@ -1720,7 +1720,10 @@ public class WeChatOrderQueryServices {
 
         resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId,"isVariant","Y").queryCount();
 
-
+        GenericValue nowStore
+                = EntityQuery.use(delegator).from("ProductStore").where(
+                "productStoreId", productStoreId).queryFirst();
+        String nowPartyId = nowStore.getString("payToPartyId");
         lowIndex = myContactListPage.getStartIndex();
         highIndex = myContactListPage.getEndIndex();
         List<Map<String, Object>> returnProductList = new ArrayList<Map<String, Object>>();
@@ -1746,6 +1749,14 @@ public class WeChatOrderQueryServices {
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
 
+
+
+                GenericValue pkey
+                        = EntityQuery.use(delegator).from("ProductKeyword").where("keyword","RM"+nowPartyId,
+                        "keywordTypeId","Tag","productId",skuId,"statusId","KW_APPROVED").queryFirst();
+                if(null!=pkey){
+                    rowMap.put("reMai","Y");
+                }
 
                 GenericValue productRoleAdmin
                         = EntityQuery.use(delegator).from("ProductRole").where(

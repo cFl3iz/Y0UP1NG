@@ -2128,9 +2128,8 @@ public class PersonManagerServices {
         if(null != productRoleAdmin){
             product.set("productName",productName);
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("comments","Y");
+                product.set("comments",product.get("comments")+""+partyId+",");
             }else{
-                product.set("comments","N");
             }
             product.store();
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
@@ -2140,7 +2139,7 @@ public class PersonManagerServices {
 
 
             if(top!=null && top.toUpperCase().equals("Y")){
-                product.set("comments", "Y");
+                product.set("comments",product.get("comments")+""+partyId+",");
                 product.store();
             }else{
                 product.set("comments", "N");

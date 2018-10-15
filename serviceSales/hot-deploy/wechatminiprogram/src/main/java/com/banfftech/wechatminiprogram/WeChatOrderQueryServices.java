@@ -3474,7 +3474,7 @@ public class WeChatOrderQueryServices {
                 findShipment = "SHIPMENT";
 
             } else {
-                EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_CANCELLED");
+                EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, orderStatusId);
                 EntityCondition genericCondition = EntityCondition.makeCondition(findConditions3, EntityOperator.AND, findConditions);
                 EntityCondition genericCondition2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
 //                listConditions2 = EntityCondition.makeCondition(genericCondition2, EntityOperator.AND, orderCancelCondition);

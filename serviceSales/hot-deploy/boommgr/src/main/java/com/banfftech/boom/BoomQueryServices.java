@@ -962,7 +962,7 @@ public class BoomQueryServices {
                 .makeCondition("enumTypeId", EntityOperator.EQUALS, "CN_SALES_CHANNEL");
 
         List<GenericValue> enumeration = EntityQuery.use(delegator).from("Enumeration").where(findConditions).orderBy(
-                "createdStamp").queryList();
+                "sequenceId").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 

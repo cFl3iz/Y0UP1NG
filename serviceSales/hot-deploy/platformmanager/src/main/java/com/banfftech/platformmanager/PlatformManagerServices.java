@@ -1098,14 +1098,20 @@ public class PlatformManagerServices {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         try {
             String[] excelHead = excelList.get(0);
-            String partyGroupId = excelHead[0];
-            GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyGroupId).queryFirst();
-
-            for (int i = 0; i < excelList.size(); i++) {
+            for (int i = 7; i < excelList.size(); i++) {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
+                if(i==8){
+
+                }
                 String[] excelRow = excelList.get(i);
+                String extId = excelRow[0];
                 String productName = excelRow[1];
+                String spec = excelRow[2];
+//                String attr = excelRow[3];
+                String uom = excelRow[4];
+//                String amount = excelRow[4];
+                String price = excelRow[7];
 
 
 

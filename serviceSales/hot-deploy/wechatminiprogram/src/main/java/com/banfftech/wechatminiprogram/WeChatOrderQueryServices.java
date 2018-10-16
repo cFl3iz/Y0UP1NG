@@ -3178,8 +3178,13 @@ public class WeChatOrderQueryServices {
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
             listConditions2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
         } else {
+//            EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
+//            listConditions2 = EntityCondition.makeCondition(genericCondition);
+            EntityCondition statusConditions = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, orderStatus);
             EntityCondition genericCondition = EntityCondition.makeCondition(roleTypeCondition, EntityOperator.AND, payToPartyIdCondition);
-            listConditions2 = EntityCondition.makeCondition(genericCondition);
+            EntityCondition genericCondition2 = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, statusConditions);
+//                listConditions2 = EntityCondition.makeCondition(genericCondition2, EntityOperator.AND, orderCancelCondition);
+            listConditions2 = EntityCondition.makeCondition(genericCondition2);
         }
 
 

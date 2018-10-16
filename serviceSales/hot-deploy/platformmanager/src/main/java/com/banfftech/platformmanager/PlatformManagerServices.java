@@ -1185,7 +1185,7 @@ public class PlatformManagerServices {
                     if( i>7 && null == gvs  ){
                         continue;
                     }else{
-                        dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", finishId, "productId", gvs.getString("productId")
+                        dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", gvs.getString("productId"), "productId",finishId
                                 , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                     }
 

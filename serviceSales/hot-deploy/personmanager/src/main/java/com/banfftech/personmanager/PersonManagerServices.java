@@ -3704,6 +3704,7 @@ public class PersonManagerServices {
 //        }
         Map<String, Object> changeOrderStatusMap =
                 dispatcher.runSync("updateOrderStatus", UtilMisc.toMap("userLogin", admin, "orderId", orderId,"statusId","ORDER_CANCELLED"));
+        dispatcher.runSync("createOrderNote", UtilMisc.toMap("userLogin", admin, "orderId", orderId, "noteName", "cancel", "note", changeReason, "internalNote", "N"));
         if (!ServiceUtil.isSuccess(changeOrderStatusMap)) {
             return changeOrderStatusMap;
         }

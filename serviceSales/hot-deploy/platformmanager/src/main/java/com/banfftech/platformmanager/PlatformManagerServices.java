@@ -1096,7 +1096,7 @@ public class PlatformManagerServices {
         List<String[]> excelList = excelToList(fileItem);
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         String finishId = "";
-        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", "admin").queryFirst();
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", "system").queryFirst();
 
         try {
             String[] excelHead = excelList.get(0);
@@ -1185,7 +1185,6 @@ public class PlatformManagerServices {
                     if( i>7 && null == gvs  ){
                         continue;
                     }else{
-
                         dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", finishId, "productId", gvs.getString("productId")
                                 , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                     }

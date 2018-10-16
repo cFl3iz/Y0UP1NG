@@ -9191,7 +9191,7 @@ public class PersonManagerServices {
         // Create Party Block
         int random = (int) (Math.random() * 1000000 + 1);
         Map<String, Object> createPartyInMap = UtilMisc.toMap("userLogin", admin, "nickname", nickName,
-                "firstName", firstName, "lastName", " ", "gender", "M");
+                "firstName", nickName, "lastName", " ", "gender", "M");
         Map<String, Object> createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
         partyId = (String) createPerson.get("partyId");
 

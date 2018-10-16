@@ -1120,7 +1120,7 @@ public class PlatformManagerServices {
                 String facilityId = facility.getString("facilityId");
 
 
-                if(i==8){
+                if(i==7){
                     if (UtilValidate.isNotEmpty(uom)) {
                         GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
                                 "description", uom).queryFirst();
@@ -3330,16 +3330,16 @@ public class PlatformManagerServices {
                 int tdLength = row.getLastCellNum();
                 String[] excelRow = new String[tdLength];
 
-                for (int j = 0; j <= tdLength; j++) {
+                for (int j = 0; j < tdLength; j++) {
                     // 当前列值
                     Cell cell = row.getCell(j);
                     if (cell == null) {
                         break;
                     }
-                    if ("".equals(cell.toString().trim())) {
-                        break;
-                    }
-                    excelRow[j] = cell.toString().trim();
+//                    if ("".equals(cell.toString().trim())) {
+//                        break;
+//                    }
+                    excelRow[j] = cell+"".trim();
                 }
                 excelList.add(excelRow);
             }

@@ -875,7 +875,8 @@ public class BoomQueryServices {
         partyId = partyGroupId;
         List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
                 "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
-
+        Debug.logInfo("queryMyFinishedGood:"+partyGroupId,module);
+        Debug.logInfo("productListSize:"+productList.size(),module);
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(productList.size()>0){

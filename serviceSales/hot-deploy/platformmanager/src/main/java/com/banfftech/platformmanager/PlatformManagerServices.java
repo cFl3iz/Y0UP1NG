@@ -1179,14 +1179,17 @@ public class PlatformManagerServices {
                     finishId = productId;
 
                 }else{
-                    if(null == EntityQuery.use(delegator).from("Product").where(
-                            "comments", extId).queryFirst() ){
+                    Debug.logInfo("import =>> ext_id = "+extId.trim(),module);
+                    GenericValue gvs = EntityQuery.use(delegator).from("Product").where(
+                            "comments", extId.trim()).queryFirst();
+                    if( i>7 && null == gvs  ){
                         continue;
                     }else{
 
+                        dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", finishId, "productId", gvs.getString("productId")
+                                , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                     }
-                    dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", finishId, "productId", extId
-                            , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+
 
                 }
                 TransactionUtil.commit();

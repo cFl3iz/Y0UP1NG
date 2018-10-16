@@ -951,6 +951,30 @@ public class BoomQueryServices {
     }
 
 
+    public static Map<String, Object> queryChannelList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("enumTypeId", EntityOperator.EQUALS, "CN_SALES_CHANNEL");
+
+        List<GenericValue> enumeration = EntityQuery.use(delegator).from("Enumeration").where(findConditions).orderBy(
+                "createdStamp").queryList();
+
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        for(GenericValue gv : enumeration){
+            Map<String,Object> rowMap = gv.getAllFields();
+            returnList.add(rowMap);
+        }
+
+
+        resultMap.put("channelList",returnList);
+        return resultMap;
+    }
 
     public static Map<String, Object> queryQuantityUom(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 

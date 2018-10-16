@@ -153,6 +153,14 @@
     </request-map>
 
 
+    <request-map uri="queryChannelList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryChannelList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="queryMyColleagues">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryMyColleagues"/>

@@ -120,7 +120,6 @@ public class PlatformManagerServices {
 
     /**
      * 素然向友评同步已发货的订单
-     *
      * @param ctx
      * @param context
      * @return
@@ -1096,25 +1095,100 @@ public class PlatformManagerServices {
         FileItem fileItem = getFileItem(request);
         List<String[]> excelList = excelToList(fileItem);
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        String finishId = "";
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("partyId", "admin").queryFirst();
+
         try {
             String[] excelHead = excelList.get(0);
+//            String partyGroupId = excelHead[0];
+
             for (int i = 7; i < excelList.size(); i++) {
                 TransactionUtil.setTransactionTimeout(100000);
                 TransactionUtil.begin();
-                if(i==8){
 
-                }
                 String[] excelRow = excelList.get(i);
                 String extId = excelRow[0];
                 String productName = excelRow[1];
                 String spec = excelRow[2];
-//                String attr = excelRow[3];
+             String color = excelRow[3];
                 String uom = excelRow[4];
-//                String amount = excelRow[4];
+              String amount = excelRow[5];
                 String price = excelRow[7];
+                String partyGroupId = excelRow[10];
+                GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                        "ownerPartyId", partyGroupId).queryFirst();
+                String facilityId = facility.getString("facilityId");
 
 
+                if(i==8){
+                    if (UtilValidate.isNotEmpty(uom)) {
+                        GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
+                                "description", uom).queryFirst();
+                        if (null == rowUom) {
+                            GenericValue newUom = delegator.makeValue("Uom",
+                                    UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description", uom, "uomTypeId", "BOM_MEASURE"));
+                            newUom.create();
+                        } else {
+                            uom = rowUom.getString("uomId");
+                        }
+                    }
 
+
+                    //CreateProduct
+                    Map<String, Object> createProductInMap = new HashMap<String, Object>();
+                    long ctm = System.currentTimeMillis();
+                    String productId = "ZF_" + (String) delegator.getNextSeqId("productId");
+                    createProductInMap.put("productId", productId);
+                    createProductInMap.put("internalName", productName);
+                    createProductInMap.put("productName", productName);
+                    createProductInMap.put("productTypeId", "FINDIG_GOOD");
+                    createProductInMap.put("description", "");
+                    createProductInMap.put("comments", extId);
+                    if (UtilValidate.isNotEmpty(uom)) {
+                        createProductInMap.put("quantityUomId", uom);
+                    }
+                    GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
+                    newProduct.create();
+
+                    if (UtilValidate.isNotEmpty(price)) {
+                        // 价格
+                        GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                        newProductVariantPrice.set("price", new BigDecimal(price));
+                        newProductVariantPrice.create();
+                    }
+
+                    if (UtilValidate.isNotEmpty(color)) {
+                        GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                                "attrName", "fuzhu", "attrValue", color));
+                        newAttribute.create();
+                    }
+
+                    if (UtilValidate.isNotEmpty(spec)) {
+                        GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                                "attrName", "spec", "attrValue", spec));
+                        newAttribute.create();
+                    }
+
+                    GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                            "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+                    newProductRole.create();
+
+                    dispatcher.runSync("createProductFacility", UtilMisc.toMap("userLogin", admin,
+                            "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal("10000"), "daysToShip", new Long(10)));
+
+                    finishId = productId;
+
+                }else{
+                    if(null == EntityQuery.use(delegator).from("Product").where(
+                            "comments", extId).queryFirst() ){
+                        continue;
+                    }else{
+
+                    }
+                    dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", finishId, "productId", extId
+                            , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+
+                }
                 TransactionUtil.commit();
                 //循环结束
             }

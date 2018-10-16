@@ -903,7 +903,8 @@ public class BoomQueryServices {
 
                 rowMap.put("productName",gv.getString("productName"));
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
-                rowMap.put("createdDate",sdf.format(gv.get("createdDate")));
+
+                rowMap.put("createdDate",sdf.format(gv.get("fromDate")));
 
 
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(

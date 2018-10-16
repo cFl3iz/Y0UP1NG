@@ -1141,7 +1141,7 @@ public class PlatformManagerServices {
                     createProductInMap.put("productId", productId);
                     createProductInMap.put("internalName", productName);
                     createProductInMap.put("productName", productName);
-                    createProductInMap.put("productTypeId", "FINDIG_GOOD");
+                    createProductInMap.put("productTypeId", "FINISHED_GOOD");
                     createProductInMap.put("description", "");
                     createProductInMap.put("comments", extId);
                     if (UtilValidate.isNotEmpty(uom)) {

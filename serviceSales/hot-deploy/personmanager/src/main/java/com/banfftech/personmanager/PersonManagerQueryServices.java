@@ -378,6 +378,20 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : historyStore){
                 Map<String,Object> rowStore = new HashMap<String, Object>();
                 String productStoreId = gv.getString("productStoreId");
+
+
+                GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                        "productStoreId", productStoreId,  "roleTypeId", "ADMIN").queryFirst();
+                String storeAdmin = role.getString("partyId");
+
+                GenericValue telecomNumber = EntityUtil.getFirst(
+                        EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(UtilMisc.toMap("partyId", storeAdmin, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId", "TELECOM_NUMBER")).orderBy("fromDate").queryList());
+                String tel = null;
+                if (UtilValidate.isNotEmpty(telecomNumber)) {
+                    tel = telecomNumber.getString("contactNumber");
+                    rowStore.put("telecomNumber",tel);
+                }
+
                 GenericValue store = EntityQuery.use(delegator).from("ProductStore").where(
                         "productStoreId", productStoreId).queryFirst();
                 String storeName = store.getString("storeName");

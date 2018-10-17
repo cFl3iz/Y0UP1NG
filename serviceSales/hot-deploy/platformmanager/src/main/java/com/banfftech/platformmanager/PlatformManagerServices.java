@@ -4,6 +4,7 @@ package main.java.com.banfftech.platformmanager;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
@@ -214,7 +215,7 @@ public class PlatformManagerServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
 
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
@@ -223,7 +224,7 @@ public class PlatformManagerServices {
         // contentId
         String partyGroupId = (String) context.get("partyGroupId");
         String content = (String) context.get("content");
-
+        content = new String(content.getBytes("GB2312"),"8859_1");
         Debug.logInfo("createOrStoreExcelProduct:"+partyGroupId,module);
         Debug.logInfo("createOrStoreExcelProduct-content:"+content,module);
 

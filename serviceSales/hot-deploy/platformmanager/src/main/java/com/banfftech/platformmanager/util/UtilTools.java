@@ -3,6 +3,7 @@ package main.java.com.banfftech.platformmanager.util;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -119,5 +120,73 @@ public class UtilTools {
             dest = m.replaceAll("");
             return dest;
         }
+    }
+
+
+    /**
+     * UTF-8编码 转换为对应的 汉字
+     *
+     * @param s E69CA8
+     * @return 木
+     */
+    public static String convertUTF8ToString(String s) {
+        if (s == null || s.equals("")) {
+            return null;
+        }
+        try {
+            s = s.toUpperCase();
+            int total = s.length() / 2;
+            //标识字节长度
+            int pos = 0;
+            byte[] buffer = new byte[total];
+            for (int i = 0; i < total; i++) {
+                int start = i * 2;
+                //将字符串参数解析为第二个参数指定的基数中的有符号整数。
+                buffer[i] = (byte) Integer.parseInt(s.substring(start, start + 2), 16);
+                pos++;
+            }
+            //通过使用指定的字符集解码指定的字节子阵列来构造一个新的字符串。
+            //新字符串的长度是字符集的函数，因此可能不等于子数组的长度。
+            return new String(buffer, 0, pos, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public static String getEncoding(String str) {
+        String encode = "GB2312";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GB2312
+                String s = encode;
+                return s;      //是的话，返回“GB2312“，以下代码同理
+            }
+        } catch (Exception exception) {
+        }
+        encode = "ISO-8859-1";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是ISO-8859-1
+                String s1 = encode;
+                return s1;
+            }
+        } catch (Exception exception1) {
+        }
+        encode = "UTF-8";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {   //判断是不是UTF-8
+                String s2 = encode;
+                return s2;
+            }
+        } catch (Exception exception2) {
+        }
+        encode = "GBK";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GBK
+                String s3 = encode;
+                return s3;
+            }
+        } catch (Exception exception3) {
+        }
+        return "";
     }
 }

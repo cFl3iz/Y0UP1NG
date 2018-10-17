@@ -1768,6 +1768,7 @@ public class WeChatOrderQueryServices {
                             "payToPartyId", partyId).queryFirst();
                     String fromStoreId = productStoreRole.getString("productStoreId");
                     rowMap.put("baseStoreId",fromStoreId);
+                    rowMap.put("storeName",productStoreRole.getString("storeName"));
                 }
 
                 EntityCondition findConditions3 = EntityCondition

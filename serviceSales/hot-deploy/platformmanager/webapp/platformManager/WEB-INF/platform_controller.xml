@@ -16,6 +16,28 @@
 
 
 
+    <request-map uri="createOrStoreExcelProduct">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createOrStoreExcelProduct"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- 创建链 -->
     <request-map uri="createForwardChain">

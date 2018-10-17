@@ -118,6 +118,9 @@ public class PlatformManagerServices {
     private static String smsTemplateCode = null;
 
 
+
+
+
     /**
      * 素然向友评同步已发货的订单
      * @param ctx
@@ -202,6 +205,32 @@ public class PlatformManagerServices {
         return result;
     }
 
+
+    /**
+     * createOrStoreExcelProduct
+     * @param ctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        // contentId
+        String partyGroupId = (String) context.get("partyGroupId");
+        String content = (String) context.get("content");
+
+        Debug.logInfo("createOrStoreExcelProduct:"+partyGroupId,module);
+        Debug.logInfo("createOrStoreExcelProduct-content:"+content,module);
+
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        return result;
+    }
 
     /**
      * deleteProductContentEvent

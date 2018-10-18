@@ -745,68 +745,36 @@ public class PersonManagerServices {
         if(null!= productIds){
             for(String rowProductId : productIds.split(",")){
 
-                //找到上家的ID
-                GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                        "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();
-                if(null == EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                        "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst()){
-                    String payToPartyId = productAndCategoryMember.getString("payToPartyId");
+                String newProductId = (String) delegator.getNextSeqId("Product");
+                dispatcher.runSync("duplicateProduct",UtilMisc.toMap("userLogin",admin,
+                        "oldProductId",rowProductId,"productId",newProductId,
+                        "duplicatePrices","Y",
+                        "duplicateAttributes","Y",
+                        "duplicateAssocs","Y"));
 
-                    //产品关联分类
-                    Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
-                    addProductToCategoryInMap.put("userLogin", admin);
-                    addProductToCategoryInMap.put("productId", rowProductId);
-                    addProductToCategoryInMap.put("productCategoryId", productCategoryId);
+                //产品关联分类
+                Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
+                addProductToCategoryInMap.put("userLogin", admin);
+                addProductToCategoryInMap.put("productId", newProductId);
+                addProductToCategoryInMap.put("productCategoryId", productCategoryId);
 
-                    Debug.logInfo("=>addProductToCategoryInMap:"+addProductToCategoryInMap,module);
+                Debug.logInfo("=>addProductToCategoryInMap:"+addProductToCategoryInMap,module);
 
-                    Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
-
-
+                Map<String, Object> addProductToCategoryServiceResultMap = dispatcher.runSync("addProductToCategory", addProductToCategoryInMap);
 
 
-
-                    if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
-                        Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
-                        return addProductToCategoryServiceResultMap;
-                    }
-
-
-                    GenericValue productRoleAdmin
-                            = EntityQuery.use(delegator).from("ProductRole").where("partyId", payToPartyId,
-                            "roleTypeId", "ADMIN", "productId", rowProductId).queryFirst();
-                    if(null!=productRoleAdmin){
-
-                    }else{
-                        EntityCondition findConditions = EntityCondition.makeCondition("keyword", EntityOperator.LIKE,"WS"+payToPartyId + "%");
-
-                        EntityCondition genericCondition = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, rowProductId);
-                        EntityCondition condition2 = EntityCondition.makeCondition(findConditions, EntityOperator.AND, genericCondition);
-                        List<GenericValue> whosalesPrices = EntityQuery.use(delegator).from("ProductKeyword").where(condition2).queryList();
-
-                        if(whosalesPrices.size()>0){
-                            GenericValue  whosalesPrice = whosalesPrices.get(0);
-
-                            String beforePrice = whosalesPrice.getString("keyword").
-                                    substring(whosalesPrice.getString("keyword").indexOf(":"));
-                                                delegator.createOrStore(delegator.makeValue("ProductKeyword",
-                            UtilMisc.toMap("keyword","WS"+partyId+":"+beforePrice,"keywordTypeId","KWT_TAG","productId",rowProductId,"statusId","KW_APPROVED")));
-                        }
-
-                    }
-
-
-
-
-
-//                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
-//                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-//                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
-//                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
-//                        myProductAndCategoryMember.store();
-//                    }
-
+                if (!ServiceUtil.isSuccess(addProductToCategoryServiceResultMap)) {
+                    Debug.logError("*Mother Fuck added Product To Category Error:" + addProductToCategoryServiceResultMap, module);
+                    return addProductToCategoryServiceResultMap;
                 }
+
+//                //找到上家的ID
+//                GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+//                        "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();
+//                if(null == EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+//                        "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst()){
+//                    String payToPartyId = productAndCategoryMember.getString("payToPartyId");
+//                }
             }
         }
 
@@ -2156,8 +2124,6 @@ public class PersonManagerServices {
 
 
 
-
-
         if(null != productRoleAdmin){
             product.set("productName",productName);
             if(top!=null && top.toUpperCase().equals("Y")){
@@ -2175,31 +2141,6 @@ public class PersonManagerServices {
             productPriceEntity.set("price", new BigDecimal(price));
             productPriceEntity.store();
 
-                delegator.createOrStore(delegator.makeValue("ProductKeyword",
-                        UtilMisc.toMap("keyword","WS"+partyId+":"+price,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
-
-        }else{
-
-
-            if(top!=null && top.toUpperCase().equals("Y")){
-                delegator.createOrStore(delegator.makeValue("ProductKeyword",
-                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
-            }else{
-                delegator.createOrStore(delegator.makeValue("ProductKeyword",
-                        UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_DISAPPROVED")));
-            }
-
-            if(price!=null){
-                delegator.createOrStore(delegator.makeValue("ProductKeyword",
-                        UtilMisc.toMap("keyword","WS"+partyId+":"+price,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
-            }
-
-//            GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-//                    "productId", productId,"payToPartyId",partyId)).queryFirst();
-//            if (null != productAndCategoryMember) {
-//                productAndCategoryMember.set("priceDetailText",price);
-//                productAndCategoryMember.store();
-//            }
         }
 
 

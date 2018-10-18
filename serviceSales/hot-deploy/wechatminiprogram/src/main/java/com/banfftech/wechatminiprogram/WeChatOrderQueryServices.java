@@ -1757,31 +1757,6 @@ public class WeChatOrderQueryServices {
                 if(null!=pkey){
                     rowMap.put("reMai","Y");
                 }
-//                rowMap.put("wholesalePrice",""+gv.get("priceDetailText"));
-                EntityCondition findConditions = EntityCondition.makeCondition("keyword", EntityOperator.LIKE,"WS"  + "%");
-
-                EntityCondition genericCondition = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, skuId);
-                EntityCondition condition2 = EntityCondition.makeCondition(findConditions, EntityOperator.AND, genericCondition);
-                List<GenericValue> whosalesPrices = EntityQuery.use(delegator).from("ProductKeyword").where(condition2).queryList();
-              Map<String,Object>  salsesPrices = new HashMap<String, Object>();
-                if(whosalesPrices.size()>0){
-                    for(GenericValue gvPrice : whosalesPrices){
-                        Map<String,Object> rowMapPrice = new HashMap<String, Object>();
-                        String keyWord = gvPrice.getString("keyword");
-                        String priceRow = keyWord.substring(keyWord.indexOf(":"));
-                        String partyPriceId = keyWord.substring(keyWord.indexOf("S")+1,keyWord.indexOf(":"));
-                        GenericValue productStoreRole
-                                = EntityQuery.use(delegator).from("ProductStore").where(
-                                "payToPartyId", partyPriceId).queryFirst();
-                        String fromStoreId = productStoreRole.getString("productStoreId");
-                        rowMapPrice.put("storeName",productStoreRole.getString("storeName"));
-                        rowMapPrice.put("storeId",fromStoreId);
-                        rowMapPrice.put("price",priceRow);
-//                        salsesPrices.add(rowMapPrice);
-                        salsesPrices.put(fromStoreId,rowMapPrice);
-                    }
-                }
-                rowMap.put("wholesalePrice",salsesPrices);
 
 
                 GenericValue productRoleAdmin

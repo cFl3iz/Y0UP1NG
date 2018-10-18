@@ -1303,9 +1303,10 @@ public class WeChatOrderQueryServices {
             if(productId.indexOf("-")>-1){
             //获取SPU的尺码规格
               productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
+                Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
+                Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
             }
-            Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
-            Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
+
 
             if(productContentAndElectronicText!=null){
 

@@ -215,22 +215,22 @@ public class PlatformManagerServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+//    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        public static String createOrStoreExcelProduct(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+            GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
 
-        LocalDispatcher dispatcher = ctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-
-        // contentId
-        String partyGroupId = (String) context.get("partyGroupId");
-        String content = (String) context.get("content");
-        content = new String(content.getBytes("GB2312"),"8859_1");
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
+            request.setCharacterEncoding("GBK");
+            // contentId
+        String partyGroupId = (String) request.getAttribute("partyGroupId");
+        String content = (String) request.getAttribute("content");
+//        content = new String(content.getBytes("GB2312"),"8859_1");
         Debug.logInfo("createOrStoreExcelProduct:"+partyGroupId,module);
         Debug.logInfo("createOrStoreExcelProduct-content:"+content,module);
 
 
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        return result;
+        return "success";
     }
 
     /**

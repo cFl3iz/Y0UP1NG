@@ -15,11 +15,11 @@
 
 
 
-    <service name="createOrStoreExcelProduct" engine="java"
-             location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="createOrStoreExcelProduct" auth="false">
-        <attribute name="partyGroupId" type="String" mode="IN"/>
-        <attribute name="content" type="String" mode="IN"/>
-    </service>
+    <!--<service name="createOrStoreExcelProduct" engine="java"-->
+             <!--location="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="createOrStoreExcelProduct" auth="false">-->
+        <!--<attribute name="partyGroupId" type="String" mode="IN"/>-->
+        <!--<attribute name="content" type="String" mode="IN"/>-->
+    <!--</service>-->
 
 
     <service name="testChangeEmp" engine="java"

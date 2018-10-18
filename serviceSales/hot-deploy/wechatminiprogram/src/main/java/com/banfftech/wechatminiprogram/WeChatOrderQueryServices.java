@@ -79,7 +79,7 @@ public class WeChatOrderQueryServices {
         String color = (String) context.get("color");
         String size = (String) context.get("size");
 
-        if(color==null && size==null || color.trim().equals("") && size.trim().equals("")){
+        if (color == null && size == null || color.trim().equals("") && size.trim().equals("")) {
             //说明是SKU查自己库存 , 就不需要往下进行
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", productId).queryFirst();
@@ -707,6 +707,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * queryCatalogSkuProductDetail
+     *
      * @param dctx
      * @param context
      * @return
@@ -742,8 +743,8 @@ public class WeChatOrderQueryServices {
         allField.put("price", productPrice.get("price"));
 
 
-        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-        if(null!=productOnePrice){
+        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+        if (null != productOnePrice) {
             allField.put("oneMouthPrice", productOnePrice.get("price"));
         }
 
@@ -791,7 +792,7 @@ public class WeChatOrderQueryServices {
             String rowVirId = (String) vir_product.get("productId");
 
 
-            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo",productId).queryList();
+            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryList();
 
             Set<String> fieldSet = new HashSet<String>();
 
@@ -833,7 +834,7 @@ public class WeChatOrderQueryServices {
                             pictures.add(rowMap);
                         }
                     }
-                    allField.put("matchPictures",matchPictures);
+                    allField.put("matchPictures", matchPictures);
                 }
                 //2 查询单品图
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
@@ -858,7 +859,7 @@ public class WeChatOrderQueryServices {
                         }
 
                     }
-                    allField.put("singlePictures",singlePictures);
+                    allField.put("singlePictures", singlePictures);
 
                 } else {
                     featureMap.put(rowColor == null ? "普通" : rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
@@ -870,14 +871,14 @@ public class WeChatOrderQueryServices {
                 List<GenericValue> detailPictures = delegator.findList("ProductContentAndInfo", detailCondition, fieldSet,
                         null, null, false);
                 if (detailPictures != null && detailPictures.size() > 0) {
-                    List<Map<String,Object>> detailList = new ArrayList<Map<String, Object>>();
+                    List<Map<String, Object>> detailList = new ArrayList<Map<String, Object>>();
                     for (GenericValue pict : detailPictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
 
-                        if(drObjectInfo.indexOf("end.jpg")>-1){
-                            allField.put("endImage",drObjectInfo);
-                        }else{
+                        if (drObjectInfo.indexOf("end.jpg") > -1) {
+                            allField.put("endImage", drObjectInfo);
+                        } else {
                             rowMap.put("drObjectInfo", drObjectInfo);
                             detailList.add(rowMap);
                         }
@@ -887,7 +888,7 @@ public class WeChatOrderQueryServices {
 //                            pictures.add(rowMap);
 //                        }
                     }
-                    allField.put("detailPictures",detailList);
+                    allField.put("detailPictures", detailList);
                 }
 
             }
@@ -904,7 +905,7 @@ public class WeChatOrderQueryServices {
             }
 
 
-            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId,"productFeatureCategoryId","PRODUCT_SIZE").queryList();
+            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId, "productFeatureCategoryId", "PRODUCT_SIZE").queryList();
 
 
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
@@ -938,7 +939,7 @@ public class WeChatOrderQueryServices {
                 productFeatureList.add(innerMap);
 
             }
-            GenericValue colorFeature = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId,"productFeatureCategoryId","PRODUCT_COLOR").queryFirst();
+            GenericValue colorFeature = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
             Map<String, Object> innerMap = new HashMap<String, Object>();
             String innerDesc = colorFeature.getString("description");
             innerMap.put("COLOR_DESC", innerDesc);
@@ -966,7 +967,6 @@ public class WeChatOrderQueryServices {
         prodCatalogId = prodCatalog.getString("prodCatalogId");
 
 
-
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
         String inventoryFacilityId = store.getString("inventoryFacilityId");
         //获得库存信息 getInventoryAvailableByFacility
@@ -978,7 +978,6 @@ public class WeChatOrderQueryServices {
         }
 
 
-
         resultMap.put("productDetail", allField);
         resultMap.put("productStoreId", productStoreId);
         resultMap.put("prodCatalogId", prodCatalogId);
@@ -986,7 +985,6 @@ public class WeChatOrderQueryServices {
 
         return resultMap;
     }
-
 
 
     public static Map<String, Object> queryNeiMaiCatalogProductDetail(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
@@ -1018,8 +1016,8 @@ public class WeChatOrderQueryServices {
         allField.put("price", productPrice.get("price"));
 
 
-        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-        if(null!=productOnePrice){
+        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+        if (null != productOnePrice) {
             allField.put("oneMouthPrice", productOnePrice.get("price"));
         }
 
@@ -1067,7 +1065,7 @@ public class WeChatOrderQueryServices {
             String rowVirId = (String) vir_product.get("productId");
 
 
-            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId,"productIdTo",productId).queryList();
+            skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId, "productIdTo", productId).queryList();
 
             Set<String> fieldSet = new HashSet<String>();
 
@@ -1168,7 +1166,7 @@ public class WeChatOrderQueryServices {
             }
 
 
-            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId,"productFeatureCategoryId","PRODUCT_SIZE").queryList();
+            List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId, "productFeatureCategoryId", "PRODUCT_SIZE").queryList();
 
 
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
@@ -1202,7 +1200,7 @@ public class WeChatOrderQueryServices {
                 productFeatureList.add(innerMap);
 
             }
-            GenericValue colorFeature = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId,"productFeatureCategoryId","PRODUCT_COLOR").queryFirst();
+            GenericValue colorFeature = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", productId, "productFeatureCategoryId", "PRODUCT_COLOR").queryFirst();
             Map<String, Object> innerMap = new HashMap<String, Object>();
             String innerDesc = colorFeature.getString("description");
             innerMap.put("COLOR_DESC", innerDesc);
@@ -1225,10 +1223,9 @@ public class WeChatOrderQueryServices {
         String productStoreId = "ZUCZUGSTORE";
         String prodCatalogId = "";
 
-            productStoreId = category.getString("productStoreId");
-            GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
-            prodCatalogId = prodCatalog.getString("prodCatalogId");
-
+        productStoreId = category.getString("productStoreId");
+        GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+        prodCatalogId = prodCatalog.getString("prodCatalogId");
 
 
         GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
@@ -1240,7 +1237,6 @@ public class WeChatOrderQueryServices {
             allField.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
             allField.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
         }
-
 
 
         resultMap.put("productDetail", allField);
@@ -1289,8 +1285,8 @@ public class WeChatOrderQueryServices {
         allField.put("price", productPrice.get("price"));
 
 
-        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-        if(null!=productOnePrice){
+        GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+        if (null != productOnePrice) {
             allField.put("oneMouthPrice", productOnePrice.get("price"));
         }
 
@@ -1305,14 +1301,12 @@ public class WeChatOrderQueryServices {
 
             //获取SPU的尺码规格
             GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
-            if(null!=productContentAndElectronicText){
-
 
             Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
             Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
             List<String> spuSpecTitleList = new ArrayList<String>();
             List<Map<String, String>> spuSpecRowList = new ArrayList<Map<String, String>>();
-            if (null != productContentAndElectronicText) {
+
                 String textData = productContentAndElectronicText.getString("textData");
                 String title = textData.substring(0, textData.indexOf("-"));
                 String rowData = textData.substring(textData.indexOf("-") + 1);
@@ -1336,8 +1330,8 @@ public class WeChatOrderQueryServices {
                         rowCount++;
                     }
                 }
-            }
-            }
+
+
             String rowVirId = (String) vir_product.get("productId");
 
 
@@ -1446,7 +1440,6 @@ public class WeChatOrderQueryServices {
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
 
 
-
 //            GenericValue productRoleAdmin
 //                    = EntityQuery.use(delegator).from("ProductRole").where(
 //                    "roleTypeId", "ADMIN", "productId", rowVirId).queryFirst();
@@ -1462,10 +1455,9 @@ public class WeChatOrderQueryServices {
 //            }
 
 
-
             GenericValue beforeProduct
-                    = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId","PRODUCT_OBSOLESCENCE","productId",productId).queryFirst();
-            if(beforeProduct!=null){
+                    = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId", "PRODUCT_OBSOLESCENCE", "productId", productId).queryFirst();
+            if (beforeProduct != null) {
                 String beforeProductId = beforeProduct.getString("productIdTo");
                 GenericValue beforePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", beforeProductId).queryFirst();
                 allField.put("beforePrice", beforePrice.get("price"));
@@ -1473,21 +1465,20 @@ public class WeChatOrderQueryServices {
                         = EntityQuery.use(delegator).from("ProductRole").where(
                         "roleTypeId", "ADMIN", "productId", beforeProductId).queryFirst();
 
-                Debug.logInfo(">>productRoleAdmin:"+productRoleAdmin,module);
-                if(productRoleAdmin !=null){
+                Debug.logInfo(">>productRoleAdmin:" + productRoleAdmin, module);
+                if (productRoleAdmin != null) {
                     String rowProductAdminId = productRoleAdmin.getString("partyId");
-                    Debug.logInfo(">>rowProductAdminId:"+rowProductAdminId,module);
+                    Debug.logInfo(">>rowProductAdminId:" + rowProductAdminId, module);
                     GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", rowProductAdminId).queryFirst();
-                    Debug.logInfo(">>salesStore:"+salesStore,module);
+                    Debug.logInfo(">>salesStore:" + salesStore, module);
                     String rowProductStoreId = salesStore.getString("productStoreId");
-                    allField.put("salesStoreId",rowProductStoreId);
-                    allField.put("salesStoreName",salesStore.getString("storeName"));
+                    allField.put("salesStoreId", rowProductStoreId);
+                    allField.put("salesStoreName", salesStore.getString("storeName"));
                 }
 
 
             }
 
-           
 
             for (GenericValue gv : gvs) {
 
@@ -1559,20 +1550,20 @@ public class WeChatOrderQueryServices {
         String productStoreId = "ZUCZUGSTORE";
         String prodCatalogId = "";
         if (category != null) {
-             productStoreId = category.getString("productStoreId");
-             GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
-             prodCatalogId = prodCatalog.getString("prodCatalogId");
-        }else{
+            productStoreId = category.getString("productStoreId");
+            GenericValue prodCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
+            prodCatalogId = prodCatalog.getString("prodCatalogId");
+        } else {
             GenericValue productCategoryMember = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId", productId).queryFirst();
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("productCategoryId", productCategoryMember.getString("productCategoryId")).queryFirst();
             prodCatalogId = prodCatalogCategory.getString("prodCatalogId");
         }
 
 
-            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
-            String inventoryFacilityId = store.getString("inventoryFacilityId");
-            //获得库存信息 getInventoryAvailableByFacility
-        if(null!=inventoryFacilityId){
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", productStoreId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        if (null != inventoryFacilityId) {
 
             Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                     "facilityId", inventoryFacilityId, "productId", productId));
@@ -1712,6 +1703,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * queryStoreProducts
+     *
      * @param dctx
      * @param context
      * @return
@@ -1744,29 +1736,28 @@ public class WeChatOrderQueryServices {
         Long resourceCount;
 
 
-        Debug.logInfo("*productStoreId="+productStoreId,module);
+        Debug.logInfo("*productStoreId=" + productStoreId, module);
 
         GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("productStoreId", productStoreId).queryFirst();
 
-        Debug.logInfo("*productStoreCatalog="+productStoreCatalog,module);
+        Debug.logInfo("*productStoreCatalog=" + productStoreCatalog, module);
 
 
-        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId",productStoreCatalog.getString("prodCatalogId") ).queryFirst();
+        GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", productStoreCatalog.getString("prodCatalogId")).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
-
 
 
         //"isVirtual", "Y","isVariant","N"
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId,"isVariant","Y").orderBy(orderBy)
+                where("productCategoryId", productCategoryId, "isVariant", "Y").orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId,"isVariant","Y").queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVariant", "Y").queryCount();
 
         GenericValue nowStore
                 = EntityQuery.use(delegator).from("ProductStore").where(
@@ -1787,9 +1778,6 @@ public class WeChatOrderQueryServices {
                 Map<String, Object> rowMap = gv.getAllFields();
 
 
-
-
-
 //                if (null != gv.get("salesDiscontinuationDate")) {
 //                    continue;
 //                }
@@ -1799,27 +1787,26 @@ public class WeChatOrderQueryServices {
 
 
                 GenericValue beforeProduct
-                        = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId","PRODUCT_OBSOLESCENCE","productId",skuId).queryFirst();
-                if(beforeProduct!=null){
+                        = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId", "PRODUCT_OBSOLESCENCE", "productId", skuId).queryFirst();
+                if (beforeProduct != null) {
                     String beforeProductId = beforeProduct.getString("productIdTo");
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", beforeProductId).queryFirst();
                     rowMap.put("beforePrice", productPrice.get("price"));
-
 
 
                     GenericValue productRoleAdmin
                             = EntityQuery.use(delegator).from("ProductRole").where(
                             "roleTypeId", "ADMIN", "productId", beforeProductId).queryFirst();
 
-                    Debug.logInfo(">>productRoleAdmin:"+productRoleAdmin,module);
-                    if(productRoleAdmin !=null){
+                    Debug.logInfo(">>productRoleAdmin:" + productRoleAdmin, module);
+                    if (productRoleAdmin != null) {
                         String rowProductAdminId = productRoleAdmin.getString("partyId");
-                        Debug.logInfo(">>rowProductAdminId:"+rowProductAdminId,module);
+                        Debug.logInfo(">>rowProductAdminId:" + rowProductAdminId, module);
                         GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", rowProductAdminId).queryFirst();
-                        Debug.logInfo(">>salesStore:"+salesStore,module);
+                        Debug.logInfo(">>salesStore:" + salesStore, module);
                         String rowProductStoreId = salesStore.getString("productStoreId");
-                        rowMap.put("salesStoreId",rowProductStoreId);
-                        rowMap.put("salesStoreName",salesStore.getString("storeName"));
+                        rowMap.put("salesStoreId", rowProductStoreId);
+                        rowMap.put("salesStoreName", salesStore.getString("storeName"));
                     }
 
 
@@ -1827,13 +1814,11 @@ public class WeChatOrderQueryServices {
 
 
                 GenericValue pkey
-                        = EntityQuery.use(delegator).from("ProductKeyword").where("keyword","RM"+nowPartyId,
-                        "keywordTypeId","KWT_TAG","productId",skuId,"statusId","KW_APPROVED").queryFirst();
-                if(null!=pkey){
-                    rowMap.put("reMai","Y");
+                        = EntityQuery.use(delegator).from("ProductKeyword").where("keyword", "RM" + nowPartyId,
+                        "keywordTypeId", "KWT_TAG", "productId", skuId, "statusId", "KW_APPROVED").queryFirst();
+                if (null != pkey) {
+                    rowMap.put("reMai", "Y");
                 }
-
-
 
 
 //                if(productRoleAdmin!=null){
@@ -1853,25 +1838,15 @@ public class WeChatOrderQueryServices {
                         findConditions3, fieldSet,
                         null, null, false);
                 int index = 0;
-                rowMap.put("rowPictures",rowPictures);
+                rowMap.put("rowPictures", rowPictures);
                 GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", skuId).queryFirst();
 
-                    count++;
-                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                    rowMap.put("price", productPrice.get("price"));
+                count++;
+                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                rowMap.put("price", productPrice.get("price"));
 
 
-
-
-
-
-
-
-
-
-
-
-                    returnProductList.add(rowMap);
+                returnProductList.add(rowMap);
 
             }
         }
@@ -1893,6 +1868,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * queryCatalogSkuProduct
+     *
      * @param dctx
      * @param context
      * @return
@@ -1951,7 +1927,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("contentId");
         fieldSet.add("productId");
 
-        Debug.logInfo("=>myContactListPage="+productList,module);
+        Debug.logInfo("=>myContactListPage=" + productList, module);
 
         if (null != myContactListPage) {
             for (GenericValue gv : productList) {
@@ -1960,7 +1936,7 @@ public class WeChatOrderQueryServices {
                 String skuId = (String) rowMap.get("productId");
 
                 //有单品图就拿单品图,否则就拿首图
-                HashSet<String>  imgFieldSet = new HashSet<String>();
+                HashSet<String> imgFieldSet = new HashSet<String>();
                 imgFieldSet.add("drObjectInfo");
                 imgFieldSet.add("productId");
                 imgFieldSet.add("productContentTypeId");
@@ -1982,16 +1958,16 @@ public class WeChatOrderQueryServices {
 //                        findConditions3, fieldSet,
 //                        null, null, false);
 
-                    count++;
-                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
-                    if(null!=productPrice){
-                        rowMap.put("price", productPrice.get("price"));
-                    }else{
-                        Debug.logInfo("can't find price productId:"+skuId,module);
-                    }
+                count++;
+                GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
+                if (null != productPrice) {
+                    rowMap.put("price", productPrice.get("price"));
+                } else {
+                    Debug.logInfo("can't find price productId:" + skuId, module);
+                }
 
 
-                    returnProductList.add(rowMap);
+                returnProductList.add(rowMap);
 
             }
         }
@@ -2013,10 +1989,9 @@ public class WeChatOrderQueryServices {
     }
 
 
-
-
     /**
      * queryCatalogProduct
+     *
      * @param dctx
      * @param context
      * @return
@@ -2051,7 +2026,6 @@ public class WeChatOrderQueryServices {
 
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", openId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
         String partyId = "NA";
-
 
 
         if (UtilValidate.isNotEmpty(partyIdentification)) {
@@ -2099,9 +2073,8 @@ public class WeChatOrderQueryServices {
                 String skuId = (String) rowMap.get("productId");
 
 
-
                 //有单品图就拿单品图,否则就拿首图
-                HashSet<String>  imgFieldSet = new HashSet<String>();
+                HashSet<String> imgFieldSet = new HashSet<String>();
                 imgFieldSet.add("drObjectInfo");
                 imgFieldSet.add("productId");
                 imgFieldSet.add("productContentTypeId");
@@ -2115,8 +2088,6 @@ public class WeChatOrderQueryServices {
                 } else {
                     rowMap.put("showImageUrl", "无");
                 }
-
-
 
 
                 EntityCondition findConditions3 = EntityCondition
@@ -2143,8 +2114,8 @@ public class WeChatOrderQueryServices {
                             GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                             rowMap.put("price", productPrice.get("price"));
 
-                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                            if(null!=productOnePrice){
+                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                            if (null != productOnePrice) {
                                 rowMap.put("oneMouthPrice", productOnePrice.get("price"));
                             }
 
@@ -2157,8 +2128,8 @@ public class WeChatOrderQueryServices {
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
 
-                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                    if(null!=productOnePrice){
+                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                    if (null != productOnePrice) {
                         rowMap.put("oneMouthPrice", productOnePrice.get("price"));
                     }
 
@@ -2227,6 +2198,7 @@ public class WeChatOrderQueryServices {
 
     /**
      * 内买专用目录产品列表
+     *
      * @param dctx
      * @param context
      * @return
@@ -2264,13 +2236,11 @@ public class WeChatOrderQueryServices {
         String partyId = "NA";
 
 
-
         if (UtilValidate.isNotEmpty(partyIdentification)) {
             partyId = (String) partyIdentification.get("partyId");
         }
         GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
-
 
 
         //"isVirtual", "Y","isVariant","N"
@@ -2326,8 +2296,8 @@ public class WeChatOrderQueryServices {
                             GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                             rowMap.put("price", productPrice.get("price"));
 
-                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                            if(null!=productOnePrice){
+                            GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                            if (null != productOnePrice) {
                                 rowMap.put("oneMouthPrice", productOnePrice.get("price"));
                             }
 
@@ -2340,8 +2310,8 @@ public class WeChatOrderQueryServices {
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
 
-                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
-                    if(null!=productOnePrice){
+                    GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                    if (null != productOnePrice) {
                         rowMap.put("oneMouthPrice", productOnePrice.get("price"));
                     }
 
@@ -2460,12 +2430,6 @@ public class WeChatOrderQueryServices {
 //        resultMap.put("last_page", Integer.parseInt(resourceCount + ""));
 //        return resultMap;
 //    }
-
-
-
-
-
-
 
 
     /**
@@ -3341,8 +3305,8 @@ public class WeChatOrderQueryServices {
                 }
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", gv.get("orderId")).queryFirst();
-                if(null!= orderNote){
-                    rowMap.put("orderNote",orderNote.getAllFields());
+                if (null != orderNote) {
+                    rowMap.put("orderNote", orderNote.getAllFields());
                 }
 
                 List<Map<String, Object>> orderItemList = new ArrayList<Map<String, Object>>();
@@ -3449,7 +3413,6 @@ public class WeChatOrderQueryServices {
                 rowMap.put("salesPersonInfoMap", queryPersonBaseInfo(delegator, payToPartyId));
 
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
-
 
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).orderBy("-createdStamp").queryFirst();
@@ -3663,8 +3626,8 @@ public class WeChatOrderQueryServices {
                 }
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", gv.get("orderId")).queryFirst();
-                if(null!= orderNote){
-                    rowMap.put("orderNote",orderNote.getAllFields());
+                if (null != orderNote) {
+                    rowMap.put("orderNote", orderNote.getAllFields());
                 }
 
                 //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)

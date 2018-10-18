@@ -752,6 +752,16 @@ public class PersonManagerServices {
                         "duplicateAttributes","Y",
                         "duplicateAssocs","Y"));
 
+
+
+                //给产品增加用户角色
+                Map<String, Object> addProductRoleServiceResoutMap = dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin,
+                        "productId", newProductId, "partyId", partyId, "roleTypeId", "ADMIN"));
+
+
+
+
+
                 //产品关联分类
                 Map<String, Object> addProductToCategoryInMap = new HashMap<String, Object>();
                 addProductToCategoryInMap.put("userLogin", admin);

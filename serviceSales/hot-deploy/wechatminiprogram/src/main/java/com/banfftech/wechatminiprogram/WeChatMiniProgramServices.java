@@ -160,8 +160,9 @@ public class WeChatMiniProgramServices {
         if(null!=neiMai && neiMai.equals("true")){
             //TODO 暂时不效验价格
         }else{
+            BigDecimal bdPrice = (BigDecimal) productPrice.get("price");
             //检查价格
-            String priceStr = productPrice.get("price") + "";
+            String priceStr = bdPrice.intValue() + "";
             Debug.logInfo("*=======================validate price==========================",module);
             Debug.logInfo("*=======================priceStr:"+priceStr,module);
             Debug.logInfo("*=======================price:"+price,module);

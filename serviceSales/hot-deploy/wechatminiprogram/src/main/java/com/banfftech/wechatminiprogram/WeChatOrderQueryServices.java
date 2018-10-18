@@ -1446,11 +1446,14 @@ public class WeChatOrderQueryServices {
 
 
             GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", rowVirId).queryFirst();
-            String rowProductStoreId = category.getString("productStoreId");
-            GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", rowProductStoreId).queryFirst();
+            if(null!=category){
+                String rowProductStoreId = category.getString("productStoreId");
+                GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", rowProductStoreId).queryFirst();
 
-            allField.put("salesStoreId",rowProductStoreId);
-            allField.put("salesStoreName",salesStore.getString("storeName"));
+                allField.put("salesStoreId",rowProductStoreId);
+                allField.put("salesStoreName",salesStore.getString("storeName"));
+            }
+           
 
             for (GenericValue gv : gvs) {
 

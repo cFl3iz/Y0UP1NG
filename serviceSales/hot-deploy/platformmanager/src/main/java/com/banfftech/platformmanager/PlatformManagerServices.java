@@ -227,10 +227,15 @@ public class PlatformManagerServices {
         String partyGroupId = (String) request.getParameter("partyGroupId");
 
         String content = (String) request.getParameter("content");
-            String str = new String(content.getBytes("ISO-8859-1"),"UTF-8");
-//        content = new String(content.getBytes("GB2312"),"8859_1");
         Debug.logInfo("createOrStoreExcelProduct:"+partyGroupId,module);
         Debug.logInfo("createOrStoreExcelProduct-content:"+content,module);
+        for(String strFirstSub : content.split("|")){
+//            1:好东西,2:成品,3:1,4:1,5:1,6:红色,7:10X10,8:10000,9:1|1:坏东西,2:原辅料,3:2,4:2,5:2,6:黑色,7:20x5,8:10001,9:无|
+            for(String rowStrSub:strFirstSub.split(",")){
+//                int fieldName = rowStrSub.substring(rowStrSub.indexOf(""));
+            }
+        }
+
 
 
         return "success";

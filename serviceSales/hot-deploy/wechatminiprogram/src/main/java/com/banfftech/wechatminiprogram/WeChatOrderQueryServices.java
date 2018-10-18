@@ -1446,11 +1446,13 @@ public class WeChatOrderQueryServices {
 
             GenericValue productRoleAdmin
                     = EntityQuery.use(delegator).from("ProductRole").where(
-                    "roleTypeId", "ADMIN", "productId", productId).queryFirst();
-//            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", rowVirId).queryFirst();
+                    "roleTypeId", "ADMIN", "productId", rowVirId).queryFirst();
+            Debug.logInfo(">>productRoleAdmin:"+productRoleAdmin,module);
             if(productRoleAdmin !=null){
                 String rowProductAdminId = productRoleAdmin.getString("partyId");
+                Debug.logInfo(">>rowProductAdminId:"+rowProductAdminId,module);
                 GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", rowProductAdminId).queryFirst();
+                Debug.logInfo(">>salesStore:"+salesStore,module);
                 String rowProductStoreId = salesStore.getString("productStoreId");
                 allField.put("salesStoreId",rowProductStoreId);
                 allField.put("salesStoreName",salesStore.getString("storeName"));
@@ -1786,15 +1788,15 @@ public class WeChatOrderQueryServices {
                 GenericValue productRoleAdmin
                         = EntityQuery.use(delegator).from("ProductRole").where(
                         "roleTypeId", "ADMIN", "productId", skuId).queryFirst();
-                if(productRoleAdmin!=null){
-                    String partyId = productRoleAdmin.getString("partyId");
-                    GenericValue productStoreRole
-                            = EntityQuery.use(delegator).from("ProductStore").where(
-                            "payToPartyId", partyId).queryFirst();
-                    String fromStoreId = productStoreRole.getString("productStoreId");
-                    rowMap.put("baseStoreId",fromStoreId);
-                    rowMap.put("storeName",productStoreRole.getString("storeName"));
-                }
+//                if(productRoleAdmin!=null){
+//                    String partyId = productRoleAdmin.getString("partyId");
+//                    GenericValue productStoreRole
+//                            = EntityQuery.use(delegator).from("ProductStore").where(
+//                            "payToPartyId", partyId).queryFirst();
+//                    String fromStoreId = productStoreRole.getString("productStoreId");
+//                    rowMap.put("baseStoreId",fromStoreId);
+//                    rowMap.put("storeName",productStoreRole.getString("storeName"));
+//                }
 
                 EntityCondition findConditions3 = EntityCondition
                         .makeCondition("productId", EntityOperator.EQUALS, skuId);
@@ -1809,6 +1811,26 @@ public class WeChatOrderQueryServices {
                     count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
+
+
+
+
+
+
+                Debug.logInfo(">>productRoleAdmin:"+productRoleAdmin,module);
+                if(productRoleAdmin !=null){
+                    String rowProductAdminId = productRoleAdmin.getString("partyId");
+                    Debug.logInfo(">>rowProductAdminId:"+rowProductAdminId,module);
+                    GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", rowProductAdminId).queryFirst();
+                    Debug.logInfo(">>salesStore:"+salesStore,module);
+                    String rowProductStoreId = salesStore.getString("productStoreId");
+                    rowMap.put("salesStoreId",rowProductStoreId);
+                    rowMap.put("salesStoreName",salesStore.getString("storeName"));
+                }
+
+
+
+
 
                     returnProductList.add(rowMap);
 

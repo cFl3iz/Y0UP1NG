@@ -1757,6 +1757,15 @@ public class WeChatOrderQueryServices {
                 if(null!=pkey){
                     rowMap.put("reMai","Y");
                 }
+//                rowMap.put("wholesalePrice",""+gv.get("priceDetailText"));
+                EntityCondition findConditions = EntityCondition.makeCondition("keyword", EntityOperator.LIKE,"WS"  + "%");
+
+                EntityCondition genericCondition = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, skuId);
+                EntityCondition condition2 = EntityCondition.makeCondition(findConditions, EntityOperator.AND, genericCondition);
+                List<GenericValue> whosalesPrices = EntityQuery.use(delegator).from("ProductKeyword").where(condition2).queryList();
+
+                rowMap.put("wholesalePrice",whosalesPrices);
+
 
                 GenericValue productRoleAdmin
                         = EntityQuery.use(delegator).from("ProductRole").where(
@@ -1784,7 +1793,7 @@ public class WeChatOrderQueryServices {
                     count++;
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId).queryFirst();
                     rowMap.put("price", productPrice.get("price"));
-                    rowMap.put("wholesalePrice",""+gv.get("priceDetailText"));
+
                     returnProductList.add(rowMap);
 
             }

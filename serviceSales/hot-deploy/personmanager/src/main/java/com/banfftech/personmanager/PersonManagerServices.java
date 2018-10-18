@@ -771,12 +771,40 @@ public class PersonManagerServices {
                         return addProductToCategoryServiceResultMap;
                     }
 
-                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
-                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
-                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
-                        myProductAndCategoryMember.store();
+
+                    GenericValue productRoleAdmin
+                            = EntityQuery.use(delegator).from("ProductRole").where("partyId", payToPartyId,
+                            "roleTypeId", "ADMIN", "productId", rowProductId).queryFirst();
+                    if(null!=productRoleAdmin){
+
+                    }else{
+                        EntityCondition findConditions = EntityCondition.makeCondition("keyword", EntityOperator.LIKE,"WS"+payToPartyId + "%");
+
+                        EntityCondition genericCondition = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, rowProductId);
+                        EntityCondition condition2 = EntityCondition.makeCondition(findConditions, EntityOperator.AND, genericCondition);
+                        List<GenericValue> whosalesPrices = EntityQuery.use(delegator).from("ProductKeyword").where(condition2).queryList();
+
+                        if(whosalesPrices.size()>0){
+                            GenericValue  whosalesPrice = whosalesPrices.get(0);
+
+                            String beforePrice = whosalesPrice.getString("keyword").
+                                    substring(whosalesPrice.getString("keyword").indexOf(":"));
+                                                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                            UtilMisc.toMap("keyword","WS"+partyId+":"+beforePrice,"keywordTypeId","KWT_TAG","productId",rowProductId,"statusId","KW_APPROVED")));
+                        }
+
                     }
+
+
+
+
+
+//                    if(!UtilValidate.isEmpty(productAndCategoryMember.get("priceDetailText"))){
+//                        GenericValue myProductAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+//                                "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst();
+//                        myProductAndCategoryMember.set("priceDetailText",productAndCategoryMember.get("priceDetailText")+"");
+//                        myProductAndCategoryMember.store();
+//                    }
 
                 }
             }
@@ -2150,21 +2178,24 @@ public class PersonManagerServices {
 
 
             if(top!=null && top.toUpperCase().equals("Y")){
-
-//                createProductKeyword
                 delegator.createOrStore(delegator.makeValue("ProductKeyword",
                         UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
-//                product.set("comments",product.get("comments")+""+partyId+",");
             }else{
                 delegator.createOrStore(delegator.makeValue("ProductKeyword",
                         UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_DISAPPROVED")));
             }
-            GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                    "productId", productId,"payToPartyId",partyId)).queryFirst();
-            if (null != productAndCategoryMember) {
-                productAndCategoryMember.set("priceDetailText",price);
-                productAndCategoryMember.store();
+
+            if(price!=null){
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","WS"+partyId+":"+price,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
             }
+
+//            GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
+//                    "productId", productId,"payToPartyId",partyId)).queryFirst();
+//            if (null != productAndCategoryMember) {
+//                productAndCategoryMember.set("priceDetailText",price);
+//                productAndCategoryMember.store();
+//            }
         }
 
 

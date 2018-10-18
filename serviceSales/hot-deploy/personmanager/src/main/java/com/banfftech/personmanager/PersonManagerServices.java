@@ -2174,6 +2174,10 @@ public class PersonManagerServices {
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
             productPriceEntity.set("price", new BigDecimal(price));
             productPriceEntity.store();
+
+                delegator.createOrStore(delegator.makeValue("ProductKeyword",
+                        UtilMisc.toMap("keyword","WS"+partyId+":"+price,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
+
         }else{
 
 

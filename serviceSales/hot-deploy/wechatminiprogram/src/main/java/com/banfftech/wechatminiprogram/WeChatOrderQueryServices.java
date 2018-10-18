@@ -1763,7 +1763,7 @@ public class WeChatOrderQueryServices {
                 EntityCondition genericCondition = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, skuId);
                 EntityCondition condition2 = EntityCondition.makeCondition(findConditions, EntityOperator.AND, genericCondition);
                 List<GenericValue> whosalesPrices = EntityQuery.use(delegator).from("ProductKeyword").where(condition2).queryList();
-                List<Map<String,Object>> salsesPrices = new ArrayList<Map<String, Object>>();
+              Map<String,Object>  salsesPrices = new HashMap<String, Object>();
                 if(whosalesPrices.size()>0){
                     for(GenericValue gvPrice : whosalesPrices){
                         Map<String,Object> rowMapPrice = new HashMap<String, Object>();
@@ -1777,7 +1777,8 @@ public class WeChatOrderQueryServices {
                         rowMapPrice.put("storeName",productStoreRole.getString("storeName"));
                         rowMapPrice.put("storeId",fromStoreId);
                         rowMapPrice.put("price",priceRow);
-                        salsesPrices.add(rowMapPrice);
+//                        salsesPrices.add(rowMapPrice);
+                        salsesPrices.put(fromStoreId,rowMapPrice);
                     }
                 }
                 rowMap.put("wholesalePrice",salsesPrices);

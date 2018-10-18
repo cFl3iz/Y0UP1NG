@@ -1270,7 +1270,8 @@ public class WeChatOrderQueryServices {
         Map<String, Object> allField = product.getAllFields();
 
         String desc = (String) allField.get("description");
-
+        List<String> spuSpecTitleList = new ArrayList<String>();
+        List<Map<String, String>> spuSpecRowList = new ArrayList<Map<String, String>>();
         List<GenericValue> skus = new ArrayList<GenericValue>();
 
         if (null != desc && !desc.equals("")) {
@@ -1304,33 +1305,34 @@ public class WeChatOrderQueryServices {
 
             Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
             Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
-            List<String> spuSpecTitleList = new ArrayList<String>();
-            List<Map<String, String>> spuSpecRowList = new ArrayList<Map<String, String>>();
 
-                String textData = productContentAndElectronicText.getString("textData");
-                String title = textData.substring(0, textData.indexOf("-"));
-                String rowData = textData.substring(textData.indexOf("-") + 1);
-                String[] titleArray = title.split(",");
-                String[] rowDataArray = rowData.split(",");
-                for (String strTitle : titleArray) {
-                    spuSpecTitleList.add(strTitle);
-                }
-                int titleLen = spuSpecTitleList.size();
-                int rowCount = 1;
-                Map<String, String> rowDataMap = new HashMap<String, String>();
-                for (String strRow : rowDataArray) {
-                    if (rowCount == titleLen) {
-                        rowDataMap.put("code" + rowCount, strRow);
-                        spuSpecRowList.add(rowDataMap);
-                        //初始化
-                        rowCount = 1;
-                        rowDataMap = new HashMap<String, String>();
-                    } else {
-                        rowDataMap.put("code" + rowCount, strRow);
-                        rowCount++;
-                    }
-                }
+            if(productContentAndElectronicText!=null){
 
+
+            String textData = productContentAndElectronicText.getString("textData");
+            String title = textData.substring(0, textData.indexOf("-"));
+            String rowData = textData.substring(textData.indexOf("-") + 1);
+            String[] titleArray = title.split(",");
+            String[] rowDataArray = rowData.split(",");
+            for (String strTitle : titleArray) {
+                spuSpecTitleList.add(strTitle);
+            }
+            int titleLen = spuSpecTitleList.size();
+            int rowCount = 1;
+            Map<String, String> rowDataMap = new HashMap<String, String>();
+            for (String strRow : rowDataArray) {
+                if (rowCount == titleLen) {
+                    rowDataMap.put("code" + rowCount, strRow);
+                    spuSpecRowList.add(rowDataMap);
+                    //初始化
+                    rowCount = 1;
+                    rowDataMap = new HashMap<String, String>();
+                } else {
+                    rowDataMap.put("code" + rowCount, strRow);
+                    rowCount++;
+                }
+            }
+            }
 
             String rowVirId = (String) vir_product.get("productId");
 

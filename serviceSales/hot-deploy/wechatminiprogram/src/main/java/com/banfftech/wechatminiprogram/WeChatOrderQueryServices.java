@@ -1750,6 +1750,14 @@ public class WeChatOrderQueryServices {
                 String skuId = (String) rowMap.get("productId");
 
 
+                GenericValue beforeProduct
+                        = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId","PRODUCT_OBSOLESCENCE","productId",skuId).queryFirst();
+                if(beforeProduct!=null){
+                    String beforeProductId = beforeProduct.getString("productIdTo");
+                    GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", beforeProductId).queryFirst();
+                    rowMap.put("beforePrice", productPrice.get("price"));
+                }
+
 
                 GenericValue pkey
                         = EntityQuery.use(delegator).from("ProductKeyword").where("keyword","RM"+nowPartyId,

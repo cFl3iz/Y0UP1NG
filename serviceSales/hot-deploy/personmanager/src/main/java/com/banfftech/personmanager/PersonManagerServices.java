@@ -768,6 +768,13 @@ public class PersonManagerServices {
                     return addProductToCategoryServiceResultMap;
                 }
 
+                dispatcher.runSync("createProductAssoc",UtilMisc.toMap("userLogin",admin,
+                        "productId",newProductId  ,
+                        "productIdTo",rowProductId,
+                        "productAssocTypeId","PRODUCT_OBSOLESCENCE",
+                        "fromDate",org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+                // PRODUCT_OBSOLESCENCE
+
 //                //找到上家的ID
 //                GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
 //                        "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();

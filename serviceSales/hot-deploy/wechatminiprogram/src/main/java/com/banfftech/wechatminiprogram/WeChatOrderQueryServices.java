@@ -1444,12 +1444,14 @@ public class WeChatOrderQueryServices {
             List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
 
-
-            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", rowVirId).queryFirst();
-            if(null!=category){
-                String rowProductStoreId = category.getString("productStoreId");
-                GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", rowProductStoreId).queryFirst();
-
+            GenericValue productRoleAdmin
+                    = EntityQuery.use(delegator).from("ProductRole").where(
+                    "roleTypeId", "ADMIN", "productId", productId).queryFirst();
+//            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", rowVirId).queryFirst();
+            if(productRoleAdmin !=null){
+                String rowProductAdminId = productRoleAdmin.getString("partyId");
+                GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", rowProductAdminId).queryFirst();
+                String rowProductStoreId = salesStore.getString("productStoreId");
                 allField.put("salesStoreId",rowProductStoreId);
                 allField.put("salesStoreName",salesStore.getString("storeName"));
             }

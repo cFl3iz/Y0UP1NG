@@ -1338,6 +1338,8 @@ public class WeChatOrderQueryServices {
             String rowVirId = (String) vir_product.get("productId");
 
 
+
+
             skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
 
             Set<String> fieldSet = new HashSet<String>();
@@ -1441,6 +1443,15 @@ public class WeChatOrderQueryServices {
 
             List<GenericValue> gvs = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowVirId).queryList();
             List<Map<String, Object>> productFeatureList = new ArrayList<Map<String, Object>>();
+
+
+            GenericValue category = EntityQuery.use(delegator).from("ProductAndCategoryMember").where("productId", rowVirId).queryFirst();
+            String rowProductStoreId = category.getString("productStoreId");
+            GenericValue salesStore = EntityQuery.use(delegator).from("ProductStore").where("productStoreId", rowProductStoreId).queryFirst();
+
+            allField.put("salesStoreId",rowProductStoreId);
+            allField.put("salesStoreName",salesStore.getString("storeName"));
+
             for (GenericValue gv : gvs) {
 
                 Map<String, Object> innerMap = new HashMap<String, Object>();

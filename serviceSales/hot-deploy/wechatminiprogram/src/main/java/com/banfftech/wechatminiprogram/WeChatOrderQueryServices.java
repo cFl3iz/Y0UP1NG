@@ -1299,10 +1299,11 @@ public class WeChatOrderQueryServices {
         Map<String, String> isExsitsPath = new HashMap<String, String>();
 
         if (vir_product != null) {
-
+            GenericValue productContentAndElectronicText = null;
+            if(productId.indexOf("-")>-1){
             //获取SPU的尺码规格
-            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
-
+              productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
+            }
             Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
             Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
 
@@ -1475,6 +1476,7 @@ public class WeChatOrderQueryServices {
                     Debug.logInfo(">>salesStore:" + salesStore, module);
                     String rowProductStoreId = salesStore.getString("productStoreId");
                     allField.put("salesStoreId", rowProductStoreId);
+                    allField.put("beforeProductId", beforeProductId);
                     allField.put("salesStoreName", salesStore.getString("storeName"));
                 }
 
@@ -1808,6 +1810,7 @@ public class WeChatOrderQueryServices {
                         Debug.logInfo(">>salesStore:" + salesStore, module);
                         String rowProductStoreId = salesStore.getString("productStoreId");
                         rowMap.put("salesStoreId", rowProductStoreId);
+                        rowMap.put("beforeProductId", beforeProductId);
                         rowMap.put("salesStoreName", salesStore.getString("storeName"));
                     }
 

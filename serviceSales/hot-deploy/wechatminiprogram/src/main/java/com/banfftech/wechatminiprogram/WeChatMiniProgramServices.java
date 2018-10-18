@@ -162,6 +162,10 @@ public class WeChatMiniProgramServices {
         }else{
             //检查价格
             String priceStr = productPrice.get("price") + "";
+            Debug.logInfo("*=======================validate price==========================",module);
+            Debug.logInfo("*=======================priceStr:"+priceStr,module);
+            Debug.logInfo("*=======================price:"+price,module);
+            Debug.logInfo("*=======================productId:"+productId,module);
             if (!priceStr.equals(price)) {
                 msg = productPrice.getString("productName") + "的价格已经调整!";
                 resultMap.put("checkMsg", msg);

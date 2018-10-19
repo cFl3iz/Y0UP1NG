@@ -887,11 +887,42 @@ public class BoomQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
+        String productName = (String) context.get("productName");
+
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
-        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
+
+        List<GenericValue> productList = null;
+
+        if(productName!=null && !productName.trim().equals("")){
+            EntityCondition findConditions = EntityCondition
+                    .makeCondition("productName", EntityOperator.LIKE, "%"+productName+"%");
+            EntityCondition findConditions2 = EntityCondition
+                    .makeCondition("roleTypeId", "ADMIN");
+
+            EntityCondition findConditionsNameAndRole = EntityCondition
+                    .makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+            EntityCondition findConditions3 = EntityCondition
+                    .makeCondition("productTypeId","FINISHED_GOOD");
+            EntityCondition findConditions4 = EntityCondition
+                    .makeCondition("partyId", partyId);
+
+            EntityCondition findConditionsTypeAndParty = EntityCondition
+                    .makeCondition(findConditions3, EntityOperator.AND, findConditions4);
+
+            EntityCondition findConditions5 = EntityCondition
+                    .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsTypeAndParty);
+            productList = delegator.findList("PartyContentAndDataResource",
+                    findConditions5, null, null, null, true);
+        }else{
+            productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                    "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
+        }
+
+
+
         Debug.logInfo("queryMyFinishedGood:"+partyGroupId,module);
         Debug.logInfo("productListSize:"+productList.size(),module);
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
@@ -911,7 +942,7 @@ public class BoomQueryServices {
                     rowMap.put("description",uomDescription);
                     rowMap.put("uomId",uomParentId);
                     String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomParentId, new Locale("zh"));
-                    rowMap.put("zh_description",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
+                    rowMap.put("uomDescription",cndescription.indexOf("Uom.description")>-1?uomDescription:cndescription);
                 }
 
 

@@ -55,7 +55,15 @@
 
 
 
-
+    <!-- Query History -->
+    <entity entity-name="QueryHistory" package-name="org.ofbiz.cloudLake.ProductStore" title="QueryHistory">
+        <field name="qhId" type="id-ne"/>
+        <field name="objectId" type="value"/>
+        <field name="objectName" type="value"/>
+        <field name="name" type="value"/>
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="qhId"/>
+    </entity>
 
 
     <!-- Lead More -->

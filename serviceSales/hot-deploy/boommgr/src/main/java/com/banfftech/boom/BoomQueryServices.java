@@ -1050,9 +1050,14 @@ public class BoomQueryServices {
 
         if(returnList!=null && returnList.size()>0 && productName!=null){
             // query history
-            String qhId = delegator.getNextSeqId("QueryHistory");
-            GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",userLogin.getString("partyId"),"name",productName));
-            newHistory.create();
+            GenericValue queryHistory =  EntityQuery.use(delegator).from("QueryHistory").where(
+                    "partyId",userLogin.getString("partyId"),"name",productName).queryFirst();
+            if(null == queryHistory){
+                String qhId = delegator.getNextSeqId("QueryHistory");
+                GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",userLogin.getString("partyId"),"name",productName));
+                newHistory.create();
+            }
+
         }
 
         resultMap.put("finishedGoodList",returnList);

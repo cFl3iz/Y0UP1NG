@@ -61,6 +61,7 @@
         <field name="objectId" type="value"/>
         <field name="objectName" type="value"/>
         <field name="name" type="value"/>
+        <field name="partyId" type="value"/>
         <field name="fromDate" type="date-time"></field>
         <prim-key field="qhId"/>
     </entity>

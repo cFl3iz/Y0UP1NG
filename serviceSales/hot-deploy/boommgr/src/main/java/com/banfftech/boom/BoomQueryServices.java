@@ -94,6 +94,31 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
 
+    /**
+     * 查询搜索历史
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryHistory(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        List<GenericValue> historyList = EntityQuery.use(delegator).from("QueryHistory").where(
+                "partyId", partyId).queryList();
+
+        resultMap.put("historyList",historyList);
+
+        return resultMap;
+    }
+
+
     public static Map<String, Object> productionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -768,6 +793,7 @@ public class BoomQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
+        String productName = (String) context.get("productName");
 
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
@@ -863,6 +889,15 @@ public class BoomQueryServices {
         }
 
         resultMap.put("rawMaterialsList",returnList);
+
+
+//        if(returnList!=null && returnList.size()>0 && productName!=null){
+//            // query history
+//            String qhId = delegator.getNextSeqId("QueryHistory");
+//            GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",partyId,"name",productName));
+//            newHistory.create();
+//        }
+
         return resultMap;
     }
 
@@ -914,7 +949,7 @@ public class BoomQueryServices {
 
             EntityCondition findConditions5 = EntityCondition
                     .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsTypeAndParty);
-            productList = delegator.findList("PartyContentAndDataResource",
+            productList = delegator.findList("ProductAndRole",
                     findConditions5, null, null, null, true);
         }else{
             productList = EntityQuery.use(delegator).from("ProductAndRole").where(
@@ -1011,6 +1046,13 @@ public class BoomQueryServices {
 
                 returnList.add(rowMap);
             }
+        }
+
+        if(returnList!=null && returnList.size()>0 && productName!=null){
+            // query history
+            String qhId = delegator.getNextSeqId("QueryHistory");
+            GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",partyId,"name",productName));
+            newHistory.create();
         }
 
         resultMap.put("finishedGoodList",returnList);

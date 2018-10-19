@@ -929,8 +929,8 @@ public class BoomQueryServices {
         partyId = partyGroupId;
 
         List<GenericValue> productList = null;
-
-        if(productName!=null && !productName.trim().equals("")){
+        Debug.logInfo("query成品:"+productName,module);
+        if(productName!=null && !productName.trim().equals("") && !productName.equals("null")){
             EntityCondition findConditions = EntityCondition
                     .makeCondition("productName", EntityOperator.LIKE, "%"+productName+"%");
             EntityCondition findConditions2 = EntityCondition

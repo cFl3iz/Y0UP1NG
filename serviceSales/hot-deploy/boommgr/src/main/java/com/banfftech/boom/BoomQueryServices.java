@@ -1051,7 +1051,7 @@ public class BoomQueryServices {
         if(returnList!=null && returnList.size()>0 && productName!=null){
             // query history
             String qhId = delegator.getNextSeqId("QueryHistory");
-            GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",partyId,"name",productName));
+            GenericValue newHistory = delegator.makeValue("QueryHistory", UtilMisc.toMap("qhId",qhId,"partyId",userLogin.getString("partyId"),"name",productName));
             newHistory.create();
         }
 

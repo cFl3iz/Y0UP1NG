@@ -301,49 +301,68 @@ public class PlatformManagerServices {
 
 
             GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
-            String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+            if(productInventoryItem==null){
+//为产品创建库存量
+                Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                        "facilityId", facilityId,
+                        "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                        "productId", productId,
+                        "description ", "卖家发布产品时的录入库存",
+                        "quantityAccepted", new BigDecimal(quantityStr),
+                        "quantityRejected", BigDecimal.ZERO,
+                        "unitCost", price,
+                        "ownerPartyId", partyGroupId,
+                        "partyId", partyGroupId,
+                        "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                        "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn);
+            }else{
+                String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
 //          -1,表示bigdemical小于bigdemical2；
 //           0,表示bigdemical等于bigdemical2；
 //           1,表示bigdemical大于bigdemical2；
 
-            Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
-            createInventoryItemDetailMap.put("userLogin", admin);
-            createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
+                Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+                createInventoryItemDetailMap.put("userLogin", admin);
+                createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
 
 
-            Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
-            Debug.logInfo("*update resource quantity = " + quantity, module);
-            Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
+                Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+                Debug.logInfo("*update resource quantity = " + quantity, module);
+                Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
 
-            //说明现库存比要设置的库存大,需要做差异减法
-            if (availableToPromiseTotal.compareTo(quantity) > 0) {
-                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
-                int quantityInt = quantity.intValue();
-                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
-                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                //说明现库存比要设置的库存大,需要做差异减法
+                if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                    int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                    int quantityInt = quantity.intValue();
+                    Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                    Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
 
-                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                    createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                    createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                    createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                }
+                //说明现库存比要设置的库存小,需要做差异加法
+                if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                    int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                    int quantityInt = quantity.intValue();
+                    Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                    Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                    createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                    createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                    createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                }
+                //一模一样的库存我还差异个屁?
+                if (availableToPromiseTotal.compareTo(quantity) == 0) {
+
+                }
+
+
+                //3.2 Do create
+                dispatcher.runAsync("createInventoryItemDetail", createInventoryItemDetailMap);
             }
-            //说明现库存比要设置的库存小,需要做差异加法
-            if (availableToPromiseTotal.compareTo(quantity) < 0) {
-                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
-                int quantityInt = quantity.intValue();
-                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
-                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
-                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
-                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
-                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
-            }
-            //一模一样的库存我还差异个屁?
-            if (availableToPromiseTotal.compareTo(quantity) == 0) {
 
-            }
-
-
-            //3.2 Do create
-            dispatcher.runAsync("createInventoryItemDetail", createInventoryItemDetailMap);
 
         }else{
             //CreateProduct

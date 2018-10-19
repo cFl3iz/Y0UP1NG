@@ -802,6 +802,23 @@ public class BoomQueryServices {
                     uomDescription = uom.getString("description");
                 }
 
+
+
+
+                //kucun
+                String payToPartyId = (String) gv.get("partyId");
+                GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+                String originFacilityId = (String) facility.get("facilityId");
+                Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                        "facilityId", originFacilityId, "productId", productId));
+                if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                    rowMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                    rowMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+                }
+
+
+
+
                 rowMap.put("description",uomDescription);
 
                 String cndescription = UtilProperties.getMessage(resourceUiLabels, "Uom.description." + uomId, new Locale("zh"));
@@ -907,8 +924,25 @@ public class BoomQueryServices {
                 rowMap.put("createdDate",sdf.format(gv.get("fromDate")));
 
 
+
+                //kucun
+                String payToPartyId = (String) gv.get("partyId");
+                GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
+                String originFacilityId = (String) facility.get("facilityId");
+                Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                        "facilityId", originFacilityId, "productId", productId));
+                if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                    rowMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                    rowMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+                }
+
+
+
+
+
                 List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
                         "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+
 
                 List<Map<String,Object>> manuList =new ArrayList<Map<String, Object>>();
                 if(null!=manufComponents&&manufComponents.size()>0){

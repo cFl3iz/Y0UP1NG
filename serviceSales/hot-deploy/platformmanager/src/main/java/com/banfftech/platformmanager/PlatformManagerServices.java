@@ -286,6 +286,16 @@ public class PlatformManagerServices {
                 attr3.store();
             }
 
+            if( EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,  "partyId", partyGroupId, "roleTypeId", "ADMIN").queryFirst() ==null){
+                //如果还没有角色
+                GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                        "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+                newProductRole.create();
+            }
+
+
+
             TransactionUtil.commit();
 
 
@@ -512,7 +522,13 @@ public class PlatformManagerServices {
                 attr3.store();
             }
 
-
+            if( EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,  "partyId", payToPartyId, "roleTypeId", "ADMIN").queryFirst() ==null){
+                //如果还没有角色
+                GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                        "partyId", payToPartyId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+                newProductRole.create();
+            }
             TransactionUtil.commit();
 
 

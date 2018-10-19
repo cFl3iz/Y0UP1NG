@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.sun.corba.se.spi.protocol.LocalClientRequestDispatcher;
 import main.java.com.banfftech.platformmanager.util.*;
 import org.apache.ofbiz.base.util.HttpRequestFileUpload;
 import org.apache.ofbiz.entity.transaction.TransactionUtil;
@@ -24,7 +25,6 @@ import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import main.java.com.banfftech.personmanager.PersonManagerServices;
 import main.java.com.banfftech.platformmanager.oss.OSSUnit;
-import net.sf.json.JSONObject;
 import main.java.com.banfftech.platformmanager.constant.PeConstant;
 import main.java.com.banfftech.platformmanager.wechat.AccessToken;
 import main.java.com.banfftech.platformmanager.wechat.WeChatUtil;
@@ -86,6 +86,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
+import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 
 import javax.servlet.http.HttpSession;
@@ -119,11 +120,9 @@ public class PlatformManagerServices {
     private static String smsTemplateCode = null;
 
 
-
-
-
     /**
      * 素然向友评同步已发货的订单
+     *
      * @param ctx
      * @param context
      * @return
@@ -206,6 +205,428 @@ public class PlatformManagerServices {
         return result;
     }
 
+    //创建或更新原辅料
+    private static void createOrStoreRawMaterialProduct(Map<String, Object> productMap, String partyGroupId, Delegator delegator,LocalDispatcher dispatcher)throws GenericEntityException, GenericServiceException {
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
+        String facilityId = facility.getString("facilityId");
+
+        String productName = (String) productMap.get("productName");
+        String productTypeId = (String) productMap.get("productTypeId");
+        String quantityStr = (String) productMap.get("quantity");
+        String price = (String) productMap.get("price");
+        String uom = (String) productMap.get("uom");
+        String color = (String) productMap.get("color");
+        String spec = (String) productMap.get("spec");
+        String model = (String) productMap.get("model");
+        String code = (String) productMap.get("code");
+        String beiZhu = (String) productMap.get("beiZhu");
+
+        TransactionUtil.setTransactionTimeout(100000);
+        TransactionUtil.begin();
+
+
+        // Create
+        if (UtilValidate.isNotEmpty(uom)) {
+            GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
+                    "description", uom).queryFirst();
+            if (null == rowUom) {
+                GenericValue newUom = delegator.makeValue("Uom",
+                        UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description", uom, "uomTypeId", "BOM_MEASURE"));
+                newUom.create();
+                uom = newUom.getString("uomId");
+            } else {
+                uom = rowUom.getString("uomId");
+            }
+        }
+
+        GenericValue product = EntityQuery.use(delegator).from("Product").where(
+                "comments", code).queryFirst();
+        if (null != product) {
+            String productId = product.getString("productId");
+            // Update
+            product.put("internalName", productName);
+            product.put("productName", productName);
+            product.put("description", beiZhu);
+            product.put("comments", code);
+            if (UtilValidate.isNotEmpty(uom)) {
+                product.put("quantityUomId", uom);
+            }
+            product.store();
+            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(
+                    "productId", productId).queryFirst();
+
+
+            if(null != productPrice){
+                productPrice.set("price",new BigDecimal(price));
+                productPrice.store();
+            }
+
+
+            GenericValue attr1 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "fuzhu").queryFirst();
+            if(attr1!=null){
+                attr1.set("attrValue", color);
+                attr1.store();
+            }
+
+            GenericValue attr2 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "spec").queryFirst();
+            if(attr2!=null){
+                attr2.set("attrValue", spec);
+                attr2.store();
+            }
+
+            GenericValue attr3 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "model").queryFirst();
+            if(attr3!=null){
+                attr3.set("attrValue", model);
+                attr3.store();
+            }
+
+            TransactionUtil.commit();
+
+
+            //库存
+            BigDecimal quantity = new BigDecimal(quantityStr);
+            //3.1 Get Now InventoryItem Quantity
+            String originFacilityId = (String) facility.get("facilityId");
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", originFacilityId, "productId", productId));
+
+            BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+            BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+            GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
+            String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+//          -1,表示bigdemical小于bigdemical2；
+//           0,表示bigdemical等于bigdemical2；
+//           1,表示bigdemical大于bigdemical2；
+
+            Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+            createInventoryItemDetailMap.put("userLogin", admin);
+            createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
+
+
+            Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+            Debug.logInfo("*update resource quantity = " + quantity, module);
+            Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
+
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            }
+            //一模一样的库存我还差异个屁?
+            if (availableToPromiseTotal.compareTo(quantity) == 0) {
+
+            }
+
+
+            //3.2 Do create
+            dispatcher.runAsync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+        }else{
+            //CreateProduct
+            Map<String, Object> createProductInMap = new HashMap<String, Object>();
+            long ctm = System.currentTimeMillis();
+            String productId = "ZF_" + (String) delegator.getNextSeqId("productId");
+            createProductInMap.put("productId", productId);
+            createProductInMap.put("internalName", productName);
+            createProductInMap.put("productName", productName);
+            createProductInMap.put("productTypeId", "RAW_MATERIAL");
+            createProductInMap.put("description", beiZhu);
+            createProductInMap.put("comments", code);
+            if (UtilValidate.isNotEmpty(uom)) {
+                createProductInMap.put("quantityUomId", uom);
+            }
+            GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
+            newProduct.create();
+
+            if (UtilValidate.isNotEmpty(price)) {
+                // 价格
+                GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                newProductVariantPrice.set("price", new BigDecimal(price));
+                newProductVariantPrice.create();
+            }
+
+            if (UtilValidate.isNotEmpty(color)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "fuzhu", "attrValue", color));
+                newAttribute.create();
+            }
+
+            if (UtilValidate.isNotEmpty(spec)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "spec", "attrValue", spec));
+                newAttribute.create();
+            }
+
+            if (UtilValidate.isNotEmpty(model)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "model", "attrValue", model));
+                newAttribute.create();
+            }
+
+            GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                    "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+            newProductRole.create();
+            TransactionUtil.commit();
+            dispatcher.runAsync("createProductFacility", UtilMisc.toMap("userLogin", admin,
+                    "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal("10000"), "daysToShip", new Long(10)));
+            //为产品创建库存量
+            Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                    "facilityId", facilityId,
+                    "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                    "productId", productId,
+                    "description ", "卖家发布产品时的录入库存",
+                    "quantityAccepted", new BigDecimal(quantityStr),
+                    "quantityRejected", BigDecimal.ZERO,
+                    "unitCost", price,
+                    "ownerPartyId", partyGroupId,
+                    "partyId", partyGroupId,
+                    "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                    "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+             dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn);
+        }
+
+
+
+    }
+    //创建或更新成品
+    private static void createOrStoreFinishGoodProduct(Map<String, Object> productMap, String payToPartyId,Delegator delegator,LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException{
+
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", payToPartyId).queryFirst();
+        String facilityId = facility.getString("facilityId");
+
+        String productName = (String) productMap.get("productName");
+        String productTypeId = (String) productMap.get("productTypeId");
+        String quantityStr = (String) productMap.get("quantity");
+        String price = (String) productMap.get("price");
+        String uom = (String) productMap.get("uom");
+        String color = (String) productMap.get("color");
+        String spec = (String) productMap.get("spec");
+        String model = (String) productMap.get("model");
+        String code = (String) productMap.get("code");
+        String beiZhu = (String) productMap.get("beiZhu");
+
+
+        if (UtilValidate.isNotEmpty(uom)) {
+            GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
+                    "description", uom).queryFirst();
+            if (null == rowUom) {
+                GenericValue newUom = delegator.makeValue("Uom",
+                        UtilMisc.toMap("uomId", delegator.getNextSeqId("Uom"), "description", uom, "uomTypeId", "BOM_MEASURE"));
+                newUom.create();
+                uom = newUom.getString("uomId");
+            } else {
+                uom = rowUom.getString("uomId");
+            }
+        }
+        TransactionUtil.setTransactionTimeout(100000);
+        TransactionUtil.begin();
+
+        GenericValue product = EntityQuery.use(delegator).from("Product").where(
+                "comments", code).queryFirst();
+        if (null != product) {
+            String productId = product.getString("productId");
+            // Update
+            product.put("internalName", productName);
+            product.put("productName", productName);
+            product.put("description", beiZhu);
+            product.put("comments", code);
+            if (UtilValidate.isNotEmpty(uom)) {
+                product.put("quantityUomId", uom);
+            }
+            product.store();
+            GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where(
+                    "productId", productId).queryFirst();
+
+
+            if(null != productPrice){
+                productPrice.set("price",new BigDecimal(price));
+                productPrice.store();
+            }
+
+
+            GenericValue attr1 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "fuzhu").queryFirst();
+            if(attr1!=null){
+                attr1.set("attrValue", color);
+                attr1.store();
+            }
+
+            GenericValue attr2 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "spec").queryFirst();
+            if(attr2!=null){
+                attr2.set("attrValue", spec);
+                attr2.store();
+            }
+
+            GenericValue attr3 = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,"attrName", "model").queryFirst();
+            if(attr3!=null){
+                attr3.set("attrValue", model);
+                attr3.store();
+            }
+
+
+            TransactionUtil.commit();
+
+
+            //库存
+            BigDecimal quantity = new BigDecimal(quantityStr);
+            //3.1 Get Now InventoryItem Quantity
+            String originFacilityId = (String) facility.get("facilityId");
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", originFacilityId, "productId", productId));
+
+            BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+            BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+            GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
+            String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+//          -1,表示bigdemical小于bigdemical2；
+//           0,表示bigdemical等于bigdemical2；
+//           1,表示bigdemical大于bigdemical2；
+
+            Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+            createInventoryItemDetailMap.put("userLogin", admin);
+            createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
+
+
+            Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+            Debug.logInfo("*update resource quantity = " + quantity, module);
+            Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
+
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            }
+            //一模一样的库存我还差异个屁?
+            if (availableToPromiseTotal.compareTo(quantity) == 0) {
+
+            }
+
+
+            //3.2 Do create
+             dispatcher.runAsync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+
+
+
+        }else{
+
+
+            // Create
+
+
+
+            //CreateProduct
+            Map<String, Object> createProductInMap = new HashMap<String, Object>();
+            long ctm = System.currentTimeMillis();
+            String productId = "ZF_" + (String) delegator.getNextSeqId("Product");
+            createProductInMap.put("productId", productId);
+            createProductInMap.put("internalName", productName);
+            createProductInMap.put("productName", productName);
+            createProductInMap.put("productTypeId", productTypeId);
+            createProductInMap.put("description", beiZhu);
+            createProductInMap.put("comments", code);
+            if (UtilValidate.isNotEmpty(uom)) {
+                createProductInMap.put("quantityUomId", uom);
+            }
+            GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
+            newProduct.create();
+
+            if (UtilValidate.isNotEmpty(price)) {
+                // 价格
+                GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
+                newProductVariantPrice.set("price", new BigDecimal(price));
+                newProductVariantPrice.create();
+            }
+
+            if (UtilValidate.isNotEmpty(color)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "fuzhu", "attrValue", color));
+                newAttribute.create();
+            }
+            if (UtilValidate.isNotEmpty(model)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "model", "attrValue", model));
+                newAttribute.create();
+            }
+
+            if (UtilValidate.isNotEmpty(spec)) {
+                GenericValue newAttribute = delegator.makeValue("ProductAttribute", UtilMisc.toMap("productId", productId,
+                        "attrName", "spec", "attrValue", spec));
+                newAttribute.create();
+            }
+
+            GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+                    "partyId", payToPartyId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+            newProductRole.create();
+
+            TransactionUtil.commit();
+            dispatcher.runAsync("createProductFacility", UtilMisc.toMap("userLogin", admin,
+                    "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal("10000"), "daysToShip", new Long(10)));
+//为产品创建库存量
+            Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                    "facilityId", facilityId,
+                    "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                    "productId", productId,
+                    "description ", "卖家发布产品时的录入库存",
+                    "quantityAccepted", new BigDecimal(quantityStr),
+                    "quantityRejected", BigDecimal.ZERO,
+                    "unitCost", price,
+                    "ownerPartyId", payToPartyId,
+                    "partyId", payToPartyId,
+                    "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                    "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+            dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn );
+        }
+
+    }
 
     /**
      * createOrStoreExcelProduct
@@ -215,23 +636,78 @@ public class PlatformManagerServices {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-//    public static Map<String, Object> createOrStoreExcelProduct(DispatchContext ctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
-        public static String createOrStoreExcelProduct(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-//            request.setCharacterEncoding("utf-8");
+    public static String createOrStoreExcelProduct(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
-            LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-            GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
 
-            Delegator delegator = (Delegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
-            String data = (String) request.getParameter("data");
-            data = data.substring(0,data.lastIndexOf(","));
-            data = data +"]}";
+        String data = (String) request.getParameter("data");
+        data = data.substring(0, data.lastIndexOf(","));
+        data = data + "]}";
 
-            JSONObject json = JSONObject.fromObject(data);
+        JSONObject json = JSONObject.fromObject(data);
+
+        String partyGroupId = (String) json.get("partyGroupId");
+        JSONArray productList = (JSONArray) json.get("productList");
+
+        if (null != productList) {
+            try {
+                for(int i=0 ; i < productList.size() ;i++){
+                    JSONObject jsonObj = productList.getJSONObject(i);
+                    String productName = (String) jsonObj.get("productName");
+                    String productTypeId = (String) jsonObj.get("productTypeId");
+                    String quantity = (String) jsonObj.get("quantity");
+                    String price = (String) jsonObj.get("price");
+                    String uom = (String) jsonObj.get("uom");
+                    String color = (String) jsonObj.get("color");
+                    String spec = (String) jsonObj.get("spec");
+                    String model = (String) jsonObj.get("model");
+                    String code = (String) jsonObj.get("extId");
+                    String beiZhu = (String) jsonObj.get("beiZhu");
+
+                    Map<String,Object> productInfo = new HashMap<String, Object>();
+                    productInfo.put("productName",productName);
+                    productInfo.put("productTypeId",productTypeId);
+                    productInfo.put("quantity",quantity);
+                    productInfo.put("price",price);
+                    productInfo.put("uom",uom);
+                    productInfo.put("color",color);
+                    productInfo.put("spec",spec);
+                    productInfo.put("model",model);
+                    productInfo.put("code",code);
+                    productInfo.put("beiZhu",beiZhu);
+
+                    // Create Or Store Product
+
+                    if(productTypeId.equals("成品")){
+                        productInfo.put("productTypeId","FINISHED_GOOD");
+                        createOrStoreFinishGoodProduct(productInfo, partyGroupId, delegator,dispatcher);
+                    }else{
+                        productInfo.put("productTypeId","RAW_MATERIAL");
+                        createOrStoreRawMaterialProduct(productInfo, partyGroupId, delegator,dispatcher);
+                    }
+
+
+                }
+            } catch (Exception e) {
+                try {
+                    TransactionUtil.rollback();
+                } catch (GenericTransactionException e1) {
+                    e1.printStackTrace();
+                }
+                Debug.logError(e, e.getMessage(), module);
+                request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+                return "error";
+            }
+        }
+
 
         return "success";
     }
+
+
 
     /**
      * deleteProductContentEvent
@@ -409,8 +885,8 @@ public class PlatformManagerServices {
         String tel = (String) context.get("tel");
         String name = (String) context.get("name");
 
-        GenericValue empInfo =   EntityQuery.use(delegator).from("ZuczugEmp").where("tel",tel).queryFirst();
-        empInfo.set("name",name);
+        GenericValue empInfo = EntityQuery.use(delegator).from("ZuczugEmp").where("tel", tel).queryFirst();
+        empInfo.set("name", name);
         empInfo.store();
         return result;
     }
@@ -1110,6 +1586,7 @@ public class PlatformManagerServices {
 
     /**
      * finishGoodUploadImportFormZhuFa
+     *
      * @param request
      * @param response
      * @return
@@ -1140,9 +1617,9 @@ public class PlatformManagerServices {
                 String extId = excelRow[0];
                 String productName = excelRow[1];
                 String spec = excelRow[2];
-             String color = excelRow[3];
+                String color = excelRow[3];
                 String uom = excelRow[4];
-              String amount = excelRow[5];
+                String amount = excelRow[5];
                 String price = excelRow[7];
                 String partyGroupId = excelRow[10];
                 GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
@@ -1150,7 +1627,7 @@ public class PlatformManagerServices {
                 String facilityId = facility.getString("facilityId");
 
 
-                if(i==7){
+                if (i == 7) {
                     if (UtilValidate.isNotEmpty(uom)) {
                         GenericValue rowUom = EntityQuery.use(delegator).from("Uom").where(
                                 "description", uom).queryFirst();
@@ -1208,14 +1685,14 @@ public class PlatformManagerServices {
 
                     finishId = productId;
 
-                }else{
-                    Debug.logInfo("import =>> ext_id = "+extId.trim(),module);
+                } else {
+                    Debug.logInfo("import =>> ext_id = " + extId.trim(), module);
                     GenericValue gvs = EntityQuery.use(delegator).from("Product").where(
                             "comments", extId.trim()).queryFirst();
-                    if( i>7 && null == gvs  ){
+                    if (i > 7 && null == gvs) {
                         continue;
-                    }else{
-                        dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", gvs.getString("productId"), "productId",finishId
+                    } else {
+                        dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", gvs.getString("productId"), "productId", finishId
                                 , "quantity", new BigDecimal(amount), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                     }
 
@@ -1241,6 +1718,7 @@ public class PlatformManagerServices {
 
     /**
      * supplierUploadImportFormZhuFa
+     *
      * @param request
      * @param response
      * @return
@@ -1273,7 +1751,7 @@ public class PlatformManagerServices {
                 Long hasData = EntityQuery.use(delegator).from("PartyRelationshipAndContactMechDetail").where(
                         "partyIdFrom", partyGroupId, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "tnContactNumber", supplierTel).queryCount();
                 if (hasData > 0) {
-                   continue;
+                    continue;
                 }
                 if (supplierName.length() >= 4) {
                     firstName = supplierName.substring(0, 2);
@@ -1284,7 +1762,7 @@ public class PlatformManagerServices {
                     firstName = supplierName.substring(1);
                 }
 
-                if(supplierName.length()<2){
+                if (supplierName.length() < 2) {
                     lastName = " ";
                     firstName = supplierName;
                 }
@@ -1296,7 +1774,7 @@ public class PlatformManagerServices {
                 createLeadMap.put("lastName", lastName);
                 createLeadMap.put("countryGeoId", "CHN");
                 createLeadMap.put("city", "无");
-                createLeadMap.put("address1","无");
+                createLeadMap.put("address1", "无");
                 createLeadMap.put("countryCode", "86");
                 createLeadMap.put("postalCode", "200000");
                 createLeadMap.put("contactNumber", supplierTel);
@@ -1306,7 +1784,7 @@ public class PlatformManagerServices {
 
 
                 GenericValue newPartyRole = delegator.makeValue("PartyRole",
-                        UtilMisc.toMap("partyId", resultPartyId,"roleTypeId", "SUPPLIER"));
+                        UtilMisc.toMap("partyId", resultPartyId, "roleTypeId", "SUPPLIER"));
                 newPartyRole.create();
 
 
@@ -1315,7 +1793,7 @@ public class PlatformManagerServices {
                 aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
                 aliasForg.set("partyIdFrom", partyGroupId);
                 aliasForg.set("partyIdTo", resultPartyId);
-                aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
+                aliasForg.set("aliasName", companyName + "-" + lastName + firstName);
                 aliasForg.set("aliasAddress", "无");
                 aliasForg.create();
 
@@ -1336,8 +1814,6 @@ public class PlatformManagerServices {
         }
         return "success";
     }
-
-
 
 
     /**
@@ -1379,8 +1855,8 @@ public class PlatformManagerServices {
                 String beiZhu = excelRow[7];
 
 
-                if(null != EntityQuery.use(delegator).from("Product").where(
-                        "comments", code).queryFirst() ){
+                if (null != EntityQuery.use(delegator).from("Product").where(
+                        "comments", code).queryFirst()) {
                     continue;
                 }
 
@@ -1394,7 +1870,7 @@ public class PlatformManagerServices {
                     } else {
                         uom = rowUom.getString("uomId");
                     }
-                }else{
+                } else {
 
                 }
 
@@ -1410,7 +1886,7 @@ public class PlatformManagerServices {
                 createProductInMap.put("description", beiZhu);
                 createProductInMap.put("comments", code);
                 if (UtilValidate.isNotEmpty(uom)) {
-                createProductInMap.put("quantityUomId", uom);
+                    createProductInMap.put("quantityUomId", uom);
                 }
                 GenericValue newProduct = delegator.makeValue("Product", createProductInMap);
                 newProduct.create();
@@ -3371,7 +3847,7 @@ public class PlatformManagerServices {
 //                    if ("".equals(cell.toString().trim())) {
 //                        break;
 //                    }
-                    excelRow[j] = cell+"".trim();
+                    excelRow[j] = cell + "".trim();
                 }
                 excelList.add(excelRow);
             }

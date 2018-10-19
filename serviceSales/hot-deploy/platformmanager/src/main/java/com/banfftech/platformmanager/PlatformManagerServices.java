@@ -450,6 +450,7 @@ public class PlatformManagerServices {
 
         GenericValue product = EntityQuery.use(delegator).from("Product").where(
                 "comments", code).queryFirst();
+        Debug.logInfo("->product:"+product,module);
         if (null != product) {
             String productId = product.getString("productId");
             // Update

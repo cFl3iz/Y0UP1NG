@@ -207,175 +207,175 @@ under the License.
     </simple-method>
     <simple-method method-name="postAcctgTrans" short-description="Post a AcctgTrans">
         <!-- make sure the AcctgTrans has not already been posted -->
-        <entity-one entity-name="AcctgTrans" value-field="acctgTrans" auto-field-map="true"/>
-        <if-compare field="acctgTrans.isPosted" operator="equals" value="Y">
-            <add-error>
-                <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionAlreadyPosted"/>
-            </add-error>
-        </if-compare>
-        <check-errors/>
+        <!--<entity-one entity-name="AcctgTrans" value-field="acctgTrans" auto-field-map="true"/>-->
+        <!--<if-compare field="acctgTrans.isPosted" operator="equals" value="Y">-->
+            <!--<add-error>-->
+                <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionAlreadyPosted"/>-->
+            <!--</add-error>-->
+        <!--</if-compare>-->
+        <!--<check-errors/>-->
 
-        <!-- check trial balance -->
-        <set from-field="parameters.acctgTransId" field="trialBalanceCallMap.acctgTransId"/>
-        <call-service service-name="calculateAcctgTransTrialBalance" in-map-name="trialBalanceCallMap">
-            <results-to-map map-name="trialBalanceResultMap"/>
-        </call-service>
-        <if-compare field="trialBalanceResultMap.debitCreditDifference" operator="greater-equals" value="0.01" type="BigDecimal">
-            <add-error>
-                <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionTrialBalanceFailed"/>
-            </add-error>
-        </if-compare>
-        <if-compare field="trialBalanceResultMap.debitCreditDifference" operator="less-equals" value="-0.01" type="BigDecimal">
-            <add-error>
-                <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionTrialBalanceFailed"/>
-            </add-error>
-        </if-compare>
-        <if>
-            <condition>
-                <and>
-                    <if-compare field="trialBalanceResultMap.debitTotal" operator="equals" value="0.00" type="BigDecimal"></if-compare>
-                    <if-compare field="trialBalanceResultMap.creditTotal" operator="not-equals" value="0.00" type="BigDecimal"></if-compare>
-                </and>
-            </condition>
-            <then>
-                <add-error>
-                    <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionDebitZero"/>
-                </add-error>
-            </then>
-        </if>
-        <if>
-            <condition>
-                <and>
-                    <if-compare field="trialBalanceResultMap.creditTotal" operator="equals" value="0.00" type="BigDecimal"></if-compare>
-                    <if-compare field="trialBalanceResultMap.debitTotal" operator="not-equals" value="0.00" type="BigDecimal"></if-compare>
-                </and>
-            </condition>
-            <then>
-                <add-error>
-                    <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionCreditZero"/>
-                </add-error>
-            </then>
-        </if>
-        <entity-condition entity-name="AcctgTransEntry" list="acctgTransEntryList">
-            <condition-expr field-name="acctgTransId" from-field="parameters.acctgTransId"/>
-            <order-by field-name="acctgTransEntrySeqId"/>
-        </entity-condition>
+        <!--&lt;!&ndash; check trial balance &ndash;&gt;-->
+        <!--<set from-field="parameters.acctgTransId" field="trialBalanceCallMap.acctgTransId"/>-->
+        <!--<call-service service-name="calculateAcctgTransTrialBalance" in-map-name="trialBalanceCallMap">-->
+            <!--<results-to-map map-name="trialBalanceResultMap"/>-->
+        <!--</call-service>-->
+        <!--<if-compare field="trialBalanceResultMap.debitCreditDifference" operator="greater-equals" value="0.01" type="BigDecimal">-->
+            <!--<add-error>-->
+                <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionTrialBalanceFailed"/>-->
+            <!--</add-error>-->
+        <!--</if-compare>-->
+        <!--<if-compare field="trialBalanceResultMap.debitCreditDifference" operator="less-equals" value="-0.01" type="BigDecimal">-->
+            <!--<add-error>-->
+                <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionTrialBalanceFailed"/>-->
+            <!--</add-error>-->
+        <!--</if-compare>-->
+        <!--<if>-->
+            <!--<condition>-->
+                <!--<and>-->
+                    <!--<if-compare field="trialBalanceResultMap.debitTotal" operator="equals" value="0.00" type="BigDecimal"></if-compare>-->
+                    <!--<if-compare field="trialBalanceResultMap.creditTotal" operator="not-equals" value="0.00" type="BigDecimal"></if-compare>-->
+                <!--</and>-->
+            <!--</condition>-->
+            <!--<then>-->
+                <!--<add-error>-->
+                    <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionDebitZero"/>-->
+                <!--</add-error>-->
+            <!--</then>-->
+        <!--</if>-->
+        <!--<if>-->
+            <!--<condition>-->
+                <!--<and>-->
+                    <!--<if-compare field="trialBalanceResultMap.creditTotal" operator="equals" value="0.00" type="BigDecimal"></if-compare>-->
+                    <!--<if-compare field="trialBalanceResultMap.debitTotal" operator="not-equals" value="0.00" type="BigDecimal"></if-compare>-->
+                <!--</and>-->
+            <!--</condition>-->
+            <!--<then>-->
+                <!--<add-error>-->
+                    <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionCreditZero"/>-->
+                <!--</add-error>-->
+            <!--</then>-->
+        <!--</if>-->
+        <!--<entity-condition entity-name="AcctgTransEntry" list="acctgTransEntryList">-->
+            <!--<condition-expr field-name="acctgTransId" from-field="parameters.acctgTransId"/>-->
+            <!--<order-by field-name="acctgTransEntrySeqId"/>-->
+        <!--</entity-condition>-->
 
-        <!-- check the scheduled posting date, but only if it's set -->
-        <if-not-empty field="acctgTrans.scheduledPostingDate">
-            <set field="scheduledPostingDate" from-field="acctgTrans.scheduledPostingDate"/>
-            <set field="beforeScheduled" value="${groovy: org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp().before(scheduledPostingDate)}"/>
-            <if-compare field="beforeScheduled" operator="equals" value="true" type="Boolean">
-                <add-error>
-                    <fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionNotScheduledToBePosted"/>
-                </add-error>
-            </if-compare>
-        </if-not-empty>
+        <!--&lt;!&ndash; check the scheduled posting date, but only if it's set &ndash;&gt;-->
+        <!--<if-not-empty field="acctgTrans.scheduledPostingDate">-->
+            <!--<set field="scheduledPostingDate" from-field="acctgTrans.scheduledPostingDate"/>-->
+            <!--<set field="beforeScheduled" value="${groovy: org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp().before(scheduledPostingDate)}"/>-->
+            <!--<if-compare field="beforeScheduled" operator="equals" value="true" type="Boolean">-->
+                <!--<add-error>-->
+                    <!--<fail-property resource="AccountingUiLabels" property="AccountingNotPostingGlAccountTransactionNotScheduledToBePosted"/>-->
+                <!--</add-error>-->
+            <!--</if-compare>-->
+        <!--</if-not-empty>-->
 
-        <!-- setup periodTypeIdList to use for CustomTimePeriod support -->
-        <set value="FISCAL_YEAR" field="onlyIncludePeriodTypeIdList[]"/>
-        <set value="FISCAL_QUARTER" field="onlyIncludePeriodTypeIdList[]"/>
-        <set value="FISCAL_MONTH" field="onlyIncludePeriodTypeIdList[]"/>
-        <set value="FISCAL_WEEK" field="onlyIncludePeriodTypeIdList[]"/>
-        <set value="FISCAL_BIWEEK" field="onlyIncludePeriodTypeIdList[]"/>
+        <!--&lt;!&ndash; setup periodTypeIdList to use for CustomTimePeriod support &ndash;&gt;-->
+        <!--<set value="FISCAL_YEAR" field="onlyIncludePeriodTypeIdList[]"/>-->
+        <!--<set value="FISCAL_QUARTER" field="onlyIncludePeriodTypeIdList[]"/>-->
+        <!--<set value="FISCAL_MONTH" field="onlyIncludePeriodTypeIdList[]"/>-->
+        <!--<set value="FISCAL_WEEK" field="onlyIncludePeriodTypeIdList[]"/>-->
+        <!--<set value="FISCAL_BIWEEK" field="onlyIncludePeriodTypeIdList[]"/>-->
 
-        <!-- get current period(s) and check if closed -->
-        <!-- also check if the glAccountId, amount, currencyUomId fields are all set -->
-        <iterate list="acctgTransEntryList" entry="acctgTransEntry">
-            <log level="info" message="->acctgTransEntryList=${acctgTransEntryList}"/>
-            <!-- we want to do this for each organizationPartyId, so only do this if we haven't already found the list for the current org -->
-            <if-empty field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]">
-                <clear-field field="findCustomTimePeriodCallMap"/>
-                <clear-field field="customTimePeriodList"/>
+        <!--&lt;!&ndash; get current period(s) and check if closed &ndash;&gt;-->
+        <!--&lt;!&ndash; also check if the glAccountId, amount, currencyUomId fields are all set &ndash;&gt;-->
+        <!--<iterate list="acctgTransEntryList" entry="acctgTransEntry">-->
+            <!--<log level="info" message="->acctgTransEntryList=${acctgTransEntryList}"/>-->
+            <!--&lt;!&ndash; we want to do this for each organizationPartyId, so only do this if we haven't already found the list for the current org &ndash;&gt;-->
+            <!--<if-empty field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]">-->
+                <!--<clear-field field="findCustomTimePeriodCallMap"/>-->
+                <!--<clear-field field="customTimePeriodList"/>-->
 
-                <set from-field="acctgTrans.transactionDate" field="findCustomTimePeriodCallMap.findDate"/>
-                <set from-field="acctgTransEntry.organizationPartyId" field="findCustomTimePeriodCallMap.organizationPartyId"/>
-                <set from-field="onlyIncludePeriodTypeIdList" field="findCustomTimePeriodCallMap.onlyIncludePeriodTypeIdList"/>
-                <!-- should we excludeNoOrganizationPeriods? for now, YES, which means to find a CustomTimePeriod one must be setup at least for the top level Organization Party -->
-                <set value="Y" field="findCustomTimePeriodCallMap.excludeNoOrganizationPeriods"/>
-                <log level="info" message="->findCustomTimePeriodCallMap=${findCustomTimePeriodCallMap}"/>
+                <!--<set from-field="acctgTrans.transactionDate" field="findCustomTimePeriodCallMap.findDate"/>-->
+                <!--<set from-field="acctgTransEntry.organizationPartyId" field="findCustomTimePeriodCallMap.organizationPartyId"/>-->
+                <!--<set from-field="onlyIncludePeriodTypeIdList" field="findCustomTimePeriodCallMap.onlyIncludePeriodTypeIdList"/>-->
+                <!--&lt;!&ndash; should we excludeNoOrganizationPeriods? for now, YES, which means to find a CustomTimePeriod one must be setup at least for the top level Organization Party &ndash;&gt;-->
+                <!--<set value="Y" field="findCustomTimePeriodCallMap.excludeNoOrganizationPeriods"/>-->
+                <!--<log level="info" message="->findCustomTimePeriodCallMap=${findCustomTimePeriodCallMap}"/>-->
 
-                <call-service service-name="findCustomTimePeriods" in-map-name="findCustomTimePeriodCallMap">
-                    <result-to-field result-name="customTimePeriodList"/>
-                </call-service>
+                <!--<call-service service-name="findCustomTimePeriods" in-map-name="findCustomTimePeriodCallMap">-->
+                    <!--<result-to-field result-name="customTimePeriodList"/>-->
+                <!--</call-service>-->
 
-                <if-empty field="customTimePeriodList">
-                    <add-error>
-                        <fail-property resource="AccountingUiLabels" property="AccountingNoCustomTimePeriodFoundForTransactionDate"/>
-                    </add-error>
-                </if-empty>
-                <!-- now do the actual isClose check -->
-                <iterate list="customTimePeriodList" entry="customTimePeriod">
-                    <if-compare field="customTimePeriod.isClosed" operator="equals" value="Y">
-                        <add-error>
-                            <fail-property resource="AccountingUiLabels" property="AccountingNoCustomTimePeriodClosed"/>
-                        </add-error>
-                    </if-compare>
-                </iterate>
+                <!--<if-empty field="customTimePeriodList">-->
+                    <!--<add-error>-->
+                        <!--<fail-property resource="AccountingUiLabels" property="AccountingNoCustomTimePeriodFoundForTransactionDate"/>-->
+                    <!--</add-error>-->
+                <!--</if-empty>-->
+                <!--&lt;!&ndash; now do the actual isClose check &ndash;&gt;-->
+                <!--<iterate list="customTimePeriodList" entry="customTimePeriod">-->
+                    <!--<if-compare field="customTimePeriod.isClosed" operator="equals" value="Y">-->
+                        <!--<add-error>-->
+                            <!--<fail-property resource="AccountingUiLabels" property="AccountingNoCustomTimePeriodClosed"/>-->
+                        <!--</add-error>-->
+                    <!--</if-compare>-->
+                <!--</iterate>-->
 
-                <!-- save this customTimePeriodList for the current entry for later use -->
-                <set from-field="customTimePeriodList" field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]"/>
-            </if-empty>
-            <if-empty field="acctgTransEntry.glAccountId">
-                <add-error>
-                    <fail-property resource="AccountingUiLabels" property="AccountingGlAccountNotSetForAccountType"/>
-                </add-error>
-            </if-empty>
-            <if-empty field="acctgTransEntry.amount">
-                <add-error>
-                    <fail-property resource="AccountingUiLabels" property="AccountingGlAccountAmountNotSet"/>
-                </add-error>
-            </if-empty>
-            <!--
-            <if-empty field="acctgTransEntry.currencyUomId">
-                <add-error>
-                    
-                </add-error>
-            </if-empty>
-            -->
-        </iterate>
+                <!--&lt;!&ndash; save this customTimePeriodList for the current entry for later use &ndash;&gt;-->
+                <!--<set from-field="customTimePeriodList" field="customTimePeriodListByOrganizationPartyIdMap[acctgTransEntry.organizationPartyId]"/>-->
+            <!--</if-empty>-->
+            <!--<if-empty field="acctgTransEntry.glAccountId">-->
+                <!--<add-error>-->
+                    <!--<fail-property resource="AccountingUiLabels" property="AccountingGlAccountNotSetForAccountType"/>-->
+                <!--</add-error>-->
+            <!--</if-empty>-->
+            <!--<if-empty field="acctgTransEntry.amount">-->
+                <!--<add-error>-->
+                    <!--<fail-property resource="AccountingUiLabels" property="AccountingGlAccountAmountNotSet"/>-->
+                <!--</add-error>-->
+            <!--</if-empty>-->
+            <!--&lt;!&ndash;-->
+            <!--<if-empty field="acctgTransEntry.currencyUomId">-->
+                <!--<add-error>-->
+                    <!---->
+                <!--</add-error>-->
+            <!--</if-empty>-->
+            <!--&ndash;&gt;-->
+        <!--</iterate>-->
 
-        <!-- DONE with initial tests/checks, see if we are good to go or not... -->
+        <!--&lt;!&ndash; DONE with initial tests/checks, see if we are good to go or not... &ndash;&gt;-->
 
-        <if-compare field="parameters.verifyOnly" operator="equals" value="Y">
-            <if-not-empty field="error_list">
-                <field-to-result field="error_list" result-name="successMessageList"/>
-            </if-not-empty>
-            <return/>
-        <else>
-            <!-- if there are errors and we have an error journal assign to the journal and return -->
-            <if-not-empty field="error_list">
-                <iterate list="acctgTransEntryList" entry="acctgTransEntry">
-                    <set field="partyAccountingPreferencesCallMap.organizationPartyId" from-field="acctgTransEntry.organizationPartyId"/>
-                     <call-service service-name="getPartyAccountingPreferences" in-map-name="partyAccountingPreferencesCallMap">
-                         <result-to-field result-name="partyAccountingPreference" field="partyAcctgPreference"/>
-                     </call-service>
-                    <if-empty field="partyAcctgPreference.errorGlJournalId">
-                        <!-- if no error journal is set, then return the error messages -->
-                        <check-errors/>
-                    <else>
-                        <!-- assign the transaction to the error journal -->
-                        <set field="acctgTrans.glJournalId" from-field="partyAcctgPreference.errorGlJournalId"/>
-                        <store-value value-field="acctgTrans"/>
-                        <set field="warningMessage[]" value="The accounting transaction [${acctgTrans.acctgTransId}] has been posted to the Error Journal [${partyAcctgPreference.errorGlJournalId}]."/>
-                        <field-to-result field="warningMessage" result-name="successMessageList"/>
-                        <return/>
-                    </else>
-                    </if-empty>
-                </iterate>
-            </if-not-empty>
+        <!--<if-compare field="parameters.verifyOnly" operator="equals" value="Y">-->
+            <!--<if-not-empty field="error_list">-->
+                <!--<field-to-result field="error_list" result-name="successMessageList"/>-->
+            <!--</if-not-empty>-->
+            <!--<return/>-->
+        <!--<else>-->
+            <!--&lt;!&ndash; if there are errors and we have an error journal assign to the journal and return &ndash;&gt;-->
+            <!--<if-not-empty field="error_list">-->
+                <!--<iterate list="acctgTransEntryList" entry="acctgTransEntry">-->
+                    <!--<set field="partyAccountingPreferencesCallMap.organizationPartyId" from-field="acctgTransEntry.organizationPartyId"/>-->
+                     <!--<call-service service-name="getPartyAccountingPreferences" in-map-name="partyAccountingPreferencesCallMap">-->
+                         <!--<result-to-field result-name="partyAccountingPreference" field="partyAcctgPreference"/>-->
+                     <!--</call-service>-->
+                    <!--<if-empty field="partyAcctgPreference.errorGlJournalId">-->
+                        <!--&lt;!&ndash; if no error journal is set, then return the error messages &ndash;&gt;-->
+                        <!--<check-errors/>-->
+                    <!--<else>-->
+                        <!--&lt;!&ndash; assign the transaction to the error journal &ndash;&gt;-->
+                        <!--<set field="acctgTrans.glJournalId" from-field="partyAcctgPreference.errorGlJournalId"/>-->
+                        <!--<store-value value-field="acctgTrans"/>-->
+                        <!--<set field="warningMessage[]" value="The accounting transaction [${acctgTrans.acctgTransId}] has been posted to the Error Journal [${partyAcctgPreference.errorGlJournalId}]."/>-->
+                        <!--<field-to-result field="warningMessage" result-name="successMessageList"/>-->
+                        <!--<return/>-->
+                    <!--</else>-->
+                    <!--</if-empty>-->
+                <!--</iterate>-->
+            <!--</if-not-empty>-->
 
-            <!-- check-errors just in case we had some bad debitCreditFlags -->
-            <check-errors/>
+            <!--&lt;!&ndash; check-errors just in case we had some bad debitCreditFlags &ndash;&gt;-->
+            <!--<check-errors/>-->
 
-            <!-- for AcctgTrans: set isPosted to Y, postedDate to now -->
-            <set from-field="acctgTrans.acctgTransId" field="updateAcctgTransParams.acctgTransId"/>
-            <now-timestamp field="updateAcctgTransParams.postedDate"/>
-            <set value="Y" field="updateAcctgTransParams.isPosted"/>
+            <!--&lt;!&ndash; for AcctgTrans: set isPosted to Y, postedDate to now &ndash;&gt;-->
+            <!--<set from-field="acctgTrans.acctgTransId" field="updateAcctgTransParams.acctgTransId"/>-->
+            <!--<now-timestamp field="updateAcctgTransParams.postedDate"/>-->
+            <!--<set value="Y" field="updateAcctgTransParams.isPosted"/>-->
 
-            <call-service service-name="updateAcctgTrans" in-map-name="updateAcctgTransParams" include-user-login="true"/>
-        </else>
-        </if-compare>
+            <!--<call-service service-name="updateAcctgTrans" in-map-name="updateAcctgTransParams" include-user-login="true"/>-->
+        <!--</else>-->
+        <!--</if-compare>-->
     </simple-method>
 
     <simple-method method-name="getAcctgTransEntriesAndTransTotal" short-description="Calculate total of credit and debit and difference between both for passed party and group rollup parties">

@@ -1399,8 +1399,10 @@ public class WeChatOrderQueryServices {
                             rowMap.put("drObjectInfo", drObjectInfo);
                             pictures.add(rowMap);
                             if (sigleIndex == 0) {
-                                featureMap.put(rowColor.get("description") + "", rowMap);
-                                sigleIndex++;
+                                if(rowColor!=null){
+                                    featureMap.put(rowColor.get("description") + "", rowMap);
+                                    sigleIndex++;
+                                }
                             }
                         }
 

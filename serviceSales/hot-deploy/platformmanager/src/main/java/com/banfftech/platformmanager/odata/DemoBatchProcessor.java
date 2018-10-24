@@ -44,6 +44,8 @@ public class DemoBatchProcessor implements BatchProcessor {
 				.parseBatchRequest(request.getBody(), boundary, options);
 		// 4. Execute the batch request parts
 		final List<ODataResponsePart> responseParts = new ArrayList<ODataResponsePart>();
+		// BatchRequestPart:Represents a distinct MIME part of a Batch Request body - either a Change Set or a Query Operation
+		// 表示批处理请求体的不同MIME部分——更改集或查询操作
 		for (final BatchRequestPart part : requestParts) {
 			responseParts.add(facade.handleBatchRequest(part));
 		}

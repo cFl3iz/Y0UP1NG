@@ -55,17 +55,17 @@ def File svnFooterFile = file("${rootDir}/runtime/SvnInfo.ftl")
 defaultTasks 'build'
 
 allprojects {
-//    repositories{
-//        jcenter()
-//        mavenLocal()
-//    }
     repositories{
-
-        jcenter(){url 'http://jcenter.bintray.com/'}  /*增加，改成http方式*/
-
-        // mavenLocal() /*取消*/
-
+        jcenter()
+        mavenLocal()
     }
+//    repositories{
+//
+//        jcenter(){url 'http://jcenter.bintray.com/'}  /*增加，改成http方式*/
+//
+//        // mavenLocal() /*取消*/
+//
+//    }
 }
 
 subprojects {
@@ -315,9 +315,9 @@ tasks.eclipse.dependsOn(cleanEclipse)
 buildscript {
     if (project.hasProperty('enableOwasp')) {
         repositories {
-            // mavenCentral() /* 取消 */
+            mavenCentral() /* 取消 */
 
-            jcenter(){url 'http://jcenter.bintray.com/'} /* 增加*/
+//            jcenter(){url 'http://jcenter.bintray.com/'} /* 增加*/
         }
         dependencies {
             classpath 'org.owasp:dependency-check-gradle:1.4.0'

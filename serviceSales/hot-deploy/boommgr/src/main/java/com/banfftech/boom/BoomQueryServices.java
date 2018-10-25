@@ -94,6 +94,19 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
 
+
+    public static Map<String, Object> queryPartyInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        String partyId = (String) context.get("partyId");
+        resultMap.put("partyInfo",queryPersonBaseInfo(delegator,partyId));
+
+        return resultMap;
+    }
+
     /**
      * 查询搜索历史
      * @param dctx

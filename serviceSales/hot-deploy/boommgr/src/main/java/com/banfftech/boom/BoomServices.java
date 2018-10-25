@@ -175,7 +175,7 @@ public class BoomServices {
                     net.sf.json.JSONObject jsonObj = array.getJSONObject(i);
 
                     String enumId   = jsonObj.getString("enumId");
-                    JSONArray innerArray = jsonObj.get("products");
+                    JSONArray innerArray = (JSONArray) jsonObj.get("products");
                     if (null != innerArray) {
                         for(int y=0 ; y < innerArray.size() ;y++){
                             net.sf.json.JSONObject innerJsonObj = innerArray.getJSONObject(y);

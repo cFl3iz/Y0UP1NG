@@ -172,7 +172,7 @@ public class BoomServices {
         if (null != array) {
 
                 for(int i=0 ; i < array.size() ;i++){
-                    JSONObject jsonObj = array.getJSONObject(i);
+                    net.sf.json.JSONObject jsonObj = array.getJSONObject(i);
                     String productId   = jsonObj.getString("productId");
                     String uomDescription   = jsonObj.getString("uomDescription");
                     String productName   = jsonObj.getString("productName");

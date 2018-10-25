@@ -139,9 +139,22 @@ public class BoomQueryServices {
         String partyId = userLogin.getString("partyId");
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
+        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlan").where(
+                "payToParty", partyGroupId).queryList();
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        resultMap.put("planDataList",EntityQuery.use(delegator).from("DeliveryPlan").where(
-                "payToParty", partyGroupId).queryList());
+        int outQuantity = 0;
+        int quantity = 0;
+        Map<String,Object> countOutMap = new HashMap<String, Object>();
+        if(null!= planDataList){
+            for(GenericValue gv : planDataList){
+                Map<String,Object> rowMap =  gv.getAllFields();
+                String key = gv.getString("planKey");
+                String productId = gv.getString("productId");
+                returnList.add(rowMap);
+            }
+        }
+        resultMap.put("planDataList",returnList);
 
         return resultMap;
     }

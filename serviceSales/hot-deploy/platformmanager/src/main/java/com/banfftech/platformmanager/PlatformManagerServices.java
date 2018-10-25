@@ -531,7 +531,7 @@ public class PlatformManagerServices {
                 attr3.set("attrValue", model);
                 attr3.store();
             }
-            GenericValue isExsits  = EntityQuery.use(delegator).from("ProductAttribute").where(
+            GenericValue isExsits  = EntityQuery.use(delegator).from("ProductRole").where(
                     "productId", productId,  "partyId", payToPartyId, "roleTypeId", "ADMIN").queryFirst();
             Debug.logInfo("productId:"+productId+"|payToPartyId:"+payToPartyId+"|isExsits="+isExsits,module);
 

@@ -26,7 +26,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
-
+    <request-map uri="removeDeliveryPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeDeliveryPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="register">
         <security https="false" auth="false"/>

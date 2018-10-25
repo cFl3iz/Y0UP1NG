@@ -141,6 +141,26 @@ public class BoomServices {
     }
 
 
+    public static Map<String, Object> removeDeliveryPlan(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Locale locale = (Locale) context.get("locale");
+
+        String key = (String) context.get("key");
+        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlan").where(
+                "planKey", key).queryList();
+        if(planDataList!=null){
+            for(GenericValue gv : planDataList){
+                gv.remove();
+            }
+        }
+        return result;
+    }
+
     /**
      * createDeliveryPlan
      * @param dctx

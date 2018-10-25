@@ -143,14 +143,47 @@ public class BoomQueryServices {
                 "payToParty", partyGroupId).queryList();
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        int outQuantity = 0;
-        int quantity = 0;
-        Map<String,Object> countOutMap = new HashMap<String, Object>();
+
+        Map<String,String> planOutCount = new HashMap<String, String>();
+        Map<String,String> planQtyCount = new HashMap<String, String>();
+
+        String beforeKey = null;
         if(null!= planDataList){
             for(GenericValue gv : planDataList){
                 Map<String,Object> rowMap =  gv.getAllFields();
-                String key = gv.getString("planKey");
-                String productId = gv.getString("productId");
+//                String key = gv.getString("planKey");
+//                String outQuantity = gv.getString("outQuantity");
+//                String quantityStr = gv.getString("quantity");
+//                int rowOutQuantity = Integer.parseInt(outQuantity);
+//                int quantity = Integer.parseInt(quantityStr);
+//
+//                if(planOutCount.get(key)!=null){
+//                    int exsitsOutCount = Integer.parseInt(planOutCount.get(key)+"");
+//                    int exsitsOtyCount = Integer.parseInt(planQtyCount.get(key) + "");
+//
+//                    exsitsOtyCount += quantity;
+//                    exsitsOutCount += rowOutQuantity;
+//
+//                    planOutCount.put(key,exsitsOutCount+"");
+//                    planQtyCount.put(key,exsitsOtyCount+"");
+//                    rowMap.put("outCount",planOutCount);
+//                    rowMap.put("qtyCount",planQtyCount);
+//
+//                }else{
+//
+//                    //new
+//                    planOutCount.put(key,rowOutQuantity+"");
+//                    planQtyCount.put(key,quantity+"");
+//
+//                }
+//
+//                if(!key.equals(beforeKey)){
+//
+//                }else{
+//
+//                }
+
+
                 returnList.add(rowMap);
             }
         }

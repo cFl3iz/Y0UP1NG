@@ -160,7 +160,7 @@ public class BoomQueryServices {
                      rowList.add(rowMap);
                      planMaps.put(key,rowList);
                  }
-                if(beforeKey.equals(key)){
+                if(null != beforeKey&&beforeKey.equals(key)){
                     rowList = planMaps.get(key);
                     rowList.add(rowMap);
                     planMaps.put(key,rowList);

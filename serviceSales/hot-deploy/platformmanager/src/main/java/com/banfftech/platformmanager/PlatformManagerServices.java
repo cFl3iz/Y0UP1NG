@@ -556,6 +556,25 @@ public class PlatformManagerServices {
 
 
             GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
+            if(null== productInventoryItem){
+//为产品创建库存量
+                Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                        "facilityId", facilityId,
+                        "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                        "productId", productId,
+                        "description ", "卖家发布产品时的录入库存",
+                        "quantityAccepted", new BigDecimal(quantityStr),
+                        "quantityRejected", BigDecimal.ZERO,
+                        "unitCost", price,
+                        "ownerPartyId", payToPartyId,
+                        "partyId", payToPartyId,
+                        "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                        "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn );
+            }else{
+
+
             String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
 //          -1,表示bigdemical小于bigdemical2；
 //           0,表示bigdemical等于bigdemical2；
@@ -599,7 +618,7 @@ public class PlatformManagerServices {
 
             //3.2 Do create
              dispatcher.runAsync("createInventoryItemDetail", createInventoryItemDetailMap);
-
+            }
 
 
 

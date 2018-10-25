@@ -68,6 +68,7 @@
     <!-- 出库计划表 -->
     <entity entity-name="DeliveryPlan" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlan">
         <field name="dpId" type="id-ne"/>
+        <field name="planKey" type="value"/>
         <field name="productId" type="value"/>
         <field name="enumId" type="value"/>
         <field name="uomDescription" type="value"/>
@@ -91,7 +92,7 @@
         <field name="outQuantity" type="value"/>
         <field name="createByParty" type="value"/>
         <field name="payToParty" type="value"/>
-        <field name="dpId" type="value"/>
+        <field name="planKey" type="value"/>
         <field name="fromDate" type="date-time"></field>
         <prim-key field="seq"/>
     </entity>

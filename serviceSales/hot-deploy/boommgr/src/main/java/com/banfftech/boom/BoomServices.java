@@ -169,13 +169,15 @@ public class BoomServices {
 
         JSONArray array = JSONArray.fromObject(planData);
 
+        String planKey = org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()+":"+partyId;
+
         if (null != array) {
 
-                for(int i=0 ; i < array.size() ;i++){
+            for(int i=0 ; i < array.size() ;i++){
                     net.sf.json.JSONObject jsonObj = array.getJSONObject(i);
-
                     String enumId   = jsonObj.getString("enumId");
                     JSONArray innerArray = (JSONArray) jsonObj.get("products");
+
                     if (null != innerArray) {
                         for(int y=0 ; y < innerArray.size() ;y++){
                             net.sf.json.JSONObject innerJsonObj = innerArray.getJSONObject(y);
@@ -185,6 +187,7 @@ public class BoomServices {
                             String quantity   = innerJsonObj.getString("quantity");
                             Map<String,Object> createMap = new HashMap<String, Object>();
                             createMap.put("productId", productId);
+                            createMap.put("planKey", planKey);
                             createMap.put("uomDescription", uomDescription);
                             createMap.put("productName", productName);
                             createMap.put("enumId", enumId);

@@ -286,13 +286,23 @@ public class PlatformManagerServices {
                 attr3.store();
             }
 
-            if( EntityQuery.use(delegator).from("ProductAttribute").where(
-                    "productId", productId,  "partyId", partyGroupId, "roleTypeId", "ADMIN").queryFirst() ==null){
+            GenericValue isExsits  = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,  "partyId", partyGroupId, "roleTypeId", "ADMIN").queryFirst();
+            Debug.logInfo("原辅料:productId:"+productId+"|payToPartyId:"+partyGroupId+"|isExsits="+isExsits,module);
+
+            if( isExsits ==null){
                 //如果还没有角色
                 GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
                         "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
                 newProductRole.create();
             }
+//            if( EntityQuery.use(delegator).from("ProductAttribute").where(
+//                    "productId", productId,  "partyId", partyGroupId, "roleTypeId", "ADMIN").queryFirst() ==null){
+//                //如果还没有角色
+//                GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
+//                        "partyId", partyGroupId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));
+//                newProductRole.create();
+//            }
 
 
 
@@ -521,9 +531,11 @@ public class PlatformManagerServices {
                 attr3.set("attrValue", model);
                 attr3.store();
             }
+            GenericValue isExsits  = EntityQuery.use(delegator).from("ProductAttribute").where(
+                    "productId", productId,  "partyId", payToPartyId, "roleTypeId", "ADMIN").queryFirst();
+            Debug.logInfo("productId:"+productId+"|payToPartyId:"+payToPartyId+"|isExsits="+isExsits,module);
 
-            if( EntityQuery.use(delegator).from("ProductAttribute").where(
-                    "productId", productId,  "partyId", payToPartyId, "roleTypeId", "ADMIN").queryFirst() ==null){
+            if( isExsits ==null){
                 //如果还没有角色
                 GenericValue newProductRole = delegator.makeValue("ProductRole", UtilMisc.toMap("productId", productId,
                         "partyId", payToPartyId, "roleTypeId", "ADMIN", "fromDate", UtilDateTime.nowTimestamp()));

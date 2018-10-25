@@ -141,17 +141,34 @@ public class BoomQueryServices {
         String partyGroupId = (String) myGroup.get("partyId");
         List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlan").where(
                 "payToParty", partyGroupId).queryList();
-        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        List<Map<String,List<Map<String,Object>>>> returnList = new ArrayList<Map<String, List<Map<String, Object>>>>();
 
 
         Map<String,String> planOutCount = new HashMap<String, String>();
         Map<String,String> planQtyCount = new HashMap<String, String>();
 
+        Map<String,List<Map<String,Object>>> planMaps = new HashMap<String, List<Map<String, Object>>>();
+
         String beforeKey = null;
         if(null!= planDataList){
             for(GenericValue gv : planDataList){
                 Map<String,Object> rowMap =  gv.getAllFields();
-//                String key = gv.getString("planKey");
+                List<Map<String,Object>> rowList =new ArrayList<Map<String, Object>>();
+                 String key = gv.getString("planKey");
+
+                 if(null == beforeKey||!beforeKey.equals(key)){
+                     rowList.add(rowMap);
+                     planMaps.put(key,rowList);
+                 }
+                if(beforeKey.equals(key)){
+                    rowList = planMaps.get(key);
+                    rowList.add(rowMap);
+                    planMaps.put(key,rowList);
+                }
+
+
+                 beforeKey = key;
+
 //                String outQuantity = gv.getString("outQuantity");
 //                String quantityStr = gv.getString("quantity");
 //                int rowOutQuantity = Integer.parseInt(outQuantity);
@@ -184,10 +201,9 @@ public class BoomQueryServices {
 //                }
 
 
-                returnList.add(rowMap);
             }
         }
-        resultMap.put("planDataList",returnList);
+        resultMap.put("planDataList",planMaps);
 
         return resultMap;
     }

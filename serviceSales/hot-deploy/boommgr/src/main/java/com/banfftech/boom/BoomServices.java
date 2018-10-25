@@ -141,6 +141,65 @@ public class BoomServices {
     }
 
 
+    /**
+     * createDeliveryPlan
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> createDeliveryPlan(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Locale locale = (Locale) context.get("locale");
+
+        String planData = (String) context.get("planData");
+
+        String partyId = userLogin.getString("partyId");
+
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        JSONArray array = JSONArray.fromObject(planData);
+
+        if (null != array) {
+
+                for(int i=0 ; i < array.size() ;i++){
+                    JSONObject jsonObj = array.getJSONObject(i);
+                    String productId   = jsonObj.getString("productId");
+                    String uomDescription   = jsonObj.getString("uomDescription");
+                    String productName   = jsonObj.getString("productName");
+                    String quantity   = jsonObj.getString("quantity");
+                    Map<String,Object> createMap = new HashMap<String, Object>();
+                    createMap.put("productId", productId);
+                    createMap.put("uomDescription", uomDescription);
+                    createMap.put("productName", productName);
+                    createMap.put("quantity", quantity);
+                    createMap.put("outQuantity", "0");
+                    createMap.put("payToParty", partyGroupId);
+                    createMap.put("createByParty", partyId);
+                    createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                    createMap.put("dpId", (String) delegator.getNextSeqId("DeliveryPlan"));
+
+                    GenericValue createEntity = delegator.makeValue("DeliveryPlan", createMap);
+                    createEntity.create();
+
+                }
+
+        }
+
+        return result;
+    }
+
+
+
 
     public static Map<String, Object> addEmp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head

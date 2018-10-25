@@ -118,6 +118,34 @@ public class BoomQueryServices {
         return resultMap;
     }
 
+    /**
+     * queryDeliveryPlan
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryDeliveryPlan(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        Map<String,Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        resultMap.put("planDataList",EntityQuery.use(delegator).from("DeliveryPlan").where(
+                "payToParty", partyGroupId).queryList());
+
+        return resultMap;
+    }
+
 
     public static Map<String, Object> productionTemp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 

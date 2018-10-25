@@ -19,6 +19,22 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="createDeliveryPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createDeliveryPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="queryDeliveryPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryDeliveryPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
     <request-map uri="queryHistory">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryHistory"/>

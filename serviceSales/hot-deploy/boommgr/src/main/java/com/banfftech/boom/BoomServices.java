@@ -173,23 +173,33 @@ public class BoomServices {
 
                 for(int i=0 ; i < array.size() ;i++){
                     net.sf.json.JSONObject jsonObj = array.getJSONObject(i);
-                    String productId   = jsonObj.getString("productId");
-                    String uomDescription   = jsonObj.getString("uomDescription");
-                    String productName   = jsonObj.getString("productName");
-                    String quantity   = jsonObj.getString("quantity");
-                    Map<String,Object> createMap = new HashMap<String, Object>();
-                    createMap.put("productId", productId);
-                    createMap.put("uomDescription", uomDescription);
-                    createMap.put("productName", productName);
-                    createMap.put("quantity", quantity);
-                    createMap.put("outQuantity", "0");
-                    createMap.put("payToParty", partyGroupId);
-                    createMap.put("createByParty", partyId);
-                    createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                    createMap.put("dpId", (String) delegator.getNextSeqId("DeliveryPlan"));
 
-                    GenericValue createEntity = delegator.makeValue("DeliveryPlan", createMap);
-                    createEntity.create();
+                    String enumId   = jsonObj.getString("enumId");
+                    JSONArray innerArray = jsonObj.get("products");
+                    if (null != innerArray) {
+                        for(int y=0 ; y < innerArray.size() ;y++){
+                            net.sf.json.JSONObject innerJsonObj = innerArray.getJSONObject(y);
+                            String productId   = innerJsonObj.getString("productId");
+                            String uomDescription   = innerJsonObj.getString("uomDescription");
+                            String productName   = innerJsonObj.getString("productName");
+                            String quantity   = innerJsonObj.getString("quantity");
+                            Map<String,Object> createMap = new HashMap<String, Object>();
+                            createMap.put("productId", productId);
+                            createMap.put("uomDescription", uomDescription);
+                            createMap.put("productName", productName);
+                            createMap.put("enumId", enumId);
+                            createMap.put("quantity", quantity);
+                            createMap.put("outQuantity", "0");
+                            createMap.put("payToParty", partyGroupId);
+                            createMap.put("createByParty", partyId);
+                            createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                            createMap.put("dpId", (String) delegator.getNextSeqId("DeliveryPlan"));
+
+                            GenericValue createEntity = delegator.makeValue("DeliveryPlan", createMap);
+                            createEntity.create();
+                        }
+                    }
+
 
                 }
 

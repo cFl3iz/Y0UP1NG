@@ -225,7 +225,7 @@ public class BoomQueryServices {
 
             }
         }
-        resultMap.put("dayPlans",channelMap);
+        resultMap.put("dayPlans",returnList);
         resultMap.put("selectDate",selectDate);
 
 

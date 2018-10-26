@@ -8,6 +8,13 @@
     <description>None</description>
     <copyright></copyright>
     <version></version>
+
+    <view-entity entity-name="DeliveryPlansItemView" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
+        <member-entity entity-name="DeliveryPlansItem" entity-alias="DP"/>
+        <alias-all entity-alias="DP"></alias-all>
+        <alias entity-alias="DP" name="enumId" group-by="true"/>
+    </view-entity>
+
     <!-- 出库计划表 -->
     <entity entity-name="DeliveryPlans" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlans">
         <field name="planId" type="id-ne"/>

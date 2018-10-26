@@ -183,7 +183,8 @@ public class BoomQueryServices {
 
         String beforeChannel = null;
         if(null!= planDataList){
-            for(GenericValue gv : planDataList){
+            for(int i = 0 ; i < planDataList.size();i++){
+                GenericValue gv = (GenericValue) planDataList.get(i);
                 Map<String,Object> rowProduct = gv.getAllFields();
                 List<Map<String,Object>> rowProductList = new ArrayList<Map<String, Object>>();
                 Map<String,Object> rowChannelMap = new HashMap<String, Object>();
@@ -207,6 +208,9 @@ public class BoomQueryServices {
                     rowProductList.add(rowProduct);
                     rowChannelMap.put("productList",rowProductList);
                     channelMap.put(channelId,rowChannelMap);
+                    if(i+1 == planDataList.size()){
+                        returnList.add(channelMap);
+                    }
                 }
 
 
@@ -222,6 +226,7 @@ public class BoomQueryServices {
                     returnList.add(channelMap);
                     channelMap =  new HashMap<String, Object>();
                 }
+
 
             }
         }

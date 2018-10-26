@@ -157,6 +157,10 @@ public class BoomQueryServices {
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("planId");
+
+
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
         EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.EQUALS, partyGroupId+"/"+selectDate);
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
@@ -164,9 +168,15 @@ public class BoomQueryServices {
 
         List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                 genericCondition).queryList();
-
-
-//        Map<String,List<Map<String,Object>>> planMaps = new HashMap<String, List<Map<String, Object>>>();
+        // 是否有历史数据
+        List<GenericValue> historyData = delegator.findList("DeliveryPlans",
+                findConditions2, fieldSet,
+                null, null, false);
+        if( historyData !=null && historyData.size()>0){
+            resultMap.put("histroyData",historyData);
+        }else{
+            resultMap.put("histroyData",null);
+        }
 
         Map<String,Object> channelMap = new HashMap<String, Object>();
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
@@ -217,6 +227,7 @@ public class BoomQueryServices {
         }
         resultMap.put("dayPlans",channelMap);
         resultMap.put("selectDate",selectDate);
+
 
         return resultMap;
     }

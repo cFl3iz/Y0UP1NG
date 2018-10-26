@@ -38,7 +38,11 @@
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="createDeliveryPlan" auth="false">
         <description>createDeliveryPlan</description>
-        <attribute name="planData" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+        <attribute name="quantity" type="String" mode="IN" optional="true"/>
+        <attribute name="enumId" type="String" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
@@ -56,8 +60,9 @@
              location="main.java.com.banfftech.boom.BoomQueryServices"
              invoke="queryDeliveryPlan" auth="false">
         <description>queryDeliveryPlan</description>
-        <attribute name="selectDate" type="String" mode="INOUT" optional="false"/>
-        <attribute name="dayPlans" type="List" mode="OUT" optional="false"/>
+        <attribute name="selectDate" type="String" mode="INOUT" optional="true"/>
+        <attribute name="dayPlans" type="List" mode="OUT" optional="true"/>
+        <attribute name="histroyData" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

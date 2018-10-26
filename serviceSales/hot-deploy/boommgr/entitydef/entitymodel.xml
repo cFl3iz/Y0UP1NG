@@ -11,9 +11,6 @@
     <!-- 出库计划表 -->
     <entity entity-name="DeliveryPlans" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlans">
         <field name="planId" type="id-ne"/>
-        <field name="planKey" type="value"/>
-        <field name="quantity" type="value"/>
-        <field name="outQuantity" type="value"/>
         <field name="extField1" type="value"/>
         <field name="extField2" type="value"/>
         <field name="extField3" type="value"/>

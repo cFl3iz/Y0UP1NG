@@ -183,74 +183,64 @@ public class BoomQueryServices {
         Debug.logInfo("planDataList:"+planDataList,module);
         String beforeChannel = null;
 
-//        if(null!= planDataList){
-//
-//
-//
-//            for(int i = 0 ; i < planDataList.size();i++){
-//                GenericValue gv = (GenericValue) planDataList.get(i);
-//                Map<String,Object> rowProduct = gv.getAllFields();
-//                List<Map<String,Object>> rowProductList = new ArrayList<Map<String, Object>>();
-//                Map<String,Object> rowChannelMap = new HashMap<String, Object>();
-//
-//                String channelId = (String) gv.get("enumId");
-//
-//                Debug.logInfo("channelId:"+channelId,module);
-//                Debug.logInfo("before channelId:"+beforeChannel,module);
-//                Debug.logInfo("before channelId:"+beforeChannel,module);
-//                if(null == beforeChannel){
-//
-//                    rowProductList.add(rowProduct);
-//
-//                    rowChannelMap.put("enumId", channelId);
-//                    rowChannelMap.put("enumDescription",channelId);
-//                    rowChannelMap.put("productList",rowProductList);
-//
-//                    channelMap.put(channelId,rowChannelMap);
-//                    if(i+1 == planDataList.size()){
-//                        returnList.add(channelMap);
-//                    }
-//                }
-//
-//                if(null!=beforeChannel&& beforeChannel.equals(channelId)){
-//                    rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
-//                    rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
-//                    rowProductList.add(rowProduct);
-//                    rowChannelMap.put("productList",rowProductList);
-//                    channelMap.put(channelId,rowChannelMap);
-//                    if(i+1 == planDataList.size()){
-//                        returnList.add(channelMap);
-//                    }
-//                }
-//
-//
-//                if(null != beforeChannel && !beforeChannel.equals(channelId)){
-//
-//                    if(channelMap.get(channelId)==null){
-//                    rowProductList.add(rowProduct);
-//                    rowChannelMap.put("enumId", channelId);
-//                    rowChannelMap.put("enumDescription",channelId);
-//                    rowChannelMap.put("productList",rowProductList);
-//
-//                    channelMap.put(channelId,rowChannelMap);
-//                    returnList.add(channelMap);
-//                    channelMap =  new HashMap<String, Object>();
-//                    }else{
-//                        rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
-//                        rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
-//                        rowProductList.add(rowProduct);
-//                        rowChannelMap.put("productList",rowProductList);
-//                        channelMap.put(channelId,rowChannelMap);
-//                        if(i+1 == planDataList.size()){
-//                            returnList.add(channelMap);
-//                        }
-//                    }
-//                }
-//
-//                beforeChannel = channelId;
-//            }
-//        }
-        resultMap.put("dayPlans",planDataList);
+
+        if(null!= planDataList){
+
+
+
+            for(int i = 0 ; i < planDataList.size();i++){
+                GenericValue gv = (GenericValue) planDataList.get(i);
+                Map<String,Object> rowProduct = gv.getAllFields();
+                List<Map<String,Object>> rowProductList = new ArrayList<Map<String, Object>>();
+                Map<String,Object> rowChannelMap = new HashMap<String, Object>();
+
+                String channelId = (String) gv.get("enumId");
+
+                Debug.logInfo("channelId:"+channelId,module);
+                Debug.logInfo("before channelId:"+beforeChannel,module);
+                Debug.logInfo("before channelId:"+beforeChannel,module);
+                if(null == beforeChannel){
+
+                    rowProductList.add(rowProduct);
+
+                    rowChannelMap.put("enumId", channelId);
+                    rowChannelMap.put("enumDescription",channelId);
+                    rowChannelMap.put("productList",rowProductList);
+
+                    channelMap.put(channelId,rowChannelMap);
+                }
+
+                if(null!=beforeChannel&& beforeChannel.equals(channelId)){
+                    rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
+                    rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
+                    rowProductList.add(rowProduct);
+                    rowChannelMap.put("productList",rowProductList);
+                    channelMap.put(channelId,rowChannelMap);
+                }
+
+
+                if(null != beforeChannel && !beforeChannel.equals(channelId)){
+
+                    if(channelMap.get(channelId)==null){
+                    rowProductList.add(rowProduct);
+                    rowChannelMap.put("enumId", channelId);
+                    rowChannelMap.put("enumDescription",channelId);
+                    rowChannelMap.put("productList",rowProductList);
+                    channelMap.put(channelId,rowChannelMap);
+                    channelMap =  new HashMap<String, Object>();
+                    }else{
+                        rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
+                        rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
+                        rowProductList.add(rowProduct);
+                        rowChannelMap.put("productList",rowProductList);
+                        channelMap.put(channelId,rowChannelMap);
+                    }
+                }
+
+                beforeChannel = channelId;
+            }
+        }
+        resultMap.put("dayPlans",channelMap);
         resultMap.put("selectDate",selectDate);
 
 

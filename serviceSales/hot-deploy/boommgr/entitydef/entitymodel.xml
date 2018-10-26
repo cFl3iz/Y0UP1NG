@@ -11,12 +11,12 @@
 
     <view-entity entity-name="DeliveryPlansItemView" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
         <member-entity entity-name="DeliveryPlansItem" entity-alias="DP"/>
+        <member-entity entity-name="DeliveryPlans" entity-alias="DPS"/>
         <!--<alias-all entity-alias="DP"></alias-all>-->
         <alias entity-alias="DP" name="enumId" group-by="true"/>
         <alias entity-alias="DP" name="seq" />
         <alias entity-alias="DP" name="planId"  />
         <alias entity-alias="DP" name="productId"  />
-        <alias entity-alias="DP" name="enumId"  />
         <alias entity-alias="DP" name="uomDescription"  />
         <alias entity-alias="DP" name="productName" />
         <alias entity-alias="DP" name="quantity"  />
@@ -25,6 +25,10 @@
         <alias entity-alias="DP" name="extField1"  />
         <alias entity-alias="DP" name="extField2"  />
         <alias entity-alias="DP" name="fromDate"  />
+
+        <view-link entity-alias="DP" rel-entity-alias="DPS">
+            <key-map field-name="planId"/>
+        </view-link>
     </view-entity>
 
     <!-- 出库计划表 -->

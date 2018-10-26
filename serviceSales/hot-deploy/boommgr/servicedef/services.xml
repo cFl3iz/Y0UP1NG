@@ -41,6 +41,7 @@
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="date" type="String" mode="IN" optional="true"/>
         <attribute name="quantity" type="String" mode="IN" optional="true"/>
+        <attribute name="enumId" type="String" mode="IN" optional="true"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

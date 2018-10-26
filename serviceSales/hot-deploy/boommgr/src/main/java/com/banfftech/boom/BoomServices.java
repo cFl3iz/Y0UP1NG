@@ -174,13 +174,14 @@ public class BoomServices {
         String productId = (String) context.get("productId");
         String date = (String) context.get("date");
         String quantity = (String) context.get("quantity");
+        String enumId = (String) context.get("enumId");
 
         String partyId = userLogin.getString("partyId");
         Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
         GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date, "productId", productId).queryFirst();
+                "planId", partyGroupId + "/" + date, "productId", productId,"enumId",enumId).queryFirst();
         gv.set("quantity",quantity);
         gv.store();
         return result;

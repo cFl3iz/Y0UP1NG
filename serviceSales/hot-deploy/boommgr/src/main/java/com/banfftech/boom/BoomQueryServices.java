@@ -150,73 +150,73 @@ public class BoomQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
+        String selectDate = (String) context.get("selectDate");
+
+
+
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
-        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlan").where(
-                "payToParty", partyGroupId).queryList();
-        List<Map<String,List<Map<String,Object>>>> returnList = new ArrayList<Map<String, List<Map<String, Object>>>>();
+
+        EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.EQUALS, partyGroupId+"/"+selectDate);
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
 
-        Map<String,String> planOutCount = new HashMap<String, String>();
-        Map<String,String> planQtyCount = new HashMap<String, String>();
+        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                genericCondition).queryList();
 
-        Map<String,List<Map<String,Object>>> planMaps = new HashMap<String, List<Map<String, Object>>>();
 
-        String beforeKey = null;
+//        Map<String,List<Map<String,Object>>> planMaps = new HashMap<String, List<Map<String, Object>>>();
+
+        Map<String,Object> channelMap = new HashMap<String, Object>();
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        String beforeChannel = null;
         if(null!= planDataList){
             for(GenericValue gv : planDataList){
-                Map<String,Object> rowMap =  gv.getAllFields();
-                List<Map<String,Object>> rowList =new ArrayList<Map<String, Object>>();
-                 String key = gv.getString("planKey");
+                Map<String,Object> rowProduct = gv.getAllFields();
+                List<Map<String,Object>> rowProductList = new ArrayList<Map<String, Object>>();
+                Map<String,Object> rowChannelMap = new HashMap<String, Object>();
 
-                 if(null == beforeKey||!beforeKey.equals(key)){
-                     rowList.add(rowMap);
-                     planMaps.put(key,rowList);
-                 }
-                if(null != beforeKey&&beforeKey.equals(key)){
-                    rowList = planMaps.get(key);
-                    rowList.add(rowMap);
-                    planMaps.put(key,rowList);
+                String channelId = (String) gv.get("enumId");
+
+                if(null == beforeChannel){
+
+                    rowProductList.add(rowProduct);
+
+                    rowChannelMap.put("enumId", channelId);
+                    rowChannelMap.put("enumDescription",channelId);
+                    rowChannelMap.put("productList",rowProductList);
+
+                    channelMap.put(channelId,rowChannelMap);
+                }
+
+                if(null!=beforeChannel&& beforeChannel.equals(channelId)){
+                    rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
+                    rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
+                    rowProductList.add(rowProduct);
+                    rowChannelMap.put("productList",rowProductList);
+                    channelMap.put(channelId,rowChannelMap);
                 }
 
 
-                 beforeKey = key;
+                if(null != beforeChannel && !beforeChannel.equals(channelId)){
 
-//                String outQuantity = gv.getString("outQuantity");
-//                String quantityStr = gv.getString("quantity");
-//                int rowOutQuantity = Integer.parseInt(outQuantity);
-//                int quantity = Integer.parseInt(quantityStr);
-//
-//                if(planOutCount.get(key)!=null){
-//                    int exsitsOutCount = Integer.parseInt(planOutCount.get(key)+"");
-//                    int exsitsOtyCount = Integer.parseInt(planQtyCount.get(key) + "");
-//
-//                    exsitsOtyCount += quantity;
-//                    exsitsOutCount += rowOutQuantity;
-//
-//                    planOutCount.put(key,exsitsOutCount+"");
-//                    planQtyCount.put(key,exsitsOtyCount+"");
-//                    rowMap.put("outCount",planOutCount);
-//                    rowMap.put("qtyCount",planQtyCount);
-//
-//                }else{
-//
-//                    //new
-//                    planOutCount.put(key,rowOutQuantity+"");
-//                    planQtyCount.put(key,quantity+"");
-//
-//                }
-//
-//                if(!key.equals(beforeKey)){
-//
-//                }else{
-//
-//                }
+                    rowProductList.add(rowProduct);
 
+                    rowChannelMap.put("enumId", channelId);
+                    rowChannelMap.put("enumDescription",channelId);
+                    rowChannelMap.put("productList",rowProductList);
+
+                    channelMap.put(channelId,rowChannelMap);
+                    returnList.add(channelMap);
+                    channelMap =  new HashMap<String, Object>();
+                }
 
             }
         }
-        resultMap.put("planDataList",planMaps);
+        resultMap.put("dayPlans",channelMap);
+        resultMap.put("selectDate",selectDate);
 
         return resultMap;
     }

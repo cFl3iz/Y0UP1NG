@@ -8,5 +8,54 @@
     <description>None</description>
     <copyright></copyright>
     <version></version>
+    <!-- 出库计划表 -->
+    <entity entity-name="DeliveryPlans" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlans">
+        <field name="planId" type="id-ne"/>
+        <field name="planKey" type="value"/>
+        <field name="quantity" type="value"/>
+        <field name="outQuantity" type="value"/>
+        <field name="extField1" type="value"/>
+        <field name="extField2" type="value"/>
+        <field name="extField3" type="value"/>
+        <field name="createByParty" type="value"/>
+        <field name="payToParty" type="value"/>
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="planId"/>
+    </entity>
+    <!-- 出库计划项 -->
+    <entity entity-name="DeliveryPlansItem" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlansItem">
 
+        <field name="seq" type="id-ne"/>
+        <field name="planId" type="id-ne"/>
+        <field name="productId" type="value"/>
+        <field name="enumId" type="value"/>
+        <field name="uomDescription" type="value"/>
+        <field name="productName" type="value"/>
+        <field name="quantity" type="value"/>
+        <field name="createByParty" type="value"/>
+        <field name="payToParty" type="value"/>
+        <field name="extField1" type="value"/>
+        <field name="extField2" type="value"/>
+        <field name="fromDate" type="date-time"></field>
+        <relation type="one" fk-name="PLANS_FK" rel-entity-name="DeliveryPlans">
+            <key-map field-name="planId"/>
+        </relation>
+        <prim-key field="seq"/>
+        <prim-key field="fromDate"/>
+    </entity>
+    <!-- 出库详情 -->
+    <entity entity-name="DeliveryPlanDetail" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlanDetail">
+
+        <field name="seq" type="id-ne"/>
+        <field name="productId" type="value"/>
+        <field name="enumId" type="value"/>
+        <field name="uomDescription" type="value"/>
+        <field name="productName" type="value"/>
+        <field name="outQuantity" type="value"/>
+        <field name="createByParty" type="value"/>
+        <field name="payToParty" type="value"/>
+        <field name="planKey" type="value"/>
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="seq"/>
+    </entity>
 </entitymodel>

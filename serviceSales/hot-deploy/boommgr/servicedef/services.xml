@@ -56,7 +56,8 @@
              location="main.java.com.banfftech.boom.BoomQueryServices"
              invoke="queryDeliveryPlan" auth="false">
         <description>queryDeliveryPlan</description>
-        <attribute name="planDataList" type="Map" mode="OUT" optional="false"/>
+        <attribute name="selectDate" type="String" mode="INOUT" optional="false"/>
+        <attribute name="dayPlans" type="List" mode="OUT" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

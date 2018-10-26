@@ -180,7 +180,7 @@ public class BoomQueryServices {
 
         Map<String,Object> channelMap = new HashMap<String, Object>();
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
-
+        Debug.logInfo("planDataList:"+planDataList,module);
         String beforeChannel = null;
         if(null!= planDataList){
             for(int i = 0 ; i < planDataList.size();i++){
@@ -200,6 +200,9 @@ public class BoomQueryServices {
                     rowChannelMap.put("productList",rowProductList);
 
                     channelMap.put(channelId,rowChannelMap);
+                    if(i+1 == planDataList.size()){
+                        returnList.add(channelMap);
+                    }
                 }
 
                 if(null!=beforeChannel&& beforeChannel.equals(channelId)){

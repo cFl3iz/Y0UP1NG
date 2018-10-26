@@ -166,7 +166,7 @@ public class BoomQueryServices {
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
 
-        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItemView").where(
+        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                 genericCondition).queryList();
         // 是否有历史数据
         List<GenericValue> historyData = delegator.findList("DeliveryPlans",
@@ -182,7 +182,11 @@ public class BoomQueryServices {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         Debug.logInfo("planDataList:"+planDataList,module);
         String beforeChannel = null;
+
         if(null!= planDataList){
+
+
+
             for(int i = 0 ; i < planDataList.size();i++){
                 GenericValue gv = (GenericValue) planDataList.get(i);
                 Map<String,Object> rowProduct = gv.getAllFields();
@@ -219,8 +223,8 @@ public class BoomQueryServices {
 
                 if(null != beforeChannel && !beforeChannel.equals(channelId)){
 
+                    if(channelMap.get(channelId)==null){
                     rowProductList.add(rowProduct);
-
                     rowChannelMap.put("enumId", channelId);
                     rowChannelMap.put("enumDescription",channelId);
                     rowChannelMap.put("productList",rowProductList);
@@ -228,9 +232,19 @@ public class BoomQueryServices {
                     channelMap.put(channelId,rowChannelMap);
                     returnList.add(channelMap);
                     channelMap =  new HashMap<String, Object>();
+                    }else{
+                        rowChannelMap = (HashMap<String, Object>) channelMap.get(channelId);
+                        rowProductList = (ArrayList<Map<String, Object>>) rowChannelMap.get("productList");
+                        rowProductList.add(rowProduct);
+                        rowChannelMap.put("productList",rowProductList);
+                        channelMap.put(channelId,rowChannelMap);
+                        if(i+1 == planDataList.size()){
+                            returnList.add(channelMap);
+                        }
+                    }
                 }
 
-
+                beforeChannel = channelId;
             }
         }
         resultMap.put("dayPlans",returnList);

@@ -72,7 +72,7 @@ public class WeChatOrderQueryServices {
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        GenericValue partyRelationships = EntityQuery.use(delegator).from("PartyRelationship").where(
+        List<GenericValue> partyRelationships = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdTo", partyId).queryList();
 
         if(null!= partyRelationships){

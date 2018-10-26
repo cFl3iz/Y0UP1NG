@@ -161,6 +161,31 @@ public class BoomServices {
         return result;
     }
 
+
+    public static Map<String, Object> updateDeliveryPlanItem(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        Locale locale = (Locale) context.get("locale");
+
+        String productId = (String) context.get("productId");
+        String date = (String) context.get("date");
+        String quantity = (String) context.get("quantity");
+
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date, "productId", productId).queryFirst();
+        gv.set("quantity",quantity);
+        gv.store();
+        return result;
+    }
+
     /**
      * createDeliveryPlan
      * @param dctx
@@ -189,6 +214,13 @@ public class BoomServices {
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
+        //已经存在就不添加了
+        if(EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date,"productId",productId).queryFirst()!=null){
+            return result;
+        }
+
+
         // 选择了一个日期
         if(UtilValidate.isNotEmpty(fromDate) && !fromDate.equals("null")  ) {
 
@@ -212,6 +244,7 @@ public class BoomServices {
             GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
                     "uomId", uomId).queryFirst();
             String uomDescription = uom.getString("description");
+
 
             // Added Item
             Map<String,Object> createMap = new HashMap<String, Object>();

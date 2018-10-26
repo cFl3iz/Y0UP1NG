@@ -216,7 +216,7 @@ public class BoomServices {
 
         //已经存在就不添加了
         if(EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date,"productId",productId).queryFirst()!=null){
+                "planId", partyGroupId + "/" + date,"productId",productId,"enumId",enumId).queryFirst()!=null){
             return result;
         }
 

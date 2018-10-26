@@ -86,6 +86,18 @@
                    optional="true" />
     </service>
 
+
+    <service name="queryClientList" engine="java"
+             location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
+             invoke="queryClientList" auth="false">
+        <description>queryClientList</description>
+        <attribute name="clientList" type="List" mode="OUT"
+                   optional="true" />
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true" />
+    </service>
+
+
     <service name="queryOrderDetailFromWeChat" engine="java"
              location="main.java.com.banfftech.wechatminiprogram.WeChatOrderQueryServices"
              invoke="queryOrderDetailFromWeChat" auth="false">

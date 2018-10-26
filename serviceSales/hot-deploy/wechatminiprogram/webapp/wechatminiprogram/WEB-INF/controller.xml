@@ -37,6 +37,14 @@
 
 
 
+
+    <request-map uri="queryClientList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryClientList"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="getNeiMaiLoginCaptcha">
         <security https="false" auth="false"/>
         <event type="service" invoke="getNeiMaiLoginCaptcha"/>

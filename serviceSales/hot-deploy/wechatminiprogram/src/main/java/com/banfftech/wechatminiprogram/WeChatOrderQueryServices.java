@@ -57,6 +57,40 @@ public class WeChatOrderQueryServices {
     public final static String module = WeChatOrderQueryServices.class.getName();
 
 
+    public static Map<String, Object> queryClientList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        //销售代表的PartyId
+        String partyId = userLogin.getString("partyId");
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        GenericValue partyRelationships = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdTo", partyId).queryList();
+
+        if(null!= partyRelationships){
+            for(GenericValue gv : partyRelationships){
+                Map<String,Object> rowMap =new HashMap<String, Object>();
+                String partyIdFrom = gv.getString("partyIdFrom");
+                rowMap.put("clientInfo",queryPersonBaseInfo(delegator,partyIdFrom));
+                returnList.add(rowMap);
+            }
+        }
+
+        resultMap.put("clientList",returnList);
+        return resultMap;
+    }
+
+
+
+
     /**
      * QuerySku
      *

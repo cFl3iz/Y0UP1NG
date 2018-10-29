@@ -229,6 +229,10 @@ public class BoomQueryServices {
 
                 GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("workEffortId", workEffortId).queryFirst();
 
+                if(inventoryItemDetail==null){
+                    continue;
+                }
+
                 String inventoryItemId = inventoryItemDetail.getString("inventoryItemId");
 
                 String inventoryItemDetailSeqId = inventoryItemDetail.getString("inventoryItemDetailSeqId");

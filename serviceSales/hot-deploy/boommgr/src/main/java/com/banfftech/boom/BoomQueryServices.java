@@ -94,6 +94,192 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
 
+    /**
+     * queryWorkLogs
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryInventoryDetails(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String loginPartyId = userLogin.getString("partyId");
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        String   groupPersons  =  (String) context.get("groupPersons");
+        String   dateRange  =  (String) context.get("dateRange");
+
+
+
+
+
+
+        Set<String> partySet = new HashSet<String>();
+
+        // 人的筛选维度
+        EntityCondition partyCondition = null;
+        if(UtilValidate.isNotEmpty(groupPersons)){
+            for(String containParty :groupPersons.split(",")){
+                partySet.add(containParty);
+            }
+            partyCondition = EntityCondition
+                    .makeCondition("partyId",EntityOperator.IN, partySet);
+        }
+
+        //筛选时间起
+        EntityCondition dateConditionStart = null;
+        //筛选时间止
+        EntityCondition dateConditionEnd = null;
+        Date date = new Date(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+        if(UtilValidate.isNotEmpty(dateRange)){
+
+            calendar.setTime(date);
+            if(dateRange.equals("MONTH")){
+                calendar.add(Calendar.MONTH, -1);
+                dateConditionStart = EntityCondition
+                        .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(sdf.format(calendar.getTime())));
+
+            }if(dateRange.equals("THREE_MONTH")){
+                calendar.add(Calendar.MONTH, -3);
+                dateConditionStart = EntityCondition
+                        .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(sdf.format(calendar.getTime())));
+
+
+            }if(dateRange.equals("SIX_MONTH")){
+                calendar.add(Calendar.MONTH, -6);
+                dateConditionStart = EntityCondition
+                        .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(sdf.format(calendar.getTime())));
+
+
+            }if(dateRange.equals("YEAR")){
+                calendar.add(Calendar.YEAR, -1);
+                dateConditionStart = EntityCondition
+                        .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(sdf.format(calendar.getTime())));
+
+            }
+
+        }else{
+            calendar.add(Calendar.WEEK_OF_YEAR, -1);
+            dateConditionStart = EntityCondition
+                    .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(sdf.format(calendar.getTime())));
+
+        }
+        dateConditionEnd = EntityCondition
+                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(sdf.format(date)));
+
+        if(UtilValidate.isNotEmpty(dateRange)&&dateRange.indexOf("/")>0){
+            String start  = dateRange.substring(0,dateRange.indexOf("/"));
+            String end   =  dateRange.substring(dateRange.indexOf("/")+1);
+            dateConditionStart = EntityCondition
+                    .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO, Timestamp.valueOf(start));
+
+            dateConditionEnd = EntityCondition
+                    .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(end));
+        }
+
+
+
+
+
+        EntityCondition genericStatusCondition = EntityCondition
+                .makeCondition("currentStatusId",EntityOperator.EQUALS,"CAL_IN_PLANNING");
+
+        //时间的起与止
+        EntityCondition dateConditions = EntityCondition
+                .makeCondition(dateConditionStart,EntityOperator.AND,dateConditionEnd);
+
+        EntityCondition dateAndStatusConditions = EntityCondition
+                .makeCondition(dateConditions,EntityOperator.AND,genericStatusCondition);
+
+
+        EntityCondition genericTypeCondition = EntityCondition
+                .makeCondition("workEffortTypeId",EntityOperator.EQUALS,"TASK");
+        if(workEffortTypeId==null||workEffortTypeId.toLowerCase().equals("all")){
+            genericTypeCondition = EntityCondition
+                    .makeCondition();
+        }
+        EntityCondition bigCondi = EntityCondition
+                .makeCondition(genericTypeCondition,EntityOperator.AND,dateAndStatusConditions);
+
+
+        EntityCondition bigConditionAndPartyCondition = null;
+        if(partyCondition!=null){
+            bigConditionAndPartyCondition =
+                    EntityCondition.makeCondition(bigCondi, EntityOperator.AND, partyCondition);
+
+        }
+
+        Map<String,String> keyMap = new HashMap<String, String>();
+
+
+
+        List<String> orderBy = new ArrayList<String>();
+        orderBy.add("-fromDate");
+        List<GenericValue> workEffortList = delegator.findList("WorkEffortPartyAssignmentAll", bigConditionAndPartyCondition!=null?bigConditionAndPartyCondition:bigCondi , null,
+                orderBy, null, false);
+
+        if(workEffortList.size()>0){
+            for(GenericValue gv : workEffortList){
+                Map<String,String> partyKeyMap = new HashMap<String, String>();
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+
+                String workEffortId = gv.getString("workEffortId");
+                GenericValue originator= EntityQuery.use(delegator).from("WorkEffortPartyAssignment").where("workEffortId",workEffortId,"roleTypeId","ORIGINATOR").queryFirst();
+                List<GenericValue> workers= EntityQuery.use(delegator).from("WorkEffortPartyAssignment").where("workEffortId",workEffortId,"roleTypeId","WORKER").queryList();
+
+                String originatorPartyId  = originator.getString("partyId");
+                rowMap.put("originatorInfo",queryPersonBaseInfo(delegator,originatorPartyId));
+                List<Map<String,String>> workerRowList = new ArrayList<Map<String, String>>();
+                if(workers!=null){
+                    for(GenericValue rowWork : workers){
+                        String partyRowWork = rowWork.getString("partyId");
+                        if(!partyKeyMap.containsKey(partyRowWork)){
+                            workerRowList.add(queryPersonBaseInfo(delegator,partyRowWork));
+                            partyKeyMap.put(partyRowWork,null);
+                        }
+                    }
+                }
+
+
+                GenericValue workEffortNoteAndData= EntityQuery.use(delegator).from("WorkEffortNoteAndData").where("workEffortId",workEffortId).queryFirst();
+
+
+                rowMap.put("workEffortId",workEffortId);
+                rowMap.put("groupPersons",workerRowList);
+                rowMap.put("description",gv.getString("workEffortName"));
+                rowMap.put("date",sdf.format(gv.get("fromDate")));
+                rowMap.put("location",getLocationFromPosition(workEffortNoteAndData.getString("noteInfo")));
+
+
+
+                List<GenericValue> contents= EntityQuery.use(delegator).from("WorkEffortAndDataResource").where("workEffortId",workEffortId).queryList();
+
+                rowMap.put("contents",contents);
+
+                if(!keyMap.containsKey(workEffortId)){
+                    returnList.add(rowMap);
+                    keyMap.put(workEffortId,"");
+                }
+            }
+        }
+
+        resultMap.put("inventoryDetails",returnList);
+        return resultMap;
+    }
 
     public static Map<String, Object> queryPartyInfo(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 

@@ -45,6 +45,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
+    <request-map uri="queryInventoryDetails">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryInventoryDetails"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
 
 
 

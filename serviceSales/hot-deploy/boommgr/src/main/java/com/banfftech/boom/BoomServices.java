@@ -281,10 +281,12 @@ public class BoomServices {
 
 
 
+           String workEffortTypeId = (String) context.get("workEffortTypeId") ;
+
             Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
                     "currentStatusId", "CAL_IN_PLANNING",
                     "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
-                    "workEffortTypeId", "CONSUME_WORKER", "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
+                    "workEffortTypeId", workEffortTypeId, "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
                     "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
                     "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
 
@@ -313,7 +315,7 @@ public class BoomServices {
             }
 
             // 增加角色到WorkEffort
-            Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", loginPartyId,
+            Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
                     "roleTypeId", "WORKER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
             Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
             if (!ServiceUtil.isSuccess(createReferrerResultMap)) {

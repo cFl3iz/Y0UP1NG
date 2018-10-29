@@ -69,8 +69,8 @@
 
 
     <WorkEffortType workEffortTypeId="ZF_WORK_TYPE" createdStamp="2018-08-02 18:37:12.0" createdTxStamp="2018-08-02 18:37:12.0" description="ROOT TYPE" lastUpdatedStamp="2018-08-02 18:37:12.0" lastUpdatedTxStamp="2018-08-02 18:37:12.0" />
-    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="PUT_WORKER" description="Be Put Product In Facility" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
-    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="OUT_WORKER" description="Be OUT Product In Facility" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
-    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="SET_WORKER" description="Be Return Product From Facility" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
+    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="PUT_WORKER" description="入库" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
+    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="OUT_WORKER" description="出库" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
+    <WorkEffortType parentTypeId="ZF_WORK_TYPE" workEffortTypeId="SET_WORKER" description="盘库" createdStamp="2018-08-02 18:37:49.0" createdTxStamp="2018-08-02 18:37:49.0"  lastUpdatedStamp="2018-08-02 18:37:49.0" lastUpdatedTxStamp="2018-08-02 18:37:49.0"/>
 
 </entity-engine-xml>

@@ -123,7 +123,6 @@ public class BoomServices {
                 UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ADMIN"));
 
 
-
         String userLoginId = delegator.getNextSeqId("UserLogin");
         // Create UserLogin Block
         Map<String, Object> createUserLoginInMap = UtilMisc.toMap("userLogin", admin, "userLoginId",
@@ -156,13 +155,13 @@ public class BoomServices {
 
 
         String partyId = userLogin.getString("partyId");
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
         //已经存在就不添加了
-        GenericValue deliveryPlansItem =EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date,"productId",productId,"enumId",enumId).queryFirst();
-        if(deliveryPlansItem!=null){
+        GenericValue deliveryPlansItem = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
+        if (deliveryPlansItem != null) {
             deliveryPlansItem.remove();
         }
 
@@ -175,22 +174,6 @@ public class BoomServices {
 //        }
         return result;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public static Map<String, Object> setProductInventory(DispatchContext dctx, Map<String, Object> context)
@@ -208,7 +191,7 @@ public class BoomServices {
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", loginPartyId), false);
         String productId = (String) context.get("productId");
         String quantityStr = (String) context.get("quantity");
-        Debug.logInfo("quantityStr:"+quantityStr,module);
+        Debug.logInfo("quantityStr:" + quantityStr, module);
         BigDecimal quantity = new BigDecimal(quantityStr);
 
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
@@ -218,10 +201,11 @@ public class BoomServices {
         String partyGroupId = (String) myGroup.get("partyId");
 
 
-
-
         GenericValue store = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyGroupId).queryFirst();
         String inventoryFacilityId = store.getString("facilityId");
+        String inventoryItemDetailSeqId = "";
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+
         //获得库存信息 getInventoryAvailableByFacility
         Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                 "facilityId", inventoryFacilityId, "productId", productId));
@@ -243,86 +227,107 @@ public class BoomServices {
         Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
         Debug.logInfo("*update resource quantity = " + quantity, module);
         Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
+        String eventDesc = "";
+        //盘库
+        if ("SET_WORKER".equals(workEffortTypeId)) {
+            eventDesc = "员工盘库";
 
-        //说明现库存比要设置的库存大,需要做差异减法
-        if (availableToPromiseTotal.compareTo(quantity) > 0) {
-            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
-            int quantityInt = quantity.intValue();
-            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
-            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
 
-            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
-            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+        }
+        //入库
+        if("PUT_WORKER".equals(workEffortTypeId)){
+            eventDesc = "员工入库";
+            createInventoryItemDetailMap.put("accountingQuantityDiff", quantity);
+            createInventoryItemDetailMap.put("availableToPromiseDiff", quantity);
+            createInventoryItemDetailMap.put("quantityOnHandDiff",quantity);
             createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
         }
-        //说明现库存比要设置的库存小,需要做差异加法
-        if (availableToPromiseTotal.compareTo(quantity) < 0) {
-            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
-            int quantityInt = quantity.intValue();
-            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
-            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
-            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
-            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
-            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+
+        //出库
+        if("OUT_WORKER".equals(workEffortTypeId)){
+            eventDesc = "员工出库";
+
+            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-"+quantity));
+            createInventoryItemDetailMap.put("availableToPromiseDiff",new BigDecimal("-"+quantity));
+            createInventoryItemDetailMap.put("quantityOnHandDiff",new BigDecimal("-"+quantity));
             createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
         }
+
         //一模一样的库存我还差异个屁?
-        if (availableToPromiseTotal.compareTo(quantity) == 0) {
+        if (availableToPromiseTotal.compareTo(quantity) == 0 && workEffortTypeId.equals("SET_WORKER")) {
 
         } else {
             //3.2 Do create
             Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
-            String inventoryItemDetailSeqId = (String) createInventoryItemDetailOutMap.get("inventoryItemDetailSeqId");
+            inventoryItemDetailSeqId = (String) createInventoryItemDetailOutMap.get("inventoryItemDetailSeqId");
+
+        }
 
 
-            GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("inventoryItemId", inventoryItemId, "inventoryItemDetailSeqId", inventoryItemDetailSeqId).queryFirst();
+        GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("inventoryItemId", inventoryItemId, "inventoryItemDetailSeqId", inventoryItemDetailSeqId).queryFirst();
 
 
+        Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
+                "currentStatusId", "CAL_IN_PLANNING",
+                "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
+                "workEffortTypeId", workEffortTypeId, "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
+                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+                "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
 
-           String workEffortTypeId = (String) context.get("workEffortTypeId") ;
+        Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                createWorkEffortMap);
 
-            Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
-                    "currentStatusId", "CAL_IN_PLANNING",
-                    "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
-                    "workEffortTypeId", workEffortTypeId, "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
-                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
-                    "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
+        if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+            Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+            return serviceResultByCreateWorkEffortMap;
+        }
 
-            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
-                    createWorkEffortMap);
-
-            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-                Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
-                return serviceResultByCreateWorkEffortMap;
-            }
-
-            String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+        String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
 
-            //  关联上产品
-            Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
-                    "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", productId);
-            Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
-            if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
-                Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
-                return createWorkEffortGoodStandardResultMap;
-            }
-            if( null==EntityQuery.use(delegator).from("PartyRole").where("partyId",partyId,"roleTypeId","WORKER").queryFirst()){
-                dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
-                        ,"partyId",partyId,"roleTypeId","WORKER"));
-            }
+        //  关联上产品
+        Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+                "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", productId);
+        Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+        if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+            Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+            return createWorkEffortGoodStandardResultMap;
+        }
+        if (null == EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "WORKER").queryFirst()) {
+            dispatcher.runSync("createPartyRole", UtilMisc.toMap("userLogin", admin
+                    , "partyId", partyId, "roleTypeId", "WORKER"));
+        }
 
-            // 增加角色到WorkEffort
-            Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
-                    "roleTypeId", "WORKER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
-            Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
-            if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
-                Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
-                return createReferrerResultMap;
-            }
-
+        // 增加角色到WorkEffort
+        Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId,
+                "roleTypeId", "WORKER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+        Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+        if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+            Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+            return createReferrerResultMap;
         }
 
         return resultMap;
@@ -348,14 +353,15 @@ public class BoomServices {
         String partyGroupId = (String) myGroup.get("partyId");
 
         GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date, "productId", productId,"enumId",enumId).queryFirst();
-        gv.set("quantity",quantity);
+                "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
+        gv.set("quantity", quantity);
         gv.store();
         return result;
     }
 
     /**
      * createDeliveryPlan
+     *
      * @param dctx
      * @param context
      * @return
@@ -379,43 +385,43 @@ public class BoomServices {
         String fromDate = (String) context.get("fromDate");
 
         String partyId = userLogin.getString("partyId");
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
         //已经存在就不添加了
-        if(EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date,"productId",productId,"enumId",enumId).queryFirst()!=null){
+        if (EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst() != null) {
             return result;
         }
 
 
         // 选择了一个日期
-        if(UtilValidate.isNotEmpty(fromDate) && !fromDate.equals("null")  ) {
+        if (UtilValidate.isNotEmpty(fromDate) && !fromDate.equals("null")) {
 
-        }else{
+        } else {
             String planId = partyGroupId + "/" + date;
             // Create New Plan
             GenericValue plan = EntityQuery.use(delegator).from("DeliveryPlans").where(
                     "planId", planId).queryFirst();
-            if(null==plan){
-                Map<String,Object> createMap = new HashMap<String, Object>();
-                            createMap.put("planId", planId);
-                            createMap.put("payToParty", partyGroupId);
-                            createMap.put("createByParty", partyId);
-                            createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                            GenericValue createEntity = delegator.makeValue("DeliveryPlans", createMap);
-                            createEntity.create();
+            if (null == plan) {
+                Map<String, Object> createMap = new HashMap<String, Object>();
+                createMap.put("planId", planId);
+                createMap.put("payToParty", partyGroupId);
+                createMap.put("createByParty", partyId);
+                createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                GenericValue createEntity = delegator.makeValue("DeliveryPlans", createMap);
+                createEntity.create();
             }
             GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
             String uomId = product.getString("quantityUomId");
             String productName = product.getString("productName");
-            GenericValue uom =  EntityQuery.use(delegator).from("Uom").where(
+            GenericValue uom = EntityQuery.use(delegator).from("Uom").where(
                     "uomId", uomId).queryFirst();
             String uomDescription = uom.getString("description");
 
 
             // Added Item
-            Map<String,Object> createMap = new HashMap<String, Object>();
+            Map<String, Object> createMap = new HashMap<String, Object>();
             createMap.put("planId", planId);
             createMap.put("payToParty", partyGroupId);
             createMap.put("productId", productId);
@@ -475,8 +481,6 @@ public class BoomServices {
     }
 
 
-
-
     public static Map<String, Object> addEmp(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -490,13 +494,13 @@ public class BoomServices {
 
         String partyId = userLogin.getString("partyId");
 
-        Map<String,Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+        Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
         createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
         createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
 //                createPartyRelationshipInMap.put("userLogin", admin);
         createPartyRelationshipInMap.put("partyIdFrom", partyGroupId);
-        createPartyRelationshipInMap.put("partyIdTo",partyId );
-        createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+        createPartyRelationshipInMap.put("partyIdTo", partyId);
+        createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
         createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
 
@@ -511,6 +515,7 @@ public class BoomServices {
 
     /**
      * addedOrderNote
+     *
      * @param dctx
      * @param context
      * @return
@@ -556,16 +561,16 @@ public class BoomServices {
 //
 //        String partyGroupId = relation.getString("partyIdTo");
 
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
-        GenericValue facility =  EntityQuery.use(delegator).from("Facility").where(
-                "ownerPartyId", partyGroupId ).queryFirst();
+        GenericValue facility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
 
         String facilityId = facility.getString("facilityId");
 
 
-        List<GenericValue> orderItems =  EntityQuery.use(delegator).from("OrderItem").where(
+        List<GenericValue> orderItems = EntityQuery.use(delegator).from("OrderItem").where(
                 "orderId", orderId).queryList();
 
 //        for(GenericValue item : orderItems){
@@ -642,16 +647,14 @@ public class BoomServices {
         //下单的当事人,创建服务会检查他有没有创建权限等。
         String partyId = (String) userLogin.get("partyId");
 
-        GenericValue  order =  EntityQuery.use(delegator).from("OrderHeader").where("orderId",orderId).queryFirst();
+        GenericValue order = EntityQuery.use(delegator).from("OrderHeader").where("orderId", orderId).queryFirst();
 
-        order.set("isViewed","Y");
+        order.set("isViewed", "Y");
 
         order.store();
 
         return result;
     }
-
-
 
 
     public static Map<String, Object> updateOrderStatus(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
@@ -709,7 +712,7 @@ public class BoomServices {
         String partyId = (String) userLogin.get("partyId");
 
 
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
 
@@ -804,8 +807,8 @@ public class BoomServices {
                         createOrderOut.get("orderId"), "noteName", "采购商备注", "note", beiZhu, "internalNote", "N"));
 
 
-                if(autoApproveOrder!=null && autoApproveOrder.equals("Y")){
-                    GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", createOrderOut.get("orderId")+""), false);
+                if (autoApproveOrder != null && autoApproveOrder.equals("Y")) {
+                    GenericValue orderHeader = delegator.findOne("OrderHeader", UtilMisc.toMap("orderId", createOrderOut.get("orderId") + ""), false);
 
 //                    GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
 //                            "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
@@ -814,33 +817,33 @@ public class BoomServices {
 //                    Map<String,Object> myGroup = getMyGroup(delegator,partyId);
 //                    String partyGroupId = (String) myGroup.get("partyId");
 
-                    GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId",partyGroupId, "roleTypeId", "ADMIN").queryFirst();
-                    if(null == productStoreRole){
+                    GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where("partyId", partyGroupId, "roleTypeId", "ADMIN").queryFirst();
+                    if (null == productStoreRole) {
                         //create
                         // 创建店铺
                         Map<String, Object> createPersonStoreOutMap = dispatcher.runSync("createProductStore", UtilMisc.toMap("userLogin", admin,
-                                "payToPartyId", partyId, "storeName", partyGroupId+"Store"
-                                ,"title","autoCreateFrom Order", "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y"));
+                                "payToPartyId", partyId, "storeName", partyGroupId + "Store"
+                                , "title", "autoCreateFrom Order", "defaultCurrencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID, "reserveInventory", "Y"));
                         String productStoreId = (String) createPersonStoreOutMap.get("productStoreId");
                         // 关联店铺角色
                         Map<String, Object> createProductStoreRoleOutMap = dispatcher.runSync("createProductStoreRole", UtilMisc.toMap("userLogin", admin,
                                 "partyId", partyGroupId, "productStoreId", productStoreId, "roleTypeId", "ADMIN"));
-                        orderHeader.set("productStoreId",""+productStoreId);
-                    }else{
-                        orderHeader.set("productStoreId",""+productStoreRole.get("productStoreId"));
+                        orderHeader.set("productStoreId", "" + productStoreId);
+                    } else {
+                        orderHeader.set("productStoreId", "" + productStoreRole.get("productStoreId"));
                     }
                     orderHeader.store();
 
                     dispatcher.runSync("updateOrderHeader", UtilMisc.toMap("userLogin", userLogin,
-                            "orderId", createOrderOut.get("orderId")+"", "statusId", "ORDER_APPROVED"));
+                            "orderId", createOrderOut.get("orderId") + "", "statusId", "ORDER_APPROVED"));
 //                    OrderChangeHelper.approveOrder(dispatcher, userLogin, createOrderOut.get("orderId")+"");
 
                 }
 
             }
 
-            Map<String,Object> changeStatusRun =  dispatcher.runSync("changeProductionRunStatus", UtilMisc.toMap("userLogin", admin, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
-            Debug.logInfo("changeStatusRun=>"+changeStatusRun,module);
+            Map<String, Object> changeStatusRun = dispatcher.runSync("changeProductionRunStatus", UtilMisc.toMap("userLogin", admin, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
+            Debug.logInfo("changeStatusRun=>" + changeStatusRun, module);
         }
 
 
@@ -899,13 +902,6 @@ public class BoomServices {
             if (checkCaptcha) {
 
 
-
-
-
-
-
-
-
                 // Check is Exsit Contact Number ?..
                 List<GenericValue> teleContact = EntityQuery.use(delegator).from("TelecomNumberAndPartyAndRelationshipView").where(
                         "contactNumber", tel, "roleTypeIdTo", "LEAD", "partyRelationshipTypeId", "LEAD_OWNER", "contactMechTypeId", "TELECOM_NUMBER").queryList();
@@ -960,20 +956,18 @@ public class BoomServices {
                 }
 
                 //是通过转发进来的
-                if(null!=fromPartyGroupId&&fromPartyGroupId.length()>3&& !fromPartyGroupId.trim().equals("null")){
-                    Map<String,Object>   createPartyRelationshipInMap = new HashMap<String, Object>();
+                if (null != fromPartyGroupId && fromPartyGroupId.length() > 3 && !fromPartyGroupId.trim().equals("null")) {
+                    Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                     createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
                     createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
                     createPartyRelationshipInMap.put("partyIdFrom", fromPartyGroupId);
-                    createPartyRelationshipInMap.put("partyIdTo",partyId );
-                    createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+                    createPartyRelationshipInMap.put("partyIdTo", partyId);
+                    createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
                     createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                    Debug.logInfo("createPartyRelationshipInMap:"+createPartyRelationshipInMap,module);
+                    Debug.logInfo("createPartyRelationshipInMap:" + createPartyRelationshipInMap, module);
 
                     GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
                     partyRelationship.create();
-
-
 
 
                     // 创建联系电话
@@ -1039,8 +1033,8 @@ public class BoomServices {
                             mergeChangeRelation(delegator, dispatcher, admin, partyIdFrom, beforePartyId, groupId);
                             relation.remove();
                             mergeChangeOrder(delegator, dispatcher, admin, partyIdFrom, beforePartyId, groupId);
-                            mergeProductsSupplier(delegator,dispatcher,admin,beforePartyId,groupId);
-                            mergeAliasForg(delegator, partyIdFrom,beforePartyId,groupId);
+                            mergeProductsSupplier(delegator, dispatcher, admin, beforePartyId, groupId);
+                            mergeAliasForg(delegator, partyIdFrom, beforePartyId, groupId);
                         }
 
 
@@ -1075,20 +1069,19 @@ public class BoomServices {
 //                    return createPartyRelationshipOutMap;
 //                }
 
-             createPartyRelationshipInMap = new HashMap<String, Object>();
+                createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
                 createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
 //                createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("partyIdFrom", groupId);
-              createPartyRelationshipInMap.put("partyIdTo",partyId );
-                createPartyRelationshipInMap.put("partyRelationshipTypeId",  "EMPLOYMENT");
+                createPartyRelationshipInMap.put("partyIdTo", partyId);
+                createPartyRelationshipInMap.put("partyRelationshipTypeId", "EMPLOYMENT");
                 createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
 
 
                 GenericValue partyRelationship = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
 
                 partyRelationship.create();
-
 
 
                 // 创建联系电话
@@ -1130,15 +1123,13 @@ public class BoomServices {
                 }
 
 
-
-
                 //其实自己也是自己的供应商
                 createPartyRelationshipInMap = new HashMap<String, Object>();
                 createPartyRelationshipInMap.put("userLogin", admin);
                 createPartyRelationshipInMap.put("roleTypeIdTo", "LEAD");
                 createPartyRelationshipInMap.put("roleTypeIdFrom", "OWNER");
                 createPartyRelationshipInMap.put("partyRelationshipTypeId", "LEAD_OWNER");
-                createPartyRelationshipInMap.put("partyIdTo",groupId );
+                createPartyRelationshipInMap.put("partyIdTo", groupId);
                 createPartyRelationshipInMap.put("partyIdFrom", groupId);
                 createPartyRelationshipOutMap = dispatcher.runSync("createPartyRelationship", createPartyRelationshipInMap);
 
@@ -1147,8 +1138,8 @@ public class BoomServices {
                 aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
                 aliasForg.set("partyIdFrom", groupId);
                 aliasForg.set("partyIdTo", groupId);
-                aliasForg.set("aliasName", "自有仓库"+"-"+name);
-                aliasForg.set("aliasAddress", province + " " + city + " "+country );
+                aliasForg.set("aliasName", "自有仓库" + "-" + name);
+                aliasForg.set("aliasAddress", province + " " + city + " " + country);
                 aliasForg.create();
 
                 result.put("tarjeta", getToken(userLogin.getString("userLoginId"), delegator));
@@ -1156,8 +1147,7 @@ public class BoomServices {
                 result.put("userInfo", PersonManagerQueryServices.queryPersonBaseInfo(delegator, partyId));
 
 
-
-                    result.put("partyGroupId", groupId);
+                result.put("partyGroupId", groupId);
 
 
             } else {
@@ -1169,13 +1159,13 @@ public class BoomServices {
         return result;
     }
 
-    private static void mergeAliasForg(Delegator delegator, String partyIdFrom, String beforePartyId, String partyId)throws GenericEntityException {
+    private static void mergeAliasForg(Delegator delegator, String partyIdFrom, String beforePartyId, String partyId) throws GenericEntityException {
         //别人给我取的别名
         List<GenericValue> aliasForg = EntityQuery.use(delegator).from("AliasForg").where(
                 "partyIdTo", beforePartyId).queryList();
-        if(null!=aliasForg && aliasForg.size()>0){
-            for(GenericValue storeRow : aliasForg){
-                storeRow.set("partyIdTo",partyId);
+        if (null != aliasForg && aliasForg.size() > 0) {
+            for (GenericValue storeRow : aliasForg) {
+                storeRow.set("partyIdTo", partyId);
                 storeRow.store();
             }
         }
@@ -1183,11 +1173,11 @@ public class BoomServices {
 
     private static void mergeProductsSupplier(Delegator delegator, LocalDispatcher dispatcher, GenericValue admin, String beforePartyId, String partyId) throws GenericEntityException, GenericServiceException {
 
-        List<GenericValue>  suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
+        List<GenericValue> suppliers = EntityQuery.use(delegator).from("SupplierProduct").where(
                 "partyId", beforePartyId).queryList();
-        if(suppliers.size()>0){
-            for(GenericValue rowSupplier : suppliers){
-                    String productId = rowSupplier.getString("productId");
+        if (suppliers.size() > 0) {
+            for (GenericValue rowSupplier : suppliers) {
+                String productId = rowSupplier.getString("productId");
                 rowSupplier.remove();
                 dispatcher.runSync("createSupplierProduct",
                         UtilMisc.toMap("userLogin", admin, "productId", productId,
@@ -1287,16 +1277,14 @@ public class BoomServices {
             result.put("partyId", miniProgramIdentification.get("partyId") + "");
 
 
-            Map<String,Object> myGroup = getMyGroup(delegator,""+miniProgramIdentification.get("partyId"));
-            if(null!=myGroup){
+            Map<String, Object> myGroup = getMyGroup(delegator, "" + miniProgramIdentification.get("partyId"));
+            if (null != myGroup) {
                 String partyGroupId = (String) myGroup.get("partyId");
                 result.put("partyGroupId", partyGroupId);
             }
 
             return result;
         }
-
-
 
 
         result.put("tarjeta", null);
@@ -1339,7 +1327,7 @@ public class BoomServices {
 //                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
 //
 //        String partyGroupId = relation.getString("partyIdTo");
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
 
@@ -1363,48 +1351,45 @@ public class BoomServices {
                 , "facilityId", facilityId, "productId", productId, "statusId", "REQ_APPROVED", "requirementStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
                 "quantity", new BigDecimal(quantity)));
 
-        List<GenericValue> productAssocList =   EntityQuery.use(delegator).from("ProductAssoc").where(
+        List<GenericValue> productAssocList = EntityQuery.use(delegator).from("ProductAssoc").where(
                 "productId", productId).queryList();
-        if(productAssocList.size()>0){
-            for(GenericValue rowAssoc : productAssocList){
+        if (productAssocList.size() > 0) {
+            for (GenericValue rowAssoc : productAssocList) {
                 BigDecimal rowQuantity = (BigDecimal) rowAssoc.get("quantity");
                 String rowProductId = (String) rowAssoc.get("productIdTo");
-                GenericValue  productionTemp =   EntityQuery.use(delegator).from("ProductionTemp").where(
-                        "productId", rowProductId,"facilityId",facilityId).queryFirst();
-                 if(productionTemp!=null){
-                     productionTemp.set("count",(Integer.parseInt(""+productionTemp.get("count"))+ (rowQuantity.intValue()* Integer.parseInt(quantity)))+"" );
+                GenericValue productionTemp = EntityQuery.use(delegator).from("ProductionTemp").where(
+                        "productId", rowProductId, "facilityId", facilityId).queryFirst();
+                if (productionTemp != null) {
+                    productionTemp.set("count", (Integer.parseInt("" + productionTemp.get("count")) + (rowQuantity.intValue() * Integer.parseInt(quantity))) + "");
                     productionTemp.store();
-                 }else{
-                     productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
-                     GenericValue rowProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId", rowProductId));
-                     productionTemp.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
-                     productionTemp.set("count",(rowQuantity.intValue()* Integer.parseInt(quantity))+"");
-                     productionTemp.set("productId",rowProductId);
-                     productionTemp.set("facilityId",facilityId);
-                     productionTemp.set("productName",rowProduct.getString("productName"));
-                     productionTemp.set("type","MANUF_COMPONENT");
-                     productionTemp.set("detailImage",rowProduct.getString("detailImageUrl"));
-                     productionTemp.create();
-                 }
+                } else {
+                    productionTemp = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
+                    GenericValue rowProduct = delegator.findOne("Product", false, UtilMisc.toMap("productId", rowProductId));
+                    productionTemp.set("tempId", (String) delegator.getNextSeqId("ProductionTemp"));
+                    productionTemp.set("count", (rowQuantity.intValue() * Integer.parseInt(quantity)) + "");
+                    productionTemp.set("productId", rowProductId);
+                    productionTemp.set("facilityId", facilityId);
+                    productionTemp.set("productName", rowProduct.getString("productName"));
+                    productionTemp.set("type", "MANUF_COMPONENT");
+                    productionTemp.set("detailImage", rowProduct.getString("detailImageUrl"));
+                    productionTemp.create();
+                }
 
 
-
-
-
-                GenericValue  productionTempFinnish =   EntityQuery.use(delegator).from("ProductionTemp").where(
-                        "productId", productId,"facilityId",facilityId).queryFirst();
-                if(productionTempFinnish!=null){
-                    productionTempFinnish.set("count",(Integer.parseInt(""+productionTempFinnish.get("count"))+  Integer.parseInt(quantity))+"" );
+                GenericValue productionTempFinnish = EntityQuery.use(delegator).from("ProductionTemp").where(
+                        "productId", productId, "facilityId", facilityId).queryFirst();
+                if (productionTempFinnish != null) {
+                    productionTempFinnish.set("count", (Integer.parseInt("" + productionTempFinnish.get("count")) + Integer.parseInt(quantity)) + "");
                     productionTempFinnish.store();
-                }else{
+                } else {
                     productionTempFinnish = delegator.makeValue("ProductionTemp", UtilMisc.toMap());
-                    productionTempFinnish.set("tempId",(String) delegator.getNextSeqId("ProductionTemp"));
-                    productionTempFinnish.set("count", Integer.parseInt(quantity)+"" );
-                    productionTempFinnish.set("productId",productId);
-                    productionTempFinnish.set("facilityId",facilityId);
-                    productionTempFinnish.set("productName",product.getString("productName"));
-                    productionTempFinnish.set("type","FINISHED_GOOD");
-                    productionTempFinnish.set("detailImage",product.getString("detailImageUrl"));
+                    productionTempFinnish.set("tempId", (String) delegator.getNextSeqId("ProductionTemp"));
+                    productionTempFinnish.set("count", Integer.parseInt(quantity) + "");
+                    productionTempFinnish.set("productId", productId);
+                    productionTempFinnish.set("facilityId", facilityId);
+                    productionTempFinnish.set("productName", product.getString("productName"));
+                    productionTempFinnish.set("type", "FINISHED_GOOD");
+                    productionTempFinnish.set("detailImage", product.getString("detailImageUrl"));
                     productionTempFinnish.create();
                 }
             }
@@ -1412,12 +1397,12 @@ public class BoomServices {
         }
 
 
-
         return resultMap;
     }
 
     /**
      * updateMyFinishedGood
+     *
      * @param dctx
      * @param context
      * @return
@@ -1443,18 +1428,18 @@ public class BoomServices {
         String productId = (String) context.get("productId");
 
 
-        GenericValue product  =  EntityQuery.use(delegator).from("Product").where(
+        GenericValue product = EntityQuery.use(delegator).from("Product").where(
                 "productId", productId).queryFirst();
-        product.set("productName",productName);
-        product.set("detailImageUrl",imagePath!=null?imagePath:"");
-        product.set("smallImageUrl",imagePath!=null?imagePath:"");
-        product.set("quantityUomId",quantityUomId);
+        product.set("productName", productName);
+        product.set("detailImageUrl", imagePath != null ? imagePath : "");
+        product.set("smallImageUrl", imagePath != null ? imagePath : "");
+        product.set("quantityUomId", quantityUomId);
         product.store();
 
-        List<GenericValue> productAssoc =  EntityQuery.use(delegator).from("ProductAssoc").where(
-                "productId", productId,"productAssocTypeId", "MANUF_COMPONENT").queryList();
-        if(null!= productAssoc && productAssoc.size()>0){
-            for(GenericValue assoc : productAssoc){
+        List<GenericValue> productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where(
+                "productId", productId, "productAssocTypeId", "MANUF_COMPONENT").queryList();
+        if (null != productAssoc && productAssoc.size() > 0) {
+            for (GenericValue assoc : productAssoc) {
                 assoc.remove();
             }
         }
@@ -1462,11 +1447,11 @@ public class BoomServices {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
-                if(count.trim().equals("0")){
+                if (count.trim().equals("0")) {
                     continue;
                 }
-                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId,"productAssocTypeId", "MANUF_COMPONENT",
-                         "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId, "productAssocTypeId", "MANUF_COMPONENT",
+                        "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
             }
         }
 
@@ -1476,6 +1461,7 @@ public class BoomServices {
 
     /**
      * createMyFinishedGood
+     *
      * @param dctx
      * @param context
      * @return
@@ -1511,7 +1497,7 @@ public class BoomServices {
         createProductInMap.put("smallImageUrl", imagePath);
         createProductInMap.put("quantityUomId", quantityUomId);
 
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 //        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
 //                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
@@ -1596,8 +1582,6 @@ public class BoomServices {
     }
 
 
-
-
     public static Map<String, Object> removeMyRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
         //Service Head
@@ -1610,23 +1594,22 @@ public class BoomServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
         String productId = (String) context.get("productId");
 
         GenericValue productRole = EntityQuery.use(delegator).from("ProductRole").where(
-                "partyId", partyGroupId,"productId",productId,"roleTypeId","ADMIN").queryFirst();
-        Debug.logInfo("partyGroupId:"+partyGroupId,module);
-        Debug.logInfo("productId:"+productId,module);
-        Debug.logInfo("productRole:"+productRole,module);
-        if(productRole!=null){
+                "partyId", partyGroupId, "productId", productId, "roleTypeId", "ADMIN").queryFirst();
+        Debug.logInfo("partyGroupId:" + partyGroupId, module);
+        Debug.logInfo("productId:" + productId, module);
+        Debug.logInfo("productRole:" + productRole, module);
+        if (productRole != null) {
             productRole.remove();
         }
 
         return resultMap;
     }
-
 
 
     public static Map<String, Object> updateRawMaterials(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
@@ -1648,23 +1631,22 @@ public class BoomServices {
         String productId = (String) context.get("productId");
 
 
-        GenericValue product  =  EntityQuery.use(delegator).from("Product").where(
+        GenericValue product = EntityQuery.use(delegator).from("Product").where(
                 "productId", productId).queryFirst();
-        Debug.logInfo("productNameL"+productName,module);
+        Debug.logInfo("productNameL" + productName, module);
         product.set("productName", productName);
-        product.set("detailImageUrl",imagePath!=null?imagePath:"");
-        product.set("smallImageUrl",imagePath!=null?imagePath:"");
-        product.set("quantityUomId",quantityUomId);
+        product.set("detailImageUrl", imagePath != null ? imagePath : "");
+        product.set("smallImageUrl", imagePath != null ? imagePath : "");
+        product.set("quantityUomId", quantityUomId);
 
         product.store();
-        List<GenericValue> supplierProducts =  EntityQuery.use(delegator).from("SupplierProduct").where(
+        List<GenericValue> supplierProducts = EntityQuery.use(delegator).from("SupplierProduct").where(
                 "productId", productId).queryList();
-        if(null!= supplierProducts && supplierProducts.size()>0){
-            for(GenericValue supplierRow : supplierProducts){
-                        supplierRow.remove();
+        if (null != supplierProducts && supplierProducts.size() > 0) {
+            for (GenericValue supplierRow : supplierProducts) {
+                supplierRow.remove();
             }
         }
-
 
 
         if (suppliers != null && suppliers.length() > 2) {
@@ -1700,12 +1682,11 @@ public class BoomServices {
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
 
-
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
 
 
-        Map<String,Object> myGroup =  getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
 
         String productName = (String) context.get("productName");
@@ -1721,8 +1702,8 @@ public class BoomServices {
         createProductInMap.put("productName", productName);
         createProductInMap.put("productTypeId", "RAW_MATERIAL");
 //        createProductInMap.put("description", description);
-        createProductInMap.put("detailImageUrl", imagePath!=null?imagePath:"");
-        createProductInMap.put("smallImageUrl", imagePath!=null?imagePath:"");
+        createProductInMap.put("detailImageUrl", imagePath != null ? imagePath : "");
+        createProductInMap.put("smallImageUrl", imagePath != null ? imagePath : "");
         createProductInMap.put("quantityUomId", quantityUomId);
 
         Map<String, Object> createProductOutMap = dispatcher.runSync("createProduct", createProductInMap);
@@ -1770,7 +1751,7 @@ public class BoomServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         String supplierName = (String) context.get("supplierName");
         String supplierTel = (String) context.get("supplierTel");
@@ -1804,30 +1785,30 @@ public class BoomServices {
         person.store();
         GenericValue telecomNumberAndPartyView = EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
                 "partyId", leadId).queryFirst();
-        if(null!= telecomNumberAndPartyView){
+        if (null != telecomNumberAndPartyView) {
             String contactMechId = telecomNumberAndPartyView.getString("contactMechId");
-            GenericValue telecomNumber= EntityQuery.use(delegator).from("TelecomNumber").where(
+            GenericValue telecomNumber = EntityQuery.use(delegator).from("TelecomNumber").where(
                     "contactMechId", contactMechId).queryFirst();
-            telecomNumber.set("contactNumber",supplierTel);
+            telecomNumber.set("contactNumber", supplierTel);
             telecomNumber.store();
-        }else{
+        } else {
             String contactMechId = (String) delegator.getNextSeqId("ContactMech");
-            dispatcher.runSync("createPartyTelecomNumber",UtilMisc.toMap("contactNumber",supplierTel,
-                    "userLogin",admin,"contactMechId",contactMechId,"partyId",leadId));
+            dispatcher.runSync("createPartyTelecomNumber", UtilMisc.toMap("contactNumber", supplierTel,
+                    "userLogin", admin, "contactMechId", contactMechId, "partyId", leadId));
         }
         GenericValue partyAndPostalAddress = EntityQuery.use(delegator).from("PartyAndPostalAddress").where(
-                "partyId", leadId,"contactMechTypeId","POSTAL_ADDRESS").queryFirst();
-        if(null!=partyAndPostalAddress){
+                "partyId", leadId, "contactMechTypeId", "POSTAL_ADDRESS").queryFirst();
+        if (null != partyAndPostalAddress) {
             String contactMechId = partyAndPostalAddress.getString("contactMechId");
-            GenericValue postalAddress= EntityQuery.use(delegator).from("PostalAddress").where(
+            GenericValue postalAddress = EntityQuery.use(delegator).from("PostalAddress").where(
                     "contactMechId", contactMechId).queryFirst();
-            postalAddress.set("address1",provinceName + " " + cityName + " "+countyName + " " + detailInfo);
+            postalAddress.set("address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo);
             postalAddress.store();
-        }else{
+        } else {
             String contactMechPurposeTypeId = "POSTAL_ADDRESS";
             Map<String, Object> createPartyPostalAddressOutMap = dispatcher.runSync("createPartyPostalAddress",
                     UtilMisc.toMap("userLogin", admin, "toName", supplierName, "partyId", leadId, "countryGeoId",
-                            PeConstant.DEFAULT_GEO_COUNTRY, "city", cityName, "address1", provinceName + " " + cityName + " "+countyName + " " + detailInfo, "postalCode", PeConstant.DEFAULT_POST_CODE
+                            PeConstant.DEFAULT_GEO_COUNTRY, "city", cityName, "address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo, "postalCode", PeConstant.DEFAULT_POST_CODE
                     ));
         }
 
@@ -1850,10 +1831,10 @@ public class BoomServices {
 
 
         GenericValue aliasForg = EntityQuery.use(delegator).from("AliasForg").where(
-                "partyIdTo", leadId,"partyIdFrom",partyGroupId).queryFirst();
+                "partyIdTo", leadId, "partyIdFrom", partyGroupId).queryFirst();
 
-        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
-        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+        aliasForg.set("aliasName", companyName + "-" + lastName + firstName);
+        aliasForg.set("aliasAddress", provinceName + " " + cityName + " " + countyName + " " + detailInfo);
         aliasForg.store();
 
         resultMap.put("leadInfo", UtilMisc.toMap("partyId", leadId));
@@ -1881,10 +1862,10 @@ public class BoomServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
-        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
-        userLogin =  EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
+        userLogin = EntityQuery.use(delegator).from("UserLogin").where("partyId", partyId).queryFirst();
 
 
         String supplierName = (String) context.get("supplierName");
@@ -1911,7 +1892,7 @@ public class BoomServices {
             firstName = supplierName.substring(1);
         }
 
-        if(supplierName.length()<2){
+        if (supplierName.length() < 2) {
             lastName = " ";
             firstName = supplierName;
         }
@@ -1948,8 +1929,8 @@ public class BoomServices {
                         aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
                         aliasForg.set("partyIdFrom", partyId);
                         aliasForg.set("partyIdTo", oldPartyId);
-                        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
-                        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+                        aliasForg.set("aliasName", companyName + "-" + lastName + firstName);
+                        aliasForg.set("aliasAddress", provinceName + " " + cityName + " " + countyName + " " + detailInfo);
                         aliasForg.create();
 
                         return resultMap;
@@ -1957,8 +1938,6 @@ public class BoomServices {
                 }
             }
         }
-
-
 
 
         //是否已经添加过
@@ -1971,9 +1950,6 @@ public class BoomServices {
         }
 
 
-
-
-
         Map<String, Object> createLeadMap = new HashMap<String, Object>();
 
         createLeadMap.put("userLogin", userLogin);
@@ -1982,7 +1958,7 @@ public class BoomServices {
         createLeadMap.put("countryGeoId", "CHN");
         createLeadMap.put("city", cityName == null ? "" : cityName);
         if (null != countyName && null != provinceName && null != detailInfo) {
-            createLeadMap.put("address1", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+            createLeadMap.put("address1", provinceName + " " + cityName + " " + countyName + " " + detailInfo);
         }
         createLeadMap.put("countryCode", "86");
         createLeadMap.put("postalCode", "200000");
@@ -2009,8 +1985,8 @@ public class BoomServices {
         aliasForg.set("aliasId", (String) delegator.getNextSeqId("AliasForg"));
         aliasForg.set("partyIdFrom", partyId);
         aliasForg.set("partyIdTo", resultPartyId);
-        aliasForg.set("aliasName", companyName+"-"+lastName+firstName);
-        aliasForg.set("aliasAddress", provinceName + " " + cityName + " "+countyName + " "  + detailInfo);
+        aliasForg.set("aliasName", companyName + "-" + lastName + firstName);
+        aliasForg.set("aliasAddress", provinceName + " " + cityName + " " + countyName + " " + detailInfo);
         aliasForg.create();
 
         resultMap.put("leadInfo", UtilMisc.toMap("partyId", resultPartyId));

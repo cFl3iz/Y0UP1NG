@@ -2141,7 +2141,8 @@ public class PersonManagerServices {
         String productName = (String) context.get("productName");
         String price = (String) context.get("price");
         String top = (String) context.get("top");
-
+        String filePaths = (String) context.get("filePaths");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
         GenericValue product
                 = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
@@ -2150,6 +2151,38 @@ public class PersonManagerServices {
                 = EntityQuery.use(delegator).from("ProductRole").where("partyId", partyId,
                 "roleTypeId", "ADMIN", "productId", productId).queryFirst();
 
+        if(null!=filePaths){
+            List<GenericValue> productContents =  EntityQuery.use(delegator).from("ProductContent").where("productId", productId).queryList();
+            if(productContents.size()>0){
+                for(GenericValue gv: productContents ){
+                    gv.remove();
+                }
+            }
+            String[] filePathsArray = filePaths.split(",");
+            for (int i = 0; i < filePathsArray.length; i++) {
+
+                if (i == 0) {
+                    product.set("smallImageUrl", "http://" + filePathsArray[i] + "?x-oss-process=image/resize,m_pad,h_50,w_50");
+                    product.set("detailImageUrl", "http://" + filePathsArray[i]);
+
+                }
+                if (i > 0 && i <= 2) {
+                    //创建产品内容和数据资源附图
+                    createProductContentAndDataResource("MATCH_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+
+                }
+                if (i > 2 && i <= 4) {
+                    createProductContentAndDataResource("SINGLE_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+
+                }
+                if (i > 4) {
+                    createProductContentAndDataResource("DETAIL_PRODUCT_IMAGE", delegator, dispatcher, admin, productId, "", filePathsArray[i], i);
+
+                }
+            }
+
+
+        }
 
 
         if(null != productRoleAdmin){
@@ -2164,14 +2197,14 @@ public class PersonManagerServices {
                 delegator.createOrStore(delegator.makeValue("ProductKeyword",
                         UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_DISAPPROVED")));
             }
-            product.store();
+
             GenericValue productPriceEntity = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
             productPriceEntity.set("price", new BigDecimal(price));
             productPriceEntity.store();
 
         }
 
-
+        product.store();
 
         return resultMap;
     }

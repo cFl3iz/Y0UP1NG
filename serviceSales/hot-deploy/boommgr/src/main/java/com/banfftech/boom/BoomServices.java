@@ -208,7 +208,7 @@ public class BoomServices {
         GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", loginPartyId), false);
         String productId = (String) context.get("productId");
         String quantityStr = (String) context.get("quantity");
-
+        Debug.logInfo("quantityStr:"+quantityStr,module);
         BigDecimal quantity = new BigDecimal(quantityStr);
 
         GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);

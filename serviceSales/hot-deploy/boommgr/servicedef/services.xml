@@ -70,6 +70,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="setProductInventory" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="setProductInventory" auth="false">
+        <description>setProductInventory</description>
+
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="String" mode="IN" optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
     <service name="queryDeliveryPlan" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomQueryServices"

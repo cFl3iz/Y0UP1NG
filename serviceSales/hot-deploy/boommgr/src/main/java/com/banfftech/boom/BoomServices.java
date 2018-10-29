@@ -177,6 +177,152 @@ public class BoomServices {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static Map<String, Object> setProductInventory(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        //当前登录用户
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String loginPartyId = userLogin.getString("partyId");
+        GenericValue person = delegator.findOne("Person", UtilMisc.toMap("partyId", loginPartyId), false);
+        String productId = (String) context.get("productId");
+        String quantityStr = (String) context.get("quantity");
+
+        BigDecimal quantity = new BigDecimal(quantityStr);
+
+        GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+        GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
+
+
+        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyGroupId).queryFirst();
+        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        //获得库存信息 getInventoryAvailableByFacility
+        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                "facilityId", inventoryFacilityId, "productId", productId));
+        BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+        BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+        GenericValue productInventoryItem = EntityQuery.use(delegator).from("ProductInventoryItem").where("productId", productId).queryFirst();
+        String inventoryItemId = (String) productInventoryItem.get("inventoryItemId");
+//          -1,表示bigdemical小于bigdemical2；
+//           0,表示bigdemical等于bigdemical2；
+//           1,表示bigdemical大于bigdemical2；
+
+        Map<String, Object> createInventoryItemDetailMap = new HashMap<String, Object>();
+        createInventoryItemDetailMap.put("userLogin", admin);
+        createInventoryItemDetailMap.put("inventoryItemId", inventoryItemId);
+
+
+        Debug.logInfo("*update resource availableToPromiseTotal = " + availableToPromiseTotal, module);
+        Debug.logInfo("*update resource quantity = " + quantity, module);
+        Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
+
+        //说明现库存比要设置的库存大,需要做差异减法
+        if (availableToPromiseTotal.compareTo(quantity) > 0) {
+            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+            int quantityInt = quantity.intValue();
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+            createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+        }
+        //说明现库存比要设置的库存小,需要做差异加法
+        if (availableToPromiseTotal.compareTo(quantity) < 0) {
+            int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+            int quantityInt = quantity.intValue();
+            Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+            Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+            createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+            createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+        }
+        //一模一样的库存我还差异个屁?
+        if (availableToPromiseTotal.compareTo(quantity) == 0) {
+
+        } else {
+            //3.2 Do create
+            Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
+
+            String inventoryItemDetailSeqId = (String) createInventoryItemDetailOutMap.get("inventoryItemDetailSeqId");
+
+
+            GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("inventoryItemId", inventoryItemId, "inventoryItemDetailSeqId", inventoryItemDetailSeqId).queryFirst();
+
+
+
+            Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
+                    "currentStatusId", "CAL_IN_PLANNING",
+                    "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
+                    "workEffortTypeId", "CONSUME_WORKER", "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
+                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+                    "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
+
+            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                    createWorkEffortMap);
+
+            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+                return serviceResultByCreateWorkEffortMap;
+            }
+
+            String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+
+            //  关联上产品
+            Map<String, Object> createWorkEffortGoodStandardMap = UtilMisc.toMap("userLogin", admin, "statusId", "WEGS_CREATED",
+                    "workEffortGoodStdTypeId", "GENERAL_SALES", "workEffortId", newWorkEffortId, "productId", productId);
+            Map<String, Object> createWorkEffortGoodStandardResultMap = dispatcher.runSync("createWorkEffortGoodStandard", createWorkEffortGoodStandardMap);
+            if (!ServiceUtil.isSuccess(createWorkEffortGoodStandardResultMap)) {
+                Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
+                return createWorkEffortGoodStandardResultMap;
+            }
+
+            // 增加角色到WorkEffort
+            Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", loginPartyId,
+                    "roleTypeId", "WORKER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", newWorkEffortId);
+            Map<String, Object> createReferrerResultMap = dispatcher.runSync("assignPartyToWorkEffort", createReferrerMap);
+            if (!ServiceUtil.isSuccess(createReferrerResultMap)) {
+                Debug.logInfo("*create Referrer Map Fail:" + createReferrerMap, module);
+                return createReferrerResultMap;
+            }
+
+        }
+
+        return resultMap;
+    }
+
+
     public static Map<String, Object> updateDeliveryPlanItem(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

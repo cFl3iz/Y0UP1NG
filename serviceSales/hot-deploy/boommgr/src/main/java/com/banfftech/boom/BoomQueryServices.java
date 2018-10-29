@@ -448,7 +448,7 @@ public class BoomQueryServices {
                 rowMap.put("groupPersons",workerRowList);
                 rowMap.put("description",gv.getString("workEffortName"));
                 rowMap.put("date",sdf.format(gv.get("fromDate")));
-                rowMap.put("location",getLocationFromPosition(workEffortNoteAndData.getString("noteInfo")));
+//                rowMap.put("location",getLocationFromPosition(workEffortNoteAndData.getString("noteInfo")));
 
 
 

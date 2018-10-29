@@ -801,7 +801,25 @@ public class PersonManagerServices {
                 }
 
 
+                //找到仓库
+                GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyId).queryFirst();
 
+                //为产品创建库存量
+                Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", userLogin,
+                        "facilityId", (String) facility.get("facilityId"),
+                        "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                        "productId", newProductId,
+                        "description ", "卖家发布产品时的录入库存",
+                        "quantityAccepted", new BigDecimal("9999999"),
+                        "quantityRejected", BigDecimal.ZERO,
+                        "unitCost", new BigDecimal("11111"),
+                        "ownerPartyId", partyId,
+                        "partyId", partyId,
+                        "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                        "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+                Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
+                );
 
             }
         }

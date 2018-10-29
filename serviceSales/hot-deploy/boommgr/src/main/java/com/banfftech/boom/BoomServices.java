@@ -280,9 +280,9 @@ public class BoomServices {
 
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
-
+            Debug.logInfo("*DeliveryPlansItem:"+gv,module);
             String qtyStr = "0" ;
-            if(null != gv.get("outQuantity")){
+            if(null != gv.get("outQuantity") && !gv.get("outQuantity")+"".equals("")){
                 qtyStr = gv.getString("outQuantity");
             }
             gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");

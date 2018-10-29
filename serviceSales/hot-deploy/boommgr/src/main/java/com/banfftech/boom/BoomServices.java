@@ -150,14 +150,29 @@ public class BoomServices {
 
         Locale locale = (Locale) context.get("locale");
 
-        String key = (String) context.get("key");
-        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlan").where(
-                "planKey", key).queryList();
-        if(planDataList!=null){
-            for(GenericValue gv : planDataList){
-                gv.remove();
-            }
+        String date = (String) context.get("date");
+        String productId = (String) context.get("productId");
+        String enumId = (String) context.get("enumId");
+
+
+        String partyId = userLogin.getString("partyId");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        //已经存在就不添加了
+        GenericValue deliveryPlansItem =EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date,"productId",productId,"enumId",enumId).queryFirst();
+        if(deliveryPlansItem!=null){
+            deliveryPlansItem.remove();
         }
+
+//        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlans").where(
+//                "planId", key).queryList();
+//        if(planDataList!=null){
+//            for(GenericValue gv : planDataList){
+//                gv.remove();
+//            }
+//        }
         return result;
     }
 

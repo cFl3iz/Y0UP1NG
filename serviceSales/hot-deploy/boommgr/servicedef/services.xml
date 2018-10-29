@@ -64,7 +64,9 @@
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="removeDeliveryPlan" auth="false">
         <description>removeDeliveryPlan</description>
-        <attribute name="key" type="String" mode="IN" optional="false"/>
+        <attribute name="date" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

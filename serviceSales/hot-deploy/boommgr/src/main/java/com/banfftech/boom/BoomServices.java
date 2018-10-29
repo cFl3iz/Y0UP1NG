@@ -229,6 +229,7 @@ public class BoomServices {
         Debug.logInfo("*update resource availableToPromiseTotal.compareTo(quantity)>0 = " + (availableToPromiseTotal.compareTo(quantity) > 0), module);
         String eventDesc = "";
         //盘库
+        String newWorkEffortId = "";
         if ("SET_WORKER".equals(workEffortTypeId)) {
             eventDesc = "员工盘库";
 
@@ -292,6 +293,23 @@ public class BoomServices {
         if (availableToPromiseTotal.compareTo(quantity) == 0 && workEffortTypeId.equals("SET_WORKER")) {
 
         } else {
+
+            Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
+                    "currentStatusId", "CAL_IN_PLANNING",
+                    "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
+                    "workEffortTypeId", workEffortTypeId, "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
+                    "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
+                    "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
+
+            Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
+                    createWorkEffortMap);
+
+            if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
+                Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
+                return serviceResultByCreateWorkEffortMap;
+            }
+              newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+            createInventoryItemDetailMap.put("workEffortId",newWorkEffortId);
             //3.2 Do create
             Map<String, Object> createInventoryItemDetailOutMap = dispatcher.runSync("createInventoryItemDetail", createInventoryItemDetailMap);
 
@@ -303,22 +321,9 @@ public class BoomServices {
         GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("inventoryItemId", inventoryItemId, "inventoryItemDetailSeqId", inventoryItemDetailSeqId).queryFirst();
 
 
-        Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", admin,
-                "currentStatusId", "CAL_IN_PLANNING",
-                "workEffortName", person.getString("firstName") + "差异[" + product.getString("productName") + "]",
-                "workEffortTypeId", workEffortTypeId, "description", "差异操作", "locationDesc", inventoryItemDetailSeqId,
-                "actualStartDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp(),
-                "workEffortPurposeTypeId", "WEPT_MAINTENANCE");
 
-        Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort",
-                createWorkEffortMap);
 
-        if (!ServiceUtil.isSuccess(serviceResultByCreateWorkEffortMap)) {
-            Debug.logInfo("*Create WorkEffort Fail:" + createWorkEffortMap, module);
-            return serviceResultByCreateWorkEffortMap;
-        }
 
-        String newWorkEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
 
 
         //  关联上产品

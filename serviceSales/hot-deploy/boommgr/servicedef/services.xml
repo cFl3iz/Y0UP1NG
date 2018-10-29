@@ -78,6 +78,8 @@
 
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="quantity" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" type="String" mode="IN" optional="true"/>
+        <attribute name="date" type="String" mode="IN" optional="true"/>
         <attribute name="workEffortTypeId" type="String" mode="IN" optional="false"/>
 
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -52,6 +52,7 @@
         <field name="uomDescription" type="value"/>
         <field name="productName" type="value"/>
         <field name="quantity" type="value"/>
+        <field name="outQuantity" type="value"/>
         <field name="createByParty" type="value"/>
         <field name="payToParty" type="value"/>
         <field name="extField1" type="value"/>

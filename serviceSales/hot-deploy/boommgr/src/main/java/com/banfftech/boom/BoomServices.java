@@ -307,6 +307,10 @@ public class BoomServices {
                 Debug.logInfo("*Create WorkEffortGoodStandard Fail:" + createWorkEffortGoodStandardMap, module);
                 return createWorkEffortGoodStandardResultMap;
             }
+            if( null==EntityQuery.use(delegator).from("PartyRole").where("partyId",partyId,"roleTypeId","WORKER").queryFirst()){
+                dispatcher.runSync("createPartyRole",UtilMisc.toMap("userLogin",admin
+                        ,"partyId",partyId,"roleTypeId","WORKER"));
+            }
 
             // 增加角色到WorkEffort
             Map<String, Object> createReferrerMap = UtilMisc.toMap("userLogin", admin, "partyId", loginPartyId,

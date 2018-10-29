@@ -93,7 +93,193 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+    /**
+     * Query InventoryWorkList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryInventoryWorkList(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
 
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String viewIndexStr = (String) context.get("viewIndex");
+        String viewSizeStr = (String) context.get("viewSize");
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+
+
+        //Default Value
+        Long count = 0l;
+        int viewSize = 10;
+        int viewIndex = 0;
+        if (UtilValidate.isNotEmpty(viewSizeStr)) {
+            viewSize = Integer.parseInt(viewSizeStr);
+        }
+        if (UtilValidate.isNotEmpty(viewIndexStr)) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+
+
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        // Query ProductCategoryImage
+        List<String> orderBy = UtilMisc.toList("-createdDate");
+        PagedList<GenericValue> workerPageList = null;
+
+        Set<String> typeSet = new HashSet<String>();
+        typeSet.add("OUT_WORKER" );
+        typeSet.add("PUT_WORKER" );
+        typeSet.add("SET_WORKER" );
+        EntityCondition typeCondi = EntityCondition
+                .makeCondition("workEffortTypeId",EntityOperator.IN, typeSet);
+
+        if(UtilValidate.isEmpty(workEffortTypeId)||workEffortTypeId.toLowerCase().equals("all")){
+            workerPageList = EntityQuery.use(delegator).from("WorkEffort").
+                    where(typeCondi).orderBy(orderBy).queryPagedList(viewIndex, viewSize);
+            count = EntityQuery.use(delegator).from("WorkEffort").where(typeCondi).queryCount();
+        }else{
+            workerPageList = EntityQuery.use(delegator).from("WorkEffort").
+                    where("workEffortTypeId", workEffortTypeId).orderBy(orderBy).queryPagedList(viewIndex, viewSize);
+            count = EntityQuery.use(delegator).from("WorkEffort").where("workEffortTypeId", workEffortTypeId).queryCount();
+        }
+
+        List<GenericValue> workerList = workerPageList.getData();
+
+
+        if (null!= workerList && workerList.size() > 0) {
+            for (GenericValue gv : workerList) {
+
+                Map<String, Object> rowMap = new HashMap<String, Object>();
+
+                rowMap.put("date", sdf.format(gv.get("createdDate")));
+
+                String workEffortId = gv.getString("workEffortId");
+
+                String rowWorkEffortTypeId = gv.getString("workEffortTypeId");
+
+
+
+                String typeStr = "入";
+
+                if(rowWorkEffortTypeId.equals("OUT_WORKER")){
+                    typeStr = "出";
+                }
+                if(rowWorkEffortTypeId.equals("SET_WORKER")){
+                    typeStr = "盘";
+                }
+
+
+
+                rowMap.put("actionName",typeStr);
+
+                rowMap.put("workEffortId",workEffortId);
+
+
+                //找到工人
+                GenericValue worker = EntityQuery.use(delegator).from("WorkEffortPartyAssignment").where("workEffortId", workEffortId).queryFirst();
+                if(null== worker){
+                    continue;
+                }
+                Debug.logInfo("row-worker:"+worker,module);
+
+                String partyId = worker.getString("partyId");
+
+                //找到产品
+                GenericValue goodProd = EntityQuery.use(delegator).from("WorkEffortGoodStandard").where("workEffortId", workEffortId).queryFirst();
+
+
+                String productId = goodProd.getString("productId");
+
+                GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", productId).queryFirst();
+
+                GenericValue supplierProduct = EntityQuery.use(delegator).from("SupplierProduct").where("productId", productId).queryFirst();
+
+                rowMap.put("vender","无");
+
+                if(supplierProduct!=null){
+                    GenericValue supplierInfo = EntityQuery.use(delegator).from("PartyGroup").where("partyId", supplierProduct.getString("partyId")).queryFirst();
+                    if(supplierInfo!=null){
+                        rowMap.put("vender",supplierInfo.getString("groupName"));
+                    }
+                }
+
+                rowMap.put("productName",product.getString("productName"));
+
+
+
+                rowMap.put("workerInfo", queryPersonBaseInfo(delegator, partyId));
+
+                String primaryProductCategoryId = product.getString("primaryProductCategoryId");
+
+                GenericValue productCategory = EntityQuery.use(delegator).from("ProductCategory").where("productCategoryId", primaryProductCategoryId).queryFirst();
+
+                rowMap.put("categoryName",productCategory==null?"未知":productCategory.getString("categoryName"));
+
+
+                GenericValue inventoryItemDetail = EntityQuery.use(delegator).from("InventoryItemDetail").where("workEffortId", workEffortId).queryFirst();
+
+                String inventoryItemId = inventoryItemDetail.getString("inventoryItemId");
+
+                String inventoryItemDetailSeqId = inventoryItemDetail.getString("inventoryItemDetailSeqId");
+                rowMap.put("inventoryItemDetailSeqId",inventoryItemDetailSeqId);
+                GenericValue outWorker = EntityQuery.use(delegator).from("WorkEffort").where("locationDesc",inventoryItemDetailSeqId).queryFirst();
+                rowMap.put("status","可用");
+                if(null!=outWorker){
+                    rowMap.put("status", "不可用");
+                }
+
+
+
+                if(rowWorkEffortTypeId.equals("CONSUME_WORKER")){
+                    List<String> orderCreatedStamp = UtilMisc.toList("-createdStamp");
+                    GenericValue inventoryItemAssoc = EntityQuery.use(delegator).from("InventoryItemAssoc").
+                            where("inventoryItemIdTo", inventoryItemId).orderBy(orderCreatedStamp).queryFirst();
+                    String oldInventoryId = inventoryItemAssoc.getString("inventoryItemId");
+                    GenericValue facilityContentDetail = EntityQuery.use(delegator).from("FacilityContentDetail").where("inventoryItemId", oldInventoryId).queryFirst();
+
+                    if(null!= facilityContentDetail){
+                        String dataResourceId = facilityContentDetail.getString("dataResourceId");
+
+                        GenericValue dataResource = EntityQuery.use(delegator).from("DataResource").where("dataResourceId", dataResourceId).queryFirst();
+
+                        rowMap.put("imageUrl",dataResource==null?null:dataResource.getString("objectInfo"));
+                    }else{
+                        rowMap.put("imageUrl","");
+                    }
+                }else{
+                    GenericValue facilityContentDetail = EntityQuery.use(delegator).from("FacilityContentDetail").where("inventoryItemId", inventoryItemId).queryFirst();
+
+                    if(null!= facilityContentDetail){
+                        String dataResourceId = facilityContentDetail.getString("dataResourceId");
+
+                        GenericValue dataResource = EntityQuery.use(delegator).from("DataResource").where("dataResourceId", dataResourceId).queryFirst();
+
+                        rowMap.put("imageUrl",dataResource==null?null:dataResource.getString("objectInfo"));
+                    }else{
+                        rowMap.put("imageUrl","");
+                    }
+                }
+
+                returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("inventoryWorkerList", returnList);
+        resultMap.put("count", count.toString());
+
+        return resultMap;
+    }
     /**
      * queryWorkLogs
      * @param dctx

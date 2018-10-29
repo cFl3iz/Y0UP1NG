@@ -120,7 +120,19 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <!-- Query CategoryList -->
+    <service name="queryInventoryWorkList" engine="java"
+             location="main.java.com.banfftech.boom.BoomQueryServices" invoke="queryInventoryWorkList" auth="false">
+        <description>queryInventoryWorkList</description>
 
+        <attribute name="workEffortTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="viewIndex" type="String" mode="IN" optional="true"/>
+        <attribute name="viewSize" type="String" mode="IN" optional="true"/>
+
+        <attribute name="inventoryWorkerList" type="List" mode="OUT" optional="true"/>
+        <attribute name="count" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <service name="addProductionTemp" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

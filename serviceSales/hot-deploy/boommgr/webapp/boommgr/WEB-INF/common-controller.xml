@@ -52,7 +52,13 @@
         <response name="error" type="request" value="result_json"/>
     </request-map>
 
-
+    <!-- QueryInventoryWorkList 流水 -->
+    <request-map uri="queryInventoryWorkList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryInventoryWorkList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="queryHistory">

@@ -277,7 +277,7 @@ public class BoomServices {
 
             String date = (String) context.get("date");
             String enumId = (String) context.get("enumId");
-            if(null != date && enumId !=null && (!date.equals(""))){
+            if(null != date && enumId !=null && (!date.equals("")) && (!date.equals("null"))){
             Debug.logInfo("date:"+date+"|enumId:"+enumId,module);
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();

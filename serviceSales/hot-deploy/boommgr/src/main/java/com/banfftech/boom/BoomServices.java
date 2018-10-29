@@ -277,6 +277,7 @@ public class BoomServices {
 
             String date = (String) context.get("date");
             String enumId = (String) context.get("enumId");
+            if(null != date && enumId !=null){
 
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
@@ -287,6 +288,7 @@ public class BoomServices {
             }
             gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");
             gv.store();
+            }
         }
 
         //一模一样的库存我还差异个屁?

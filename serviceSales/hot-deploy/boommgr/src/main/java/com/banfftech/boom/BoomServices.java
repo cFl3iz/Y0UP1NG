@@ -277,13 +277,13 @@ public class BoomServices {
 
             String date = (String) context.get("date");
             String enumId = (String) context.get("enumId");
-            if(null != date && enumId !=null){
-
+            if(null != date && enumId !=null && (!date.equals(""))){
+            Debug.logInfo("date:"+date+"|enumId:"+enumId,module);
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
             Debug.logInfo("*DeliveryPlansItem:"+gv,module);
             String qtyStr = "0" ;
-            if(null != gv.get("outQuantity") && ((gv.get("outQuantity")+"").equals("") != true)){
+            if(null!=gv&&null != gv.get("outQuantity") && ((gv.get("outQuantity")+"").equals("") != true)){
                 qtyStr = gv.getString("outQuantity");
             }
             gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");

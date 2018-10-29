@@ -245,36 +245,6 @@ public class BoomQueryServices {
 
 
 
-                if(rowWorkEffortTypeId.equals("CONSUME_WORKER")){
-                    List<String> orderCreatedStamp = UtilMisc.toList("-createdStamp");
-                    GenericValue inventoryItemAssoc = EntityQuery.use(delegator).from("InventoryItemAssoc").
-                            where("inventoryItemIdTo", inventoryItemId).orderBy(orderCreatedStamp).queryFirst();
-                    String oldInventoryId = inventoryItemAssoc.getString("inventoryItemId");
-                    GenericValue facilityContentDetail = EntityQuery.use(delegator).from("FacilityContentDetail").where("inventoryItemId", oldInventoryId).queryFirst();
-
-                    if(null!= facilityContentDetail){
-                        String dataResourceId = facilityContentDetail.getString("dataResourceId");
-
-                        GenericValue dataResource = EntityQuery.use(delegator).from("DataResource").where("dataResourceId", dataResourceId).queryFirst();
-
-                        rowMap.put("imageUrl",dataResource==null?null:dataResource.getString("objectInfo"));
-                    }else{
-                        rowMap.put("imageUrl","");
-                    }
-                }else{
-                    GenericValue facilityContentDetail = EntityQuery.use(delegator).from("FacilityContentDetail").where("inventoryItemId", inventoryItemId).queryFirst();
-
-                    if(null!= facilityContentDetail){
-                        String dataResourceId = facilityContentDetail.getString("dataResourceId");
-
-                        GenericValue dataResource = EntityQuery.use(delegator).from("DataResource").where("dataResourceId", dataResourceId).queryFirst();
-
-                        rowMap.put("imageUrl",dataResource==null?null:dataResource.getString("objectInfo"));
-                    }else{
-                        rowMap.put("imageUrl","");
-                    }
-                }
-
                 returnList.add(rowMap);
             }
         }

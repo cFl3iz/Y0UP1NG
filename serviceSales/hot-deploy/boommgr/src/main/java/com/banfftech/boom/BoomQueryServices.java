@@ -46,6 +46,7 @@ import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.base.util.UtilHttp;
 import org.apache.ofbiz.service.ModelService;
+import org.apache.ofbiz.base.util.collections.PagedList;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

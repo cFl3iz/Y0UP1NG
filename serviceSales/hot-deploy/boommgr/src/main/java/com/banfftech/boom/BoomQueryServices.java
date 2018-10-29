@@ -231,11 +231,17 @@ public class BoomQueryServices {
 
                 if(inventoryItemDetail==null){
                     continue;
+                }else{
+                    rowMap.put("quantityOnHandDiff",inventoryItemDetail.get("quantityOnHandDiff"));
                 }
 
                 String inventoryItemId = inventoryItemDetail.getString("inventoryItemId");
 
                 String inventoryItemDetailSeqId = inventoryItemDetail.getString("inventoryItemDetailSeqId");
+
+
+
+
                 rowMap.put("inventoryItemDetailSeqId",inventoryItemDetailSeqId);
                 GenericValue outWorker = EntityQuery.use(delegator).from("WorkEffort").where("locationDesc",inventoryItemDetailSeqId).queryFirst();
                 rowMap.put("status","可用");

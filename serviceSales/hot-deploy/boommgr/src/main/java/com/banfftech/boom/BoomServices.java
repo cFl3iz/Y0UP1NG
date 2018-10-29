@@ -220,8 +220,8 @@ public class BoomServices {
 
 
 
-        GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyGroupId).queryFirst();
-        String inventoryFacilityId = store.getString("inventoryFacilityId");
+        GenericValue store = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyGroupId).queryFirst();
+        String inventoryFacilityId = store.getString("facilityId");
         //获得库存信息 getInventoryAvailableByFacility
         Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                 "facilityId", inventoryFacilityId, "productId", productId));

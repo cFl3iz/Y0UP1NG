@@ -42,6 +42,11 @@
         <field name="fromDate" type="date-time"></field>
         <prim-key field="planId"/>
     </entity>
+    <entity entity-name="PermisionJson" package-name="org.ofbiz.cloudLake.ProductStore" title="PermisionJson">
+        <field name="id" type="id-ne"/>
+        <field name="data" type="very-long"/>
+        <prim-key field="id"/>
+    </entity>
     <!-- 出库计划项 -->
     <entity entity-name="DeliveryPlansItem" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlansItem">
 

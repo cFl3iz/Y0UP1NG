@@ -139,6 +139,20 @@ public class BoomServices {
         return partyId;
     }
 
+    public static Map<String, Object> updatePermisionJson(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+
+        String data = (String) context.get("data");
+
+        delegator.createOrStore(delegator.makeValue("PermisionJson",
+                UtilMisc.toMap("id","1", "data",data
+                )));
+
+        return result;
+    }
 
     public static Map<String, Object> removeDeliveryPlan(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head

@@ -21,6 +21,25 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="queryPermisionJson" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryPermisionJson" auth="false">
+        <description>queryPermisionJson</description>
+        <attribute name="data" type="String" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+    <service name="updatePermisionJson" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="updatePermisionJson" auth="false">
+        <description>updatePermisionJson</description>
+        <attribute name="data" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="productionTemp" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

@@ -94,6 +94,25 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+
+
+
+    public static Map<String, Object> queryPermisionJson(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue permJson = EntityQuery.use(delegator).from("PermisionJson").where( ).queryFirst();
+
+
+        if(null!=permJson){
+            resultMap.put("data",permJson.getString("data"));
+        }
+
+        return resultMap;
+    }
     /**
      * Query InventoryWorkList
      * @param dctx

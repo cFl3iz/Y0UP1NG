@@ -784,9 +784,9 @@ public class PersonManagerServices {
 
 //                //找到上家的ID
                 GenericValue productAndCategoryMember = EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                        "productId", rowProductId,"productCategoryId",fromProductCategoryId)).queryFirst();
-                if(null != EntityQuery.use(delegator).from("ProductAndCategoryMember").where(UtilMisc.toMap(
-                        "productId", rowProductId,"productCategoryId",productCategoryId)).queryFirst()){
+                        "productId", rowProductId )).queryFirst();
+                Debug.logInfo("productAndCategoryMember:"+productAndCategoryMember,module);
+                if(null != productAndCategoryMember ){
                     String payToPartyId = productAndCategoryMember.getString("payToPartyId");
                     Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
                     createPartyRelationshipInMap.put("partyIdFrom", partyId);

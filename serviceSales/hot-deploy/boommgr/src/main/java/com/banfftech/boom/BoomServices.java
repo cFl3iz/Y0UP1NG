@@ -141,6 +141,7 @@ public class BoomServices {
 
     public static Map<String, Object> updatePermisionJson(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Locale locale = (Locale) context.get("locale");

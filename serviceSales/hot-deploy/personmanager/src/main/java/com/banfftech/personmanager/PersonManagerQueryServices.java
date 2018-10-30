@@ -3972,7 +3972,7 @@ public class PersonManagerQueryServices {
 
             List<GenericValue> contentsList =
                     EntityQuery.use(delegator).from("PartyContentAndDataResource").
-                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("-fromDate").queryPagedList(0, 999999).getData();
+                            where("partyId", partyId, "partyContentTypeId", "LGOIMGURL").orderBy("fromDate").queryPagedList(0, 999999).getData();
 
 
             GenericValue partyContent = null;

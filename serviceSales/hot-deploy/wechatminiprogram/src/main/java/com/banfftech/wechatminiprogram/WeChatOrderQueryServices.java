@@ -74,13 +74,16 @@ public class WeChatOrderQueryServices {
 
         List<GenericValue> partyRelationships = EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdTo", partyId).queryList();
-
+        Map<String,Object> queryFilter = new HashMap<String, Object>();
         if(null!= partyRelationships){
             for(GenericValue gv : partyRelationships){
-                Map<String,Object> rowMap =new HashMap<String, Object>();
                 String partyIdFrom = gv.getString("partyIdFrom");
-                rowMap.put("clientInfo",queryPersonBaseInfo(delegator,partyIdFrom));
-                returnList.add(rowMap);
+                if(!queryFilter.containsKey(partyIdFrom)){
+                    Map<String,Object> rowMap =new HashMap<String, Object>();
+                    rowMap.put("clientInfo",queryPersonBaseInfo(delegator,partyIdFrom));
+                    returnList.add(rowMap);
+                    queryFilter.put(partyIdFrom,null);
+                }
             }
         }
 

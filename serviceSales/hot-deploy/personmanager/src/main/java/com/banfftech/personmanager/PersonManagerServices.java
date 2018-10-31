@@ -735,7 +735,7 @@ public class PersonManagerServices {
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
 
-
+        String payToPartyId = null;
 
 
 
@@ -787,17 +787,7 @@ public class PersonManagerServices {
                         "productId", rowProductId )).queryFirst();
                 Debug.logInfo("productAndCategoryMember:"+productAndCategoryMember,module);
                 if(null != productAndCategoryMember ){
-                    String payToPartyId = productAndCategoryMember.getString("payToPartyId");
-                    Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
-                    createPartyRelationshipInMap.put("partyIdFrom", partyId);
-                    createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-                    createPartyRelationshipInMap.put("partyIdTo",payToPartyId );
-                    createPartyRelationshipInMap.put("partyRelationshipTypeId", "AGENT");
-                    createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
-                    createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
-                    GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
-                    pr.create();
-
+                      payToPartyId = productAndCategoryMember.getString("payToPartyId");
                 }
 
 
@@ -822,6 +812,19 @@ public class PersonManagerServices {
                 );
 
             }
+        }
+
+        if(payToPartyId!=null && EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdFrom", partyId,"partyIdTo",payToPartyId,"partyRelationshipTypeId","AGENT").queryFirst() ==null){
+            Map<String, Object> createPartyRelationshipInMap = new HashMap<String, Object>();
+            createPartyRelationshipInMap.put("partyIdFrom", partyId);
+            createPartyRelationshipInMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+            createPartyRelationshipInMap.put("partyIdTo",payToPartyId );
+            createPartyRelationshipInMap.put("partyRelationshipTypeId", "AGENT");
+            createPartyRelationshipInMap.put("roleTypeIdTo", "_NA_");
+            createPartyRelationshipInMap.put("roleTypeIdFrom", "_NA_");
+            GenericValue pr = delegator.makeValue("PartyRelationship", createPartyRelationshipInMap);
+            pr.create();
         }
 
         return resultMap;

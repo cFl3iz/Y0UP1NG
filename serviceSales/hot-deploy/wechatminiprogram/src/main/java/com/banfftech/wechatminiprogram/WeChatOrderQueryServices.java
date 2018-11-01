@@ -81,6 +81,8 @@ public class WeChatOrderQueryServices {
                 if(!queryFilter.containsKey(partyIdFrom)){
                     Map<String,Object> rowMap =new HashMap<String, Object>();
                     rowMap.put("clientInfo",queryPersonBaseInfo(delegator,partyIdFrom));
+                    GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyIdFrom).queryFirst();
+                    rowMap.put("productStoreId",store.getString("productStoreId"));
                     returnList.add(rowMap);
                     queryFilter.put(partyIdFrom,null);
                 }

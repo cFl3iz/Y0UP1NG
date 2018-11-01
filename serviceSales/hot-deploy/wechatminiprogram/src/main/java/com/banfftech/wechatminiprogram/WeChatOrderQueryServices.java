@@ -1831,7 +1831,7 @@ public class WeChatOrderQueryServices {
 
 
                 GenericValue beforeProduct
-                        = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId", "PRODUCT_OBSOLESCENCE", "productId", skuId).queryFirst();
+                        = EntityQuery.use(delegator).from("ProductAssoc").where("productAssocTypeId", "PRODUCT_OBSOLESCENCE", "productId", skuId).orderBy("-fromDate").queryFirst();
                 if (beforeProduct != null) {
                     String beforeProductId = beforeProduct.getString("productIdTo");
                     GenericValue productPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", beforeProductId).queryFirst();

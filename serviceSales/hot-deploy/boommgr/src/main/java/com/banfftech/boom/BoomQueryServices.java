@@ -1549,7 +1549,7 @@ public class BoomQueryServices {
             }
         }
 
-        if(returnList!=null && returnList.size()>0 && productName!=null){
+        if(returnList!=null && returnList.size()>0 && productName!=null&&!productName.equals("null")&&!productName.equals("")){
             // query history
             GenericValue queryHistory =  EntityQuery.use(delegator).from("QueryHistory").where(
                     "partyId",userLogin.getString("partyId"),"name",productName).queryFirst();

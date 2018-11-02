@@ -130,6 +130,13 @@ public class BoomQueryServices {
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String loginPartyId = userLogin.getString("partyId");
+
+        Map<String,Object> myGroup = getMyGroup(delegator, loginPartyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String viewIndexStr = (String) context.get("viewIndex");
@@ -185,6 +192,24 @@ public class BoomQueryServices {
 
                 String workEffortId = gv.getString("workEffortId");
 
+                //找到工人
+                GenericValue worker = EntityQuery.use(delegator).from("WorkEffortPartyAssignment").where("workEffortId", workEffortId).queryFirst();
+                if(null== worker){
+                    continue;
+                }
+                Debug.logInfo("row-worker:"+worker,module);
+
+                String partyId = worker.getString("partyId");
+
+
+                Map<String,Object> rowGroup = getMyGroup(delegator, partyId);
+                String rowGroupId = (String) myGroup.get("partyId");
+
+                if(!rowGroupId.equals(partyGroupId)){
+                    continue;
+                }
+
+
                 String rowWorkEffortTypeId = gv.getString("workEffortTypeId");
 
 
@@ -205,14 +230,7 @@ public class BoomQueryServices {
                 rowMap.put("workEffortId",workEffortId);
 
 
-                //找到工人
-                GenericValue worker = EntityQuery.use(delegator).from("WorkEffortPartyAssignment").where("workEffortId", workEffortId).queryFirst();
-                if(null== worker){
-                    continue;
-                }
-                Debug.logInfo("row-worker:"+worker,module);
 
-                String partyId = worker.getString("partyId");
 
                 //找到产品
                 GenericValue goodProd = EntityQuery.use(delegator).from("WorkEffortGoodStandard").where("workEffortId", workEffortId).queryFirst();

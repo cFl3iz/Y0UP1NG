@@ -784,7 +784,13 @@ public class PersonManagerQueryServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
-        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
+//        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
+
+        PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
+                where().distinct().queryPagedList(0, 100);
+
+
+        List<GenericValue> allList = queryList.getData();
 
         Map<String,Object> partyFromMap = new HashMap<String, Object>();
 

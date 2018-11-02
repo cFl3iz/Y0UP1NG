@@ -203,7 +203,7 @@ public class BoomQueryServices {
 
 
                 Map<String,Object> rowGroup = getMyGroup(delegator, partyId);
-                String rowGroupId = (String) myGroup.get("partyId");
+                String rowGroupId = (String) rowGroup.get("partyId");
 
                 if(!rowGroupId.equals(partyGroupId)){
                     continue;
@@ -1238,15 +1238,18 @@ public class BoomQueryServices {
         }
 
 
-        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
-                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
+//                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER" ).queryFirst();
+//
+//        String partyGroupId = relation.getString("partyIdTo");
+//
+//        GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
+//                "partyId", partyGroupId).queryFirst();
 
-        String partyGroupId = relation.getString("partyIdTo");
+        Map<String,Object> myGroup = getMyGroup(delegator,partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
-        GenericValue partyGroup = EntityQuery.use(delegator).from("PartyGroup").where(
-                "partyId", partyGroupId).queryFirst();
-
-        String groupName = partyGroup.getString("groupName");
+        String groupName = (String) myGroup.get("groupName");
 
         returnMap.put("partyGroupId",partyGroupId);
         returnMap.put("groupName",groupName);

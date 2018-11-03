@@ -942,6 +942,13 @@ public class WeChatMiniProgramServices {
 
         String partyId = (String) userLogin.get("partyId");
 
+        GenericValue productStore  = EntityQuery.use(delegator).from("ProductStore").where(  "productStoreId", productStoreId).queryFirst();
+
+        String payToPartyId = productStore.getString("payToPartyId");
+
+        if(payToPartyId.equals(partyId)){
+            return resultMap;
+        }
 
         // 客户是否拥有
         GenericValue partyCustRole = EntityQuery.use(delegator).from("PartyRole").where("partyId", partyId, "roleTypeId", "CUSTOMER").queryFirst();

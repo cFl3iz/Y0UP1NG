@@ -110,28 +110,36 @@ public class PersonManagerQueryServices {
 
 
 
-        List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-                "partyIdTo", partyFromId, "basePartyId",partyId).queryList();
-
-        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
-            for (GenericValue genericValue : queryAgentForwardChainFacts) {
-                Map<String,Object> rowMap = genericValue.getAllFields();
-
-                String partyIdFrom = genericValue.getString("partyIdFrom");
-                String basePartyId = genericValue.getString("basePartyId");
-                String partyIdTo = genericValue.getString("partyIdTo");
-
-                List<Map<String,Object>> subList = new ArrayList<Map<String, Object>>();
-
-                subList =  getNextAgentForwardChain(delegator,basePartyId,partyIdFrom,partyIdTo);
-
+         GenericValue queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
+                "partyIdTo", partyFromId, "basePartyId",partyId).queryFirst();
+        Map<String,Object> rowMap = null;
+            if(null != queryAgentForwardChainFacts){
+                rowMap = queryAgentForwardChainFacts.getAllFields();
+               String partyIdFrom = queryAgentForwardChainFacts.getString("partyIdFrom");
+                String basePartyId = queryAgentForwardChainFacts.getString("basePartyId");
+                String partyIdTo = queryAgentForwardChainFacts.getString("partyIdTo");
+               List<Map<String,Object>> subList =  getNextAgentForwardChain(delegator,basePartyId,partyIdFrom,partyIdTo);
                 rowMap.put("subList",subList);
-                returnList.add(rowMap);
             }
-        }
+//        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
+//            for (GenericValue genericValue : queryAgentForwardChainFacts) {
+//                Map<String,Object> rowMap = genericValue.getAllFields();
+//
+//                String partyIdFrom = genericValue.getString("partyIdFrom");
+//                String basePartyId = genericValue.getString("basePartyId");
+//                String partyIdTo = genericValue.getString("partyIdTo");
+//
+//                List<Map<String,Object>> subList = new ArrayList<Map<String, Object>>();
+//
+//                subList =  getNextAgentForwardChain(delegator,basePartyId,partyIdFrom,partyIdTo);
+//
+//                rowMap.put("subList",subList);
+//                returnList.add(rowMap);
+//            }
+//        }
 
 
-        resultMap.put("agentList",returnList);
+        resultMap.put("agents",rowMap);
 
         return resultMap;
     }

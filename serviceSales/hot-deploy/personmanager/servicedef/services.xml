@@ -249,7 +249,7 @@
              invoke="queryAgentForwardChainFact" auth="false">
         <description>queryAgentForwardChainFact</description>
        <attribute name="partyIdFrom" type="String" mode="IN"  optional="true"/>
-        <attribute name="agentList" type="List" mode="OUT"
+        <attribute name="agents" type="List" mode="OUT"
                    optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

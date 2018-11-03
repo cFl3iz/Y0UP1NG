@@ -109,7 +109,7 @@ public class PersonManagerQueryServices {
 
 
         List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-                "partyIdFrom", partyFromId, "basePartyId",partyId).queryList();
+                "partyIdTo", partyFromId, "basePartyId",partyId).queryList();
 
         if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
             for (GenericValue genericValue : queryAgentForwardChainFacts) {

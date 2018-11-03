@@ -837,7 +837,7 @@ public class PersonManagerServices {
 
         //TODO FIX ME
         if ( EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-               "basePartyId",basePartyId, "partyIdFrom", payToPartyId,"partyIdTo",partyId,"partyRelationshipTypeId","AGENT").queryFirst() ==null){
+               "basePartyId",basePartyId, "partyIdFrom", payToPartyId,"partyIdTo",partyId).queryFirst() ==null){
             Map<String, Object> createInMap = new HashMap<String, Object>();
             createInMap.put("basePartyId", basePartyId);
             createInMap.put("createDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());

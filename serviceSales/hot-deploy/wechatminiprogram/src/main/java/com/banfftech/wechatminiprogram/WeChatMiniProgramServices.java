@@ -915,7 +915,31 @@ public class WeChatMiniProgramServices {
         productBizDataDetail.create();
     }
 
+    public static Map<String, Object> removeStoreRole(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
 
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        String payToPartyId = userLogin.getString("partyId");
+        String partyId = (String) context.get("partyId");
+        String roleTypeId = (String) context.get("roleTypeId");
+
+        GenericValue productStore  = EntityQuery.use(delegator).from("ProductStore").where(  "payToPartyId", payToPartyId).queryFirst();
+
+        // is Exsits Role ?
+        GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", partyId, "roleTypeId", roleTypeId, "productStoreId", productStore.getString("productStoreId")).queryFirst();
+
+        if (null != productStoreRole) {
+            productStoreRole.remove();
+        }
+
+        return resultMap;
+    }
     /**
      * addPartyToStoreRole
      * @param dctx

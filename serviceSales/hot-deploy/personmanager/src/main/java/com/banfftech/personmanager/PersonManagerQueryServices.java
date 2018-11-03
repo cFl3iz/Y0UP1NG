@@ -101,16 +101,57 @@ public class PersonManagerQueryServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = userLogin.getString("partyId");
+
         String partyFromId = (String) context.get("partyFromId");
 
 
-        List<GenericValue> queryAgentForwardChainFact = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
                 "partyFromId", partyFromId, "basePartyId",partyId).queryList();
 
+        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
+            for (GenericValue genericValue : queryAgentForwardChainFacts) {
+                Map<String,Object> rowMap = genericValue.getAllFields();
 
-        resultMap.put("agentList",queryAgentForwardChainFact);
+                String partyIdFrom = genericValue.getString("partyIdFrom");
+                String basePartyId = genericValue.getString("basePartyId");
+                String partyIdTo = genericValue.getString("partyIdTo");
+
+                List<Map<String,Object>> subList = new ArrayList<Map<String, Object>>();
+
+                subList =  getNextAgentForwardChain(delegator,basePartyId,partyIdFrom,partyIdTo);
+
+                rowMap.put("subList",subList);
+                returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("agentList",returnList);
 
         return resultMap;
+    }
+    // 递归发现,不考虑DeepCount
+    private List<Map<String, Object>> getNextAgentForwardChain(Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo) {
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+        List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
+                "partyFromId", partyIdFrom, "basePartyId",basePartyId).queryList();
+        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
+            for (GenericValue genericValue : queryAgentForwardChainFacts) {
+                Map<String,Object> rowMap = genericValue.getAllFields();
+                String subPartyIdFrom = genericValue.getString("partyIdFrom");
+                String subBasePartyId = genericValue.getString("basePartyId");
+                String subPartyIdTo = genericValue.getString("partyIdTo");
+                List<Map<String,Object>> subList = getNextAgentForwardChain(delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
+                rowMap.put("subList",subList);
+                returnList.add(rowMap);
+            }
+            return returnList;
+        }
+
+        return null;
     }
 
     public Map<String, Object> queryEmpBuyHistory(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {

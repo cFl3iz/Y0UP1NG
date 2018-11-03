@@ -102,7 +102,7 @@ public class PersonManagerQueryServices {
 
         String partyId = userLogin.getString("partyId");
 
-        String partyFromId = (String) context.get("partyFromId");
+        String partyFromId = (String) context.get("partyIdFrom");
 
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();

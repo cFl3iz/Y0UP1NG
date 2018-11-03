@@ -134,7 +134,7 @@ public class PersonManagerQueryServices {
         return resultMap;
     }
     // 递归发现,不考虑DeepCount
-    private List<Map<String, Object>> getNextAgentForwardChain(Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo) {
+    private List<Map<String, Object>> getNextAgentForwardChain(Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo)throws GenericEntityException {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
                 "partyFromId", partyIdFrom, "basePartyId",basePartyId).queryList();

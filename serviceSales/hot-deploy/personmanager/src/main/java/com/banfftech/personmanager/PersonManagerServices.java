@@ -814,9 +814,47 @@ public class PersonManagerServices {
                 Map<String, Object> receiveInventoryProductOut = dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn
                 );
 
+
+
+
+
+
+
+                basePartyId = getBasePartyFromProduct(rowProductId,delegator);
+//TODO FIX ME
+                if ( EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
+                        "basePartyId",basePartyId, "partyIdFrom", payToPartyId,"partyIdTo",partyId).queryFirst() ==null){
+                    Map<String, Object> createInMap = new HashMap<String, Object>();
+                    createInMap.put("basePartyId", basePartyId);
+                    createInMap.put("createDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                    createInMap.put("partyIdFrom",payToPartyId );
+                    createInMap.put("partyIdTo",partyId );
+                    createInMap.put("productId",rowProductId );
+
+                    Map<String,String> baseInfo = queryPersonBaseInfo(delegator,partyId);
+                    createInMap.put("objectInfo",baseInfo.get("headPortrait"));
+                    createInMap.put("firstName",baseInfo.get("firstName"));
+
+                    GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", basePartyId).queryFirst();
+                    String productStoreName = store.getString("storeName");
+                    createInMap.put("baseStoreId",store.getString("productStoreId"));
+
+                    GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", oneProductId).queryFirst();
+                    String productName = product.getString("productName");
+
+                    GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", basePartyId).queryFirst();
+                    String firstName = person.getString("firstName");
+
+                    createInMap.put("baseStoreName",productStoreName );
+                    createInMap.put("productName",productName );
+                    createInMap.put("basePartyName",firstName );
+
+
+                    GenericValue pr = delegator.makeValue("DkAgentForwardChainFact", createInMap);
+                    pr.create();
+                }
             }
         }
-        basePartyId = getBasePartyFromProduct(oneProductId,delegator);
 
         if(payToPartyId!=null && EntityQuery.use(delegator).from("PartyRelationship").where(
                 "partyIdFrom", partyId,"partyIdTo",payToPartyId,"partyRelationshipTypeId","AGENT").queryFirst() ==null){
@@ -835,38 +873,7 @@ public class PersonManagerServices {
             basePartyId = payToPartyId;
         }
 
-        //TODO FIX ME
-        if ( EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-               "basePartyId",basePartyId, "partyIdFrom", payToPartyId,"partyIdTo",partyId).queryFirst() ==null){
-            Map<String, Object> createInMap = new HashMap<String, Object>();
-            createInMap.put("basePartyId", basePartyId);
-            createInMap.put("createDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
-            createInMap.put("partyIdFrom",payToPartyId );
-            createInMap.put("partyIdTo",partyId );
-            createInMap.put("productId",oneProductId );
 
-            Map<String,String> baseInfo = queryPersonBaseInfo(delegator,partyId);
-            createInMap.put("objectInfo",baseInfo.get("headPortrait"));
-            createInMap.put("firstName",baseInfo.get("firstName"));
-
-            GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", basePartyId).queryFirst();
-            String productStoreName = store.getString("storeName");
-            createInMap.put("baseStoreId",store.getString("productStoreId"));
-
-            GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", oneProductId).queryFirst();
-            String productName = product.getString("productName");
-
-            GenericValue person = EntityQuery.use(delegator).from("Person").where("partyId", basePartyId).queryFirst();
-            String firstName = person.getString("firstName");
-
-            createInMap.put("baseStoreName",productStoreName );
-            createInMap.put("productName",productName );
-            createInMap.put("basePartyName",firstName );
-
-
-            GenericValue pr = delegator.makeValue("DkAgentForwardChainFact", createInMap);
-            pr.create();
-        }
 
         return resultMap;
 
@@ -874,10 +881,17 @@ public class PersonManagerServices {
 
     private static String getBasePartyFromProduct(String rowProductId, Delegator delegator) throws GenericEntityException{
 
-         GenericValue  queryAgentForwardChainFact = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-                "productId", rowProductId ).queryFirst();
+         GenericValue  hasBefore = EntityQuery.use(delegator).from("ProductAssoc").where(
+                "productId", rowProductId ,"productAssocTypeId","PRODUCT_OBSOLESCENCE").queryFirst();
+        if(hasBefore!=null){
+            return getBasePartyFromProduct(hasBefore.getString("productIdTo"),delegator);
+        }else{
+            GenericValue productRoleAdmin
+                    = EntityQuery.use(delegator).from("ProductRole").where(
+                    "roleTypeId", "ADMIN", "productId", rowProductId).queryFirst();
+            return productRoleAdmin.getString("partyId");
+        }
 
-        return queryAgentForwardChainFact==null?null:queryAgentForwardChainFact.getString("basePartyId");
     }
 
 

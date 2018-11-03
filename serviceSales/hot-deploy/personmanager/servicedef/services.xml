@@ -244,6 +244,17 @@
                    optional="true"/>
     </service>
 
+   <service name="queryAgentForwardChainFact" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
+             invoke="queryAgentForwardChainFact" auth="false">
+        <description>queryAgentForwardChainFact</description>
+       <attribute name="partyIdFrom" type="String" mode="IN"  optional="true"/>
+        <attribute name="agentList" type="List" mode="OUT"
+                   optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
 
 
     <service name="queryMyProductStore" engine="java"

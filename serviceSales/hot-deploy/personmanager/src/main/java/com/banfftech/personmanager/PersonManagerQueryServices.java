@@ -78,7 +78,40 @@ public class PersonManagerQueryServices {
     public int rowId = 1;
 
 
+    /**
+     * queryAgentForwardChainFact
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws Exception
+     */
+    public Map<String, Object> queryAgentForwardChainFact(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+        Locale locale = (Locale) context.get("locale");
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+        String partyFromId = (String) context.get("partyFromId");
+
+
+        List<GenericValue> queryAgentForwardChainFact = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
+                "partyFromId", partyFromId, "basePartyId",partyId).queryList();
+
+
+        resultMap.put("agentList",queryAgentForwardChainFact);
+
+        return resultMap;
+    }
 
     public Map<String, Object> queryEmpBuyHistory(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, Exception {
 

@@ -65,6 +65,7 @@
     <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="亚马逊" enumCode="AMAZON" enumId="AMAZON" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="4"/>
     <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="淘宝" enumCode="TAOBAO" enumId="TAOBAO" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="5"/>
     <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="海外" enumCode="NO_CHN" enumId="NO_CHN" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="6"/>
+    <Enumeration createdStamp="2018-10-15 18:54:27.0" createdTxStamp="2018-10-15 18:54:27.0" description="企业" enumCode="OB" enumId="OB" enumTypeId="CN_SALES_CHANNEL" lastUpdatedStamp="2018-10-15 18:54:27.0" lastUpdatedTxStamp="2018-10-15 18:54:27.0" sequenceId="7"/>
 
 
 

@@ -9,6 +9,32 @@
     <copyright>CloudLake</copyright>
     <version>1.0</version>
 
+
+    <entity entity-name="DkAgentForwardChainFact" package-name="org.apache.ofbiz.olap" title="DkAgentForwardChainFact">
+
+        <field name="basePartyId" type="id-ne"/>
+        <field name="basePartyName" type="value"/>
+        <field name="baseStoreName" type="value"/>
+        <field name="baseStoreId" type="value"/>
+
+
+        <field name="partyIdFrom" type="id-ne"/>
+        <field name="partyIdTo" type="id-ne"/>
+
+        <field name="firstName" type="value"/>
+        <field name="objectInfo" type="value"/>
+
+        <field name="productId" type="value"/>
+        <field name="productName" type="value"/>
+
+        <field name="createDate" type="date-time" />
+
+        <prim-key field="basePartyId"/>
+        <prim-key field="partyIdFrom"/>
+        <prim-key field="partyIdTo"/>
+
+    </entity>
+
     <entity entity-name="YpForwardChainFact" package-name="org.apache.ofbiz.olap" title="YpForwardChainFact">
 
         <!-- 链条头 -->

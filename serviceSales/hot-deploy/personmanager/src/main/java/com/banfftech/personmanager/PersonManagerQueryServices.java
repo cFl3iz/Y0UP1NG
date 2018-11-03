@@ -78,6 +78,7 @@ public class PersonManagerQueryServices {
     public int rowId = 1;
 
 
+
     /**
      * queryAgentForwardChainFact
      * @param dctx
@@ -106,6 +107,7 @@ public class PersonManagerQueryServices {
 
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
 
 
         List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
@@ -137,7 +139,7 @@ public class PersonManagerQueryServices {
     private List<Map<String, Object>> getNextAgentForwardChain(Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo)throws GenericEntityException {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
-                "partyIdFrom", partyIdFrom, "basePartyId",basePartyId).queryList();
+                "partyIdFrom", partyIdTo, "basePartyId",basePartyId).queryList();
         if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
             for (GenericValue genericValue : queryAgentForwardChainFacts) {
                 Map<String,Object> rowMap = genericValue.getAllFields();

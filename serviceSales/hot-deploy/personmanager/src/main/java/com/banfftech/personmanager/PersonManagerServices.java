@@ -843,13 +843,15 @@ public class PersonManagerServices {
             createInMap.put("createDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
             createInMap.put("partyIdFrom",payToPartyId );
             createInMap.put("partyIdTo",partyId );
+            createInMap.put("productId",oneProductId );
 
             Map<String,String> baseInfo = queryPersonBaseInfo(delegator,partyId);
             createInMap.put("objectInfo",baseInfo.get("headPortrait"));
-            createInMap.put("firstName",baseInfo.get("firstName") );
+            createInMap.put("firstName",baseInfo.get("firstName"));
 
             GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", basePartyId).queryFirst();
             String productStoreName = store.getString("storeName");
+            createInMap.put("baseStoreId",store.getString("productStoreId"));
 
             GenericValue product = EntityQuery.use(delegator).from("Product").where("productId", oneProductId).queryFirst();
             String productName = product.getString("productName");

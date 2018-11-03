@@ -83,6 +83,7 @@ public class WeChatOrderQueryServices {
                     rowMap.put("clientInfo",queryPersonBaseInfo(delegator,partyIdFrom));
                     GenericValue store = EntityQuery.use(delegator).from("ProductStore").where("payToPartyId", partyIdFrom).queryFirst();
                     rowMap.put("productStoreId",store.getString("productStoreId"));
+                    rowMap.put("partyIdFrom",partyIdFrom);
                     returnList.add(rowMap);
                     queryFilter.put(partyIdFrom,null);
                 }

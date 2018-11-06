@@ -930,9 +930,17 @@ public class WeChatMiniProgramServices {
 
         GenericValue productStore  = EntityQuery.use(delegator).from("ProductStore").where(  "payToPartyId", payToPartyId).queryFirst();
 
+
+
         // is Exsits Role ?
         GenericValue productStoreRole = EntityQuery.use(delegator).from("ProductStoreRole").where(
                 "partyId", partyId, "roleTypeId", roleTypeId, "productStoreId", productStore.getString("productStoreId")).queryFirst();
+
+        Debug.logInfo("*removeStoreRole|payToPartyId:"+payToPartyId,module);
+        Debug.logInfo("*removeStoreRole|partyId:"+partyId,module);
+        Debug.logInfo("*removeStoreRole|roleTypeId:"+roleTypeId,module);
+        Debug.logInfo("*removeStoreRole|productStore:"+productStore,module);
+        Debug.logInfo("*removeStoreRole|productStoreRole:"+productStoreRole,module);
 
         if (null != productStoreRole) {
             productStoreRole.remove();

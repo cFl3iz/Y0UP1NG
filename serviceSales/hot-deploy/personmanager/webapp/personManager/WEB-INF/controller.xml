@@ -25,6 +25,15 @@
         <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
     </postprocessor>
     -->
+
+
+    <request-map uri="placedStoreAtTheTop">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placedStoreAtTheTop"  />
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
     <request-map uri="queryClientList">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryClientList"  />

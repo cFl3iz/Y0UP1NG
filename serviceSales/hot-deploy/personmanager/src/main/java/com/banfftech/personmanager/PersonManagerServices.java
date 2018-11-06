@@ -470,10 +470,33 @@ public class PersonManagerServices {
     }
 
 
+    /**
+     * placedStoreAtTheTop
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> placedStoreAtTheTop(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        GenericValue store =  EntityQuery.use(delegator).from("ProductStoreRole").where(
+                "partyId", userLogin.getString("partyId"), "roleTypeId", "CUSTOMER").orderBy("-fromDate").queryFirst();
+        if(null!= store){
+            store.set("top","true");
+            store.store();
+        }
 
 
-
-
+        return result;
+    }
 
     public static Map<String, Object> registerDk(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head

@@ -353,6 +353,9 @@
     </extend-entity>
 
 
+    <extend-entity entity-name="ProductStoreRole">
+        <field name="top" type="value"></field>
+    </extend-entity>
 
     <extend-entity entity-name="PartyIdentification">
         <field name="appId" type="value"></field>

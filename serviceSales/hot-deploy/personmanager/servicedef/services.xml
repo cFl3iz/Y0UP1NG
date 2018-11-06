@@ -244,6 +244,17 @@
                    optional="true"/>
     </service>
 
+
+    <service name="placedStoreAtTheTop" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="placedStoreAtTheTop" auth="false">
+        <description>placedStoreAtTheTop</description>
+        <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
    <service name="queryAgentForwardChainFact" engine="java"
              location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryAgentForwardChainFact" auth="false">

@@ -925,7 +925,7 @@ public class WeChatMiniProgramServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String payToPartyId = userLogin.getString("partyId");
-        String partyId = (String) context.get("partyId");
+        String partyId = (String) context.get("removePartyId");
         String roleTypeId = (String) context.get("roleTypeId");
 
         GenericValue productStore  = EntityQuery.use(delegator).from("ProductStore").where(  "payToPartyId", payToPartyId).queryFirst();

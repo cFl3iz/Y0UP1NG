@@ -462,7 +462,7 @@
              location="main.java.com.banfftech.wechatminiprogram.WeChatMiniProgramServices"
              invoke="removeStoreRole" auth="false">
         <description>removeStoreCust</description>
-        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="removePartyId" type="String" mode="IN" optional="true"/>
         <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>

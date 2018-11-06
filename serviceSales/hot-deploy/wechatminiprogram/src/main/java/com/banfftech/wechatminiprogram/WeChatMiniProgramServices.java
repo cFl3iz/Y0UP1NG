@@ -946,6 +946,16 @@ public class WeChatMiniProgramServices {
             productStoreRole.remove();
         }
 
+
+        List<GenericValue> partyRelationships = EntityQuery.use(delegator).from("PartyRelationship").where(
+                "partyIdTo", payToPartyId, "partyRelationshipTypeId", "AGENT", "partyIdFrom",partyId).queryList();
+
+        if(null!= partyRelationships && partyRelationships.size()>0){
+            for(GenericValue gv : partyRelationships){
+                gv.remove();
+            }
+        }
+
         return resultMap;
     }
     /**

@@ -462,7 +462,7 @@ public class PersonManagerQueryServices {
             for(GenericValue gv : historyStore){
                 Map<String,Object> rowStore = new HashMap<String, Object>();
                 String productStoreId = gv.getString("productStoreId");
-
+                rowStore.put("top",gv.getString("top"));
 
                 GenericValue role = EntityQuery.use(delegator).from("ProductStoreRole").where(
                         "productStoreId", productStoreId,  "roleTypeId", "ADMIN").queryFirst();

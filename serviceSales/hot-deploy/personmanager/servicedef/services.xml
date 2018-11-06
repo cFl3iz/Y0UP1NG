@@ -250,6 +250,7 @@
              invoke="placedStoreAtTheTop" auth="false">
         <description>placedStoreAtTheTop</description>
         <attribute name="productStoreId" type="String" mode="IN"  optional="true"/>
+        <attribute name="top" type="String" mode="IN"  optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

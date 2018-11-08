@@ -21,7 +21,7 @@
 
     <request-map uri="createKeyWord">
         <security https="false" auth="false"/>
-        <event type="service" invoke="createKeyWord"/>
+        <event type="service" invoke="createKeyWordBox"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

@@ -146,7 +146,7 @@ public class BoomServices {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Locale locale = (Locale) context.get("locale");
 
-        String name = (String) context.get("name");
+        String name = (String) context.get("keyWord");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         //当事人标识
         String partyId = (String) userLogin.get("partyId");
@@ -154,9 +154,10 @@ public class BoomServices {
         String partyGroupId = (String) myGroup.get("partyId");
 
 
-        delegator.makeValue("KeyWordBox",
+        GenericValue kwb= delegator.makeValue("KeyWordBox",
                 UtilMisc.toMap("kId",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
                 ));
+        kwb.create();
 
         return result;
     }

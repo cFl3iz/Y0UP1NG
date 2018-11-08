@@ -1508,7 +1508,9 @@ public class BoomQueryServices {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(productList.size()>0){
             for(GenericValue gv : productList){
+
                 Map<String,Object> rowMap = new HashMap<String, Object>();
+
                 String productId = gv.getString("productId");
 
 

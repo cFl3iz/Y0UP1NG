@@ -113,7 +113,7 @@ public class BoomQueryServices {
 //                UtilMisc.toMap("kId",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
 //                ));
 
-        result.put("keyWordList",EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryFirst());
+        result.put("keyWordList",EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryList());
 
         return result;
     }

@@ -1468,36 +1468,63 @@ public class BoomQueryServices {
 
         String productName = (String) context.get("productName");
 
+        String keyWord = (String) context.get("keyWord");
+
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
 
         List<GenericValue> productList = null;
         Debug.logInfo("query成品:"+productName,module);
+
+
+        EntityCondition findConditionsRole = EntityCondition
+                .makeCondition("roleTypeId", "ADMIN");
+        EntityCondition findConditionsType = EntityCondition
+                .makeCondition("productTypeId","FINISHED_GOOD");
+
+        EntityCondition findConditionsNameAndRole = EntityCondition
+                .makeCondition(findConditionsType, EntityOperator.AND, findConditionsRole);
+
+
+        EntityCondition findConditionsParty = EntityCondition
+                .makeCondition("partyId", partyId);
+
+        EntityCondition findConditionsTypeRoleAndParty = EntityCondition
+                .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsParty);
+
+
         if(productName!=null && !productName.trim().equals("") && !productName.equals("null")){
-            EntityCondition findConditions = EntityCondition
-                    .makeCondition("productName", EntityOperator.LIKE, "%"+productName+"%");
-            EntityCondition findConditions2 = EntityCondition
-                    .makeCondition("roleTypeId", "ADMIN");
 
-            EntityCondition findConditionsNameAndRole = EntityCondition
-                    .makeCondition(findConditions, EntityOperator.AND, findConditions2);
+            EntityCondition findConditionsName = EntityCondition
+                    .makeCondition("productName", EntityOperator.LIKE, "%" + productName + "%");
+            EntityCondition findConditionsTypeRoleAndPartyAndName = EntityCondition
+                    .makeCondition(findConditionsTypeRoleAndParty, EntityOperator.AND, findConditionsName);
+            if(keyWord!=null && !keyWord.equals("")){
+                EntityCondition findConditionsKeyWord = EntityCondition
+                        .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
+                EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition
+                        .makeCondition(findConditionsTypeRoleAndPartyAndName, EntityOperator.AND, findConditionsKeyWord);
+                productList = delegator.findList("ProductAndRoleAndKeyWord",
+                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+            }else{
+                productList = delegator.findList("ProductAndRole",
+                        findConditionsTypeRoleAndPartyAndName, null, null, null, true);
+            }
 
-            EntityCondition findConditions3 = EntityCondition
-                    .makeCondition("productTypeId","FINISHED_GOOD");
-            EntityCondition findConditions4 = EntityCondition
-                    .makeCondition("partyId", partyId);
-
-            EntityCondition findConditionsTypeAndParty = EntityCondition
-                    .makeCondition(findConditions3, EntityOperator.AND, findConditions4);
-
-            EntityCondition findConditions5 = EntityCondition
-                    .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsTypeAndParty);
-            productList = delegator.findList("ProductAndRole",
-                    findConditions5, null, null, null, true);
         }else{
-            productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                    "partyId", partyId, "roleTypeId", "ADMIN","productTypeId","FINISHED_GOOD").orderBy("-fromDate").queryList();
+            if(keyWord!=null && !keyWord.equals("")){
+                EntityCondition findConditionsKeyWord = EntityCondition
+                        .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
+                EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition
+                        .makeCondition(findConditionsTypeRoleAndParty, EntityOperator.AND, findConditionsKeyWord);
+                productList = delegator.findList("ProductAndRoleAndKeyWord",
+                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+            }else{
+                productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                        findConditionsTypeRoleAndParty).orderBy("-fromDate").queryList();
+            }
+
         }
 
 

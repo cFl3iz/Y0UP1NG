@@ -155,7 +155,7 @@ public class BoomServices {
 
 
         delegator.makeValue("KeyWordBox",
-                UtilMisc.toMap("id",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
+                UtilMisc.toMap("kId",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
                 ));
 
         return result;

@@ -94,7 +94,7 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
-    public static Map<String, Object> queryKeyWordBox(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+    public static Map<String, Object> queryKeyWordBox(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException  {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();

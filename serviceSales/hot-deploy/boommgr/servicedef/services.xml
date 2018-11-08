@@ -12,7 +12,7 @@
     </service>
 
 
-    <service name="createKeyWord" engine="java"
+    <service name="createKeyWordBox" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"
              invoke="createKeyWord" auth="false">
@@ -29,7 +29,7 @@
              location="main.java.com.banfftech.boom.BoomQueryServices"
              invoke="queryKeyWordBox" auth="false">
         <description>queryKeyWordBox</description>
-        <attribute name="keyWordList" type="List" mode="OUT" optional="false"/>
+        <attribute name="keyWordList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

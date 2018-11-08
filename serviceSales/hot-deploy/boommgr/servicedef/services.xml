@@ -21,6 +21,15 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="removeKeywordBox" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="removeKeywordBox" auth="false">
+        <description>removeKeywordBox</description>
+        <attribute name="kId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
     <service name="addedProductKeyword" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

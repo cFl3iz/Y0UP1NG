@@ -169,6 +169,27 @@ public class BoomServices {
         dispatcher.runSync("deleteProductKeyword",UtilMisc.toMap("userLogin",admin,"keyword",name,"keywordTypeId","KWT_TAG","productId",productId));
 
         return result;
+
+    }
+
+    public static Map<String, Object> removeKeywordBox(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
+
+        String kId = (String) context.get("kId");
+
+
+        GenericValue keyWordBox = EntityQuery.use(delegator).from("KeyWordBox").where("kId",kId).queryFirst();
+
+        if(keyWordBox!=null){
+            keyWordBox.remove();
+        }
+
+        return result;
     }
 
 

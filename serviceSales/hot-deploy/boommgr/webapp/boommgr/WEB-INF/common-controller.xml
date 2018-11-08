@@ -12,10 +12,16 @@
     </preprocessor>
 
 
+    <request-map uri="queryKeyWordBox">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryKeyWordBox"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
     <request-map uri="createKeyWord">
         <security https="false" auth="false"/>
-        <event type="service" invoke="createKeyWordBox"/>
+        <event type="service" invoke="createKeyWord"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>

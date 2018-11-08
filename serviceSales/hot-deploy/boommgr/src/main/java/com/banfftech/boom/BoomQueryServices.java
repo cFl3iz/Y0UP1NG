@@ -94,7 +94,29 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+    public static Map<String, Object> queryKeyWordBox(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
 
+        String name = (String) context.get("name");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        //当事人标识
+        String partyId = (String) userLogin.get("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
+//        delegator.makeValue("KeyWordBox",
+//                UtilMisc.toMap("kId",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
+//                ));
+
+        result.put("keyWordList",EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryFirst());
+
+        return result;
+    }
 
 
     public static Map<String, Object> queryPermisionJson(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {

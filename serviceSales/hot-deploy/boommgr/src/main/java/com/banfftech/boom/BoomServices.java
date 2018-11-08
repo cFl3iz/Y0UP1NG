@@ -139,6 +139,23 @@ public class BoomServices {
         return partyId;
     }
 
+    public static Map<String, Object> addedProductKeyword(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
+
+        String name = (String) context.get("keyWord");
+        String productId = (String) context.get("productId");
+
+        dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin",admin,"keyword",name,"keywordTypeId","KWT_TAG","productId",productId));
+
+        return result;
+    }
+
+
     public static Map<String, Object> createKeyWord(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

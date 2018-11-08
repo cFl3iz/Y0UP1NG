@@ -1511,6 +1511,12 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 String productId = gv.getString("productId");
 
+
+                GenericValue tags =  EntityQuery.use(delegator).from("ProductKeyword").where(
+                        "productId", productId,"keywordTypeId","KWT_TAG").queryList();
+
+                rowMap.put("keyWordList",tags);
+
                 String uomParentId = gv.getString("quantityUomId");
 
 

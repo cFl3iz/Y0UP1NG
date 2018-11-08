@@ -1500,7 +1500,7 @@ public class BoomQueryServices {
                     .makeCondition("productName", EntityOperator.LIKE, "%" + productName + "%");
             EntityCondition findConditionsTypeRoleAndPartyAndName = EntityCondition
                     .makeCondition(findConditionsTypeRoleAndParty, EntityOperator.AND, findConditionsName);
-            if(keyWord!=null && !keyWord.equals("")){
+            if(keyWord!=null && !keyWord.equals("") && !keyWord.equals("null")){
                 EntityCondition findConditionsKeyWord = EntityCondition
                         .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
                 EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition
@@ -1513,7 +1513,7 @@ public class BoomQueryServices {
             }
 
         }else{
-            if(keyWord!=null && !keyWord.equals("")){
+            if(keyWord!=null && !keyWord.equals("") && !keyWord.equals("null")){
                 EntityCondition findConditionsKeyWord = EntityCondition
                         .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
                 EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition

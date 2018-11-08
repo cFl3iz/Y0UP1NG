@@ -297,12 +297,31 @@ public class BoomServices {
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
             Debug.logInfo("*DeliveryPlansItem:"+gv,module);
-            String qtyStr = "0" ;
-            if(null!=gv&&null != gv.get("outQuantity") && ((gv.get("outQuantity")+"").equals("") != true)){
-                qtyStr = gv.getString("outQuantity");
-            }
-            gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");
-            gv.store();
+                if(gv==null){
+                    // Added Item
+
+                    Map<String, Object> createMap = new HashMap<String, Object>();
+                    createMap.put("planId", partyGroupId + "/" + date);
+                    createMap.put("payToParty", partyGroupId);
+                    createMap.put("productId", productId);
+                    createMap.put("productName", product.getString("productName"));
+                    createMap.put("createByParty", partyId);
+                    createMap.put("seq", (String) delegator.getNextSeqId("DeliveryPlansItem"));
+                    createMap.put("enumId", enumId);
+                    createMap.put("uomDescription", "");
+                    createMap.put("quantity", "0");
+                    createMap.put("outQuantity", quantity+"");
+                    createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                    GenericValue createEntity = delegator.makeValue("DeliveryPlansItem", createMap);
+                    createEntity.create();
+                }else{
+                    String qtyStr = "0" ;
+                    if(null!=gv&&null != gv.get("outQuantity") && ((gv.get("outQuantity")+"").equals("") != true)){
+                        qtyStr = gv.getString("outQuantity");
+                    }
+                    gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");
+                    gv.store();
+                }
             }
         }
 

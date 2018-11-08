@@ -1093,9 +1093,11 @@ public class WeChatMiniProgramServices {
 
         String media_id = (String) context.get("media_id");
 
-        //TODO ADD MEDIA _ID
-
         String unioId = (String) context.get("unioId");
+
+        String colorArray = (String) context.get("colorArray");
+
+        String sizeArray = (String) context.get("sizeArray");
 
         String kuCun = (String) context.get("kuCun");
 
@@ -1106,11 +1108,6 @@ public class WeChatMiniProgramServices {
         //经纬度
         String latitude = (String) context.get("latitude");
         String longitude = (String) context.get("longitude");
-
-        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> address = " + address);
-        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> latitude = " + latitude);
-        System.out.println("o>>>>>>>>>>>>>>>>>>>>>>>>>> longitude = " + longitude);
-
         if (UtilValidate.isNotEmpty(kuCun) && !kuCun.trim().equals("")) {
             quantityTotal = new BigDecimal(kuCun);
         }
@@ -1124,12 +1121,6 @@ public class WeChatMiniProgramServices {
             price = new BigDecimal(priceStr);
         }
 
-
-//        GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_UNIO_ID").queryFirst();
-//        String partyId = "NA";
-//        if (UtilValidate.isNotEmpty(partyIdentification)) {
-//            partyId = (String) partyIdentification.get("partyId");
-//        }
 
         //逻辑暂时改为 openID
         GenericValue partyIdentification = EntityQuery.use(delegator).from("PartyIdentification").where("idValue", unioId, "partyIdentificationTypeId", "WX_MINIPRO_OPEN_ID").queryFirst();
@@ -1311,6 +1302,13 @@ public class WeChatMiniProgramServices {
             } else {
                 dispatcher.runSync("createPartyAttribute", UtilMisc.toMap("userLogin", admin, "partyId", partyId, "attrName", "media_id", "attrValue", media_id));
             }
+        }
+
+        if(UtilValidate.isNotEmpty(colorArray)){
+
+        }
+        if(UtilValidate.isNotEmpty(sizeArray)){
+
         }
 
         resultMap.put("productId", productId);

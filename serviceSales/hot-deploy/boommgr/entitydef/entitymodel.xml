@@ -31,6 +31,15 @@
         </view-link>
     </view-entity>
 
+    <entity entity-name="KeyWordBox" package-name="org.ofbiz.cloudLake.ProductStore" title="KeyWordBox">
+        <field name="kId" type="id-ne"/>
+        <field name="entityId" type="value"/>
+        <field name="name" type="value"/>
+        <field name="fromDate" type="date-time"></field>
+        <prim-key field="kId"/>
+    </entity>
+
+
     <!-- 出库计划表 -->
     <entity entity-name="DeliveryPlans" package-name="org.ofbiz.cloudLake.ProductStore" title="DeliveryPlans">
         <field name="planId" type="id-ne"/>

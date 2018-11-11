@@ -1730,6 +1730,23 @@ public class BoomServices {
                 "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal(quantity), "daysToShip", new Long(10)));
 
 
+        //为产品创建库存量
+        Map<String, Object> receiveInventoryProductIn = UtilMisc.toMap("userLogin", admin,
+                "facilityId", facilityId,
+                "inventoryItemTypeId", PeConstant.DEFAULT_INV_ITEM,
+                "productId", productId,
+                "description ", "卖家发布产品时的录入库存",
+                "quantityAccepted", new BigDecimal(quantity),
+                "quantityRejected", BigDecimal.ZERO,
+                "unitCost", BigDecimal.ZERO,
+                "ownerPartyId", partyGroupId,
+                "partyId", partyGroupId,
+                "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
+                "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+
+        dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn );
+
+
         if (rawMaterials != null && rawMaterials.length() > 2) {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));

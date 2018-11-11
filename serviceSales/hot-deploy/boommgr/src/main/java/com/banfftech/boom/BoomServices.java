@@ -1744,7 +1744,7 @@ public class BoomServices {
                 "uomId", PeConstant.DEFAULT_CURRENCY_UOM_ID,
                 "currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
 
-        dispatcher.runAsync("receiveInventoryProduct", receiveInventoryProductIn );
+        dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn );
 
 
         if (rawMaterials != null && rawMaterials.length() > 2) {

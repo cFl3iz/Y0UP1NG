@@ -1938,7 +1938,7 @@ public class BoomServices {
 
                 //获得库存信息 getInventoryAvailableByFacility
                 Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
-                        "facilityId", facilityId, "productId", productId));
+                        "facilityId", facilityId, "productId", productIdFrom));
                 BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
                 BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
 

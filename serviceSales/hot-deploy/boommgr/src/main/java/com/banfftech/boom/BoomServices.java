@@ -205,6 +205,45 @@ public class BoomServices {
             }
         }else{
 
+            //增加
+//获得库存信息 getInventoryAvailableByFacility
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", inventoryFacilityId, "productId", productId));
+            BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+            BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+            //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
+            dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
+                    "productId",productId,"quantity",quantityOnHandTotal.add(new BigDecimal(quantity)).intValue()+"",
+                    "workEffortTypeId","SPLIT_WORKER"));
+
+
+
+            List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
+                    "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+            if(null!=manufComponents&&manufComponents.size()>0){
+                for(GenericValue row : manufComponents){
+                    Map<String,Object> rowComponent = new HashMap<String, Object>();
+                    String rowProductId = row.getString("productIdTo");
+                    BigDecimal rowQuantity  = (BigDecimal)row.get("quantity");
+                    BigDecimal resulNum = rowQuantity.multiply( new BigDecimal(quantity) );
+
+                    //获得库存信息 getInventoryAvailableByFacility
+                    getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                            "facilityId", inventoryFacilityId, "productId", rowProductId));
+                    BigDecimal rowQuantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+
+
+                    //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
+                    dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
+                            "productId",rowProductId,"quantity",rowQuantityOnHandTotal.subtract(resulNum).intValue()+"","workEffortTypeId","SPLIT_WORKER"));
+                }
+            }
+
+
+
+
         }
 
 

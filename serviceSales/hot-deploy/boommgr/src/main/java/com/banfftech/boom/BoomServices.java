@@ -139,6 +139,78 @@ public class BoomServices {
         return partyId;
     }
 
+
+    /**
+     * copyOrSplitBoundProd
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> copyOrSplitBoundProd(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
+        String productId = (String) context.get("productId");
+        String quantity = (String) context.get("quantity");
+        String actionType = (String) context.get("actionType");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+        GenericValue store = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", partyGroupId).queryFirst();
+        String inventoryFacilityId = store.getString("facilityId");
+
+        //拆解
+        if(actionType.toLowerCase().equals("split")){
+
+            //获得库存信息 getInventoryAvailableByFacility
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", inventoryFacilityId, "productId", productId));
+            BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+            BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
+            //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
+            dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
+                    "productId",productId,"quantity",quantityOnHandTotal.subtract(new BigDecimal(quantity)).intValue()+"",
+                    "workEffortTypeId","SPLIT_WORKER"));
+
+
+
+            List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
+                    "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+            if(null!=manufComponents&&manufComponents.size()>0){
+                for(GenericValue row : manufComponents){
+                    Map<String,Object> rowComponent = new HashMap<String, Object>();
+                    String rowProductId = row.getString("productIdTo");
+                    BigDecimal rowQuantity  = (BigDecimal)row.get("quantity");
+                    BigDecimal resulNum = rowQuantity.multiply( new BigDecimal(quantity) );
+
+                    //获得库存信息 getInventoryAvailableByFacility
+                      getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                            "facilityId", inventoryFacilityId, "productId", rowProductId));
+                    BigDecimal rowQuantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+
+
+                    //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
+                    dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
+                            "productId",rowProductId,"quantity",rowQuantityOnHandTotal.add(resulNum).intValue()+"","workEffortTypeId","SPLIT_WORKER"));
+                }
+            }
+        }else{
+
+        }
+
+
+        return result;
+    }
+
     public static Map<String, Object> addedProductKeyword(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -1685,6 +1757,8 @@ public class BoomServices {
 //
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
 
         String productName = (String) context.get("productName");
         String quantityUomId = (String) context.get("quantityUomId");
@@ -1704,8 +1778,7 @@ public class BoomServices {
         createProductInMap.put("smallImageUrl", imagePath);
         createProductInMap.put("quantityUomId", quantityUomId);
 
-        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
-        String partyGroupId = (String) myGroup.get("partyId");
+
 //        GenericValue relation = EntityQuery.use(delegator).from("PartyRelationship").where(
 //                "partyIdFrom", partyId, "partyRelationshipTypeId", "OWNER").queryFirst();
 //
@@ -1755,9 +1828,17 @@ public class BoomServices {
                         , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                 BigDecimal cBd = new BigDecimal(count);
                 BigDecimal resulNum = cBd.multiply( new BigDecimal(quantity) );
+
+                //获得库存信息 getInventoryAvailableByFacility
+                Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                        "facilityId", facilityId, "productId", productId));
+                BigDecimal quantityOnHandTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("quantityOnHandTotal");
+                BigDecimal availableToPromiseTotal = (BigDecimal) getInventoryAvailableByFacilityMap.get("availableToPromiseTotal");
+
+
                 //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
                 dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
-                        "productId",productIdFrom,"quantity",resulNum.intValue()+"","workEffortTypeId","MAKE_WORKER"));
+                        "productId",productIdFrom,"quantity",quantityOnHandTotal.subtract(resulNum).intValue()+"","workEffortTypeId","MAKE_WORKER"));
             }
         }
 

@@ -13,12 +13,26 @@
 
 
 
+
+
+
     <request-map uri="removeProductKeyword">
         <security https="false" auth="false"/>
         <event type="service" invoke="removeProductKeyword"/>
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
-    </request-map>    <request-map uri="removeKeywordBox">
+    </request-map>
+
+    <request-map uri="copyOrSplitBoundProd">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="copyOrSplitBoundProd"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="removeKeywordBox">
         <security https="false" auth="false"/>
         <event type="service" invoke="removeKeywordBox"/>
         <response name="success" type="request" value="result_json"/>

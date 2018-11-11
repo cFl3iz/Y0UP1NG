@@ -1537,7 +1537,7 @@ public class BoomQueryServices {
                         .makeCondition(findConditionsTypeRoleAndPartyAndName, EntityOperator.AND, findConditionsKeyWord);
 //                productList = delegator.findList("ProductAndRoleAndKeyWord",
 //                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
-                productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                productList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where(
                         findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }else{
 //                productList = delegator.findList("ProductAndRole",
@@ -1554,7 +1554,7 @@ public class BoomQueryServices {
                         .makeCondition(findConditionsTypeRoleAndParty, EntityOperator.AND, findConditionsKeyWord);
 //                productList = delegator.findList("ProductAndRoleAndKeyWord",
 //                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
-                productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                productList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where(
                         findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }else{
                 productList = EntityQuery.use(delegator).from("ProductAndRole").where(

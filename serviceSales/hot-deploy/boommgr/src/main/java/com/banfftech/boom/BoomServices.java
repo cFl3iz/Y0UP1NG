@@ -1767,6 +1767,8 @@ public class BoomServices {
         String rawMaterials = (String) context.get("rawMaterials");
 
 
+
+
         Map<String, Object> createProductInMap = new HashMap<String, Object>();
         createProductInMap.put("userLogin", admin);
         long ctm = System.currentTimeMillis();
@@ -1797,6 +1799,23 @@ public class BoomServices {
 
 
         String productId = (String) createProductOutMap.get("productId");
+
+
+
+        //Create Product Price
+        Map<String, Object> createProductPriceInMap = new HashMap<String, Object>();
+        createProductPriceInMap.put("userLogin", admin);
+        createProductPriceInMap.put("productId", productId);
+        createProductPriceInMap.put("currencyUomId", PeConstant.DEFAULT_CURRENCY_UOM_ID);
+        createProductPriceInMap.put("price", BigDecimal.ZERO);
+        createProductPriceInMap.put("productPricePurposeId", PeConstant.PRODUCT_PRICE_DEFAULT_PURPOSE);
+        createProductPriceInMap.put("productPriceTypeId", PeConstant.PRODUCT_PRICE_DEFAULT_TYPE_ID);
+        createProductPriceInMap.put("productStoreGroupId", PeConstant.NA);
+        Map<String, Object> createProductPriceServiceResultMap = dispatcher.runSync("createProductPrice", createProductPriceInMap);
+        if (!ServiceUtil.isSuccess(createProductPriceServiceResultMap)) {
+            Debug.logError("*Mother Fuck Create Product Price Error:" + createProductPriceServiceResultMap, module);
+            return createProductPriceServiceResultMap;
+        }
 
 
         dispatcher.runSync("createProductFacility", UtilMisc.toMap("userLogin", userLogin,

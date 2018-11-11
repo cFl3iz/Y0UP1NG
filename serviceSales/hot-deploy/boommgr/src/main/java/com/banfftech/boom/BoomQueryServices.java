@@ -1569,7 +1569,7 @@ public class BoomQueryServices {
         Debug.logInfo("productListSize:"+productList.size(),module);
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(productList.size()>0){
+        if(productList!=null){
             for(GenericValue gv : productList.getData()){
 
                 Map<String,Object> rowMap = new HashMap<String, Object>();

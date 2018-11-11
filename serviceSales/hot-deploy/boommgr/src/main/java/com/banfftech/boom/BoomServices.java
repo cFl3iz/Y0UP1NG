@@ -1739,7 +1739,7 @@ public class BoomServices {
                 BigDecimal cBd = new BigDecimal(count);
                 BigDecimal resulNum = cBd.multiply( new BigDecimal(quantity) );
                 //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
-                dispatcher.runSync("setProductInventory",UtilMisc.toMap(
+                dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
                         "productId",productIdFrom,"quantity",resulNum.intValue()+"","workEffortTypeId","MAKE_WORKER"));
             }
         }

@@ -1737,7 +1737,7 @@ public class BoomServices {
                 dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId
                         , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
                 BigDecimal cBd = new BigDecimal(count);
-                BigDecimal resulNum = cBd.multiply(quantity);
+                BigDecimal resulNum = cBd.multiply( new BigDecimal(quantity) );
                 //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
                 dispatcher.runSync("setProductInventory",UtilMisc.toMap(
                         "productId",productIdFrom,"quantity",resulNum.intValue()+"","workEffortTypeId","MAKE_WORKER"));

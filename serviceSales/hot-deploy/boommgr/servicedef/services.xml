@@ -591,6 +591,8 @@
              invoke="queryMyFinishedGood" auth="false">
         <description>queryMyFinishedGood</description>
         <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="viewSize" type="String" mode="IN" optional="true"/>
+        <attribute name="viewIndex" type="String" mode="IN" optional="true"/>
         <attribute name="keyWord" type="String" mode="IN" optional="true"/>
         <attribute name="finishedGoodList" type="List" mode="OUT" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

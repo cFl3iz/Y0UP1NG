@@ -1470,6 +1470,31 @@ public class BoomQueryServices {
 
         String keyWord = (String) context.get("keyWord");
 
+
+
+
+
+
+        String viewIndexStr = (String) context.get("viewIndex");
+        String viewSizeStr = (String) context.get("viewSize");
+
+
+        //Default Value
+        Long count = 0l;
+        int viewSize = 10;
+        int viewIndex = 0;
+        if (UtilValidate.isNotEmpty(viewSizeStr)) {
+            viewSize = Integer.parseInt(viewSizeStr);
+        }
+        if (UtilValidate.isNotEmpty(viewIndexStr)) {
+            viewIndex = Integer.parseInt(viewIndexStr);
+        }
+        PagedList<GenericValue> productList = null;
+
+
+
+
+
         Map<String,Object> myGroup = getMyGroup(delegator,partyId);
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
@@ -1479,7 +1504,7 @@ public class BoomQueryServices {
                 "ownerPartyId", partyGroupId).queryFirst();
         String groupFacilityId = groupFacility.getString("facilityId");
 
-        List<GenericValue> productList = null;
+//        List<GenericValue> productList = null;
         Debug.logInfo("query成品:"+productName,module);
 
 
@@ -1510,11 +1535,15 @@ public class BoomQueryServices {
                         .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
                 EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition
                         .makeCondition(findConditionsTypeRoleAndPartyAndName, EntityOperator.AND, findConditionsKeyWord);
-                productList = delegator.findList("ProductAndRoleAndKeyWord",
-                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+//                productList = delegator.findList("ProductAndRoleAndKeyWord",
+//                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+                productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }else{
-                productList = delegator.findList("ProductAndRole",
-                        findConditionsTypeRoleAndPartyAndName, null, null, null, true);
+//                productList = delegator.findList("ProductAndRole",
+//                        findConditionsTypeRoleAndPartyAndName, null, null, null, true);
+                 productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                         findConditionsTypeRoleAndPartyAndName).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }
 
         }else{
@@ -1523,11 +1552,13 @@ public class BoomQueryServices {
                         .makeCondition("keyword", EntityOperator.LIKE, "%"+keyWord+"%");
                 EntityCondition findConditionsTypeRoleAndPartyAndNameAndKey = EntityCondition
                         .makeCondition(findConditionsTypeRoleAndParty, EntityOperator.AND, findConditionsKeyWord);
-                productList = delegator.findList("ProductAndRoleAndKeyWord",
-                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+//                productList = delegator.findList("ProductAndRoleAndKeyWord",
+//                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
+                productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }else{
                 productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                        findConditionsTypeRoleAndParty).orderBy("-fromDate").queryList();
+                        findConditionsTypeRoleAndParty).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
             }
 
         }
@@ -1539,7 +1570,7 @@ public class BoomQueryServices {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(productList.size()>0){
-            for(GenericValue gv : productList){
+            for(GenericValue gv : productList.getData()){
 
                 Map<String,Object> rowMap = new HashMap<String, Object>();
 

@@ -1474,6 +1474,11 @@ public class BoomQueryServices {
         String partyGroupId = (String) myGroup.get("partyId");
         partyId = partyGroupId;
 
+
+        GenericValue groupFacility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
+        String groupFacilityId = groupFacility.getString("facilityId");
+
         List<GenericValue> productList = null;
         Debug.logInfo("query成品:"+productName,module);
 
@@ -1572,10 +1577,9 @@ public class BoomQueryServices {
 
                 //kucun
                 String payToPartyId = (String) gv.get("partyId");
-                GenericValue facility = EntityQuery.use(delegator).from("Facility").where("ownerPartyId", payToPartyId).queryFirst();
-                String originFacilityId = (String) facility.get("facilityId");
+
                 Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
-                        "facilityId", originFacilityId, "productId", productId));
+                        "facilityId", groupFacilityId, "productId", productId));
                 if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
                     rowMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
                     rowMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));

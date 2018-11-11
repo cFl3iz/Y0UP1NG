@@ -323,6 +323,62 @@ public class BoomServices {
         String eventDesc = "";
         //盘库
         String newWorkEffortId = "";
+        if ("SPLIT_WORKER".equals(workEffortTypeId)) {
+            eventDesc = "拆分产品";
+
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+        }
+        if ("MAKE_WORKER".equals(workEffortTypeId)) {
+            eventDesc = "组装打包产品";
+
+            //说明现库存比要设置的库存大,需要做差异减法
+            if (availableToPromiseTotal.compareTo(quantity) > 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("-" + (availableToPromiseTotalInt - quantityInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+            //说明现库存比要设置的库存小,需要做差异加法
+            if (availableToPromiseTotal.compareTo(quantity) < 0) {
+                int availableToPromiseTotalInt = availableToPromiseTotal.intValue();
+                int quantityInt = quantity.intValue();
+                Debug.logInfo("*update resource quantityInt Diff =   " + quantityInt, module);
+                Debug.logInfo("*update resource availableToPromiseTotalInt =   " + availableToPromiseTotalInt, module);
+                createInventoryItemDetailMap.put("accountingQuantityDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("availableToPromiseDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("quantityOnHandDiff", new BigDecimal("" + (quantityInt - availableToPromiseTotalInt)));
+                createInventoryItemDetailMap.put("unitCost", productPrice.get("price"));
+            }
+        }
+
+
         if ("SET_WORKER".equals(workEffortTypeId)) {
             eventDesc = "员工盘库";
 
@@ -372,6 +428,24 @@ public class BoomServices {
             String enumId = (String) context.get("enumId");
             if(null != date && enumId !=null && (!date.equals("")) && (!date.equals("null"))){
             Debug.logInfo("date:"+date+"|enumId:"+enumId,module);
+
+
+                String planId = partyGroupId + "/" + date;
+                // Create New Plan
+                GenericValue plan = EntityQuery.use(delegator).from("DeliveryPlans").where(
+                        "planId", planId).queryFirst();
+                if (null == plan) {
+                    Map<String, Object> createMap = new HashMap<String, Object>();
+                    createMap.put("planId", planId);
+                    createMap.put("payToParty", partyGroupId);
+                    createMap.put("createByParty", partyId);
+                    createMap.put("fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp());
+                    GenericValue createEntity = delegator.makeValue("DeliveryPlans", createMap);
+                    createEntity.create();
+                }
+
+
+
             GenericValue gv = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                     "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
             Debug.logInfo("*DeliveryPlansItem:"+gv,module);
@@ -1614,6 +1688,7 @@ public class BoomServices {
 
         String productName = (String) context.get("productName");
         String quantityUomId = (String) context.get("quantityUomId");
+        String quantity  = (String) context.get("quantity");
         String imagePath = (String) context.get("imagePath");
         String rawMaterials = (String) context.get("rawMaterials");
 
@@ -1652,7 +1727,7 @@ public class BoomServices {
 
 
         dispatcher.runSync("createProductFacility", UtilMisc.toMap("userLogin", userLogin,
-                "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal("10000"), "daysToShip", new Long(10)));
+                "productId", productId, "facilityId", facilityId, "minimumStock", BigDecimal.ZERO, "reorderQuantity", new BigDecimal(quantity), "daysToShip", new Long(10)));
 
 
         if (rawMaterials != null && rawMaterials.length() > 2) {
@@ -1661,6 +1736,11 @@ public class BoomServices {
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
                 dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId
                         , "quantity", new BigDecimal(count), "productAssocTypeId", "MANUF_COMPONENT", "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+                BigDecimal cBd = new BigDecimal(count);
+                BigDecimal resulNum = cBd.multiply(quantity);
+                //组装一个新的组合产品意味着消耗 (成品数量FPQ) x (单组合产品SMQ) = 产生消耗数量的产品数
+                dispatcher.runSync("setProductInventory",UtilMisc.toMap(
+                        "productId",productIdFrom,"quantity",resulNum.intValue()+"","workEffortTypeId","MAKE_WORKER"));
             }
         }
 

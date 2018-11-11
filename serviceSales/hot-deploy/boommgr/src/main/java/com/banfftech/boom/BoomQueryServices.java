@@ -1566,7 +1566,7 @@ public class BoomQueryServices {
 
 
         Debug.logInfo("queryMyFinishedGood:"+partyGroupId,module);
-        Debug.logInfo("productListSize:"+productList.size(),module);
+        Debug.logInfo("productList:"+productList,module);
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(productList!=null){

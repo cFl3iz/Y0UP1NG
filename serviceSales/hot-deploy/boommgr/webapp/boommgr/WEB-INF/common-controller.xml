@@ -29,7 +29,18 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
-
+    <request-map uri="createNewChannel">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createNewChannel"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="removeChannel">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeChannel"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="removeKeywordBox">

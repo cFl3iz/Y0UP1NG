@@ -1655,21 +1655,35 @@ public class BoomQueryServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
+
+
+        Locale locale = (Locale) context.get("locale");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
         EntityCondition findConditions = EntityCondition
                 .makeCondition("enumTypeId", EntityOperator.EQUALS, "CN_SALES_CHANNEL");
 
-        List<GenericValue> enumeration = EntityQuery.use(delegator).from("Enumeration").where(findConditions).orderBy(
+
+        EntityCondition findConditions2 = EntityCondition.makeCondition("enumCode", EntityOperator.LIKE, partyGroupId+"%");
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+
+        List<GenericValue> enumeration = EntityQuery.use(delegator).from("Enumeration").where(genericCondition).orderBy(
                 "sequenceId").queryList();
 
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        for(GenericValue gv : enumeration){
-            Map<String,Object> rowMap = gv.getAllFields();
-            returnList.add(rowMap);
-        }
+//        for(GenericValue gv : enumeration){
+//            Map<String,Object> rowMap = gv.getAllFields();
+//            returnList.add(rowMap);
+//        }
 
 
-        resultMap.put("channelList",returnList);
+        resultMap.put("channelList",enumeration);
         return resultMap;
     }
 

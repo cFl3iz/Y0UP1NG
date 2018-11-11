@@ -140,6 +140,55 @@ public class BoomServices {
     }
 
 
+    public static Map<String, Object> createNewChannel(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
+        String name = (String) context.get("name");
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        GenericValue kwb= delegator.makeValue("Enumeration",
+                UtilMisc.toMap("enumId",(String) delegator.getNextSeqId("Enumeration"),
+                        "enumTypeId","CN_SALES_CHANNEL", "description",name
+                ));
+        kwb.create();
+        String enumId = kwb.getString("enumId");
+        kwb.set("enumCode",partyGroupId+"-"+enumId);
+        kwb.store();
+
+
+
+        return result;
+    }
+
+
+
+    public static Map<String, Object> removeChannel(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        Locale locale = (Locale) context.get("locale");
+        String enumId = (String) context.get("enumId");
+
+       GenericValue  enumeration = EntityQuery.use(delegator).from("Enumeration").where("enumId",enumId).queryFirst();
+        if(enumeration!=null){
+            enumeration.remove();
+        }
+
+
+
+        return result;
+    }
+
     /**
      * copyOrSplitBoundProd
      * @param dctx

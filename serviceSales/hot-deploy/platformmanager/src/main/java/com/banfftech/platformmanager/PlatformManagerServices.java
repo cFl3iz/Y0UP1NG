@@ -2765,8 +2765,11 @@ public class PlatformManagerServices {
                             productContentCtx.put("contentId", contentId);
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
-                            GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+
+                            //防止出现已经存在的数据的情况
+                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -2782,7 +2785,8 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
 
@@ -2798,7 +2802,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
                             String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
@@ -2811,7 +2816,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
                         //细节图
@@ -2827,7 +2833,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
                             String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
@@ -2841,7 +2848,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
                         if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
@@ -2856,7 +2864,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
 
@@ -2900,7 +2909,8 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();
@@ -2916,8 +2926,9 @@ public class PlatformManagerServices {
 //                                productContentCtx.put("statusId", "IM_PENDING");
 //                                dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
-                        }
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
+                            }
 
                         //单品图
                         if (!UtilValidate.isEmpty(singleOne) && !singleOne.equals("无")) {
@@ -2931,7 +2942,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(singleTwo) && !singleTwo.equals("无")) {
                             String contentId = createNewContentForImage(dispatcher, delegator, singleTwo, admin);
@@ -2944,7 +2956,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
                         //细节图
@@ -2960,7 +2973,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(detailTwo) && !detailTwo.equals("无")) {
                             String contentId = createNewContentForImage(dispatcher, delegator, detailTwo, admin);
@@ -2974,7 +2988,8 @@ public class PlatformManagerServices {
 //                                    productContentCtx.put("statusId", "IM_PENDING");
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
                         if (!UtilValidate.isEmpty(detailThree) && !detailThree.equals("无")) {
                             String contentId = createNewContentForImage(dispatcher, delegator, detailThree, admin);
@@ -2989,8 +3004,8 @@ public class PlatformManagerServices {
 //                                    dispatcher.runSync("createProductContent", productContentCtx);
 
                             GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
-                            productContent.create();
-
+//                            productContent.create();
+                            delegator.createOrStore(productContent);
                         }
 
                     }

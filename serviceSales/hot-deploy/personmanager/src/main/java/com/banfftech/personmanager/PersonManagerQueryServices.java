@@ -114,11 +114,12 @@ public class PersonManagerQueryServices {
                 "partyIdTo", partyFromId, "basePartyId",partyId).queryFirst();
         Map<String,Object> rowMap = null;
             if(null != queryAgentForwardChainFacts){
+                int deepCount = 0;
                 rowMap = queryAgentForwardChainFacts.getAllFields();
                String partyIdFrom = queryAgentForwardChainFacts.getString("partyIdFrom");
                 String basePartyId = queryAgentForwardChainFacts.getString("basePartyId");
                 String partyIdTo = queryAgentForwardChainFacts.getString("partyIdTo");
-               List<Map<String,Object>> subList =  getNextAgentForwardChain(delegator,basePartyId,partyIdFrom,partyIdTo);
+               List<Map<String,Object>> subList =  getNextAgentForwardChain(deepCount+1,delegator,basePartyId,partyIdFrom,partyIdTo);
                 rowMap.put("subList",subList);
             }
 //        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
@@ -144,17 +145,20 @@ public class PersonManagerQueryServices {
         return resultMap;
     }
     // 递归发现,不考虑DeepCount
-    private List<Map<String, Object>> getNextAgentForwardChain(Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo)throws GenericEntityException {
+    private List<Map<String, Object>> getNextAgentForwardChain(int deep,Delegator delegator, String basePartyId, String partyIdFrom, String partyIdTo)throws GenericEntityException {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         List<GenericValue> queryAgentForwardChainFacts = EntityQuery.use(delegator).from("DkAgentForwardChainFact").where(
                 "partyIdFrom", partyIdTo, "basePartyId",basePartyId).queryList();
-        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
+//        if(deep<7){
+//
+//        }
+        if(deep<5 && queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
             for (GenericValue genericValue : queryAgentForwardChainFacts) {
                 Map<String,Object> rowMap = genericValue.getAllFields();
                 String subPartyIdFrom = genericValue.getString("partyIdFrom");
                 String subBasePartyId = genericValue.getString("basePartyId");
                 String subPartyIdTo = genericValue.getString("partyIdTo");
-                List<Map<String,Object>> subList = getNextAgentForwardChain(delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
+                List<Map<String,Object>> subList = getNextAgentForwardChain(deep,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
                 rowMap.put("subList",subList);
                 returnList.add(rowMap);
             }

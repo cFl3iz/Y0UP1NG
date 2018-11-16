@@ -3252,6 +3252,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("roleTypeId");
         fieldSet.add("orderDate");
         fieldSet.add("productStoreId");
+        fieldSet.add("isViewed");
 
 
         EntityCondition roleTypeCondition = EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "SALES_REP"));

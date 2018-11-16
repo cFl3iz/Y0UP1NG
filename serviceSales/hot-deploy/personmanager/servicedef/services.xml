@@ -156,6 +156,22 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+   <!-- orderCancel -->
+    <service name="insightIntoOrder" engine="java"
+             location="main.java.com.banfftech.personmanager.PersonManagerServices"
+             invoke="insightIntoOrder" auth="false">
+        <description>insightIntoOrder</description>
+
+        <attribute name="orderId" type="String" mode="IN"
+                   optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
+
+
 
     <!-- hiddenOrder -->
     <service name="hiddenOrder" engine="java"

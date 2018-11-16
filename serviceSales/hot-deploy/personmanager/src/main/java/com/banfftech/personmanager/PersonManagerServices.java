@@ -3812,6 +3812,32 @@ public class PersonManagerServices {
         return resultMap;
     }
 
+
+
+
+
+    public static Map<String, Object> insightIntoOrder(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException, Exception {
+
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+
+        Delegator delegator = dispatcher.getDelegator();
+
+
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        String orderId = (String) context.get("orderId");
+
+        GenericValue order = delegator.findOne("OrderHeader", false, UtilMisc.toMap("orderId", orderId));
+        order.set("isViewed","Y");
+        order.store();
+
+        return resultMap;
+    }
     /**
      * Order Cancel
      *

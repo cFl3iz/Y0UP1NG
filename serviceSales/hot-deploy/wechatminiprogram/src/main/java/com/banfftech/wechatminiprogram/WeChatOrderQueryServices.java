@@ -3331,13 +3331,13 @@ public class WeChatOrderQueryServices {
             for (GenericValue gv : queryMyResourceOrderList) {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
+                rowMap = gv.getAllFields();
 
 
                 GenericValue orderHeaderAndShipGroupMaps = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                         where("orderId", gv.get("orderId")).queryFirst();
                 rowMap.put("orderHeaderAndShipGroups", orderHeaderAndShipGroupMaps);
 
-                rowMap = gv.getAllFields();
                 String statusId = (String) gv.get("statusId");
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
                         UtilMisc.toMap("orderId", rowMap.get("orderId")));
@@ -3663,12 +3663,12 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
+                rowMap = gv.getAllFields();
 
                 GenericValue orderHeaderAndShipGroupMap = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
                         where("orderId", gv.get("orderId")).queryFirst();
                 rowMap.put("orderHeaderAndShipGroups", orderHeaderAndShipGroupMap);
 
-                rowMap = gv.getAllFields();
                 String statusId = (String) gv.get("statusId");
 
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",

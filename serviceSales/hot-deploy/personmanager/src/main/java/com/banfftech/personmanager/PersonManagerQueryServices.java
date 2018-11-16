@@ -152,13 +152,13 @@ public class PersonManagerQueryServices {
 //        if(deep<7){
 //
 //        }
-        if(deep<5 && queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
+        if(deep<8 && queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
             for (GenericValue genericValue : queryAgentForwardChainFacts) {
                 Map<String,Object> rowMap = genericValue.getAllFields();
                 String subPartyIdFrom = genericValue.getString("partyIdFrom");
                 String subBasePartyId = genericValue.getString("basePartyId");
                 String subPartyIdTo = genericValue.getString("partyIdTo");
-                List<Map<String,Object>> subList = getNextAgentForwardChain(deep,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
+                List<Map<String,Object>> subList = getNextAgentForwardChain(deep+1,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
                 rowMap.put("subList",subList);
                 returnList.add(rowMap);
             }

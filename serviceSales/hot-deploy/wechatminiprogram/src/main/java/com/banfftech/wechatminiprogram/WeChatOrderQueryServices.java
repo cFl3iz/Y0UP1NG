@@ -3332,6 +3332,11 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
+
+                GenericValue orderHeaderAndShipGroupMaps = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
+                        where("orderId", gv.get("orderId")).queryFirst();
+                rowMap.put("orderHeaderAndShipGroups", orderHeaderAndShipGroupMaps);
+
                 rowMap = gv.getAllFields();
                 String statusId = (String) gv.get("statusId");
                 Map<String, Object> calcOrderTotal = dispatcher.runSync("getOrderAvailableReturnedTotal",
@@ -3658,6 +3663,11 @@ public class WeChatOrderQueryServices {
 
                 Map<String, Object> rowMap = new HashMap<String, Object>();
 
+
+                GenericValue orderHeaderAndShipGroupMap = EntityQuery.use(delegator).from("OrderHeaderAndShipGroups").
+                        where("orderId", gv.get("orderId")).queryFirst();
+                rowMap.put("orderHeaderAndShipGroups", orderHeaderAndShipGroupMap);
+
                 rowMap = gv.getAllFields();
                 String statusId = (String) gv.get("statusId");
 
@@ -3860,6 +3870,10 @@ public class WeChatOrderQueryServices {
                 rowMap.put("personInfoMap", personInfoMap);
 
                 rowMap.put("personAddressInfoMap", personAddressInfoMap);
+
+
+
+
 
 
                 GenericValue orderPaymentPrefAndPayment = EntityQuery.use(delegator).from("OrderPaymentPreference").where("orderId", gv.get("orderId")).queryFirst();

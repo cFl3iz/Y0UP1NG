@@ -120,7 +120,7 @@ public class PersonManagerQueryServices {
                 String basePartyId = queryAgentForwardChainFacts.getString("basePartyId");
                 String partyIdTo = queryAgentForwardChainFacts.getString("partyIdTo");
                List<Map<String,Object>> subList =  getNextAgentForwardChain(deepCount+1,delegator,basePartyId,partyIdFrom,partyIdTo);
-                rowMap.put("subList",subList);
+                rowMap.put("subList",subList==null? new ArrayList<Map<String,Object>>():subList);
             }
 //        if(queryAgentForwardChainFacts!=null && queryAgentForwardChainFacts.size()>0){
 //            for (GenericValue genericValue : queryAgentForwardChainFacts) {

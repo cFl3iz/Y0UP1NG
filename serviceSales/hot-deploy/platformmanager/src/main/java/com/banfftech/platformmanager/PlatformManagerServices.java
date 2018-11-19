@@ -2769,7 +2769,12 @@ public class PlatformManagerServices {
                             //防止出现已经存在的数据的情况
                              GenericValue productContent = delegator.makeValue("ProductContent", productContentCtx);
 //                            productContent.create();
-                            delegator.createOrStore(productContent);
+
+                            GenericValue isExsits = EntityQuery.use(delegator).from("ProductContent").where("productId", productVirtualId
+                            ,"productContentTypeId","MATCH_PRODUCT_IMAGE","contentId",contentId).queryFirst();
+                            if(null==isExsits){
+                                delegator.createOrStore(productContent);
+                            }
                         }
                         if (!UtilValidate.isEmpty(metchTwo) && !metchTwo.equals("无")) {
                             Map<String, Object> productContentCtx = new HashMap<String, Object>();

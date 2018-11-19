@@ -171,7 +171,7 @@ public class PersonManagerQueryServices {
                 String subPartyIdFrom = genericValue.getString("partyIdFrom");
                 String subBasePartyId = genericValue.getString("basePartyId");
                 String subPartyIdTo = genericValue.getString("partyIdTo");
-                if(!forwardKeyMap.containsKey(basePartyId+"|"+partyIdFrom+"|"+partyIdTo)){
+                if(!forwardKeyMap.containsKey(subBasePartyId+"|"+subPartyIdFrom+"|"+subPartyIdTo)){
                     forwardKeyMap.put(basePartyId+"|"+partyIdFrom+"|"+partyIdTo,"");
                     List<Map<String,Object>> subList = getNextAgentForwardChain(deep+1,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
                     rowMap.put("subList",subList==null?new ArrayList<Map<String,Object>>():subList);

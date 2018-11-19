@@ -159,7 +159,7 @@ public class PersonManagerQueryServices {
                 String subBasePartyId = genericValue.getString("basePartyId");
                 String subPartyIdTo = genericValue.getString("partyIdTo");
                 List<Map<String,Object>> subList = getNextAgentForwardChain(deep+1,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
-                rowMap.put("subList",subList);
+                rowMap.put("subList",subList==null?new ArrayList<Map<String,Object>>():subList);
                 returnList.add(rowMap);
             }
             return returnList;

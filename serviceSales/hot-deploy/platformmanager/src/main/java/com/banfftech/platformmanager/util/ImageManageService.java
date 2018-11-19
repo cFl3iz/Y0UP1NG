@@ -2,10 +2,7 @@ package main.java.com.banfftech.platformmanager.util;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -369,9 +366,11 @@ public class ImageManageService {
 
             Map<String, Object> contentCtx = new HashMap<String, Object>();
             contentCtx.put("contentTypeId", "DOCUMENT");
-            contentCtx.put("contentId",  delegator.getNextSeqId("contentId"));
-
+            Random r = new Random();
+            int randomNum = r.nextInt(10);
+            contentCtx.put("contentId",  delegator.getNextSeqId("contentId")+"_"+randomNum);
             GenericValue content = delegator.makeValue("Content",contentCtx );
+
             content.create();
 
 //            Map<String, Object> contentResult = new HashMap<String, Object>();

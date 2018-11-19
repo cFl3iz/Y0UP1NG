@@ -1304,17 +1304,17 @@ public class WeChatMiniProgramServices {
             }
         }
 
-        if(UtilValidate.isNotEmpty(colorArray)){
-            for(String rowColor : colorArray.split(",")){
-
-            }
-        }
-        if(UtilValidate.isNotEmpty(sizeArray)){
-            for(String rowSize : colorArray.split(",")){
-                dispatcher.runSync("createProductAttribute", UtilMisc.toMap("userLogin", admin,
-                        "productId", productId, "attrName", "address", "attrValue", address + ""));
-            }
-        }
+//        if(UtilValidate.isNotEmpty(colorArray)){
+//            for(String rowColor : colorArray.split(",")){
+//
+//            }
+//        }
+//        if(UtilValidate.isNotEmpty(sizeArray)){
+//            for(String rowSize : colorArray.split(",")){
+//                dispatcher.runSync("createProductAttribute", UtilMisc.toMap("userLogin", admin,
+//                        "productId", productId, "attrName", "address", "attrValue", address + ""));
+//            }
+//        }
 
         resultMap.put("productId", productId);
         resultMap.put("payToPartyId", partyId);

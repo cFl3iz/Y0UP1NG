@@ -93,6 +93,13 @@
     </request-map>
 
 
+
+    <request-map uri="UpdateProductSinglePathEvent">
+        <security https="true" auth="true"/>
+        <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="updateProductSinglePathEvent"/>
+        <response name="success" type="view" value="ProductUploadImport"/>
+    </request-map>
+
     <request-map uri="ProductUploadImportFormExtraOne">
         <security https="true" auth="true"/>
         <event type="java" path="main.java.com.banfftech.platformmanager.PlatformManagerServices" invoke="productUploadImportFormExtraOne"/>

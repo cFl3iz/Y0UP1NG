@@ -2650,6 +2650,57 @@ public class PlatformManagerServices {
     }
 
 
+
+
+    public static String updateProductSinglePathEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
+        try {
+            String[] excelHead = excelList.get(0);
+
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                String[] excelRow = excelList.get(i);
+                Debug.logInfo("excelRow:" + excelRow, module);
+                String productId = excelRow[0];
+                String path = excelRow[1];
+
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId));
+                if(null!= product){
+                    product.set("detailImageUrl",path);
+                    product.set("smallImageUrl",path);
+                    product.set("originalImageUrl",path);
+                    product.store();
+                    TransactionUtil.commit();
+                }
+
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
     /**
      * productUploadImportNewEvent 最新 带图片地址的
      *

@@ -1990,11 +1990,15 @@ public class WeChatOrderQueryServices {
                 imgFieldSet.add("productContentTypeId");
                 EntityCondition genericProductConditions = EntityCondition.makeCondition("productId", EntityOperator.EQUALS, skuId);
                 EntityCondition singleTypeConditions = EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "SINGLE_PRODUCT_IMAGE");
+                EntityCondition singleTypeConditions2 = EntityCondition.makeCondition("drObjectInfo", EntityOperator.LIKE, "%jpg");
                 EntityCondition singleCondition = EntityCondition.makeCondition(singleTypeConditions, EntityOperator.AND, genericProductConditions);
                 List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, imgFieldSet,
                         null, null, false);
                 if (singlePictures != null && singlePictures.size() > 0) {
-                    rowMap.put("showImageUrl", singlePictures.get(0).get("drObjectInfo") + "");
+
+                        rowMap.put("showImageUrl", singlePictures.get(0).get("drObjectInfo") + "");
+
+
                 } else {
                     rowMap.put("showImageUrl", "无");
                 }

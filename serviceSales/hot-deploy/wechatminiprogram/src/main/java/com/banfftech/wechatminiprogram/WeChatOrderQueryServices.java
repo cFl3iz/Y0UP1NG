@@ -1592,9 +1592,17 @@ public class WeChatOrderQueryServices {
 
             }
 
+            List<String> list = new ArrayList<String>();
+            for (int z=0; z<imgAttr.length;z++) {
+                if(imgAttr[z].indexOf("jpg")>0){
+                    Debug.logInfo("imgAttr[i]:"+imgAttr[z],module);
+                    list.add(imgAttr[z]);
+                }
+            }
 
+            String[] newStr =  list.toArray(new String[1]); //返回一个包含所有对象的指定类型的数组
             //图片数组
-            allField.put("imgArray", imgAttr);
+            allField.put("imgArray", newStr);
             //所有特征
             allField.put("features", productFeatureList);
             //特征切换图片

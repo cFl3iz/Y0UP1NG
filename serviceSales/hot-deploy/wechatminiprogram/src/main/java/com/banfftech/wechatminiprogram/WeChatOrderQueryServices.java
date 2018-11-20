@@ -987,16 +987,16 @@ public class WeChatOrderQueryServices {
 
 
             //图片数组
-            List<String> list = new ArrayList<String>();
-            if(imgAttr.length>0){
-                for( int i = 0 ; i< imgAttr.length;i++){
-                    String str = imgAttr[i];
-                    if(str.indexOf(".jpg")>0){
-                        list.add(str);
-                    }
-                }
-            }
-            allField.put("imgArray", list.toArray(new String[1]));
+//            List<String> list = new ArrayList<String>();
+//            if(imgAttr.length>0){
+//                for( int i = 0 ; i< imgAttr.length;i++){
+//                    String str = imgAttr[i];
+//                    if(str.indexOf(".jpg")>0){
+//                        list.add(str);
+//                    }
+//                }
+//            }
+            allField.put("imgArray", imgAttr);
             //所有特征
             allField.put("features", productFeatureList);
             //特征切换图片
@@ -1257,7 +1257,17 @@ public class WeChatOrderQueryServices {
             innerMap.put("COLOR_DESC", innerDesc);
             productFeatureList.add(innerMap);
             //图片数组
-            allField.put("imgArray", imgAttr);
+
+            List<String> list = new ArrayList<String>();
+            for (int i=0; i<imgAttr.length; i++) {
+                if(imgAttr[i].indexOf(".jpg")>0){
+                    list.add(imgAttr[i]);
+                }
+            }
+
+            String[] newStr =  list.toArray(new String[1]); //返回一个包含所有对象的指定类型的数组
+
+            allField.put("imgArray", newStr);
             //所有特征
             allField.put("features", productFeatureList);
             //特征切换图片

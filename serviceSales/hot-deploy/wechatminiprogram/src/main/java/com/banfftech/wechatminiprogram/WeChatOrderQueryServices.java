@@ -1690,9 +1690,25 @@ public class WeChatOrderQueryServices {
 //                    morePicture.add(rowPicMap);
                     i++;
                 }
+
+
+                List<String> list = new ArrayList<String>();
+                for (int z=0; z<imgAttr.length;z++) {
+                    if(imgAttr[z].indexOf("jpg")>0){
+                        Debug.logInfo("imgAttr[i]:"+imgAttr[z],module);
+                        list.add(imgAttr[z]);
+                    }
+                }
+
+                String[] newStr =  list.toArray(new String[1]); //返回一个包含所有对象的指定类型的数组
                 allField.remove("imgArray");
+                allField.put("imgArray", newStr);
+
                 Debug.logInfo(":imgAttr=" + imgAttr, module);
-                allField.put("imgArray", imgAttr);
+
+
+
+//                allField.put("imgArray", imgAttr);
             }
 //            rowMap.put("morePicture", morePicture);
 

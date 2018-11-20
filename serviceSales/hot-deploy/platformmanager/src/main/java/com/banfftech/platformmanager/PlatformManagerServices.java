@@ -2677,7 +2677,7 @@ public class PlatformManagerServices {
                 String productId = excelRow[0];
                 String path = excelRow[1];
 
-                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId));
+                GenericValue product = delegator.findOne("Product",UtilMisc.toMap("productId",productId),false);
                 if(null!= product){
                     product.set("detailImageUrl",path);
                     product.set("smallImageUrl",path);

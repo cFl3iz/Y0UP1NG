@@ -428,7 +428,46 @@ public class BoomServices {
         return result;
     }
 
+    public static Map<String, Object> setProductInventoryFromPlan(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException, GenericServiceException {
 
+        // Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        //当前登录用户
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String loginPartyId = userLogin.getString("partyId");
+        String date = (String) context.get("date");
+
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+        List<GenericValue> dpi  = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date).queryList();
+        if ( dpi != null && dpi.size()>0) {
+            for(GenericValue gv : dpi){
+//                <attribute name="productId" type="String" mode="IN" optional="false"/>
+//                <attribute name="quantity" type="String" mode="IN" optional="false"/>
+//                <attribute name="enumId" type="String" mode="IN" optional="true"/>
+//                <attribute name="date" type="String" mode="IN" optional="true"/>
+//                <attribute name="workEffortTypeId" type="String" mode="IN" optional="false"/>
+                    String productId = gv.getString("productId");
+                    String quantity = gv.getString("quantity");
+                    String enumId = gv.getString("enumId");
+                    dispatcher.runSync("setProductInventory",UtilMisc.toMap("userLogin",userLogin,
+                            "productId",productId,"date",date,
+                            "quantity",quantity,"enumId",enumId,"workEffortTypeId","OUT_WORKER"));
+            }
+        }
+
+
+
+        return resultMap;
+    }
     public static Map<String, Object> setProductInventory(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
 

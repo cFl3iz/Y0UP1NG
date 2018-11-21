@@ -144,6 +144,18 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+    <service name="setProductInventoryFromPlan" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="setProductInventoryFromPlan" auth="false">
+        <description>setProductInventoryFromPlan</description>
+        <attribute name="date" type="String" mode="IN" optional="true"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
     <service name="removeDeliveryPlan" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"

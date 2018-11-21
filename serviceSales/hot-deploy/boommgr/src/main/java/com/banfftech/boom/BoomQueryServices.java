@@ -610,7 +610,17 @@ public class BoomQueryServices {
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         Debug.logInfo("planDataList:"+planDataList,module);
         String beforeChannel = null;
+        int count = 0;
+        if(planDataList.size()>0){
+            for(GenericValue gv : planDataList){
+                Map<String,Object> rowMap =new HashMap<String, Object>();
+                rowMap = gv.getAllFields();
 
+                int quantity =  Integer.parseInt(gv.getString("quantity"));
+                count+=quantity;
+                returnList.add(rowMap);
+            }
+        }
 
 //        if(null!= planDataList){
 //
@@ -668,8 +678,9 @@ public class BoomQueryServices {
 //                beforeChannel = channelId;
 //            }
 //        }
-        resultMap.put("dayPlans",planDataList);
+        resultMap.put("dayPlans",returnList);
         resultMap.put("selectDate",selectDate);
+        resultMap.put("count",count+"");
 
 
         return resultMap;

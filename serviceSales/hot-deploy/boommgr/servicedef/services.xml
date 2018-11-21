@@ -188,6 +188,7 @@
              invoke="queryDeliveryPlan" auth="false">
         <description>queryDeliveryPlan</description>
         <attribute name="selectDate" type="String" mode="INOUT" optional="true"/>
+        <attribute name="count" type="String" mode="OUT" optional="true"/>
         <attribute name="dayPlans" type="List" mode="OUT" optional="true"/>
         <attribute name="histroyData" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

@@ -672,7 +672,7 @@ public class BoomServices {
                     }
                     int nowQuantity =  Integer.parseInt(gv.getString("quantity"));
                     gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");
-                    gv.set("quantity",(nowQuantity-quantity.intValue())+"");
+                    gv.set("quantity",(nowQuantity-quantity.intValue()<=0?0:nowQuantity-quantity.intValue())+"");
                     gv.store();
                 }
             }

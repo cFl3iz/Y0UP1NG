@@ -755,8 +755,13 @@ public class BoomServices {
         String partyGroupId = (String) myGroup.get("partyId");
 
         //已经存在就不添加了
-        if (EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst() != null) {
+        GenericValue dpi  = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "planId", partyGroupId + "/" + date, "productId", productId, "enumId", enumId).queryFirst();
+        if ( dpi != null) {
+            //累加数字
+            int nowQty = Integer.parseInt(dpi.get("quantity")+"");
+            dpi.set("quantity",(nowQty+Integer.parseInt(quantity))+"");
+            dpi.store();
             return result;
         }
 

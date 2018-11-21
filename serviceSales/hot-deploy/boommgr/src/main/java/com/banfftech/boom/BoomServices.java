@@ -670,7 +670,9 @@ public class BoomServices {
                     if(null!=gv&&null != gv.get("outQuantity") && ((gv.get("outQuantity")+"").equals("") != true)){
                         qtyStr = gv.getString("outQuantity");
                     }
+                    int nowQuantity =  Integer.parseInt(gv.getString("quantity"));
                     gv.set("outQuantity", new BigDecimal(qtyStr).add(quantity) +"");
+                    gv.set("quantity",(nowQuantity-quantity.intValue())+"");
                     gv.store();
                 }
             }

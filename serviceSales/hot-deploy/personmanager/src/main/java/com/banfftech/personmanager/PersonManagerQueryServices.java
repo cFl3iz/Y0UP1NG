@@ -124,8 +124,8 @@ public class PersonManagerQueryServices {
                String partyIdFrom = queryAgentForwardChainFacts.getString("partyIdFrom");
                 String basePartyId = queryAgentForwardChainFacts.getString("basePartyId");
                 String partyIdTo = queryAgentForwardChainFacts.getString("partyIdTo");
-                if(!forwardKeyMap.containsKey(  basePartyId+"|"+partyIdFrom+"|"+partyIdTo)){
-                    forwardKeyMap.put(basePartyId+"|"+partyIdFrom+"|"+partyIdTo,"");
+                if(!forwardKeyMap.containsKey(   partyIdTo)){
+                    forwardKeyMap.put( partyIdTo,"");
 //                    forwardKeyMap.put(  partyIdTo,"");
                     List<Map<String,Object>> subList =  getNextAgentForwardChain(deepCount+1,delegator,basePartyId,partyIdFrom,partyIdTo);
                     rowMap.put("subList",subList==null? new ArrayList<Map<String,Object>>():subList);
@@ -172,8 +172,8 @@ public class PersonManagerQueryServices {
                 String subPartyIdFrom = genericValue.getString("partyIdFrom");
                 String subBasePartyId = genericValue.getString("basePartyId");
                 String subPartyIdTo = genericValue.getString("partyIdTo");
-                if(!forwardKeyMap.containsKey( subBasePartyId+"|"+subPartyIdFrom+"|"+subPartyIdTo)){
-                   forwardKeyMap.put(subBasePartyId+"|"+subPartyIdFrom+"|"+subPartyIdTo,"");
+                if(!forwardKeyMap.containsKey( subPartyIdTo)){
+                   forwardKeyMap.put(subPartyIdTo,"");
 //                     forwardKeyMap.put(subPartyIdTo,"");
                     List<Map<String,Object>> subList = getNextAgentForwardChain(deep+1,delegator,subBasePartyId,subPartyIdFrom,subPartyIdTo);
                     rowMap.put("subList",subList==null?new ArrayList<Map<String,Object>>():subList);

@@ -2651,6 +2651,58 @@ public class PlatformManagerServices {
 
 
 
+    public static String addedProductsToCategory(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        FileItem fileItem = getFileItem(request);
+        String fileName = fileItem.getName();
+        List<String[]> excelList = excelToList(fileItem);
+
+        GenericValue admin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", "admin").queryFirst();
+
+        try {
+            String[] excelHead = excelList.get(0);
+
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+                String[] excelRow = excelList.get(i);
+                Debug.logInfo("excelRow:" + excelRow, module);
+                String productId = excelRow[0];
+                String productCategoryId = excelRow[1];
+
+                GenericValue productCateMemb = delegator.findOne("ProductCategoryMember",UtilMisc.toMap("productId",productId,"productCategoryId",productCategoryId),false);
+                if(null!= productCateMemb){
+                    Map<String, Object> productCateMemberCtx = new HashMap<String, Object>();
+                    productCateMemberCtx.put("productId", productId);
+                    productCateMemberCtx.put("productCategoryId", productCategoryId);
+                    productCateMemberCtx.put("fromDate", UtilDateTime.nowTimestamp());
+                    //防止出现已经存在的数据的情况
+                    GenericValue productCateMembGv = delegator.makeValue("ProductCategoryMember", productCateMemberCtx);
+                    productCateMembGv.create();
+                    TransactionUtil.commit();
+                }
+
+                //循环结束
+            }
+
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
 
     public static String updateProductSinglePathEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
 

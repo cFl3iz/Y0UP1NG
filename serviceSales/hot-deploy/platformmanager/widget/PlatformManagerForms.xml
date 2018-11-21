@@ -15,8 +15,16 @@
         </field>
     </form>
 
-
+    AddedProductsToCategory
     <form name="ProductPriceUploadImportForm" type="upload" target="ProductPriceUploadImportFormEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+        <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form><form name="AddedProductsToCategory" type="upload" target="AddedProductsToCategory"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
         <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">
             <file></file>

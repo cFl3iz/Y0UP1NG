@@ -136,6 +136,13 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+
+                        <screenlet title="更新产品到目录(如果不存在Members)">
+                            <include-form name="AddedProductsToCategory"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
                         <screenlet title="更新产品首图">
                             <include-form name="UpdateProductSinglePath"
                                           location="component://platformmanager/widget/PlatformManagerForms.xml"/>

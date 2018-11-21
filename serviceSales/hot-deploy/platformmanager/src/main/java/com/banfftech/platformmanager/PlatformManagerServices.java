@@ -2676,7 +2676,8 @@ public class PlatformManagerServices {
                 String productId = excelRow[0];
                 String productCategoryId = excelRow[1];
 
-                GenericValue productCateMemb = delegator.findOne("ProductCategoryMember",UtilMisc.toMap("productId",productId,"productCategoryId",productCategoryId),false);
+
+                GenericValue productCateMemb = EntityQuery.use(delegator).from("ProductCategoryMember").where("productId",productId,"productCategoryId",productCategoryId).queryFirst();
                 if(null!= productCateMemb){
                     Map<String, Object> productCateMemberCtx = new HashMap<String, Object>();
                     productCateMemberCtx.put("productId", productId);

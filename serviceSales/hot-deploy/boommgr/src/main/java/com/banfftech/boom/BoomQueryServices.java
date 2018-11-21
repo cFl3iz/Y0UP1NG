@@ -113,7 +113,23 @@ public class BoomQueryServices {
 //                UtilMisc.toMap("kId",(String) delegator.getNextSeqId("KeyWordBox"),"entityId",partyGroupId, "name",name,"fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()
 //                ));
 
-        result.put("keyWordList",EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryList());
+        List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        List<GenericValue> keyWordBoxList = EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryList();
+        if(null!=keyWordBoxList&& keyWordBoxList.size()>0){
+            for(GenericValue gv : keyWordBoxList){
+                Map<String,Object> rowMap = new HashMap<String, Object>();
+                rowMap = gv.getAllFields();
+                String keyWordName = gv.getString("name");
+                Long rowCount = EntityQuery.use(delegator).from("ProductKeyword").where("keyword",keyWordName).queryCount();
+                rowMap.put("keywordCount",rowCount);
+                returnList.add(rowMap);
+            }
+        }
+
+
+
+        result.put("keyWordList",returnList);
 
         return result;
     }

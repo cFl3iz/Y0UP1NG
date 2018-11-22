@@ -2315,11 +2315,12 @@ public class WeChatOrderQueryServices {
         String openId = (String) context.get("openId");
         String prodCatalogId = (String) context.get("prodCatalogId");
 
-        System.out.println("*OPENID = " + openId);
 
         String viewIndexStr = (String) context.get("viewIndexStr");
         String viewSizeStr = (String) context.get("viewSizeStr");
 
+        System.out.println("*queryNeiMaiCatalogProduct viewIndexStr= " + viewIndexStr);
+        System.out.println("*queryNeiMaiCatalogProduct viewSizeStr= " + viewSizeStr);
 
         int viewIndex = 0;
         if (viewIndexStr != null) {

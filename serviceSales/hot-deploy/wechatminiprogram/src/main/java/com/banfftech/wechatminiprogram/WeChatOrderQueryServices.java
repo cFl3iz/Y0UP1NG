@@ -1605,7 +1605,11 @@ public class WeChatOrderQueryServices {
 
             List<String> list = new ArrayList<String>();
             for (int z=0; z<imgAttr.length;z++) {
-                if(imgAttr[z].toLowerCase().indexOf("jpg")>0||imgAttr[z].toLowerCase().indexOf("png")>0){
+                Debug.logInfo("productid:"+productId+"|imgAttr:"+imgAttr[z],module);
+                Debug.logInfo("imgAttr[z].toLowerCase().indexOf(jpg?):"+(imgAttr[z].toLowerCase().indexOf("jpg")),module);
+                Debug.logInfo("imgAttr[z].toLowerCase().indexOf(jpg?):"+(imgAttr[z].toLowerCase().indexOf("png")),module);
+
+                if (imgAttr[z].toLowerCase().indexOf("jpg") > 0 || imgAttr[z].toLowerCase().indexOf("png")>0){
                     Debug.logInfo("imgAttr[i]:"+imgAttr[z],module);
                     list.add(imgAttr[z]);
                 }

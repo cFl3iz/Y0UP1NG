@@ -2392,6 +2392,7 @@ public class WeChatOrderQueryServices {
         fieldSet.add("productId");
         if (null != myContactListPage) {
             for (GenericValue gv : myContactListPage) {
+                boolean isOneMouthPrice = false;
                 Map<String, Object> rowMap = gv.getAllFields();
                 //自己就是sku
                 String skuId = (String) rowMap.get("productId");
@@ -2413,7 +2414,7 @@ public class WeChatOrderQueryServices {
 
                     } else {
                         Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
-                        boolean isOneMouthPrice = false;
+
                         //如果没有图的默认不看 针对zuczug
                         if (detailImageUrl.indexOf("DEFAULT_PRODUCT") < 0) {
                             count++;
@@ -2430,13 +2431,13 @@ public class WeChatOrderQueryServices {
                                 isOneMouthPrice = !isOneMouthPrice;
                             }
                             // 有最低价格的，只给akr看
-                            System.out.println("*isOneMouthPrice= " + isOneMouthPrice);
-
+//                            System.out.println("*isOneMouthPrice= " + isOneMouthPrice);
+                            Debug.logInfo("isOneMouthPrice:"+isOneMouthPrice,module);
                             if(isAkrEmp){
                                 returnProductList.add(rowMap);
                                 beforeVir = rowVirId;
                             }else{
-                                if(isOneMouthPrice ){
+                                if(isOneMouthPrice){
                                     returnProductList.add(rowMap);
                                     beforeVir = rowVirId;
                                 }else{
@@ -2444,17 +2445,6 @@ public class WeChatOrderQueryServices {
                                 }
                             }
 
-//                            if(isOneMouthPrice ){
-//                                if(isAkrEmp){
-//                                    returnProductList.add(rowMap);
-//                                    beforeVir = rowVirId;
-//                                }else{
-//                                    beforeVir = rowVirId;
-//                                }
-//                            }else{
-//                                returnProductList.add(rowMap);
-//                                beforeVir = rowVirId;
-//                            }
 
                         }
                     }

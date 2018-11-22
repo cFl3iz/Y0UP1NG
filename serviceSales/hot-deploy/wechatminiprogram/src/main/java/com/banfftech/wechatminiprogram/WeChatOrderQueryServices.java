@@ -2403,7 +2403,10 @@ public class WeChatOrderQueryServices {
                             if (null != productOnePrice) {
                                 rowMap.put("oneMouthPrice", productOnePrice.get("price"));
                             }
-
+                            GenericValue productTwoPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "ONE_MOUTH_PRICE").queryFirst();
+                            if (null != productTwoPrice) {
+                                rowMap.put("twoMouthPrice", productTwoPrice.get("price"));
+                            }
                             returnProductList.add(rowMap);
                             beforeVir = rowVirId;
                         }

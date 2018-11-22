@@ -4,7 +4,7 @@
     <!-- PartyIdentification -->
     <PartyIdentificationType createdStamp="2018-04-11 12:02:23.0" createdTxStamp="2018-04-11 12:02:23.0" description="授权验证的手机号码" hasTable="Y" lastUpdatedStamp="2018-04-11 12:02:23.0" lastUpdatedTxStamp="2018-04-11 12:02:23.0" partyIdentificationTypeId="AUTHORIZATION_TEL"/>
 
-
+    <ProductPriceType createdStamp="2018-11-22 14:15:45.0" createdTxStamp="2018-11-22 14:15:45.0" description="一口价" lastUpdatedStamp="2018-11-22 14:15:45.0" lastUpdatedTxStamp="2018-11-22 14:15:45.0" productPriceTypeId="ONE_MOUTH_PRICE"/>
 
     <!-- Tarjeta Property-->
     <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.expirationTime" systemPropertyValue="1296000" description="tarjeta的有效时间"/>

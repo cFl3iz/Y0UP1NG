@@ -1609,6 +1609,8 @@ public class PlatformManagerServices {
                 String spuId = excelRow[1];
                 String colorId = excelRow[2];
                 String onePrice = excelRow[5];
+                // MINIMUM_PRICE or ONE_MOUTH_PRICE
+                String productPriceTypeId = excelRow[6];
                 Debug.logInfo("*productName:" + productName + "|spuId:" + spuId + "|colorId:" + colorId, module);
                 EntityCondition findConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, spuId + "-" + colorId + "%");
                 List<GenericValue> products = EntityQuery.use(delegator).from("Product").where(findConditions).queryList();
@@ -1618,7 +1620,7 @@ public class PlatformManagerServices {
                         String skuId = product.getString("productId");
                         Debug.logInfo("*update product [" + skuId + "] MINIMUM_PRICE to " + onePrice, module);
                         GenericValue productPrice =
-                                EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "MINIMUM_PRICE").queryFirst();
+                                EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", productPriceTypeId).queryFirst();
                         if (null != productPrice) {
                             productPrice.set("price", new BigDecimal(onePrice));
                             productPrice.store();
@@ -1626,7 +1628,7 @@ public class PlatformManagerServices {
                             dispatcher.runSync("createProductPrice", UtilMisc.toMap("userLogin", admin, "currencyUomId", "CNY",
                                             "productId", skuId, "price", new BigDecimal(onePrice),
                                             "productPricePurposeId", "PURCHASE",
-                                            "productPriceTypeId", "MINIMUM_PRICE",
+                                            "productPriceTypeId", productPriceTypeId,
                                             "productStoreGroupId", "_NA_", "taxInPrice", "Y")
                             );
                         }

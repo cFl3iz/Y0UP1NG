@@ -1717,7 +1717,8 @@ public class WeChatOrderQueryServices {
 
                 List<String> list = new ArrayList<String>();
                 for (int z=0; z<imgAttr.length;z++) {
-                    if(imgAttr[z].indexOf("jpg")>0){
+//                    if(imgAttr[z].indexOf("jpg")>0){
+                    if(imgAttr[z].toLowerCase().indexOf("jpg")>0||imgAttr[z].toLowerCase().indexOf("png")>0){
                         Debug.logInfo("imgAttr[i]:"+imgAttr[z],module);
                         list.add(imgAttr[z]);
                     }

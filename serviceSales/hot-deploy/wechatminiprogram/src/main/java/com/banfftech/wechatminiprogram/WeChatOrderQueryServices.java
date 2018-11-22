@@ -2432,17 +2432,29 @@ public class WeChatOrderQueryServices {
                             // 有最低价格的，只给akr看
                             System.out.println("*isOneMouthPrice= " + isOneMouthPrice);
 
-                            if(isOneMouthPrice ){
-                                if(isAkrEmp){
+                            if(isAkrEmp){
+                                returnProductList.add(rowMap);
+                                beforeVir = rowVirId;
+                            }else{
+                                if(isOneMouthPrice ){
                                     returnProductList.add(rowMap);
                                     beforeVir = rowVirId;
                                 }else{
                                     beforeVir = rowVirId;
                                 }
-                            }else{
-                                returnProductList.add(rowMap);
-                                beforeVir = rowVirId;
                             }
+
+//                            if(isOneMouthPrice ){
+//                                if(isAkrEmp){
+//                                    returnProductList.add(rowMap);
+//                                    beforeVir = rowVirId;
+//                                }else{
+//                                    beforeVir = rowVirId;
+//                                }
+//                            }else{
+//                                returnProductList.add(rowMap);
+//                                beforeVir = rowVirId;
+//                            }
 
                         }
                     }

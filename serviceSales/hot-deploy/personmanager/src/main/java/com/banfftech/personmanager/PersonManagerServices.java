@@ -2296,7 +2296,7 @@ public class PersonManagerServices {
             product.set("productName",productName);
             if(top!=null && top.toUpperCase().equals("Y")){
 
-//                createProductKeyword
+//                createProductKeyword`
                 delegator.createOrStore(delegator.makeValue("ProductKeyword",
                         UtilMisc.toMap("keyword","RM"+partyId,"keywordTypeId","KWT_TAG","productId",productId,"statusId","KW_APPROVED")));
 //                product.set("comments",product.get("comments")+""+partyId+",");

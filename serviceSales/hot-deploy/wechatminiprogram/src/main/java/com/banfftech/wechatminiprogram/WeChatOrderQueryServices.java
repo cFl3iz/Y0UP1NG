@@ -2336,6 +2336,10 @@ public class WeChatOrderQueryServices {
         String viewSizeStr = (String) context.get("viewSizeStr");
 
         System.out.println("*queryNeiMaiCatalogProduct viewIndexStr= " + viewIndexStr);
+        System.out.println("*roleTypeId= " + roleTypeId);
+        Debug.logInfo("roleTypeId:" + roleTypeId, module);
+        Debug.logInfo("isAkrEmp:"+isAkrEmp,module);
+        System.out.println("*isAkrEmp= " + isAkrEmp);
         System.out.println("*queryNeiMaiCatalogProduct viewSizeStr= " + viewSizeStr);
 
         int viewIndex = 0;
@@ -2426,6 +2430,8 @@ public class WeChatOrderQueryServices {
                                 isOneMouthPrice = !isOneMouthPrice;
                             }
                             // 有最低价格的，只给akr看
+                            System.out.println("*isOneMouthPrice= " + isOneMouthPrice);
+
                             if(isOneMouthPrice ){
                                 if(isAkrEmp){
                                     returnProductList.add(rowMap);
@@ -2433,6 +2439,9 @@ public class WeChatOrderQueryServices {
                                 }else{
                                     beforeVir = rowVirId;
                                 }
+                            }else{
+                                returnProductList.add(rowMap);
+                                beforeVir = rowVirId;
                             }
 
                         }

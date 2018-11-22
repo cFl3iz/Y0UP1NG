@@ -788,6 +788,8 @@ public class BoomServices {
         String productId = (String) context.get("productId");
         String date = (String) context.get("date");
         String quantity = (String) context.get("quantity");
+        quantity = (quantity == null?"0":quantity);
+        quantity = (quantity.equals("null")?"0":quantity);
         String enumId = (String) context.get("enumId");
         String fromDate = (String) context.get("fromDate");
 

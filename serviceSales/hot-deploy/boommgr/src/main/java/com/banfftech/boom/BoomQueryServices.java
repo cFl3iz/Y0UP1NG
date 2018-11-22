@@ -616,7 +616,7 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap =new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
 
-                int quantity =  Integer.parseInt(gv.getString("quantity"));
+                int quantity =  Integer.parseInt(gv.getString("quantity").equals("null")?"0":gv.getString("quantity"));
                 count+=quantity;
                 returnList.add(rowMap);
             }

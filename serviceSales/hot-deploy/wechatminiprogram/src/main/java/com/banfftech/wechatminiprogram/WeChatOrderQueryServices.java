@@ -2325,7 +2325,7 @@ public class WeChatOrderQueryServices {
             viewIndex = Integer.parseInt(viewIndexStr);
         }
 
-        int viewSize = 50000;
+        int viewSize = 10;
         int lowIndex = 0;
         int highIndex = 0;
         Long resourceCount;

@@ -2318,14 +2318,18 @@ public class WeChatOrderQueryServices {
         System.out.println("*OPENID = " + openId);
 
         String viewIndexStr = (String) context.get("viewIndexStr");
+        String viewSizeStr = (String) context.get("viewSizeStr");
 
 
         int viewIndex = 0;
         if (viewIndexStr != null) {
             viewIndex = Integer.parseInt(viewIndexStr);
         }
-
         int viewSize = 20;
+        if (viewSizeStr != null) {
+            viewSize = Integer.parseInt(viewSizeStr);
+        }
+
         int lowIndex = 0;
         int highIndex = 0;
         Long resourceCount;

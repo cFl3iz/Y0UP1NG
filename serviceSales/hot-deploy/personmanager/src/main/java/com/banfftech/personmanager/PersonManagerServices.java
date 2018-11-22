@@ -8672,9 +8672,17 @@ public class PersonManagerServices {
 
             GenericValue productOnePrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId,"productPriceTypeId","MINIMUM_PRICE").queryFirst();
             if(null!=productOnePrice && neiMai!=null && neiMai.equals("true")){
-                itemProduct.set("unitPrice", productOnePrice.get("price"));
-                itemProduct.set("unitListPrice", productOnePrice.get("price"));
-                itemProduct.set("isModifiedPrice", "Y");
+                GenericValue productTwoPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", productId, "productPriceTypeId", "ONE_MOUTH_PRICE").queryFirst();
+                if (null != productTwoPrice) {
+                    itemProduct.set("unitPrice", productTwoPrice.get("price"));
+                    itemProduct.set("unitListPrice", productTwoPrice.get("price"));
+                    itemProduct.set("isModifiedPrice", "Y");
+                }else{
+                    itemProduct.set("unitPrice", productOnePrice.get("price"));
+                    itemProduct.set("unitListPrice", productOnePrice.get("price"));
+                    itemProduct.set("isModifiedPrice", "Y");
+                }
+
             }else{
                 itemProduct.set("unitPrice", new BigDecimal(product.get("price") + ""));
                 itemProduct.set("isModifiedPrice", "N");

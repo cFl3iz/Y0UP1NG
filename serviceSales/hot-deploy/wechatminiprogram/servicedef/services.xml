@@ -315,6 +315,7 @@
         <description>queryNeiMaiCatalogProduct</description>
         <attribute name="openId" type="String" mode="IN" optional="true" />
         <attribute name="prodCatalogId" type="String" mode="IN" optional="true" />
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true" />
         <attribute name="viewIndexStr" type="String" mode="IN" optional="true" />
         <attribute name="viewSizeStr" type="String" mode="IN" optional="true" />
         <attribute name="total" type="java.lang.Integer" mode="OUT" optional="true" />

@@ -2322,10 +2322,15 @@ public class WeChatOrderQueryServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        boolean isAkrEmp = false;
 
         String openId = (String) context.get("openId");
         String prodCatalogId = (String) context.get("prodCatalogId");
+        String roleTypeId = (String) context.get("roleTypeId");
 
+        if(null!= roleTypeId && roleTypeId.equals("ANKORAU_EMP")){
+            isAkrEmp = !isAkrEmp;
+        }
 
         String viewIndexStr = (String) context.get("viewIndexStr");
         String viewSizeStr = (String) context.get("viewSizeStr");
@@ -2404,6 +2409,7 @@ public class WeChatOrderQueryServices {
 
                     } else {
                         Debug.logInfo("detailImageUrl:" + detailImageUrl, module);
+                        boolean isOneMouthPrice = false;
                         //如果没有图的默认不看 针对zuczug
                         if (detailImageUrl.indexOf("DEFAULT_PRODUCT") < 0) {
                             count++;
@@ -2417,9 +2423,18 @@ public class WeChatOrderQueryServices {
                             GenericValue productTwoPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", skuId, "productPriceTypeId", "ONE_MOUTH_PRICE").queryFirst();
                             if (null != productTwoPrice) {
                                 rowMap.put("twoMouthPrice", productTwoPrice.get("price"));
+                                isOneMouthPrice = !isOneMouthPrice;
                             }
-                            returnProductList.add(rowMap);
-                            beforeVir = rowVirId;
+                            // 有最低价格的，只给akr看
+                            if(isOneMouthPrice ){
+                                if(isAkrEmp){
+                                    returnProductList.add(rowMap);
+                                    beforeVir = rowVirId;
+                                }else{
+                                    beforeVir = rowVirId;
+                                }
+                            }
+
                         }
                     }
                 } else {

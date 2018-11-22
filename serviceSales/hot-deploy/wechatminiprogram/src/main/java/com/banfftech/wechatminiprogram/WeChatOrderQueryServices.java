@@ -1072,6 +1072,10 @@ public class WeChatOrderQueryServices {
             allField.put("oneMouthPrice", productOnePrice.get("price"));
         }
 
+        GenericValue productTwoPrice = EntityQuery.use(delegator).from("ProductPrice").where("productId", vir_productId, "productPriceTypeId", "ONE_MOUTH_PRICE").queryFirst();
+        if (null != productTwoPrice) {
+            allField.put("twoMouthPrice", productTwoPrice.get("price"));
+        }
 
         GenericValue vir_product = EntityQuery.use(delegator).from("ProductAssoc").where("productIdTo", productId).queryFirst();
         String[] imgAttr = new String[]{

@@ -485,10 +485,11 @@ public class PersonManagerServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> result = ServiceUtil.returnSuccess();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String productStoreId = (String) context.get("productStoreId");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String top = (String) context.get("top");
         GenericValue store =  EntityQuery.use(delegator).from("ProductStoreRole").where(
-                "partyId", userLogin.getString("partyId"), "roleTypeId", "CUSTOMER").orderBy("-fromDate").queryFirst();
+                "partyId", userLogin.getString("partyId"), "roleTypeId", "CUSTOMER","productStoreId",productStoreId).orderBy("-fromDate").queryFirst();
         if(null!= store){
             store.set("top",top);
             store.store();

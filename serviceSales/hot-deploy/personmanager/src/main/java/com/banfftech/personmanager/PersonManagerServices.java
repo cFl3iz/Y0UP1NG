@@ -2244,6 +2244,7 @@ public class PersonManagerServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) userLogin.get("partyId");
         String productId = (String) context.get("productId");
+        String description = (String) context.get("description");
         String productName = (String) context.get("productName");
         String price = (String) context.get("price");
         String top = (String) context.get("top");
@@ -2310,6 +2311,7 @@ public class PersonManagerServices {
 
         }
 
+        product.set("description",description);
         product.store();
 
         return resultMap;

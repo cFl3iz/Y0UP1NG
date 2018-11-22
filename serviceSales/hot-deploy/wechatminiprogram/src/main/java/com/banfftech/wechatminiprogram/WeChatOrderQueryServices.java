@@ -2350,6 +2350,10 @@ public class WeChatOrderQueryServices {
         if (viewSizeStr != null) {
             viewSize = Integer.parseInt(viewSizeStr);
         }
+        // zuc zug emp
+        if(isAkrEmp==false){
+            viewSize = 50000;
+        }
 
         int lowIndex = 0;
         int highIndex = 0;

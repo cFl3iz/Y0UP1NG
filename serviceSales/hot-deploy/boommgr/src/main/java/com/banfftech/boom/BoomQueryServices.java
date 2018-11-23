@@ -121,18 +121,8 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
                 String keyWordName = gv.getString("name");
-                int rowCount = 0;
-                List<GenericValue> pkList = EntityQuery.use(delegator).from("ProductKeyword").where("keyword",keyWordName).queryList();
-                Map<String,String> pksMap = new HashMap<String, String>();
-                if(pkList!=null & pkList.size()>0){
-                    for(GenericValue gv2 : pkList){
-                        String productId =  gv2.getString("productId");
-                        if(!pksMap.containsKey(productId)){
-                            pksMap.put(productId,null);
-                            rowCount++;
-                        }
-                    }
-                }
+                Long rowCount = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where("keyword",keyWordName).queryCount();
+
                 rowMap.put("keywordCount",rowCount);
                 returnList.add(rowMap);
             }

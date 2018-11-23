@@ -1846,29 +1846,29 @@ public class BoomServices {
         GenericValue product = EntityQuery.use(delegator).from("Product").where(
                 "productId", productId).queryFirst();
         product.set("productName", productName);
-        product.set("detailImageUrl", imagePath != null ? imagePath : "");
-        product.set("smallImageUrl", imagePath != null ? imagePath : "");
-        product.set("quantityUomId", quantityUomId);
+//        product.set("detailImageUrl", imagePath != null ? imagePath : "");
+//        product.set("smallImageUrl", imagePath != null ? imagePath : "");
+//        product.set("quantityUomId", quantityUomId);
         product.store();
 
-        List<GenericValue> productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where(
-                "productId", productId, "productAssocTypeId", "MANUF_COMPONENT").queryList();
-        if (null != productAssoc && productAssoc.size() > 0) {
-            for (GenericValue assoc : productAssoc) {
-                assoc.remove();
-            }
-        }
-        if (rawMaterials != null && rawMaterials.length() > 2) {
-            for (String rowProduct : rawMaterials.split(",")) {
-                String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
-                String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
-                if (count.trim().equals("0")) {
-                    continue;
-                }
-                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId, "productAssocTypeId", "MANUF_COMPONENT",
-                        "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
-            }
-        }
+//        List<GenericValue> productAssoc = EntityQuery.use(delegator).from("ProductAssoc").where(
+//                "productId", productId, "productAssocTypeId", "MANUF_COMPONENT").queryList();
+//        if (null != productAssoc && productAssoc.size() > 0) {
+//            for (GenericValue assoc : productAssoc) {
+//                assoc.remove();
+//            }
+//        }
+//        if (rawMaterials != null && rawMaterials.length() > 2) {
+//            for (String rowProduct : rawMaterials.split(",")) {
+//                String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
+//                String count = rowProduct.substring(rowProduct.indexOf(":") + 1);
+//                if (count.trim().equals("0")) {
+//                    continue;
+//                }
+//                dispatcher.runSync("createProductAssoc", UtilMisc.toMap("userLogin", admin, "productIdTo", productIdFrom, "productId", productId, "productAssocTypeId", "MANUF_COMPONENT",
+//                        "quantity", new BigDecimal(count), "fromDate", org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp()));
+//            }
+//        }
 
         return resultMap;
     }

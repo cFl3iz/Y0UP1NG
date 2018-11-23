@@ -393,7 +393,7 @@
         <attribute name="productName" type="String" mode="IN" optional="false"/>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="quantityUomId" type="String" mode="IN" optional="true"/>
-        <attribute name="imagePath" type="String" mode="IN" optional="false"/>
+        <attribute name="imagePath" type="String" mode="IN" optional="true"/>
         <attribute name="rawMaterials" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

@@ -1604,7 +1604,7 @@ public class BoomQueryServices {
 
 
         Debug.logInfo("queryMyFinishedGood:"+partyGroupId,module);
-        Debug.logInfo("productList:"+productList,module);
+        Debug.logInfo("~~~~~~productList:"+productList,module);
         Debug.logInfo("productListS:"+productList.getData().size(),module);
         List<Map<String,Object>> returnList = new ArrayList<Map<String, Object>>();
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1615,9 +1615,11 @@ public class BoomQueryServices {
                 String productId = gv.getString("productId");
                 Long rowCount = EntityQuery.use(delegator).from("ProductKeyword").where("keyword",keyWord,"productId",productId).queryCount();
                 if(rowCount==0 && keyWord!=null && !keyWord.equals("") && !keyWord.equals("null")){
+                    Debug.logInfo("rowCount:"+rowCount+"|keyWord:"+keyWord,module);
                     continue;
                 }
                 if(pkMap.containsKey(productId)){
+                    Debug.logInfo("pkMap.containsKey(productId):"+(pkMap.containsKey(productId))+"|productId:"+productId,module);
                     continue;
                 }
                 pkMap.put(productId,null);

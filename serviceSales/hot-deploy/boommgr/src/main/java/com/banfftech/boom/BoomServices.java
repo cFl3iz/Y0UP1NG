@@ -1902,6 +1902,7 @@ public class BoomServices {
         String quantity  = (String) context.get("quantity");
         String imagePath = (String) context.get("imagePath");
         String rawMaterials = (String) context.get("rawMaterials");
+        String keyword = (String) context.get("keyword");
 
 
 
@@ -2002,6 +2003,9 @@ public class BoomServices {
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyGroupId));
         dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin, "costComponentTypeId", "GEN_COST", "costUomId", "CNY", "productId", productId, "partyId", partyId));
 
+        if(UtilValidate.isNotEmpty(keyword)){
+            dispatcher.runSync("addedProductKeyword",UtilMisc.toMap("userLogin", admin,"keyWord",keyword,"productId",productId));
+        }
 
         return resultMap;
     }

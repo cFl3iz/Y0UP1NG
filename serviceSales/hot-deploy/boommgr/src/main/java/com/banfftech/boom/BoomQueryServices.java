@@ -1598,10 +1598,13 @@ public class BoomQueryServices {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(productList!=null){
             for(GenericValue gv : productList.getData()){
-
                 Map<String,Object> rowMap = new HashMap<String, Object>();
 
                 String productId = gv.getString("productId");
+                Long rowCount = EntityQuery.use(delegator).from("ProductKeyword").where("keyword",keyWord,"productId",productId).queryCount();
+                if(rowCount==0){
+                    continue;
+                }
                 if(pkMap.containsKey(productId)){
                     continue;
                 }

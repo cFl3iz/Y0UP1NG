@@ -1977,7 +1977,7 @@ public class BoomServices {
         dispatcher.runSync("receiveInventoryProduct", receiveInventoryProductIn );
 
 
-        if (rawMaterials != null && rawMaterials.length() > 2) {
+        if (UtilValidate.isNotEmpty(rawMaterials)&&!rawMaterials.equals("null") && rawMaterials.length() > 4) {
             for (String rowProduct : rawMaterials.split(",")) {
                 String productIdFrom = rowProduct.substring(0, rowProduct.indexOf(":"));
                 String count = rowProduct.substring(rowProduct.indexOf(":") + 1);

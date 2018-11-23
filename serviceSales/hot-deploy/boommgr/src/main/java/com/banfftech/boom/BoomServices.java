@@ -2078,6 +2078,12 @@ public class BoomServices {
             productRole.remove();
         }
 
+        List<GenericValue> prodKeyWords = EntityQuery.use(delegator).from("ProductKeyword").where("productId",productId).queryList();
+        if(prodKeyWords.size()>0){
+            for(GenericValue gv : prodKeyWords){
+                gv.remove();
+            }
+        }
         return resultMap;
     }
 

@@ -2004,7 +2004,7 @@ public class BoomServices {
         dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin, "costComponentTypeId", "GEN_COST", "costUomId", "CNY", "productId", productId, "partyId", partyId));
 
         if(UtilValidate.isNotEmpty(keyword)){
-            dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin", admin,"keyword",keyword,"productId",productId,"keywordTypeId","Keyword"));
+            dispatcher.runSync("createProductKeyword",UtilMisc.toMap("userLogin", admin,"keyword",keyword,"productId",productId,"keywordTypeId","KWT_KEYWORD"));
         }
 
         return resultMap;

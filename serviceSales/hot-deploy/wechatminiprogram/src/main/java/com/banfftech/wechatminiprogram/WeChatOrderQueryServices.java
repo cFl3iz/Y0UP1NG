@@ -2419,13 +2419,13 @@ public class WeChatOrderQueryServices {
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where(listQueryConditions).orderBy(orderBy)
+                where(otherFindConditions==null?genericCondition:listQueryConditions).orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where(listQueryConditions).queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where(otherFindConditions==null?genericCondition:listQueryConditions).queryCount();
 
 
         lowIndex = myContactListPage.getStartIndex();

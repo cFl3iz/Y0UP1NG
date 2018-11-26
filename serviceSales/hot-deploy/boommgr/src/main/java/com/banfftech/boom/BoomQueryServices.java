@@ -1639,7 +1639,7 @@ public class BoomQueryServices {
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
 
                 rowMap.put("createdDate",sdf.format(gv.get("fromDate")));
-                rowMap.put("sequenceNum",sdf.format(gv.get("sequenceNum")));
+                rowMap.put("sequenceNum", gv.get("sequenceNum") );
 
 
 

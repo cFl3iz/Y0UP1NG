@@ -139,6 +139,35 @@ public class BoomServices {
         return partyId;
     }
 
+    /**
+     * initPartyGroupProductSequence
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
+    public static Map<String, Object> initPartyGroupProductSequence(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        String partyGroupId = (String) context.get("partyGroupId");
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "roleTypeId","ADMIN","productTypeId","FINISHED_GOOD","partyId",partyGroupId).orderBy("-fromDate").queryList();
+        if(null!= productList && productList.size()>0){
+            long i = 0;
+            for(GenericValue gv : productList){
+                gv.set("sequenceNum",i);
+                gv.store();
+                i++;
+            }
+        }
+        return result;
+    }
+
 
     public static Map<String, Object> createNewChannel(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head

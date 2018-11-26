@@ -42,6 +42,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.module;
 import static main.java.com.banfftech.personmanager.PersonManagerQueryServices.queryPersonAddressInfo;
@@ -2309,7 +2311,14 @@ public class WeChatOrderQueryServices {
         return resultMap;
     }
 
-
+    public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 内买专用目录产品列表
      *
@@ -2332,6 +2341,10 @@ public class WeChatOrderQueryServices {
         String openId = (String) context.get("openId");
         String prodCatalogId = (String) context.get("prodCatalogId");
         String roleTypeId = (String) context.get("roleTypeId");
+        String queryData = (String) context.get("queryData");
+
+
+
 
         if(null!= roleTypeId && roleTypeId.equals("ANKORAU_EMP")){
             isAkrEmp = !isAkrEmp;
@@ -2375,17 +2388,44 @@ public class WeChatOrderQueryServices {
         String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
 
 
+
+        //findConditions
+        EntityCondition simpleProListCondition = EntityCondition
+                .makeCondition(UtilMisc.toMap("productCategoryId", productCategoryId));
+
+        EntityCondition optionProListCondition = EntityCondition
+                .makeCondition(UtilMisc.toMap("isVirtual", "N"));
+
+        EntityCondition genericCondition = EntityCondition.makeCondition(simpleProListCondition, EntityOperator.AND, optionProListCondition);
+
+
+
+        EntityCondition otherFindConditions = null;
+
+        if (UtilValidate.isNotEmpty(queryData)) {
+            if(isContainChinese(queryData)){
+                otherFindConditions = EntityCondition.makeCondition("productName", EntityOperator.LIKE,"%"+ queryData + "%");
+            }else{
+                otherFindConditions = EntityCondition.makeCondition("productId", EntityOperator.LIKE, "%"+ queryData + "%");
+            }
+        }
+
+
+        EntityConditionList<EntityCondition> listQueryConditions = EntityCondition
+                .makeCondition(genericCondition, otherFindConditions);
+
+
         //"isVirtual", "Y","isVariant","N"
         List<String> orderBy = UtilMisc.toList("-createdDate");
         PagedList<GenericValue> myContactListPage = null;
         myContactListPage = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").
-                where("productCategoryId", productCategoryId, "isVirtual", "N").orderBy(orderBy)
+                where(listQueryConditions).orderBy(orderBy)
                 .distinct()
                 .queryPagedList(viewIndex, viewSize);
 
         List<GenericValue> productList = myContactListPage.getData();
 
-        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where("productCategoryId", productCategoryId, "isVirtual", "N").queryCount();
+        resourceCount = EntityQuery.use(delegator).from("ProductCategoryMemberAndProdDetail").where(listQueryConditions).queryCount();
 
 
         lowIndex = myContactListPage.getStartIndex();

@@ -139,6 +139,41 @@ public class BoomServices {
         return partyId;
     }
 
+
+
+
+    public static Map<String, Object> sortFinishedProductSequence(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
+        String productId = (String) context.get("productId");
+        String toSeq = (String) context.get("toSeq");
+
+         GenericValue  toSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
+                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "sequenceNum",toSeq).queryFirst();
+  GenericValue  nowSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
+                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId",productId).queryFirst();
+
+
+        if(null!= nowSeqGv &&  null != toSeqGv){
+
+            nowSeqGv.set("sequenceNum",new Long(toSeq));
+            nowSeqGv.store();
+
+            toSeqGv.set("sequenceNum",nowSeqGv.get("sequenceNum"));
+            toSeqGv.store();
+
+        }
+        return result;
+    }
     /**
      * initPartyGroupProductSequence
      * @param dctx
@@ -2028,11 +2063,11 @@ public class BoomServices {
             }
         }
          GenericValue lastSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
-                 "roleTypeId", "ADMIN", "productTypeId","FINISHED_GOOD","partyId",partyGroupId).orderBy("-sequenceNum");
+                 "roleTypeId", "ADMIN", "productTypeId","FINISHED_GOOD","partyId",partyGroupId).orderBy("-sequenceNum").queryFirst();
         long lastSequence = lastSeq==null?0: (long)lastSeq.get("sequenceNum");
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyGroupId));
         GenericValue nowSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
-                "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId", productId);
+                "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId", productId).queryFirst();
         nowSeq.set("sequenceNum",lastSequence+1);
         nowSeq.store();
 

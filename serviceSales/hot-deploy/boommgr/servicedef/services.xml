@@ -623,6 +623,16 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+    <service name="sortFinishedProductSequence" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomServices"
+             invoke="sortFinishedProductSequence" auth="false">
+        <description>sortFinishedProductSequence</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="toSeq" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
 
 
     <service name="queryMyOrderList" engine="java"

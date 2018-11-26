@@ -12,7 +12,12 @@
     </preprocessor>
 
 
-
+    <request-map uri="sortFinishedProductSequence">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sortFinishedProductSequence"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
     <request-map uri="setProductInventoryFromPlan">
         <security https="false" auth="false"/>
         <event type="service" invoke="setProductInventoryFromPlan"/>

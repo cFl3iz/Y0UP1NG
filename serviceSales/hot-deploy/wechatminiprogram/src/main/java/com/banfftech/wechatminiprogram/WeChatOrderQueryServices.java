@@ -2402,7 +2402,7 @@ public class WeChatOrderQueryServices {
 
         EntityCondition otherFindConditions = null;
 
-        if (UtilValidate.isNotEmpty(queryData)) {
+        if (UtilValidate.isNotEmpty(queryData)&& !queryData.equals("null")) {
             if(isContainChinese(queryData)){
                 otherFindConditions = EntityCondition.makeCondition("productName", EntityOperator.LIKE,"%"+ queryData + "%");
             }else{

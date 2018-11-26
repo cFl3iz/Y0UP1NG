@@ -158,20 +158,16 @@ public class BoomServices {
         String toSeq = (String) context.get("toSeq");
 
          GenericValue  toSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
-                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "sequenceNum",new Long(toSeq)).queryFirst();
+                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "sequenceNum", new Long(toSeq)).queryFirst();
   GenericValue  nowSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
                  "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId",productId).queryFirst();
 
 
         if(null!= nowSeqGv &&  null != toSeqGv){
-
-
-            nowSeqGv.set("sequenceNum",new Long(toSeq));
-            nowSeqGv.store();
-
             toSeqGv.set("sequenceNum",nowSeqGv.get("sequenceNum"));
             toSeqGv.store();
-
+            nowSeqGv.set("sequenceNum",new Long(toSeq));
+            nowSeqGv.store();
         }
         return result;
     }

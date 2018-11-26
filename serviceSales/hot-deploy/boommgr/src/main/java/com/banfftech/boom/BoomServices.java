@@ -2027,9 +2027,15 @@ public class BoomServices {
                         "productId",productIdFrom,"quantity",quantityOnHandTotal.subtract(resulNum).intValue()+"","workEffortTypeId","MAKE_WORKER"));
             }
         }
-
-
+         GenericValue lastSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
+                 "roleTypeId", "ADMIN", "productTypeId","FINISHED_GOOD","partyId",partyGroupId).orderBy("-sequenceNum");
+        long lastSequence = lastSeq==null?0: (long)lastSeq.get("sequenceNum");
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyGroupId));
+        GenericValue nowSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
+                "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId", productId);
+        nowSeq.set("sequenceNum",lastSequence+1);
+        nowSeq.store();
+
         dispatcher.runSync("createCostComponent", UtilMisc.toMap("userLogin", admin, "costComponentTypeId", "GEN_COST", "costUomId", "CNY", "productId", productId, "partyId", partyId));
 
         if(UtilValidate.isNotEmpty(keyword)){

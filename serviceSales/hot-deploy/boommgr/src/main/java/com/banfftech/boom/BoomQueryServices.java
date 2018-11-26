@@ -1566,12 +1566,12 @@ public class BoomQueryServices {
 //                productList = delegator.findList("ProductAndRoleAndKeyWord",
 //                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
                 productList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where(
-                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
+                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy( "sequenceNum").queryPagedList(viewIndex, viewSize);
             }else{
 //                productList = delegator.findList("ProductAndRole",
 //                        findConditionsTypeRoleAndPartyAndName, null, null, null, true);
                  productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                         findConditionsTypeRoleAndPartyAndName).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
+                         findConditionsTypeRoleAndPartyAndName).orderBy( "sequenceNum").queryPagedList(viewIndex, viewSize);
             }
 
         }else{
@@ -1583,10 +1583,10 @@ public class BoomQueryServices {
 //                productList = delegator.findList("ProductAndRoleAndKeyWord",
 //                        findConditionsTypeRoleAndPartyAndNameAndKey, null, null, null, true);
                 productList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where(
-                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
+                        findConditionsTypeRoleAndPartyAndNameAndKey).orderBy( "sequenceNum").queryPagedList(viewIndex, viewSize);
             }else{
                 productList = EntityQuery.use(delegator).from("ProductAndRole").where(
-                        findConditionsTypeRoleAndParty).orderBy("-fromDate").queryPagedList(viewIndex, viewSize);
+                        findConditionsTypeRoleAndParty).orderBy( "sequenceNum").queryPagedList(viewIndex, viewSize);
             }
 
         }

@@ -1342,6 +1342,8 @@ public class WeChatOrderQueryServices {
         Map<String, Object> allField = product.getAllFields();
 
         String desc = (String) allField.get("description");
+        desc = desc.replaceAll("\\*","%");
+        desc = desc.replaceAll("*","%");
         List<String> spuSpecTitleList = new ArrayList<String>();
         List<Map<String, String>> spuSpecRowList = new ArrayList<Map<String, String>>();
         List<GenericValue> skus = new ArrayList<GenericValue>();

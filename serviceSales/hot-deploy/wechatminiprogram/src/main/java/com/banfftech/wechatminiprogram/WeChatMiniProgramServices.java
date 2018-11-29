@@ -1315,6 +1315,9 @@ public class WeChatMiniProgramServices {
 //                        "productId", productId, "attrName", "address", "attrValue", address + ""));
 //            }
 //        }
+        GenericValue product = EntityQuery.use(delegator).from("Product").where("productId",productId).queryFirst();
+        product.set("longDescription",description);
+        product.store();
 
         resultMap.put("productId", productId);
         resultMap.put("payToPartyId", partyId);

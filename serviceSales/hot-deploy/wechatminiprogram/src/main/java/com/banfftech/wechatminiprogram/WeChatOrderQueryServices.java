@@ -1181,7 +1181,9 @@ public class WeChatOrderQueryServices {
                     for (GenericValue pict : singlePictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-                        if (!isExsitsPath.containsKey(drObjectInfo)) {
+                        //针对11-30日本白
+
+                        if (!isExsitsPath.containsKey(drObjectInfo) && productId.indexOf("0183VE05")<0) {
                             isExsitsPath.put(drObjectInfo, "");
                             rowMap.put("drObjectInfo", drObjectInfo);
                             pictures.add(rowMap);

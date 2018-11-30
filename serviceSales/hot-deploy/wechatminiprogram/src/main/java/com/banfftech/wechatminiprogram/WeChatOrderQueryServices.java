@@ -1484,19 +1484,33 @@ public class WeChatOrderQueryServices {
                     for (GenericValue pict : singlePictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-
-                        if (!isExsitsPath.containsKey(drObjectInfo) && productId.indexOf("0183VE05")< 0 ) {
+                        if(productId.indexOf("0183VE05")>= 0){
                             Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
-                            isExsitsPath.put(drObjectInfo, "");
-                            rowMap.put("drObjectInfo", drObjectInfo);
-                            pictures.add(rowMap);
-                            if (sigleIndex == 0) {
-                                if(rowColor!=null){
-                                    featureMap.put(rowColor.get("description") + "", rowMap);
-                                    sigleIndex++;
+                                Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
+                                isExsitsPath.put(drObjectInfo, "");
+                                rowMap.put("drObjectInfo", drObjectInfo);
+                                pictures.add(rowMap);
+                                    if(rowColor!=null){
+                                        featureMap.put(rowColor.get("description") + "", rowMap);
+                                        sigleIndex++;
+                                    }
+                        }else{
+                            if (!isExsitsPath.containsKey(drObjectInfo) ) {
+
+                                isExsitsPath.put(drObjectInfo, "");
+                                rowMap.put("drObjectInfo", drObjectInfo);
+                                pictures.add(rowMap);
+                                if (sigleIndex == 0) {
+                                    if(rowColor!=null){
+                                        featureMap.put(rowColor.get("description") + "", rowMap);
+                                        sigleIndex++;
+                                    }
                                 }
                             }
                         }
+
+
+
 
                     }
                 } else {

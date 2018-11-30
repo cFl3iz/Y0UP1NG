@@ -1182,16 +1182,27 @@ public class WeChatOrderQueryServices {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
                         //针对11-30日本白
+                        if(productId.indexOf("0183VE05")>=0){
+                                Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
+                                rowMap.put("drObjectInfo", drObjectInfo);
+                                pictures.add(rowMap);
+                                if (sigleIndex == 0) {
+                                    featureMap.put(rowColor.get("description") + "", rowMap);
+                                    sigleIndex++;
+                                }
 
-                        if (!isExsitsPath.containsKey(drObjectInfo) && productId.indexOf("0183VE05")<0) {
-                            isExsitsPath.put(drObjectInfo, "");
-                            rowMap.put("drObjectInfo", drObjectInfo);
-                            pictures.add(rowMap);
-                            if (sigleIndex == 0) {
-                                featureMap.put(rowColor.get("description") + "", rowMap);
-                                sigleIndex++;
+                        }else {
+                            if (!isExsitsPath.containsKey(drObjectInfo)  ) {
+                                isExsitsPath.put(drObjectInfo, "");
+                                rowMap.put("drObjectInfo", drObjectInfo);
+                                pictures.add(rowMap);
+                                if (sigleIndex == 0) {
+                                    featureMap.put(rowColor.get("description") + "", rowMap);
+                                    sigleIndex++;
+                                }
                             }
                         }
+
 
                     }
                 } else {

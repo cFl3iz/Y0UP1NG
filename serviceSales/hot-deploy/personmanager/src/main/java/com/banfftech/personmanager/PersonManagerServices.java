@@ -488,9 +488,13 @@ public class PersonManagerServices {
         String productStoreId = (String) context.get("productStoreId");
         GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
         String top = (String) context.get("top");
+        Debug.logInfo("placedStoreAtTheTop:"+top+"|"+productStoreId
+                ,module);
         GenericValue store =  EntityQuery.use(delegator).from("ProductStoreRole").where(
                 "partyId", userLogin.getString("partyId"), "roleTypeId", "CUSTOMER","productStoreId",productStoreId).orderBy("-fromDate").queryFirst();
         if(null!= store){
+            Debug.logInfo("placedStoreAtTheTop:"+store
+                    ,module);
             store.set("top",top);
             store.store();
         }

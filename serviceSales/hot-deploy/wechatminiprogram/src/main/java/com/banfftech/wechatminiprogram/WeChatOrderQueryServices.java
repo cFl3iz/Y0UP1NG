@@ -3539,7 +3539,7 @@ public class WeChatOrderQueryServices {
                     String innerNote = (String) orderNoteMap.get("noteInfo");
 
                     if(innerNote.indexOf("*")>=0) {
-                        innerNote = innerNote.replaceAll("*","%");
+                        innerNote = innerNote.replaceAll("\\*","%");
                     }
                     orderNoteMap.put("noteInfo",innerNote );
                     rowMap.put("orderNote", orderNoteMap);
@@ -3872,7 +3872,7 @@ public class WeChatOrderQueryServices {
                     String innerNote = (String) orderNoteMap.get("noteInfo");
 
                     if(innerNote.indexOf("*")>=0) {
-                        innerNote = innerNote.replaceAll("*","%");
+                        innerNote = innerNote.replaceAll("\\*","%");
                     }
                     orderNoteMap.put("noteInfo",innerNote );
                     rowMap.put("orderNote", orderNoteMap);

@@ -3535,7 +3535,14 @@ public class WeChatOrderQueryServices {
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", gv.get("orderId")).queryFirst();
                 if (null != orderNote) {
-                    rowMap.put("orderNote", orderNote.getAllFields());
+                    Map<String,Object> orderNoteMap =orderNote.getAllFields();
+                    String innerNote = (String) orderNoteMap.get("noteInfo");
+
+                    if(innerNote.indexOf("*")>=0) {
+                        innerNote = innerNote.replaceAll("*","%");
+                    }
+                    orderNoteMap.put("noteInfo",innerNote );
+                    rowMap.put("orderNote", orderNoteMap);
                 }
 
                 List<Map<String, Object>> orderItemList = new ArrayList<Map<String, Object>>();
@@ -3861,7 +3868,14 @@ public class WeChatOrderQueryServices {
                 GenericValue orderNote = EntityQuery.use(delegator).from("OrderHeaderNoteView").
                         where("orderId", gv.get("orderId")).queryFirst();
                 if (null != orderNote) {
-                    rowMap.put("orderNote", orderNote.getAllFields());
+                    Map<String,Object> orderNoteMap =orderNote.getAllFields();
+                    String innerNote = (String) orderNoteMap.get("noteInfo");
+
+                    if(innerNote.indexOf("*")>=0) {
+                        innerNote = innerNote.replaceAll("*","%");
+                    }
+                    orderNoteMap.put("noteInfo",innerNote );
+                    rowMap.put("orderNote", orderNoteMap);
                 }
 
                 //OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, true, false, false)

@@ -732,15 +732,18 @@ public class WeChatOrderQueryServices {
             String workEffortId = "NA";
             String partyIdTo = "NO_PARTY";
             Map<String, String> userInfo = queryPersonBaseInfo(delegator, partyId);
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
-                    "partyIdFrom", fromPartyId,
-                    "partyIdTo", partyIdTo,
-                    "workEffortId", workEffortId,
-                    "basePartyId", basePartyId,
-                    "firstName", userInfo.get("firstName"),
-                    "objectInfo", userInfo.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
+            if(   userInfo!=null && userInfo.get("firstName")!=null){
+                dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                        "userLogin", admin,
+                        "partyIdFrom", fromPartyId,
+                        "partyIdTo", partyIdTo,
+                        "workEffortId", workEffortId,
+                        "basePartyId", basePartyId,
+                        "firstName", userInfo.get("firstName"),
+                        "objectInfo", userInfo.get("headPortrait"),
+                        "createDate", new Timestamp(new Date().getTime())));
+            }
+
         }
 
         return resultMap;

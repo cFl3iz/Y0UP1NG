@@ -774,7 +774,7 @@ public class PersonManagerServices {
                 oneProductId = rowProductId;
 
                 String newProductId = (String) delegator.getNextSeqId("Product");
-                dispatcher.runSync("b",UtilMisc.toMap("userLogin",admin,
+                dispatcher.runSync("duplicateProduct",UtilMisc.toMap("userLogin",admin,
                         "oldProductId",rowProductId,"productId",newProductId,
                         "duplicatePrices","Y",
                         "duplicateAttributes","Y",

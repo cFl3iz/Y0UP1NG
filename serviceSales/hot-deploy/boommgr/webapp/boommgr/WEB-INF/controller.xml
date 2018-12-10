@@ -34,6 +34,15 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+
+    <request-map uri="queryDeliveryPlanItemByDate">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryDeliveryPlanItemByDate"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
     <request-map uri="queryPermisionJson">
         <security https="false" auth="false"/>
         <event type="service" invoke="queryPermisionJson"/>

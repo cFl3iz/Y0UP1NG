@@ -188,8 +188,8 @@ public class BoomQueryServices {
         if(null != chanels && chanels.size()>0){
             for (GenericValue gv : chanels) {
                 if(!allChanelMap.containsKey(gv.getString("enumId"))){
-                    GenericValue chanel = EntityQuery.use(delegator).from("Enumeration").where("enumId",gv.getString("enumId")).queryList();
-                    allChanelMap.put(gv.getString("enumId"),gv.getString("description"));
+                    GenericValue chanel = EntityQuery.use(delegator).from("Enumeration").where("enumId",gv.getString("enumId")).queryFirst();
+                    allChanelMap.put(gv.getString("enumId"), chanel.getString("description"));
                 }
             }
         }

@@ -175,32 +175,34 @@ public class BoomQueryServices {
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
+
+                Debug.logInfo("Rowgv:"+gv,module);
                 if(!allProductMap.containsKey(gv.getString("productId"))){
                     allProductMap.put(gv.getString("productId"),gv.getString("productName"));
                 }
-                Debug.logInfo("Rowgv:"+gv,module);
                 Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",module);
 
                 String outQuantity = gv.getString("outQuantity") ;
                 String enumId = gv.getString("enumId") ;
                 String productId = gv.getString("productId") ;
                 Debug.logInfo("enumId:"+enumId,module);
-                Debug.logInfo("productId:"+productId,module);
-                Debug.logInfo("outQuantity:"+outQuantity,module);
+
                 int outQ;
                 if(outQuantity == null || outQuantity.trim().toLowerCase().equals("null")){
                     outQ =0;
                 }else{
                     outQ = Integer.parseInt(outQuantity);
                 }
-
                 if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
                     channelProductCountMap.put(enumId+"-"+productId,outQuantity);
+                    Debug.logInfo("productId-1:"+productId,module);
                 }else{
                     int exsitQty = Integer.parseInt(
                             channelProductCountMap.get(enumId+"-"+productId)+"");
                     channelProductCountMap.put(enumId+"-"+productId,outQ+exsitQty);
+                    Debug.logInfo("productId-2:"+productId,module);
                 }
+                Debug.logInfo("outQuantity:"+outQuantity,module);
             }
         }
         Debug.logInfo("****************************************************************************************************"+chanels,module);

@@ -171,6 +171,7 @@ public class BoomQueryServices {
             }
         }
         Debug.logInfo("************************* chanels = "+chanels,module);
+        Debug.logInfo("****************************************************************************************************"+chanels,module);
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
@@ -178,17 +179,23 @@ public class BoomQueryServices {
                     allProductMap.put(gv.getString("productId"),gv.getString("productName"));
                 }
                 String outQuantity = gv.getString("outQuantity") ;
-                int outQ = Integer.parseInt(outQuantity);
-                if(!channelProductCountMap.containsKey(gv.getString("enumId")+"-"+gv.getString("productId"))){
-                    channelProductCountMap.put(gv.getString("enumId")+"-"+gv.getString("productId"),gv.getString("outQuantity"));
+                String enumId = gv.getString("enumId") ;
+                String productId = gv.getString("productId") ;
+                Debug.logInfo("enumId:"+enumId,module);
+                Debug.logInfo("productId:"+productId,module);
+                Debug.logInfo("outQuantity:"+outQuantity,module);
+                int outQ = Integer.parseInt(outQuantity==null?"0":outQuantity);
+                if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
+                    channelProductCountMap.put(enumId+"-"+productId,outQuantity);
                 }else{
                     int exsitQty = Integer.parseInt(
-                            channelProductCountMap.get(gv.getString("enumId")+"-"+gv.getString("productId"))+"");
-                    channelProductCountMap.put(gv.getString("enumId")+"-"+gv.getString("productId"),outQ+exsitQty);
+                            channelProductCountMap.get(enumId+"-"+productId)+"");
+                    channelProductCountMap.put(enumId+"-"+productId,outQ+exsitQty);
                 }
-//                        dataArrayList.add(innerMap);
             }
         }
+        Debug.logInfo("****************************************************************************************************"+chanels,module);
+
         Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
         Debug.logInfo("************************* allProductMap = "+allProductMap,module);
         int rowCount = 1;

@@ -154,19 +154,70 @@ public class BoomQueryServices {
 
         Debug.logInfo("->>>>dpList:"+dpList,module);
 
+        Map<String,Object> allProductMap = new HashMap<String, Object>();
+
+
+
+        EntityCondition findConditionsRole = EntityCondition
+                .makeCondition("roleTypeId", "ADMIN");
+        EntityCondition findConditionsType = EntityCondition
+                .makeCondition("productTypeId","FINISHED_GOOD");
+
+        EntityCondition findConditionsNameAndRole = EntityCondition
+                .makeCondition(findConditionsType, EntityOperator.AND, findConditionsRole);
+
+
+        EntityCondition findConditionsParty = EntityCondition
+                .makeCondition("partyId", partyGroupId);
+
+        EntityCondition findConditionsTypeRoleAndParty = EntityCondition
+                .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsParty);
+
+        List<GenericValue>  productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                findConditionsTypeRoleAndParty).queryList();
+        if(null!=productList && productList.size()>0){
+            for(GenericValue gv : productList){
+                if(!allProductMap.containsKey(gv.getString("productId"))){
+                    allProductMap.put(gv.getString("productId"),gv.getString("productName"));
+                }
+            }
+        }
+        Map<String,Object> allChanelMap = new HashMap<String, Object>();
+        EntityCondition findChanelCondition = EntityCondition.makeCondition("enumCode", EntityOperator.LIKE, partyGroupId+"%");
+        List<GenericValue> chanels = EntityQuery.use(delegator).from("Enumeration").where(findChanelCondition).queryList();
+        if(null != chanels && chanels.size()>0){
+            for (GenericValue gv : chanels) {
+                if(!allChanelMap.containsKey(gv.getString("enumId"))){
+                    GenericValue chanel = EntityQuery.use(delegator).from("Enumeration").where("enumId",gv.getString("enumId")).queryList();
+                    allChanelMap.put(gv.getString("enumId"),gv.getString("description"));
+                }
+            }
+        }
+
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
-                Map<String, Object> innerMap = new HashMap<String, Object>();
-                        //"分类名称", "物品名称", "型号", "厂家", "所在库位", "电压", "电流", "出厂日期"
-                        innerMap.put("productName",  gv.get("productName"));
-                        innerMap.put("outQuantity",  gv.get("outQuantity"));
-                        dataArrayList.add(innerMap);
+
+//                        Map<String, Object> innerMap = new HashMap<String, Object>();
+//                        //"分类名称", "物品名称", "型号", "厂家", "所在库位", "电压", "电流", "出厂日期"
+//                        innerMap.put("productName",  gv.get("productName"));
+//                        innerMap.put("outQuantity",  gv.get("outQuantity"));
+//                        dataArrayList.add(innerMap);
             }
         }
         long tm = System.currentTimeMillis();
         DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String[] excelTitle = new String[]{"productName", "outQuantity"};
-        String mapKeys = "productName,outQuantity";
+        String[] excelTitle = new String[allProductMap.size()+1];
+        String mapKeys = "";
+
+        int i =1;
+        for (Map.Entry<String, Object> m : allProductMap.entrySet()) {
+            excelTitle[i] = (String) m.getValue();
+            mapKeys += excelTitle[i]+",";
+            i++;
+//            System.out.println("key:" + m.getKey() + " value:" + m.getValue());
+        }
+
+
         String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
         List<File> attachments = new ArrayList<File>();
         File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");

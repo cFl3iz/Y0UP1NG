@@ -135,6 +135,8 @@ public class BoomQueryServices {
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
         EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId+"/"+"%");
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+        Debug.logInfo("->>>>startDate:"+startDate,module);
+        Debug.logInfo("->>>>endDate:"+endDate,module);
 
         dateConditionStart = EntityCondition
                 .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
@@ -149,6 +151,8 @@ public class BoomQueryServices {
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 allCondition, null,
                 null, null, false);
+
+        Debug.logInfo("->>>>dpList:"+dpList,module);
 
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {

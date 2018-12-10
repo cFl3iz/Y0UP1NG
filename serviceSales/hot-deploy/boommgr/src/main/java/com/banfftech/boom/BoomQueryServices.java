@@ -241,6 +241,9 @@ public class BoomQueryServices {
 //            System.out.println("key:" + m.getKey() + " value:" + m.getValue());
         }
 
+        Debug.logInfo("///////////////////////////////////////////dataArrayList:"+dataArrayList,module);
+        Debug.logInfo("///////////////////////////////////////////excelTitle:"+excelTitle,module);
+        Debug.logInfo("///////////////////////////////////////////mapKeys:"+mapKeys,module);
         // TODO 先不发送,看看效果
 //        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
 //        List<File> attachments = new ArrayList<File>();

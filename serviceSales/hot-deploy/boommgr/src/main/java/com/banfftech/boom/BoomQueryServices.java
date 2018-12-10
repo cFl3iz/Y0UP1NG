@@ -152,7 +152,7 @@ public class BoomQueryServices {
                 allCondition, null,
                 null, null, false);
 
-        Debug.logInfo("->>>>dpList:"+dpList,module);
+        Debug.logInfo("->>>>dpListSize:"+dpList.size(),module);
 
         Map<String,Object> allProductMap = new HashMap<String, Object>();
 
@@ -170,6 +170,7 @@ public class BoomQueryServices {
                 }
             }
         }
+        Debug.logInfo("************************* chanels = "+chanels,module);
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
@@ -188,7 +189,8 @@ public class BoomQueryServices {
 //                        dataArrayList.add(innerMap);
             }
         }
-
+        Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
+        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
         int rowCount = 1;
         if(allChanelMap.size()>0){
             for (Map.Entry<String, Object> m : allChanelMap.entrySet()) {
@@ -203,7 +205,7 @@ public class BoomQueryServices {
                 }
             }
         }
-
+        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
         long tm = System.currentTimeMillis();
         DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String[] excelTitle = new String[allProductMap.size()+1];

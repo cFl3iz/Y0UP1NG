@@ -282,6 +282,7 @@ public class BoomQueryServices {
 
 
         mailInfo.setAttachments(attachments);
+
         mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
         // 这个类主要来发送邮件
         MailSender.sendMail(mailInfo);//发送邮件

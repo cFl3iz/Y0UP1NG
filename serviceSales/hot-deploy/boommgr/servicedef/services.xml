@@ -78,6 +78,16 @@
                    optional="true"/>
     </service>
 
+    <service name="queryDeliveryPlanItemByDate" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="queryDeliveryPlanItemByDate" auth="false">
+        <description>queryDeliveryPlanItemByDate</description>
+        <attribute name="dpList" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
     <service name="viewedOrder" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomServices"

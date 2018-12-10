@@ -94,6 +94,68 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+
+    /**
+     * query DeliveryPlanItemByDate(按时间查询出库)
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryDeliveryPlanItemByDate(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        // Admin Do Run Service
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin.getString("partyId");
+        //筛选时间起
+        EntityCondition dateConditionStart = null;
+        //筛选时间止
+        EntityCondition dateConditionEnd = null;
+        Date date = new Date(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+
+        String startDate = (String) context.get("startDate");
+        String endDate = (String) context.get("endDate");
+
+        Map<String,Object> myGroup = getMyGroup(delegator, partyId);
+        String partyGroupId = (String) myGroup.get("partyId");
+
+
+        EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId+"/"+"%");
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+        dateConditionStart = EntityCondition
+                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
+        dateConditionEnd = EntityCondition
+                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(endDate));
+
+        EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
+
+        EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
+
+
+        // 是否有历史数据
+        List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
+                allCondition, null,
+                null, null, false);
+
+        resultMap.put("dpList",dpList);
+        return resultMap;
+    }
+
+
+
+
+
+
     public static Map<String, Object> queryKeyWordBox(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException  {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();

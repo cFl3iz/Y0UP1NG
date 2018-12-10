@@ -184,7 +184,13 @@ public class BoomQueryServices {
                 Debug.logInfo("enumId:"+enumId,module);
                 Debug.logInfo("productId:"+productId,module);
                 Debug.logInfo("outQuantity:"+outQuantity,module);
-                int outQ = Integer.parseInt(outQuantity==null?"0":outQuantity);
+                int outQ;
+                if(outQuantity==null || outQuantity.equals("null")){
+                    outQ =0;
+                }else{
+                    outQ = Integer.parseInt(outQuantity);
+                }
+
                 if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
                     channelProductCountMap.put(enumId+"-"+productId,outQuantity);
                 }else{

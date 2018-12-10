@@ -165,7 +165,7 @@ public class BoomQueryServices {
         String mapKeys = "productName,outQuantity";
         String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
         List<File> attachments = new ArrayList<File>();
-        File affix = new File(path + ".xlsx");
+        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
         attachments.add(affix);
 
         String mailContent = "";

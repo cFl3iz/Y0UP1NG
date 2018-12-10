@@ -300,10 +300,10 @@ public class ExportExcelFile {
             fout.close();
             wb.close();
 
-           byte[] fileByte = toByteArray3("/tmp/"+fileName);
-
-
-           String qiNiuResult = QiNiuUtil.upload(fileName,fileByte);
+//           byte[] fileByte = toByteArray3("/tmp/"+fileName);
+//
+//
+//           String qiNiuResult = QiNiuUtil.upload(fileName,fileByte);
 
 
 

@@ -128,7 +128,8 @@ public class BoomQueryServices {
         String mail = (String) context.get("mail");
 
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
-        String partyGroupId = (String) myGroup.get("partyId");
+        String partyGroupId = "13390";
+        //String partyGroupId = (String) myGroup.get("partyId");
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
@@ -136,7 +137,7 @@ public class BoomQueryServices {
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
         dateConditionStart = EntityCondition
-                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
+                .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
         dateConditionEnd = EntityCondition
                 .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(endDate));
 
@@ -145,7 +146,6 @@ public class BoomQueryServices {
         EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
 
 
-        // 是否有历史数据
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 allCondition, null,
                 null, null, false);

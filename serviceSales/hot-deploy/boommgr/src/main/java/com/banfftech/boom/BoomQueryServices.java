@@ -152,7 +152,7 @@ public class BoomQueryServices {
                 allCondition, null,
                 null, null, false);
 
-        Debug.logInfo("->>>>dpListSize:"+dpList.size(),module);
+        //     Debug.logInfo("->>>>dpListSize:"+dpList.size(),module);
 
         Map<String,Object> allProductMap = new HashMap<String, Object>();
 
@@ -170,22 +170,22 @@ public class BoomQueryServices {
                 }
             }
         }
-        Debug.logInfo("************************* chanels = "+chanels,module);
-        Debug.logInfo("****************************************************************************************************"+chanels,module);
+        //  Debug.logInfo("************************* chanels = "+chanels,module);
+        //   Debug.logInfo("****************************************************************************************************"+chanels,module);
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
 
-                Debug.logInfo("Rowgv:"+gv,module);
+                //    Debug.logInfo("Rowgv:"+gv,module);
                 if(!allProductMap.containsKey(gv.getString("productId"))){
                     allProductMap.put(gv.getString("productId"),gv.getString("productName"));
                 }
-                Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",module);
+                //Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",module);
 
                 String outQuantity = gv.getString("outQuantity") ;
                 String enumId = gv.getString("enumId") ;
                 String productId = gv.getString("productId") ;
-                Debug.logInfo("enumId:"+enumId,module);
+                //  Debug.logInfo("enumId:"+enumId,module);
 
                 int outQ;
                 if(outQuantity == null || outQuantity.trim().toLowerCase().equals("null")){
@@ -195,19 +195,19 @@ public class BoomQueryServices {
                 }
                 if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
                     channelProductCountMap.put(enumId+"-"+productId,outQ);
-                    Debug.logInfo("productId-1:"+productId,module);
+                    // Debug.logInfo("productId-1:"+productId,module);
                 }else{
                     int exsitQty = Integer.parseInt(channelProductCountMap.get(enumId+"-"+productId)+"");
                     channelProductCountMap.put(enumId+"-"+productId,outQ+exsitQty);
-                    Debug.logInfo("productId-2:"+productId,module);
+                    // Debug.logInfo("productId-2:"+productId,module);
                 }
-                Debug.logInfo("outQuantity:"+outQuantity,module);
+//                Debug.logInfo("outQuantity:"+outQuantity,module);
             }
         }
-        Debug.logInfo("****************************************************************************************************"+chanels,module);
-
-        Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
-        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
+//        Debug.logInfo("****************************************************************************************************"+chanels,module);
+//
+//        Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
+//        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
         int rowCount = 1;
         if(allChanelMap.size()>0){
             for (Map.Entry<String, Object> m : allChanelMap.entrySet()) {
@@ -222,7 +222,7 @@ public class BoomQueryServices {
                 }
             }
         }
-        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
+//        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
         long tm = System.currentTimeMillis();
         DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String[] excelTitle = new String[allProductMap.size()+1];

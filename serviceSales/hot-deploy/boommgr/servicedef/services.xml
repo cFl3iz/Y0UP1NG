@@ -84,6 +84,7 @@
              invoke="queryDeliveryPlanItemByDate" auth="false">
         <description>queryDeliveryPlanItemByDate</description>
         <attribute name="startDate" type="String" mode="IN" optional="false"/>
+        <attribute name="mail" type="String" mode="IN" optional="false"/>
         <attribute name="endDate" type="String" mode="IN" optional="false"/>
         <attribute name="dpList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"

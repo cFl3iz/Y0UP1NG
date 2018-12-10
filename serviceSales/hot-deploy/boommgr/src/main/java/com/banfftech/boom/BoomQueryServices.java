@@ -185,7 +185,7 @@ public class BoomQueryServices {
         mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
         // 以下是接收方信息
         mailInfo.setToAddress(mail);
-        mailInfo.setSubject("Dc-业务数据导出");
+        mailInfo.setSubject("业务数据导出");
         mailInfo.setContent(mailContent);
 
 

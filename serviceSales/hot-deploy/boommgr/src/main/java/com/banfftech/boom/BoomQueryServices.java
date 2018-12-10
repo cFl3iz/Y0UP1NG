@@ -178,6 +178,9 @@ public class BoomQueryServices {
                 if(!allProductMap.containsKey(gv.getString("productId"))){
                     allProductMap.put(gv.getString("productId"),gv.getString("productName"));
                 }
+                Debug.logInfo("Rowgv:"+gv,module);
+                Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",module);
+
                 String outQuantity = gv.getString("outQuantity") ;
                 String enumId = gv.getString("enumId") ;
                 String productId = gv.getString("productId") ;
@@ -185,7 +188,7 @@ public class BoomQueryServices {
                 Debug.logInfo("productId:"+productId,module);
                 Debug.logInfo("outQuantity:"+outQuantity,module);
                 int outQ;
-                if(outQuantity==null || outQuantity.equals("null")){
+                if(outQuantity == null || outQuantity.trim().toLowerCase().equals("null")){
                     outQ =0;
                 }else{
                     outQ = Integer.parseInt(outQuantity);

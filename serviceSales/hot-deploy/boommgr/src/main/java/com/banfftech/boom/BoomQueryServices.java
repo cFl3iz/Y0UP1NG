@@ -241,30 +241,31 @@ public class BoomQueryServices {
 //            System.out.println("key:" + m.getKey() + " value:" + m.getValue());
         }
 
-        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
-        List<File> attachments = new ArrayList<File>();
-        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
-        attachments.add(affix);
-
-        String mailContent = "";
-        mailContent = "-----导出-----" + "<br/>";
-
-
-        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
-
-        MailInfo mailInfo = new MailInfo();
-        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
-        mailInfo.setMailServerPort("465");
-        //不要验证
-        mailInfo.setValidate(true);
-        // 以下是发送方信息
-        mailInfo.setUserName("yinlin.shen@banff-tech.com");
-        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
-        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
-        // 以下是接收方信息
-        mailInfo.setToAddress(mail);
-        mailInfo.setSubject("业务数据导出");
-        mailInfo.setContent(mailContent);
+        // TODO 先不发送,看看效果
+//        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
+//        List<File> attachments = new ArrayList<File>();
+//        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
+//        attachments.add(affix);
+//
+//        String mailContent = "";
+//        mailContent = "-----导出-----" + "<br/>";
+//
+//
+//        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
+//
+//        MailInfo mailInfo = new MailInfo();
+//        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
+//        mailInfo.setMailServerPort("465");
+//        //不要验证
+//        mailInfo.setValidate(true);
+//        // 以下是发送方信息
+//        mailInfo.setUserName("yinlin.shen@banff-tech.com");
+//        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
+//        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
+//        // 以下是接收方信息
+//        mailInfo.setToAddress(mail);
+//        mailInfo.setSubject("业务数据导出");
+//        mailInfo.setContent(mailContent);
 
 
 
@@ -281,11 +282,11 @@ public class BoomQueryServices {
 
 
 
-        mailInfo.setAttachments(attachments);
-
-        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
-        // 这个类主要来发送邮件
-        MailSender.sendMail(mailInfo);//发送邮件
+//        mailInfo.setAttachments(attachments);
+//
+//        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
+//        // 这个类主要来发送邮件
+//        MailSender.sendMail(mailInfo);//发送邮件
 
 
 

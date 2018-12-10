@@ -194,11 +194,10 @@ public class BoomQueryServices {
                     outQ = Integer.parseInt(outQuantity);
                 }
                 if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
-                    channelProductCountMap.put(enumId+"-"+productId,outQuantity);
+                    channelProductCountMap.put(enumId+"-"+productId,outQ);
                     Debug.logInfo("productId-1:"+productId,module);
                 }else{
-                    int exsitQty = Integer.parseInt(
-                            channelProductCountMap.get(enumId+"-"+productId)+"");
+                    int exsitQty = Integer.parseInt(channelProductCountMap.get(enumId+"-"+productId)+"");
                     channelProductCountMap.put(enumId+"-"+productId,outQ+exsitQty);
                     Debug.logInfo("productId-2:"+productId,module);
                 }

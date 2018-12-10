@@ -1,11 +1,13 @@
 package main.java.com.banfftech.boom;
 
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import main.java.com.banfftech.boom.bean.MailInfo;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -123,10 +125,11 @@ public class BoomQueryServices {
 
         String startDate = (String) context.get("startDate");
         String endDate = (String) context.get("endDate");
+        String mail = (String) context.get("mail");
 
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
         String partyGroupId = (String) myGroup.get("partyId");
-
+        List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
         EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId+"/"+"%");
@@ -146,6 +149,67 @@ public class BoomQueryServices {
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 allCondition, null,
                 null, null, false);
+
+        if (dpList.size() > 0) {
+            for (GenericValue gv : dpList) {
+                Map<String, Object> innerMap = new HashMap<String, Object>();
+                        //"分类名称", "物品名称", "型号", "厂家", "所在库位", "电压", "电流", "出厂日期"
+                        innerMap.put("productName",  gv.get("productName"));
+                        innerMap.put("outQuantity",  gv.get("outQuantity"));
+                        dataArrayList.add(innerMap);
+            }
+        }
+        long tm = System.currentTimeMillis();
+        DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String[] excelTitle = new String[]{"productName", "outQuantity"};
+        String mapKeys = "productName,outQuantity";
+        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
+        List<File> attachments = new ArrayList<File>();
+        File affix = new File(path + ".xlsx");
+        attachments.add(affix);
+
+        String mailContent = "";
+        mailContent = "-----导出-----" + "<br/>";
+
+
+        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
+
+        MailInfo mailInfo = new MailInfo();
+        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
+        mailInfo.setMailServerPort("465");
+        //不要验证
+        mailInfo.setValidate(true);
+        // 以下是发送方信息
+        mailInfo.setUserName("yinlin.shen@banff-tech.com");
+        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
+        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
+        // 以下是接收方信息
+        mailInfo.setToAddress(mail);
+        mailInfo.setSubject("Dc-业务数据导出");
+        mailInfo.setContent(mailContent);
+
+
+
+        //查询库存明细报表Excel
+//        if (inventoryDetail != null && inventoryDetail.toLowerCase().equals("y")) {
+//
+//            List<String> strList = exportExcelToMail("inventoryDetail", delegator, dispatcher, admin, email, startDate, endDate);
+//            String netPath = strList.get(0);
+//            excels.add(UtilMisc.toMap("inventoryDetail", netPath));
+//            File affix = new File(strList.get(1) + ".xlsx");
+//            attachments.add(affix);
+//        }
+
+
+
+
+        mailInfo.setAttachments(attachments);
+        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
+        // 这个类主要来发送邮件
+        MailSender.sendMail(mailInfo);//发送邮件
+
+
+
 
         resultMap.put("dpList",dpList);
         return resultMap;

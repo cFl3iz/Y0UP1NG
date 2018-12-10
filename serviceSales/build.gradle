@@ -89,6 +89,9 @@ configurations {
 
 dependencies {
 
+//七牛
+    compile group: 'com.qiniu', name: 'qiniu-java-sdk', version: '7.2.14'
+
     compile group: 'org.apache.olingo', name: 'odata-commons-core', version: '4.5.0'
     compile group: 'org.apache.olingo', name: 'odata-commons-api', version: '4.5.0'
     compile group: 'org.apache.olingo', name: 'odata-server-core', version: '4.5.0'

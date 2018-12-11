@@ -209,15 +209,26 @@ public class BoomQueryServices {
 //        Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
 //        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
         int rowCount = 1;
+        String beforeEnumId = null;
         if(allChanelMap.size()>0){
             for (Map.Entry<String, Object> m : allChanelMap.entrySet()) {
                 Map<String,Object> innerMap = new HashMap<String, Object>();
                 innerMap.put("channel",(String) m.getValue());
                 if(channelProductCountMap.size()>0){
                     for(Map.Entry<String, Object> p : channelProductCountMap.entrySet()){
-                        innerMap.put("count"+rowCount,(String) m.getValue());
-                        dataArrayList.add(innerMap);
-                        rowCount++;
+                        String rowChannel = m.getValue()+"".substring(0,(m.getValue()+"").indexOf("-"));
+                        if(beforeEnumId==null || beforeEnumId.equals(rowChannel)){
+                            innerMap.put("count"+rowCount,(String) m.getValue());
+                            dataArrayList.add(innerMap);
+                            rowCount++;
+                            beforeEnumId = rowChannel;
+                        }else{
+                            innerMap.put("count"+rowCount,(String) m.getValue());
+                            dataArrayList.add(innerMap);
+                            beforeEnumId = rowChannel;
+//                            rowCount++;
+                        }
+
                     }
                 }
             }

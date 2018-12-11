@@ -216,7 +216,8 @@ public class BoomQueryServices {
                 innerMap.put("channel",(String) m.getValue());
                 if(channelProductCountMap.size()>0){
                     for(Map.Entry<String, Object> p : channelProductCountMap.entrySet()){
-                            innerMap.put("count"+rowCount,(String) p.getValue());
+                        Debug.logInfo("count"+rowCount+"|" +  p.getValue(),module);
+                            innerMap.put("count"+rowCount,"" +  p.getValue());
                             dataArrayList.add(innerMap);
                             rowCount++;
 

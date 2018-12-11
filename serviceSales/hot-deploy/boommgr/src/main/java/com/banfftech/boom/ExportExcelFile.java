@@ -241,8 +241,6 @@ public class ExportExcelFile {
         XSSFWorkbook wb = new XSSFWorkbook(); // --->创建了一个excel文件
         XSSFSheet sheet = wb.createSheet(fileName); // --->创建了一个工作簿
 
-//        sheet.autoSizeColumn(1);
-//        sheet.autoSizeColumn(1, true);
 
         XSSFRow row = sheet.createRow(0); // --->创建一行
         String[] keys = mapKeys.split(",");
@@ -288,29 +286,14 @@ public class ExportExcelFile {
         sheet.setColumnWidth(7, 25 * 256);  //设置列宽，20个字符宽
         fileName += ".xlsx";
         try {
-//            response.addHeader("Content-Disposition",
-//                    "attachment;filename=" + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
-//            OutputStream os = response.getOutputStream();
-//            wb.write(os);
-//            os.flush();
-//            os.close();
-
             FileOutputStream fout = new FileOutputStream("/tmp/"+fileName);
             wb.write(fout);
             fout.close();
             wb.close();
-
-//           byte[] fileByte = toByteArray3("/tmp/"+fileName);
-//
-//
-//           String qiNiuResult = QiNiuUtil.upload(fileName,fileByte);
-
-
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e)
- {
+        {
             e.printStackTrace();
         }
         return "";

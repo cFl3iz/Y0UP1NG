@@ -2,6 +2,9 @@ package main.java.com.banfftech.boom;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,6 +82,9 @@ import main.java.com.banfftech.platformmanager.oss.OSSUnit;
 
 
 import net.sf.json.JSONArray;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONObject;
 import org.omg.CORBA.portable.Delegate;
 import sun.net.www.content.text.Generic;
@@ -128,8 +134,8 @@ public class BoomQueryServices {
         String mail = (String) context.get("mail");
 
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
-        String partyGroupId = "13390";
-        //String partyGroupId = (String) myGroup.get("partyId");
+//        String partyGroupId = "13390";
+         String partyGroupId = (String) myGroup.get("partyId");
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
@@ -146,22 +152,22 @@ public class BoomQueryServices {
         EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
 
         EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
-
-
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 allCondition, null,
                 null, null, false);
 
-        //     Debug.logInfo("->>>>dpListSize:"+dpList.size(),module);
-
         Map<String,Object> allProductMap = new HashMap<String, Object>();
+        DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        XSSFWorkbook wb = new XSSFWorkbook(); // --->创建了一个excel文件
+        long tm = System.currentTimeMillis();
+        String fileName = "test-send" + "-" + sdf2.format(tm);
 
-
-
-
+        XSSFSheet sheet = wb.createSheet(fileName); // --->创建了一个工作簿
+        XSSFRow row = sheet.createRow(0); // --->创建一行
         Map<String,Object> allChanelMap = new HashMap<String, Object>();
         EntityCondition findChanelCondition = EntityCondition.makeCondition("enumCode", EntityOperator.LIKE, partyGroupId+"%");
         List<GenericValue> chanels = EntityQuery.use(delegator).from("Enumeration").where(findChanelCondition).queryList();
+
         if(null != chanels && chanels.size()>0){
             for (GenericValue gv : chanels) {
                 if(!allChanelMap.containsKey(gv.getString("enumId"))){
@@ -170,23 +176,26 @@ public class BoomQueryServices {
                 }
             }
         }
-         Debug.logInfo("************************* chanels = "+chanels,module);
-        //   Debug.logInfo("****************************************************************************************************"+chanels,module);
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
+        int tableHeadIndex = 0;
+        row.createCell(tableHeadIndex).setCellValue("");
+        tableHeadIndex+=1;
         if (dpList.size() > 0) {
             for (GenericValue gv : dpList) {
-
-                //    Debug.logInfo("Rowgv:"+gv,module);
-                if(!allProductMap.containsKey(gv.getString("productId"))){
-                    allProductMap.put(gv.getString("productId"),gv.getString("productName"));
-                }
-                //Debug.logInfo(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",module);
-
                 String outQuantity = gv.getString("outQuantity") ;
                 String enumId = gv.getString("enumId") ;
-                String productId = gv.getString("productId") ;
-                //  Debug.logInfo("enumId:"+enumId,module);
+                //绘制表头
+                if(!allProductMap.containsKey(gv.getString("productId")) && UtilValidate.isNotEmpty(outQuantity)){
+                    int intOutQuantity = Integer.parseInt(outQuantity);
+                    if(intOutQuantity>0 && allChanelMap.containsKey(enumId)){
+                        allProductMap.put(gv.getString("productId"),gv.getString("productName"));
+                        row.createCell(tableHeadIndex).setCellValue(gv.getString("productName"));
+                        tableHeadIndex++;
+                    }
+                }
 
+
+                String productId = gv.getString("productId") ;
                 int outQ;
                 if(outQuantity == null || outQuantity.trim().toLowerCase().equals("null")){
                     outQ =0;
@@ -195,110 +204,106 @@ public class BoomQueryServices {
                 }
                 if(!channelProductCountMap.containsKey(enumId+"-"+productId)){
                     channelProductCountMap.put(enumId+"-"+productId,outQ);
-                    // Debug.logInfo("productId-1:"+productId,module);
                 }else{
                     int exsitQty = Integer.parseInt(channelProductCountMap.get(enumId+"-"+productId)+"");
                     channelProductCountMap.put(enumId+"-"+productId,outQ+exsitQty);
-                    // Debug.logInfo("productId-2:"+productId,module);
                 }
-//                Debug.logInfo("outQuantity:"+outQuantity,module);
             }
         }
-//        Debug.logInfo("****************************************************************************************************"+chanels,module);
-//
-//        Debug.logInfo("************************* channelProductCountMap = "+channelProductCountMap,module);
-//        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
+
         int rowCount = 1;
         String beforeEnumId = null;
         Map<String,Object> isExistChannel = new HashMap<String, Object>();
         if(allChanelMap.size()>0){
+            int i = 1;
             for (Map.Entry<String, Object> m : allChanelMap.entrySet()) {
-                Map<String,Object> innerMap = new HashMap<String, Object>();
+                int j = 0;
+                String channelKey = m.getKey();
+                String channelName = "" + m.getValue();
+                XSSFRow nRow = sheet.createRow(i);
+                nRow.createCell(j).setCellValue(channelName);
 
-                    innerMap.put("channel",(String) m.getValue());
-
-                if(channelProductCountMap.size()>0){
-                    for(Map.Entry<String, Object> p : channelProductCountMap.entrySet()){
-                            Debug.logInfo("count"+rowCount+"|" +  p.getValue(),module);
-                            innerMap.put("count"+rowCount,"" +  p.getValue());
-                            dataArrayList.add(innerMap);
-                            rowCount++;
-
-//                        String rowChannel = m.getValue()+"".substring(0,(m.getValue()+"").indexOf("-"));
-//                        if(beforeEnumId==null || beforeEnumId.equals(rowChannel)){
-//                            innerMap.put("count"+rowCount,(String) m.getValue());
-//                            dataArrayList.add(innerMap);
-//                            rowCount++;
-//                            beforeEnumId = rowChannel;
-//                        }else{
-//                            innerMap.put("count"+rowCount,(String) m.getValue());
-//                            dataArrayList.add(innerMap);
-//                            beforeEnumId = rowChannel;
-////                            rowCount++;
-//                        }
-
+                for (Map.Entry<String, Object> p : allProductMap.entrySet()) {
+                    String productId = p.getKey();
+                    if(channelProductCountMap.containsKey(channelKey + "-" + productId)){
+                        String outQuantity = ""+channelProductCountMap.get(channelKey + "-" + productId);
+                        int outQuantityInt = Integer.parseInt(outQuantity);
+                            nRow.createCell(j+1).setCellValue((Integer)outQuantityInt);
+                        j++;
+                    }else{
+                        nRow.createCell(j+1).setCellValue(Integer.parseInt("0"));
+                        j++;
                     }
                 }
+                i++;
             }
         }
-        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
-//        long tm = System.currentTimeMillis();
-//        DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-//        String[] excelTitle = new String[allProductMap.size()+1];
-//        String mapKeys = "channel,";
-//        for(int i =0 ; i < rowCount;i++){
-//            if(i+1==rowCount){
-//                mapKeys += "count"+(i+1);
-//            }else{
-//                mapKeys += "count"+(i+1)+",";
-//            }
-//        }
-//        int i =1;
-//        for (Map.Entry<String, Object> m : allProductMap.entrySet()) {
-//            excelTitle[i] = (String) m.getValue();
-//            i++;
-//        }
-//
-//        Debug.logInfo("///////////////////////////////////////////dataArrayList:"+dataArrayList,module);
-//        Debug.logInfo("///////////////////////////////////////////excelTitle:"+excelTitle,module);
-//        Debug.logInfo("///////////////////////////////////////////mapKeys:"+mapKeys,module);
+        sheet.setColumnWidth(0, 20 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(1, 20 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(2, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(3, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(4, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(5, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(6, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(7, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(8, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(9, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(10, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(11, 25 * 256);  //设置列宽，20个字符宽
+        sheet.setColumnWidth(12, 25 * 256);  //设置列宽，20个字符宽
+
+
+        fileName += ".xlsx";
+        try {
+           FileOutputStream fout = new FileOutputStream("/tmp/"+fileName);
+//            FileOutputStream fout = new FileOutputStream("D:\\"+fileName);
+            wb.write(fout);
+            fout.close();
+            wb.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
 //        // TODO 先不发送,看看效果
 //        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
-//        List<File> attachments = new ArrayList<File>();
-//        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
-//        attachments.add(affix);
-//
-//        String mailContent = "";
-//        mailContent = "-----导出-----" + "<br/>";
-//
-//
-//        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
-//
-//        MailInfo mailInfo = new MailInfo();
-//        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
-//        mailInfo.setMailServerPort("465");
-//        //不要验证
-//        mailInfo.setValidate(true);
-//        // 以下是发送方信息
-//        mailInfo.setUserName("yinlin.shen@banff-tech.com");
-//        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
-//        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
-//        // 以下是接收方信息
-//        mailInfo.setToAddress(mail);
-//        mailInfo.setSubject("业务数据导出");
-//        mailInfo.setContent(mailContent);
-//
-//
-//
-//
-//
-//
-//
-//        mailInfo.setAttachments(attachments);
-//
-//        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
-//        // 这个类主要来发送邮件
-//        MailSender.sendMail(mailInfo);//发送邮件
+        List<File> attachments = new ArrayList<File>();
+        File affix = new File("/tmp/"+fileName);
+        attachments.add(affix);
+
+        String mailContent = "";
+        mailContent = "-----导出-----" + "<br/>";
+
+
+        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
+
+        MailInfo mailInfo = new MailInfo();
+        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
+        mailInfo.setMailServerPort("465");
+        //不要验证
+        mailInfo.setValidate(true);
+        // 以下是发送方信息
+        mailInfo.setUserName("yinlin.shen@banff-tech.com");
+        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
+        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
+        // 以下是接收方信息
+        mailInfo.setToAddress(mail);
+        mailInfo.setSubject("业务数据导出");
+        mailInfo.setContent(mailContent);
+
+
+
+
+
+
+
+        mailInfo.setAttachments(attachments);
+
+        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
+        // 这个类主要来发送邮件
+        MailSender.sendMail(mailInfo);//发送邮件
 
 
 

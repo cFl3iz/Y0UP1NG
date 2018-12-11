@@ -134,7 +134,7 @@ public class BoomQueryServices {
         String mail = (String) context.get("mail");
 
         Map<String,Object> myGroup = getMyGroup(delegator, partyId);
-//        String partyGroupId = "13390";
+        //String partyGroupId = "13390";
          String partyGroupId = (String) myGroup.get("partyId");
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
@@ -189,8 +189,8 @@ public class BoomQueryServices {
                     int intOutQuantity = Integer.parseInt(outQuantity);
                     if(intOutQuantity>0 && allChanelMap.containsKey(enumId)){
                         allProductMap.put(gv.getString("productId"),gv.getString("productName"));
-                        row.createCell(tableHeadIndex).setCellValue(gv.getString("productName"));
-                        tableHeadIndex++;
+//                        row.createCell(tableHeadIndex).setCellValue(gv.getString("productId") + "|" + gv.getString("productName"));
+//                        tableHeadIndex++;
                     }
                 }
 
@@ -210,6 +210,11 @@ public class BoomQueryServices {
                 }
             }
         }
+        //表头
+        for(Map.Entry<String, Object> p : allProductMap.entrySet()){
+            row.createCell(tableHeadIndex).setCellValue(""+p.getValue());
+            tableHeadIndex++;
+        }
 
         int rowCount = 1;
         String beforeEnumId = null;
@@ -227,11 +232,11 @@ public class BoomQueryServices {
                     String productId = p.getKey();
                     if(channelProductCountMap.containsKey(channelKey + "-" + productId)){
                         String outQuantity = ""+channelProductCountMap.get(channelKey + "-" + productId);
-                        int outQuantityInt = Integer.parseInt(outQuantity);
-                            nRow.createCell(j+1).setCellValue((Integer)outQuantityInt);
+
+                            nRow.createCell(j+1).setCellValue(outQuantity );
                         j++;
                     }else{
-                        nRow.createCell(j+1).setCellValue(Integer.parseInt("0"));
+                        nRow.createCell(j+1).setCellValue("0" );
                         j++;
                     }
                 }

@@ -216,18 +216,22 @@ public class BoomQueryServices {
                 innerMap.put("channel",(String) m.getValue());
                 if(channelProductCountMap.size()>0){
                     for(Map.Entry<String, Object> p : channelProductCountMap.entrySet()){
-                        String rowChannel = m.getValue()+"".substring(0,(m.getValue()+"").indexOf("-"));
-                        if(beforeEnumId==null || beforeEnumId.equals(rowChannel)){
-                            innerMap.put("count"+rowCount,(String) m.getValue());
+                            innerMap.put("count"+rowCount,(String) p.getValue());
                             dataArrayList.add(innerMap);
                             rowCount++;
-                            beforeEnumId = rowChannel;
-                        }else{
-                            innerMap.put("count"+rowCount,(String) m.getValue());
-                            dataArrayList.add(innerMap);
-                            beforeEnumId = rowChannel;
+
+//                        String rowChannel = m.getValue()+"".substring(0,(m.getValue()+"").indexOf("-"));
+//                        if(beforeEnumId==null || beforeEnumId.equals(rowChannel)){
+//                            innerMap.put("count"+rowCount,(String) m.getValue());
+//                            dataArrayList.add(innerMap);
 //                            rowCount++;
-                        }
+//                            beforeEnumId = rowChannel;
+//                        }else{
+//                            innerMap.put("count"+rowCount,(String) m.getValue());
+//                            dataArrayList.add(innerMap);
+//                            beforeEnumId = rowChannel;
+////                            rowCount++;
+//                        }
 
                     }
                 }
@@ -256,51 +260,42 @@ public class BoomQueryServices {
         Debug.logInfo("///////////////////////////////////////////excelTitle:"+excelTitle,module);
         Debug.logInfo("///////////////////////////////////////////mapKeys:"+mapKeys,module);
         // TODO 先不发送,看看效果
-//        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
-//        List<File> attachments = new ArrayList<File>();
-//        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
-//        attachments.add(affix);
-//
-//        String mailContent = "";
-//        mailContent = "-----导出-----" + "<br/>";
-//
-//
-//        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
-//
-//        MailInfo mailInfo = new MailInfo();
-//        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
-//        mailInfo.setMailServerPort("465");
-//        //不要验证
-//        mailInfo.setValidate(true);
-//        // 以下是发送方信息
-//        mailInfo.setUserName("yinlin.shen@banff-tech.com");
-//        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
-//        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
-//        // 以下是接收方信息
-//        mailInfo.setToAddress(mail);
-//        mailInfo.setSubject("业务数据导出");
-//        mailInfo.setContent(mailContent);
+        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
+        List<File> attachments = new ArrayList<File>();
+        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
+        attachments.add(affix);
+
+        String mailContent = "";
+        mailContent = "-----导出-----" + "<br/>";
 
 
+        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
 
-        //查询库存明细报表Excel
-//        if (inventoryDetail != null && inventoryDetail.toLowerCase().equals("y")) {
-//
-//            List<String> strList = exportExcelToMail("inventoryDetail", delegator, dispatcher, admin, email, startDate, endDate);
-//            String netPath = strList.get(0);
-//            excels.add(UtilMisc.toMap("inventoryDetail", netPath));
-//            File affix = new File(strList.get(1) + ".xlsx");
-//            attachments.add(affix);
-//        }
+        MailInfo mailInfo = new MailInfo();
+        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
+        mailInfo.setMailServerPort("465");
+        //不要验证
+        mailInfo.setValidate(true);
+        // 以下是发送方信息
+        mailInfo.setUserName("yinlin.shen@banff-tech.com");
+        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
+        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
+        // 以下是接收方信息
+        mailInfo.setToAddress(mail);
+        mailInfo.setSubject("业务数据导出");
+        mailInfo.setContent(mailContent);
 
 
 
 
-//        mailInfo.setAttachments(attachments);
-//
-//        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
-//        // 这个类主要来发送邮件
-//        MailSender.sendMail(mailInfo);//发送邮件
+
+
+
+        mailInfo.setAttachments(attachments);
+
+        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
+        // 这个类主要来发送邮件
+        MailSender.sendMail(mailInfo);//发送邮件
 
 
 

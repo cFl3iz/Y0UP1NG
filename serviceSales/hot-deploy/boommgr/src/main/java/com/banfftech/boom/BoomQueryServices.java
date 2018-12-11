@@ -155,7 +155,7 @@ public class BoomQueryServices {
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 genericCondition, null,
                 null, null, false);
-
+        Debug.logInfo("dpListSize:"+dpList.size(),module);
         Map<String,Object> allProductMap = new HashMap<String, Object>();
         DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         XSSFWorkbook wb = new XSSFWorkbook(); // --->创建了一个excel文件

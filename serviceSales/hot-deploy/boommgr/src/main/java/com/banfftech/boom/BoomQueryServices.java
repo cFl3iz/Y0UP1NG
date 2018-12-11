@@ -139,21 +139,21 @@ public class BoomQueryServices {
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
-        EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId+"/"+"%");
+        EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId+"/"+startDate+"%");
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
         Debug.logInfo("->>>>startDate:"+startDate,module);
-        Debug.logInfo("->>>>endDate:"+endDate,module);
 
-        dateConditionStart = EntityCondition
-                .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
-        dateConditionEnd = EntityCondition
-                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(endDate));
 
-        EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
-
-        EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
+//        dateConditionStart = EntityCondition
+//                .makeCondition("fromDate",EntityOperator.GREATER_THAN_EQUAL_TO,Timestamp.valueOf(startDate));
+//        dateConditionEnd = EntityCondition
+//                .makeCondition("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,Timestamp.valueOf(endDate));
+//
+//        EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
+//        EntityCondition dateCondition = EntityCondition.makeCondition("planId", EntityOperator.AND, dateConditionEnd);
+//        EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
         List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
-                allCondition, null,
+                genericCondition, null,
                 null, null, false);
 
         Map<String,Object> allProductMap = new HashMap<String, Object>();

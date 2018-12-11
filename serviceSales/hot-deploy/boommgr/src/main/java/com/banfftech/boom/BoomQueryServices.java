@@ -170,7 +170,7 @@ public class BoomQueryServices {
                 }
             }
         }
-        //  Debug.logInfo("************************* chanels = "+chanels,module);
+         Debug.logInfo("************************* chanels = "+chanels,module);
         //   Debug.logInfo("****************************************************************************************************"+chanels,module);
         Map<String,Object> channelProductCountMap = new HashMap<String, Object>();
         if (dpList.size() > 0) {
@@ -210,13 +210,16 @@ public class BoomQueryServices {
 //        Debug.logInfo("************************* allProductMap = "+allProductMap,module);
         int rowCount = 1;
         String beforeEnumId = null;
+        Map<String,Object> isExistChannel = new HashMap<String, Object>();
         if(allChanelMap.size()>0){
             for (Map.Entry<String, Object> m : allChanelMap.entrySet()) {
                 Map<String,Object> innerMap = new HashMap<String, Object>();
-                innerMap.put("channel",(String) m.getValue());
+
+                    innerMap.put("channel",(String) m.getValue());
+
                 if(channelProductCountMap.size()>0){
                     for(Map.Entry<String, Object> p : channelProductCountMap.entrySet()){
-                        Debug.logInfo("count"+rowCount+"|" +  p.getValue(),module);
+                            Debug.logInfo("count"+rowCount+"|" +  p.getValue(),module);
                             innerMap.put("count"+rowCount,"" +  p.getValue());
                             dataArrayList.add(innerMap);
                             rowCount++;
@@ -238,65 +241,64 @@ public class BoomQueryServices {
                 }
             }
         }
-//        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
-        long tm = System.currentTimeMillis();
-        DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String[] excelTitle = new String[allProductMap.size()+1];
-        String mapKeys = "channel,";
-        for(int i =0 ; i < rowCount;i++){
-            if(i+1==rowCount){
-                mapKeys += "count"+(i+1);
-            }else{
-                mapKeys += "count"+(i+1)+",";
-            }
-        }
-        int i =1;
-        for (Map.Entry<String, Object> m : allProductMap.entrySet()) {
-            excelTitle[i] = (String) m.getValue();
-            i++;
-//            System.out.println("key:" + m.getKey() + " value:" + m.getValue());
-        }
-
-        Debug.logInfo("///////////////////////////////////////////dataArrayList:"+dataArrayList,module);
-        Debug.logInfo("///////////////////////////////////////////excelTitle:"+excelTitle,module);
-        Debug.logInfo("///////////////////////////////////////////mapKeys:"+mapKeys,module);
-        // TODO 先不发送,看看效果
-        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
-        List<File> attachments = new ArrayList<File>();
-        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
-        attachments.add(affix);
-
-        String mailContent = "";
-        mailContent = "-----导出-----" + "<br/>";
-
-
-        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
-
-        MailInfo mailInfo = new MailInfo();
-        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
-        mailInfo.setMailServerPort("465");
-        //不要验证
-        mailInfo.setValidate(true);
-        // 以下是发送方信息
-        mailInfo.setUserName("yinlin.shen@banff-tech.com");
-        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
-        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
-        // 以下是接收方信息
-        mailInfo.setToAddress(mail);
-        mailInfo.setSubject("业务数据导出");
-        mailInfo.setContent(mailContent);
-
-
-
-
-
-
-
-        mailInfo.setAttachments(attachments);
-
-        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
-        // 这个类主要来发送邮件
-        MailSender.sendMail(mailInfo);//发送邮件
+        Debug.logInfo("************************* dataArrayList = "+dataArrayList,module);
+//        long tm = System.currentTimeMillis();
+//        DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+//        String[] excelTitle = new String[allProductMap.size()+1];
+//        String mapKeys = "channel,";
+//        for(int i =0 ; i < rowCount;i++){
+//            if(i+1==rowCount){
+//                mapKeys += "count"+(i+1);
+//            }else{
+//                mapKeys += "count"+(i+1)+",";
+//            }
+//        }
+//        int i =1;
+//        for (Map.Entry<String, Object> m : allProductMap.entrySet()) {
+//            excelTitle[i] = (String) m.getValue();
+//            i++;
+//        }
+//
+//        Debug.logInfo("///////////////////////////////////////////dataArrayList:"+dataArrayList,module);
+//        Debug.logInfo("///////////////////////////////////////////excelTitle:"+excelTitle,module);
+//        Debug.logInfo("///////////////////////////////////////////mapKeys:"+mapKeys,module);
+//        // TODO 先不发送,看看效果
+//        String path = ExportExcelFile.exportExcelMapToQiNiu(dataArrayList, excelTitle, mapKeys, "test-send" + "-" + sdf2.format(tm));
+//        List<File> attachments = new ArrayList<File>();
+//        File affix = new File("/tmp/test-send" + "-" + sdf2.format(tm) + ".xlsx");
+//        attachments.add(affix);
+//
+//        String mailContent = "";
+//        mailContent = "-----导出-----" + "<br/>";
+//
+//
+//        List<Map<String, Object>> excels = new ArrayList<Map<String, Object>>();
+//
+//        MailInfo mailInfo = new MailInfo();
+//        mailInfo.setMailServerHost("smtp.exmail.qq.com"); // 邮箱服务器
+//        mailInfo.setMailServerPort("465");
+//        //不要验证
+//        mailInfo.setValidate(true);
+//        // 以下是发送方信息
+//        mailInfo.setUserName("yinlin.shen@banff-tech.com");
+//        mailInfo.setPassword("woaizhu131");// 您的邮箱密码
+//        mailInfo.setFromAddress("yinlin.shen@banff-tech.com");
+//        // 以下是接收方信息
+//        mailInfo.setToAddress(mail);
+//        mailInfo.setSubject("业务数据导出");
+//        mailInfo.setContent(mailContent);
+//
+//
+//
+//
+//
+//
+//
+//        mailInfo.setAttachments(attachments);
+//
+//        mailInfo.setContentType("text/html");//HTML格式：text/html，纯文本格式：text/plain
+//        // 这个类主要来发送邮件
+//        MailSender.sendMail(mailInfo);//发送邮件
 
 
 

@@ -807,6 +807,9 @@ public class WeChatOrderQueryServices {
         if (vir_product != null) {
 
             //获取SPU的尺码规格
+            if(productId.indexOf("-")>=0){
+
+
             GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
 //            Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
 //            Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
@@ -837,7 +840,7 @@ public class WeChatOrderQueryServices {
                     }
                 }
             }
-
+            }
             String rowVirId = (String) vir_product.get("productId");
 
 
@@ -905,6 +908,7 @@ public class WeChatOrderQueryServices {
                                 featureMap.put(rowColor.get("description") + "", rowMap);
                                 sigleIndex++;
                             }
+
                         }
 
                     }

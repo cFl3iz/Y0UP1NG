@@ -2330,25 +2330,29 @@ public class WeChatOrderQueryServices {
             String workEffortId = "NA";
             String partyIdTo = "NO_PARTY";
             Map<String, String> userInfo = queryPersonBaseInfo(delegator, partyId);
-            dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
-                    "userLogin", admin,
-                    "partyIdFrom", fromPartyId,
-                    "partyIdTo", partyIdTo,
-                    "workEffortId", workEffortId,
-                    "basePartyId", basePartyId,
-                    "firstName", userInfo.get("firstName"),
-                    "objectInfo", userInfo.get("headPortrait"),
-                    "createDate", new Timestamp(new Date().getTime())));
-        }
-        GenericValue myForwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
-                "partyIdTo", partyId).queryFirst();
+            if(null!=userInfo){
+                dispatcher.runSync("inForwardChainFact", UtilMisc.toMap(
+                        "userLogin", admin,
+                        "partyIdFrom", fromPartyId,
+                        "partyIdTo", partyIdTo,
+                        "workEffortId", workEffortId,
+                        "basePartyId", basePartyId,
+                        "firstName", userInfo.get("firstName"),
+                        "objectInfo", userInfo.get("headPortrait"),
+                        "createDate", new Timestamp(new Date().getTime())));
+                GenericValue myForwardChainFactTemp = EntityQuery.use(delegator).from("YpForwardChainFactTemp").where(
+                        "partyIdTo", partyId).queryFirst();
 
-        // 更新我的软连接
-        if (null != myForwardChainFactTemp) {
-            myForwardChainFactTemp.set("basePartyId", partyId);
-            myForwardChainFactTemp.store();
-            Debug.logInfo("update ... " + myForwardChainFactTemp, module);
+                // 更新我的软连接
+                if (null != myForwardChainFactTemp) {
+                    myForwardChainFactTemp.set("basePartyId", partyId);
+                    myForwardChainFactTemp.store();
+                    Debug.logInfo("update ... " + myForwardChainFactTemp, module);
+                }
+            }
+
         }
+
         return resultMap;
     }
 

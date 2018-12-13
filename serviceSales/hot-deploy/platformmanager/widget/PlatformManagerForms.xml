@@ -15,7 +15,7 @@
         </field>
     </form>
 
-    AddedProductsToCategory
+
     <form name="ProductPriceUploadImportForm" type="upload" target="ProductPriceUploadImportFormEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
         <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">

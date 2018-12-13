@@ -805,12 +805,15 @@ public class WeChatOrderQueryServices {
         Map<String, String> isExsitsPath = new HashMap<String, String>();
 
         if (vir_product != null) {
-
+            GenericValue productContentAndElectronicText = null;
             //获取SPU的尺码规格
             if(productId.indexOf("-")>=0){
+                  productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
+            }else{
+                productContentAndElectronicText = null;
+            }
 
 
-            GenericValue productContentAndElectronicText = EntityQuery.use(delegator).from("ProductContentAndElectronicText").where("productId", productId.substring(0, productId.indexOf("-"))).queryFirst();
 //            Debug.logInfo("productId+:" + productId.substring(0, productId.indexOf("-")), module);
 //            Debug.logInfo("productContentAndElectronicText:" + productContentAndElectronicText, module);
             List<String> spuSpecTitleList = new ArrayList<String>();
@@ -840,7 +843,7 @@ public class WeChatOrderQueryServices {
                     }
                 }
             }
-            }
+
             String rowVirId = (String) vir_product.get("productId");
 
 

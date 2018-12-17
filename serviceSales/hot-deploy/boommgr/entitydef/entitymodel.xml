@@ -33,7 +33,7 @@
     <view-entity entity-name="DeliveryPlansItemGroupByView" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
         <member-entity entity-name="DeliveryPlansItem" entity-alias="DP"/>
         <alias-all entity-alias="DP" />
-        <alias name="enumId" group-by="true" />
+        <alias name="enumId" entity-alias="DP" group-by="true"  />
     </view-entity>
 
     <entity entity-name="KeyWordBox" package-name="org.ofbiz.cloudLake.ProductStore" title="KeyWordBox">

@@ -152,9 +152,10 @@ public class BoomQueryServices {
 //        EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
 //        EntityCondition dateCondition = EntityCondition.makeCondition("planId", EntityOperator.AND, dateConditionEnd);
 //        EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
-        List<GenericValue> dpList = delegator.findList("DeliveryPlansItemGroupByView",
+        List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
                 genericCondition, null,
                 null, null, false);
+        
         Debug.logInfo("dpListSize:"+dpList.size(),module);
         Map<String,Object> allProductMap = new HashMap<String, Object>();
         DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");

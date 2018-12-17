@@ -5,6 +5,17 @@
 
 
 
+    <form name="updateProductSalesPrice" type="upload" target="updateProductSalesPriceEvent"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
+        <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">
+            <file></file>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
     <form name="UpdateProductSinglePath" type="upload" target="UpdateProductSinglePathEvent"
           odd-row-style="alternate-row" default-table-style="basic-table hover-bar" paginate-target="ProductReport">
         <field name="file" title="${uiLabelMap.ChooseFile}" required-field="true">

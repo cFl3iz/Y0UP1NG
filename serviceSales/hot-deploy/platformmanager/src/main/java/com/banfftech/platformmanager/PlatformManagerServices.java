@@ -1572,6 +1572,58 @@ public class PlatformManagerServices {
     }
 
     /**
+     * 产品普通销售价格更新
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws FileUploadException
+     * @throws InvalidFormatException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static String updateProductSalesPriceEvent(HttpServletRequest request, HttpServletResponse response) throws IOException, FileUploadException, InvalidFormatException, GenericEntityException, GenericServiceException {
+
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        FileItem fileItem = getFileItem(request);
+        List<String[]> excelList = excelToList(fileItem);
+
+        try {
+
+            for (int i = 0; i < excelList.size(); i++) {
+                TransactionUtil.setTransactionTimeout(100000);
+                TransactionUtil.begin();
+
+                String[] excelRow = excelList.get(i);
+
+                String productId = excelRow[0];
+                String price = excelRow[1];
+
+                GenericValue productPrice =
+                        EntityQuery.use(delegator).from("ProductPrice").where("productId", productId).queryFirst();
+                if (null != productPrice) {
+                    productPrice.set("price", new BigDecimal(price));
+                    productPrice.store();
+
+                }
+                TransactionUtil.commit();
+            }
+        } catch (Exception e) {
+            try {
+                TransactionUtil.rollback();
+            } catch (GenericTransactionException e1) {
+                e1.printStackTrace();
+                return "error";
+            }
+            Debug.logError(e, e.getMessage(), module);
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        }
+        return "success";
+    }
+    /**
      * 产品特殊价格更新
      *
      * @param request

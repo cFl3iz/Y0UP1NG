@@ -30,6 +30,11 @@
             <key-map field-name="planId"/>
         </view-link>
     </view-entity>
+    <view-entity entity-name="DeliveryPlansItemGroupByView" package-name="org.ofbiz.cloudLake" title="Apps Configuration..">
+        <member-entity entity-name="DeliveryPlansItem" entity-alias="DP"/>
+        <alias-all entity-alias="DP" />
+        <alias name="enumId" group-by="true" />
+    </view-entity>
 
     <entity entity-name="KeyWordBox" package-name="org.ofbiz.cloudLake.ProductStore" title="KeyWordBox">
         <field name="kId" type="id-ne"/>

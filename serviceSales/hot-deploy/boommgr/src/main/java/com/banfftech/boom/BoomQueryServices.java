@@ -152,7 +152,7 @@ public class BoomQueryServices {
 //        EntityCondition dateCondition = EntityCondition.makeCondition(dateConditionStart, EntityOperator.AND, dateConditionEnd);
 //        EntityCondition dateCondition = EntityCondition.makeCondition("planId", EntityOperator.AND, dateConditionEnd);
 //        EntityCondition allCondition = EntityCondition.makeCondition(genericCondition, EntityOperator.AND, dateCondition);
-        List<GenericValue> dpList = delegator.findList("DeliveryPlansItem",
+        List<GenericValue> dpList = delegator.findList("DeliveryPlansItemGroupByView",
                 genericCondition, null,
                 null, null, false);
         Debug.logInfo("dpListSize:"+dpList.size(),module);

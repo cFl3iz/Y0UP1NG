@@ -644,6 +644,7 @@
         <description>sortFinishedProductSequence</description>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="toSeq" type="String" mode="IN" optional="true"/>
+        <attribute name="productArray" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

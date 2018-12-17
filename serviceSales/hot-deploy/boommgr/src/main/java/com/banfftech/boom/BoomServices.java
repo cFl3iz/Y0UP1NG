@@ -140,8 +140,15 @@ public class BoomServices {
     }
 
 
-
-
+    /**
+     * 产品序号排序
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws UnsupportedEncodingException
+     */
     public static Map<String, Object> sortFinishedProductSequence(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException, UnsupportedEncodingException {
         //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -156,19 +163,31 @@ public class BoomServices {
 
         String productId = (String) context.get("productId");
         String toSeq = (String) context.get("toSeq");
-
-         GenericValue  toSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
-                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "sequenceNum", new Long(toSeq)).queryFirst();
-  GenericValue  nowSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
-                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId",productId).queryFirst();
-
-
-        if(null!= nowSeqGv &&  null != toSeqGv){
-            toSeqGv.set("sequenceNum",nowSeqGv.get("sequenceNum"));
-            toSeqGv.store();
-            nowSeqGv.set("sequenceNum",new Long(toSeq));
-            nowSeqGv.store();
+        String productArray = (String) context.get("productArray");
+        Debug.logInfo("*sortFinishedProductSequence:"+productArray,module);
+        if(UtilValidate.isNotEmpty(productArray) ){
+            String [] array = productArray.split(",");
+            for(int i = 0 ; i < array.length;i++){
+                GenericValue  rowSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
+                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId",array[i]).queryFirst();
+                rowSeq.set("sequenceNum",new Long(i));
+                Debug.logInfo("*=> SORT "+array[i]+" to " + i +" !",module);
+                rowSeq.store();
+            }
         }
+
+//         GenericValue  toSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
+//                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "sequenceNum", new Long(toSeq)).queryFirst();
+//  GenericValue  nowSeqGv = EntityQuery.use(delegator).from("ProductAndRole").where(
+//                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId",productId).queryFirst();
+//
+//
+//        if(null!= nowSeqGv &&  null != toSeqGv){
+//            toSeqGv.set("sequenceNum",nowSeqGv.get("sequenceNum"));
+//            toSeqGv.store();
+//            nowSeqGv.set("sequenceNum",new Long(toSeq));
+//            nowSeqGv.store();
+//        }
         return result;
     }
     /**

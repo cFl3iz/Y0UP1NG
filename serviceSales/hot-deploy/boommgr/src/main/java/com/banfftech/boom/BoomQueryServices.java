@@ -1779,6 +1779,8 @@ public class BoomQueryServices {
         EntityCondition findConditionsTypeRoleAndParty = EntityCondition
                 .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsParty);
 
+        Long countSize =  EntityQuery.use(delegator).from("ProductAndRole").where(
+                findConditionsTypeRoleAndParty).queryCount();
 
         if(productName!=null && !productName.trim().equals("") && !productName.equals("null")){
 
@@ -1940,6 +1942,7 @@ public class BoomQueryServices {
         }
 
         resultMap.put("finishedGoodList",returnList);
+        resultMap.put("countSize",countSize);
         return resultMap;
     }
 

@@ -1942,7 +1942,7 @@ public class BoomQueryServices {
         }
 
         resultMap.put("finishedGoodList",returnList);
-        resultMap.put("countSize",countSize);
+        resultMap.put("countSize",countSize+"");
         return resultMap;
     }
 

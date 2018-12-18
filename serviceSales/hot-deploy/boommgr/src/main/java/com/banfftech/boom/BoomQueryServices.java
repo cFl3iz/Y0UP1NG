@@ -1868,7 +1868,7 @@ public class BoomQueryServices {
                 rowMap.put("productId",productId);
 
                 rowMap.put("productName",gv.getString("productName"));
-                rowMap.put("py1",Pinyin4jUtil.converterToSpell(gv.getString("productName")));
+                rowMap.put("py1",Pinyin4jUtil.converterToSpellUpper(gv.getString("productName")));
                 rowMap.put("py2", Pinyin4jUtil.converterToFirstSpell(gv.getString("productName")));
 
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));

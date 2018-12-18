@@ -11,7 +11,7 @@
         </description>
     </service>
     <!-- 库存同步长宁 -->
-    <service name="syncZuczugInventory" engine="java" invoke="syncZuczugInventory"
+    <service name="syncZuczugInventory" engine="java" invoke="syncZuczugInventory" transaction-timeout="9989898"
              location="main.java.com.banfftech.platformmanager.PlatformInventoryServices">
         <description>syncZuczugInventory</description>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>

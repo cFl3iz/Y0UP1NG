@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import main.java.com.banfftech.boom.bean.MailInfo;
+import main.java.com.banfftech.platformmanager.util.Pinyin4jUtil;
 import org.apache.ofbiz.base.util.Debug;
 
 import main.java.com.banfftech.platformmanager.util.HttpHelper;
@@ -1867,6 +1868,9 @@ public class BoomQueryServices {
                 rowMap.put("productId",productId);
 
                 rowMap.put("productName",gv.getString("productName"));
+                rowMap.put("py1",Pinyin4jUtil.converterToSpell(gv.getString("productName")));
+                rowMap.put("py2", Pinyin4jUtil.converterToFirstSpell(gv.getString("productName")));
+
                 rowMap.put("imagePath",gv.getString("detailImageUrl"));
 
                 rowMap.put("createdDate",sdf.format(gv.get("fromDate")));

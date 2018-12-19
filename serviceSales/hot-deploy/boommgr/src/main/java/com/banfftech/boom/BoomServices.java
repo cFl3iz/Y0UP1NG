@@ -2080,7 +2080,11 @@ public class BoomServices {
         }
          GenericValue lastSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
                  "roleTypeId", "ADMIN", "productTypeId","FINISHED_GOOD","partyId",partyGroupId).orderBy("-sequenceNum").queryFirst();
-        long lastSequence = lastSeq==null?0: (long)lastSeq.get("sequenceNum");
+        long lastSequence = 0;
+        if(lastSeq!=null &&  lastSeq.get("sequenceNum")!=null){
+             Debug.logInfo("*lastSeq="+lastSeq,module);
+            lastSequence = (long)lastSeq.get("sequenceNum");
+        }
         dispatcher.runSync("addProductRole", UtilMisc.toMap("userLogin", admin, "roleTypeId", "ADMIN", "productId", productId, "partyId", partyGroupId));
         GenericValue nowSeq = EntityQuery.use(delegator).from("ProductAndRole").where(
                 "roleTypeId", "ADMIN", "productTypeId", "FINISHED_GOOD", "partyId", partyGroupId, "productId", productId).queryFirst();

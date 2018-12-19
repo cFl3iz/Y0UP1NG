@@ -351,7 +351,7 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<String, Object>();
                 rowMap = gv.getAllFields();
                 String keyWordName = gv.getString("name");
-                Long rowCount = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where("keyword",keyWordName).queryCount();
+                Long rowCount = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where("keyword",keyWordName,"partyId",partyGroupId).queryCount();
 
                 rowMap.put("keywordCount",rowCount);
                 returnList.add(rowMap);

@@ -136,7 +136,7 @@ public class BoomQueryServices {
 
         EntityCondition findConditions = EntityCondition.makeCondition(UtilMisc.toMap("enumId",enumId));
 
-        EntityCondition findConditions2 = EntityCondition.makeCondition("outQuantity", EntityOperator.NOT_EUQALS, GenericEntity.NULL_FIELD);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("outQuantity", EntityOperator.NOT_EQUAL, GenericEntity.NULL_FIELD);
 
         EntityConditionList<EntityCondition> listConditions = EntityCondition
                 .makeCondition(findConditions, findConditions2);

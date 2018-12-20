@@ -210,10 +210,13 @@ public class BoomQueryServices {
                     String productId = product.getString("productId");
                     String productName = product.getString("productName");
                     String outQuantity = productAndQuantity.get(productId);
-                    innerMap.put("productId",productId);
-                    innerMap.put("productName",productName);
-                    innerMap.put("outQuantity",outQuantity);
-                    innerList.add(innerMap);
+                    if(UtilValidate.isNotEmpty(outQuantity)){
+                        innerMap.put("productId",productId);
+                        innerMap.put("productName",productName);
+                        innerMap.put("outQuantity",outQuantity);
+                        innerList.add(innerMap);
+                    }
+
                 }
                 rowMap.put("products",innerList);
                 returnList.add(rowMap);

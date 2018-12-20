@@ -105,6 +105,47 @@ public class BoomQueryServices {
 
 
     /**
+     * queryChanelHotSaleList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> queryChanelHotSaleList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        List<Map<String,Object>> returnList = new ArrayList<>();
+
+        String enumId = (String) context.get("enumId");
+
+        List<GenericValue> salesList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                "enumId",enumId).orderBy("-outQuantity").queryList();
+
+        if(salesList.size()>0){
+            for (GenericValue gv : salesList){
+                Map<String,Object> rowMap = new HashMap<>();
+                String productId = gv.getString("productId");
+                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where(
+                        "productId",productId).orderBy("-outQuantity").queryFirst();
+                rowMap.put("productId",productId);
+                rowMap.put("productName",rowProduct.getString("productName"));
+                rowMap.put("outQuantity",gv.get("outQuantity"));
+                returnList.add(rowMap);
+            }
+        }
+
+
+        resultMap.put("salesList",returnList);
+        return resultMap;
+    }
+
+
+    /**
      * query DeliveryPlanItemByDate(按时间查询出库)
      * @param dctx
      * @param context

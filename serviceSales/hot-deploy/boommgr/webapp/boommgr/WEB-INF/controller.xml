@@ -36,6 +36,14 @@
     </request-map>
 
 
+    <request-map uri="queryChanelHotSaleList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryChanelHotSaleList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
 
     <request-map uri="queryPermisionJson">
         <security https="false" auth="false"/>

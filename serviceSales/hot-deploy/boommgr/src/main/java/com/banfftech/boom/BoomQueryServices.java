@@ -131,7 +131,7 @@ public class BoomQueryServices {
                 Map<String,Object> rowMap = new HashMap<>();
                 String productId = gv.getString("productId");
                 GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where(
-                        "productId",productId).orderBy("-outQuantity").queryFirst();
+                        "productId",productId).queryFirst();
                 rowMap.put("productId",productId);
                 rowMap.put("productName",rowProduct.getString("productName"));
                 rowMap.put("outQuantity",gv.get("outQuantity"));

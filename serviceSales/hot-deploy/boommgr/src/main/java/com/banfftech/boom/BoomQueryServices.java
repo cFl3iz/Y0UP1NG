@@ -119,25 +119,107 @@ public class BoomQueryServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String partyId = userLogin.getString("partyId");
+
+        Map<String,Object> myGroup = getMyGroup(delegator, partyId);
+
+        String partyGroupId = (String) myGroup.get("partyId");
+
         List<Map<String,Object>> returnList = new ArrayList<>();
+
+
+
 
         String enumId = (String) context.get("enumId");
 
+        EntityCondition findConditions = EntityCondition.makeCondition(UtilMisc.toMap("enumId",enumId));
+
+        EntityCondition findConditions2 = EntityCondition.makeCondition("outQuantity", EntityOperator.NOT_EUQALS, GenericEntity.NULL_FIELD);
+
+        EntityConditionList<EntityCondition> listConditions = EntityCondition
+                .makeCondition(findConditions, findConditions2);
+
         List<GenericValue> salesList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
-                "enumId",enumId).orderBy("-outQuantity").queryList();
+                listConditions ).orderBy("-outQuantity").queryList();
+
+        Map<String,String> productAndQuantity = new TreeMap<String, String>(
+                new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        // 降序排序
+                        return obj2.compareTo(obj1);
+                    }
+                });
 
         if(salesList.size()>0){
             for (GenericValue gv : salesList){
                 Map<String,Object> rowMap = new HashMap<>();
                 String productId = gv.getString("productId");
-                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where(
-                        "productId",productId).queryFirst();
-                rowMap.put("productId",productId);
-                rowMap.put("productName",rowProduct.getString("productName"));
-                rowMap.put("outQuantity",gv.get("outQuantity"));
+                String rowOutQuantity = gv.getString("outQuantity");
+                if(productAndQuantity.containsKey(productId)){
+                    //add sum
+                    String beforeCount = productAndQuantity.get(productId);
+                    int sumValue =  Integer.parseInt(beforeCount)+ Integer.parseInt(rowOutQuantity);
+                    productAndQuantity.put(productId,sumValue+"");
+                }else{
+                    //add new
+                    productAndQuantity.put(productId, rowOutQuantity );
+                }
+//                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where(
+//                        "productId",productId).queryFirst();
+//                rowMap.put("productId",productId);
+//                rowMap.put("productName",rowProduct.getString("productName"));
+//                rowMap.put("outQuantity",gv.get("outQuantity"));
+//                returnList.add(rowMap);
+            }
+        }
+
+
+//        List<Map.Entry<String,String>> list = new ArrayList<Map.Entry<String,String>>(productAndQuantity.entrySet());
+//        //然后通过比较器来实现排序
+//        Collections.sort(list,new Comparator<Map.Entry<String,String>>() {
+//            //升序排序
+//            public int compare(Map.Entry<String, String> o1,
+//                               Map.Entry<String, String> o2) {
+//                return o1.getValue().compareTo(o2.getValue());
+//            }
+//
+//        });
+//        Set<String> keySet = productAndQuantity.keySet();
+//        Iterator<String> iter = keySet.iterator();
+//        while (iter.hasNext()) {
+//            String key = iter.next();
+//            System.out.println(key + ":" + productAndQuantity.get(key));
+//        }
+
+
+
+        List<GenericValue> keyWordBoxList = EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryList();
+        if(null!=keyWordBoxList&& keyWordBoxList.size()>0){
+            for(GenericValue gv : keyWordBoxList){
+                Map<String,Object> rowMap = new HashMap<>();
+                String keyWordName = gv.getString("name");
+                List<GenericValue> productKeywordList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where("keyword",keyWordName,"partyId",partyGroupId).queryList();
+                rowMap.put("keyword",keyWordName);
+                List<Map<String,Object>> innerList = new ArrayList<>();
+                for(GenericValue product : productKeywordList){
+                    Map<String,Object> innerMap = new HashMap<>();
+                    String productId = product.getString("productId");
+                    String productName = product.getString("productName");
+                    String outQuantity = productAndQuantity.get(productId);
+                    innerMap.put("productId",productId);
+                    innerMap.put("productName",productName);
+                    innerMap.put("outQuantity",outQuantity);
+                    innerList.add(innerMap);
+                }
+                rowMap.put("products",innerList);
                 returnList.add(rowMap);
             }
         }
+
+
+        //                List<GenericValue> productKeywordList = EntityQuery.use(delegator).from("ProductAndRoleAndKeyWord").where("keyword",keyWordName,"partyId",partyGroupId).queryList();
 
 
         resultMap.put("salesList",returnList);

@@ -164,7 +164,9 @@ public class BoomQueryServices {
                     productAndQuantity.put(productId,sumValue+"");
                 }else{
                     //add new
-                    productAndQuantity.put(productId, rowOutQuantity );
+                    if(UtilValidate.isNotEmpty(rowOutQuantity)){
+                        productAndQuantity.put(productId, rowOutQuantity );
+                    }
                 }
 //                GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where(
 //                        "productId",productId).queryFirst();

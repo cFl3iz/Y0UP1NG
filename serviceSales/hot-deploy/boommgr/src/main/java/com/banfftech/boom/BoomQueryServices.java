@@ -195,7 +195,9 @@ public class BoomQueryServices {
 //            System.out.println(key + ":" + productAndQuantity.get(key));
 //        }
 
-
+        GenericValue groupFacility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
+        String groupFacilityId = groupFacility.getString("facilityId");
 
         List<GenericValue> keyWordBoxList = EntityQuery.use(delegator).from("KeyWordBox").where("entityId",partyGroupId).queryList();
         if(null!=keyWordBoxList&& keyWordBoxList.size()>0){
@@ -214,6 +216,13 @@ public class BoomQueryServices {
                         innerMap.put("productId",productId);
                         innerMap.put("productName",productName);
                         innerMap.put("outQuantity",outQuantity);
+                        Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                                "facilityId", groupFacilityId, "productId", productId));
+                        if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                            innerMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                            innerMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+                        }
+
                         innerList.add(innerMap);
                     }
 

@@ -177,7 +177,13 @@ public class BoomQueryServices {
 //                returnList.add(rowMap);
             }
         }
-
+               productAndQuantity = new TreeMap<String, String>(
+                new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        // 降序排序
+                        return obj2.compareTo(obj1);
+                    }
+                });
 
 //        List<Map.Entry<String,String>> list = new ArrayList<Map.Entry<String,String>>(productAndQuantity.entrySet());
 //        //然后通过比较器来实现排序

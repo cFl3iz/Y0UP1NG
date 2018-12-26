@@ -137,8 +137,27 @@ public class BoomQueryServices {
 
         List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
                 findConditionsTypeRoleAndParty).queryList();
+        GenericValue admin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
+        GenericValue groupFacility = EntityQuery.use(delegator).from("Facility").where(
+                "ownerPartyId", partyGroupId).queryFirst();
+        String groupFacilityId = groupFacility.getString("facilityId");
+        List<Map<String,Object>> returnList = new ArrayList<>();
+        for(GenericValue gv : productList){
+            Map<String,Object> rowMap = new HashMap<>();
+            String productId = gv.getString("productId");
+            rowMap.put("productId",productId);
+            rowMap.put("productName",gv.getString("productName"));
 
-        resultMap.put("productList",productList);
+            Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
+                    "facilityId", groupFacilityId, "productId", productId));
+            if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
+                rowMap.put("quantityOnHandTotal", getInventoryAvailableByFacilityMap.get("quantityOnHandTotal"));
+                rowMap.put("availableToPromiseTotal", getInventoryAvailableByFacilityMap.get("availableToPromiseTotal"));
+            }
+            returnList.add(rowMap);
+        }
+
+        resultMap.put("productList",returnList);
 
         return resultMap;
     }

@@ -148,6 +148,15 @@ public class BoomQueryServices {
             rowMap.put("productId",productId);
             rowMap.put("productName",gv.getString("productName"));
 
+
+             GenericValue  productKeyword = EntityQuery.use(delegator).from("ProductKeyword").where(
+                     "keywordTypeId", "KWT_TAG", "productId", productId).queryFirst();
+             if(null!= productKeyword){
+                 rowMap.put("keyword", productKeyword.getString("keyword"));
+             }else{
+                 rowMap.put("keyword", null);
+             }
+
             Map<String, Object> getInventoryAvailableByFacilityMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", admin,
                     "facilityId", groupFacilityId, "productId", productId));
             if (ServiceUtil.isSuccess(getInventoryAvailableByFacilityMap)) {
@@ -157,7 +166,15 @@ public class BoomQueryServices {
             returnList.add(rowMap);
         }
 
+
+        List<GenericValue> keyWordBoxs = EntityQuery.use(delegator).from("KeyWordBox").where(
+                "entityId",partyGroupId).queryList();
+
+
+
+
         resultMap.put("productList",returnList);
+        resultMap.put("keyWordList",keyWordBoxs);
 
         return resultMap;
     }

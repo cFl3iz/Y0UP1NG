@@ -41,6 +41,7 @@
         <description>exportFinishedProductList</description>
         <attribute name="partyGroupId" type="String" mode="IN" optional="false"/>
         <attribute name="productList" type="List" mode="OUT" optional="false"/>
+        <attribute name="keyWordList" type="List" mode="OUT" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

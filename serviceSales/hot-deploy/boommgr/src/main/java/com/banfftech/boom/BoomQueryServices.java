@@ -152,6 +152,7 @@ public class BoomQueryServices {
                 }
             }
             if(null!=rowProds){
+                rowMap.put("rowProds",rowProds);
                 returnList.add(rowMap);
 
             }

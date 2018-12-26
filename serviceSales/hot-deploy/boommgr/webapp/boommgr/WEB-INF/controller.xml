@@ -26,6 +26,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <request-map uri="exportFinishedProductList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="exportFinishedProductList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="queryPartyInfo">

@@ -102,6 +102,46 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+    /**
+     * exportFinishedProductList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> exportFinishedProductList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String partyGroupId = (String) context.get("partyGroupId");
+
+        EntityCondition findConditionsRole = EntityCondition
+                .makeCondition("roleTypeId", "ADMIN");
+        EntityCondition findConditionsType = EntityCondition
+                .makeCondition("productTypeId", "FINISHED_GOOD");
+
+        EntityCondition findConditionsNameAndRole = EntityCondition
+                .makeCondition(findConditionsType, EntityOperator.AND, findConditionsRole);
+
+
+        EntityCondition findConditionsParty = EntityCondition
+                .makeCondition("partyId", partyGroupId);
+
+        EntityCondition findConditionsTypeRoleAndParty = EntityCondition
+                .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsParty);
+
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                findConditionsTypeRoleAndParty).queryList();
+
+        resultMap.put("productList",productList);
+
+        return resultMap;
+    }
 
     /**
      * queryChanelHotSaleList

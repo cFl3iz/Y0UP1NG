@@ -145,15 +145,16 @@ public class BoomQueryServices {
             List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
                     "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
             rowMap.put("productId",productId);
-            Map<String,Object> innerMap = new HashMap<>();
+            List<Map<String,Object>> innerList = new ArrayList<>();
             if(null!=manufComponents && manufComponents.size()>0){
                 for(GenericValue rowProd : manufComponents){
-
+                    Map<String,Object> innerMap = new HashMap<>();
                     innerMap.put("productId",rowProd.getString("productIdTo"));
                     innerMap.put("quantity",rowProd.get("quantity"));
+                    innerList.add(innerMap);
                 }
             }
-                rowMap.put("rowProds",innerMap);
+                rowMap.put("rowProds",innerList);
                 returnList.add(rowMap);
 
         }

@@ -103,6 +103,65 @@ public class BoomQueryServices {
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
     /**
+     * exportAssocProductList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> exportAssocProductList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        String partyGroupId = (String) context.get("partyGroupId");
+
+        EntityCondition findConditionsRole = EntityCondition
+                .makeCondition("roleTypeId", "ADMIN");
+        EntityCondition findConditionsType = EntityCondition
+                .makeCondition("productTypeId", "FINISHED_GOOD");
+
+        EntityCondition findConditionsNameAndRole = EntityCondition
+                .makeCondition(findConditionsType, EntityOperator.AND, findConditionsRole);
+
+
+        EntityCondition findConditionsParty = EntityCondition
+                .makeCondition("partyId", partyGroupId);
+
+        EntityCondition findConditionsTypeRoleAndParty = EntityCondition
+                .makeCondition(findConditionsNameAndRole, EntityOperator.AND, findConditionsParty);
+
+        List<GenericValue> productList = EntityQuery.use(delegator).from("ProductAndRole").where(
+                findConditionsTypeRoleAndParty).queryList();
+
+        List<Map<String, Object>> returnList = new ArrayList<>();
+        for(GenericValue gv : productList){
+            Map<String,Object> rowMap = new HashMap<>();
+            String productId = gv.getString("productId");
+            List<GenericValue> manufComponents  = EntityQuery.use(delegator).from("ProductAssoc").where(
+                    "productId", productId,"productAssocTypeId","MANUF_COMPONENT").queryList();
+            rowMap.put("productId",productId);
+            String rowProds = null;
+            if(null!=manufComponents && manufComponents.size()>0){
+                for(GenericValue rowProd : manufComponents){
+                    rowProds = rowProd.getString("productIdTo")+",";
+                }
+            }
+            if(null!=rowProds){
+                returnList.add(rowMap);
+
+            }
+        }
+
+        resultMap.put("productList",returnList);
+        return resultMap;
+    }
+
+    /**
      * exportFinishedProductList
      * @param dctx
      * @param context

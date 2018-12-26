@@ -32,6 +32,12 @@
         <response name="success" type="request" value="result_json"/>
         <response name="error" type="request" value="result_json"/>
     </request-map>
+    <request-map uri="exportAssocProductList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="exportAssocProductList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
 
 
     <request-map uri="queryPartyInfo">

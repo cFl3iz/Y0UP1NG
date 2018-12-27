@@ -102,6 +102,44 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+    /**
+     * exportChannelList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> exportChannelList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+
+        //String partyGroupId = "13390";
+        String partyGroupId = (String) context.get("partyGroupId");
+
+
+        EntityCondition findConditions = EntityCondition
+                .makeCondition("enumTypeId", EntityOperator.EQUALS, "CN_SALES_CHANNEL");
+
+
+        EntityCondition findConditions2 = EntityCondition.makeCondition("enumCode", EntityOperator.LIKE, partyGroupId + "%");
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+
+        List<GenericValue> enumeration = EntityQuery.use(delegator).from("Enumeration").where(genericCondition).orderBy(
+                "sequenceId").queryList();
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+
+        resultMap.put("channelList", enumeration);
+        return resultMap;
+    }
+
 
     /**
      * exportDeliveryPlanList
@@ -118,7 +156,7 @@ public class BoomQueryServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        
+
         //String partyGroupId = "13390";
         String partyGroupId = (String) context.get("partyGroupId");
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();

@@ -34,6 +34,22 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
+
+
+
+    <service name="exportChannelList" engine="java"
+             use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
+             location="main.java.com.banfftech.boom.BoomQueryServices"
+             invoke="exportChannelList" auth="false">
+        <description>exportChannelList</description>
+        <attribute name="partyGroupId" type="String" mode="IN" optional="false"/>
+        <attribute name="channelList" type="List" mode="OUT" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT"
+                   optional="true"/>
+    </service>
+
+
     <service name="exportFinishedProductList" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"
              location="main.java.com.banfftech.boom.BoomQueryServices"
@@ -249,6 +265,7 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>
+
 
     <service name="queryPartyInfo" engine="java"
              use-transaction="true" require-new-transaction="true" transaction-timeout="9980000"

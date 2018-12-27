@@ -118,9 +118,9 @@ public class BoomQueryServices {
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        
         //String partyGroupId = "13390";
-        String partyGroupId = (String) myGroup.get("partyId");
+        String partyGroupId = (String) context.get("partyGroupId");
         List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
 
         EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);

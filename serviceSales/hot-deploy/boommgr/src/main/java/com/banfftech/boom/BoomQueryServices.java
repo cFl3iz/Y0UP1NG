@@ -102,6 +102,40 @@ public class BoomQueryServices {
 
     public static final String resourceUiLabels = "CommonEntityLabels.xml";
 
+
+    /**
+     * exportDeliveryPlanList
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    public static Map<String, Object> exportDeliveryPlanList(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, GenericServiceException {
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        Map<String, Object> myGroup = getMyGroup(delegator, partyId);
+        //String partyGroupId = "13390";
+        String partyGroupId = (String) myGroup.get("partyId");
+        List<Map<String, Object>> dataArrayList = new ArrayList<Map<String, Object>>();
+
+        EntityCondition findConditions = EntityCondition.makeCondition("payToParty", EntityOperator.EQUALS, partyGroupId);
+        EntityCondition findConditions2 = EntityCondition.makeCondition("planId", EntityOperator.LIKE, partyGroupId + "/" + "%");
+        EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
+
+
+        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                genericCondition).queryList();
+
+
+        resultMap.put("deliveryPlanList",planDataList);
+        return resultMap;
+    }
+
     /**
      * exportAssocProductList
      * @param dctx

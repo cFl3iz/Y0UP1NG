@@ -2838,6 +2838,8 @@ public class PlatformManagerServices {
 
             //WATERPROOF or ANKORAU_RETAIL
             String prodCatalogId = excelHead[0];
+            Debug.logInfo("excelHead[0]:"+excelHead[0],module);
+            Debug.logInfo("excelHead:"+excelHead,module);
             GenericValue prodCatalogCategory = EntityQuery.use(delegator).from("ProdCatalogCategory").where("prodCatalogId", prodCatalogId).queryFirst();
             String productCategoryId = (String) prodCatalogCategory.get("productCategoryId");
             GenericValue productStoreCatalog = EntityQuery.use(delegator).from("ProductStoreCatalog").where("prodCatalogId", prodCatalogId).queryFirst();

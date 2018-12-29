@@ -1148,7 +1148,7 @@ public class WeChatOrderQueryServices {
             List<Map<String, Object>> pictures = new ArrayList<Map<String, Object>>();
 
 
-            Map<String, Map<String, Object>> featureMap = new HashMap<String, Map<String, Object>>();
+            Map<String, Map<String, Object>> featureMap =  new HashMap<String, Map<String, Object>>();
 
             for (GenericValue rowSku : skus) {
                 String rowSkuId = rowSku.getString("productIdTo");
@@ -1185,23 +1185,26 @@ public class WeChatOrderQueryServices {
                 List<GenericValue> singlePictures = delegator.findList("ProductContentAndInfo", singleCondition, fieldSet,
                         null, null, false);
                 GenericValue rowColor = EntityQuery.use(delegator).from("ProductFeatureAndAppl").where("productId", rowSkuId, "productFeatureTypeId", "COLOR").queryFirst();
-
+                Debug.logInfo("=>rowColor:"+rowColor ,module);
+                Debug.logInfo("=>singlePictures:"+singlePictures ,module);
                 if (singlePictures != null && singlePictures.size() > 0) {
                     int sigleIndex = 0;
                     for (GenericValue pict : singlePictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
+                        Debug.logInfo("=>productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
                         //针对11-30日本白
                         if(productId.indexOf("0183VE05")>=0){
                                 Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
                                 rowMap.put("drObjectInfo", drObjectInfo);
                                 pictures.add(rowMap);
                                 if (sigleIndex == 0) {
+
                                     featureMap.put(rowColor.get("description") + "", rowMap);
                                     sigleIndex++;
                                 }
 
-                        }else {
+                        }
                             if (!isExsitsPath.containsKey(drObjectInfo)  ) {
                                 isExsitsPath.put(drObjectInfo, "");
                                 rowMap.put("drObjectInfo", drObjectInfo);
@@ -1211,10 +1214,9 @@ public class WeChatOrderQueryServices {
                                     sigleIndex++;
                                 }
                             }
-                        }
-
 
                     }
+
                 } else {
                     featureMap.put(rowColor == null ? "普通" : rowColor.get("description") + "", UtilMisc.toMap("drObjectInfo", "https://personerp.oss-cn-hangzhou.aliyuncs.com/datas/serviceSales/3333.jpg"));
                 }

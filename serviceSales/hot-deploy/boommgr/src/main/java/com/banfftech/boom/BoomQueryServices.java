@@ -166,11 +166,15 @@ public class BoomQueryServices {
         EntityCondition genericCondition = EntityCondition.makeCondition(findConditions, EntityOperator.AND, findConditions2);
 
 
-        List<GenericValue> planDataList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+        List<GenericValue> planDataItemList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
+                genericCondition).queryList();
+
+        List<GenericValue> deliveryPlans = EntityQuery.use(delegator).from("DeliveryPlans").where(
                 genericCondition).queryList();
 
 
-        resultMap.put("deliveryPlanList",planDataList);
+        resultMap.put("deliveryPlanList",deliveryPlans);
+        resultMap.put("deliveryPlanItemList",planDataItemList);
         return resultMap;
     }
 

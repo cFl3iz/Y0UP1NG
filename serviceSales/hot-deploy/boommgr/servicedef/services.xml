@@ -79,6 +79,7 @@
         <description>exportDeliveryPlanList</description>
         <attribute name="partyGroupId" type="String" mode="IN" optional="false"/>
         <attribute name="deliveryPlanList" type="List" mode="OUT" optional="false"/>
+        <attribute name="deliveryPlanItemList" type="List" mode="OUT" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT"
                    optional="true"/>
     </service>

@@ -168,13 +168,24 @@ public class BoomQueryServices {
 
         List<GenericValue> planDataItemList = EntityQuery.use(delegator).from("DeliveryPlansItem").where(
                 genericCondition).queryList();
-
+        List<Map<String,Object>> returnPlanDataItemList = new ArrayList<>();
+        List<Map<String,Object>> returnDeliveryPlans = new ArrayList<>();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(GenericValue gv : planDataItemList){
+            Map<String,Object> rowMap = gv.getAllFields();
+            rowMap.put("fromDate",  sdf.format(rowMap.get("fromDate")));
+            returnPlanDataItemList.add(rowMap);
+        }
         List<GenericValue> deliveryPlans = EntityQuery.use(delegator).from("DeliveryPlans").where(
                 genericCondition).queryList();
+        for(GenericValue gv : deliveryPlans){
+            Map<String,Object> rowMap = gv.getAllFields();
+            rowMap.put("fromDate",  sdf.format(rowMap.get("fromDate")));
+            returnDeliveryPlans.add(rowMap);
+        }
 
-
-        resultMap.put("deliveryPlanList",deliveryPlans);
-        resultMap.put("deliveryPlanItemList",planDataItemList);
+        resultMap.put("deliveryPlanList",returnDeliveryPlans);
+        resultMap.put("deliveryPlanItemList",returnPlanDataItemList);
         return resultMap;
     }
 

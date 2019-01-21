@@ -3183,9 +3183,13 @@ public class PlatformManagerServices {
 
                     //创建缺省价格
                     if (UtilValidate.isNotEmpty(listPrice)) {
+                        try{
                         GenericValue newProductVariantPrice = delegator.makeValue("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE", "productPricePurposeId", "PURCHASE", "currencyUomId", "CNY", "productStoreGroupId", "_NA_", "fromDate", UtilDateTime.nowTimestamp()));
                         newProductVariantPrice.set("price", new BigDecimal(listPrice));
                         newProductVariantPrice.create();
+                        }catch (GenericEntityException e){
+
+                        }
                     }
 
 

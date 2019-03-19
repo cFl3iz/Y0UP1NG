@@ -172,8 +172,8 @@ public class PlatformManagerServices {
                 dispatcher.runSync("sendEmailNotification",
                         UtilMisc.toMap("content",
                                 "友评订单号:[" + ypOrderId +
-                                        "],在素然单号:[" + zuczugOrderId + "]已分拣发货,联动友评主机成功! 产生的运单号为:" + trackingIdNumber
-                                , "title", "[长宁通知友评素然订单已发货]"));
+                                        "],在素然单号:[" + zuczugOrderId + "]已分拣发货,联动小程序主机成功! 产生的运单号为:" + trackingIdNumber
+                                , "title", "[长宁通知小程序素然订单已发货]"));
             }
 
         }
@@ -2855,20 +2855,13 @@ public class PlatformManagerServices {
 
                 String internalName = excelRow[2];
                 String productVirtualId = excelRow[3];
-
                 String colorId = excelRow[4];
                 String colorDesc = excelRow[5];
-
                 String sizeId = excelRow[6];
                 String listPrice = excelRow[7];
-
                 String sizeDesc = excelRow[8];
                 String productId = excelRow[9];
-//                String ean = excelRow[10];
-
                 String desc = excelRow[10];
-                String otherDesc = desc;
-//                String keyword = excelRow[14];
                 String metchOne = null;
                 String metchTwo = null;
                 String singleOne = null;

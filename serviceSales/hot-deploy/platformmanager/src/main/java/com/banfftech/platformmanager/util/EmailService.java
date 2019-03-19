@@ -125,7 +125,10 @@ public class EmailService {
         String title = (String) context.get("title");
         String [] mailTo = new String[]{"yinlin.shen@banff-tech.com",
                 "longxi.jin@banff-tech.com",
-                "hao.feng@banff-tech.com","longxiang.xia@banff-tech.com","jimeng.zou@banff-tech.com","rong.liu@banff-tech.com"};
+                "hao.feng@banff-tech.com",
+                "longxiang.xia@banff-tech.com",
+                "jimeng.zou@banff-tech.com",
+                "shijun.shao@comonetwork.com"};
         try {
             String fromMail = "yinlin.shen@banff-tech.com";//UtilProperties.getPropertyValue("sendMailConfig", "SEND_MAIL");
             String port = "465";//UtilProperties.getPropertyValue("sendMailConfig", "SMTP_PORT");

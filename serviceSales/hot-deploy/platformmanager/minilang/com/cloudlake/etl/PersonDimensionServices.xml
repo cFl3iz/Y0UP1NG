@@ -45,82 +45,43 @@
     <!-- join forward chain Dimension -->
     <simple-method method-name="inForwardChainFact" use-transaction="true" short-description="load  Fact">
 
-        <set field="basePartyId" from-field="parameters.basePartyId"/>
-        <set field="partyIdFrom" from-field="parameters.partyIdFrom"/>
-        <set field="partyIdTo" from-field="parameters.partyIdTo"/>
-        <set field="firstName" from-field="parameters.firstName"/>
-        <set field="objectInfo" from-field="parameters.objectInfo"/>
-        <set field="workEffortId" from-field="parameters.workEffortId"/>
-        <set field="productId" from-field="parameters.productId"/>
-        <set field="createDate" from-field="parameters.createDate"/>
-        <!-- TODO FIX ME -->
-        <log level="info" message=" inForwardChainFact : basePartyId:${basePartyId} , partyIdFrom:${partyIdFrom} , partyIdTo:${partyIdTo}"/>
-        <entity-condition entity-name="YpForwardChainFact" list="isExsits">
+        <!--<set field="basePartyId" from-field="parameters.basePartyId"/>-->
+        <!--<set field="partyIdFrom" from-field="parameters.partyIdFrom"/>-->
+        <!--<set field="partyIdTo" from-field="parameters.partyIdTo"/>-->
+        <!--<set field="firstName" from-field="parameters.firstName"/>-->
+        <!--<set field="objectInfo" from-field="parameters.objectInfo"/>-->
+        <!--<set field="workEffortId" from-field="parameters.workEffortId"/>-->
+        <!--<set field="productId" from-field="parameters.productId"/>-->
+        <!--<set field="createDate" from-field="parameters.createDate"/>-->
+        <!--&lt;!&ndash; TODO FIX ME &ndash;&gt;-->
+        <!--<log level="info" message=" inForwardChainFact : basePartyId:${basePartyId} , partyIdFrom:${partyIdFrom} , partyIdTo:${partyIdTo}"/>-->
+        <!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->
 
-                
-                <condition-list>
-                    <condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>
-                    <condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>
-                    <condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>
-                </condition-list>
-                
-                
-                <!--<condition-list combine="and">-->
+                <!---->
+                <!--<condition-list>-->
                     <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
                     <!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
                     <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
                 <!--</condition-list>-->
-
-                <!--<condition-list combine="and">-->
-                    <!--<condition-expr field-name="basePartyId" from-field="partyIdTo" operator="equals"/>-->
-                    <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-                <!--</condition-list>-->
-
-                <!--<condition-list combine="and">-->
-                    <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
-                    <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-                <!--</condition-list>-->
-
-                <!--<condition-list combine="and">-->
-                    <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
-                    <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
-                <!--</condition-list>-->
-
-
-
-
-            <!--<order-by field-name="-fromDate"/>-->
-        </entity-condition>
-        <!--<entity-condition entity-name="YpForwardChainFact" list="isExsits">-->
-        <!--<condition-list>-->
-        <!--<condition-expr field-name="basePartyId" from-field="basePartyId" operator="equals"/>-->
-        <!--<condition-expr field-name="partyIdFrom" from-field="partyIdFrom" operator="equals"/>-->
-        <!--<condition-expr field-name="partyIdTo" from-field="partyIdTo" operator="equals"/>-->
-        <!--<condition-expr field-name="partyIdFrom" from-field="partyIdTo" operator="equals"/>-->
-        <!--<condition-expr field-name="partyIdTo" from-field="partyIdFrom" operator="equals"/>-->
-        <!--</condition-list>-->
+                <!---->
         <!--</entity-condition>-->
 
-        <if-empty field="isExsits">
-            <make-value value-field="YpForwardChainFact" entity-name="YpForwardChainFact"/>
-            <set field="YpForwardChainFact.basePartyId" from-field="parameters.basePartyId"/>
-            <set field="YpForwardChainFact.partyIdFrom" from-field="parameters.partyIdFrom"/>
-            <set field="YpForwardChainFact.partyIdTo" from-field="parameters.partyIdTo"/>
-            <set field="YpForwardChainFact.firstName" from-field="parameters.firstName"/>
-            <set field="YpForwardChainFact.objectInfo" from-field="parameters.objectInfo"/>
-            <set field="YpForwardChainFact.workEffortId" from-field="parameters.workEffortId"/>
-            <set field="YpForwardChainFact.productId" from-field="parameters.productId"/>
-            <set field="YpForwardChainFact.createDate" from-field="parameters.createDate"/>
-            <create-value value-field="YpForwardChainFact"/>
-        </if-empty>
+        <!--<if-empty field="isExsits">-->
+            <!--<make-value value-field="YpForwardChainFact" entity-name="YpForwardChainFact"/>-->
+            <!--<set field="YpForwardChainFact.basePartyId" from-field="parameters.basePartyId"/>-->
+            <!--<set field="YpForwardChainFact.partyIdFrom" from-field="parameters.partyIdFrom"/>-->
+            <!--<set field="YpForwardChainFact.partyIdTo" from-field="parameters.partyIdTo"/>-->
+            <!--<set field="YpForwardChainFact.firstName" from-field="parameters.firstName"/>-->
+            <!--<set field="YpForwardChainFact.objectInfo" from-field="parameters.objectInfo"/>-->
+            <!--<set field="YpForwardChainFact.workEffortId" from-field="parameters.workEffortId"/>-->
+            <!--<set field="YpForwardChainFact.productId" from-field="parameters.productId"/>-->
+            <!--<set field="YpForwardChainFact.createDate" from-field="parameters.createDate"/>-->
+            <!--<create-value value-field="YpForwardChainFact"/>-->
+        <!--</if-empty>-->
 
 
-        <if-not-empty field="isExsits">
-           <!--<now-timestamp field="nowTime" />-->
-            <!--<set field="isExsits[0].createDate" from-field="nowTime"/>-->
-            <!--<store-value value-field="isExsits[0]" />-->
-            <!--<log level="info" message="update isExsits Forward ${isExsits}" />-->
-        </if-not-empty>
+        <!--<if-not-empty field="isExsits">-->
+        <!--</if-not-empty>-->
 
 
     </simple-method>

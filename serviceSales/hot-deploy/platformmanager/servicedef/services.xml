@@ -168,11 +168,11 @@
     <service name="inForwardChainFact" auth="false" engine="simple" transaction-timeout="90000"
              location="component://platformmanager/minilang/com/cloudlake/etl/PersonDimensionServices.xml" invoke="inForwardChainFact">
         <description>Calls the inForwardFact</description>
-        <attribute name="basePartyId" type="String" mode="IN" optional="false"/>
-        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
-        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
-        <attribute name="firstName" type="String" mode="IN" optional="false"/>
-        <attribute name="objectInfo" type="String" mode="IN" optional="false"/>
+        <attribute name="basePartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="true"/>
+        <attribute name="objectInfo" type="String" mode="IN" optional="true"/>
         <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
         <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="createDate" type="Timestamp" mode="IN" optional="true"/>

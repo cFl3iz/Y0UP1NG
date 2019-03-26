@@ -1501,12 +1501,13 @@ public class WeChatOrderQueryServices {
                         String drObjectInfo = (String) pict.get("drObjectInfo");
                         Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
                         Debug.logInfo("rowColor:"+rowColor,module);
-                        if (sigleIndex == 0) {
-                            if(rowColor!=null){
-                                featureMap.put(rowColor.get("description") + "", rowMap);
-                                sigleIndex++;
-                            }
-                        }
+                        Debug.logError("=》pict:"+pict,module);
+//                        if (sigleIndex == 0) {
+//                            if(rowColor!=null){
+//                                featureMap.put(rowColor.get("description") + "", rowMap);
+//                                sigleIndex++;
+//                            }
+//                        }
                         if(productId.indexOf("0183VE05")>= 0){
                                 Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
                                 Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
@@ -1532,6 +1533,8 @@ public class WeChatOrderQueryServices {
                             }
                         }
 
+                        Debug.logError("=》rowmap :"+rowMap,module);
+                        Debug.logError("=》featureMap :"+featureMap,module);
 
 
 

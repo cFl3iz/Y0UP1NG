@@ -1499,26 +1499,17 @@ public class WeChatOrderQueryServices {
                     for (GenericValue pict : singlePictures) {
                         Map<String, Object> rowMap = new HashMap<String, Object>();
                         String drObjectInfo = (String) pict.get("drObjectInfo");
-                        Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
-                        Debug.logInfo("rowColor:"+rowColor,module);
-                        Debug.logError("=》pict:"+pict,module);
+                        Debug.logError("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
+                        Debug.logError("rowColor:"+rowColor,module);
+                        Debug.logError("=》isExsitsPath:"+isExsitsPath,module);
+                        Debug.logError("=》!isExsitsPath.containsKey(drObjectInfo):"+!isExsitsPath.containsKey(drObjectInfo),module);
 //                        if (sigleIndex == 0) {
 //                            if(rowColor!=null){
 //                                featureMap.put(rowColor.get("description") + "", rowMap);
 //                                sigleIndex++;
 //                            }
 //                        }
-                        if(productId.indexOf("0183VE05")>= 0){
-                                Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
-                                Debug.logInfo("productId:"+productId+"|drObjectInfo:"+drObjectInfo,module);
-                                isExsitsPath.put(drObjectInfo, "");
-                                rowMap.put("drObjectInfo", drObjectInfo);
-                                pictures.add(rowMap);
-                                    if(rowColor!=null){
-                                        featureMap.put(rowColor.get("description") + "", rowMap);
-                                        sigleIndex++;
-                                    }
-                        }else{
+
                             if (!isExsitsPath.containsKey(drObjectInfo) ) {
 
                                 isExsitsPath.put(drObjectInfo, "");
@@ -1531,7 +1522,7 @@ public class WeChatOrderQueryServices {
                                     }
                                 }
                             }
-                        }
+
 
                         Debug.logError("=》rowmap :"+rowMap,module);
                         Debug.logError("=》featureMap :"+featureMap,module);

@@ -1442,6 +1442,7 @@ public class WeChatOrderQueryServices {
 
 
             skus = EntityQuery.use(delegator).from("ProductAssoc").where("productId", rowVirId).queryList();
+            Debug.logError("--------------now  skus :"+skus,module);
 
             Set<String> fieldSet = new HashSet<String>();
 
@@ -1457,6 +1458,8 @@ public class WeChatOrderQueryServices {
 
             for (GenericValue rowSku : skus) {
                 String rowSkuId = rowSku.getString("productIdTo");
+                Debug.logError("--------------now row sku :"+rowSkuId,module);
+
                 GenericValue rowProduct = EntityQuery.use(delegator).from("Product").where("productId", rowSkuId).queryFirst();
                 // 不管怎么样 这个变形产品得有图
                 String detailImageUrl = rowProduct.getString("detailImageUrl");

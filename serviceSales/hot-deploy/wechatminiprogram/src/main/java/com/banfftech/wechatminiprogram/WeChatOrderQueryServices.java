@@ -777,7 +777,7 @@ public class WeChatOrderQueryServices {
         List<GenericValue> skus = new ArrayList<GenericValue>();
 
         if (null != desc && !desc.equals("")) {
-            desc = desc.replaceAll("/", "\n/");
+            desc = desc.replaceAll("/", "\n");
         }
         allField.put("description", desc);
 
@@ -1072,7 +1072,7 @@ public class WeChatOrderQueryServices {
         List<GenericValue> skus = new ArrayList<GenericValue>();
 
         if (null != desc && !desc.equals("")) {
-            desc = desc.replaceAll("/", "\n/");
+            desc = desc.replaceAll("/", "\n");
         }
         allField.put("description", desc);
 
@@ -1374,7 +1374,7 @@ public class WeChatOrderQueryServices {
         List<GenericValue> skus = new ArrayList<GenericValue>();
 
         if (null != desc && !desc.equals("")) {
-            desc = desc.replaceAll("/", "\n/");
+            desc = desc.replaceAll("/", "\n");
         }
         allField.put("description", desc);
 

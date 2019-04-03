@@ -49,10 +49,10 @@ import javax.servlet.http.HttpSession;
 import java.awt.geom.GeneralPath;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
-import java.security.Timestamp;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.sql.*;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -923,7 +923,7 @@ public class PersonManagerQueryServices {
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-           String createdDate = sdf.format(gv.get("createDate"));
+           String createdDate = sdf.format((Timestamp)gv.get("createDate"));
 
             if(!partyFromMap.containsKey(rowBaseId) && rowBaseId.equals(rowFromId) ||
                     !partyFromMap.containsKey(rowBaseId) &&     rowFromId.equals("NO_PARTY")
@@ -1011,7 +1011,7 @@ public class PersonManagerQueryServices {
                 return rowList;
             }else{
                 for(GenericValue gv : forwardChain){
-                    String createdDate = sdf.format(gv.get("createDate"));
+                    String createdDate = sdf.format((Timestamp)gv.get("createDate"));
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {

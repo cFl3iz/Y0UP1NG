@@ -897,7 +897,7 @@ public class PersonManagerQueryServices {
 //        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
         PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
-                where().distinct().orderBy("-createDate").queryPagedList(0, 300);
+                where().distinct().orderBy("-createDate").queryPagedList(0, 400);
 
 
         List<GenericValue> allList = queryList.getData();
@@ -937,7 +937,7 @@ public class PersonManagerQueryServices {
                 List<Map<String,Object>> rowChilds = null;
                 //递归
                 rowChilds = forEachGetAllChildren(deepCount+1,rowChilds,rowBaseId,rowFromId,delegator);
-                row.put("children",rowChilds);
+                if(rowChilds.size()>0){row.put("children",rowChilds);}
                 childrenList.add(row);
                 partyFromMap.put(rowBaseId,"");
             }
@@ -1024,7 +1024,7 @@ public class PersonManagerQueryServices {
                         innerRowChilds = forEachGetAllChildren(deepCount+1,innerRowChilds,rowBaseId,partyIdTo,delegator);
                     }
 
-                    if(null!= innerRowChilds ){
+                    if(null!= innerRowChilds && innerRowChilds.size()>0 ){
                         forwardLine.put("children",innerRowChilds);
                     }
                     rowList.add(forwardLine);

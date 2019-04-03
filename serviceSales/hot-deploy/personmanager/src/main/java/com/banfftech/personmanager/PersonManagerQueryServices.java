@@ -34,6 +34,9 @@ import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.birt.chart.extension.datafeed.GanttEntry;
 
+
+
+import net.sf.json.JSONArray;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -946,12 +949,24 @@ public class PersonManagerQueryServices {
 //        root.put("",childrenList);
 
 
-        JSONObject jsonMap2 = JSONObject.fromObject(childrenList);
-        Debug.logInfo("childrenList:"+ jsonMap2,module);
-        resultMap.put("lastShareLines",jsonMap2);
+//        JSONOArray jsonMap2 = JSONOArray.fromObject(childrenList);
+//        Debug.logInfo("childrenList:"+ jsonMap2,module);
+        resultMap.put("lastShareLines",getJSONArrayByList(childrenList));
         return resultMap;
     }
 
+
+    public static JSONArray getJSONArrayByList(List<?> list){
+        JSONArray jsonArray = new JSONArray();
+        if (list==null ||list.isEmpty()) {
+            return jsonArray;//nerver return null
+        }
+
+        for (Object object : list) {
+            jsonArray.add(object);
+        }
+        return jsonArray;
+    }
     /**
      * 递归查询子数据
      * @param rowBaseId

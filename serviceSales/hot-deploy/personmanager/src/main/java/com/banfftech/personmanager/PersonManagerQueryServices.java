@@ -923,7 +923,11 @@ public class PersonManagerQueryServices {
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-           String createdDate = sdf.format((Timestamp)gv.get("createDate"));
+            String createdDate = "";
+
+            if(null!=gv.get("createDate")){
+                createdDate = sdf.format((Timestamp)gv.get("createDate"));
+            }
 
             if(!partyFromMap.containsKey(rowBaseId) && rowBaseId.equals(rowFromId) ||
                     !partyFromMap.containsKey(rowBaseId) &&     rowFromId.equals("NO_PARTY")
@@ -1011,7 +1015,11 @@ public class PersonManagerQueryServices {
                 return rowList;
             }else{
                 for(GenericValue gv : forwardChain){
-                    String createdDate = sdf.format((Timestamp)gv.get("createDate"));
+                    String createdDate = "";
+
+                    if(null!=gv.get("createDate")){
+                        createdDate = sdf.format((Timestamp)gv.get("createDate"));
+                    }
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {

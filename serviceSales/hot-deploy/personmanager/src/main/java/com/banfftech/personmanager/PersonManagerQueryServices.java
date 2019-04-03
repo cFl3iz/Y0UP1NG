@@ -897,7 +897,7 @@ public class PersonManagerQueryServices {
 //        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
         PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
-                where().distinct().orderBy("-createDate").queryPagedList(0, 400);
+                where().distinct().queryPagedList(0, 2100);
 
 
         List<GenericValue> allList = queryList.getData();
@@ -928,7 +928,12 @@ public class PersonManagerQueryServices {
                 Map<String,Object> row = new HashMap<>();
                 row.put("key",rowBaseId);
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
-                row.put("name",rowInfo.get("firstName"));
+                if(rowInfo.get("firstName").trim().equals("")){
+                    row.put("name","匿名");
+                }else{
+                    row.put("name",rowInfo.get("firstName"));
+                }
+
                 row.put("avatar",rowInfo.get("headPortrait")+"");
                 row.put("tel",rowInfo.get("contactNumber")+"");
                 row.put("date",createdDate);
@@ -1008,7 +1013,11 @@ public class PersonManagerQueryServices {
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
                         Map<String,Object> forwardLine = new HashMap<>();
                         Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
-                        forwardLine.put("name",rowInfo.get("firstName"));
+                        if(rowInfo.get("firstName").trim().equals("")){
+                            forwardLine.put("name","匿名");
+                        }else{
+                            forwardLine.put("name",rowInfo.get("firstName"));
+                        }
                         forwardLine.put("date",createdDate);
                         forwardLine.put("avatar",rowInfo.get("headPortrait")+"");
                         forwardLine.put("tel",rowInfo.get("contactNumber")+"");

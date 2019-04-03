@@ -944,7 +944,7 @@ public class PersonManagerQueryServices {
 
                 row.put("avatar",rowInfo.get("headPortrait")+"");
                 row.put("tel",rowInfo.get("contactNumber")+"");
-                row.put("memberId",rowInfo.get("memberId"));
+                row.put("memberId",(String)rowInfo.get("memberId"));
                 row.put("date",createdDate);
 
 

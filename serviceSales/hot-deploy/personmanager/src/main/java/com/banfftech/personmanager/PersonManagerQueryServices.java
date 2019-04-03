@@ -919,7 +919,7 @@ public class PersonManagerQueryServices {
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
-            String createdDate = sdf.format(gv.get("createDate"));
+//            String createdDate = sdf.format(gv.get("createDate"));
 
             if(!partyFromMap.containsKey(rowBaseId) && rowBaseId.equals(rowFromId) ||
                     !partyFromMap.containsKey(rowBaseId) &&     rowFromId.equals("NO_PARTY")
@@ -936,7 +936,7 @@ public class PersonManagerQueryServices {
 
                 row.put("avatar",rowInfo.get("headPortrait")+"");
                 row.put("tel",rowInfo.get("contactNumber")+"");
-                row.put("date",createdDate);
+                row.put("date",gv.get("createDate"));
 
 
                 List<Map<String,Object>> rowChilds = null;
@@ -1007,7 +1007,7 @@ public class PersonManagerQueryServices {
                 return rowList;
             }else{
                 for(GenericValue gv : forwardChain){
-                    String createdDate = sdf.format(gv.get("createDate"));
+//                    String createdDate = sdf.format(gv.get("createDate"));
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
@@ -1018,7 +1018,7 @@ public class PersonManagerQueryServices {
                         }else{
                             forwardLine.put("name",rowInfo.get("firstName"));
                         }
-                        forwardLine.put("date",createdDate);
+                        forwardLine.put("date",gv.get("createDate"));
                         forwardLine.put("avatar",rowInfo.get("headPortrait")+"");
                         forwardLine.put("tel",rowInfo.get("contactNumber")+"");
                         forwardLine.put("key",partyIdTo);

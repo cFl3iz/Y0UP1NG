@@ -897,7 +897,7 @@ public class PersonManagerQueryServices {
 //        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
         PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
-                where().distinct().queryPagedList(0, 100);
+                where().distinct().orderBy("-createdDate").queryPagedList(0, 300);
 
 
         List<GenericValue> allList = queryList.getData();
@@ -905,6 +905,8 @@ public class PersonManagerQueryServices {
         Map<String,Object> partyFromMap = new HashMap<String, Object>();
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Map<String,Object> root = new HashMap<>();
 //        root.setId("1");
@@ -917,16 +919,20 @@ public class PersonManagerQueryServices {
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
             String rowBaseId = gv.getString("basePartyId");
+            String createdDate = sdf.format(gv.get("createdDate"));
+
             if(!partyFromMap.containsKey(rowBaseId) && rowBaseId.equals(rowFromId) ||
                     !partyFromMap.containsKey(rowBaseId) &&     rowFromId.equals("NO_PARTY")
 
                     ) {
                 Map<String,Object> row = new HashMap<>();
-                row.put("key",getStringRandom(15));
+                row.put("key",rowBaseId);
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
                 row.put("name",rowInfo.get("firstName"));
                 row.put("avatar",rowInfo.get("headPortrait")+"");
                 row.put("tel",rowInfo.get("contactNumber")+"");
+                row.put("date",createdDate);
+
 
                 List<Map<String,Object>> rowChilds = null;
                 //递归
@@ -976,16 +982,19 @@ public class PersonManagerQueryServices {
      */
     private List<Map<String,Object>> forEachGetAllChildren(int deepCount ,List<Map<String,Object>> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
         Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
-        if(deepCount>=5){
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if(deepCount>=8){
             return rowList;
         }
+
         //入口
         if(null == rowList){
             rowList = new ArrayList<Map<String,Object>>();
         }
         //next
         if(null != rowList){
-
+//createDate
             List<GenericValue> forwardChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
                     "basePartyId",rowBaseId,
                     "partyIdFrom",rowFromId).queryList();
@@ -993,16 +1002,19 @@ public class PersonManagerQueryServices {
                 return rowList;
             }else{
                 for(GenericValue gv : forwardChain){
+                    String createdDate = sdf.format(gv.get("createdDate"));
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
                         Map<String,Object> forwardLine = new HashMap<>();
                         Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
                         forwardLine.put("name",rowInfo.get("firstName"));
+                        forwardLine.put("date",createdDate);
                         forwardLine.put("avatar",rowInfo.get("headPortrait")+"");
                         forwardLine.put("tel",rowInfo.get("contactNumber")+"");
+                        forwardLine.put("key",partyIdTo);
 
-                    List<Map<String,Object>> innerRowChilds = null;
+                        List<Map<String,Object>> innerRowChilds = null;
                     //递归
                     List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
                             "basePartyId",rowBaseId,

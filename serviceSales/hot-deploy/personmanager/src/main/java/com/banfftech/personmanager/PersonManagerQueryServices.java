@@ -910,7 +910,7 @@ public class PersonManagerQueryServices {
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Map<String,Object> root = new HashMap<>();
 //        root.setId("1");
@@ -995,7 +995,7 @@ public class PersonManagerQueryServices {
      */
     private List<Map<String,Object>> forEachGetAllChildren(int deepCount ,List<Map<String,Object>> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
         Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         if(deepCount>=4){
             return rowList;

@@ -903,13 +903,13 @@ public class PersonManagerQueryServices {
 
         List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 
-        ForwardLine root = new ForwardLine();
-        root.setId("1");
-        root.setName("AnKoRau");
+        Map<String,Object> root = new HashMap<>();
+//        root.setId("1");
+//        root.setName("AnKoRau");
 //        Map<String,Object> root = new HashMap<String, Object>();
 //        root.put("id", "1");
 //        root.put("name", "AnKoRau");
-        List<ForwardLine> childrenList = new ArrayList<ForwardLine>();
+        List<Map<String,Object>> childrenList = new ArrayList<>();
         for(GenericValue gv : allList){
             int deepCount = 0;
             String rowFromId = gv.getString("partyIdFrom");
@@ -918,16 +918,17 @@ public class PersonManagerQueryServices {
                     !partyFromMap.containsKey(rowBaseId) &&     rowFromId.equals("NO_PARTY")
 
                     ) {
-                ForwardLine row  = new ForwardLine();
-                row.setId(getStringRandom(15));
+                Map<String,Object> row = new HashMap<>();
+                row.put("key",getStringRandom(15));
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
-//                row.setName(rowInfo.get("firstName"));
-                row.setName(rowInfo.get("firstName")+"$"+rowInfo.get("headPortrait")+"");
-                row.setAvatar(rowInfo.get("headPortrait")+"");
-                List<ForwardLine> rowChilds = null;
+                row.put("name",rowInfo.get("firstName"));
+                row.put("avatar",rowInfo.get("headPortrait")+"");
+                row.put("tel",rowInfo.get("contactNumber")+"");
+
+                List<Map<String,Object>> rowChilds = null;
                 //递归
                 rowChilds = forEachGetAllChildren(deepCount+1,rowChilds,rowBaseId,rowFromId,delegator);
-                row.setChildren(rowChilds);
+                row.put("children",rowChilds);
                 childrenList.add(row);
                 partyFromMap.put(rowBaseId,"");
             }
@@ -942,11 +943,11 @@ public class PersonManagerQueryServices {
         }
 
 //        root.put("children", childrenList);
-        root.setChildren(childrenList);
+//        root.put("",childrenList);
 
 
-        JSONObject jsonMap2 = JSONObject.fromObject(root);
-        Debug.logInfo("root:"+ jsonMap2,module);
+        JSONObject jsonMap2 = JSONObject.fromObject(childrenList);
+        Debug.logInfo("childrenList:"+ jsonMap2,module);
         resultMap.put("lastShareLines",jsonMap2);
         return resultMap;
     }
@@ -958,14 +959,14 @@ public class PersonManagerQueryServices {
      * @param delegator
      * @return
      */
-    private List<ForwardLine> forEachGetAllChildren(int deepCount ,List<ForwardLine> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
+    private List<Map<String,Object>> forEachGetAllChildren(int deepCount ,List<Map<String,Object>> rowList ,String rowBaseId, String rowFromId, Delegator delegator) throws GenericEntityException,GenericServiceException{
         Debug.logInfo("*forEachGetAllChildren rowBaseId:"+rowBaseId+"|rowFromId:"+rowFromId+"|deepCount:"+deepCount,module);
         if(deepCount>=5){
             return rowList;
         }
         //入口
         if(null == rowList){
-            rowList = new ArrayList<ForwardLine>();
+            rowList = new ArrayList<Map<String,Object>>();
         }
         //next
         if(null != rowList){
@@ -980,23 +981,24 @@ public class PersonManagerQueryServices {
                     String nowFromId = gv.getString("partyIdFrom");
                     String partyIdTo = gv.getString("partyIdTo");
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
-                    ForwardLine forwardLine = new ForwardLine();
-                    forwardLine.setId(getStringRandom(15));
-//                    Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
-//                    forwardLine.setName(gv.getString("firstName"));
-                    forwardLine.setName(gv.getString("firstName")+"$"+gv.getString("objectInfo"));
-                    forwardLine.setAvatar(gv.getString("objectInfo"));
-                    List<ForwardLine> innerRowChilds = null;
+                        Map<String,Object> forwardLine = new HashMap<>();
+                        Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
+                        forwardLine.put("name",rowInfo.get("firstName"));
+                        forwardLine.put("avatar",rowInfo.get("headPortrait")+"");
+                        forwardLine.put("tel",rowInfo.get("contactNumber")+"");
+
+                    List<Map<String,Object>> innerRowChilds = null;
                     //递归
                     List<GenericValue> innerChain =  EntityQuery.use(delegator).from("YpForwardChainFact").where(
                             "basePartyId",rowBaseId,
                             "partyIdFrom",partyIdTo).queryList();
+
                     if(null!=innerChain && innerChain.size()>0){
                         innerRowChilds = forEachGetAllChildren(deepCount+1,innerRowChilds,rowBaseId,partyIdTo,delegator);
                     }
 
                     if(null!= innerRowChilds ){
-                        forwardLine.setChildren(innerRowChilds);
+                        forwardLine.put("children",innerRowChilds);
                     }
                     rowList.add(forwardLine);
                     }

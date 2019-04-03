@@ -493,6 +493,9 @@
     <service name="queryForwardChainLastLines" engine="java" location="main.java.com.banfftech.personmanager.PersonManagerQueryServices"
              invoke="queryForwardChainLastLines" auth="false" transaction-timeout="98989898">
         <description>queryForwardChainLastLines</description>
+
+        <attribute name="pageIndex" type="String" mode="IN"  optional="true"/>
+
         <attribute name="lastShareLines" type="net.sf.json.JSONArray" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

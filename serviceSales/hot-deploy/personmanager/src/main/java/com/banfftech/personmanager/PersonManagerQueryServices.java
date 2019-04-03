@@ -891,13 +891,17 @@ public class PersonManagerQueryServices {
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
-
+        String pageIndex = (String) context.get("pageIndex");
+        int pageIndexInt = 0;
+        if(pageIndex!=null){
+            pageIndexInt =  Integer.parseInt(pageIndex);
+        }
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
 //        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
         PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
-                where().distinct();
+                where().distinct().queryPagedList(pageIndexInt, 300);
 //.queryPagedList(0, 2100)
 
         List<GenericValue> allList = queryList.getData();
@@ -928,7 +932,7 @@ public class PersonManagerQueryServices {
                 Map<String,Object> row = new HashMap<>();
                 row.put("key",rowBaseId);
                 Map<String,String> rowInfo = queryPersonBaseInfo(delegator, rowBaseId);
-                if(rowInfo.get("firstName") ==null ||rowInfo.get("firstName").trim().equals("")){
+                if(rowInfo ==null || rowInfo.get("firstName") ==null ||rowInfo.get("firstName").trim().equals("")){
                     row.put("name","匿名");
                 }else{
                     row.put("name",rowInfo.get("firstName"));
@@ -1013,7 +1017,7 @@ public class PersonManagerQueryServices {
                     if (!partyIdTo.equals(rowBaseId) && !partyIdTo.equals("NO_PARTY")) {
                         Map<String,Object> forwardLine = new HashMap<>();
                         Map<String,String> rowInfo = queryPersonBaseInfo(delegator, partyIdTo);
-                        if(null == rowInfo.get("firstName") ||rowInfo.get("firstName").trim().equals("")){
+                        if(null == rowInfo || null == rowInfo.get("firstName") ||rowInfo.get("firstName").trim().equals("")){
                             forwardLine.put("name","匿名");
                         }else{
                             forwardLine.put("name",rowInfo.get("firstName"));

@@ -944,6 +944,7 @@ public class PersonManagerQueryServices {
 
                 row.put("avatar",rowInfo.get("headPortrait")+"");
                 row.put("tel",rowInfo.get("contactNumber")+"");
+                row.put("memberId",rowInfo.get("memberId"));
                 row.put("date",createdDate);
 
 
@@ -1033,6 +1034,7 @@ public class PersonManagerQueryServices {
                         forwardLine.put("date",createdDate);
                         forwardLine.put("avatar",rowInfo.get("headPortrait")+"");
                         forwardLine.put("tel",rowInfo.get("contactNumber")+"");
+                        forwardLine.put("memberId",rowInfo.get("memberId"));
                         forwardLine.put("key",partyIdTo);
 
                         List<Map<String,Object>> innerRowChilds = null;
@@ -4153,6 +4155,7 @@ public class PersonManagerQueryServices {
             }
             personInfo.put("firstName", (String) person.get("firstName"));
             personInfo.put("lastName", (String) person.get("lastName"));
+            personInfo.put("memberId",  person.get("memberId"));
 
             GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where(UtilMisc.toMap("partyId", partyId)).queryFirst();
             personInfo.put("userLoginId",userLogin==null?"": userLogin.getString("userLoginId"));

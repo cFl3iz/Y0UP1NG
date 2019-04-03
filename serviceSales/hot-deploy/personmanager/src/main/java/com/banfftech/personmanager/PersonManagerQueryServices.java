@@ -901,7 +901,7 @@ public class PersonManagerQueryServices {
 //        List<GenericValue> allList=  EntityQuery.use(delegator).from("YpForwardChainFact").where().queryList();
 
         PagedList<GenericValue>   queryList = EntityQuery.use(delegator).from("YpForwardChainFact").
-                where().distinct().queryPagedList(pageIndexInt, 300);
+                where().distinct().queryPagedList(pageIndexInt, 2200);
 //.queryPagedList(0, 2100)
 
         List<GenericValue> allList = queryList.getData();

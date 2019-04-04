@@ -4163,7 +4163,7 @@ public class PersonManagerQueryServices {
                             EntityQuery.use(delegator).from("TelecomNumberAndPartyView").where(
                                     UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE",
                                             "contactMechTypeId", "TELECOM_NUMBER")).orderBy("fromDate").queryList());
-              String tel = null;
+              String tel = "未绑定";
                 if (UtilValidate.isNotEmpty(telecomNumber)) {
                     tel = telecomNumber.getString("contactNumber");
                }

@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns="http://ofbiz.apache.org/Simple-Method"
+                xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+
+    <!-- 开店 -->
+    <simple-method method-name="quickStartAppStoreEvent" short-description="updatePartyAppConfig">
+        <set field="appName" from-field="parameters.appName"/>
+        <set field="isDemoStore" from-field="parameters.isDemoStore"/>
+        <set field="appServiceType" from-field="parameters.appServiceType"/>
+        <set field="hasShoppingCart" from-field="parameters.hasShoppingCart"/>
+        <set field="appId" from-field="parameters.appId"/>
+        
+        <log level="info" message="Quick Start New App Store Miniprogram...${appName}:${appId}"/>
+
+        <entity-and entity-name="PartyIdentification" list="isExsitsAppId">
+            <field-map field-name="idValue" from-field="appId"/>
+        </entity-and>
+        <log level="info" message="isExsitsAppId:${isExsitsAppId}"/>
+        <if-not-empty  field="isExsitsAppId"  >
+             <set field="errorMessage" value="这个AppId:${appId}已被使用了,请删除旧店关联或换一个AppID试试!"/>
+            <field-to-list field="errorMessage" list="error_list"/>
+            <return response-code="error"/>
+        </if-not-empty>
+        <check-errors error-list-name="error_list" error-code="resultPage"/>
+
+
+        <call-class-method class-name="com.banfftech.platformmanager.util.Pinyin4jUtil"
+                           method-name="converterToSpellUpper" ret-field="pinYin">
+            <field field="appName" type="String"/>
+        </call-class-method>
+
+
+        <log level="info" message="returnPinYin:${pinYin}"/>
+
+        <entity-one entity-name="Party" value-field="partyIsExsits">
+            <field-map field-name="partyId" from-field="pinYin"/>
+        </entity-one>
+        <if-not-empty field="partyIsExsits">
+            <set field="errorMessage" value="这个应用已存在数据,请换个名字试试!"/>
+            <field-to-list field="errorMessage" list="error_list"/>
+            <return response-code="error"/>
+        </if-not-empty>
+
+
+        <set field="createPartyMap" type="Map"/>
+        <set field="createPartyMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createPartyMap.groupName" from-field="appName"/>
+        <set field="createPartyMap.partyId" from-field="pinYin"/>
+        <!-- create PartyGroup  -->
+        <call-service service-name="createPartyGroup" in-map-name="createPartyMap">
+            <result-to-field result-name="partyId" />
+        </call-service>
+        <log level="info" message="partyId:${partyId}"/>
+        <!--<set field="partyId" from-field="createPartyResult.partyId"/>-->
+
+        <!-- Create Role - BILL_FROM_VENDOR -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="BILL_FROM_VENDOR"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+        <!-- Create Role - BILL_TO_CUSTOMER -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="BILL_TO_CUSTOMER"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+        <!-- Create Role - SHIP_FROM_VENDOR -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="SHIP_FROM_VENDOR"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+        <!-- Create Role - INTERNAL_ORGANIZATIO -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="INTERNAL_ORGANIZATIO"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+
+        <!-- Create Role - SUPPLIER -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="SUPPLIER"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+        <!-- Create Role - SUPPLIER_AGENT -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="SUPPLIER_AGENT"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+        <!-- Create Role - SALES_REP -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="SALES_REP"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+        <!-- Create Role - _NA_ -->
+       <!--<set field="createPartyRoleMap" type="Map"/>-->
+       <!--<set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>-->
+       <!--<set field="createPartyRoleMap.roleTypeId" value="_NA_"/>-->
+       <!--<set field="createPartyRoleMap.partyId" from-field="partyId"/>-->
+       <!--<call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">-->
+       <!--</call-service>-->
+       <!--<clear-field field="createPartyRoleMap"/>-->
+
+        <!-- Create Role - ACCOUNT -->
+       <set field="createPartyRoleMap" type="Map"/>
+       <set field="createPartyRoleMap.userLogin" from-field="parameters.userLogin"/>
+       <set field="createPartyRoleMap.roleTypeId" value="ACCOUNT"/>
+       <set field="createPartyRoleMap.partyId" from-field="partyId"/>
+       <call-service service-name="createPartyRole" in-map-name="createPartyRoleMap">
+       </call-service>
+       <clear-field field="createPartyRoleMap"/>
+
+
+
+        <!-- Create ContactMech -->
+        <!--<set field="createContactMechMap" type="Map"/>-->
+        <!--<set field="createContactMechMap.userLogin" from-field="parameters.userLogin"/>-->
+        <!--<set field="createContactMechMap.contactMechTypeId" value="POSTAL_ADDRESS"/>-->
+        <!--<sequenced-id sequence-name="ContactMech" field="contactMechId" />-->
+
+        <!--<set field="createContactMechMap.contactMechId" from-field="contactMechId"/>-->
+        <!--<call-service service-name="createContactMech" in-map-name="createContactMechMap">-->
+            <!--<result-to-field result-name="contactMechId" />-->
+        <!--</call-service>-->
+
+
+
+
+        <!-- Create PartyContactMech -->
+        <!--<set field="createPartyContactMechMap" type="Map"/>-->
+        <!--<set field="createPartyContactMechMap.userLogin" from-field="parameters.userLogin"/>-->
+        <!--<set field="createPartyContactMechMap.contactMechTypeId" value="POSTAL_ADDRESS"/>-->
+        <!--<set field="createPartyContactMechMap.partyId" from-field="partyId"/>-->
+        <!--&lt;!&ndash;<make-next-seq-id value-field="ContactMech" seq-field-name="contactMechId" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<set field="createPartyContactMechMap.contactMechId" from-field="contactMechId"/>&ndash;&gt;-->
+
+        <!--<call-service service-name="createPartyContactMech" in-map-name="createPartyContactMechMap">-->
+            <!--<result-to-field result-name="contactMechId" />-->
+        <!--</call-service>-->
+
+
+        <!-- CreatePostalAddress -->
+
+        <set field="createPostalAddressMap" type="Map"/>
+        <set field="createPostalAddressMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createPostalAddressMap.address1" value="China-ShangHai-JingAn-ShanXiBeiLu-278-952"/>
+        <set field="createPostalAddressMap.city" value="ShangHai"/>
+        <!--<set field="createPostalAddressMap.contactMechId" from-field="contactMechId"/>-->
+        <set field="createPostalAddressMap.postalCode" value="200124"/>
+        <call-service service-name="createPostalAddress" in-map-name="createPostalAddressMap">
+            <result-to-field result-name="contactMechId" />
+        </call-service>
+
+
+
+
+
+
+        <!-- Create PartyContactMechPurpose  / BILLING_LOCATION -->
+
+        <set field="createPartyContactMechPurposeMap" type="Map"/>
+        <set field="createPartyContactMechPurposeMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createPartyContactMechPurposeMap.contactMechId" from-field="contactMechId"/>
+        <set field="createPartyContactMechPurposeMap.contactMechPurposeTypeId" value="BILLING_LOCATION"/>
+        <call-service service-name="createPartyContactMechPurpose" in-map-name="createPartyContactMechPurposeMap">
+            <!--<result-to-field result-name="createPartyContactMechPurposeResult" />-->
+        </call-service>
+        <clear-field field="createPartyContactMechPurposeMap" />
+
+
+
+        <!-- Create PartyContactMechPurpose  / GENERAL_LOCATION -->
+
+        <set field="createPartyContactMechPurposeMap" type="Map"/>
+        <set field="createPartyContactMechPurposeMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createPartyContactMechPurposeMap.contactMechId" from-field="contactMechId"/>
+        <set field="createPartyContactMechPurposeMap.contactMechPurposeTypeId" value="GENERAL_LOCATION"/>
+        <call-service service-name="createPartyContactMechPurpose" in-map-name="createPartyContactMechPurposeMap">
+            <!--<result-to-field result-name="createPartyContactMechPurposeResult" />-->
+        </call-service>
+        <clear-field field="createPartyContactMechPurposeMap" />
+
+        <!-- Create PartyContactMechPurpose  / PAYMENT_LOCATION -->
+
+        <set field="createPartyContactMechPurposeMap" type="Map"/>
+        <set field="createPartyContactMechPurposeMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createPartyContactMechPurposeMap.contactMechId" from-field="contactMechId"/>
+        <set field="createPartyContactMechPurposeMap.contactMechPurposeTypeId" value="PAYMENT_LOCATION"/>
+        <call-service service-name="createPartyContactMechPurpose" in-map-name="createPartyContactMechPurposeMap">
+            <!--<result-to-field result-name="createPartyContactMechPurposeResult" />-->
+        </call-service>
+        <clear-field field="createPartyContactMechPurposeMap" />
+
+
+
+        <!-- Create Product Facility -->
+        <set field="createFacilityMap" type="Map"/>
+        <set field="createFacilityMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createFacilityMap.facilityId" from-field="partyId"/>
+        <set field="createFacilityMap.ownerPartyId" from-field="partyId"/>
+        <set field="createFacilityMap.facilityTypeId" value="WAREHOUSE"/>
+        <set field="createFacilityMap.facilityName" value="${appName}仓库"/>
+        <set field="createFacilityMap.description" value="${appName}仓库"/>
+        <call-service service-name="createFacility" in-map-name="createFacilityMap">
+            <result-to-field result-name="facilityId" />
+        </call-service>
+
+        <!--<set field="facilityId" from-field="createFacilityResult.facilityId" />-->
+
+
+
+
+
+        <!-- Create Store -->
+        <set field="createProductStoreMap" type="Map"/>
+        <set field="createProductStoreMap.userLogin" from-field="parameters.userLogin"/>
+        <!--<set field="createProductStoreMap.productStoreId" from-field="partyId"/>-->
+        <set field="createProductStoreMap.storeName" from-field="appName"/>
+        <set field="createProductStoreMap.companyName" from-field="appName"/>
+        <set field="createProductStoreMap.title" from-field="appName"/>
+        <set field="createProductStoreMap.payToPartyId" from-field="partyId"/>
+        <set field="createProductStoreMap.daysToCancelNonPay" type="Long" value="4"/>
+        <set field="createProductStoreMap.prorateShipping" value="Y"/>
+        <set field="createProductStoreMap.prorateTaxes" value="Y"/>
+        <set field="createProductStoreMap.inventoryFacilityId" from-field="facilityId"/>
+        <set field="createProductStoreMap.oneInventoryFacility" value="Y"/>
+        <set field="createProductStoreMap.checkInventory" value="Y"/>
+        <set field="createProductStoreMap.splitPayPrefPerShpGrp" value="N"/>
+        <set field="createProductStoreMap.reserveInventory" value="N"/>
+        <set field="createProductStoreMap.reserveOrderEnumId" value="INVRO_FIFO_REC"/>
+        <set field="createProductStoreMap.requireInventory" value="Y"/>
+        <set field="createProductStoreMap.isImmediatelyFulfilled" value="Y"/>
+        <set field="createProductStoreMap.defaultLocaleString" value="zh_CN"/>
+        <set field="createProductStoreMap.defaultCurrencyUomId" value="CNY"/>
+        <set field="createProductStoreMap.allowPassword" value="Y"/>
+        <set field="createProductStoreMap.explodeOrderItems" value="N"/>
+        <set field="createProductStoreMap.retryFailedAuths" value="N"/>
+        <set field="createProductStoreMap.manualAuthIsCapture" value="Y"/>
+        <set field="createProductStoreMap.orderNumberPrefix" from-field="partyId"/>
+        <set field="createProductStoreMap.visualThemeId" value="EC_DEFAULT"/>
+        <set field="createProductStoreMap.autoApproveInvoice" value="Y"/>
+        <set field="createProductStoreMap.shipIfCaptureFails" value="Y"/>
+        <set field="createProductStoreMap.autoApproveOrder" value="Y"/>
+        <set field="createProductStoreMap.isDemoStore " value="N"/>
+        <call-service service-name="createProductStore" in-map-name="createProductStoreMap">
+            <result-to-field result-name="productStoreId" />
+        </call-service>
+
+
+        <!--<set field="productStoreId" from-field="createProductStoreResult.productStoreId"/>-->
+
+        <!-- Create ProductStoreFacility  /ASSOC -->
+        <!--<set field="createProductStoreFacility" type="Map"/>-->
+        <!--<set field="createProductStoreFacility.userLogin" from-field="parameters.userLogin"/>-->
+        <!--<set field="createProductStoreFacility.facilityId" from-field="facilityId"/>-->
+        <!--<set field="createProductStoreFacility.productStoreId" from-field="productStoreId"/>-->
+        <!--<now-timestamp field="fromDate" />-->
+        <!--<set field="createProductStoreFacility.fromDate" from-field="fromDate"/>-->
+        <!--<call-service service-name="createProductStoreFacility" in-map-name="createProductStoreFacility">-->
+            <!--<result-to-field result-name="createProductStoreFacilityResult" />-->
+        <!--</call-service>-->
+
+
+        <!-- createProductStorePaymentSetting -->
+        <set field="createProductStorePaymentSetting" type="Map"/>
+        <set field="createProductStorePaymentSetting.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProductStorePaymentSetting.paymentMethodTypeId" value="EXT_WECHAT_PAY"/>
+        <set field="createProductStorePaymentSetting.applyToAllProducts" value="Y"/>
+        <set field="createProductStorePaymentSetting.productStoreId" from-field="productStoreId"/>
+        <set field="createProductStorePaymentSetting.paymentServiceTypeEnumId" value="PRDS_PAY_EXTERNAL"/>
+        <call-service service-name="createProductStorePaymentSetting" in-map-name="createProductStorePaymentSetting">
+            <result-to-field result-name="createProductStorePaymentSettingResult" />
+        </call-service>
+
+
+        <!--<attribute name="idValue" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="groupName" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="isDemoStore" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="appServiceType" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="hasShoppingCart" type="String" mode="IN" optional="true"/>-->
+        <set field="updateMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="updateMap.partyId" from-field="partyId"/>
+        <set field="updateMap.idValue" from-field="appId"/>
+        <set field="updateMap.groupName" from-field="appName"/>
+        <set field="updateMap.isDemoStore" from-field="isDemoStore"/>
+        <set field="updateMap.appServiceType" from-field="appServiceType"/>
+        <set field="updateMap.hasShoppingCart" from-field="hasShoppingCart"/>
+        <call-service service-name="updatePartyAppConfig" in-map-name="updateMap"/>
+
+
+        <set field="createProdCatalogMap" type="Map"/>
+        <set field="createProdCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProdCatalogMap.catalogName" value="${appName}目录"/>
+        <call-service service-name="createProdCatalog" in-map-name="createProdCatalogMap">
+            <result-to-field result-name="prodCatalogId" />
+        </call-service>
+        
+
+        <log level="info" message="prodCatalogId=>${prodCatalogId}"/>
+        <set field="createProductCategoryMap" type="Map"/>
+        <set field="createProductCategoryMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProductCategoryMap.productCategoryTypeId" value="CATALOG_CATEGORY"/>
+        <set field="createProductCategoryMap.categoryName" value="${appName}目录分类"/>
+        <set field="createProductCategoryMap.description " value="auto create"/>
+
+        <call-service service-name="createProductCategory" in-map-name="createProductCategoryMap">
+            <result-to-field result-name="productCategoryId" />
+        </call-service>
+
+
+        <log level="info" message="productCategoryId=>${productCategoryId}"/>
+
+
+
+
+        <set field="addProductCategoryToProdCatalogMap" type="Map"/>
+        <set field="addProductCategoryToProdCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="addProductCategoryToProdCatalogMap.prodCatalogCategoryTypeId" value="PCCT_PURCH_ALLW"/>
+        <set field="addProductCategoryToProdCatalogMap.prodCatalogId" from-field="prodCatalogId"/>
+        <set field="addProductCategoryToProdCatalogMap.productCategoryId" from-field="productCategoryId"/>
+
+        <call-service service-name="addProductCategoryToProdCatalog" in-map-name="addProductCategoryToProdCatalogMap">
+        </call-service>
+
+
+        <set field="createProductStoreCatalogMap" type="Map"/>
+        <set field="createProductStoreCatalogMap.userLogin" from-field="parameters.userLogin"/>
+        <set field="createProductStoreCatalogMap.prodCatalogId" from-field="prodCatalogId"/>
+        <set field="createProductStoreCatalogMap.productStoreId" from-field="productStoreId"/>
+        <call-service service-name="createProductStoreCatalog" in-map-name="createProductStoreCatalogMap">
+        </call-service>
+
+        <set field="successMessage" value="[${appName}]=>店铺-${productStoreId}、目录-${prodCatalogId}、分类-${productCategoryId}创建成功!"/>
+        <field-to-result field="successMessage" result-name="successMessage"/>
+    </simple-method>
+
+
+    <!-- 更新店铺对应的小程序 -->
+    <simple-method method-name="updatePartyAppConfig" short-description="updatePartyAppConfig">
+        <set field="partyId" from-field="parameters.partyId"/>
+        <set field="idValue" from-field="parameters.idValue"/>
+
+
+        <set field="isDemoStore" from-field="parameters.isDemoStore"/>
+        <set field="appServiceType" from-field="parameters.appServiceType"/>
+        <set field="hasShoppingCart" from-field="parameters.hasShoppingCart"/>
+        <set field="groupName" from-field="parameters.groupName"/>
+
+        <log level="info"
+             message="parameters ${parameters} isDemoStore=${isDemoStore} appServiceType=${appServiceType} hasShoppingCart=${hasShoppingCart} "/>
+
+        <!-- 更新小程序App_Id -->
+        <if-not-empty field="idValue">
+            <entity-and entity-name="PartyIdentification" list="partyIdentifications">
+                <field-map field-name="partyId"/>
+                <field-map field-name="partyIdentificationTypeId" value="MINIPROGRAM_APP_ID"/>
+            </entity-and>
+            <if-not-empty field="partyIdentifications">
+                <first-from-list entry="firstLine" list="partyIdentifications"/>
+                <set field="firstLine.idValue" from-field="idValue"/>
+                <store-value value-field="firstLine"/>
+            </if-not-empty>
+
+            <if-empty field="partyIdentifications">
+                <set field="createPartyIdentification" type="Map"/>
+                <set field="createPartyIdentification.userLogin" from-field="parameters.userLogin"/>
+                <set field="createPartyIdentification.partyId" from-field="partyId"/>
+                <set field="createPartyIdentification.partyIdentificationTypeId" value="MINIPROGRAM_APP_ID"/>
+                <set field="createPartyIdentification.idValue" from-field="idValue"/>
+                <call-service service-name="createPartyIdentification" in-map-name="createPartyIdentification">
+                    <result-to-field result-name="createPartyIdentification" />
+                </call-service>
+            </if-empty>
+
+            <check-errors/>
+        </if-not-empty>
+        <if-not-empty field="isDemoStore">
+            <!-- Update 应用是否是演示版 -->
+            <make-value entity-name="PartyAttribute" value-field="demoAppStore"></make-value>
+            <set field="demoAppStore.partyId" from-field="partyId"/>
+            <set field="demoAppStore.attrName" value="DEMO_STORE"/>
+            <set field="demoAppStore.attrValue" from-field="isDemoStore"/>
+            <create-value value-field="demoAppStore" or-store="true"/>
+        </if-not-empty>
+        <!-- Update 应用类型 -->
+        <if-not-empty field="appServiceType">
+            <make-value entity-name="PartyAttribute" value-field="appService"></make-value>
+            <set field="appService.partyId" from-field="partyId"/>
+            <set field="appService.attrName" value="SERVICE_TYPE"/>
+            <set field="appService.attrValue" from-field="appServiceType"/>
+            <create-value value-field="appService" or-store="true"/>
+
+        </if-not-empty>
+
+        <if-not-empty field="groupName">
+            <make-value entity-name="PartyGroup" value-field="partyGroup"></make-value>
+            <set field="partyGroup.partyId" from-field="partyId"/>
+            <set field="partyGroup.groupName" from-field="groupName"/>
+            <create-value value-field="partyGroup" or-store="true"/>
+        </if-not-empty>
+
+        <if-not-empty field="hasShoppingCart">
+            <!-- Update 购物车配置 -->
+            <make-value entity-name="PartyAttribute" value-field="shoppingCart"></make-value>
+            <set field="shoppingCart.partyId" from-field="partyId"/>
+            <set field="shoppingCart.attrName" value="NEED_SHOPPING_CART"/>
+            <set field="shoppingCart.attrValue" from-field="hasShoppingCart"/>
+            <create-value value-field="shoppingCart" or-store="true"/>
+
+        </if-not-empty>
+
+    </simple-method>
+
+</simple-methods>

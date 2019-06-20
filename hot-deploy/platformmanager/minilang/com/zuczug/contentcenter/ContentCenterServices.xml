@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+
+	<!-- 更新或新增店铺HomePageJson -->
+	<simple-method method-name="EditHomePageJsonEvent" short-description="EditHomePageJsonEvent">
+		<set field="partyId" from-field="parameters.partyId"/>
+		<set field="textData" from-field="parameters.textData"/>
+		<set field="dataResourceId" from-field="parameters.dataResourceId"/>
+		<set field="productStoreId" from-field="parameters.productStoreId"/>
+		<log level="info" message="EditHomePageJsonEvent:partyId=${partyId} textData=${textData} dataResourceId=${dataResourceId}"/>
+
+
+		<if-not-empty field="dataResourceId">
+
+			<!-- update -->
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.textData" from-field="textData"/>
+			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
+			<call-service service-name="updateElectronicText" in-map-name="inMap"/>
+		</if-not-empty>
+
+		<if-empty field="dataResourceId">
+
+			<entity-one entity-name="ProductStore" value-field="store">
+				<field-map field-name="productStoreId" from-field="productStoreId"/>
+			</entity-one>
+
+			<!-- createElText -->
+			<set field="inMap.textData" from-field="textData"/>
+			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
+			<call-service service-name="createElectronicText" in-map-name="inMap">
+				<result-to-field field="newDataResourceId" result-name="dataResourceId"/>
+			</call-service>
+			<clear-field field="inMap"/>
+			<set field="inMap.dataResourceId" from-field="newDataResourceId"/>
+			<set field="inMap.textData" from-field="textData"/>
+			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
+			<call-service service-name="createContent" in-map-name="inMap">
+				<result-to-field field="newContentId" result-name="contentId"/>
+			</call-service>
+			<clear-field field="inMap"/>
+			<set field="inMap.contentId" from-field="newContentId"/>
+			<set field="inMap.partyId" from-field="store.payToPartyId"/>
+			<set field="inMap.partyContentTypeId" value="MINIPROGRAM_HOME"/>
+			<set field="inMap.userLogin" from-field="parameters.userLogin"/>
+			<call-service service-name="createPartyContent" in-map-name="inMap">
+			</call-service>
+		</if-empty>
+
+		<field-to-result field="productStoreId"/>
+	</simple-method>
+
+
+
+	<!-- 物理移除店铺角色 -->
+	<simple-method method-name="storeDeleteRole" short-description="storeDeleteRole">
+		<set field="partyId" from-field="parameters.partyId"/>
+		<set field="productStoreId" from-field="parameters.productStoreId"/>
+		<set field="roleTypeId" from-field="parameters.roleTypeId"/>
+
+		<entity-and entity-name="ProductStoreRole" list="productStoreRoles">
+			<field-map field-name="partyId" from-field="partyId"/>
+			<field-map field-name="productStoreId" from-field="productStoreId"/>
+			<field-map field-name="roleTypeId" from-field="roleTypeId"/>
+		</entity-and>
+
+		<if-not-empty field="productStoreRoles">
+			<first-from-list entry="productStoreRole" list="productStoreRoles"/>
+			<remove-value value-field="productStoreRole"/>
+		</if-not-empty>
+
+	</simple-method>
+
+
+	<simple-method method-name="createProductSizeContentAndInfo" short-description="create product size content and info">
+		<set field="productId" from-field="parameters.productId"/>
+		<set field="textData" from-field="parameters.textData"/>
+		<entity-one entity-name="Product" value-field="product"/>
+		<if-empty field="product">
+			<add-error>
+				<fail-message message="Product with id ${productId} not found."/>
+			</add-error>
+			<check-errors/>
+		</if-empty>
+		<if-compare field="product.isVariant" operator="equals" value="Y">
+			<entity-and entity-name="ProductAssoc" list="productAssocList" filter-by-date="true">
+				<field-map field-name="productIdTo" from-field="productId"/>
+				<field-map field-name="productAssocTypeId" value="PRODUCT_VARIANT"/>
+			</entity-and>
+			<if-not-empty field="productAssocList">
+				<first-from-list entry="productAssoc" list="productAssocList"/>
+				<set field="productId" from-field="productAssoc.productId"/>
+			</if-not-empty>
+		</if-compare>
+		<entity-and entity-name="ProductContentAndInfo" filter-by-date="true" list="productContentAndInfoList">
+			<field-map field-name="productId"></field-map>
+			<field-map field-name="productContentTypeId" value="PRODUCT_SIZE_DES"></field-map>
+		</entity-and>
+		<if-empty field="productContentAndInfoList">
+			<set field="textInMap.textData" from-field="textData"/>
+			<set field="textInMap.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+			<call-service service-name="createDataResourceAndText" in-map-name="textInMap">
+				<result-to-field field="dataResourceId" result-name="dataResourceId"/>
+			</call-service>
+			<if-empty field="dataResourceId">
+				<add-error>
+					<fail-message message="Create data resource error."/>
+				</add-error>
+				<check-errors/>
+			</if-empty>
+			<set field="contentInMap.dataResourceId" from-field="dataResourceId"/>
+			<call-service service-name="createContent" in-map-name="contentInMap">
+				<result-to-field field="contentId" result-name="contentId"/>
+			</call-service>
+			<if-empty field="contentId">
+				<add-error>
+					<fail-message message="Create content error."/>
+				</add-error>
+				<check-errors/>
+			</if-empty>
+			<set field="inMap.productContentTypeId" value="PRODUCT_SIZE_DES"/>
+			<set field="inMap.productId" from-field="productId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<call-service service-name="createProductContent" in-map-name="inMap"/>
+			<else>
+				<first-from-list entry="productContentAndInfo" list="productContentAndInfoList"/>
+				<set field="inMap.dataResourceId" from-field="productContentAndInfo.dataResourceId"/>
+				<set field="inMap.textData" from-field="textData"/>
+				<call-service service-name="updateElectronicText" in-map-name="inMap"/>
+			</else>
+		</if-empty>
+		<field-to-result field="productId" result-name="productId"/>
+	</simple-method>
+   
+	<simple-method method-name="removeProductContent" short-description="remove Product Contents by sven">
+		<if-not-empty field="parameters.productId">
+			<entity-and list="contents" entity-name="ProductContent">
+	        	<field-map field-name="productId" from-field="parameters.productId"/>
+	        	<field-map field-name="contentId" from-field="parameters.contentId"/>
+	        	<field-map field-name="productContentTypeId" from-field="parameters.productContentTypeId"/>
+	        </entity-and>
+	        <remove-list list="contents"/>
+		</if-not-empty>
+		<check-errors/>
+        <set field="_EVENT_MESSAGE_" value="操作成功"/>
+        <field-to-request field="_EVENT_MESSAGE_"/>
+    </simple-method>
+    
+    
+    <simple-method method-name="addProductToMatch" short-description="add Product To Match by sven">
+		<set field="productId" from-field="parameters.productId"/>
+		<set field="productCategoryId" from-field="parameters.productCategoryId"/>
+		<if-empty field="productCategoryId"><!-- 如果没有搭配，就创建一个 -->
+			<set field="newMap.productCategoryTypeId" value="MIXMATCH_CATEGORY"/>
+			<call-service service-name="createProductCategory" in-map-name="newMap">
+				<result-to-field result-name="productCategoryId"/>
+			</call-service>
+			<field-to-request field="productCategoryId"/>
+			<set field="parameters.productCategoryId" from-field="productCategoryId"/>
+		</if-empty>
+		
+		<entity-and list="categoryMembers" entity-name="ProductCategoryMember">
+			<field-map field-name="productCategoryId" from-field="productCategoryId"/>
+			<field-map field-name="productId" from-field="productId"/>
+		</entity-and>
+		<if-not-empty field="categoryMembers">
+			<set field="_ERROR_MESSAGE_" value="该商品已经在搭配中了"/>
+        	<field-to-request field="_ERROR_MESSAGE_"/>
+        	<return/>
+		</if-not-empty>
+		
+		<entity-and list="categoryMembers" entity-name="ProductCategoryMember">
+			<field-map field-name="productCategoryId" from-field="productCategoryId"/>
+			<limit-view view-size="1" view-index="1"/>
+			<select-field field-name="sequenceNum"/>
+			<order-by field-name="-sequenceNum"/>
+		</entity-and>
+		<if-not-empty field="categoryMembers">
+			<first-from-list entry="member" list="categoryMembers"/>
+			<set field="sequenceNum" value="${member.sequenceNum+1}" type="Long"/>
+		<else>
+			<set field="sequenceNum" value="1" type="Long"/>
+		</else>
+		</if-not-empty>
+		
+		<now-timestamp field="now"/>
+		<set-service-fields service-name="addProductToCategory" to-map="inMap" map="parameters"/>
+		<set field="inMap.fromDate" from-field="now"/>
+		<set field="inMap.sequenceNum" from-field="sequenceNum"/>
+		<call-service service-name="addProductToCategory" in-map-name="inMap"></call-service>
+				
+		<check-errors/>
+        <set field="_EVENT_MESSAGE_" value="添加成功"/>
+        <field-to-request field="_EVENT_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="removeProductFromMatch" short-description="remove Product From Match by sven">
+		<entity-and list="productCategorymembers" entity-name="ProductCategoryMember">
+        	<field-map field-name="productId" from-field="parameters.productId"/>
+        	<field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+        </entity-and>
+        <remove-list list="productCategorymembers"/>
+		<check-errors/>
+        <set field="_EVENT_MESSAGE_" value="操作成功"/>
+        <field-to-request field="_EVENT_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="removeProductCategoryContent" short-description="remove Product Category Content by sven">
+		<if-not-empty field="parameters.productCategoryId">
+			<entity-and list="contents" entity-name="ProductCategoryContent">
+	        	<field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+	        	<field-map field-name="contentId" from-field="parameters.contentId"/>
+	        	<field-map field-name="prodCatContentTypeId" value="CATEGORY_IMAGE_URL"/>
+	        </entity-and>
+	        <remove-list list="contents"/>
+		</if-not-empty>
+		<check-errors/>
+        <set field="_EVENT_MESSAGE_" value="操作成功"/>
+        <field-to-request field="_EVENT_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="removeMatchProductCategory" short-description="删除一个搭配（category） by sven ">
+		<if-not-empty field="parameters.productCategoryId">
+	        <set field="removeMap.productCategoryId" from-field="parameters.productCategoryId"/>
+	        <remove-by-and map="removeMap" entity-name="ProductCategoryContent"/>
+	        <remove-by-and map="removeMap" entity-name="ProductCategoryMember"/>
+	        
+	        <set field="removeMap.productCategoryId" from-field="parameters.productCategoryId"/>
+	        <remove-by-and map="removeMap" entity-name="ProductCategory"/>
+		</if-not-empty>
+		<check-errors/>
+        <set field="_EVENT_MESSAGE_" value="删除成功"/>
+        <field-to-request field="_EVENT_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="copyImageAndContentInfoFromMiddleSize" short-description="拷贝一个中码的图片到其他尺码上 by sven">
+    	<if-empty field="parameters.colorId">
+    		<return/>
+    	</if-empty>
+    	<set field="variantProductId" value="${groovy: com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher)}"/>
+    	<entity-and list="colorAllSize" entity-name="ProductSameColorAllSize">
+    		<field-map field-name="productId" from-field="parameters.productId"/>
+    		<field-map field-name="productFeatureId" from-field="parameters.colorId"/>
+    	</entity-and>
+    	
+		<iterate entry="pa" list="colorAllSize">
+			<call-object-method method-name="toUpperCase" obj-field="variantProductId" ret-field="variantProductId"></call-object-method>
+			<call-object-method method-name="toUpperCase" obj-field="pa.productIdTo" ret-field="pa.productIdTo"></call-object-method>
+			 <log message="当前中间码是：${variantProductId}" level="info"/>
+			 <log message="比较的尺码是 ：${pa.productIdTo}" level="info"/>
+			 <if-compare-field to-field="variantProductId" operator="not-equals" field="pa.productIdTo"><!-- 不等于当前中间码 -->
+				<entity-one value-field="middleProduct" entity-name="Product">
+					<field-map field-name="productId" from-field="variantProductId"/>
+				</entity-one>
+				
+				<entity-one value-field="newProduct" entity-name="Product">
+					<field-map field-name="productId" from-field="pa.productIdTo"/>
+				</entity-one>
+				<set field="newProduct.smallImageUrl" from-field="middleProduct.smallImageUrl"/>
+				<set field="newProduct.mediumImageUrl" from-field="middleProduct.mediumImageUrl"/>
+				<set field="newProduct.largeImageUrl" from-field="middleProduct.largeImageUrl"/>
+				<set field="newProduct.detailImageUrl" from-field="middleProduct.detailImageUrl"/>
+				<set field="newProduct.originalImageUrl" from-field="middleProduct.originalImageUrl"/>
+				<!-- <store-value value-field="newProduct"/> -->
+				<!-- <call-object-method method-name="getAllFields" obj-field="newProduct" ret-field="newProductMap"></call-object-method> -->
+				<set-service-fields service-name="updateProduct" to-map="newProductMap" map="newProduct"/>
+				<call-service service-name="updateProduct" in-map-name="newProductMap"></call-service>
+				
+				<!-- 复制单品图和细节图 -->
+				<clear-field field="removeMap"/>
+				<set field="removeMap.productId" from-field="pa.productIdTo"/>
+				<set field="removeMap.productContentTypeId" value="SINGLE_PRODUCT_IMAGE"/>
+				<remove-by-and map="removeMap" entity-name="ProductContent"/>
+				
+				<entity-and list="singleImages" entity-name="ProductContent">
+					<field-map field-name="productId" from-field="variantProductId"/>
+					<field-map field-name="productContentTypeId" value="SINGLE_PRODUCT_IMAGE"/>
+				</entity-and>
+				<iterate entry="singleContent" list="singleImages">
+					<clone-value new-value-field="newSingleContent" value-field="singleContent"/>
+					<set field="newSingleContent.productId" from-field="pa.productIdTo"/>
+					<clear-field field="inMap"/>
+					<set-service-fields service-name="createProductContent" to-map="inMap" map="newSingleContent"/>
+					<call-service service-name="createProductContent" in-map-name="inMap"></call-service>
+				</iterate>
+				
+				<set field="removeMap.productContentTypeId" value="DETAIL_PRODUCT_IMAGE"/>
+				<remove-by-and map="removeMap" entity-name="ProductContent"/>
+				<entity-and list="detailImages" entity-name="ProductContent">
+					<field-map field-name="productId" from-field="variantProductId"/>
+					<field-map field-name="productContentTypeId" value="DETAIL_PRODUCT_IMAGE"/>
+				</entity-and>
+				<iterate entry="detailContent" list="detailImages">
+					<clone-value new-value-field="newDetailContent" value-field="detailContent"/>
+					<set field="newDetailContent.productId" from-field="pa.productIdTo"/>
+					<clear-field field="inMap"/>
+					<set-service-fields service-name="createProductContent" to-map="inMap" map="newDetailContent"/>
+					<call-service service-name="createProductContent" in-map-name="inMap"></call-service>
+				</iterate>
+			</if-compare-field>
+		</iterate>
+    </simple-method>
+    
+    <simple-method method-name="setMatchIsIpadUse" short-description="set Match Is Ipad Use by sven">
+    	<!-- 先把有的删除了 -->
+    	<entity-and list="matchAttributes" entity-name="ProductCategoryAttribute">
+    		<field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+    		<field-map field-name="attrName" value="ipadSeq"/>
+    	</entity-and>
+    	<remove-list list="matchAttributes"/>
+    	
+    	<if-compare operator="equals" value="Y" field="parameters.iPadUse">
+    		<!-- 如果适用，就重新添加，获取虚拟商品的季 -->
+    		<set field="groupInfo" value="${groovy: com.zuczug.product.ZuczugProductUtils.getVariantGroupCategorys(delegator,parameters.virtualProductId)}" type="Object" />
+    		<entity-one value-field="seasonGv" entity-name="ProductCategory">
+    			<field-map field-name="productCategoryId" from-field="groupInfo.seasonId"/>
+    		</entity-one>
+    		<make-value value-field="matchAttr" entity-name="ProductCategoryAttribute"/>
+    		<set field="matchAttr.attrName" value="ipadSeq"/>
+    		<set field="matchAttr.productCategoryId" from-field="parameters.productCategoryId"/>
+    		<set field="matchAttr.attrValue" from-field="seasonGv.categoryName"/>
+    		
+    		<clear-field field="inMap"/>
+    		<set-service-fields service-name="createProductCategoryAttribute" to-map="inMap" map="matchAttr"/>
+    		<call-service service-name="createProductCategoryAttribute" in-map-name="inMap"></call-service>
+    	</if-compare>
+    </simple-method>
+    
+    
+    <simple-method method-name="setMatchIsWebsiteUse" short-description="set Match Is Website Use by sven">
+    	<!-- 先把有的删除了 -->
+    	<entity-and list="matchAttributes" entity-name="ProductCategoryAttribute">
+    		<field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+    		<field-map field-name="attrName" value="WEBSITE_USE"/>
+    	</entity-and>
+    	<remove-list list="matchAttributes"/>
+    	
+    	<if-compare operator="equals" value="Y" field="parameters.websiteUse">
+    		<!-- 如果适用，就重新添加-->
+    		<make-value value-field="matchAttr" entity-name="ProductCategoryAttribute"/>
+    		<set field="matchAttr.attrName" value="WEBSITE_USE"/>
+    		<set field="matchAttr.productCategoryId" from-field="parameters.productCategoryId"/>
+    		<set field="matchAttr.attrValue" value="Y"/>
+    		
+    		<clear-field field="inMap"/>
+    		<set-service-fields service-name="createProductCategoryAttribute" to-map="inMap" map="matchAttr"/>
+    		<call-service service-name="createProductCategoryAttribute" in-map-name="inMap"></call-service>
+    	</if-compare>
+    </simple-method>
+    
+    
+    <simple-method method-name="removeProductContentMatchAndPutAgain" short-description="更新搭配中主款商品的ProductContent的内容 by sven">
+    	<if-empty field="parameters.productCategoryId">
+    		<return/>
+    	</if-empty>
+    	
+    	<!-- 不管怎么样，先把这个商品的搭配图删掉 -->
+    	<set field="removeMap.productId" from-field="parameters.variantProductId"/>
+    	<set field="removeMap.productContentTypeId" value="MATCH_PRODUCT_IMAGE"/>
+    	<remove-by-and map="removeMap" entity-name="ProductContent"/>
+    	
+    	<!-- 找到这个搭配的主款 -->
+    	<entity-and list="productList" entity-name="ProductCategoryMember">
+			<field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+			<select-field field-name="productId"/>
+			<limit-view view-size="1" view-index="1"/>
+			<order-by field-name="sequenceNum"/>
+		</entity-and>
+		<set field="parameters.variantProductId" from-field="productList[0].productId"/>
+    	
+    	<!-- 找到所有包含这个主款产品的所有搭配,包含，不一定是主款
+    	做法是找到这个商品是主款的所有搭配，把这些
+    	 -->
+    	<entity-and list="categoryMemberList" entity-name="ProductCategoryAndMember">
+    		<field-map field-name="productId" from-field="parameters.variantProductId"/>
+    		<field-map field-name="productCategoryTypeId" value="MIXMATCH_CATEGORY"/>
+    	</entity-and>
+    	<now-timestamp field="now"/>
+    	<set field="sequenceNum" value="10" type="Long"/>
+    	<iterate entry="cm" list="categoryMemberList">
+    		<!-- 判断它能否网站使用 -->
+			<entity-one value-field="tempAttr" entity-name="ProductCategoryAttribute">
+				<field-map field-name="productCategoryId" from-field="cm.productCategoryId"/>
+				<field-map field-name="attrName" value="WEBSITE_USE"/>
+			</entity-one>
+			<if-not-empty field="tempAttr">
+	    		<!-- 可以网站使用，找到这个搭配的主款 -->
+				<entity-and list="productList" entity-name="ProductCategoryMember">
+					<field-map field-name="productCategoryId" from-field="cm.productCategoryId"/>
+					<select-field field-name="productId"/>
+					<limit-view view-size="1" view-index="1"/>
+					<order-by field-name="sequenceNum"/>
+				</entity-and>
+				<if-not-empty field="productList">
+					<first-from-list entry="productMember" list="productList"/>
+					<!-- 如果主款等于当前款 -->
+					<if-compare operator="equals" value="${productMember.productId}" field="parameters.variantProductId">
+						<!-- 然后挨个把producntCategoryContent加到ProductContent中 -->
+						<entity-and list="prodCatContentList" entity-name="ProductCategoryContent">
+							<field-map field-name="productCategoryId" from-field="cm.productCategoryId"/>
+							<field-map field-name="prodCatContentTypeId" value="CATEGORY_IMAGE_URL"/>
+						</entity-and>
+						<iterate entry="prodCat" list="prodCatContentList">
+							<entity-and list="checkContent" entity-name="ProductContent">
+								<field-map field-name="productId" from-field="parameters.variantProductId"/>
+								<field-map field-name="productContentTypeId" value="MATCH_PRODUCT_IMAGE"/>
+								<field-map field-name="contentId" from-field="prodCat.contentId"/>
+							</entity-and>
+							<if-empty field="checkContent">
+								<make-value value-field="pc" entity-name="ProductContent"/>
+								<set field="pc.productId" from-field="parameters.variantProductId"/>
+								<set field="pc.productContentTypeId" value="MATCH_PRODUCT_IMAGE"/>
+								<set field="pc.contentId" from-field="prodCat.contentId"/>
+								<set field="pc.sequenceNum" from-field="sequenceNum"/>
+								<set field="pc.fromDate" from-field="now"/>
+								
+								<clear-field field="inMap"/>
+					    		<set-service-fields service-name="createProductContent" to-map="inMap" map="pc"/>
+					    		<call-service service-name="createProductContent" in-map-name="inMap"></call-service>
+								
+								<set field="sequenceNum" value="${sequenceNum+1}" type="Long"/>
+							</if-empty>
+						</iterate>
+					</if-compare>
+				</if-not-empty>
+			</if-not-empty>
+    	</iterate>
+    </simple-method>
+    
+    
+    <simple-method method-name="setProductMasterColor" short-description="设置商品的主色 by sven">
+    	<set field="colorId" from-field="parameters.colorId"/>
+    	<set field="productId" from-field="parameters.productId"/>
+    	<!-- 把这个颜色的中间码设定成100，其他非中间码的递增 -->
+    	<call-class-method method-name="checkProductMiddleSize" class-name="com.zuczug.product.ZuczugProductUtils" ret-field="middleSizeProductId">
+    		<field field="productId"/>
+    		<field field="colorId"/>
+    		<field field="delegator" type="org.ofbiz.entity.Delegator"/>
+    		<field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+    	</call-class-method>
+    	<if-empty field="middleSizeProductId">
+    		<set field="_ERROR_MESSAGE_" value="获取商品的中间码失败"/>
+    		<field-to-request field="_ERROR_MESSAGE_"/>
+    		<return response-code="error"/>
+    	</if-empty>
+    	
+    	<entity-and list="assocList" entity-name="ProductAssoc">
+    		<field-map field-name="productId" from-field="parameters.productId"/>
+    		<field-map field-name="productAssocTypeId" value="PRODUCT_VARIANT"/>
+    	</entity-and>
+    	<set field="seqIndex" value="101" type="Long"/>
+    	<iterate entry="assoc" list="assocList">
+    		<set-service-fields service-name="updateProductAssoc" to-map="updateAssocMap" map="assoc"/>
+    		<if-compare operator="not-equals" value="${middleSizeProductId}" field="assoc.productIdTo"><!-- 非中间码递增 -->
+    			<set field="updateAssocMap.sequenceNum" from-field="seqIndex" type="Long"/>
+    		<else>
+    			<set field="updateAssocMap.sequenceNum" value="100" type="Long"/><!-- 中间码,固定100 -->
+    		</else>
+    		</if-compare>
+    		<call-service service-name="updateProductAssoc" in-map-name="updateAssocMap"></call-service>
+   			<set field="seqIndex" value="${seqIndex+1}" type="Long"/>
+   			<clear-field field="updateAssocMap"/>
+    	</iterate>
+    </simple-method>
+    
+    <simple-method method-name="downloadExcel" short-description="downloadExcel">
+		<call-class-method class-name="com.zuczug.util.ExcelUtilService" method-name="downloadExcel">
+            <field field="productId" type="java.lang.String"/>
+            <field field="waveId" type="java.lang.String"/>
+            <field field="subSeriesId" type="java.lang.String"/>
+            <field field="seriesId" type="java.lang.String"/>
+            <field field="seasonId" type="java.lang.String"/>
+           	<field field="groupName" type="java.lang.String"/>
+           	<field field="productName" type="java.lang.String"/>
+        </call-class-method>
+	</simple-method>	
+	
+	<simple-method method-name="editShopProductContent" short-description="editShopProductContent">
+		<!-- 查询数据是否存在来判断是更新还是新建 -->
+		<entity-and entity-name="ProductContent" list="productContentDescriptions">
+			<field-map field-name="productId" from-field="parameters.productId"/>
+			<field-map field-name="productContentTypeId" value="REAL_PRODUCT_DESCRIPTION"/>
+		</entity-and>
+		<!-- 商品描述 -->
+		<if-empty field="productContentDescriptions">
+			<!-- 新建 -->
+			<!-- 新建DataResource/ElectronicText -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="DataResource" field="dataResourceId"/>			
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+			<set field="inMap.dataTemplateTypeId" value="NONE"/>
+			<set field="inMap.dataResourceName" value="realProductDescription"/>
+			<set field="inMap.mimeTypeId" value="text/html"/>
+			<set field="inMap.isPublic" value="Y"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createDataResource" in-map-name="inMap"></call-service>
+			<clear-field field="inMap"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.textData" from-field="parameters.realProductDescription"/>
+			<call-service service-name="createElectronicText" in-map-name="inMap"></call-service>
+			<!-- 新建Content -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="Content" field="contentId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.contentTypeId" value="ANNOTATION"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createContent" in-map-name="inMap"/>
+			<!-- 新建ProductContent -->
+			<clear-field field="inMap"/>
+			<set field="inMap.productId" from-field="parameters.productId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.productContentTypeId" value="REAL_PRODUCT_DESCRIPTION"/>
+			<call-service service-name="createProductContent" in-map-name="inMap"/>			
+		<else>
+			<!-- 更新 -->
+			<set field="inMap.dataResourceId" from-field="parameters.realProductDescriptionId"/>
+			<set field="inMap.textData" from-field="parameters.realProductDescription"/>
+			<call-service service-name="updateElectronicText" in-map-name="inMap"/>		
+		</else>	
+		</if-empty>
+		<!-- 特殊说明 -->
+		<entity-and entity-name="ProductContent" list="productContentSpecialAlert">
+			<field-map field-name="productId" from-field="parameters.productId"/>
+			<field-map field-name="productContentTypeId" value="REAL_PRODUCT_SPECIAL_ALERT"/>
+		</entity-and>
+		<if-empty field="productContentSpecialAlert">
+			<!-- 新建 -->
+			<!-- 新建DataResource/ElectronicText -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="DataResource" field="dataResourceId"/>			
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+			<set field="inMap.dataTemplateTypeId" value="NONE"/>
+			<set field="inMap.dataResourceName" value="realProductDescription"/>
+			<set field="inMap.mimeTypeId" value="text/html"/>
+			<set field="inMap.isPublic" value="Y"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createDataResource" in-map-name="inMap"></call-service>
+			<clear-field field="inMap"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.textData" from-field="parameters.specialPackaging"/>
+			<call-service service-name="createElectronicText" in-map-name="inMap"></call-service>
+			<!-- 新建Content -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="Content" field="contentId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.contentTypeId" value="ANNOTATION"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createContent" in-map-name="inMap"/>
+			<!-- 新建ProductContent -->
+			<clear-field field="inMap"/>
+			<set field="inMap.productId" from-field="parameters.productId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.productContentTypeId" value="REAL_PRODUCT_SPECIAL_ALERT"/>
+			<call-service service-name="createProductContent" in-map-name="inMap"/>
+		<else>
+			<!-- 更新 -->
+			<set field="inMap.dataResourceId" from-field="parameters.specialPackagingId"/>
+			<set field="inMap.textData" from-field="parameters.specialPackaging"/>
+			<call-service service-name="updateElectronicText" in-map-name="inMap"/>		
+		</else>
+		</if-empty>
+		
+		<!-- 成分 -->
+		<entity-and entity-name="ProductContent" list="productContentSpecialAlert">
+			<field-map field-name="productId" from-field="parameters.productId"/>
+			<field-map field-name="productContentTypeId" value="REAL_PRODUCT_INGREDIENT"/>
+		</entity-and>
+		<if-empty field="productContentSpecialAlert">
+			<!-- 新建 -->
+			<!-- 新建DataResource/ElectronicText -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="DataResource" field="dataResourceId"/>			
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+			<set field="inMap.dataTemplateTypeId" value="NONE"/>
+			<set field="inMap.dataResourceName" value="realProductDescription"/>
+			<set field="inMap.mimeTypeId" value="text/html"/>
+			<set field="inMap.isPublic" value="Y"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createDataResource" in-map-name="inMap"></call-service>
+			<clear-field field="inMap"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.textData" from-field="parameters.ingredient"/>
+			<call-service service-name="createElectronicText" in-map-name="inMap"></call-service>
+			<!-- 新建Content -->
+			<clear-field field="inMap"/>
+			<sequenced-id sequence-name="Content" field="contentId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.contentTypeId" value="ANNOTATION"/>
+			<set field="inMap.dataResourceId" from-field="dataResourceId"/>
+			<set field="inMap.statucId" value="IM_APPROVED"/>
+			<call-service service-name="createContent" in-map-name="inMap"/>
+			<!-- 新建ProductContent -->
+			<clear-field field="inMap"/>
+			<set field="inMap.productId" from-field="parameters.productId"/>
+			<set field="inMap.contentId" from-field="contentId"/>
+			<set field="inMap.productContentTypeId" value="REAL_PRODUCT_INGREDIENT"/>
+			<call-service service-name="createProductContent" in-map-name="inMap"/>
+		<else>
+			<!-- 更新 -->
+			<set field="inMap.dataResourceId" from-field="parameters.ingredientId"/>
+			<set field="inMap.textData" from-field="parameters.ingredient"/>
+			<call-service service-name="updateElectronicText" in-map-name="inMap"/>		
+		</else>
+		</if-empty>
+	</simple-method>
+	
+	 <simple-method method-name="loadProductInfo" short-description="load Product WashInfo">
+	 	<set field="parameters.ingredient" value=" "/>
+	 	<set field="parameters.specialPackaging" value=" "/>
+	 	<set field="hasGroup" value="false"/>
+	 	<entity-condition entity-name="ProductIngredientGroup" list="productIngredientGroups"></entity-condition>
+	 	<iterate entry="productIngredientGroup" list="productIngredientGroups">
+	 		<entity-and entity-name="ProductIngredientGroupAndAppl" list="productIngredientGroupAndAppls">
+	 			<field-map field-name="productId" from-field="parameters.productId"/>
+	 			<field-map field-name="productIngredientGroupId" from-field="productIngredientGroup.productIngredientGroupId"/>
+	 		</entity-and>
+	 		<iterate entry="productIngredientGroupAndAppl" list="productIngredientGroupAndAppls">	 		
+	 			<if-compare field="hasGroup" operator="equals" value="false">
+	 				<set field="parameters.ingredient" value="${parameters.ingredient}${productIngredientGroup.description}"/>
+	 				<set field="hasGroup" value="true"/>
+	 			</if-compare>
+	 			<set field="parameters.ingredient" value="${parameters.ingredient}${productIngredientGroupAndAppl.percentage}%          ${productIngredientGroupAndAppl.description}  ; "/>
+	 		</iterate>
+	 		<set field="hasGroup" value="false"/>
+	 	</iterate>
+	 	<entity-and entity-name="ProductAttribute" list="specialInstructions">
+	 		<field-map field-name="productId" from-field="parameters.productId"/>
+	 		<field-map field-name="attrName" value="SPECIAL_INSTRUCTIONS"/>
+	 	</entity-and>	
+	 	
+	 	<set field="specialInstruction" from-field="specialInstructions[0].attrValue"/>	
+	 	<set field="parameters.specialPackaging" from-field="specialInstruction"/>
+	 	
+	 	<call-simple-method method-name="editShopProductContent"/>
+	 	
+	 </simple-method>
+</simple-methods>

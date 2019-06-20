@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://ofbiz.apache.org/Site-Conf"
+           xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+    <!-- The controller elements that are common to all OFBiz components
+         can be found in the following xml file. A component can override the
+         elements found in the common-controller.xml file. -->
+    <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+
+    <description>WebManager Component Site Configuration File</description>
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java"
+               path="com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+    </preprocessor>
+    <!-- Events to run on every request before security (chains exempt) -->
+    <!--
+    <preprocessor>
+    </preprocessor>
+    -->
+    <!-- Events to run on every request after all other processing (chains exempt) -->
+    <!--
+    <postprocessor>
+        <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
+    </postprocessor>
+    -->
+
+    <!-- Request Mappings -->
+
+    <request-map uri="myOrder">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myOrder"/>
+    </request-map>
+
+    <request-map uri="myStory">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myStory"/>
+    </request-map>
+
+    <request-map uri="myOrderDetail">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myOrderDetail"/>
+    </request-map>
+
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
+    <!-- Share Resource -->
+    <request-map uri="shareProduct">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="shareProduct"/>
+    </request-map>
+
+
+
+    <request-map uri="ViewSelectProductFeature">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="ViewSelectProductFeature"/>
+    </request-map>
+
+
+    <!-- Share Category -->
+    <request-map uri="shareCategory">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="shareCategory"/>
+    </request-map>
+    <!-- create Payment FromCust -->
+    <request-map uri="createPaymentFromCust">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPaymentFromCust"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createPartyToPartyRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPartyToPartyRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="createCustRequest">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createCustRequestFromWeb"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
+
+    <!-- Mini Chat -->
+    <request-map uri="miniChat">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryPersonBaseInfoByChat"/>
+        <response name="success" type="view" value="miniChat">
+            <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+            <!--<redirect-parameter name="personInfo" from="personInfo"/>-->
+            <!--<redirect-parameter name="productId" from="productId"/>-->
+            <!--<redirect-parameter name="payToPartyId" from="payToPartyId"/>-->
+            <!--<redirect-parameter name="payToPartyFirstName" from="payToPartyFirstName"/>-->
+            <!--<redirect-parameter name="payToPartyHead" from="payToPartyHead"/>-->
+        </response>
+        <response name="error" type="view" value="shareProduct">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+    </request-map>
+
+
+    <!--<request-map uri="updateShipGroupShipInfo">-->
+    <!--<security https="false" auth="false"/>-->
+    <!--<event type="service" invoke="updateShipGroupShipInfoForWeChat"/>-->
+    <!--<response name="success" type="view" value="viewWebOrderDetail">-->
+    <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+    <!--<redirect-parameter name="productId" from="productId"/>-->
+    <!--</response>-->
+    <!--<response name="error" type="view" value="viewWebOrderDetail">-->
+    <!--<redirect-parameter name="tarjeta" from="tarjeta"/>-->
+    <!--<redirect-parameter name="productId" from="productId"/>-->
+    <!--</response>-->
+    <!--</request-map>-->
+
+
+    <!-- ViewOrder -->
+    <request-map uri="viewWebOrderDetail">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewWebOrderDetail"/>
+    </request-map>
+    <!-- QueryMessage -->
+    <request-map uri="queryMessage">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerServices"
+               invoke="queryMessage"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="tuCao">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerServices"
+               invoke="tuCaoProduct"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="webQueryCustRequestList">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerQueryServices"
+               invoke="webQueryCustRequestList"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="SelectAddress">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewWebOrderDetail"/>
+    </request-map>
+
+    <!-- 联系卖家微信号 -->
+    <request-map uri="viewContactQrCode">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="viewContactQrCode"/>
+    </request-map>
+
+
+
+    <request-map uri="selectPartyPostalAddress2Order">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="selectPartyPostalAddress2Order"/>
+        <response name="success" type="request-redirect" value="myOrder">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
+        </response>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="getUserContactInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getUserContactInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- 返回sku -->
+    <request-map uri="productFeatureSelect">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="getSkuFromProductFeatureDesc"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="shareInformation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="shareInformation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="receivedInformation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="receivedInformation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createCustRequestFromMiniApp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createCustRequestFromMiniApp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createPersonPartyPostalAddressFromMiniprogram">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPersonPartyPostalAddressFromMiniprogram"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="createPersonPartyPostalAddress">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPersonPartyPostalAddress"/>
+        <response name="success" type="request-redirect" value="viewWebOrderDetail">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="orderId" from="orderId"/>
+        </response>
+        <response name="error" type="request" value="result_json">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="orderId" from="orderId"/>
+        </response>
+    </request-map>
+
+    <!-- markOrOutMarkProduct -->
+
+    <request-map uri="markOrOutMarkProduct">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="markOrOutMarkProduct"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="queryProductRole">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryProductRole"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="likeResource">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerServices"
+               invoke="likeResource"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryProductDetail">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerQueryServices"
+               invoke="queryProductDetail"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- Load payToPartySend Message -->
+    <request-map uri="loadMaiJiaMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadMaiJiaMessage"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="loadMessage">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="loadMessage"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- PushMessage -->
+    <request-map uri="pushMessage">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerServices"
+               invoke="pushMessage"></event>
+        <!--<event type="service" invoke="pushMessage"/>-->
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+    <request-map uri="loadChatMessage">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerQueryServices"
+               invoke="loadChatMessage"></event>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- checkAddress -->
+    <request-map uri="checkAddress">
+        <security https="false" auth="false"/>
+        <event type="java"
+               path="com.banfftech.personmanager.PersonManagerServices"
+               invoke="checkAddress"></event>
+
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- accessWeChatFromBuyProduct -->
+    <request-map uri="accessWeChatFromBuyProduct">
+        <security auth="false" https="false"/>
+        <event type="java" path="com.banfftech.webmanager.WebServices"
+               invoke="accessWeChatFromBuyProduct"/>
+
+        <response name="success" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="spm" from="spm"/>
+            <redirect-parameter name="returnPayToPartyId" from="returnPayToPartyId"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="productId" from="productId"/>
+            <redirect-parameter name="nowPersonName" value="${nowPersonName}"/>
+        </response>
+
+        <response name="error" type="request-redirect" value="shareProduct">
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+    </request-map>
+
+
+
+    <request-map uri="accessOrderList">
+        <security auth="false" https="false"/>
+        <event type="java" path="com.banfftech.webmanager.WebServices"
+               invoke="accessOrderList"/>
+
+        <response name="success" type="request-redirect" value="myOrder">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="payToPartyId" from="spm"/>
+            <redirect-parameter name="partyId" from="partyId"/>
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+        <response name="error" type="request-redirect" value="myOrder">
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+    </request-map>
+
+
+
+    <request-map uri="accessWeChatFromBuyStory">
+        <security auth="false" https="false"/>
+        <event type="java" path="com.banfftech.webmanager.WebServices"
+               invoke="accessWeChatFromBuyStory"/>
+
+        <response name="success" type="request-redirect" value="myStory">
+            <redirect-parameter name="tarjeta" from="tarjeta"/>
+            <redirect-parameter name="subscribe" from="subscribe"/>
+            <redirect-parameter name="spm" from="spm"/>
+            <redirect-parameter name="partyId" from="partyId"/>
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+
+        <response name="error" type="request-redirect" value="myStory">
+            <redirect-parameter name="productId" from="productId"/>
+        </response>
+    </request-map>
+
+
+    <!--<request-map uri="checkSubscribe">-->
+    <!--<security auth="false" https="false"/>-->
+    <!--<event type="java" path="com.banfftech.personmanager.PersonManagerServices"-->
+    <!--invoke="checkSubscribe"/>-->
+    <!--<response name="success" type="request" value="json"/>-->
+    <!--<response name="error" type="request" value="json"/>-->
+
+    <!--</request-map>-->
+
+
+    <request-map uri="checkTarjeta">
+        <security auth="false" https="false"/>
+        <event type="java" path="com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+
+    </request-map>
+    <!-- Buy -->
+    <request-map uri="placeResourceOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placeResourceOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <!-- Buy -->
+    <request-map uri="placeResourceOrder4NeiMai">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placeResourceOrder4NeiMai"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- Buy Shopping Cart -->
+    <request-map uri="placeResourcesOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="placeResourcesOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="addProductRole">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addProductRole"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="doAddPartyRelation">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="doAddPartyRelation"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- 增加转发者记录 -->
+    <request-map uri="addDistributingLeaflets">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addDistributingLeaflets"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- 确认我已经付款了,并且告诉卖家 -->
+    <request-map uri="setOrderPaymentStatus">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="setOrderPaymentStatus"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <!-- View Mappings myOrder-->
+
+
+    <view-map name="myStory" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myStory"/>
+    <view-map name="viewContactQrCode" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#viewContactQrCode"/>
+    <view-map name="ViewSelectProductFeature" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#ViewSelectProductFeature"/>
+    <view-map name="myOrder" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrder"/>
+    <view-map name="myOrderDetail" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#myOrderDetail"/>
+
+    <view-map name="miniChat" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#miniChat"/>
+    <view-map name="viewWebOrderDetail" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#viewWebOrderDetail"/>
+    <view-map name="main" type="screen" page="component://webmanager/widget/WebManagerScreens.xml#main"/>
+    <view-map name="shareProduct" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#shareProduct"/>
+    <view-map name="shareCategory" type="screen"
+              page="component://webmanager/widget/WebManagerScreens.xml#shareCategory"/>
+</site-conf>

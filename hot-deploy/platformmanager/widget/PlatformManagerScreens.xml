@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://ofbiz.apache.org/Widget-Screen"
+         xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="headerItem" value="main"/>
+                <!-- this highlights the selected menu-item with name "main" -->
+            </actions>
+            <widgets>
+                <decorator-screen name="PlatformManagerCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- SPU 尺码-->
+    <screen name="FindProductSizeDescription">
+        <section>
+            <actions>
+                <set field="tabButtonItem" value="FindProductSizeDescription"/>
+                <set field="titleProperty" value="mainDecoratorLocation"/>
+                <set field="headerItem" value="FindProductSizeDescription"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <set field="parameters.productContentTypeId" default-value="PRODUCT_SIZE_DES"/>
+                <service service-name="performFind" result-map="result">
+                    <field-map field-name="inputFields" from-field="parameters"/>
+                    <field-map field-name="entityName" value="ProductContentAndInfo"/>
+                    <field-map field-name="orderBy" value="drLastModifiedDate DESC"/>
+                    <field-map field-name="viewIndex" from-field="viewIndex"/>
+                    <field-map field-name="viewSize" from-field="viewSize"/>
+                </service>
+                <set field="listIt" from-field="result.listIt"/>
+                <set field="listSize" from-field="result.listSize"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+
+                        <section>
+                            <widgets>
+                                <decorator-screen name="FindScreenDecorator"
+                                                  location="component://common/widget/CommonScreens.xml">
+                                    <decorator-section name="menu-bar">
+                                        <container style="button-bar">
+                                            <link target="EditProductSizeDescription"
+                                                  text="${uiLabelMap.CreateProductSizeDes}" style="buttontext create"/>
+                                        </container>
+                                    </decorator-section>
+                                    <decorator-section name="search-options">
+                                        <include-form name="FindProductSizeDescription"
+                                                      location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                    </decorator-section>
+                                    <decorator-section name="search-results">
+                                        <include-form name="ListProductSizeDescription"
+                                                      location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                    </decorator-section>
+                                </decorator-screen>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="EditProductSizeDescription">
+        <section>
+            <actions>
+                <entity-and entity-name="ProductContentAndElectronicText" list="productContentAndElectronicText">
+                    <field-map field-name="productId" from-field="parameters.productId"/>
+                    <field-map field-name="dataSourceId" from-field="parameters.dataSourceId"/>
+                </entity-and>
+                <set field="productContentAndElectronicText" value="${productContentAndElectronicText[0]}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="EcBackofficeTabBar" location="component://ecbackoffice/widget/EcBackofficeMenus.xml"/>-->
+                        <screenlet>
+                            <include-form name="EditProductSizeDescription"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="LoadOSSResourceHtml">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                                location="component://platformmanager/webapp/platformmanager/template/image/OSSImageList.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="ExportShareCpsToExcel">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="platformmanagerTabBar" location="component://platformmanager/widget/platformmanagerMenus.xml"/>-->
+                        <screenlet title="导出分享报表Excel">
+                            <include-form name="ExportShareCpsToExcel"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <!-- 产品导入 -->
+    <screen name="ProductUploadImport">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="更新产品标价价格">
+                            <include-form name="updateProductSalesPrice"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="更新产品到目录(如果不存在Members)">
+                            <include-form name="AddedProductsToCategory"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
+                        <screenlet title="更新产品首图">
+                            <include-form name="UpdateProductSinglePath"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
+                        <screenlet title="导入诸法成品">
+                            <include-form name="FinishGoodUploadImportFormZhuFa"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+                        <screenlet title="导入诸法供应商">
+                            <include-form name="SupplierUploadImportFormZhuFa"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
+                        <screenlet title="导入诸法原辅料">
+                            <include-form name="RawProductUploadImportFormZhuFa"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
+                        <screenlet title="(Extra-One4模特图)产品导入">
+                            <include-form name="ProductUploadImportFormExtraOne"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+                        <screenlet title="(新)素然产品(2x2x2)导入">
+                            <include-form name="ProductUploadImportFormNew"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <!--<include-menu name="platformmanagerTabBar" location="component://platformmanager/widget/platformmanagerMenus.xml"/>-->
+                        <screenlet title="素然产品导入">
+                            <include-form name="ProductUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+
+                        <screenlet title="素然产品特殊价格导入">
+                            <include-form name="ProductPriceUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+                        <screenlet title="素然员工导入">
+                            <include-form name="ZugZugEmpUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+
+                        <screenlet title="康橙产品导入">
+                            <include-form name="KangChengProductUploadImportForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- 快速运送整个订单,这种做法不对... -->
+    <screen name="QuickShipOrder">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="platformmanagerTabBar" location="component://platformmanager/widget/platformmanagerMenus.xml"/>-->
+                        <screenlet title="快速装运">
+                            <include-form name="QuickShipOrderForm"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 产品图片导入 -->
+    <screen name="ProductImageUpload">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <!--<include-menu name="platformmanagerTabBar" location="component://platformmanager/widget/platformmanagerMenus.xml"/>-->
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/uploadImg.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 产品内容 -->
+
+    <screen name="RealProductImageAssoc">
+        <section>
+            <actions>
+                <set field="headerItem" value="Buttons"/>
+                <set field="tabButtonItem" value="RealProductImageAssoc"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one value-field="product" entity-name="Product"></entity-one>
+                <!-- 载入所有颜色 -->
+                <!--<entity-condition entity-name="ProductDesignFeatureWithType" list="colorList" filter-by-date="true">-->
+                <!--<condition-list>-->
+                <!--<condition-expr field-name="productId" from-field="parameters.productId" operator="equals"/>-->
+                <!--<condition-expr field-name="productFeatureTypeId" value="%COLOR" operator="like"/>-->
+                <!--</condition-list>-->
+                <!--</entity-condition>-->
+
+                <!--<set field="variantProductId" value="${groovy:-->
+                <!--if(parameters.colorId==null)return parameters.productId;-->
+                <!--if(parameters.colorId!=null)return  com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher);-->
+                <!--}"/>-->
+
+                <!-- 获取虚拟商品 4码的编号 -->
+                <!--<set field="variantProductId" value="${groovy:com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher)}"/>-->
+                <set field="variantProductId" value="${productId}"/>
+                <!-- 获取单品图 -->
+                <entity-condition entity-name="ProductContentAndInfo" list="singleProductImages">
+                    <condition-list combine="and">
+                        <condition-expr field-name="productId" from-field="variantProductId"/>
+                        <condition-expr field-name="productContentTypeId" operator="equals"
+                                        value="SINGLE_PRODUCT_IMAGE"/>
+                    </condition-list>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+
+                <!-- 获取细节图 -->
+                <entity-condition entity-name="ProductContentAndInfo" list="detailProductImages">
+                    <condition-list combine="and">
+                        <condition-expr field-name="productId" from-field="variantProductId"/>
+                        <condition-expr field-name="productContentTypeId" operator="equals"
+                                        value="DETAIL_PRODUCT_IMAGE"/>
+                    </condition-list>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+
+                <!-- 获取包含这个商品的搭配Category -->
+                <entity-and list="minmatchList" entity-name="ProductCategoryAndMember">
+                    <field-map field-name="productId" from-field="variantProductId"/>
+                    <field-map field-name="productCategoryTypeId" value="MIXMATCH_CATEGORY"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="realProductImageTabBar"/>
+                        <screenlet title="商品信息">
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml"
+                                          name="SelectColorToAssoc"/>
+                        </screenlet>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/image/realProductImageAssoc.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 应用首页管理 -->
+    <screen name="HomePageMgr">
+        <section>
+            <actions>
+                <set field="headerItem" value="HomePageMgr"/>
+                <set field="tabButtonItem" value="HomePageMgr"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productStoreId" value="${parameters.productStoreId}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                        <screenlet title="现在,请先选择一个店铺/应用...">
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml"
+                                          name="SelectStore"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.HomeContent}">
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml"
+                                          name="EditHomePageJson"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 小程序高级配置 -->
+    <screen name="AppSetting">
+        <section>
+            <actions>
+                <set field="headerItem" value="AppSetting"/>
+                <set field="tabButtonItem" value="AppSetting"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 编辑或新建Sku -->
+    <screen name="EditSku">
+        <section>
+            <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-form name="EditSku"
+                                      location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+
+
+    <!-- AddFromOss -->
+    <screen name="AddFromOss">
+        <section>
+            <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+            </actions>
+            <widgets>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/addFromOss.ftl"/>
+                            </html>
+                        </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 成品图片编辑 -->
+
+    <screen name="EditPicture">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickPutProduct"/>
+                <set field="tabButtonItem" value="QuickPutProduct"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productId" value="${parameters.productId}"/>
+                <!-- 查图片 -->
+                <!-- 单品图片 -->
+                <entity-and entity-name="ProductContentAndInfo" list="singlePictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="SINGLE_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+                <entity-and entity-name="ProductContentAndInfo" list="detailPictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="DETAIL_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+                <entity-and entity-name="ProductContentAndInfo" list="matchPictures">
+                    <field-map field-name="productId" from-field="productId"/>
+                    <field-map field-name="productContentTypeId" value="MATCH_PRODUCT_IMAGE"/>
+                    <!--<limit-view view-index="1" view-size="50"/>-->
+                </entity-and>
+
+
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+
+                        <!--<link link-type="ajax-window" text="AddFromOss" target="AddFromOss" style="buttontext right">-->
+                            <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
+                        <!--</link>-->
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/editPicture.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 快速铺货 上产品 -->
+    <screen name="QuickPutProduct">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickPutProduct"/>
+                <set field="tabButtonItem" value="QuickPutProduct"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="productStoreId" value="${parameters.productStoreId}"/>
+                <set field="prodCatalogId" value="${parameters.prodCatalogId}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+
+                        <link text="新建单品" target="EditSku" style="buttontext create">
+                            <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
+                            <!--<parameter param-name="workEffortId" value="${parameters.workEffortId}"/>-->
+                        </link>
+                        <link text="excel导入产品" target="#" link-type="ajax-window" width="500"
+                              style="buttontext create" height="500">
+                            <!--<parameter param-name="productIdTo" value="${parameters.productId}"/>-->
+                            <!--<parameter param-name="workEffortId" value="${parameters.workEffortId}"/>-->
+                        </link>
+                        <section>
+                            <condition>
+                                <if-compare operator="equals"
+                                            value=""
+                                            field="prodCatalogId"/>
+                            </condition>
+                            <widgets>
+                                <screenlet title="选择要编辑的店铺及产品目录">
+                                    <include-form name="ChoeseStoreAndCatelog"
+                                                  location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                </screenlet>
+                            </widgets>
+                        </section>
+                        <screenlet title="${prodCatalogId}产品列表" tab-menu-name="productBar">
+                            <include-form name="ProductList"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                            <!--<platform-specific>-->
+                            <!--<html>-->
+                            <!--<html-template location="component://jjstudy/widget/ftl/editHuoXinPage.ftl"/>-->
+                            <!--</html>-->
+                            <!--</platform-specific>-->
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 快速开店 -->
+    <screen name="QuickStartAppStore">
+        <section>
+            <actions>
+                <set field="headerItem" value="QuickStartAppStore"/>
+                <set field="tabButtonItem" value="QuickStartAppStore"/>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                        <screenlet title="Quick Start">
+                            <include-form name="QuickStartAppStore"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <!--<screenlet title="${uiLabelMap.CommonList}">-->
+                        <!--<include-form name="PartyAppList" location="component://platformmanager/widget/PlatformManagerForms.xml" />-->
+                        <!--</screenlet>-->
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- 店铺角色 -->
+    <screen name="StoreRoleMgr">
+        <section>
+            <actions>
+                <!--<set field="titleProperty" value="StoreRoleMgr"/>-->
+                <set field="headerItem" value="StoreRoleMgr"/>
+                <set field="tabButtonItem" value="StoreRoleMgr"/>
+                <!--<set field="labelTitleProperty" value="ProductProductStoreRoles"/>-->
+                <set field="parameters.noConditionFind" value="Y"/>
+                <entity-one entity-name="ProductStoreRole" value-field="productStoreRole" auto-field-map="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonPartyDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                        <screenlet title="快速加角色到店铺">
+                            <include-form name="EditProductStoreRole"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <decorator-screen name="FindScreenDecorator"
+                                          location="component://common/widget/CommonScreens.xml">
+                            <decorator-section name="search-options">
+                                <include-form name="FindProductStoreRole"
+                                              location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                            </decorator-section>
+                            <decorator-section name="search-results">
+                                <include-form name="ListProductStoreRole"
+                                              location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                            </decorator-section>
+                        </decorator-screen>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- App 商家管理 -->
+    <screen name="FindPartyApps">
+        <section>
+            <actions>
+                <set field="headerItem" value="FindPartyApps"/>
+                <set field="tabButtonItem" value="FindPartyApps"/>
+                <set field="parameters.noConditionFind" value="Y"/>
+
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/PlatformManagerMenus.xml"
+                                      name="AppToolsBar"/>
+                        <screenlet title="${uiLabelMap.CommonSearch}">
+                            <include-form name="FindPartyApps"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.CommonList}">
+                            <include-form name="PartyAppList"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindRealProductList">
+        <section>
+            <actions>
+                <set field="headerItem" value="FindRealProductList"/>
+                <set field="tabButtonItem" value="FindRealProductList"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.CommonSearch}">
+
+                            <include-form name="FindProductVirtual"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.CommonList}">
+                            <include-form name="ProductVirtualList"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindRealProductContentList">
+        <section>
+            <actions>
+                <set field="headerItem" value="main"/>
+                <set field="tabButtonItem" value="FindRealProductContentList"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="mainSearchBar"/>
+                        <screenlet title="${uiLabelMap.CommonSearch}">
+                            <include-form name="FindProductVirtualContent"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.CommonList}">
+                            <include-form name="ProductVirtualContentList"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindRealProductContentListSimple">
+        <section>
+            <actions>
+                <set field="headerItem" value="main"/>
+                <set field="tabButtonItem" value="SimpleSearchProductContent"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="mainSearchBar"/>
+                        <screenlet title="${uiLabelMap.CommonSearch}">
+                            <include-form name="FindProductSimple"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.CommonList}">
+                            <include-form name="ListProductContentSimple"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="RealProductImageAssoc">
+        <section>
+            <actions>
+                <set field="headerItem" value="Buttons"/>
+                <set field="tabButtonItem" value="RealProductImageAssoc"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <set field="colorId" from-field="parameters.colorId"/>
+                <entity-one value-field="product" entity-name="Product"></entity-one>
+                <!-- 载入所有颜色 -->
+                <entity-condition entity-name="ProductDesignFeatureWithType" list="colorList" filter-by-date="true">
+                    <condition-list>
+                        <condition-expr field-name="productId" from-field="parameters.productId" operator="equals"/>
+                        <condition-expr field-name="productFeatureTypeId" value="%COLOR" operator="like"/>
+                    </condition-list>
+                </entity-condition>
+
+                <!--<set field="variantProductId" value="${groovy:-->
+                <!--if(parameters.colorId==null)return parameters.productId;-->
+                <!--if(parameters.colorId!=null)return com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher);-->
+                <!--}"/>-->
+
+                <!-- 获取虚拟商品 4码的编号 -->
+                <set field="variantProductId"
+                     value="${groovy:com.banfftech.platformmanager.util.ZuczugProductUtils.checkProductMiddleSize(parameters.productId,parameters.colorId,delegator,dispatcher)}"/>
+                <!-- 获取单品图 -->
+                <entity-condition entity-name="ProductContentAndInfo" list="singleProductImages">
+                    <condition-list combine="and">
+                        <condition-expr field-name="productId" from-field="variantProductId"/>
+                        <condition-expr field-name="productContentTypeId" operator="equals"
+                                        value="SINGLE_PRODUCT_IMAGE"/>
+                    </condition-list>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+
+                <!-- 获取细节图 -->
+                <entity-condition entity-name="ProductContentAndInfo" list="detailProductImages">
+                    <condition-list combine="and">
+                        <condition-expr field-name="productId" from-field="variantProductId"/>
+                        <condition-expr field-name="productContentTypeId" operator="equals"
+                                        value="DETAIL_PRODUCT_IMAGE"/>
+                    </condition-list>
+                    <order-by field-name="sequenceNum"/>
+                </entity-condition>
+
+                <!-- 获取包含这个商品的搭配Category -->
+                <entity-and list="minmatchList" entity-name="ProductCategoryAndMember">
+                    <field-map field-name="productId" from-field="variantProductId"/>
+                    <field-map field-name="productCategoryTypeId" value="MIXMATCH_CATEGORY"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="realProductImageTabBar"/>
+                        <screenlet title="商品信息">
+                            <include-form location="component://platformmanager/widget/PlatformManagerForms.xml"
+                                          name="SelectColorToAssoc"/>
+                        </screenlet>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/image/realProductImageAssoc.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="LoadOSSResourceHtml">
+        <section>
+            <actions>
+                <property-map resource="PlatformManagerUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                                location="component://platformmanager/webapp/platformManager/template/image/OSSImageList.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditProductMatch">
+        <section>
+            <actions>
+                <set field="headerItem" value="Buttons"/>
+                <set field="tabButtonItem" value="EditProductMatch"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one value-field="product" entity-name="Product"></entity-one>
+
+                <!-- 获取这个搭配的图片列表 -->
+                <entity-and list="contents" entity-name="ProductCategoryContentAndInfo">
+                    <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+                    <field-map field-name="prodCatContentTypeId" value="CATEGORY_IMAGE_URL"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-and>
+
+                <!-- 获取商品列表 -->
+                <entity-and list="memberList" entity-name="ProductCategoryMember">
+                    <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-and>
+
+                <!-- 获取是否可以ipad用 -->
+                <entity-one value-field="ipadUseAttribute" entity-name="ProductCategoryAttribute">
+                    <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+                    <field-map field-name="attrName" value="ipadSeq"/>
+                </entity-one>
+
+                <!-- 获取是否可以网站用 -->
+                <entity-one value-field="webSiteUseAttribute" entity-name="ProductCategoryAttribute">
+                    <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+                    <field-map field-name="attrName" value="WEBSITE_USE"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="realProductImageTabBar"/>
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                        location="component://platformmanager/webapp/platformManager/template/image/editProductMatch.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="realProductContent">
+        <section>
+            <actions>
+                <set field="headerItem" value="Buttons"/>
+                <set field="tabButtonItem" value="ProductContent"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-and entity-name="ProductAssocViewWithVariant" list="productAssocList" filter-by-date="true">
+                    <field-map field-name="productId" from-field="productId"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <include-menu location="component://platformmanager/widget/platformmanagerMenus.xml"
+                                      name="realProductImageTabBar"/>
+                        <section>
+                            <condition>
+                                <if-empty field="productAssocList"/>
+                            </condition>
+                            <actions>
+                                <set field="assoc.productIdTo" from-field="productId"/>
+                                <set field="assoc.productId" from-field="productId"/>
+                                <set field="productAssocList" type="Object"/>
+                                <set field="productAssocList[]" from-field="assoc"/>
+                            </actions>
+                            <widgets>
+                                <screenlet title="${uiLabelMap.CommonSearch}">
+                                    <include-form name="realProductContent"
+                                                  location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                </screenlet>
+                            </widgets>
+                            <fail-widgets>
+                                <screenlet title="${uiLabelMap.CommonSearch}">
+                                    <include-form name="realProductContent"
+                                                  location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                                </screenlet>
+                            </fail-widgets>
+                        </section>
+
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditRealProductContent">
+        <section>
+            <actions>
+                <set field="headerItem" value="EditRealProductContent"/>
+                <set field="tabButtonItem" value="EditRealProductContent"/>
+                <entity-and entity-name="ProductAssocViewWithVariant" list="productAssocList" filter-by-date="true">
+                    <field-map field-name="productId" from-field="parameters.productId"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="RealProductImageManageCommonDecorator"
+                                  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.CommonSearch}">
+                            <include-form name="EditShopProductContent"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="realProductDescriptionExcelUpload">
+        <section>
+            <actions>
+                <set field="headerItem" value="realProductDescriptionExcelUpload"/>
+                <set field="tabButtonItem" value="realProductDescriptionExcelUpload"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="导入商品描述">
+                            <include-form name="realProductDescriptionUpload"
+                                          location="component://platformmanager/widget/PlatformManagerForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

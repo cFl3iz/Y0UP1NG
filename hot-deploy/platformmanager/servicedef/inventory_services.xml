@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PlatformManager Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service>
+    <!-- 库存同步长宁 -->
+    <service name="syncZuczugInventory" engine="java" invoke="syncZuczugInventory" transaction-timeout="9989898"
+             location="com.banfftech.platformmanager.PlatformInventoryServices">
+        <description>syncZuczugInventory</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+    </service>
+
+
+</services>

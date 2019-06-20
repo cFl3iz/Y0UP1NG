@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+
+
+    <description>BoomMgr Component Site Configuration File</description>
+    <!-- Every Request Do Check -->
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java"
+               path="com.banfftech.platformmanager.common.PlatformLoginWorker"
+               invoke="checkTarjetaLogin"/>
+    </preprocessor>
+
+
+    <request-map uri="queryChanelHotSaleList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryChanelHotSaleList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryDeliveryPlanItemByDate">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryDeliveryPlanItemByDate"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="sortFinishedProductSequence">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="sortFinishedProductSequence"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="setProductInventoryFromPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="setProductInventoryFromPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="removeProductKeyword">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeProductKeyword"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="copyOrSplitBoundProd">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="copyOrSplitBoundProd"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="createNewChannel">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createNewChannel"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="removeChannel">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeChannel"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="removeKeywordBox">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeKeywordBox"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="addedProductKeyword">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addedProductKeyword"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryKeyWordBox">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryKeyWordBox"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createKeyWord">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createKeyWordBox"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="updateOrderStatus">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateOrderStatus"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="setProductInventory">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="setProductInventory"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="updateDeliveryPlanItem">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateDeliveryPlanItem"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createDeliveryPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createDeliveryPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryDeliveryPlan">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryDeliveryPlan"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryInventoryDetails">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryInventoryDetails"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- QueryInventoryWorkList 流水 -->
+    <request-map uri="queryInventoryWorkList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryInventoryWorkList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryHistory">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryHistory"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="addedOrderNote">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addedOrderNote"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="viewedOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="viewedOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="productionTemp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="productionTemp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="addProductionTemp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addProductionTemp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="removeMyLead">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeMyLead"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="removeMyRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="removeMyRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="updateMyLead">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateMyLead"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="createPurchaseOrder">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createPurchaseOrder"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="addEmp">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="addEmp"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createMyLead">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createMyLead"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="createRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+    <request-map uri="updateRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="createMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createMyFinishedGood"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
+    <request-map uri="updateMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="updateMyFinishedGood"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="createProductionRouting">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="createProductionRouting"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="empJoinPartyGroup">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="empJoinPartyGroup"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryMySupplierList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMySupplierList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryChannelList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryChannelList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryMyColleagues">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyColleagues"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryProductionRouting">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryProductionRouting"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+    <request-map uri="queryMyPurchaseOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyPurchaseOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="quickQueryCount">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="quickQueryCount"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+    <request-map uri="queryMySalesOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMySalesOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMyInfo">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyInfo"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMyFinishedGood">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyFinishedGood"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMyRawMaterials">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyRawMaterials"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <request-map uri="queryMyOrderList">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryMyOrderList"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+
+
+
+
+    <request-map uri="queryQuantityUom">
+        <security https="false" auth="false"/>
+        <event type="service" invoke="queryQuantityUom"/>
+        <response name="success" type="request" value="result_json"/>
+        <response name="error" type="request" value="result_json"/>
+    </request-map>
+
+    <!-- Events to run on every request before security (chains exempt) -->
+    <!--
+    <preprocessor>
+    </preprocessor>
+    -->
+    <!-- Events to run on every request after all other processing (chains exempt) -->
+    <!--
+    <postprocessor>
+        <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
+    </postprocessor>
+    -->
+
+    <!-- Request Mappings -->
+    <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
+    
+    <!-- View Mappings -->
+    <view-map name="main" type="screen" page="component://boommgr/widget/BoomMgrScreens.xml#main"/>
+</site-conf>
